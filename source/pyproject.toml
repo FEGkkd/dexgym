@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dexteroushands-lab"
+version = "0.1.0"
+description = "Isaac Lab extension for DexterousHands task migration"
+requires-python = ">=3.10"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["dexteroushands_lab*"]

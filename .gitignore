@@ -1,0 +1,39 @@
+# Python and local tooling
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+.mypy_cache/
+.ruff_cache/
+
+# Local environments and credentials
+.venv/
+venv/
+env/
+.env
+
+# Isaac Sim / Isaac Lab generated output
+logs/*
+!logs/README.md
+artifacts/*
+!artifacts/README.md
+!artifacts/**/
+!artifacts/**/summary.json
+*.usd.bak
+*.usda.bak
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+
+# Large local assets and exported checkpoints
+*.pt
+*.pth
+*.onnx
+*.onnx.data
+*.npz
+*.mp4
+*.avi
+*.gif

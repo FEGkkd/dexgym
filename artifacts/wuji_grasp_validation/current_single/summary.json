@@ -1,0 +1,126 @@
+{
+  "active_fingers": [
+    "thumb"
+  ],
+  "asset": {
+    "isaac_collision_body_count": 21,
+    "isaac_hand_mass_kg": 0.6207000017166138,
+    "usd_path": "/home/feg/dex/DexterousHands/isaaclab/assets/wuji_isaac_generated/right_merged_v2/right/right.usda"
+  },
+  "baseline_object_position_m": [
+    [
+      0.08016826212406158,
+      0.03536541014909744,
+      0.5192683935165405
+    ]
+  ],
+  "contact_threshold_n": 0.05,
+  "definition": "scripted finger closure followed by static/gravity-equivalent hold",
+  "fixed_base_orientation_error": [
+    2.5458115260335035e-07
+  ],
+  "fixed_base_position_error_m": [
+    2.3853496955439368e-08
+  ],
+  "num_envs": 1,
+  "official_mjcf_reference": {
+    "collision_geom_count": 17,
+    "contact_excludes": [
+      [
+        "r_wrist",
+        "r_thumb_proximal"
+      ],
+      [
+        "r_wrist",
+        "r_thumb_proximal_abd"
+      ],
+      [
+        "r_wrist",
+        "r_index_finger_proximal_abd"
+      ],
+      [
+        "r_wrist",
+        "r_middle_finger_proximal_abd"
+      ],
+      [
+        "r_wrist",
+        "r_ring_finger_proximal_abd"
+      ],
+      [
+        "r_wrist",
+        "r_pinky_proximal_abd"
+      ]
+    ],
+    "cube": {
+      "condim": 3,
+      "friction": 0.3,
+      "mass": 0.12,
+      "priority": 0,
+      "size": [
+        0.054,
+        0.054,
+        0.054
+      ],
+      "solimp": [
+        0.85,
+        0.85,
+        0.001
+      ],
+      "solref": [
+        0.015,
+        1.0
+      ]
+    },
+    "hand_contact": {
+      "friction": 0.7,
+      "priority": 1,
+      "solimp": [
+        0.9,
+        0.95,
+        0.001
+      ],
+      "solref": [
+        0.02,
+        1.5
+      ]
+    },
+    "hand_mass_kg": 0.5266132,
+    "simulation": {
+      "integrator": "Euler",
+      "iterations": 5,
+      "ls_iterations": 8,
+      "timestep": 0.01
+    }
+  },
+  "pass": false,
+  "per_env": [
+    {
+      "common_physics_pass": true,
+      "drop_time_s": 0.85,
+      "env_id": 0,
+      "final_contact_body_names": [],
+      "final_lift_height_m": -0.06942957639694214,
+      "final_object_displacement_m": 0.11872601509094238,
+      "final_orientation_drift_rad": 1.8323895931243896,
+      "final_slip_xy_m": 0.0963088795542717,
+      "final_undesired_contact_count": 0,
+      "max_joint_target_error_rad": 0.24724119901657104,
+      "max_lift_height_m": -0.004970133304595947,
+      "max_normal_force_n": 52.34299087524414,
+      "max_object_speed_mps": 0.34904375672340393,
+      "max_tangential_force_n": 97.58206176757812,
+      "max_torque_saturation_fraction": 0.0,
+      "pass": false,
+      "required_active_tip_count": 1,
+      "scenario_pass": false,
+      "sustained_active_tip_contact_ratio": 0.0,
+      "sustained_required_tip_contact_ratio": 0.0
+    }
+  ],
+  "physics_dt": 0.008333333333333333,
+  "scenario": "single",
+  "schema_version": 1,
+  "seed": 0,
+  "steps": 180,
+  "task": "DexterousHands-Wuji-Hand-Reorientation-Direct-v0"
+}

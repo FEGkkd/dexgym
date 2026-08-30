@@ -1,0 +1,239 @@
+{
+  "acceptance_mode": "contact physics; grasp outcome is reported but not gating",
+  "active_fingers": [
+    "thumb"
+  ],
+  "asset": {
+    "isaac_collision_body_count": 26,
+    "isaac_hand_mass_kg": 0.5180599689483643,
+    "usd_path": "/home/feg/dex/wuji-description/hand/body/usd/right/wujihand.usd"
+  },
+  "baseline_object_position_m": [
+    [
+      -0.074416883289814,
+      0.12083946913480759,
+      0.522707462310791
+    ]
+  ],
+  "contact_threshold_n": 0.05,
+  "definition": "single-index-finger bounded contact response",
+  "fixed_base_orientation_error": [
+    1.3334674520137924e-07
+  ],
+  "fixed_base_position_error_m": [
+    3.183320629318587e-08
+  ],
+  "num_envs": 1,
+  "official_mjcf_reference": {
+    "collision_geom_count": 17,
+    "contact_excludes": [
+      [
+        "r_wrist",
+        "r_thumb_proximal"
+      ],
+      [
+        "r_wrist",
+        "r_thumb_proximal_abd"
+      ],
+      [
+        "r_wrist",
+        "r_index_finger_proximal_abd"
+      ],
+      [
+        "r_wrist",
+        "r_middle_finger_proximal_abd"
+      ],
+      [
+        "r_wrist",
+        "r_ring_finger_proximal_abd"
+      ],
+      [
+        "r_wrist",
+        "r_pinky_proximal_abd"
+      ]
+    ],
+    "cube": {
+      "condim": 3,
+      "friction": 0.3,
+      "mass": 0.12,
+      "priority": 0,
+      "size": [
+        0.054,
+        0.054,
+        0.054
+      ],
+      "solimp": [
+        0.85,
+        0.85,
+        0.001
+      ],
+      "solref": [
+        0.015,
+        1.0
+      ]
+    },
+    "hand_contact": {
+      "friction": 0.7,
+      "priority": 1,
+      "solimp": [
+        0.9,
+        0.95,
+        0.001
+      ],
+      "solref": [
+        0.02,
+        1.5
+      ]
+    },
+    "hand_mass_kg": 0.5266132,
+    "simulation": {
+      "integrator": "Euler",
+      "iterations": 5,
+      "ls_iterations": 8,
+      "timestep": 0.01
+    }
+  },
+  "pass": true,
+  "per_env": [
+    {
+      "active_contact_steps": 52,
+      "common_physics_pass": true,
+      "contact_coverage_pass": true,
+      "contact_physics_pass": true,
+      "contacted_active_tip_names": [
+        "thumb"
+      ],
+      "drop_time_s": null,
+      "env_id": 0,
+      "expected_effective_friction": 0.7,
+      "final_contact_body_names": [
+        "right_finger1_tip_link"
+      ],
+      "final_lift_height_m": 0.0,
+      "final_object_displacement_m": 0.0,
+      "final_orientation_drift_rad": 0.0,
+      "final_slip_xy_m": 0.0,
+      "final_undesired_contact_count": 0,
+      "grasp_outcome_pass": true,
+      "initial_condition_pass": true,
+      "max_friction_to_normal_ratio": 0.699998140335083,
+      "max_joint_target_error_rad": 0.11313588172197342,
+      "max_lift_height_m": 0.0,
+      "max_normal_force_n": 6.705013751983643,
+      "max_object_speed_mps": 0.0,
+      "max_tangential_force_n": 4.939671039581299,
+      "max_torque_saturation_fraction": 0.05000000074505806,
+      "pass": true,
+      "preclose_max_normal_force_n": 0.0,
+      "preclose_max_object_displacement_m": 0.0,
+      "required_active_tip_count": 1,
+      "scenario_pass": true,
+      "sustained_active_tip_contact_ratio": 1.0,
+      "sustained_required_tip_contact_ratio": 1.0
+    }
+  ],
+  "physics_dt": 0.008333333333333333,
+  "placement_calibration": {
+    "active_tip_travel_m": [
+      [
+        0.03489882871508598
+      ]
+    ],
+    "center_predictions_m": [
+      [
+        [
+          -0.074416883289814,
+          0.12083946913480759,
+          0.522707462310791
+        ]
+      ]
+    ],
+    "closed_tip_positions_m": [
+      [
+        [
+          -0.06513535976409912,
+          0.1190355122089386,
+          0.5139049291610718
+        ],
+        [
+          -0.16633592545986176,
+          0.0487934835255146,
+          0.44599175453186035
+        ],
+        [
+          -0.163421168923378,
+          0.007444378454238176,
+          0.4367905855178833
+        ],
+        [
+          -0.15837843716144562,
+          -0.023175925016403198,
+          0.4408140480518341
+        ],
+        [
+          -0.14646311104297638,
+          -0.05692877620458603,
+          0.44775834679603577
+        ]
+      ]
+    ],
+    "mean_predicted_object_position_m": [
+      [
+        -0.074416883289814,
+        0.12083946913480759,
+        0.522707462310791
+      ]
+    ],
+    "open_tip_positions_m": [
+      [
+        [
+          -0.04006148502230644,
+          0.1141621544957161,
+          0.4901251196861267
+        ],
+        [
+          -0.16633592545986176,
+          0.0487934835255146,
+          0.44599175453186035
+        ],
+        [
+          -0.163421168923378,
+          0.007444378454238176,
+          0.4367905855178833
+        ],
+        [
+          -0.15837843716144562,
+          -0.023175925016403198,
+          0.4408140480518341
+        ],
+        [
+          -0.14646311104297638,
+          -0.05692877620458603,
+          0.44775834679603577
+        ]
+      ]
+    ],
+    "placement_penetration_m": 0.001,
+    "selected_object_position_m": [
+      [
+        -0.074416883289814,
+        0.12083946913480759,
+        0.522707462310791
+      ]
+    ],
+    "selected_object_position_source": "active fingertip trajectory",
+    "tip_frame_source": "official WUJI USD tip_link rigid bodys"
+  },
+  "scenario": "single",
+  "schema_version": 2,
+  "seed": 0,
+  "steps": 120,
+  "task": "DexterousHands-Wuji-Hand-Reorientation-Direct-v0",
+  "test_object_size_m": [
+    0.02,
+    0.02,
+    0.02
+  ],
+  "validation_open_delta_rad": 0.65,
+  "validation_press_overtravel_rad": 0.25
+}

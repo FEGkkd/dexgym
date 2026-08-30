@@ -1,0 +1,151 @@
+{
+  "acceptance_scope": "contact force reporting, friction-cone behavior, and dynamic stability; complete grasp and lift are not required",
+  "calibration": {
+    "closed_tip_position_m": [
+      [
+        0.12723146378993988,
+        0.06553298979997635,
+        0.5145664811134338
+      ]
+    ],
+    "measured_contact_normal_axis_world": [
+      [
+        -0.8176764249801636,
+        0.57536381483078,
+        -0.01902010664343834
+      ]
+    ],
+    "normal_axis_world": [
+      [
+        -0.45446598529815674,
+        0.8877341151237488,
+        -0.07340768724679947
+      ]
+    ],
+    "object_position_m": [
+      [
+        0.12256653606891632,
+        0.0746452584862709,
+        0.5138129591941833
+      ]
+    ],
+    "open_tip_position_m": [
+      [
+        0.17352838814258575,
+        -0.024901416152715683,
+        0.5220445990562439
+      ]
+    ],
+    "placement_penetration_m": 0.001,
+    "tangent_axis_world": [
+      [
+        0.8901357650756836,
+        0.4556954801082611,
+        -0.0
+      ]
+    ],
+    "tip_frame_source": "wuji-description right.urdf fixed tip joint",
+    "tip_travel_m": [
+      0.10187104344367981
+    ]
+  },
+  "checks": {
+    "finite": true,
+    "no_initial_contact": true,
+    "numerically_bounded": true,
+    "preload_contact": true,
+    "slip_contact_observed": true,
+    "slip_friction_inside_cone": true,
+    "slip_friction_opposes_load": true,
+    "static_contact": true,
+    "static_friction_inside_cone": true,
+    "static_friction_reported": true,
+    "static_translation_bounded": true,
+    "supercritical_load_causes_more_motion": true
+  },
+  "finger": "index",
+  "fixture": {
+    "measured_steady_normal_force_n": 0.18395481415485082,
+    "phase_start_positions_m": {
+      "preload": [
+        [
+          0.12256653606891632,
+          0.0746452584862709,
+          0.5138129591941833
+        ]
+      ],
+      "slip": [
+        [
+          0.11285923421382904,
+          0.06978190690279007,
+          0.5138172507286072
+        ]
+      ],
+      "static": [
+        [
+          0.11311891674995422,
+          0.06993351131677628,
+          0.5138058662414551
+        ]
+      ]
+    },
+    "probe_mass_kg": 0.11999998986721039,
+    "probe_size_m": 0.02,
+    "rotation_constraint": "one-dimensional rail: only tangent-axis translation remains dynamic",
+    "slip_tangent_load_n": 0.16555933273936574,
+    "static_tangent_load_n": 0.06438418495419779
+  },
+  "material": {
+    "combine_mode": "max",
+    "effective_friction": 0.7,
+    "source": "WUJI official MJCF hand contact"
+  },
+  "metrics": {
+    "initial_max_normal_force_n": 0.0,
+    "preload": {
+      "contact_ratio": 0.975,
+      "max_abs_tangent_displacement_m": 0.010556785389780998,
+      "max_abs_tangent_speed_mps": 0.040109165012836456,
+      "max_friction_ratio": 1.5217198133468628,
+      "max_normal_force_n": 0.4160592257976532,
+      "max_object_speed_mps": 0.049312517046928406,
+      "mean_friction_force_n": 0.11208374817942968,
+      "mean_normal_force_n": 0.25905587123706936,
+      "opposing_friction_ratio": 0.5128205128205128,
+      "sample_count": 80
+    },
+    "slip": {
+      "contact_ratio": 1.0,
+      "max_abs_tangent_displacement_m": 0.010806392878293991,
+      "max_abs_tangent_speed_mps": 0.023869166150689125,
+      "max_friction_ratio": 0.6984061598777771,
+      "max_normal_force_n": 0.2957287132740021,
+      "max_object_speed_mps": 0.02634284645318985,
+      "mean_friction_force_n": 0.06854038098827005,
+      "mean_normal_force_n": 0.20044898502528669,
+      "opposing_friction_ratio": 0.85,
+      "sample_count": 20
+    },
+    "slip_tangent_displacement_increment_m": 0.002817307598888874,
+    "static": {
+      "contact_ratio": 1.0,
+      "max_abs_tangent_displacement_m": 0.011306379921734333,
+      "max_abs_tangent_speed_mps": 0.02032364532351494,
+      "max_friction_ratio": 0.6958951950073242,
+      "max_normal_force_n": 0.1677151322364807,
+      "max_object_speed_mps": 0.024441838264465332,
+      "mean_friction_force_n": 0.05785004884004593,
+      "mean_normal_force_n": 0.1255258309841156,
+      "opposing_friction_ratio": 0.4,
+      "sample_count": 50
+    },
+    "static_tangent_displacement_increment_m": 0.00012154318392276764
+  },
+  "num_envs": 1,
+  "pass": true,
+  "physics_dt": 0.008333333333333333,
+  "schema_version": 1,
+  "seed": 0,
+  "task": "DexterousHands-Wuji-Hand-Reorientation-Direct-v0",
+  "test": "wuji_loaded_fingertip_contact_friction"
+}

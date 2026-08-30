@@ -1,0 +1,13 @@
+[package]
+name = "dexteroushands_lab"
+version = "0.1.0"
+description = "Isaac Lab task extension for DexterousHands"
+repository = "https://github.com/FEGkkd/dexgym"
+
+[dependencies]
+"isaaclab" = {}
+"isaaclab_assets" = {}
+"isaaclab_tasks" = {}
+
+[[python.module]]
+name = "dexteroushands_lab"
