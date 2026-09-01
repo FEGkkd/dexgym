@@ -6,6 +6,7 @@ import argparse
 import csv
 import json
 import math
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -52,8 +53,9 @@ import gymnasium as gym  # noqa: E402
 import torch  # noqa: E402
 
 import dexteroushands_lab.tasks as dexteroushands_tasks  # noqa: E402
-from dexteroushands_lab.assets.wuji_mjcf_reference import (  # noqa: E402
-    WUJI_OFFICIAL_HAND_CONTACT,
+from dexteroushands_lab.assets.wuji_hand import (  # noqa: E402
+    WUJI_HAND_CONTACT_FRICTION,
+    WUJI_HAND_USD_RELATIVE_PATH,
 )
 from isaaclab_tasks.utils import parse_env_cfg  # noqa: E402
 from isaaclab.utils.math import quat_apply  # noqa: E402
@@ -383,9 +385,9 @@ def _phase_stats(rows: list[dict[str, object]], phase: str) -> dict[str, float]:
 def run() -> tuple[dict[str, object], list[dict[str, object]]]:
     if args.num_envs != 1:
         raise ValueError("This calibrated fixture currently requires --num_envs 1.")
-    if not 0.0 < args.static_load_ratio < float(WUJI_OFFICIAL_HAND_CONTACT["friction"]):
+    if not 0.0 < args.static_load_ratio < WUJI_HAND_CONTACT_FRICTION:
         raise ValueError("--static_load_ratio must be between zero and the configured friction.")
-    if args.slip_load_ratio <= float(WUJI_OFFICIAL_HAND_CONTACT["friction"]):
+    if args.slip_load_ratio <= WUJI_HAND_CONTACT_FRICTION:
         raise ValueError("--slip_load_ratio must exceed the configured friction.")
     if min(args.preload_steps, args.static_steps, args.slip_steps) < 5:
         raise ValueError("Every phase must contain at least five simulation steps.")
@@ -529,7 +531,7 @@ def run() -> tuple[dict[str, object], list[dict[str, object]]]:
         preload = _phase_stats(rows, "preload")
         static = _phase_stats(rows, "static")
         slip = _phase_stats(rows, "slip")
-        mu = float(WUJI_OFFICIAL_HAND_CONTACT["friction"])
+        mu = WUJI_HAND_CONTACT_FRICTION
         finite = all(
             math.isfinite(float(row[key]))
             for row in rows
@@ -583,6 +585,9 @@ def run() -> tuple[dict[str, object], list[dict[str, object]]]:
             "pass": all(checks.values()),
             "checks": checks,
             "task": args.task,
+            "asset": {
+                "usd_path": f"$WUJI_DESCRIPTION_ROOT/{WUJI_HAND_USD_RELATIVE_PATH.as_posix()}",
+            },
             "finger": args.finger,
             "seed": args.seed,
             "num_envs": args.num_envs,
@@ -601,7 +606,7 @@ def run() -> tuple[dict[str, object], list[dict[str, object]]]:
             "material": {
                 "effective_friction": mu,
                 "combine_mode": "max",
-                "source": "WUJI official MJCF hand contact",
+                "source": "DexGym PhysX material applied to the official WUJI USD",
             },
             "calibration": calibration,
             "metrics": {
@@ -641,7 +646,18 @@ def main() -> int:
 
 try:
     exit_code = main()
-finally:
-    simulation_app.close()
+except BaseException:
+    # Let Python propagate validation errors; Isaac Sim's close path exits the
+    # process with status 0 and would otherwise hide the original failure.
+    raise
 
-raise SystemExit(exit_code)
+if exit_code != 0:
+    # Isaac Sim registers an exit hook that overwrites normal Python exits.
+    # The summary is already durable; preserve the hard-gate status explicitly.
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(exit_code)
+
+# A passing run can use the normal Isaac Sim shutdown path.
+simulation_app.close()
+raise SystemExit(0)

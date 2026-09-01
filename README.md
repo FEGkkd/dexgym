@@ -34,9 +34,15 @@ for future arm-hand work.
 
 WUJI uses the official native USD at
 `hand/body/usd/right/wujihand.usd`, resolved from
-`WUJI_DESCRIPTION_ROOT`. The WUJI arm-hand directory is an unregistered
-scaffold; arm plus hand training is not claimed by this release. Sim-to-sim is
-also deferred.
+`WUJI_DESCRIPTION_ROOT`.
+
+WUJI 运行时只支持这个官方原生 USD。仓库不包含模型转换逻辑、转换后资产或旧资产回退路径。
+
+The WUJI runtime supports only this official native USD; no converted asset or
+legacy asset fallback is included.
+
+The WUJI arm-hand directory is an unregistered scaffold; arm plus hand training
+is not claimed by this release. Sim-to-sim is also deferred.
 
 ## 环境要求 / Requirements
 
@@ -183,10 +189,9 @@ for the official-USD physics evidence.
   is not registered.
 - The short PPO run proves numerical training-chain connectivity, not
   reorientation success or a production checkpoint.
-- Native USD and official WUJI MJCF are not exactly dynamics-equivalent; the
-  remaining geometry/contact, system-identification, disturbance, and domain-
-  randomization gaps are documented in the validation report.
-- MuJoCo sim-to-sim comparison and real-robot deployment are deferred.
+- The WUJI runtime accepts only the official native USD selected by
+  `WUJI_DESCRIPTION_ROOT`; converted robot assets are not supported.
+- Cross-simulator comparison and real-robot deployment are deferred.
 
 ## License and attribution
 

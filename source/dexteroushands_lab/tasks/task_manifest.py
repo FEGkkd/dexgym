@@ -27,7 +27,7 @@ TASK_MANIFEST = (
         task_id="DexterousHands-Wuji-Hand-Reorientation-Direct-v0",
         workflow="direct",
         status="isaac-runtime-and-export-chain-validated-task-effect-pending",
-        source_task="wuji-mjlab.reorient",
+        source_task="WUJI official native USD",
     ),
     TaskRecord(
         task_id="DexterousHands-Allegro-Repose-ManagerBased-v0",

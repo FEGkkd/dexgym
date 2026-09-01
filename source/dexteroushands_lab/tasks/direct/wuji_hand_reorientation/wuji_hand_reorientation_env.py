@@ -30,15 +30,11 @@ from ....assets.wuji_hand import (
     WUJI_ISAAC_NON_TIP_BODY_NAMES,
     WUJI_ISAAC_TIP_BODY_NAMES,
 )
-from ....assets.wuji_mjcf_reference import (
-    official_mjcf_path,
-    official_reference_summary,
-)
 from .wuji_hand_reorientation_env_cfg import WujiHandReorientationDirectEnvCfg
 
 
 class WujiHandReorientationDirectEnv(DirectRLEnv):
-    """Explicit Isaac lifecycle with Wuji task semantics from wuji-mjlab."""
+    """Explicit Isaac lifecycle for the official native WUJI USD."""
 
     cfg: WujiHandReorientationDirectEnvCfg
 
@@ -158,8 +154,7 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
         self.previous_previous_actions = torch.zeros_like(self.actions)
         self.joint_targets = self.default_joint_pos.clone()
 
-        # Isaac Lab pose buffers use xyzw. The public data contract documents
-        # the Wuji/MuJoCo boundary separately as wxyz.
+        # Isaac Lab pose buffers use xyzw; the task contract names this explicitly.
         self.tag_in_palm_pos = torch.tensor(
             cfg.tag_in_palm_pos, device=self.device
         ).view(1, 3)
@@ -334,16 +329,6 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
             "drives=read_from_usd",
             flush=True,
         )
-        reference = official_reference_summary()
-        if reference is not None:
-            print(
-                "WUJI_MJCF_REFERENCE "
-                f"source={official_mjcf_path()} mass_sum={reference.mass_total:.8f} "
-                f"collision_geoms={reference.collision_geom_count} "
-                "comparison=informational_only",
-                flush=True,
-            )
-
     def _setup_scene(self):
         self.robot = Articulation(self.cfg.robot)
         self.object = RigidObject(self.cfg.object)

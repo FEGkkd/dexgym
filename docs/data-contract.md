@@ -1,20 +1,20 @@
-# Isaac Lab and MuJoCo Data Contract
+# Isaac Lab WUJI Data Contract
 
 Contract version: `dexteroushands-v1`
 
-The validated Wuji Hand DirectTask uses the right Wuji Hand 2 Beta 1 asset. Its
-policy action order is the MuJoCo actuator order:
+The validated Wuji Hand DirectTask loads the official native USD asset. Its
+policy action order is the native USD joint order:
 
 ```text
-r_THJ0 r_THJ1 r_THJ2 r_THJ3
-r_FFJ0 r_FFJ1 r_FFJ2 r_FFJ3
-r_MFJ0 r_MFJ1 r_MFJ2 r_MFJ3
-r_RFJ0 r_RFJ1 r_RFJ2 r_RFJ3
-r_LFJ0 r_LFJ1 r_LFJ2 r_LFJ3
+right_finger1_joint1 right_finger1_joint2 right_finger1_joint3 right_finger1_joint4
+right_finger2_joint1 right_finger2_joint2 right_finger2_joint3 right_finger2_joint4
+right_finger3_joint1 right_finger3_joint2 right_finger3_joint3 right_finger3_joint4
+right_finger4_joint1 right_finger4_joint2 right_finger4_joint3 right_finger4_joint4
+right_finger5_joint1 right_finger5_joint2 right_finger5_joint3 right_finger5_joint4
 ```
 
-Isaac Lab maps these entries to semantic native-USD joint names at runtime.
-`WUJI_DESCRIPTION_ROOT` selects the external asset checkout; the native USD is loaded at runtime and no machine-local
+The order is authored explicitly from the official native USD contract.
+`WUJI_DESCRIPTION_ROOT` selects the external asset checkout; no machine-local
 absolute path is embedded in the extension.
 
 ## Identity
@@ -65,7 +65,7 @@ oldest-to-newest history, for a policy input dimension of 207:
 20  previous raw action
 ```
 
-The action vector has 20 entries in the explicit Wuji actuator order above.
+The action vector has 20 entries in the explicit official USD joint order above.
 Actions are clipped to [-1, 1], scaled by 0.5 around the configured default
 joint pose, clipped to joint limits, then filtered with EMA alpha 0.5 before
 being sent as Isaac joint position targets. A 0.4 s warmup holds the default
@@ -130,9 +130,6 @@ physics_dt = sim.dt
 control_dt = physics_dt * decimation
 policy_rate = 1 / control_dt
 ```
-
-MuJoCo uses the same effective policy period even if its internal integration
-step differs.
 
 ## Reset and termination
 

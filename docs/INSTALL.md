@@ -42,6 +42,8 @@ printf '%s\n' "$WUJI_DESCRIPTION_ROOT"
 test -f "$WUJI_DESCRIPTION_ROOT/hand/body/usd/right/wujihand.usd"
 ```
 
+当前任务只加载上述官方 USD，不执行模型转换，也不回退到旧的本地转换资产。
+
 ### 训练和 GUI
 
 ```bash
@@ -105,6 +107,9 @@ Verify the paths and launch a smoke test:
 ./scripts/list_envs.sh
 ./scripts/smoke.sh --task DexterousHands-Wuji-Hand-Reorientation-Direct-v0 --num_envs 2 --steps 3
 ```
+
+The task loads only `/hand/body/usd/right/wujihand.usd`.
+It does not convert robot models or fall back to previously generated assets.
 
 Train headless or with the desktop window:
 

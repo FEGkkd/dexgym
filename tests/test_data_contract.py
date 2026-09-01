@@ -30,14 +30,18 @@ class DataContractTest(unittest.TestCase):
         self.assertEqual(record.workflow, "direct")
         self.assertEqual(record.source_task, "ShadowHandReOrientation")
 
-    def test_wuji_contract_matches_mujoco_action_width(self):
+    def test_wuji_contract_matches_official_usd_action_width(self):
         self.assertEqual(WUJI_REORIENTATION_CONTRACT.action_dim, 20)
         self.assertEqual(WUJI_REORIENTATION_CONTRACT.frame_observation_dim, 69)
         self.assertEqual(WUJI_REORIENTATION_CONTRACT.observation_history_length, 3)
         self.assertEqual(WUJI_REORIENTATION_CONTRACT.observation_dim, 207)
         self.assertEqual(WUJI_REORIENTATION_CONTRACT.critic_observation_dim, 413)
-        self.assertEqual(WUJI_REORIENTATION_CONTRACT.joint_order[0], "r_THJ0")
-        self.assertEqual(WUJI_REORIENTATION_CONTRACT.joint_order[-1], "r_LFJ3")
+        self.assertEqual(
+            WUJI_REORIENTATION_CONTRACT.joint_order[0], "right_finger1_joint1"
+        )
+        self.assertEqual(
+            WUJI_REORIENTATION_CONTRACT.joint_order[-1], "right_finger5_joint4"
+        )
 
 
 if __name__ == "__main__":

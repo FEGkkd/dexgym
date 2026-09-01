@@ -98,7 +98,7 @@
   "material": {
     "combine_mode": "max",
     "effective_friction": 0.7,
-    "source": "WUJI official MJCF hand contact"
+    "source": "DexGym PhysX material applied to the official WUJI USD"
   },
   "metrics": {
     "initial_max_normal_force_n": 0.0,
@@ -139,13 +139,16 @@
       "opposing_friction_ratio": 1.0,
       "sample_count": 50
     },
-    "static_tangent_displacement_increment_m": 7.070787250995636e-05
+    "static_tangent_displacement_increment_m": 0.00007070787250995636
   },
   "num_envs": 1,
   "pass": true,
   "physics_dt": 0.008333333333333333,
-  "schema_version": 1,
+  "schema_version": 2,
   "seed": 0,
   "task": "DexterousHands-Wuji-Hand-Reorientation-Direct-v0",
-  "test": "wuji_loaded_fingertip_contact_friction"
+  "test": "wuji_loaded_fingertip_contact_friction",
+  "asset": {
+    "usd_path": "$WUJI_DESCRIPTION_ROOT/hand/body/usd/right/wujihand.usd"
+  }
 }

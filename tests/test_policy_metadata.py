@@ -39,7 +39,7 @@ class PolicyMetadataTest(unittest.TestCase):
         self.assertEqual(artifacts["policy_metadata.yaml"]["critic_observation_dim"], 413)
         self.assertEqual(artifacts["action_schema.yaml"]["dim"], 20)
         self.assertEqual(
-            artifacts["action_schema.yaml"]["joint_order"][0], "r_THJ0"
+            artifacts["action_schema.yaml"]["joint_order"][0], "right_finger1_joint1"
         )
         self.assertEqual(
             artifacts["observation_schema.yaml"]["policy_input"]["layout"],

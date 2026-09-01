@@ -6,8 +6,7 @@ Inputs:
 
 - legacy task files and YAML configs;
 - current Isaac Lab version;
-- Wuji USD/MJCF descriptions;
-- `wuji-mjlab` reorientation task.
+- the official native WUJI USD description;
 
 Outputs:
 
@@ -51,8 +50,10 @@ Gate: reset, one-step, finite-value, dimension, and reward component tests pass.
 ## Phase 3: Wuji Hand DirectTask
 
 Implement a native Wuji Hand single-hand reorientation task in Isaac Lab
-using the official pre-built Wuji USD and PhysX. Use `wuji-mjlab` as the semantic reference, and use the official USD as the Isaac physics source for
-joint order, timing, action filtering, observations, goal generation, reset,
+using the official pre-built WUJI USD and PhysX. The official USD is the only
+Isaac asset source for joint order, articulation properties, body mapping, and
+contact geometry. The task configuration owns timing, action filtering,
+observations, goal generation, reset,
 success, cage logic, and reward scaling. The current policy contract is
 20 actions and 3 x 69 observation history = 207 inputs.
 
@@ -61,8 +62,7 @@ contact isolation, short PPO update, checkpoint loading, policy export,
 and offline export validation. These gates pass for the current Wuji DirectTask.
 The short policy smoke has not demonstrated reorientation success: success remained zero and the open-loop rollouts showed early cage escapes.
 The next task-level milestone is a longer training run after validating initial
-contact retention and reward balance. Contact terms must not be silently
-approximated as MuJoCo behavior. The native USD collision-bearing body map
+contact retention and reward balance. Contact terms must be measured and validated directly in PhysX. The native USD collision-bearing body map
 must remain explicit and name-checked.
 
 ## Phase 4: Manager-Based arm-hand task
@@ -83,19 +83,10 @@ DirectTask counterpart for the shared fields.
 
 ## Phase 5: Sim-to-sim (deferred)
 
-Implement when the Isaac-only training milestone is accepted:
-
-- exported policy metadata;
-- Isaac Lab observation adapter;
-- MuJoCo observation adapter;
-- canonical action postprocessor;
-- deterministic rollout trace writer;
-- tolerance-based trace comparison.
-
 This phase is intentionally outside the current single-hand training scope.
-When resumed, the gate is a fixed action sequence and policy invocation with
-matching shapes, finite values, joint names, and documented numeric
-tolerances.
+No cross-simulator model conversion, adapter, or trace-comparison code is
+included in this repository. It must be specified and validated separately if
+the scope is resumed.
 
 ## Phase 6: Remaining legacy tasks
 

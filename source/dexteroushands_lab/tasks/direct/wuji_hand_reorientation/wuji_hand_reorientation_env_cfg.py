@@ -9,7 +9,14 @@ import isaaclab.sim as sim_utils
 from isaaclab.utils.configclass import configclass
 from isaaclab_physx.physics import PhysxCfg
 
-from ....assets.wuji_hand import WUJI_ISAAC_JOINT_NAMES, make_wuji_hand_cfg
+from ....assets.wuji_hand import (
+    WUJI_HAND_CONTACT_FRICTION,
+    WUJI_ISAAC_JOINT_NAMES,
+    WUJI_OBJECT_FRICTION,
+    WUJI_OBJECT_MASS_KG,
+    WUJI_OBJECT_SIZE_M,
+    make_wuji_hand_cfg,
+)
 from .task_contract import WUJI_CRITIC_OBSERVATION_DIM
 
 
@@ -18,7 +25,7 @@ class WujiHandReorientationDirectEnvCfg(DirectRLEnvCfg):
     """DirectTask configuration with an imported native Wuji Hand asset."""
 
     seed = 0
-    # Keep the effective policy period aligned with wuji-mjlab (0.05 s).
+    # Use a 50 ms policy period for the fixed-base native USD task.
     # Isaac Sim uses 120 Hz PhysX and six substeps per policy action.
     episode_length_s = 50.0
     decimation = 6
@@ -51,7 +58,7 @@ class WujiHandReorientationDirectEnvCfg(DirectRLEnvCfg):
     object: RigidObjectCfg = RigidObjectCfg(
         prim_path="/World/envs/env_.*/Object",
         spawn=sim_utils.CuboidCfg(
-            size=(0.054, 0.054, 0.054),
+            size=(WUJI_OBJECT_SIZE_M, WUJI_OBJECT_SIZE_M, WUJI_OBJECT_SIZE_M),
             visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.1, 0.45, 0.85)),
             rigid_props=sim_utils.RigidBodyPropertiesCfg(
                 disable_gravity=False,
@@ -61,14 +68,14 @@ class WujiHandReorientationDirectEnvCfg(DirectRLEnvCfg):
                 collision_enabled=True, contact_offset=0.002, rest_offset=0.0
             ),
             physics_material=sim_utils.PhysxRigidBodyMaterialCfg(
-                static_friction=0.3,
-                dynamic_friction=0.3,
+                static_friction=WUJI_OBJECT_FRICTION,
+                dynamic_friction=WUJI_OBJECT_FRICTION,
                 restitution=0.0,
                 friction_combine_mode="max",
                 restitution_combine_mode="min",
             ),
             activate_contact_sensors=True,
-            mass_props=sim_utils.MassPropertiesCfg(mass=0.12),
+            mass_props=sim_utils.MassPropertiesCfg(mass=WUJI_OBJECT_MASS_KG),
         ),
         init_state=RigidObjectCfg.InitialStateCfg(
             pos=(0.0700, 0.0300, 0.5400), rot=(0.0, 0.0, 0.0, 1.0)
@@ -76,11 +83,11 @@ class WujiHandReorientationDirectEnvCfg(DirectRLEnvCfg):
     )
 
     # The native WUJI USD does not author a PhysX material on its imported
-    # collision prototypes. Apply the official MJCF hand contact friction
+    # collision prototypes. Apply the configured WUJI hand contact friction
     # as a stage-local inherited material in the DirectTask.
     wuji_hand_physics_material = sim_utils.PhysxRigidBodyMaterialCfg(
-        static_friction=0.7,
-        dynamic_friction=0.7,
+        static_friction=WUJI_HAND_CONTACT_FRICTION,
+        dynamic_friction=WUJI_HAND_CONTACT_FRICTION,
         restitution=0.0,
         friction_combine_mode="max",
         restitution_combine_mode="min",

@@ -2,11 +2,12 @@
 
 ## System boundary
 
-The project has three boundaries:
+The project has two boundaries:
 
-1. external legacy implementations used as migration references;
-2. this repository's Isaac Lab GPU training and export stack;
-3. `sim2sim` (deferred): future adapters and tests that compare Isaac Lab with MuJoCo.
+1. external robot descriptions and legacy implementations used as references;
+2. this repository's Isaac Lab GPU training and export stack.
+
+Cross-simulator comparison is deferred and has no implementation in this repository.
 
 The current acceptance path ends at Isaac Sim/PhysX policy training, checkpointing, and export.
 
@@ -17,10 +18,10 @@ embedded inside the simulation task implementation.
 
 ### Assets
 
-Asset modules own USD/URDF/MJCF paths, articulation configuration, actuator
+Asset modules own official USD paths, articulation configuration, actuator
 settings, joint-name mappings, body-name mappings, default states, and asset
-validation helpers. Wuji assets are referenced from the local description
-repositories through explicit configuration or environment variables.
+validation helpers. The WUJI task resolves only the native USD selected by
+`WUJI_DESCRIPTION_ROOT`; converted-asset fallbacks are prohibited.
 
 ### Controllers
 
@@ -51,8 +52,8 @@ not contain reward or robot-specific logic.
 ### Validation
 
 Validation is split into static checks, CPU/Python contract tests, Isaac Sim
-scene smoke tests, short GPU training tests, checkpoint tests, and sim-to-sim
-trace tests.
+scene smoke tests, short GPU training tests, checkpoint tests, and policy export
+tests.
 
 ## Data flow
 
@@ -75,8 +76,8 @@ Isaac Lab physics
         +--> extras/log
 ```
 
-The same semantic fields are reserved for a future MuJoCo adapter. Flattening
-order is defined by the data contract, not by incidental dictionary ordering.
+Flattening order is defined by the data contract, not by incidental dictionary
+ordering. No cross-simulator adapter is included in the current repository.
 
 ## DirectTask implementation rule
 

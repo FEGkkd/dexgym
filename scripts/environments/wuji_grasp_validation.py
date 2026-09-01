@@ -6,6 +6,7 @@ import argparse
 import csv
 import json
 import math
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -59,12 +60,11 @@ import gymnasium as gym  # noqa: E402
 import torch  # noqa: E402
 
 import dexteroushands_lab.tasks as dexteroushands_tasks  # noqa: E402
-from dexteroushands_lab.assets.wuji_mjcf_reference import (  # noqa: E402
-    WUJI_OFFICIAL_COLLISION_GEOM_COUNT,
-    WUJI_OFFICIAL_CONTACT_EXCLUDES,
-    WUJI_OFFICIAL_CUBE,
-    WUJI_OFFICIAL_HAND_CONTACT,
-    WUJI_OFFICIAL_SIMULATION,
+from dexteroushands_lab.assets.wuji_hand import (  # noqa: E402
+    WUJI_HAND_CONTACT_FRICTION,
+    WUJI_HAND_USD_RELATIVE_PATH,
+    WUJI_OBJECT_MASS_KG,
+    WUJI_OBJECT_SIZE_M,
 )
 from isaaclab_tasks.utils import parse_env_cfg  # noqa: E402
 from isaaclab.utils.math import quat_apply  # noqa: E402
@@ -145,7 +145,7 @@ def _set_gravity_equivalent_force(env, enabled: bool) -> None:
     forces = torch.zeros((env.num_envs, 1, 3), device=env.device)
     torques = torch.zeros_like(forces)
     if enabled:
-        forces[:, 0, 2] = -float(WUJI_OFFICIAL_CUBE["mass"]) * args.gravity
+        forces[:, 0, 2] = -WUJI_OBJECT_MASS_KG * args.gravity
     object_asset.permanent_wrench_composer.set_forces_and_torques_index(
         forces=forces,
         torques=torques,
@@ -270,7 +270,7 @@ def _calibrate_object_position(
     object_size = (
         SINGLE_FINGER_PROBE_SIZE_M
         if args.scenario == "single"
-        else float(WUJI_OFFICIAL_CUBE["size"][0])
+        else WUJI_OBJECT_SIZE_M
     )
     half_extent = 0.5 * object_size
     ray_extent = half_extent / torch.amax(torch.abs(direction), dim=-1, keepdim=True)
@@ -555,7 +555,7 @@ def _summarize(rows: list[dict[str, object]], env_index: int, hold_steps: int) -
         "max_normal_force_n": maximum_force,
         "max_tangential_force_n": max(float(row["tangential_force_sum_n"]) for row in env_rows),
         "max_friction_to_normal_ratio": max_friction_ratio,
-        "expected_effective_friction": float(WUJI_OFFICIAL_HAND_CONTACT["friction"]),
+        "expected_effective_friction": WUJI_HAND_CONTACT_FRICTION,
         "max_object_speed_mps": maximum_speed,
         "max_lift_height_m": maximum_lift,
         "final_lift_height_m": float(final["lift_height_m"]),
@@ -766,17 +766,9 @@ def run() -> tuple[dict[str, object], list[dict[str, object]]]:
             "fixed_base_position_error_m": _to_list(root_position_error),
             "fixed_base_orientation_error": _to_list(root_orientation_error),
             "asset": {
-                "usd_path": direct_env.cfg.robot.spawn.usd_path,
+                "usd_path": f"$WUJI_DESCRIPTION_ROOT/{WUJI_HAND_USD_RELATIVE_PATH.as_posix()}",
                 "isaac_hand_mass_kg": hand_mass,
                 "isaac_collision_body_count": len(direct_env.robot.body_names),
-            },
-            "official_mjcf_reference": {
-                "hand_mass_kg": 0.5266132,
-                "collision_geom_count": WUJI_OFFICIAL_COLLISION_GEOM_COUNT,
-                "contact_excludes": WUJI_OFFICIAL_CONTACT_EXCLUDES,
-                "hand_contact": WUJI_OFFICIAL_HAND_CONTACT,
-                "cube": WUJI_OFFICIAL_CUBE,
-                "simulation": WUJI_OFFICIAL_SIMULATION,
             },
             "per_env": per_env,
         }
@@ -807,7 +799,18 @@ def main() -> int:
 
 try:
     exit_code = main()
-finally:
-    simulation_app.close()
+except BaseException:
+    # Let Python propagate validation errors; Isaac Sim's close path exits the
+    # process with status 0 and would otherwise hide the original failure.
+    raise
 
-raise SystemExit(exit_code)
+if exit_code != 0:
+    # Isaac Sim registers an exit hook that overwrites normal Python exits.
+    # The summary is already durable; preserve the hard-gate status explicitly.
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(exit_code)
+
+# A passing run can use the normal Isaac Sim shutdown path.
+simulation_app.close()
+raise SystemExit(0)

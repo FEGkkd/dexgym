@@ -6,7 +6,7 @@ from isaaclab_rl.rsl_rl import RslRlMLPModelCfg, RslRlOnPolicyRunnerCfg, RslRlPp
 
 @configclass
 class WujiHandReorientationPPORunnerCfg(RslRlOnPolicyRunnerCfg):
-    # Match official wuji-mjlab asymmetric actor-critic semantics.
+    # Use the asymmetric actor-critic contract for the official native USD task.
     obs_groups = {"actor": ["policy"], "critic": ["critic"]}
     num_steps_per_env = 40
     max_iterations = 5000

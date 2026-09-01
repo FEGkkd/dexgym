@@ -2,7 +2,7 @@
 
 The task is trained with Isaac Sim/PhysX. The official pre-built USD is the
 physics source of truth; WUJI_DESCRIPTION_ROOT selects the description checkout.
-The MuJoCo checkout is used only as a semantic policy-contract reference.
+The task contract is defined by the native USD joint and body names.
 """
 
 from __future__ import annotations
@@ -14,14 +14,6 @@ import isaaclab.sim as sim_utils
 from isaaclab.actuators import ImplicitActuatorCfg
 from isaaclab.assets import ArticulationCfg
 
-WUJI_MJCF_ACTUATOR_NAMES = (
-    "r_THJ0", "r_THJ1", "r_THJ2", "r_THJ3",
-    "r_FFJ0", "r_FFJ1", "r_FFJ2", "r_FFJ3",
-    "r_MFJ0", "r_MFJ1", "r_MFJ2", "r_MFJ3",
-    "r_RFJ0", "r_RFJ1", "r_RFJ2", "r_RFJ3",
-    "r_LFJ0", "r_LFJ1", "r_LFJ2", "r_LFJ3",
-)
-
 # The official USD exposes these names directly. They are ordered in the
 # same finger-major order as the 20-DOF policy contract.
 WUJI_ISAAC_JOINT_NAMES = tuple(
@@ -29,10 +21,6 @@ WUJI_ISAAC_JOINT_NAMES = tuple(
     for finger in range(1, 6)
     for joint in range(1, 5)
 )
-
-# Compatibility alias for task/config code written before the switch to the
-# official native USD.
-WUJI_URDF_JOINT_NAMES = WUJI_ISAAC_JOINT_NAMES
 
 WUJI_ISAAC_BODY_NAMES = (
     "right_palm_link",
@@ -45,6 +33,12 @@ WUJI_ISAAC_TIP_BODY_NAMES = tuple(
 WUJI_ISAAC_NON_TIP_BODY_NAMES = tuple(
     name for name in WUJI_ISAAC_BODY_NAMES if name not in WUJI_ISAAC_TIP_BODY_NAMES
 )
+
+WUJI_HAND_USD_RELATIVE_PATH = Path("hand/body/usd/right/wujihand.usd")
+WUJI_HAND_CONTACT_FRICTION = 0.7
+WUJI_OBJECT_SIZE_M = 0.054
+WUJI_OBJECT_MASS_KG = 0.12
+WUJI_OBJECT_FRICTION = 0.3
 
 # Isaac Lab pose buffers use xyzw. The official demo starts at 0.06 rad
 # on the first joint of each finger and zero elsewhere.
@@ -71,48 +65,13 @@ def wuji_description_root() -> Path:
     return root
 
 
-def wuji_hand_urdf_path() -> str:
-    """Return the official right-hand URDF used only for tip-frame inspection."""
-
-    path = wuji_description_root() / "hand/body/urdf/right.urdf"
-    if not path.is_file():
-        raise FileNotFoundError(f"Wuji Hand URDF does not exist: {path}")
-    return str(path)
-
-
-
 def wuji_hand_usd_path() -> str:
-    """Return the official pre-built USD, or an explicit asset override."""
+    """Return the official native USD from the external description checkout."""
 
-    override = os.environ.get("WUJI_ISAAC_ASSET_PATH")
-    if override:
-        path = Path(override).expanduser().resolve()
-        if not path.is_file():
-            raise FileNotFoundError(f"WUJI_ISAAC_ASSET_PATH does not exist: {path}")
-        return str(path)
-
-    candidates = []
-    configured_root = os.environ.get("WUJI_DESCRIPTION_ROOT")
-    if configured_root:
-        candidates.append(
-            Path(configured_root).expanduser().resolve()
-            / "hand/body/usd/right/wujihand.usd"
-        )
-
-    # Keep a convenient sibling-checkout fallback for local development. The
-    # explicit environment variable remains the reproducible path in CI.
-    project_root = Path(__file__).resolve().parents[3]
-    candidates.extend([
-        project_root.parent / "isaaclab-sim/wuji_hand_description/usd/right/wujihand.usd",
-        project_root.parent / "wuji-hand-description/usd/right/wujihand.usd",
-    ])
-    for path in candidates:
-        if path.is_file():
-            return str(path)
-    raise FileNotFoundError(
-        "Official WUJI Hand USD was not found. Checked: "
-        + ", ".join(str(path) for path in candidates)
-    )
+    path = wuji_description_root() / WUJI_HAND_USD_RELATIVE_PATH
+    if not path.is_file():
+        raise FileNotFoundError(f"Official WUJI Hand USD does not exist: {path}")
+    return str(path)
 
 
 def make_wuji_hand_cfg() -> ArticulationCfg:

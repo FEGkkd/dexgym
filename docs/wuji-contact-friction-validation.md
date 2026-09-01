@@ -13,8 +13,9 @@ WUJI hand contact friction (`static_friction=0.7`, `dynamic_friction=0.7`,
 friction `0.3`, so the effective pair coefficient is `0.7`. The source USD
 file is never modified.
 
-This is a simulator-readiness result. It does not claim dynamic equivalence to
-the WUJI MJCF, real hardware, or a small sim-to-real gap.
+This is a simulator-readiness result. It establishes the configured Isaac Sim / PhysX
+contact behavior only; it does not claim real-hardware equivalence or a small
+sim-to-real gap.
 
 ## Official USD Runtime Facts
 
@@ -130,24 +131,18 @@ smoke test, not task-success evidence.
 These results are sufficient to start implementing WUJI fixed-base grasp
 rewards, resets, curricula, and longer PPO training in Isaac Lab.
 
-## Remaining Fidelity Gap
+## Remaining Fidelity Work
 
-The official USD and official WUJI MJCF are not identical:
+The native USD is the sole Isaac Sim asset source. The official USD does not
+author a hand physics material on its collision prototypes, so the task applies
+a stage-local PhysX material with the validated hand coefficient `0.7`; the
+source USD remains unchanged.
 
-| Property | Official USD | Official MJCF reference |
-| --- | ---: | ---: |
-| Hand mass sum | 0.518060 kg | 0.526613 kg |
-| Collision bodies/geometries | 26 | 17 |
-| Native filtered-pair entries / MJCF contact excludes | 10 | 6 |
-| Hand contact coefficient | 0.7 stage overlay | 0.7 |
-| Object contact coefficient | 0.3 | 0.3 |
-
-MuJoCo `solref` and `solimp` do not have an exact one-to-one PhysX mapping in
-this task. The material overlay validates the coefficient and force direction,
-but does not establish exact force magnitudes, real-hardware friction, or
-sim-to-real performance. The remaining work includes geometry/contact parity,
-contact-exclude policy review, system identification, disturbance/domain
-randomization parity, and task-level grasp/reorientation success.
+The remaining work is Isaac-side system identification and task validation:
+contact geometry review, material calibration, disturbance and domain
+randomization, and task-level grasp/reorientation success. The contact probe
+validates the configured force direction and friction-cone behavior; it does not
+establish exact real-hardware force magnitudes or sim-to-real performance.
 
 ## Reproduction
 
