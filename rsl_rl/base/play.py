@@ -10,8 +10,10 @@ from rsl_rl import cli_args
 
 
 def _parser() -> argparse.ArgumentParser:
+    from isaaclab.app import AppLauncher
+
     parser = argparse.ArgumentParser(description="Play a DexterousHands RSL-RL policy.")
-    parser.add_argument("--task", type=str, required=True)
+    parser.add_argument("--task", type=str, default=None)
     parser.add_argument("--num_envs", type=int, default=50)
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--disable_fabric", action="store_true", default=False)
@@ -19,6 +21,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--video_length", type=int, default=300)
     parser.add_argument("--steps", type=int, default=0)
     cli_args.add_rsl_rl_args(parser)
+    AppLauncher.add_app_launcher_args(parser)
     return parser
 
 
@@ -40,6 +43,8 @@ def _disable_training_enhancements(env_cfg) -> None:
 
 def main(argv: list[str] | None = None) -> None:
     args = _parser().parse_args(argv)
+    if args.task is None:
+        raise SystemExit("--task is required")
     if args.video:
         args.enable_cameras = True
     from isaaclab.app import AppLauncher

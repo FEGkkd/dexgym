@@ -12,8 +12,10 @@ from rsl_rl import cli_args
 
 
 def _parser() -> argparse.ArgumentParser:
+    from isaaclab.app import AppLauncher
+
     parser = argparse.ArgumentParser(description="Train a DexterousHands task with RSL-RL.")
-    parser.add_argument("--task", type=str, required=True)
+    parser.add_argument("--task", type=str, default=None)
     parser.add_argument("--num_envs", type=int, default=None)
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--max_iterations", type=int, default=None)
@@ -22,11 +24,14 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--video_length", type=int, default=200)
     parser.add_argument("--video_interval", type=int, default=2000)
     cli_args.add_rsl_rl_args(parser)
+    AppLauncher.add_app_launcher_args(parser)
     return parser
 
 
 def main(argv: list[str] | None = None) -> None:
     args = _parser().parse_args(argv)
+    if args.task is None:
+        raise SystemExit("--task is required")
     if args.video:
         args.enable_cameras = True
     from isaaclab.app import AppLauncher
@@ -47,6 +52,7 @@ def main(argv: list[str] | None = None) -> None:
         env_cfg = parse_env_cfg(
             args.task, device=args.device, num_envs=args.num_envs, use_fabric=not args.disable_fabric
         )
+        cli_args.apply_env_cfg_overrides(env_cfg, args)
         agent_cfg = cli_args.parse_rsl_rl_cfg(args.task, args)
         if args.max_iterations is not None:
             agent_cfg.max_iterations = args.max_iterations

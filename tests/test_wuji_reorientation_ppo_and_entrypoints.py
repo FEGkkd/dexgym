@@ -31,3 +31,10 @@ def test_top_level_entrypoints_are_importable():
     assert callable(train.main)
     assert callable(play.main)
     assert callable(play._disable_training_enhancements)
+
+
+def test_entrypoints_expose_isaaclab_visualizer_argument():
+    from rsl_rl.base import play, train
+
+    assert "--viz" in train._parser()._option_string_actions
+    assert "--viz" in play._parser()._option_string_actions
