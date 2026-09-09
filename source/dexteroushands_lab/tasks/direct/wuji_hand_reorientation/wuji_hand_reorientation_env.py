@@ -719,12 +719,13 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
             self.num_envs, 9
         )[:, 3:]
 
+        curriculum_progress = self.curriculum_state.as_progress()
         state_progress = torch.stack(
             (
                 self.hold_counter.float() / max(self.cfg.success_hold_steps, 1),
                 self.reward_window_timer.float() / max(self.cfg.goal_switch_delay, 1),
                 self.episode_length_buf.float() / max(self.max_episode_length, 1),
-                self.goal_reach_count.float(),
+                curriculum_progress["scale"].to(self.device),
             ),
             dim=-1,
         )
