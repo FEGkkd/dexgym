@@ -85,7 +85,7 @@ def build_policy_artifacts(
             "actor_deployment": False,
             "purpose": "privileged asymmetric critic input used during training only",
             "layout": "207 clean shared history + 206 privileged state terms",
-            "placeholder_fields": [
+            "privileged_fields": [
                 "perturbation_direction",
                 "perturbation_velocity",
                 "domain_randomization_ratios",
@@ -147,6 +147,9 @@ def runtime_from_env_cfg(env_cfg: Any) -> dict[str, Any]:
         "action_scale": getattr(env_cfg, "action_scale", None),
         "ema_alpha": getattr(env_cfg, "ema_alpha", None),
         "warmup_time_s": getattr(env_cfg, "warmup_time_s", None),
+        "enable_curriculum": getattr(env_cfg, "enable_curriculum", None),
+        "enable_domain_randomization": getattr(env_cfg, "enable_domain_randomization", None),
+        "enable_disturbance": getattr(env_cfg, "enable_disturbance", None),
     }
 
 

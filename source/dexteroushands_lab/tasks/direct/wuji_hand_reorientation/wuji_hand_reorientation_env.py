@@ -31,6 +31,10 @@ from ....assets.wuji_hand import (
     WUJI_ISAAC_TIP_BODY_NAMES,
 )
 from .wuji_hand_reorientation_env_cfg import WujiHandReorientationDirectEnvCfg
+from .contact import WujiContactGroups
+from .curriculum import CurriculumState
+from .disturbance import DisturbanceScheduler
+from .randomization import DomainRandomizationState
 
 
 class WujiHandReorientationDirectEnv(DirectRLEnv):
@@ -113,15 +117,22 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
 
         body_name_to_id = {name: index for index, name in enumerate(self._contact_body_names)}
         self._tip_body_ids = [body_name_to_id[name] for name in WUJI_ISAAC_TIP_BODY_NAMES]
-        self._distal_body_ids = list(self._tip_body_ids)
+        self._distal_body_ids = [
+            body_name_to_id[name]
+            for name in self._contact_body_names
+            if name.endswith(("link3", "link4"))
+        ]
         self._palm_body_ids = [
-            body_name_to_id[name] for name in WUJI_ISAAC_NON_TIP_BODY_NAMES
+            body_name_to_id[name]
+            for name in self._contact_body_names
+            if name.endswith("palm_link") or name.endswith(("link1", "link2"))
         ]
         self._cage_body_ids = list(range(len(self._contact_body_names)))
-        if len(self._tip_body_ids) != 5 or len(self._palm_body_ids) != 21:
+        if len(self._tip_body_ids) != 5 or len(self._palm_body_ids) != 11 or len(self._distal_body_ids) != 10:
             raise RuntimeError(
-                "Official WUJI contact mapping expected five tip and 21 non-tip bodies, "
-                f"got tips={len(self._tip_body_ids)} non_tips={len(self._palm_body_ids)}"
+                "Official WUJI contact mapping expected 11 palm/proximal, 10 distal, "
+                f"and five tip bodies, got palm={len(self._palm_body_ids)} "
+                f"distal={len(self._distal_body_ids)} tips={len(self._tip_body_ids)}"
             )
 
         self.actuated_joint_ids = [
@@ -205,6 +216,38 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
             self.num_envs, device=self.device
         )
 
+        # Both the explicit compatibility gate and the nested group gate must
+        # be enabled before a feature can change simulation state.
+        self.cfg.curriculum.enabled = bool(
+            self.cfg.curriculum.enabled and self.cfg.enable_curriculum
+        )
+        self.cfg.domain_randomization.enabled = bool(
+            self.cfg.domain_randomization.enabled and self.cfg.enable_domain_randomization
+        )
+        self.cfg.disturbance.enabled = bool(
+            self.cfg.disturbance.enabled and self.cfg.enable_disturbance
+        )
+        self.curriculum_state = CurriculumState(self.cfg.curriculum, self.num_envs, self.device)
+        self.disturbance_scheduler = DisturbanceScheduler(
+            self.cfg.disturbance, self.num_envs, self.device
+        )
+        self.randomization_state = DomainRandomizationState(
+            self.cfg.domain_randomization, self.num_envs, self.device
+        )
+        self._default_object_mass = self.object.data.body_mass.torch.clone()
+        self._default_joint_stiffness = self.robot.data.joint_stiffness.torch.clone()
+        self._default_joint_damping = self.robot.data.joint_damping.torch.clone()
+        self.contact_groups = WujiContactGroups.from_body_names(self._contact_body_names)
+        self._last_perturbation_direction = torch.zeros(
+            (self.num_envs, 3), device=self.device
+        )
+        self._last_perturbation_velocity = torch.zeros(
+            (self.num_envs, 6), device=self.device
+        )
+        self._disturbance_count = torch.zeros(
+            self.num_envs, dtype=torch.long, device=self.device
+        )
+
         self.observation_history = torch.zeros(
             (
                 self.num_envs,
@@ -234,6 +277,46 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
             self.num_envs, device=self.device
         )
         self._audit_runtime_physics()
+
+    def _apply_domain_randomization(self, env_ids: torch.Tensor) -> None:
+        """Sample and apply reset-time parameters supported by the backend."""
+        self.randomization_state.reset(env_ids)
+        if not self.cfg.domain_randomization.enabled:
+            return
+        ratios = self.randomization_state.ratios
+        # These fields have no stable indexed setter for the imported native
+        # USD in this task. Keep their critic values neutral and report the
+        # capability explicitly instead of claiming a sampled value applied.
+        for column, field in ((1, "object_com"), (2, "object_size"), (3, "hand_friction")):
+            ratios[env_ids, column] = 1.0
+            self.randomization_state.mark_capability(field, False)
+        try:
+            masses = self._default_object_mass[env_ids] * ratios[env_ids, 0:1]
+            self.object.set_masses_index(masses=masses, env_ids=env_ids)
+            self.randomization_state.mark_capability("object_mass", True)
+        except (AttributeError, NotImplementedError, RuntimeError):
+            ratios[env_ids, 0] = 1.0
+            self.randomization_state.mark_capability("object_mass", False)
+        try:
+            stiffness = self._default_joint_stiffness[env_ids][:, self.actuated_joint_ids]
+            stiffness = stiffness * ratios[env_ids, 4:5]
+            self.robot.write_joint_stiffness_to_sim_index(
+                stiffness=stiffness, joint_ids=self.actuated_joint_ids, env_ids=env_ids
+            )
+            self.randomization_state.mark_capability("pd_stiffness", True)
+        except (AttributeError, NotImplementedError, RuntimeError):
+            ratios[env_ids, 4] = 1.0
+            self.randomization_state.mark_capability("pd_stiffness", False)
+        try:
+            damping = self._default_joint_damping[env_ids][:, self.actuated_joint_ids]
+            damping = damping * ratios[env_ids, 5:6]
+            self.robot.write_joint_damping_to_sim_index(
+                damping=damping, joint_ids=self.actuated_joint_ids, env_ids=env_ids
+            )
+            self.randomization_state.mark_capability("joint_damping", True)
+        except (AttributeError, NotImplementedError, RuntimeError):
+            ratios[env_ids, 5] = 1.0
+            self.randomization_state.mark_capability("joint_damping", False)
 
     def _audit_runtime_physics(self):
         """Audit that the loaded articulation still uses the official USD data."""
@@ -418,13 +501,29 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
         ]
 
     def _pre_physics_step(self, actions: torch.Tensor):
-        # Keep raw action history independent from the processed target.
+        # Keep raw action history independent from the processed target.  The
+        # target is clipped only when converted into joint positions below.
         self.previous_previous_actions.copy_(self.previous_actions)
         self.previous_actions.copy_(self.actions)
-        self.actions = actions.to(self.device).clone().clamp(-1.0, 1.0)
+        self.actions = actions.to(self.device).clone()
+
+        now = self.episode_length_buf.to(torch.float32) * self.step_dt
+        progress = now / max(float(self.cfg.episode_length_s), self.step_dt)
+        trigger, direction, velocity = self.disturbance_scheduler.step(now, progress)
+        self._last_perturbation_direction = direction
+        self._last_perturbation_velocity = velocity
+        self._disturbance_count += trigger.to(torch.long)
+        if trigger.any():
+            ids = trigger.nonzero(as_tuple=False).flatten()
+            root_velocity = self.object.data.root_vel_w.torch[ids].clone()
+            root_velocity[:, :3] += velocity[ids, :3]
+            self.object.write_root_velocity_to_sim_index(
+                root_velocity=root_velocity, env_ids=ids
+            )
 
     def _apply_action(self):
-        raw_target = self.default_joint_pos + self.cfg.action_scale * self.actions
+        control_action = self.actions.clamp(-1.0, 1.0)
+        raw_target = self.default_joint_pos + self.cfg.action_scale * control_action
         raw_target = torch.clamp(
             raw_target, self.joint_lower_limits, self.joint_upper_limits
         )
@@ -473,6 +572,7 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
 
     def _build_policy_frame(self, apply_noise: bool | None = None) -> torch.Tensor:
         joint_angles = self._joint_pos_normalized()
+        joint_angles = joint_angles + self.randomization_state.encoder_bias
         qpos_error = joint_angles - self._normalize_target(self.joint_targets)
 
         tag_pos, tag_quat = self._tag_pose()
@@ -633,16 +733,9 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
             / float(max(self.cfg.cage_max_outside_steps, 1))
         ).clamp(max=1.0).unsqueeze(-1)
 
-        # Isaac currently has no Wuji disturbance or model-parameter DR events.
-        # Keep these fields explicit and finite while their physical
-        # randomization is migrated separately.
-        perturbation_direction = torch.zeros(
-            (self.num_envs, 3), device=self.device
-        )
-        perturbation_velocity = torch.zeros(
-            (self.num_envs, 6), device=self.device
-        )
-        dr_params = torch.ones((self.num_envs, 6), device=self.device)
+        perturbation_direction = self._last_perturbation_direction
+        perturbation_velocity = self._last_perturbation_velocity
+        dr_params = self.randomization_state.neutralized()
 
         palm_quat = self.robot.data.root_pose_w.torch[:, 3:7]
         palm_rot = matrix_from_quat(palm_quat).reshape(self.num_envs, 9)[:, 3:]
@@ -868,6 +961,19 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
             self.contact_sensor.data.friction_forces_w, "friction-force"
         )
 
+    def _finger_self_collision_penalty(self) -> torch.Tensor:
+        """Use cross-finger body proximity as the PhysX-independent collision proxy."""
+        pairs = self.contact_groups.finger_collision_pairs
+        if not pairs:
+            return torch.zeros(self.num_envs, device=self.device)
+        body_positions = self.robot.data.body_link_pose_w.torch[:, :, :3]
+        first = torch.tensor([pair[0] for pair in pairs], device=self.device)
+        second = torch.tensor([pair[1] for pair in pairs], device=self.device)
+        distances = torch.linalg.norm(
+            body_positions[:, first] - body_positions[:, second], dim=-1
+        )
+        return torch.relu(0.012 - distances).sum(dim=-1)
+
     def _get_rewards(self) -> torch.Tensor:
         object_pose = self.object.data.root_pose_w.torch
         object_quat = object_pose[:, 3:7]
@@ -934,6 +1040,7 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
         palm_detach_reward = (
             (~torch.any(palm_contact, dim=-1)) & torch.any(distal_contact, dim=-1)
         ).float()
+        finger_self_collision = self._finger_self_collision_penalty()
 
         cage_penalty = (
             outside.float()
@@ -956,6 +1063,7 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
             - 0.3 * tip_slide_penalty
             + 0.5 * palm_detach_reward
             + 11.4 * hold_reward
+            - 2.0 * finger_self_collision
         )
 
         log = self.extras.setdefault("log", {})
@@ -968,9 +1076,22 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
         log["Metrics/tip_contact_count"] = tip_contact.float().sum(dim=-1).mean().item()
         log["Metrics/tip_slide_penalty"] = tip_slide_penalty.mean().item()
         log["Metrics/palm_detach_rate"] = palm_detach_reward.mean().item()
+        log["Metrics/finger_self_collision"] = finger_self_collision.mean().item()
         log["Metrics/reset_initial_cage_escape"] = self._initial_cage_escape.mean().item()
         log["Metrics/reset_initial_tip_contact_count"] = (
             self._initial_tip_contact_count.mean().item()
+        )
+        finished = self.episode_length_buf >= self.max_episode_length - 1
+        episode_steps = self.episode_length_buf[finished] if finished.any() else None
+        progress = self.curriculum_state.update(self.success_achieved, episode_steps)
+        log["Curriculum/scale"] = progress["scale"].mean().item()
+        log["Curriculum/success_count"] = progress["success_count"].float().mean().item()
+        log["Disturbance/count"] = self._disturbance_count.float().mean().item()
+        log["Disturbance/speed"] = torch.linalg.norm(
+            self._last_perturbation_velocity[:, :3], dim=-1
+        ).mean().item()
+        log["Randomization/unsupported_fields"] = ",".join(
+            sorted(self.randomization_state.unsupported_fields)
         )
         self._episode_control_steps += 1
         return reward
@@ -1054,6 +1175,10 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
             root_velocity=object_velocity, env_ids=env_ids
         )
 
+        self._apply_domain_randomization(env_ids)
+        now = self.episode_length_buf[env_ids].to(torch.float32) * self.step_dt
+        self.disturbance_scheduler.reset(env_ids, now)
+
         self.goal_rot[env_ids] = self._sample_goal_rotation(
             env_ids, palm_quat=root_pose[:, 3:7]
         )
@@ -1083,3 +1208,7 @@ class WujiHandReorientationDirectEnv(DirectRLEnv):
         self._episode_control_steps[env_ids] = 0
         self._initial_cage_escape[env_ids] = 0.0
         self._initial_tip_contact_count[env_ids] = 0.0
+        self._last_perturbation_direction[env_ids] = 0.0
+        self._last_perturbation_velocity[env_ids] = 0.0
+        self._disturbance_count[env_ids] = 0
+        self.curriculum_state.reset(env_ids)

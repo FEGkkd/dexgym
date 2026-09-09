@@ -21,6 +21,49 @@ from .task_contract import WUJI_CRITIC_OBSERVATION_DIM
 
 
 @configclass
+class WujiCurriculumCfg:
+    enabled: bool = True
+    success_count_threshold: int = 3
+    delta_per_loop: float = 0.08
+    adaptive_episode_enabled: bool = True
+    adaptive_target_steps: int = 800
+    adaptive_inc_rate: float = 0.1
+    adaptive_dec_rate: float = 0.2
+    adaptive_min_scale: float = 0.05
+    adaptive_drop_gamma: float = 1.0
+
+
+@configclass
+class WujiDomainRandomizationCfg:
+    enabled: bool = True
+    object_com_range: tuple[float, float] = (-0.003, 0.003)
+    object_mass_scale: tuple[float, float] = (0.4, 1.6)
+    object_size_scale: tuple[float, float] = (0.85, 1.15)
+    hand_friction_scale: tuple[float, float] = (0.7, 1.3)
+    contact_soft_width: tuple[float, float] = (2.0, 5.0)
+    contact_finger_width: tuple[float, float] = (1.0, 2.0)
+    contact_dmin: tuple[float, float] = (0.5, 1.0)
+    pd_stiffness_scale: tuple[float, float] = (0.75, 1.5)
+    pd_damping_scale: tuple[float, float] = (0.5, 2.0)
+    joint_damping_scale: tuple[float, float] = (0.3, 3.0)
+    joint_armature_scale: tuple[float, float] = (0.75, 1.3)
+    joint_friction_scale: tuple[float, float] = (0.5, 2.0)
+    encoder_bias_range: tuple[float, float] = (-0.01, 0.01)
+    link_mass_scale: tuple[float, float] = (0.4, 1.5)
+    link_inertia_scale: tuple[float, float] = (0.4, 1.5)
+
+
+@configclass
+class WujiDisturbanceCfg:
+    enabled: bool = True
+    interval_s: tuple[float, float] = (0.6, 1.8)
+    speed_range: tuple[float, float] = (0.05, 0.15)
+    warmup_time_s: float = 3.0
+    warmup_frac: float = 0.05
+    rampup_frac: float = 0.80
+
+
+@configclass
 class WujiHandReorientationDirectEnvCfg(DirectRLEnvCfg):
     """DirectTask configuration with an imported native Wuji Hand asset."""
 
@@ -39,6 +82,16 @@ class WujiHandReorientationDirectEnvCfg(DirectRLEnvCfg):
     observation_space = observation_history_length * observation_frame_dim
     # DirectRLEnv exposes this as the optional critic gym observation space.
     state_space = WUJI_CRITIC_OBSERVATION_DIM
+
+    # Compatibility switches used by train/play tooling.  The nested groups
+    # below carry the tunable parameters; both gates must be enabled for a
+    # feature to affect the environment.
+    enable_curriculum = True
+    enable_domain_randomization = True
+    enable_disturbance = True
+    curriculum = WujiCurriculumCfg()
+    domain_randomization = WujiDomainRandomizationCfg()
+    disturbance = WujiDisturbanceCfg()
 
     sim = SimulationCfg(
         dt=1.0 / 120.0,
