@@ -22,6 +22,12 @@ USD_SHA256 = {
     ("beta2", "left"): "f8094cff005b5b069d55cb3f36402f98aba5e5983f583e9968be2763a2d0909b",
     ("beta2", "right"): "839fc0d0d0c06a2d7d463851b087a2dfe69bc883bc240ead47230536cbd54b20",
 }
+ASSET_TREE_SHA256 = {
+    ("beta1", "left"): "6f0d85a3b7b80c2418a97c147f005fefbe957984d3a3e0e97ec51e957c2ce2b9",
+    ("beta1", "right"): "9f934ba533996b5a30976226ef8f76ed96b35cd6a8e34b4b50deeb567cf0a707",
+    ("beta2", "left"): "c4c7ae7f784b041ed3fd138548995896f08c4b02817f65fa215789056157ec10",
+    ("beta2", "right"): "7b7d4d56684407d980ba689b8ea84daa94127b9fa013dbac294776f8b8976a95",
+}
 FINGER_ORDER = ("thumb", "index_finger", "middle_finger", "ring_finger", "pinky")
 ACTUATOR_GROUPS = ("THJ", "FFJ", "MFJ", "RFJ", "LFJ")
 JOINT_SUFFIXES = (
@@ -49,6 +55,7 @@ class Hand2Spec:
     side: str
     usd_path: Path
     usd_sha256: str
+    asset_tree_sha256: str
     source_tag: str
     source_commit: str
     commit_verified: bool
@@ -83,6 +90,30 @@ def _source_root(root: str | Path | None) -> Path:
     return path
 
 
+def _asset_tree_sha256(body_dir: Path, side: str) -> str:
+    """Hash all native USD layers, meshes and audited MJCF for one hand side.
+
+    Relative filenames are included so removing, renaming or adding a source
+    file changes the digest. Hidden Isaac cache files are excluded.
+    """
+    roots = (body_dir / "usd" / side, body_dir / "meshes" / side)
+    if any(not root.is_dir() for root in roots):
+        raise FileNotFoundError(f"Incomplete official asset tree: {body_dir}/{side}")
+    paths = [path for root in roots for path in root.rglob("*")
+             if path.is_file() and not path.name.startswith(".")]
+    mjcf = body_dir / "mjcf" / f"{side}.xml"
+    if not mjcf.is_file():
+        raise FileNotFoundError(mjcf)
+    paths.append(mjcf)
+    digest = sha256()
+    for path in sorted(paths, key=lambda item: item.relative_to(body_dir).as_posix()):
+        digest.update(path.relative_to(body_dir).as_posix().encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
 def load_hand2_spec(
     root: str | Path | None = None, *, variant: str = "beta1", side: str
 ) -> Hand2Spec:
@@ -105,6 +136,9 @@ def load_hand2_spec(
     digest = sha256(usd_path.read_bytes()).hexdigest()
     if digest != USD_SHA256[(variant, side)]:
         raise ValueError(f"Official USD checksum mismatch: {usd_path}: {digest}")
+    tree_digest = _asset_tree_sha256(body_dir, side)
+    if tree_digest != ASSET_TREE_SHA256[(variant, side)]:
+        raise ValueError(f"Official USD/MJCF/mesh tree checksum mismatch: {body_dir}/{side}: {tree_digest}")
 
     commit_verified = False
     if (root_path / ".git").exists():
@@ -151,7 +185,7 @@ def load_hand2_spec(
         for node in tree.findall("./contact/exclude")
     )
     return Hand2Spec(
-        variant, side, usd_path, digest, SOURCE_TAG, SOURCE_COMMIT, commit_verified,
+        variant, side, usd_path, digest, tree_digest, SOURCE_TAG, SOURCE_COMMIT, commit_verified,
         f"{prefix}_wrist", body_names, expected_tips, tuple(joints), exclusions,
     )
 

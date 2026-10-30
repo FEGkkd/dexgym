@@ -13,6 +13,7 @@ def make_bimanual_bottle_scene_cfg(
     *, num_envs: int, asset_dir: Path, bottle: BottleConfig,
     variant: str = "beta1", contact_debug: bool = False,
     bottle_tilt_radians: float = 0.0,
+    bottle_center_z: float = 0.5,
 ):
     """Build a scene without registering an RL task or policy observation."""
     import isaaclab.sim as sim_utils
@@ -30,7 +31,7 @@ def make_bimanual_bottle_scene_cfg(
     cap_position = (
         bottle.cap_initial_z * math.sin(bottle_tilt_radians),
         0.0,
-        0.5 + bottle.cap_initial_z * math.cos(bottle_tilt_radians),
+        bottle_center_z + bottle.cap_initial_z * math.cos(bottle_tilt_radians),
     )
     bottle_path = asset_dir / "bottle.usda"
     cap_path = asset_dir / "cap.usda"
@@ -65,7 +66,7 @@ def make_bimanual_bottle_scene_cfg(
                 ),
             ),
             init_state=RigidObjectCfg.InitialStateCfg(
-                pos=(0.0, 0.0, 0.5), rot=bottle_orientation,
+                pos=(0.0, 0.0, bottle_center_z), rot=bottle_orientation,
             ),
         )
         bottle_cap: RigidObjectCfg = RigidObjectCfg(

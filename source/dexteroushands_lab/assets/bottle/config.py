@@ -26,13 +26,18 @@ class BottleConfig:
     breakaway_torque: float = 0.020
     breakaway_stiffness: float = 0.2
     breakaway_damping: float = 0.003
+    slip_angle_ratio: float = 1.5
+    slip_speed: float = 0.1
+    restick_speed: float = 0.05
     running_resistance_torque: float = 0.006
     max_constraint_force: float = 8.0
     max_constraint_torque: float = 0.08
     lateral_stiffness: float = 10.0
     lateral_damping: float = 0.1
-    axial_stiffness: float = 100.0
-    axial_damping: float = 1.2
+    axial_stiffness: float = 500.0
+    axial_damping: float = 3.5
+    end_stop_stiffness: float = 0.5
+    end_stop_damping: float = 0.02
     tilt_stiffness: float = 0.001
     tilt_damping: float = 0.0001
     friction_velocity_scale: float = 20.0
@@ -49,6 +54,8 @@ class BottleConfig:
             self.max_constraint_torque, self.friction_velocity_scale,
             self.breakaway_stiffness,
             self.breakaway_damping,
+            self.slip_angle_ratio, self.slip_speed, self.restick_speed,
+            self.end_stop_stiffness, self.end_stop_damping,
         )
         if any(not math.isfinite(x) or x <= 0 for x in numeric):
             raise ValueError("Bottle dimensions, mass, pitch and limits must be finite and positive")

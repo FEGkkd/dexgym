@@ -33,6 +33,8 @@ parser.add_argument("--right_fingers", type=float, nargs=20, default=None,
                     help="20 canonical right finger target positions in radians")
 parser.add_argument("--test_torque", type=float, default=0.0, help="N m about bottle-local +Z, env 0 only")
 parser.add_argument("--bottle_tilt_deg", type=float, default=0.0)
+parser.add_argument("--bottle_center_z", type=float, default=0.5,
+                    help="Bottle center height in metres; 0.1 rests the sample bottle on ground")
 parser.add_argument("--contact_debug", action="store_true")
 parser.add_argument("--contact_probe_side", choices=("left", "right"),
                     help="Place bottle beside one fingertip once at fixture initialization")
@@ -94,6 +96,8 @@ def main():
     if args.num_envs < 1 or args.steps < 1:
         raise ValueError("num_envs and steps must be positive")
     config = BottleConfig()
+    if args.bottle_center_z < config.bottle_height / 2:
+        raise ValueError("bottle center must keep the sample body above the ground")
     asset_dir = REPO_ROOT / "source/dexteroushands_lab/assets/bottle/generated"
     build_bottle_usd(config, asset_dir)
     print("BIMANUAL_STAGE bottle_usd_generated", flush=True)
@@ -109,6 +113,7 @@ def main():
         num_envs=args.num_envs, asset_dir=asset_dir, bottle=config,
         variant=args.variant, contact_debug=args.contact_debug,
         bottle_tilt_radians=math.radians(args.bottle_tilt_deg),
+        bottle_center_z=args.bottle_center_z,
     ))
     print("BIMANUAL_STAGE interactive_scene_created", flush=True)
     for env_index in range(args.num_envs):
@@ -189,6 +194,10 @@ def main():
     max_right_contact = 0.0
     max_speed = 0.0
     max_error = 0.0
+    max_breakaway_resistance = 0.0
+    max_running_resistance = 0.0
+    max_end_stop_resistance = 0.0
+    max_applied_thread_torque = 0.0
     max_wrist_speed = 0.0
     max_wrist_angular_speed = 0.0
     max_wrist_force = 0.0
@@ -232,6 +241,14 @@ def main():
             bw.append((result.bottle_force, result.bottle_torque))
             cw.append((result.cap_force, cap_torque))
             final_states.append(result.state)
+            max_breakaway_resistance = max(max_breakaway_resistance,
+                                           abs(result.breakaway_resistance_torque))
+            max_running_resistance = max(max_running_resistance,
+                                         abs(result.resistance_torque))
+            max_end_stop_resistance = max(max_end_stop_resistance,
+                                          abs(result.end_stop_resistance_torque))
+            max_applied_thread_torque = max(max_applied_thread_torque,
+                                            result.applied_coupling_torque_nm)
             if args.trace and i == 0 and step < 20:
                 print(
                     f"BIMANUAL_STEP {step} theta={result.state.theta_unwrapped:.6f} "
@@ -304,6 +321,10 @@ def main():
             for s in final_states
         ],
         "max_constraint_error_m": max_error,
+        "max_breakaway_resistance_nm": max_breakaway_resistance,
+        "max_running_resistance_nm": max_running_resistance,
+        "max_end_stop_requested_nm": max_end_stop_resistance,
+        "max_applied_thread_torque_nm": max_applied_thread_torque,
         "max_contact_force_n": max_contact,
         "max_left_hand_contact_force_n": max_left_contact,
         "max_right_hand_contact_force_n": max_right_contact,
@@ -314,6 +335,8 @@ def main():
         "max_wrist_torque_nm": max_wrist_torque,
         "left_joint_count": len(left.joint_names),
         "right_joint_count": len(right.joint_names),
+        "left_joint_names": list(left.joint_names),
+        "right_joint_names": list(right.joint_names),
         "left_final_joints": _rows(left.data.joint_pos.torch),
         "right_final_joints": _rows(right.data.joint_pos.torch),
         "left_initial_pose": [tuple(p) for p in _rows(left.data.default_root_pose.torch)],

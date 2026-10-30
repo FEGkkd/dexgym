@@ -50,6 +50,7 @@ def inspect(variant: str, side: str):
         "variant": variant, "side": side, "usd": str(spec.usd_path),
         "source_commit": spec.source_commit, "commit_verified": spec.commit_verified,
         "usd_sha256": spec.usd_sha256,
+        "asset_tree_sha256": spec.asset_tree_sha256,
         "joint_count": len(spec.joints), "body_count_mjcf": len(spec.body_names),
         "fingertips": spec.fingertip_bodies,
         "collision_exclusion_count_mjcf": len(spec.collision_exclusions),

@@ -60,6 +60,7 @@ class WristLimits:
     max_command_translation: float = 0.01  # m per control update
     max_command_rotation: float = 0.08  # rad per control update
     max_target_radius: float = 0.60  # m from initial wrist position
+    max_target_rotation: float = 1.2  # rad from initial wrist orientation
     min_height: float = 0.10  # world z, m
     max_force: float = 40.0  # N
     max_torque: float = 2.0  # N m
@@ -114,7 +115,17 @@ class Wrist6DoFController:
                 delta_r[2] * sin_half_over_angle,
                 math.cos(angle / 2.0),
             )
-            self.target_quat = _quat_normalize(_quat_mul(self.target_quat, delta_q))
+            candidate = _quat_normalize(_quat_mul(self.target_quat, delta_q))
+            from_initial = _clip(
+                _orientation_error(candidate, self.initial_quat),
+                self.limits.max_target_rotation,
+            )
+            total_angle = _norm(from_initial)
+            if total_angle:
+                factor = math.sin(total_angle / 2.0) / total_angle
+                total_q = (from_initial[0] * factor, from_initial[1] * factor,
+                           from_initial[2] * factor, math.cos(total_angle / 2.0))
+                self.target_quat = _quat_normalize(_quat_mul(total_q, self.initial_quat))
 
     def wrench(
         self, position_world: Vector3, quaternion_xyzw: QuaternionXYZW,

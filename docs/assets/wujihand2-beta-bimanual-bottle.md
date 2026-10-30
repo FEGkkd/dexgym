@@ -4,7 +4,7 @@
 
 ## 来源、版本与硬件边界
 
-- 官方资源：[wuji-description `v2026.9.11`](https://github.com/wuji-technology/wuji-description/releases/tag/v2026.9.11)，commit `c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95`，官方仓库 [MIT 许可证](https://github.com/wuji-technology/wuji-description/blob/v2026.9.11/LICENSE)。运行时读取外部 `WUJI_DESCRIPTION_ROOT`，核对 commit（若是 Git checkout）和每侧 USD SHA-256；不复制手模型到 DexGym。
+- 官方资源：[wuji-description `v2026.9.11`](https://github.com/wuji-technology/wuji-description/releases/tag/v2026.9.11)，commit `c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95`，官方仓库 [MIT 许可证](https://github.com/wuji-technology/wuji-description/blob/v2026.9.11/LICENSE)。运行时读取外部 `WUJI_DESCRIPTION_ROOT`，核对 commit（若是 Git checkout）、每侧顶层 USD SHA-256，以及该侧所有原生 USD 层、mesh、配套 MJCF 的路径与内容 SHA-256 清单；不复制手模型到 DexGym。
 - 默认选用无独立指尖传感框架的 `beta1`，可通过 `--variant beta2` 选择 Beta 2。真实设备只确认“WujiHand2 Beta、无触觉”，尚无序列号或厂商 BOM 能判定其几何版本。**Beta 1 是候选，不是实物同一性结论。** Beta 2 有额外指尖刚体，但场景也不需要触觉信号。
 - 参考工程 `FEGkkd/whole-body-teleop` 的 `codex/whole-body-sim-phase1` 分支使用 Beta 2 `with_mount` MJCF，在 Marvin M6 上固定安装。该工程的 MuJoCo 验证不证明本场景的 PhysX 结果，也不证明实物是 Beta 2。参考工程 Git HTTP 匿名读取受限；本次通过 GitHub 连接器读取了 `model/README.md`、`model/VALIDATION.md` 和 `model_joints.hpp`，没有修改参考仓库。
 - 独立自由腕使用官方 `body/usd/{left,right}` 原生 USD，不使用 `with_mount` 文件。官方 mount 的 MJCF 质量为 0.069 kg；若接机械臂需重新选择装配资产及基座惯量。
@@ -30,7 +30,7 @@
 
 - 世界为 Z-up、米、弧度、秒。左手初始腕约在世界 `(-0.30, 0, 0.62)`，右手在 `(0.30, 0, 0.62)`，面向瓶子。场景创建时禁用官方 USD 的 world fixed joint，把 `ArticulationRootAPI` 放到 `l_wrist` / `r_wrist`；每只手是独立自由 articulation，不按物理步改写 root pose。
 - `HandCommand` 每侧 26 个值：世界坐标的 `Δx,Δy,Δz`，当前目标腕坐标的旋转向量 `Δrx,Δry,Δrz`，再按上述 canonical order 给 20 个手指位置目标。`BimanualCommand.from_flat()` 定义左右合计 52 值的未来接口；本阶段 CLI 逐侧输入，不注册 52 维 PPO action space。
-- `Wrist6DoFController` 对自由腕施加世界坐标的有限力和力矩。单次位置目标增量上限 0.01 m、旋转增量 0.08 rad，目标半径 0.6 m、最低高度 0.1 m；力 40 N、力矩 2 N·m。线速 0.5 m/s、角速 3 rad/s 是 PD 软阻尼阈值。USD 上另配置 PhysX rigid body 最大线速 1 m/s、最大角速 360°/s；目前自由 articulation 的根角速度仍可能超过此值，因此**不能将该属性当作已经验证的硬限幅**。控制器可接收碰撞反作用；实际稳定性应看 GPU 验证数据。
+- `Wrist6DoFController` 对自由腕施加世界坐标的有限力和力矩。单次位置目标增量上限 0.01 m、旋转增量 0.08 rad，目标半径 0.6 m、目标姿态离初始姿态最多 1.2 rad、最低高度 0.1 m；力 40 N、力矩 2 N·m。线速 0.5 m/s、角速 3 rad/s 是 PD 软阻尼阈值。USD 上另配置 PhysX rigid body 最大线速 1 m/s、最大角速 360°/s；目前自由 articulation 的根角速度仍可能超过此值，因此**不能将该属性当作已经验证的硬限幅**。控制器可接收碰撞反作用；实际稳定性应看 GPU 验证数据。
 - Isaac Lab 3.0 root pose 数组及本模块接口使用 `xyzw` quaternion；USD `Gf.Quatf` 在作者侧用实部加虚部 (`wxyz` 概念顺序)。外部手势或策略接入必须显式转换。官方 USD 没有独立 `palm` 刚体，掌部几何附着在 `l_wrist` / `r_wrist`；当前 `palm_body` 是腕部刚体别名，若需要掌心控制点须另行标定其相对腕部的固定变换。瓶子 `Bottle` 原点是瓶身质心，螺纹轴为其局部 +Z。
 - 手部官方几何、质量、惯量、关节轴、原有 collision mesh 和 USD finger drive 未改写；只在场景层禁用固定根关节、设置 articulation root、启用 contact sensor 并绑定可配置的 PhysX 接触材质。每侧应独立检查关节和接触。
 
@@ -40,7 +40,7 @@
 
 `generate_usd.py` 用 OpenUSD / `pxr` 从配置生成独立的 `bottle.usda`、`cap.usda`、`parameters.json`。视觉及碰撞由 cylinder、cube、capsule 组成，每个资产少于 60 个简单 collider；瓶颈外与盖内均有分段螺旋凸纹，没有高密度动态三角网格。瓶身和盖各有独立自由刚体、质量、惯量与塑料接触材质。生成文件约 44 KiB，随源码提交并可重建；没有第三方瓶模型，生成器依赖项目的 Isaac Sim/OpenUSD，不需要 MuJoCo。
 
-瓶和盖间用 USD D6 joint 锁定横向两轴及倾斜两轴，保留瓶身局部螺纹轴的平移和转动，并限定轴向行程。当前 PhysX 不依赖任何假定存在的 Screw Joint API。`ThreadCoupler` 在每步由瓶与盖的相对姿态求连续角 `θ`，在瓶身局部轴计算 `z_target = z_initial + sign·pitch·θ/(2π)`，再用有限、等大反向力及力矩作顺从耦合。有限弹性静摩擦提供 `breakaway_torque`，速度阻力提供 `running_resistance_torque`。瓶盖运动始终来自 PhysX 刚体积分和约束，没有逐帧位姿瞬移。脚本测试力矩只作为确定性外力，不代表抓握或 RL 成功。
+瓶和盖间用 USD D6 joint 锁定横向两轴及倾斜两轴，保留瓶身局部螺纹轴的平移和转动，并限定轴向行程。当前 PhysX 不依赖任何假定存在的 Screw Joint API。`ThreadCoupler` 在每步由瓶与盖的相对姿态求连续角 `θ`，在瓶身局部轴计算 `z_target = z_initial + sign·pitch·θ/(2π)`，再用有限、等大反向力及力矩作顺从耦合。阻尼使用扣除了瓶身角速度引起的坐标搬运速度；有状态的粘着/滑动模型分别使用 `breakaway_torque` 与 `running_resistance_torque`，停转后重新锚定。三圈行程末端有有限力矩止挡，超过行程不会持续自由转动。瓶盖运动始终来自 PhysX 刚体积分和约束，没有逐帧位姿瞬移。脚本测试力矩只作为确定性外力，不代表抓握或 RL 成功。
 
 当前限制：螺纹只支持预啮合行程，**不支持完全拧脱及重新啮合**；分段凸纹与简化物理等效件尚未按真实瓶标定。低于松动阈值允许有限弹性角位移，不应解释为零位移。每步 Python wrench 耦合在大量并行环境的吞吐和长时间接触稳定性仍需测量。自由瓶会因重力下落，独立螺纹夹具只在瓶落地前的 120 步窗口验收；双手稳定抓握瓶体未实现。
 
@@ -55,9 +55,11 @@ export ISAACLAB_PYTHON=/path/to/isaacsim/python
 ./scripts/run_isaaclab.sh scripts/environments/inspect_wuji_hand2_beta.py
 ./scripts/run_isaaclab.sh scripts/environments/smoke_bimanual_scene.py --headless --num_envs 1 --steps 120
 ./scripts/run_isaaclab.sh scripts/environments/smoke_bimanual_scene.py --headless --num_envs 2 --steps 120 --bottle_tilt_deg 30 --test_torque 0.04
+./scripts/run_isaaclab.sh scripts/environments/smoke_bimanual_scene.py --headless --num_envs 1 --steps 600 --bottle_center_z 0.1 --test_torque 0.04
 ./scripts/run_isaaclab.sh scripts/environments/validate_wrist_6dof.py
 ./scripts/run_isaaclab.sh scripts/environments/validate_bottle_thread.py
 ./scripts/run_isaaclab.sh scripts/environments/validate_hand2_contact.py
+./scripts/run_isaaclab.sh scripts/environments/validate_hand2_fingers.py
 ```
 
 GUI：

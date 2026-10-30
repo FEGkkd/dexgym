@@ -33,6 +33,9 @@ class WristControllerTests(unittest.TestCase):
             ctrl.command((1, 1, -1), (0, 0, 0))
         self.assertGreaterEqual(ctrl.target_pos[2], ctrl.limits.min_height)
         self.assertLessEqual(math.dist(ctrl.target_pos, (0, 0, 0.5)), ctrl.limits.max_target_radius + 1e-9)
+        for _ in range(100):
+            ctrl.command((0, 0, 0), (0, 0, 1))
+        self.assertLessEqual(ctrl.target_rot_angle, ctrl.limits.max_target_rotation + 1e-9)
         _, torque = ctrl.wrench(ctrl.target_pos, tuple(-q for q in ctrl.target_quat), (0, 0, 0), (0, 0, 0))
         self.assertLess(math.dist(torque, (0, 0, 0)), 1e-6)
 

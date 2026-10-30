@@ -11,6 +11,7 @@ import json
 import math
 
 from _bimanual_validation import run_fixture
+from dexteroushands_lab.assets.bottle import BottleConfig
 
 
 def main():
@@ -34,6 +35,8 @@ def main():
             "thread": result["thread"],
             "max_constraint_error_m": result["max_constraint_error_m"],
             "max_cap_speed_m_s": result["max_cap_speed_m_s"],
+            "max_breakaway_resistance_nm": result["max_breakaway_resistance_nm"],
+            "max_running_resistance_nm": result["max_running_resistance_nm"],
             "bottle_final_velocity": result["bottle_final_velocity"],
         }, sort_keys=True), flush=True)
     rest, low, forward, reverse, tilt = (results[name] for name in cases)
@@ -48,15 +51,49 @@ def main():
     for name, result in results.items():
         if result["left_joint_count"] != 20 or result["right_joint_count"] != 20:
             raise AssertionError(f"Hand joint count failed in {name}")
-        if result["max_constraint_error_m"] > 0.002:
+        if result["max_constraint_error_m"] > 0.0001:
             raise AssertionError(f"Thread constraint drift in {name}")
         if not math.isfinite(result["max_cap_speed_m_s"]) or result["max_cap_speed_m_s"] > 5:
             raise AssertionError(f"Unbounded cap speed in {name}")
         for state in result["thread"]:
-            if abs(state["axial_m"] - state["expected_axial_m"]) > 0.002:
+            if abs(state["axial_m"] - state["expected_axial_m"]) > 0.00002:
                 raise AssertionError(f"Pitch coupling failed in {name}")
+    rest_axial = rest["thread"][0]["axial_m"]
+    if (forward["thread"][0]["axial_m"] - rest_axial < 0.00005
+            or reverse["thread"][0]["axial_m"] - rest_axial > -0.00005):
+        raise AssertionError("Signed axial travel was too small for the measured rotation")
     if abs(forward["bottle_final_velocity"][0][5]) < 0.01:
         raise AssertionError("Free bottle did not react to the cap torque")
+    if (forward["max_breakaway_resistance_nm"] > BottleConfig().breakaway_torque + 1e-6
+            or forward["max_running_resistance_nm"] > BottleConfig().running_resistance_torque + 1e-6):
+        raise AssertionError("Thread resistance exceeded configured limits")
+    long_run = run_fixture(
+        "--variant", args.variant, "--num_envs", "1", "--steps", "600",
+        "--bottle_center_z", "0.1", "--test_torque", "0.04",
+    )
+    long_state = long_run["thread"][0]
+    limit = BottleConfig().thread_turns * 2 * math.pi
+    if not 0.8 * limit < long_state["theta_rad"] < limit + 0.1:
+        raise AssertionError("Long-run rotation did not approach and stop at the finite thread limit")
+    if (abs(long_state["constraint_error_m"]) > 0.0003
+            or long_run["max_constraint_error_m"] > 0.0004):
+        raise AssertionError("Long-run pitch constraint drift exceeded the compliant fixture limit")
+    if abs(long_run["bottle_final_velocity"][0][5]) < 0.01:
+        raise AssertionError("Ground-supported bottle was unexpectedly locked to world")
+    if (long_run["max_end_stop_requested_nm"] <= 0.0
+            or long_run["max_applied_thread_torque_nm"]
+            > BottleConfig().max_constraint_torque + 1e-6):
+        raise AssertionError("Finite end stop was not engaged or applied torque exceeded its limit")
+    print("THREAD_LONG_CASE " + json.dumps({
+        "theta_rad": long_state["theta_rad"],
+        "axial_m": long_state["axial_m"],
+        "expected_axial_m": long_state["expected_axial_m"],
+        "constraint_error_m": long_state["constraint_error_m"],
+        "max_constraint_error_m": long_run["max_constraint_error_m"],
+        "max_cap_speed_m_s": long_run["max_cap_speed_m_s"],
+        "max_end_stop_requested_nm": long_run["max_end_stop_requested_nm"],
+        "max_applied_thread_torque_nm": long_run["max_applied_thread_torque_nm"],
+    }, sort_keys=True), flush=True)
     print("THREAD_VALIDATION_PASS " + json.dumps({
         "variant": args.variant,
         "forward_theta_rad": theta(forward),
@@ -64,6 +101,8 @@ def main():
         "tilted_theta_rad": theta(tilt),
         "low_torque_theta_rad": theta(low),
         "independent_env_theta_rad": theta(tilt, 1),
+        "full_travel_theta_rad": long_state["theta_rad"],
+        "full_travel_pitch_error_m": long_state["constraint_error_m"],
     }, sort_keys=True), flush=True)
 
 

@@ -5,7 +5,7 @@ from pathlib import Path
 import subprocess
 import unittest
 
-from dexteroushands_lab.assets.wuji_hand2_beta import load_hand2_spec
+from dexteroushands_lab.assets.wuji_hand2_beta import _asset_tree_sha256, load_hand2_spec
 
 
 ROOT = Path(os.environ.get("WUJI_DESCRIPTION_BETA_ROOT",
@@ -61,8 +61,27 @@ class Hand2BetaAssetTests(unittest.TestCase):
         spec = load_hand2_spec(ROOT, variant="beta1", side="left")
         self.assertEqual(spec.source_commit, "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95")
         self.assertEqual(len(spec.usd_sha256), 64)
+        self.assertEqual(len(spec.asset_tree_sha256), 64)
         with self.assertRaises(ValueError):
             load_hand2_spec(ROOT, variant="beta3", side="left")
+
+    def test_tree_hash_includes_referenced_layers_and_audited_mjcf(self):
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as directory:
+            body = Path(directory)
+            (body / "usd/left").mkdir(parents=True)
+            (body / "meshes/left").mkdir(parents=True)
+            (body / "mjcf").mkdir()
+            layer = body / "usd/left/configuration.usd"
+            layer.write_bytes(b"physics A")
+            (body / "mjcf/left.xml").write_bytes(b"limits A")
+            initial = _asset_tree_sha256(body, "left")
+            layer.write_bytes(b"physics B")
+            self.assertNotEqual(_asset_tree_sha256(body, "left"), initial)
+            layer.write_bytes(b"physics A")
+            (body / "mjcf/left.xml").write_bytes(b"limits B")
+            self.assertNotEqual(_asset_tree_sha256(body, "left"), initial)
 
 
 if __name__ == "__main__":

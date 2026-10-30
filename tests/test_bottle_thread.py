@@ -69,6 +69,49 @@ class BottleThreadTests(unittest.TestCase):
         self.assertAlmostEqual(returned.breakaway_resistance_torque,
                                tiny.breakaway_resistance_torque)
 
+    def test_running_regime_releases_stiction_and_resticks(self):
+        cfg = BottleConfig()
+        coupler = ThreadCoupler(cfg)
+        z0 = cfg.cap_initial_z
+        bottle = ((0, 0, 0), IDENTITY, (0, 0, 0), (0, 0, 0))
+        coupler.wrenches(*bottle, (0, 0, z0), IDENTITY, (0, 0, 0), (0, 0, 0))
+        slipping = coupler.wrenches(*bottle, (0, 0, z0), yaw(0.2),
+                                     (0, 0, 0), (0, 0, 1))
+        self.assertAlmostEqual(slipping.breakaway_resistance_torque, 0.0)
+        self.assertLess(slipping.resistance_torque, 0.0)
+        stopped = coupler.wrenches(*bottle, (0, 0, z0), yaw(0.2),
+                                    (0, 0, 0), (0, 0, 0))
+        self.assertAlmostEqual(stopped.breakaway_resistance_torque, 0.0)
+        resticking = coupler.wrenches(*bottle, (0, 0, z0), yaw(0.21),
+                                       (0, 0, 0), (0, 0, 0))
+        self.assertLess(resticking.breakaway_resistance_torque, 0.0)
+
+    def test_common_rigid_rotation_has_no_spurious_joint_damping(self):
+        cfg = BottleConfig()
+        coupler = ThreadCoupler(cfg)
+        z0 = cfg.cap_initial_z
+        spin = (0, 1, 0)
+        result = coupler.wrenches(
+            (0, 0, 0), IDENTITY, (0, 0, 0), spin,
+            (0, 0, z0), IDENTITY, (z0, 0, 0), spin,
+        )
+        self.assertLess(math.dist(result.cap_force, (0, 0, 0)), 1e-9)
+
+    def test_finite_thread_travel_has_a_physical_end_stop(self):
+        cfg = BottleConfig()
+        coupler = ThreadCoupler(cfg)
+        z0 = cfg.cap_initial_z
+        bottle = ((0, 0, 0), IDENTITY, (0, 0, 0), (0, 0, 0))
+        result = None
+        for index in range(0, 100):
+            angle = index * 0.2
+            result = coupler.wrenches(*bottle, (0, 0, z0), yaw(angle),
+                                      (0, 0, 0), (0, 0, 0))
+        self.assertGreater(result.state.theta_unwrapped, cfg.thread_turns * 2 * math.pi)
+        self.assertLess(result.end_stop_resistance_torque, 0.0)
+        self.assertLessEqual(result.applied_coupling_torque_nm,
+                             cfg.max_constraint_torque + 1e-9)
+
     def test_invalid_geometry_is_rejected(self):
         with self.assertRaises(ValueError):
             BottleConfig(cap_outer_radius=0.01)

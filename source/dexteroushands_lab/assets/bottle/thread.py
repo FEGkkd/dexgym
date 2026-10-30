@@ -64,6 +64,8 @@ class ThreadWrenches:
     state: ThreadState
     resistance_torque: float
     breakaway_resistance_torque: float
+    end_stop_resistance_torque: float
+    applied_coupling_torque_nm: float
 
 
 class ThreadCoupler:
@@ -76,6 +78,7 @@ class ThreadCoupler:
         self._initial_theta = 0.0
         self._initial_axial: float | None = None
         self._stick_reference = 0.0
+        self._sliding = False
 
     def reset(self) -> None:
         self._last_wrapped = None
@@ -83,6 +86,7 @@ class ThreadCoupler:
         self._initial_theta = 0.0
         self._initial_axial = None
         self._stick_reference = 0.0
+        self._sliding = False
 
     def observe(self, bottle_pos, bottle_quat, cap_pos, cap_quat) -> ThreadState:
         axis = _rotate(bottle_quat, (0.0, 0.0, 1.0))
@@ -122,7 +126,11 @@ class ThreadCoupler:
         axis = state.axis_world
         displacement = _sub(cap_pos, bottle_pos)
         lateral = _sub(displacement, _scale(axis, state.axial))
-        relative_velocity = _sub(cap_lin_vel, bottle_lin_vel)
+        # COM velocity difference includes frame transport when the complete
+        # assembly rotates. Subtract ω_bottle × r before damping joint motion.
+        relative_velocity = _sub(
+            _sub(cap_lin_vel, bottle_lin_vel), _cross(bottle_ang_vel, displacement)
+        )
         axial_velocity = _dot(relative_velocity, axis)
         lateral_velocity = _sub(relative_velocity, _scale(axis, axial_velocity))
         lateral_force = _add(
@@ -143,18 +151,35 @@ class ThreadCoupler:
         )
         lead = cfg.thread_sign * cfg.thread_pitch / (2 * math.pi)
         screw_torque = cfg.axial_stiffness * state.constraint_error * lead
-        # Elastic stiction supplies a finite, equal-and-opposite breakaway
-        # torque. The D6 joint constrains the other four axes. The reference
-        # stays at engagement angle, avoiding plastic drift from a single
-        # high-acceleration physics substep on this light engineering cap.
+        # A small elastic angular range holds the engaged cap. The extra
+        # angle/speed condition avoids false slip on one explicit high-
+        # acceleration substep. During slip only running resistance remains;
+        # when spin settles, re-anchor the static branch at the current angle.
+        if self._sliding and abs(spin) < cfg.restick_speed:
+            self._sliding = False
+            self._stick_reference = state.theta_unwrapped
+        if not self._sliding and (
+            abs(state.theta_unwrapped - self._stick_reference)
+            >= cfg.slip_angle_ratio * cfg.breakaway_torque / cfg.breakaway_stiffness
+            and abs(spin) >= cfg.slip_speed
+        ):
+            self._sliding = True
         trial = (-cfg.breakaway_stiffness * (state.theta_unwrapped - self._stick_reference)
                  - cfg.breakaway_damping * spin)
-        breakaway = max(-cfg.breakaway_torque, min(cfg.breakaway_torque, trial))
+        breakaway = (0.0 if self._sliding else
+                     max(-cfg.breakaway_torque, min(cfg.breakaway_torque, trial)))
         resistance = -cfg.running_resistance_torque * math.tanh(
             spin / cfg.friction_velocity_scale
         )
+        limit = cfg.thread_turns * 2 * math.pi
+        excess = state.theta_unwrapped - max(-limit, min(limit, state.theta_unwrapped))
+        end_stop = 0.0
+        if excess:
+            end_stop = -cfg.end_stop_stiffness * excess
+            if spin * excess > 0:
+                end_stop -= cfg.end_stop_damping * spin
         coupling_torque = _clip(
-            _add(tilt_torque, _scale(axis, screw_torque + resistance + breakaway)),
+            _add(tilt_torque, _scale(axis, screw_torque + resistance + breakaway + end_stop)),
             cfg.max_constraint_torque,
         )
         # Both force vectors act at the same point on the neck axis; the
@@ -165,5 +190,5 @@ class ThreadCoupler:
                              _cross(_sub(anchor, bottle_pos), bottle_force))
         return ThreadWrenches(
             bottle_force, bottle_torque, cap_force, cap_torque,
-            state, resistance, breakaway,
+            state, resistance, breakaway, end_stop, _norm(coupling_torque),
         )
