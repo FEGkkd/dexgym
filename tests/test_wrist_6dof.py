@@ -27,6 +27,14 @@ class WristControllerTests(unittest.TestCase):
         self.assertLess(force[0], 0)
         self.assertLess(torque[1], 0)
 
+    def test_opposite_rotation_command_returns_exact_initial_target(self):
+        ctrl = Wrist6DoFController((0, 0, 0.5), (0, 0, 0, 1), WristLimits())
+        ctrl.command((0, 0, 0), (0, 0, 0.08))
+        self.assertGreater(ctrl.target_rot_angle, 0.07)
+        ctrl.command((0, 0, 0), (0, 0, -0.08))
+        self.assertLess(ctrl.target_rot_angle, 1e-9)
+        self.assertEqual(ctrl.target_quat, ctrl.initial_quat)
+
     def test_world_workspace_limits_and_quaternion_sign(self):
         ctrl = Wrist6DoFController((0, 0, 0.5), (0, 0, 0, 1), WristLimits())
         for _ in range(100):

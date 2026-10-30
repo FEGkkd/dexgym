@@ -126,6 +126,8 @@ class Wrist6DoFController:
                 total_q = (from_initial[0] * factor, from_initial[1] * factor,
                            from_initial[2] * factor, math.cos(total_angle / 2.0))
                 self.target_quat = _quat_normalize(_quat_mul(total_q, self.initial_quat))
+            else:
+                self.target_quat = self.initial_quat
 
     def wrench(
         self, position_world: Vector3, quaternion_xyzw: QuaternionXYZW,
