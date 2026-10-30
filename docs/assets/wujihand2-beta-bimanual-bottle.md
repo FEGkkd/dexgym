@@ -49,7 +49,7 @@
 | 瓶身与内容物 | 半径 32.5 mm、高 190 mm、总质量 520 g | 工程近似：500 mL 水加约 20 g 塑料；不是与该盖配套的瓶身 CAD，未模拟液体晃动 |
 | 径向间隙与阻力曲线 | 0.2 mm；松盖阈值 0.05 N·m，运行阻力 0.12→0.02 N·m | 工程假设，未找到该组合的实测值；没有密封垫预紧、残留内压或防盗环断裂模型 |
 
-参考样例资产写入 `assets/bottle/generated/pco1881_reference/`，避免覆盖原工程样例。此配置的几何与螺距可由静态测试检查；**其开启阻力尚未通过物理验收**：在当前 120 步 GPU fixture 中，瓶盖质量 2.34 g、显式力矩更新与 PhysX 步长的组合使施加 0.6 N·m（低于 0.90 N·m 名义阈值）时瓶盖仍转过约 4.33 rad。曾测试 D6 角度驱动；它使 0.6 N·m 停住，但连 1.2 N·m 和 3.0 N·m 也几乎不转，故没有保留该方案。不能仅凭参数写了 0.90 N·m 就宣称仿真开启扭矩接近实物。未来需要实测目标瓶扭矩曲线，并采用通过低于/高于阈值双侧 GPU 测试的稳定接触/关节阻力实现。参考瓶口约 4.88 mm 的螺纹轴向行程小于盖与瓶颈的初始重叠，因此即使螺纹退出，盖可能仍套在瓶口；自然脱落或抓取提盖尚未验收。
+参考样例资产写入 `assets/bottle/generated/pco1881_reference/`，避免覆盖原工程样例。为使 2.34 g 轻瓶盖的显式弹性阻力积分稳定，参考样例场景使用 `0.0001 s` 物理步长；原工程样例仍用 `0.002 s`。相同的 0.24 s 测试因此从 120 步增至 2400 步，明显增加训练吞吐成本。GPU 夹具已观察到 0.6 N·m（低于名义 0.90 N·m 阈值）只产生约 `0.0019 rad` 弹性转角，而 1.2 N·m 产生约 `4.50 rad` 旋松、沿瓶身局部轴上移；反向测试产生约 `-4.50 rad` 和相反位移。倾斜 30°、双环境试验中只有受力环境转动，最大瞬态螺距误差约 `0.136 mm`。这些是**仿真夹具验收结果**，不证明某款实物瓶的扭矩曲线；运行阻力、密封垫、防盗环和掉盖行为仍未按实物验证。曾测试 D6 角度驱动；它使 0.6 N·m 停住，但连 1.2 N·m 和 3.0 N·m 也几乎不转，故没有保留该方案。参考瓶口约 4.88 mm 的螺纹轴向行程小于盖与瓶颈的初始重叠，因此即使螺纹退出，盖可能仍套在瓶口；自然脱落或抓取提盖尚未验收。
 
 `generate_usd.py` 用 OpenUSD / `pxr` 从配置生成独立的 `bottle.usda`、`cap.usda`、`parameters.json`。瓶身和盖的可见圆面是默认 64 段的 `UsdGeom.Mesh`，不带碰撞；隐藏的 cylinder、cube 和 capsule 负责碰撞，每个资产少于 60 个简单 collider。瓶颈外与盖内均有分段螺旋凸纹，没有高密度动态三角网格碰撞。瓶身和盖各有独立自由刚体、质量、惯量与塑料接触材质。生成文件随源码提交并可重建；没有第三方瓶模型，生成器依赖项目的 Isaac Sim/OpenUSD，不需要 MuJoCo。
 
@@ -76,7 +76,7 @@ export ISAACLAB_PYTHON=/path/to/isaacsim/python
 ./scripts/run_isaaclab.sh scripts/environments/validate_bottle_detachment.py
 ./scripts/run_isaaclab.sh scripts/environments/validate_hand2_contact.py
 ./scripts/run_isaaclab.sh scripts/environments/validate_hand2_fingers.py
-./scripts/run_isaaclab.sh scripts/environments/smoke_bimanual_scene.py --headless --bottle_profile pco1881_reference --bottle_center_z 0.095 --fixture_hold_bottle --steps 120 --test_torque 0.6
+./scripts/run_isaaclab.sh scripts/environments/validate_pco1881_reference.py
 ```
 
 GUI：

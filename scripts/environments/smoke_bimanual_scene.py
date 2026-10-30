@@ -125,7 +125,8 @@ def main():
     right_spec = load_hand2_spec(variant=args.variant, side="right")
     print("BIMANUAL_STAGE official_assets_verified", flush=True)
 
-    sim = sim_utils.SimulationContext(sim_utils.SimulationCfg(dt=0.002, device=args.device))
+    physics_dt = 0.0001 if config.source_profile == "pco1881_reference" else 0.002
+    sim = sim_utils.SimulationContext(sim_utils.SimulationCfg(dt=physics_dt, device=args.device))
     print("BIMANUAL_STAGE simulation_context_created", flush=True)
     focus_z = min(0.55, max(0.22, args.bottle_center_z + 0.12))
     sim.set_camera_view((0.45, -0.70, focus_z + 0.30), (0.0, 0.0, focus_z))
@@ -377,6 +378,8 @@ def main():
         "status": "ran_without_nonfinite_state",
         "num_envs": args.num_envs,
         "steps": args.steps,
+        "physics_dt_s": physics_dt,
+        "simulated_time_s": args.steps * physics_dt,
         "asset_variant": args.variant,
         "bottle_profile": args.bottle_profile,
         "test_torque_nm": args.test_torque,
