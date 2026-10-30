@@ -1,0 +1,507 @@
+#usda 1.0
+(
+    defaultPrim = "Cap"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Cap" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    float3 physics:diagonalInertia = (6.869375e-7, 6.869375e-7, 0.00000149775)
+    float physics:mass = 0.006
+    bool physics:rigidBodyEnabled = 1
+
+    def Material "PlasticContact" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 0.4
+        float physics:restitution = 0
+        float physics:staticFriction = 0.6
+    }
+
+    def Cube "wall_00" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cap/PlasticContact>
+        color3f[] primvars:displayColor = [(0.92, 0.35, 0.1)]
+        double size = 1
+        float xformOp:rotateZ = 90
+        float3 xformOp:scale = (0.00923984, 0.0025, 0.025)
+        double3 xformOp:translate = (0.01575, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+
+    def Cube "wall_01" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cap/PlasticContact>
+        color3f[] primvars:displayColor = [(0.92, 0.35, 0.1)]
+        double size = 1
+        float xformOp:rotateZ = 120
+        float3 xformOp:scale = (0.00923984, 0.0025, 0.025)
+        double3 xformOp:translate = (0.01363990010960491, 0.007874999999999998, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+
+    def Cube "wall_02" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cap/PlasticContact>
+        color3f[] primvars:displayColor = [(0.92, 0.35, 0.1)]
+        double size = 1
+        float xformOp:rotateZ = 150
+        float3 xformOp:scale = (0.00923984, 0.0025, 0.025)
+        double3 xformOp:translate = (0.007875000000000002, 0.013639900109604908, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+
+    def Cube "wall_03" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cap/PlasticContact>
+        color3f[] primvars:displayColor = [(0.92, 0.35, 0.1)]
+        double size = 1
+        float xformOp:rotateZ = 180
+        float3 xformOp:scale = (0.00923984, 0.0025, 0.025)
+        double3 xformOp:translate = (9.644093543285406e-19, 0.01575, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+
+    def Cube "wall_04" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cap/PlasticContact>
+        color3f[] primvars:displayColor = [(0.92, 0.35, 0.1)]
+        double size = 1
+        float xformOp:rotateZ = 210
+        float3 xformOp:scale = (0.00923984, 0.0025, 0.025)
+        double3 xformOp:translate = (-0.007874999999999997, 0.01363990010960491, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+
+    def Cube "wall_05" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cap/PlasticContact>
+        color3f[] primvars:displayColor = [(0.92, 0.35, 0.1)]
+        double size = 1
+        float xformOp:rotateZ = 240
+        float3 xformOp:scale = (0.00923984, 0.0025, 0.025)
+        double3 xformOp:translate = (-0.01363990010960491, 0.007874999999999998, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+
+    def Cube "wall_06" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cap/PlasticContact>
+        color3f[] primvars:displayColor = [(0.92, 0.35, 0.1)]
+        double size = 1
+        float xformOp:rotateZ = 270
+        float3 xformOp:scale = (0.00923984, 0.0025, 0.025)
+        double3 xformOp:translate = (-0.01575, 1.9288187086570813e-18, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+
+    def Cube "wall_07" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cap/PlasticContact>
+        color3f[] primvars:displayColor = [(0.92, 0.35, 0.1)]
+        double size = 1
+        float xformOp:rotateZ = 300
+        float3 xformOp:scale = (0.00923984, 0.0025, 0.025)
+        double3 xformOp:translate = (-0.013639900109604912, -0.007874999999999995, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+
+    def Cube "wall_08" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cap/PlasticContact>
+        color3f[] primvars:displayColor = [(0.92, 0.35, 0.1)]
+        double size = 1
+        float xformOp:rotateZ = 330
+        float3 xformOp:scale = (0.00923984, 0.0025, 0.025)
+        double3 xformOp:translate = (-0.007875000000000007, -0.013639900109604905, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+
+    def Cube "wall_09" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cap/PlasticContact>
+        color3f[] primvars:displayColor = [(0.92, 0.35, 0.1)]
+        double size = 1
+        float xformOp:rotateZ = 360
+        float3 xformOp:scale = (0.00923984, 0.0025, 0.025)
+        double3 xformOp:translate = (-2.8932280629856217e-18, -0.01575, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+
+    def Cube "wall_10" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cap/PlasticContact>
+        color3f[] primvars:displayColor = [(0.92, 0.35, 0.1)]
+        double size = 1
+        float xformOp:rotateZ = 390
+        float3 xformOp:scale = (0.00923984, 0.0025, 0.025)
+        double3 xformOp:translate = (0.007875000000000002, -0.013639900109604908, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+
+    def Cube "wall_11" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        rel material:binding:physics = </Cap/PlasticContact>
+        color3f[] primvars:displayColor = [(0.92, 0.35, 0.1)]
+        double size = 1
+        float xformOp:rotateZ = 420
+        float3 xformOp:scale = (0.00923984, 0.0025, 0.025)
+        double3 xformOp:translate = (0.013639900109604905, -0.007875000000000007, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateZ", "xformOp:scale"]
+    }
+
+    def Cylinder "top" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        double height = 0.002
+        rel material:binding:physics = </Cap/PlasticContact>
+        color3f[] primvars:displayColor = [(0.92, 0.35, 0.1)]
+        double radius = 0.017
+        double3 xformOp:translate = (0, 0, 0.0115)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def "internal_thread"
+    {
+        def Capsule "ridge_00" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341187
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835209, -0.6417552764751651, -0.26582373924050856, 0)
+            double3 xformOp:translate = (0.011949747468305833, 0.0049497474683058325, -0.00981250000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_01" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341187
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835208, -0.2658237392405086, -0.641755276475165, 0)
+            double3 xformOp:translate = (0.004949747468305833, 0.011949747468305832, -0.00943750000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_02" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341187
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835207, 0.26582373924050856, -0.6417552764751651, 0)
+            double3 xformOp:translate = (-0.0049497474683058325, 0.011949747468305833, -0.009062500000000012)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_03" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341187
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835208, 0.641755276475165, -0.2658237392405086, 0)
+            double3 xformOp:translate = (-0.011949747468305832, 0.004949747468305834, -0.008687500000000011)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_04" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341187
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835208, 0.6417552764751651, 0.2658237392405084, -0)
+            double3 xformOp:translate = (-0.011949747468305835, -0.004949747468305832, -0.00831250000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_05" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341187
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835208, 0.2658237392405086, 0.641755276475165, -0)
+            double3 xformOp:translate = (-0.004949747468305835, -0.011949747468305832, -0.00793750000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_06" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341184
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835208, -0.26582373924050845, 0.6417552764751651, 0)
+            double3 xformOp:translate = (0.004949747468305831, -0.011949747468305835, -0.00756250000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_07" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341187
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835209, -0.641755276475165, 0.2658237392405088, 0)
+            double3 xformOp:translate = (0.011949747468305832, -0.004949747468305836, -0.00718750000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_08" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341187
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835208, -0.6417552764751651, -0.2658237392405084, 0)
+            double3 xformOp:translate = (0.011949747468305835, 0.00494974746830583, -0.006812500000000011)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_09" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341187
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835209, -0.2658237392405088, -0.641755276475165, 0)
+            double3 xformOp:translate = (0.004949747468305836, 0.011949747468305832, -0.006437500000000011)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_10" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341174
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835209, 0.2658237392405082, -0.6417552764751652, 0)
+            double3 xformOp:translate = (-0.0049497474683058255, 0.011949747468305839, -0.006062500000000011)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_11" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341198
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835209, 0.6417552764751648, -0.26582373924050906, 0)
+            double3 xformOp:translate = (-0.011949747468305828, 0.004949747468305841, -0.00568750000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_12" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341198
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835208, 0.6417552764751651, 0.2658237392405088, -0)
+            double3 xformOp:translate = (-0.01194974746830583, -0.0049497474683058325, -0.00531250000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_13" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341174
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835208, 0.2658237392405086, 0.641755276475165, -0)
+            double3 xformOp:translate = (-0.0049497474683058325, -0.011949747468305835, -0.0049375000000000105)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_14" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341174
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835209, -0.26582373924050806, 0.6417552764751653, 0)
+            double3 xformOp:translate = (0.004949747468305824, -0.011949747468305839, -0.004562500000000011)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_15" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341198
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835208, -0.6417552764751647, 0.2658237392405091, 0)
+            double3 xformOp:translate = (0.011949747468305827, -0.004949747468305843, -0.004187500000000011)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_16" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341198
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835208, -0.641755276475165, -0.26582373924050856, 0)
+            double3 xformOp:translate = (0.011949747468305832, 0.004949747468305832, -0.0038125000000000103)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_17" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341174
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835208, -0.2658237392405086, -0.641755276475165, 0)
+            double3 xformOp:translate = (0.004949747468305834, 0.011949747468305835, -0.0034375000000000104)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_18" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341174
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835209, 0.26582373924050795, -0.6417552764751653, 0)
+            double3 xformOp:translate = (-0.004949747468305822, 0.01194974746830584, -0.0030625000000000105)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_19" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341198
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835207, 0.6417552764751647, -0.2658237392405093, 0)
+            double3 xformOp:translate = (-0.011949747468305825, 0.004949747468305845, -0.0026875000000000106)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_20" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341198
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835209, 0.6417552764751651, 0.2658237392405085, -0)
+            double3 xformOp:translate = (-0.011949747468305832, -0.00494974746830583, -0.0023125000000000107)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_21" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.00972169607734115
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835208, 0.2658237392405093, 0.6417552764751647, -0)
+            double3 xformOp:translate = (-0.004949747468305849, -0.011949747468305835, -0.0019375000000000104)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_22" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341198
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835208, -0.26582373924050723, 0.6417552764751655, 0)
+            double3 xformOp:translate = (0.004949747468305807, -0.011949747468305842, -0.00156250000000001)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_23" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.009721696077341198
+            rel material:binding:physics = </Cap/PlasticContact>
+            color3f[] primvars:displayColor = [(0.55, 0.13, 0.04)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7193663216835209, -0.6417552764751647, 0.2658237392405094, 0)
+            double3 xformOp:translate = (0.011949747468305825, -0.004949747468305846, -0.0011875000000000097)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+}

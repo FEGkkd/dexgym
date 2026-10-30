@@ -38,6 +38,17 @@ from isaaclab_tasks.utils import parse_env_cfg  # noqa: E402
 dexteroushands_tasks.register_tasks()
 
 
+def _check_observations(obs, cfg, num_envs):
+    """Check the selected task's declared spaces, without assuming Wuji v1."""
+    assert "policy" in obs
+    assert obs["policy"].shape == (num_envs, cfg.observation_space)
+    assert torch.isfinite(obs["policy"]).all().item()
+    if cfg.state_space:
+        assert "critic" in obs
+        assert obs["critic"].shape == (num_envs, cfg.state_space)
+        assert torch.isfinite(obs["critic"]).all().item()
+
+
 def main() -> None:
     print("SMOKE_STAGE before_parse_cfg", flush=True)
     env_cfg = parse_env_cfg(args_cli.task, device=args_cli.device, num_envs=args_cli.num_envs)
@@ -55,12 +66,7 @@ def main() -> None:
         print("SMOKE_STAGE before_reset", flush=True)
         obs, _ = env.reset(seed=0)
         print("SMOKE_STAGE after_reset", flush=True)
-        assert "policy" in obs
-        assert "critic" in obs
-        assert obs["policy"].shape == (args_cli.num_envs, 207)
-        assert obs["critic"].shape == (args_cli.num_envs, 413)
-        assert torch.isfinite(obs["policy"]).all().item()
-        assert torch.isfinite(obs["critic"]).all().item()
+        _check_observations(obs, env_cfg, args_cli.num_envs)
 
         if args_cli.force_contact_probe or args_cli.ground_contact_probe or args_cli.large_contact_probe:
             robot = env.unwrapped.robot
@@ -198,10 +204,7 @@ def main() -> None:
                 device=env.unwrapped.device,
             )
             obs, reward, terminated, truncated, _ = env.step(actions)
-            assert obs["policy"].shape == (args_cli.num_envs, 207)
-            assert obs["critic"].shape == (args_cli.num_envs, 413)
-            assert torch.isfinite(obs["policy"]).all().item()
-            assert torch.isfinite(obs["critic"]).all().item()
+            _check_observations(obs, env_cfg, args_cli.num_envs)
             assert torch.isfinite(reward).all().item()
             assert terminated.shape[0] == args_cli.num_envs
             assert truncated.shape[0] == args_cli.num_envs
@@ -263,7 +266,7 @@ def main() -> None:
                             ).item()
         print(
             f"SMOKE_OK task={args_cli.task} envs={args_cli.num_envs} "
-            f"obs={tuple(obs['policy'].shape)} critic={tuple(obs['critic'].shape)} action={env.action_space.shape}"
+            f"obs={tuple(obs['policy'].shape)} critic={tuple(obs['critic'].shape) if 'critic' in obs else None} action={env.action_space.shape}"
         )
     finally:
         env.close()

@@ -1,0 +1,363 @@
+#usda 1.0
+(
+    defaultPrim = "Bottle"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Bottle" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    float3 physics:diagonalInertia = (0.0001091875, 0.0001091875, 0.000018375)
+    float physics:mass = 0.03
+    bool physics:rigidBodyEnabled = 1
+
+    def Material "PlasticContact" (
+        prepend apiSchemas = ["PhysicsMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 0.4
+        float physics:restitution = 0
+        float physics:staticFriction = 0.6
+    }
+
+    def Cylinder "body" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        double height = 0.2
+        rel material:binding:physics = </Bottle/PlasticContact>
+        color3f[] primvars:displayColor = [(0.1, 0.5, 0.72)]
+        double radius = 0.035
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def Cylinder "neck" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        double height = 0.04
+        rel material:binding:physics = </Bottle/PlasticContact>
+        color3f[] primvars:displayColor = [(0.18, 0.65, 0.8)]
+        double radius = 0.012
+        double3 xformOp:translate = (0, 0, 0.12000000000000001)
+        uniform token[] xformOpOrder = ["xformOp:translate"]
+    }
+
+    def "external_thread"
+    {
+        def Capsule "ridge_00" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067355
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.720821341465761, -0.6403602208438915, -0.2652458882777701, 0)
+            double3 xformOp:translate = (0.010669417382415922, 0.004419417382415922, 0.1251875)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_01" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067358
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657619, -0.26524588827776985, -0.6403602208438907, 0)
+            double3 xformOp:translate = (0.004419417382415923, 0.010669417382415922, 0.12556250000000002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_02" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067355
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.720821341465761, 0.2652458882777701, -0.6403602208438915, 0)
+            double3 xformOp:translate = (-0.004419417382415922, 0.010669417382415922, 0.12593750000000004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_03" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067358
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657619, 0.6403602208438905, -0.26524588827776985, 0)
+            double3 xformOp:translate = (-0.010669417382415922, 0.004419417382415924, 0.12631250000000002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_04" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067358
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657609, 0.6403602208438915, 0.26524588827777007, -0)
+            double3 xformOp:translate = (-0.010669417382415922, -0.004419417382415921, 0.1266875)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_05" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067358
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657619, 0.26524588827776985, 0.6403602208438905, -0)
+            double3 xformOp:translate = (-0.004419417382415924, -0.010669417382415922, 0.12706250000000002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_06" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067355
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.720821341465761, -0.2652458882777701, 0.6403602208438915, 0)
+            double3 xformOp:translate = (0.00441941738241592, -0.010669417382415922, 0.12743750000000004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_07" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067358
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657619, -0.6403602208438904, 0.26524588827776996, 0)
+            double3 xformOp:translate = (0.010669417382415922, -0.004419417382415925, 0.12781250000000002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_08" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067358
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657609, -0.6403602208438915, -0.26524588827777007, 0)
+            double3 xformOp:translate = (0.010669417382415922, 0.004419417382415919, 0.1281875)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_09" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067358
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657619, -0.26524588827776996, -0.6403602208438904, 0)
+            double3 xformOp:translate = (0.004419417382415925, 0.010669417382415922, 0.12856250000000002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_10" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067348
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.720821341465761, 0.2652458882777698, -0.6403602208438918, 0)
+            double3 xformOp:translate = (-0.004419417382415915, 0.010669417382415928, 0.12893750000000004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_11" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067368
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.720821341465762, 0.6403602208438903, -0.2652458882777704, 0)
+            double3 xformOp:translate = (-0.010669417382415917, 0.00441941738241593, 0.12931250000000002)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_12" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067368
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657609, 0.6403602208438914, 0.2652458882777703, -0)
+            double3 xformOp:translate = (-0.010669417382415919, -0.004419417382415922, 0.1296875)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_13" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067348
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.720821341465762, 0.2652458882777698, 0.6403602208438907, -0)
+            double3 xformOp:translate = (-0.004419417382415922, -0.010669417382415926, 0.13006250000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_14" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067348
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.720821341465761, -0.2652458882777697, 0.6403602208438918, 0)
+            double3 xformOp:translate = (0.004419417382415913, -0.01066941738241593, 0.13043750000000004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_15" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067368
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.720821341465762, -0.6403602208438903, 0.2652458882777705, 0)
+            double3 xformOp:translate = (0.010669417382415915, -0.0044194173824159315, 0.13081250000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_16" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067368
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657609, -0.6403602208438915, -0.26524588827777024, 0)
+            double3 xformOp:translate = (0.01066941738241592, 0.00441941738241592, 0.1311875)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_17" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067348
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657619, -0.2652458882777699, -0.6403602208438905, 0)
+            double3 xformOp:translate = (0.004419417382415924, 0.010669417382415924, 0.13156250000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_18" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067348
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.720821341465761, 0.2652458882777695, -0.6403602208438918, 0)
+            double3 xformOp:translate = (-0.0044194173824159124, 0.01066941738241593, 0.13193750000000004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_19" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067368
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657619, 0.6403602208438903, -0.2652458882777704, 0)
+            double3 xformOp:translate = (-0.010669417382415915, 0.004419417382415932, 0.13231250000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_20" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067365
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657609, 0.6403602208438915, 0.26524588827777007, -0)
+            double3 xformOp:translate = (-0.010669417382415922, -0.004419417382415919, 0.1326875)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_21" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067327
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657619, 0.2652458882777706, 0.6403602208438903, -0)
+            double3 xformOp:translate = (-0.004419417382415937, -0.010669417382415922, 0.13306250000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_22" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067368
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657609, -0.26524588827776885, 0.6403602208438921, 0)
+            double3 xformOp:translate = (0.004419417382415899, -0.01066941738241593, 0.13343750000000004)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+
+        def Capsule "ridge_23" (
+            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+        )
+        {
+            double height = 0.008574432405067368
+            rel material:binding:physics = </Bottle/PlasticContact>
+            color3f[] primvars:displayColor = [(0.03, 0.32, 0.6)]
+            double radius = 0.0005
+            quatd xformOp:orient = (0.7208213414657619, -0.6403602208438903, 0.2652458882777705, 0)
+            double3 xformOp:translate = (0.010669417382415915, -0.004419417382415934, 0.13381250000000003)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient"]
+        }
+    }
+}

@@ -1,5 +1,9 @@
 # DexGym
 
+WujiHand2 Beta 双手自由腕与螺纹瓶的独立 Isaac Lab 基础场景见
+[资产、控制和物理验证说明](docs/assets/wujihand2-beta-bimanual-bottle.md)。此场景不注册 RL task；
+原有单手训练与导出接口继续使用第一代 Wuji Hand 资产。
+
 DexGym is a focused Isaac Lab reinforcement-learning workspace for
 dexterous-hand research. It contains the migrated task extension, DirectTask
 and Manager-Based task boundaries, RSL-RL train/play entry points, contract

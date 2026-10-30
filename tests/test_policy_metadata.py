@@ -1,6 +1,7 @@
 import os
 import sys
 import unittest
+from dataclasses import replace
 from pathlib import Path
 
 import torch
@@ -92,6 +93,15 @@ class PolicyMetadataTest(unittest.TestCase):
         runtime = runtime_from_env_cfg(EnvCfg())
         self.assertAlmostEqual(runtime["control_dt"], 0.05)
         self.assertEqual(runtime["decimation"], 6)
+
+    def test_other_task_does_not_inherit_wuji_critic_layout(self):
+        contract = replace(WUJI_REORIENTATION_CONTRACT, task_id="Other-Direct-v0",
+                           critic_observation_dim=220)
+        schema = build_policy_artifacts(contract)["observation_schema.yaml"]
+        self.assertEqual(schema["critic_input"]["dim"], 220)
+        self.assertEqual(schema["critic_input"]["layout"],
+                         "task-specific critic input; see task contract")
+        self.assertNotIn("privileged_fields", schema["critic_input"])
 
 
 if __name__ == "__main__":

@@ -84,13 +84,17 @@ def build_policy_artifacts(
             "dim": contract.critic_observation_dim,
             "actor_deployment": False,
             "purpose": "privileged asymmetric critic input used during training only",
-            "layout": "207 clean shared history + 206 privileged state terms",
-            "privileged_fields": [
-                "perturbation_direction",
-                "perturbation_velocity",
-                "domain_randomization_ratios",
-            ],
+            "layout": "task-specific critic input; see task contract",
         }
+        if contract.task_id == "DexterousHands-Wuji-Hand-Reorientation-Direct-v0":
+            observation_schema["critic_input"]["layout"] = (
+                f"{contract.observation_dim} clean shared history + "
+                f"{contract.critic_observation_dim - contract.observation_dim} privileged state terms"
+            )
+            observation_schema["critic_input"]["privileged_fields"] = [
+                "perturbation_direction", "perturbation_velocity",
+                "domain_randomization_ratios",
+            ]
 
     action_schema = {
         "metadata_version": "dexteroushands-action-v1",

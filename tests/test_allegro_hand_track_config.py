@@ -10,8 +10,9 @@ pytest.importorskip("isaaclab.sim")
 def test_allegro_config_declares_contract_and_resolves_reference(monkeypatch, tmp_path):
     asset_root = tmp_path / "asset"
     asset_root.mkdir()
-    (asset_root / "allegro_hand_description_right_fly.usd").write_text(
-        "#usda 1.0\n", encoding="utf-8"
+    (asset_root / "urdf").mkdir()
+    (asset_root / "urdf" / "allegro_hand_description_right_fly.urdf").write_text(
+        '<robot name="allegro_hand"/>\n', encoding="utf-8"
     )
     data_root = tmp_path / "grab"
     (data_root / "data").mkdir(parents=True)
