@@ -36,13 +36,15 @@
 
 ## 瓶与螺纹
 
-`BottleConfig` 中全部尺寸是未标定的**工程样例**，单位 SI。默认瓶身半径 35 mm、高 200 mm，瓶颈外半径 12 mm，盖外半径 17 mm、高 25 mm，右旋螺距 3 mm、三圈、径向间隙 0.5 mm、初始啮合 18 mm，质量瓶身 30 g、盖 6 g。其余可配置项包括摩擦、松动阈值、运行阻力和有限约束力。真实瓶须测量 CAD/扫描、质量、惯量、螺纹牙型和扭矩后替换。
+`BottleConfig` 中全部尺寸是未标定的**工程样例**，单位 SI。默认瓶身半径 35 mm、高 200 mm，瓶颈外半径 12 mm，盖外半径 17 mm、高 25 mm，右旋螺距 3 mm、三圈、径向间隙 0.5 mm、初始啮合 9 mm，质量瓶身 30 g、盖 6 g。三圈轴向行程为 9 mm，退出后盖底缘可越过瓶颈顶端。其余可配置项包括摩擦、松动阈值、运行阻力和有限约束力。真实瓶须测量 CAD/扫描、质量、惯量、螺纹牙型和扭矩后替换。
 
-`generate_usd.py` 用 OpenUSD / `pxr` 从配置生成独立的 `bottle.usda`、`cap.usda`、`parameters.json`。视觉及碰撞由 cylinder、cube、capsule 组成，每个资产少于 60 个简单 collider；瓶颈外与盖内均有分段螺旋凸纹，没有高密度动态三角网格。瓶身和盖各有独立自由刚体、质量、惯量与塑料接触材质。生成文件约 44 KiB，随源码提交并可重建；没有第三方瓶模型，生成器依赖项目的 Isaac Sim/OpenUSD，不需要 MuJoCo。
+`generate_usd.py` 用 OpenUSD / `pxr` 从配置生成独立的 `bottle.usda`、`cap.usda`、`parameters.json`。瓶身和盖的可见圆面是默认 64 段的 `UsdGeom.Mesh`，不带碰撞；隐藏的 cylinder、cube 和 capsule 负责碰撞，每个资产少于 60 个简单 collider。瓶颈外与盖内均有分段螺旋凸纹，没有高密度动态三角网格碰撞。瓶身和盖各有独立自由刚体、质量、惯量与塑料接触材质。生成文件随源码提交并可重建；没有第三方瓶模型，生成器依赖项目的 Isaac Sim/OpenUSD，不需要 MuJoCo。
 
-瓶和盖间用 USD D6 joint 锁定横向两轴及倾斜两轴，保留瓶身局部螺纹轴的平移和转动，并限定轴向行程。当前 PhysX 不依赖任何假定存在的 Screw Joint API。`ThreadCoupler` 在每步由瓶与盖的相对姿态求连续角 `θ`，在瓶身局部轴计算 `z_target = z_initial + sign·pitch·θ/(2π)`，再用有限、等大反向力及力矩作顺从耦合。阻尼使用扣除了瓶身角速度引起的坐标搬运速度；有状态的粘着/滑动模型分别使用 `breakaway_torque` 与 `running_resistance_torque`，停转后重新锚定。三圈行程末端有有限力矩止挡，超过行程不会持续自由转动。瓶盖运动始终来自 PhysX 刚体积分和约束，没有逐帧位姿瞬移。脚本测试力矩只作为确定性外力，不代表抓握或 RL 成功。
+瓶和盖间用 USD D6 joint 锁定横向两轴及倾斜两轴，保留瓶身局部螺纹轴的平移和转动，并限定轴向行程。当前 PhysX 不依赖任何假定存在的 Screw Joint API。`ThreadCoupler` 在每步由瓶与盖的相对姿态求连续角 `θ`，在瓶身局部轴计算 `z_target = z_initial + sign·pitch·θ/(2π)`，再用有限、等大反向力及力矩作顺从耦合。阻尼使用扣除了瓶身角速度引起的坐标搬运速度；有状态的粘着/滑动模型停转后重新锚定。松动阈值从完全啮合的 0.020 N·m 随轴向退出单调降至 0.004 N·m；运行阻力从 0.006 降至 0.001 N·m，指数和端点均可配置。这是按啮合重叠量定义的**工程阻力模型**，不是经实际瓶盖预紧力测试标定的扭矩曲线。瓶盖运动始终来自 PhysX 刚体积分和约束，没有逐帧位姿瞬移。脚本测试力矩只作为确定性外力，不代表抓握或 RL 成功。
 
-当前限制：螺纹只支持预啮合行程，**不支持完全拧脱及重新啮合**；分段凸纹与简化物理等效件尚未按真实瓶标定。低于松动阈值允许有限弹性角位移，不应解释为零位移。每步 Python wrench 耦合在大量并行环境的吞吐和长时间接触稳定性仍需测量。自由瓶会因重力下落，独立螺纹夹具只在瓶落地前的 120 步窗口验收；双手稳定抓握瓶体未实现。
+默认保持三圈末端的有限止挡，以便重复进行已啮合螺纹测试。启用 `--allow_detachment` 后，在三圈行程结束、局部轴向误差和剩余啮合量满足阈值时，运行中禁用该环境的 D6 joint 并停止耦合力；盖子成为自由刚体。双环境 PhysX fixture 在第 510 步释放环境 0，施加 0.05 N 横向测试力后盖子离瓶 0.97 m 并落地，环境 1 保持连接。没有横向外力或抓握动作时，脱离的盖也可能落回瓶颈附近；它不会被脚本瞬移到地上。
+
+当前限制：退出后支持单向释放，**不支持重新啮合**；分段凸纹与简化物理等效件尚未按真实瓶标定。低于松动阈值允许有限弹性角位移，不应解释为零位移。每步 Python wrench 耦合在大量并行环境的吞吐和长时间接触稳定性仍需测量。自由瓶会因重力下落，独立螺纹夹具只在瓶落地前的 120 步窗口验收；双手稳定抓握瓶体未实现。
 
 ## 启动与验收
 
@@ -58,6 +60,7 @@ export ISAACLAB_PYTHON=/path/to/isaacsim/python
 ./scripts/run_isaaclab.sh scripts/environments/smoke_bimanual_scene.py --headless --num_envs 1 --steps 600 --bottle_center_z 0.1 --test_torque 0.04
 ./scripts/run_isaaclab.sh scripts/environments/validate_wrist_6dof.py
 ./scripts/run_isaaclab.sh scripts/environments/validate_bottle_thread.py
+./scripts/run_isaaclab.sh scripts/environments/validate_bottle_detachment.py
 ./scripts/run_isaaclab.sh scripts/environments/validate_hand2_contact.py
 ./scripts/run_isaaclab.sh scripts/environments/validate_hand2_fingers.py
 ```
@@ -65,10 +68,10 @@ export ISAACLAB_PYTHON=/path/to/isaacsim/python
 GUI：
 
 ```bash
-./scripts/run_isaaclab.sh scripts/environments/smoke_bimanual_scene.py --num_envs 1 --steps 300 --left_xyz 0.01 0 0 --right_rot 0 0 0.08 --left_grip 0.5 --contact_debug
+./scripts/run_isaaclab.sh scripts/environments/smoke_bimanual_scene.py --viz kit --num_envs 1 --steps 100000 --bottle_center_z 0.1 --test_torque 0.04 --torque_cycle_steps 600 --contact_debug
 ```
 
-GUI 创建左右腕（掌部几何使用同一刚体）与瓶局部轴的 frame marker，并显示当前角度、轴向位移及约束误差；结束时另由 `BIMANUAL_SCENE_RESULT` JSON 输出。`--left_fingers` / `--right_fingers` 接收各 20 个关节位置目标。GUI 窗口尚未在有显示器的工作站验收。上述脚本每次从相同初始条件复现；验证器要求明确 `*_PASS` 输出，Isaac Sim 进程退出码独自不足以判定成功。
+GUI 创建左右腕（掌部几何使用同一刚体）与瓶局部轴的 frame marker，并显示当前角度、轴向位移及约束误差；结束时另由 `BIMANUAL_SCENE_RESULT` JSON 输出。当前 Isaac Lab 版本需要显式传 `--viz kit`，并使 `isaaclab_visualizers` 可导入；若没有该可选包，脚本只显示场景和状态文字，不显示 marker。`--left_fingers` / `--right_fingers` 接收各 20 个关节位置目标。上述脚本每次从相同初始条件复现；验证器要求明确 `*_PASS` 输出，Isaac Sim 进程退出码独自不足以判定成功。
 
 无需 GPU 的契约测试：
 

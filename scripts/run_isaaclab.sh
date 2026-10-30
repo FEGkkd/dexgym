@@ -57,7 +57,7 @@ export ACCEPT_EULA="${ACCEPT_EULA:-Y}"
 export PRIVACY_CONSENT="${PRIVACY_CONSENT:-Y}"
 export PYTHONPATH="${REPO_ROOT}/source${PYTHONPATH:+:${PYTHONPATH}}"
 if [[ -n "${ISAACLAB_ROOT:-}" ]]; then
-    for extension in isaaclab isaaclab_physx isaaclab_contrib isaaclab_rl isaaclab_tasks; do
+    for extension in isaaclab isaaclab_physx isaaclab_contrib isaaclab_rl isaaclab_tasks isaaclab_visualizers; do
         if [[ -d "${ISAACLAB_ROOT}/source/${extension}" ]]; then
             export PYTHONPATH="${ISAACLAB_ROOT}/source/${extension}:${PYTHONPATH}"
         fi

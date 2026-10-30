@@ -12,24 +12,32 @@ class BottleConfig:
     neck_height: float = 0.040
     cap_outer_radius: float = 0.017
     cap_height: float = 0.025
+    visual_radial_segments: int = 64
     thread_pitch: float = 0.003
     thread_turns: int = 3
+    allow_detachment: bool = False
+    detachment_angle_margin: float = 0.06
+    detachment_overlap_fraction: float = 0.05
+    detachment_max_constraint_error: float = 0.0005
     thread_handedness: str = "right"
     thread_clearance: float = 0.0005
     thread_height: float = 0.001
-    initial_engagement: float = 0.018
+    initial_engagement: float = 0.009
     cap_top_clearance: float = 0.002
     cap_mass: float = 0.006
     bottle_mass: float = 0.030
     static_friction: float = 0.6
     dynamic_friction: float = 0.4
     breakaway_torque: float = 0.020
+    loose_breakaway_torque: float = 0.004
     breakaway_stiffness: float = 0.2
     breakaway_damping: float = 0.003
     slip_angle_ratio: float = 1.5
     slip_speed: float = 0.1
     restick_speed: float = 0.05
     running_resistance_torque: float = 0.006
+    loose_running_resistance_torque: float = 0.001
+    engagement_resistance_exponent: float = 1.5
     max_constraint_force: float = 8.0
     max_constraint_torque: float = 0.08
     lateral_stiffness: float = 10.0
@@ -56,13 +64,22 @@ class BottleConfig:
             self.breakaway_damping,
             self.slip_angle_ratio, self.slip_speed, self.restick_speed,
             self.end_stop_stiffness, self.end_stop_damping,
+            self.engagement_resistance_exponent,
+            self.detachment_angle_margin, self.detachment_overlap_fraction,
+            self.detachment_max_constraint_error,
         )
         if any(not math.isfinite(x) or x <= 0 for x in numeric):
             raise ValueError("Bottle dimensions, mass, pitch and limits must be finite and positive")
         if not isinstance(self.thread_turns, int) or self.thread_turns < 1:
             raise ValueError("thread_turns must be a positive integer")
+        if not isinstance(self.visual_radial_segments, int) or not 24 <= self.visual_radial_segments <= 256:
+            raise ValueError("visual_radial_segments must be an integer in [24, 256]")
         if self.thread_handedness not in ("right", "left"):
             raise ValueError("thread_handedness must be right or left")
+        if not isinstance(self.allow_detachment, bool):
+            raise ValueError("allow_detachment must be bool")
+        if self.detachment_overlap_fraction >= 1 or self.detachment_angle_margin >= 2 * math.pi:
+            raise ValueError("detachment tolerances exceed one turn or full engagement")
         if self.cap_inner_radius >= self.cap_outer_radius:
             raise ValueError("cap wall thickness must be positive")
         if self.neck_outer_radius >= self.bottle_radius:
@@ -73,6 +90,10 @@ class BottleConfig:
             raise ValueError("friction coefficients are invalid")
         if self.breakaway_torque < 0 or self.running_resistance_torque < 0:
             raise ValueError("resistance torques must be nonnegative")
+        if not (0 <= self.loose_breakaway_torque <= self.breakaway_torque):
+            raise ValueError("loose breakaway torque must be within tight breakaway limit")
+        if not (0 <= self.loose_running_resistance_torque <= self.running_resistance_torque):
+            raise ValueError("loose running torque must be within tight running limit")
 
     @property
     def thread_sign(self) -> int:

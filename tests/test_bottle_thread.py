@@ -69,6 +69,56 @@ class BottleThreadTests(unittest.TestCase):
         self.assertAlmostEqual(returned.breakaway_resistance_torque,
                                tiny.breakaway_resistance_torque)
 
+    def test_torque_limits_decrease_as_thread_overlap_decreases(self):
+        cfg = BottleConfig()
+        coupler = ThreadCoupler(cfg)
+        z0 = cfg.cap_initial_z
+        bottle = ((0, 0, 0), IDENTITY, (0, 0, 0), (0, 0, 0))
+        tight = coupler.wrenches(*bottle, (0, 0, z0), IDENTITY,
+                                 (0, 0, 0), (0, 0, 0))
+        half = coupler.wrenches(*bottle,
+                                (0, 0, z0 + cfg.thread_pitch * cfg.thread_turns / 2),
+                                yaw(math.pi * cfg.thread_turns), (0, 0, 0), (0, 0, 0))
+        loose = coupler.wrenches(*bottle,
+                                 (0, 0, z0 + cfg.thread_pitch * cfg.thread_turns),
+                                 yaw(2 * math.pi * cfg.thread_turns), (0, 0, 0), (0, 0, 0))
+        self.assertGreater(tight.breakaway_limit_nm, half.breakaway_limit_nm)
+        self.assertGreater(half.breakaway_limit_nm, loose.breakaway_limit_nm)
+        self.assertGreater(tight.running_limit_nm, half.running_limit_nm)
+        self.assertGreater(half.running_limit_nm, loose.running_limit_nm)
+        self.assertAlmostEqual(tight.state.engagement_fraction, 1.0)
+        self.assertAlmostEqual(loose.state.engagement_fraction, 0.0)
+
+    def test_optional_release_removes_all_coupling_wrenches(self):
+        cfg = BottleConfig(allow_detachment=True)
+        coupler = ThreadCoupler(cfg)
+        z0 = cfg.cap_initial_z
+        coupler.observe((0, 0, 0), IDENTITY, (0, 0, z0), IDENTITY)
+        limit = 2 * math.pi * cfg.thread_turns
+        for i in range(1, 101):
+            angle = limit * i / 100
+            z = z0 + cfg.thread_pitch * angle / (2 * math.pi)
+            state = coupler.observe((0, 0, 0), IDENTITY, (0, 0, z), yaw(angle))
+        self.assertTrue(state.detached)
+        result = coupler.wrenches(
+            (0, 0, 0), IDENTITY, (0, 0, 0), (0, 0, 0),
+            (0.05, 0, z0 + 0.02), yaw(limit), (0, 0, 0), (0, 0, 0),
+        )
+        self.assertEqual(result.cap_force, (0.0, 0.0, 0.0))
+        self.assertEqual(result.cap_torque, (0.0, 0.0, 0.0))
+
+    def test_left_hand_thread_releases_on_negative_rotation(self):
+        cfg = BottleConfig(thread_handedness="left", allow_detachment=True)
+        coupler = ThreadCoupler(cfg)
+        z0 = cfg.cap_initial_z
+        coupler.observe((0, 0, 0), IDENTITY, (0, 0, z0), IDENTITY)
+        for i in range(1, 101):
+            angle = -2 * math.pi * cfg.thread_turns * i / 100
+            z = z0 + cfg.thread_pitch * (-angle) / (2 * math.pi)
+            state = coupler.observe((0, 0, 0), IDENTITY, (0, 0, z), yaw(angle))
+        self.assertTrue(state.detached)
+        self.assertEqual(state.engagement_fraction, 0.0)
+
     def test_running_regime_releases_stiction_and_resticks(self):
         cfg = BottleConfig()
         coupler = ThreadCoupler(cfg)
@@ -124,6 +174,9 @@ class BottleThreadTests(unittest.TestCase):
         cap_top = cfg.cap_initial_z + cfg.cap_height / 2
         self.assertGreater(cap_bottom, cfg.bottle_height / 2)
         self.assertGreater(cap_top, cfg.bottle_height / 2 + cfg.neck_height)
+        released_bottom = cap_bottom + cfg.thread_pitch * cfg.thread_turns
+        self.assertGreater(released_bottom,
+                           cfg.bottle_height / 2 + cfg.neck_height)
 
 
 if __name__ == "__main__":

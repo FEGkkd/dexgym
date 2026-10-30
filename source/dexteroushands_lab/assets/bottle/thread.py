@@ -53,6 +53,8 @@ class ThreadState:
     constraint_error: float
     lateral_error: float
     axis_world: tuple[float, float, float]
+    engagement_fraction: float
+    detached: bool
 
 
 @dataclass(frozen=True)
@@ -66,6 +68,8 @@ class ThreadWrenches:
     breakaway_resistance_torque: float
     end_stop_resistance_torque: float
     applied_coupling_torque_nm: float
+    breakaway_limit_nm: float
+    running_limit_nm: float
 
 
 class ThreadCoupler:
@@ -79,6 +83,7 @@ class ThreadCoupler:
         self._initial_axial: float | None = None
         self._stick_reference = 0.0
         self._sliding = False
+        self._detached = False
 
     def reset(self) -> None:
         self._last_wrapped = None
@@ -87,6 +92,11 @@ class ThreadCoupler:
         self._initial_axial = None
         self._stick_reference = 0.0
         self._sliding = False
+        self._detached = False
+
+    @property
+    def detached(self) -> bool:
+        return self._detached
 
     def observe(self, bottle_pos, bottle_quat, cap_pos, cap_quat) -> ThreadState:
         axis = _rotate(bottle_quat, (0.0, 0.0, 1.0))
@@ -113,8 +123,21 @@ class ThreadCoupler:
         desired = self._initial_axial + (
             self.config.thread_sign * self.config.thread_pitch * travel_angle / (2 * math.pi)
         )
+        travel = self.config.thread_pitch * self.config.thread_turns
+        unscrewed_fraction = (axial - self._initial_axial) / travel
+        engagement_fraction = max(0.0, min(1.0, 1.0 - unscrewed_fraction))
+        if (self.config.allow_detachment and not self._detached
+                and self.config.thread_sign * (self._theta - self._initial_theta)
+                >= self.config.thread_turns * 2 * math.pi - self.config.detachment_angle_margin
+                and engagement_fraction <= self.config.detachment_overlap_fraction
+                and abs(axial - desired) <= self.config.detachment_max_constraint_error):
+            self._detached = True
+        if self._detached:
+            desired = axial
+            engagement_fraction = 0.0
         return ThreadState(
-            self._theta - self._initial_theta, axial, desired, axial - desired, _norm(lateral), axis,
+            self._theta - self._initial_theta, axial, desired, axial - desired,
+            _norm(lateral), axis, engagement_fraction, self._detached,
         )
 
     def wrenches(
@@ -123,6 +146,10 @@ class ThreadCoupler:
     ) -> ThreadWrenches:
         cfg = self.config
         state = self.observe(bottle_pos, bottle_quat, cap_pos, cap_quat)
+        if state.detached:
+            zero = (0.0, 0.0, 0.0)
+            return ThreadWrenches(zero, zero, zero, zero, state,
+                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         axis = state.axis_world
         displacement = _sub(cap_pos, bottle_pos)
         lateral = _sub(displacement, _scale(axis, state.axial))
@@ -151,6 +178,12 @@ class ThreadCoupler:
         )
         lead = cfg.thread_sign * cfg.thread_pitch / (2 * math.pi)
         screw_torque = cfg.axial_stiffness * state.constraint_error * lead
+        engagement_power = state.engagement_fraction ** cfg.engagement_resistance_exponent
+        breakaway_limit = (cfg.loose_breakaway_torque
+                           + (cfg.breakaway_torque - cfg.loose_breakaway_torque) * engagement_power)
+        running_limit = (cfg.loose_running_resistance_torque
+                         + (cfg.running_resistance_torque - cfg.loose_running_resistance_torque)
+                         * engagement_power)
         # A small elastic angular range holds the engaged cap. The extra
         # angle/speed condition avoids false slip on one explicit high-
         # acceleration substep. During slip only running resistance remains;
@@ -160,15 +193,15 @@ class ThreadCoupler:
             self._stick_reference = state.theta_unwrapped
         if not self._sliding and (
             abs(state.theta_unwrapped - self._stick_reference)
-            >= cfg.slip_angle_ratio * cfg.breakaway_torque / cfg.breakaway_stiffness
+            >= cfg.slip_angle_ratio * breakaway_limit / cfg.breakaway_stiffness
             and abs(spin) >= cfg.slip_speed
         ):
             self._sliding = True
         trial = (-cfg.breakaway_stiffness * (state.theta_unwrapped - self._stick_reference)
                  - cfg.breakaway_damping * spin)
         breakaway = (0.0 if self._sliding else
-                     max(-cfg.breakaway_torque, min(cfg.breakaway_torque, trial)))
-        resistance = -cfg.running_resistance_torque * math.tanh(
+                     max(-breakaway_limit, min(breakaway_limit, trial)))
+        resistance = -running_limit * math.tanh(
             spin / cfg.friction_velocity_scale
         )
         limit = cfg.thread_turns * 2 * math.pi
@@ -191,4 +224,5 @@ class ThreadCoupler:
         return ThreadWrenches(
             bottle_force, bottle_torque, cap_force, cap_torque,
             state, resistance, breakaway, end_stop, _norm(coupling_torque),
+            breakaway_limit, running_limit,
         )

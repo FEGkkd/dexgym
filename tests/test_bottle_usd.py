@@ -16,6 +16,7 @@ class BottleUsdTests(unittest.TestCase):
         UsdPhysics.RigidBodyAPI.Apply(stage.DefinePrim("/World/envs/env_0/Bottle", "Xform"))
         UsdPhysics.RigidBodyAPI.Apply(stage.DefinePrim("/World/envs/env_0/Cap", "Xform"))
         joint = author_thread_joint(stage, "/World/envs/env_0", BottleConfig())
+        self.assertTrue(joint.GetJointEnabledAttr().Get())
         self.assertEqual(joint.GetBody0Rel().GetTargets()[0].pathString, "/World/envs/env_0/Bottle")
         self.assertEqual(joint.GetBody1Rel().GetTargets()[0].pathString, "/World/envs/env_0/Cap")
         for axis in ("transY", "transZ", "rotY", "rotZ"):
@@ -24,7 +25,7 @@ class BottleUsdTests(unittest.TestCase):
         self.assertFalse(joint.GetPrim().HasAPI(UsdPhysics.DriveAPI, "rotX"))
 
     def test_two_dynamic_rigid_bodies_and_bounded_primitive_colliders(self):
-        from pxr import Usd, UsdPhysics
+        from pxr import Usd, UsdGeom, UsdPhysics
         from dexteroushands_lab.assets.bottle.generate_usd import build_bottle_usd
 
         with tempfile.TemporaryDirectory() as directory:
@@ -40,6 +41,10 @@ class BottleUsdTests(unittest.TestCase):
                 self.assertGreater(len(colliders), 10)
                 self.assertLess(len(colliders), 60)
                 self.assertTrue(all(p.GetTypeName() in ("Capsule", "Cube", "Cylinder") for p in colliders))
+                visual_meshes = [UsdGeom.Mesh(p) for p in stage.Traverse()
+                                 if p.GetTypeName() == "Mesh" and not p.HasAPI(UsdPhysics.CollisionAPI)]
+                self.assertTrue(visual_meshes)
+                self.assertTrue(any(len(mesh.GetPointsAttr().Get()) >= 64 for mesh in visual_meshes))
 
 
 if __name__ == "__main__":

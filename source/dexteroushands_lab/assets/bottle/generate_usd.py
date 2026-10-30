@@ -32,7 +32,8 @@ def _bind_collision(prim, material):
     UsdShade.MaterialBindingAPI.Apply(prim).Bind(material, materialPurpose="physics")
 
 
-def _cylinder(stage, path, radius, height, z, color, material, collision=True):
+def _cylinder(stage, path, radius, height, z, color, material, collision=True,
+              visible=True):
     from pxr import Gf, UsdGeom
 
     cylinder = UsdGeom.Cylinder.Define(stage, path)
@@ -42,7 +43,63 @@ def _cylinder(stage, path, radius, height, z, color, material, collision=True):
     cylinder.CreateDisplayColorAttr([Gf.Vec3f(*color)])
     if collision:
         _bind_collision(cylinder.GetPrim(), material)
+    if not visible:
+        cylinder.CreateVisibilityAttr(UsdGeom.Tokens.invisible)
     return cylinder
+
+
+def _round_mesh(stage, path, outer_radius, inner_radius, height, z, color,
+                segments):
+    """Author a round visual shell; physics uses separate primitive colliders."""
+    from pxr import Gf, UsdGeom
+
+    if not 0 <= inner_radius < outer_radius:
+        raise ValueError("Visual shell radii are invalid")
+    mesh = UsdGeom.Mesh.Define(stage, path)
+    rings = (outer_radius,) if inner_radius == 0 else (outer_radius, inner_radius)
+    points = []
+    for radius in rings:
+        for height_sign in (-1, 1):
+            for i in range(segments):
+                angle = 2 * math.pi * i / segments
+                points.append(Gf.Vec3f(
+                    radius * math.cos(angle), radius * math.sin(angle),
+                    z + height_sign * height / 2,
+                ))
+    indices = []
+    counts = []
+
+    def quad(a, b, c, d):
+        counts.append(4)
+        indices.extend((a, b, c, d))
+
+    for i in range(segments):
+        j = (i + 1) % segments
+        quad(i, j, segments + j, segments + i)
+        if inner_radius:
+            inner = 2 * segments
+            quad(inner + j, inner + i, inner + segments + i,
+                 inner + segments + j)
+            quad(segments + i, segments + j,
+                 inner + segments + j, inner + segments + i)
+            quad(j, i, inner + i, inner + j)
+    if inner_radius == 0:
+        bottom_center = len(points)
+        points.append(Gf.Vec3f(0, 0, z - height / 2))
+        top_center = len(points)
+        points.append(Gf.Vec3f(0, 0, z + height / 2))
+        for i in range(segments):
+            j = (i + 1) % segments
+            counts.extend((3, 3))
+            indices.extend((bottom_center, j, i,
+                            top_center, segments + i, segments + j))
+    mesh.CreatePointsAttr(points)
+    mesh.CreateFaceVertexCountsAttr(counts)
+    mesh.CreateFaceVertexIndicesAttr(indices)
+    mesh.CreateSubdivisionSchemeAttr(UsdGeom.Tokens.none)
+    mesh.CreateDoubleSidedAttr(True)
+    mesh.CreateDisplayColorAttr([Gf.Vec3f(*color)])
+    return mesh
 
 
 def _thread_capsules(stage, root, points, radius, material, color):
@@ -83,10 +140,18 @@ def _cap_shell(stage, root, cfg: BottleConfig, material):
         ))
         wall.CreateDisplayColorAttr([Gf.Vec3f(0.92, 0.35, 0.10)])
         _bind_collision(wall.GetPrim(), material)
+        wall.CreateVisibilityAttr(UsdGeom.Tokens.invisible)
     _cylinder(
         stage, root + "/top", cfg.cap_outer_radius, 0.002,
         cfg.cap_height / 2 - 0.001, (0.92, 0.35, 0.10), material,
+        visible=False,
     )
+    _round_mesh(stage, root + "/shell_visual", cfg.cap_outer_radius,
+                cfg.cap_inner_radius, cfg.cap_height, 0.0,
+                (0.92, 0.35, 0.10), cfg.visual_radial_segments)
+    _round_mesh(stage, root + "/top_visual", cfg.cap_outer_radius,
+                0.0, 0.002, cfg.cap_height / 2 - 0.001,
+                (0.92, 0.35, 0.10), cfg.visual_radial_segments)
 
 
 def _body(stage, path, mass, inertia):
@@ -131,14 +196,23 @@ def build_bottle_usd(config: BottleConfig, output_dir: Path) -> tuple[Path, Path
     bottle_material = _material(bottle, "/Bottle", config)
     _cylinder(
         bottle, "/Bottle/body", config.bottle_radius, config.bottle_height,
-        0.0, (0.10, 0.50, 0.72), bottle_material,
+        0.0, (0.10, 0.50, 0.72), bottle_material, visible=False,
     )
+    _round_mesh(bottle, "/Bottle/body_visual", config.bottle_radius,
+                0.0, config.bottle_height, 0.0, (0.10, 0.50, 0.72),
+                config.visual_radial_segments)
     _cylinder(
         bottle, "/Bottle/neck", config.neck_outer_radius, config.neck_height,
         config.bottle_height / 2 + config.neck_height / 2,
-        (0.18, 0.65, 0.80), bottle_material,
+        (0.18, 0.65, 0.80), bottle_material, visible=False,
     )
-    thread_start = config.bottle_height / 2 + config.neck_height - config.cap_height + 0.010
+    _round_mesh(bottle, "/Bottle/neck_visual", config.neck_outer_radius,
+                0.0, config.neck_height,
+                config.bottle_height / 2 + config.neck_height / 2,
+                (0.18, 0.65, 0.80), config.visual_radial_segments)
+    thread_start = config.bottle_height / 2 + config.neck_height
+    if config.thread_sign > 0:
+        thread_start -= config.thread_pitch * config.thread_turns
     external = sample_helix(
         config, radius=config.neck_outer_radius + config.thread_height / 2,
         start_z=thread_start,
@@ -162,8 +236,9 @@ def build_bottle_usd(config: BottleConfig, output_dir: Path) -> tuple[Path, Path
     # Half-pitch phase offset places internal ridges between external ridges.
     internal = sample_helix(
         config, radius=config.cap_inner_radius - config.thread_height / 2,
-        start_z=thread_start - config.cap_initial_z
-                + config.thread_sign * config.thread_pitch / 2,
+        start_z=max(-config.cap_height / 2 + config.thread_height / 2,
+                    thread_start - config.cap_initial_z
+                    + config.thread_sign * config.thread_pitch / 2),
     )
     _thread_capsules(
         cap, "/Cap/internal_thread", internal,
@@ -197,6 +272,7 @@ def author_thread_joint(stage, env_path: str, config: BottleConfig):
         if not stage.GetPrimAtPath(path).HasAPI(UsdPhysics.RigidBodyAPI):
             raise ValueError(f"Thread joint endpoint is not a rigid body: {path}")
     joint = UsdPhysics.Joint.Define(stage, env_path + "/BottleThreadJoint")
+    joint.CreateJointEnabledAttr(True)
     joint.CreateBody0Rel().SetTargets([Sdf.Path(bottle_path)])
     joint.CreateBody1Rel().SetTargets([Sdf.Path(cap_path)])
     joint.CreateLocalPos0Attr(Gf.Vec3f(0, 0, config.cap_initial_z))

@@ -7,6 +7,7 @@ Example: scripts/run_isaaclab.sh scripts/environments/smoke_bimanual_scene.py
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import math
 from pathlib import Path
@@ -32,6 +33,12 @@ parser.add_argument("--left_fingers", type=float, nargs=20, default=None,
 parser.add_argument("--right_fingers", type=float, nargs=20, default=None,
                     help="20 canonical right finger target positions in radians")
 parser.add_argument("--test_torque", type=float, default=0.0, help="N m about bottle-local +Z, env 0 only")
+parser.add_argument("--torque_cycle_steps", type=int, default=0,
+                    help="Reverse scripted test torque every N physics steps; 0 keeps the torque constant")
+parser.add_argument("--allow_detachment", action="store_true",
+                    help="Release the D6 joint after the configured thread travel is complete")
+parser.add_argument("--detach_probe_force", type=float, default=0.0,
+                    help="Optional world-X force in N on the released cap for a separation fixture")
 parser.add_argument("--bottle_tilt_deg", type=float, default=0.0)
 parser.add_argument("--bottle_center_z", type=float, default=0.5,
                     help="Bottle center height in metres; 0.1 rests the sample bottle on ground")
@@ -41,6 +48,9 @@ parser.add_argument("--contact_probe_side", choices=("left", "right"),
 parser.add_argument("--trace", action="store_true")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
+kit_markers_available = importlib.util.find_spec("isaaclab_visualizers") is not None
+if args.contact_debug and not kit_markers_available:
+    print("BIMANUAL_GUI_NOTE isaaclab_visualizers is unavailable; contact debug markers disabled", flush=True)
 
 app_launcher = AppLauncher(args)
 simulation_app = app_launcher.app
@@ -93,9 +103,10 @@ def _apply_wrench(asset, forces, torques, *, body_id=None):
 
 def main():
     print("BIMANUAL_STAGE starting", flush=True)
-    if args.num_envs < 1 or args.steps < 1:
-        raise ValueError("num_envs and steps must be positive")
-    config = BottleConfig()
+    if (args.num_envs < 1 or args.steps < 1 or args.torque_cycle_steps < 0
+            or args.detach_probe_force < 0):
+        raise ValueError("environment count, steps and fixture force must be valid")
+    config = BottleConfig(allow_detachment=args.allow_detachment)
     if args.bottle_center_z < config.bottle_height / 2:
         raise ValueError("bottle center must keep the sample body above the ground")
     asset_dir = REPO_ROOT / "source/dexteroushands_lab/assets/bottle/generated"
@@ -107,17 +118,21 @@ def main():
 
     sim = sim_utils.SimulationContext(sim_utils.SimulationCfg(dt=0.002, device=args.device))
     print("BIMANUAL_STAGE simulation_context_created", flush=True)
-    sim.set_camera_view((0.7, -0.9, 0.95), (0.0, 0.0, 0.55))
+    focus_z = min(0.55, max(0.22, args.bottle_center_z + 0.12))
+    sim.set_camera_view((0.45, -0.70, focus_z + 0.30), (0.0, 0.0, focus_z))
     print("BIMANUAL_STAGE camera_configured", flush=True)
     scene = InteractiveScene(make_bimanual_bottle_scene_cfg(
         num_envs=args.num_envs, asset_dir=asset_dir, bottle=config,
-        variant=args.variant, contact_debug=args.contact_debug,
+        variant=args.variant, contact_debug=args.contact_debug and kit_markers_available,
         bottle_tilt_radians=math.radians(args.bottle_tilt_deg),
         bottle_center_z=args.bottle_center_z,
     ))
     print("BIMANUAL_STAGE interactive_scene_created", flush=True)
-    for env_index in range(args.num_envs):
+    thread_joints = [
         author_thread_joint(sim.stage, f"/World/envs/env_{env_index}", config)
+        for env_index in range(args.num_envs)
+    ]
+    detachment_steps = [None] * args.num_envs
     # The official native USD is fixed-base. Verify the Isaac Lab override
     # disabled its world joint before PhysX creates the articulations.
     for name in ("LeftHand", "RightHand"):
@@ -179,10 +194,13 @@ def main():
     if not args.headless:
         import omni.ui as ui
 
-        marker_cfg = FRAME_MARKER_CFG.replace(prim_path="/Visuals/WristAndThreadFrames")
-        marker_cfg.markers["frame"].scale = (0.045, 0.045, 0.045)
-        markers = VisualizationMarkers(marker_cfg)
-        thread_window = ui.Window("DexGym bottle thread", width=370, height=95)
+        if kit_markers_available:
+            marker_cfg = FRAME_MARKER_CFG.replace(prim_path="/Visuals/WristAndThreadFrames")
+            marker_cfg.markers["frame"].scale = (0.045, 0.045, 0.045)
+            markers = VisualizationMarkers(marker_cfg)
+        thread_window = ui.Window("DexGym bottle thread", width=450, height=125)
+        thread_window.position_x = 850
+        thread_window.position_y = 95
         with thread_window.frame:
             with ui.VStack(spacing=5):
                 ui.Label("Thread state (env 0, bottle-local +Z)")
@@ -203,6 +221,8 @@ def main():
     max_wrist_force = 0.0
     max_wrist_torque = 0.0
     final_states = []
+    final_breakaway_limits = []
+    final_running_limits = []
     for step in range(args.steps):
         left_pose = _rows(left.data.root_pose_w.torch)
         right_pose = _rows(right.data.root_pose_w.torch)
@@ -214,6 +234,8 @@ def main():
         cap_vel = _rows(cap.data.root_vel_w.torch)
         lw, rw, bw, cw = [], [], [], []
         final_states = []
+        final_breakaway_limits = []
+        final_running_limits = []
         for i in range(args.num_envs):
             lw.append(left_ctrl[i].wrench(left_pose[i][:3], left_pose[i][3:7],
                                           left_vel[i][:3], left_vel[i][3:6]))
@@ -235,12 +257,25 @@ def main():
                 bottle_pose[i][:3], bottle_pose[i][3:7], bottle_vel[i][:3], bottle_vel[i][3:6],
                 cap_pose[i][:3], cap_pose[i][3:7], cap_vel[i][:3], cap_vel[i][3:6],
             )
-            applied = args.test_torque if i == 0 else 0.0
+            cycle_sign = (-1 if args.torque_cycle_steps
+                          and (step // args.torque_cycle_steps) % 2 else 1)
+            if result.state.detached and detachment_steps[i] is None:
+                thread_joints[i].GetJointEnabledAttr().Set(False)
+                thread_joints[i].CreateCollisionEnabledAttr(True)
+                detachment_steps[i] = step
+                print(f"THREAD_DETACHED env={i} step={step}", flush=True)
+            applied = args.test_torque * cycle_sign if i == 0 and not result.state.detached else 0.0
             cap_torque = tuple(result.cap_torque[j] + applied * result.state.axis_world[j]
                                for j in range(3))
+            cap_force = result.cap_force
+            if result.state.detached and i == 0 and args.detach_probe_force:
+                cap_force = (cap_force[0] + args.detach_probe_force,
+                             cap_force[1], cap_force[2])
             bw.append((result.bottle_force, result.bottle_torque))
-            cw.append((result.cap_force, cap_torque))
+            cw.append((cap_force, cap_torque))
             final_states.append(result.state)
+            final_breakaway_limits.append(result.breakaway_limit_nm)
+            final_running_limits.append(result.running_limit_nm)
             max_breakaway_resistance = max(max_breakaway_resistance,
                                            abs(result.breakaway_resistance_torque))
             max_running_resistance = max(max_running_resistance,
@@ -302,23 +337,34 @@ def main():
                            right.data.root_pose_w.torch[:, 3:7],
                            bottle.data.root_pose_w.torch[:, 3:7]), dim=0),
             )
-            if thread_label is not None:
-                state = final_states[0]
-                thread_label.text = (
-                    f"angle {state.theta_unwrapped:+.3f} rad    "
-                    f"axial {state.axial * 1000:.2f} mm    "
-                    f"error {state.constraint_error * 1000:+.3f} mm"
-                )
+        if thread_label is not None and step % 10 == 0:
+            state = final_states[0]
+            thread_label.text = (
+                f"angle {state.theta_unwrapped:+.3f} rad    "
+                f"axial {state.axial * 1000:.2f} mm    "
+                f"error {state.constraint_error * 1000:+.3f} mm\n"
+                f"thread overlap {state.engagement_fraction * 100:.0f}%    "
+                f"breakaway limit {final_breakaway_limits[0]:.4f} N m"
+                + ("    DETACHED" if state.detached else "")
+            )
     print("BIMANUAL_SCENE_RESULT " + json.dumps({
         "status": "ran_without_nonfinite_state",
         "num_envs": args.num_envs,
         "steps": args.steps,
         "asset_variant": args.variant,
         "test_torque_nm": args.test_torque,
+        "torque_cycle_steps": args.torque_cycle_steps,
+        "allow_detachment": args.allow_detachment,
+        "detachment_steps": detachment_steps,
+        "joint_enabled": [joint.GetJointEnabledAttr().Get() for joint in thread_joints],
         "thread": [
             {"theta_rad": s.theta_unwrapped, "axial_m": s.axial,
-             "expected_axial_m": s.desired_axial, "constraint_error_m": s.constraint_error}
-            for s in final_states
+             "expected_axial_m": s.desired_axial, "constraint_error_m": s.constraint_error,
+             "engagement_fraction": s.engagement_fraction,
+             "detached": s.detached, "lateral_error_m": s.lateral_error,
+             "breakaway_limit_nm": final_breakaway_limits[i],
+             "running_limit_nm": final_running_limits[i]}
+            for i, s in enumerate(final_states)
         ],
         "max_constraint_error_m": max_error,
         "max_breakaway_resistance_nm": max_breakaway_resistance,

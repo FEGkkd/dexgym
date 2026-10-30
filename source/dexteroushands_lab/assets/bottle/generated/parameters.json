@@ -1,5 +1,6 @@
 {
   "parameters": {
+    "allow_detachment": false,
     "axial_damping": 3.5,
     "axial_stiffness": 500.0,
     "body_angular_damping": 1.0,
@@ -13,13 +14,19 @@
     "cap_mass": 0.006,
     "cap_outer_radius": 0.017,
     "cap_top_clearance": 0.002,
+    "detachment_angle_margin": 0.06,
+    "detachment_max_constraint_error": 0.0005,
+    "detachment_overlap_fraction": 0.05,
     "dynamic_friction": 0.4,
     "end_stop_damping": 0.02,
     "end_stop_stiffness": 0.5,
+    "engagement_resistance_exponent": 1.5,
     "friction_velocity_scale": 20.0,
-    "initial_engagement": 0.018,
+    "initial_engagement": 0.009,
     "lateral_damping": 0.1,
     "lateral_stiffness": 10.0,
+    "loose_breakaway_torque": 0.004,
+    "loose_running_resistance_torque": 0.001,
     "max_body_angular_velocity_deg": 1080.0,
     "max_body_linear_velocity": 5.0,
     "max_constraint_force": 8.0,
@@ -37,7 +44,8 @@
     "thread_pitch": 0.003,
     "thread_turns": 3,
     "tilt_damping": 0.0001,
-    "tilt_stiffness": 0.001
+    "tilt_stiffness": 0.001,
+    "visual_radial_segments": 64
   },
   "schema": "dexgym-bottle-example-v1",
   "units": "SI"
