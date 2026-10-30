@@ -7,6 +7,7 @@ Example: scripts/run_isaaclab.sh scripts/environments/smoke_bimanual_scene.py
 from __future__ import annotations
 
 import argparse
+from dataclasses import replace
 import importlib.util
 import json
 import math
@@ -22,6 +23,8 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--num_envs", type=int, default=1)
 parser.add_argument("--steps", type=int, default=300)
 parser.add_argument("--variant", choices=("beta1", "beta2"), default="beta1")
+parser.add_argument("--bottle_profile", choices=("engineering_example", "pco1881_reference"),
+                    default="engineering_example")
 parser.add_argument("--left_xyz", type=float, nargs=3, default=(0.0, 0.0, 0.0))
 parser.add_argument("--right_xyz", type=float, nargs=3, default=(0.0, 0.0, 0.0))
 parser.add_argument("--left_rot", type=float, nargs=3, default=(0.0, 0.0, 0.0))
@@ -39,6 +42,8 @@ parser.add_argument("--allow_detachment", action="store_true",
                     help="Release the D6 joint after the configured thread travel is complete")
 parser.add_argument("--detach_probe_force", type=float, default=0.0,
                     help="Optional world-X force in N on the released cap for a separation fixture")
+parser.add_argument("--fixture_hold_bottle", action="store_true",
+                    help="Hold bottle with a bounded PD wrench for isolated opening-torque tests")
 parser.add_argument("--bottle_tilt_deg", type=float, default=0.0)
 parser.add_argument("--bottle_center_z", type=float, default=0.5,
                     help="Bottle center height in metres; 0.1 rests the sample bottle on ground")
@@ -64,7 +69,7 @@ from pxr import UsdPhysics  # noqa: E402
 
 from dexteroushands_lab.assets.bottle import BottleConfig, ThreadCoupler  # noqa: E402
 from dexteroushands_lab.assets.bottle.generate_usd import build_bottle_usd, author_thread_joint  # noqa: E402
-from dexteroushands_lab.assets.wrist_6dof import Wrist6DoFController  # noqa: E402
+from dexteroushands_lab.assets.wrist_6dof import Wrist6DoFController, WristLimits  # noqa: E402
 from dexteroushands_lab.assets.wuji_hand2_beta import load_hand2_spec  # noqa: E402
 from dexteroushands_lab.scenes.bimanual_bottle import make_bimanual_bottle_scene_cfg  # noqa: E402
 
@@ -106,10 +111,14 @@ def main():
     if (args.num_envs < 1 or args.steps < 1 or args.torque_cycle_steps < 0
             or args.detach_probe_force < 0):
         raise ValueError("environment count, steps and fixture force must be valid")
-    config = BottleConfig(allow_detachment=args.allow_detachment)
+    base_config = (BottleConfig.pco1881_reference()
+                   if args.bottle_profile == "pco1881_reference" else BottleConfig())
+    config = replace(base_config, allow_detachment=args.allow_detachment)
     if args.bottle_center_z < config.bottle_height / 2:
         raise ValueError("bottle center must keep the sample body above the ground")
     asset_dir = REPO_ROOT / "source/dexteroushands_lab/assets/bottle/generated"
+    if args.bottle_profile != "engineering_example":
+        asset_dir /= args.bottle_profile
     build_bottle_usd(config, asset_dir)
     print("BIMANUAL_STAGE bottle_usd_generated", flush=True)
     left_spec = load_hand2_spec(variant=args.variant, side="left")
@@ -174,6 +183,14 @@ def main():
     right_pose = _rows(right.data.root_pose_w.torch)
     left_ctrl = [Wrist6DoFController(tuple(p[:3]), tuple(p[3:7])) for p in left_pose]
     right_ctrl = [Wrist6DoFController(tuple(p[:3]), tuple(p[3:7])) for p in right_pose]
+    bottle_hold_limits = WristLimits(
+        max_force=100.0, max_torque=3.0,
+        kp_position=300.0, kd_position=30.0,
+        kp_rotation=10.0, kd_rotation=0.1,
+    )
+    bottle_ctrl = ([Wrist6DoFController(tuple(p[:3]), tuple(p[3:7]), bottle_hold_limits)
+                    for p in _rows(bottle.data.root_pose_w.torch)]
+                   if args.fixture_hold_bottle else None)
     for ctrl in left_ctrl:
         ctrl.command(tuple(args.left_xyz), tuple(args.left_rot))
     for ctrl in right_ctrl:
@@ -271,7 +288,16 @@ def main():
             if result.state.detached and i == 0 and args.detach_probe_force:
                 cap_force = (cap_force[0] + args.detach_probe_force,
                              cap_force[1], cap_force[2])
-            bw.append((result.bottle_force, result.bottle_torque))
+            bottle_force = result.bottle_force
+            bottle_torque = result.bottle_torque
+            if bottle_ctrl is not None:
+                hold_force, hold_torque = bottle_ctrl[i].wrench(
+                    bottle_pose[i][:3], bottle_pose[i][3:7],
+                    bottle_vel[i][:3], bottle_vel[i][3:6],
+                )
+                bottle_force = tuple(bottle_force[j] + hold_force[j] for j in range(3))
+                bottle_torque = tuple(bottle_torque[j] + hold_torque[j] for j in range(3))
+            bw.append((bottle_force, bottle_torque))
             cw.append((cap_force, cap_torque))
             final_states.append(result.state)
             final_breakaway_limits.append(result.breakaway_limit_nm)
@@ -352,7 +378,9 @@ def main():
         "num_envs": args.num_envs,
         "steps": args.steps,
         "asset_variant": args.variant,
+        "bottle_profile": args.bottle_profile,
         "test_torque_nm": args.test_torque,
+        "fixture_hold_bottle": args.fixture_hold_bottle,
         "torque_cycle_steps": args.torque_cycle_steps,
         "allow_detachment": args.allow_detachment,
         "detachment_steps": detachment_steps,

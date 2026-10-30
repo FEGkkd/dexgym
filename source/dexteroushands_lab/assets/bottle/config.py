@@ -6,6 +6,7 @@ import math
 
 @dataclass(frozen=True)
 class BottleConfig:
+    source_profile: str = "engineering_example"
     bottle_radius: float = 0.035
     bottle_height: float = 0.20
     neck_outer_radius: float = 0.012
@@ -14,7 +15,7 @@ class BottleConfig:
     cap_height: float = 0.025
     visual_radial_segments: int = 64
     thread_pitch: float = 0.003
-    thread_turns: int = 3
+    thread_turns: float = 3.0
     allow_detachment: bool = False
     detachment_angle_margin: float = 0.06
     detachment_overlap_fraction: float = 0.05
@@ -70,8 +71,9 @@ class BottleConfig:
         )
         if any(not math.isfinite(x) or x <= 0 for x in numeric):
             raise ValueError("Bottle dimensions, mass, pitch and limits must be finite and positive")
-        if not isinstance(self.thread_turns, int) or self.thread_turns < 1:
-            raise ValueError("thread_turns must be a positive integer")
+        if (not isinstance(self.thread_turns, (int, float))
+                or not math.isfinite(self.thread_turns) or not 0 < self.thread_turns <= 10):
+            raise ValueError("thread_turns must be finite and in (0, 10]")
         if not isinstance(self.visual_radial_segments, int) or not 24 <= self.visual_radial_segments <= 256:
             raise ValueError("visual_radial_segments must be an integer in [24, 256]")
         if self.thread_handedness not in ("right", "left"):
@@ -101,7 +103,33 @@ class BottleConfig:
 
     @property
     def cap_inner_radius(self) -> float:
-        return self.neck_outer_radius + 2 * self.thread_height + self.thread_clearance
+        return self.neck_outer_radius + self.thread_height + self.thread_clearance
+
+    @classmethod
+    def pco1881_reference(cls) -> "BottleConfig":
+        """Supplier-grounded 28 mm PCO 1881 example, not a measured user bottle.
+
+        Thread data: BERICAP PCO 1881 brochure (650 degrees, 2.7 mm pitch).
+        Closure: Delta El Nile DEN-CLO-PCO_1881 (29.6 mm top diameter,
+        15.65 mm height, 2.34 g; 5-14 in-lb removal-torque guideline).
+        Bottle body, running friction, fill mass and seal are not SKU-matched.
+        """
+        return cls(
+            source_profile="pco1881_reference",
+            bottle_radius=0.0325, bottle_height=0.190,
+            neck_outer_radius=0.01247, neck_height=0.017,
+            cap_outer_radius=0.0148, cap_height=0.01565,
+            thread_pitch=0.0027, thread_turns=650.0 / 360.0,
+            thread_height=0.00123, thread_clearance=0.0002,
+            initial_engagement=0.013,
+            cap_mass=0.00234, bottle_mass=0.520,
+            breakaway_torque=0.90, loose_breakaway_torque=0.05,
+            breakaway_stiffness=20.0, breakaway_damping=0.05,
+            running_resistance_torque=0.12,
+            loose_running_resistance_torque=0.02,
+            max_constraint_torque=1.5, max_constraint_force=8.0,
+            axial_damping=1.0,
+        )
 
     @property
     def cap_initial_z(self) -> float:
@@ -120,11 +148,12 @@ def sample_helix(
     if segments_per_turn < 4:
         raise ValueError("At least four segments per turn are needed")
     r = config.neck_outer_radius if radius is None else radius
+    count = math.ceil(config.thread_turns * segments_per_turn)
     return tuple(
         (
-            r * math.cos(2 * math.pi * i / segments_per_turn),
-            r * math.sin(2 * math.pi * i / segments_per_turn),
-            start_z + config.thread_sign * config.thread_pitch * i / segments_per_turn,
+            r * math.cos(2 * math.pi * config.thread_turns * i / count),
+            r * math.sin(2 * math.pi * config.thread_turns * i / count),
+            start_z + config.thread_sign * config.thread_pitch * config.thread_turns * i / count,
         )
-        for i in range(config.thread_turns * segments_per_turn + 1)
+        for i in range(count + 1)
     )

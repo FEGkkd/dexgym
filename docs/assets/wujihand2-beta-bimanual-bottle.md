@@ -38,6 +38,19 @@
 
 `BottleConfig` 中全部尺寸是未标定的**工程样例**，单位 SI。默认瓶身半径 35 mm、高 200 mm，瓶颈外半径 12 mm，盖外半径 17 mm、高 25 mm，右旋螺距 3 mm、三圈、径向间隙 0.5 mm、初始啮合 9 mm，质量瓶身 30 g、盖 6 g。三圈轴向行程为 9 mm，退出后盖底缘可越过瓶颈顶端。其余可配置项包括摩擦、松动阈值、运行阻力和有限约束力。真实瓶须测量 CAD/扫描、质量、惯量、螺纹牙型和扭矩后替换。
 
+另提供 `BottleConfig.pco1881_reference()` 与 CLI `--bottle_profile pco1881_reference`，用于更接近常见 28 mm 饮料瓶的**公开规格参考样例**。它不代表用户手中的某一款瓶子，尤其不代表经过实测的开盖力学。来源与工程假设分开如下：
+
+| 参数 | 参考样例 | 来源与边界 |
+| --- | --- | --- |
+| 瓶口螺纹 | 单头右旋，螺距 2.7 mm，650°（1.806 圈） | [BERICAP PCO1881 产品资料](https://www.phperu.com/_files/ugd/2c48bc_53e4d3ea1ed3488a88d72c82416b8514.pdf?index=true)；[ISBT 螺纹规格目录](https://www.isbt.com/resources/isbt-threadspecs)列有 PCO1881 |
+| 瓶口直径 | 螺纹牙顶 27.4 mm，牙底 24.94 mm | [NEXPET PCO1881 瓶口图纸](https://nexpet.co/resources/028_PCO1881_125.0_24.8_3.43_35.5.pdf)；目前用等高分段 capsule 表示牙型，并未复刻图纸的全部截面和公差 |
+| 瓶盖外径、高、质量 | 29.6 mm、15.65 mm、2.34 g | [Delta El Nile PCO1881 瓶盖规格](https://www.deltaelnile.com/en/closure-pco-1881.html)；属于该供应商瓶盖，不保证与上述瓶口供应商形成实际配套 |
+| 开启扭矩量级 | 供应商建议 5–14 in-lb（约 0.565–1.582 N·m）；配置名义紧盖阈值 0.90 N·m | [Delta El Nile 技术页](https://www.deltaelnile.com/en/sku/den-clo-pco-1881.html)。0.90 N·m 只是落在建议范围内的选点，未经本地实物测量 |
+| 瓶身与内容物 | 半径 32.5 mm、高 190 mm、总质量 520 g | 工程近似：500 mL 水加约 20 g 塑料；不是与该盖配套的瓶身 CAD，未模拟液体晃动 |
+| 径向间隙与阻力曲线 | 0.2 mm；松盖阈值 0.05 N·m，运行阻力 0.12→0.02 N·m | 工程假设，未找到该组合的实测值；没有密封垫预紧、残留内压或防盗环断裂模型 |
+
+参考样例资产写入 `assets/bottle/generated/pco1881_reference/`，避免覆盖原工程样例。此配置的几何与螺距可由静态测试检查；**其开启阻力尚未通过物理验收**：在当前 120 步 GPU fixture 中，瓶盖质量 2.34 g、显式力矩更新与 PhysX 步长的组合使施加 0.6 N·m（低于 0.90 N·m 名义阈值）时瓶盖仍转过约 4.33 rad。曾测试 D6 角度驱动；它使 0.6 N·m 停住，但连 1.2 N·m 和 3.0 N·m 也几乎不转，故没有保留该方案。不能仅凭参数写了 0.90 N·m 就宣称仿真开启扭矩接近实物。未来需要实测目标瓶扭矩曲线，并采用通过低于/高于阈值双侧 GPU 测试的稳定接触/关节阻力实现。参考瓶口约 4.88 mm 的螺纹轴向行程小于盖与瓶颈的初始重叠，因此即使螺纹退出，盖可能仍套在瓶口；自然脱落或抓取提盖尚未验收。
+
 `generate_usd.py` 用 OpenUSD / `pxr` 从配置生成独立的 `bottle.usda`、`cap.usda`、`parameters.json`。瓶身和盖的可见圆面是默认 64 段的 `UsdGeom.Mesh`，不带碰撞；隐藏的 cylinder、cube 和 capsule 负责碰撞，每个资产少于 60 个简单 collider。瓶颈外与盖内均有分段螺旋凸纹，没有高密度动态三角网格碰撞。瓶身和盖各有独立自由刚体、质量、惯量与塑料接触材质。生成文件随源码提交并可重建；没有第三方瓶模型，生成器依赖项目的 Isaac Sim/OpenUSD，不需要 MuJoCo。
 
 瓶和盖间用 USD D6 joint 锁定横向两轴及倾斜两轴，保留瓶身局部螺纹轴的平移和转动，并限定轴向行程。当前 PhysX 不依赖任何假定存在的 Screw Joint API。`ThreadCoupler` 在每步由瓶与盖的相对姿态求连续角 `θ`，在瓶身局部轴计算 `z_target = z_initial + sign·pitch·θ/(2π)`，再用有限、等大反向力及力矩作顺从耦合。阻尼使用扣除了瓶身角速度引起的坐标搬运速度；有状态的粘着/滑动模型停转后重新锚定。松动阈值从完全啮合的 0.020 N·m 随轴向退出单调降至 0.004 N·m；运行阻力从 0.006 降至 0.001 N·m，指数和端点均可配置。这是按啮合重叠量定义的**工程阻力模型**，不是经实际瓶盖预紧力测试标定的扭矩曲线。瓶盖运动始终来自 PhysX 刚体积分和约束，没有逐帧位姿瞬移。脚本测试力矩只作为确定性外力，不代表抓握或 RL 成功。
@@ -63,6 +76,7 @@ export ISAACLAB_PYTHON=/path/to/isaacsim/python
 ./scripts/run_isaaclab.sh scripts/environments/validate_bottle_detachment.py
 ./scripts/run_isaaclab.sh scripts/environments/validate_hand2_contact.py
 ./scripts/run_isaaclab.sh scripts/environments/validate_hand2_fingers.py
+./scripts/run_isaaclab.sh scripts/environments/smoke_bimanual_scene.py --headless --bottle_profile pco1881_reference --bottle_center_z 0.095 --fixture_hold_bottle --steps 120 --test_torque 0.6
 ```
 
 GUI：

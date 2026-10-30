@@ -20,6 +20,25 @@ class BottleThreadTests(unittest.TestCase):
         left = sample_helix(BottleConfig(thread_handedness="left"), segments_per_turn=8)
         self.assertAlmostEqual(left[2][2] - left[0][2], -(helix[2][2] - helix[0][2]))
 
+    def test_pco1881_reference_uses_supplier_dimensions_and_torque_window(self):
+        cfg = BottleConfig.pco1881_reference()
+        self.assertEqual(cfg.source_profile, "pco1881_reference")
+        self.assertAlmostEqual(cfg.thread_pitch, 0.0027)
+        self.assertAlmostEqual(cfg.thread_turns * 360, 650)
+        self.assertAlmostEqual(2 * (cfg.neck_outer_radius + cfg.thread_height), 0.0274)
+        self.assertAlmostEqual(2 * cfg.cap_outer_radius, 0.0296)
+        self.assertAlmostEqual(cfg.cap_height, 0.01565)
+        self.assertAlmostEqual(cfg.cap_mass, 0.00234)
+        self.assertAlmostEqual(cfg.bottle_mass, 0.520)
+        self.assertAlmostEqual(cfg.cap_inner_radius - (cfg.neck_outer_radius + cfg.thread_height),
+                               cfg.thread_clearance)
+        self.assertGreaterEqual(cfg.breakaway_torque / 0.112984829, 5)
+        self.assertLessEqual(cfg.breakaway_torque / 0.112984829, 14)
+        helix = sample_helix(cfg)
+        self.assertEqual(len(helix), math.ceil(cfg.thread_turns * 8) + 1)
+        self.assertAlmostEqual(helix[-1][2] - helix[0][2],
+                               cfg.thread_pitch * cfg.thread_turns)
+
     def test_unwrapped_angle_and_pitch_coupling(self):
         cfg = BottleConfig()
         coupler = ThreadCoupler(cfg)
