@@ -78,8 +78,12 @@ def main():
         if len(selected) != 1:
             raise ValueError("Requested proposal index is absent or not unique")
     selected = selected[:args.candidate_count]
-    if (args.control_mode == "fixed_wrist" or args.start_at_goal) and len(selected) != 1:
-        raise ValueError("A fixed-wrist fixture has one authored wrist anchor per run")
+    if (args.control_mode == "fixed_wrist" or args.start_at_goal) and len(selected) > 1:
+        anchor = (selected[0]["wrist_position_w_m"],
+                  selected[0]["wrist_quaternion_wxyz"])
+        if any((item["wrist_position_w_m"],
+                item["wrist_quaternion_wxyz"]) != anchor for item in selected[1:]):
+            raise ValueError("Candidates in one anchored fixture need the same wrist pose")
     from dexteroushands_lab.assets.bottle import BottleConfig
     from dexteroushands_lab.assets.wrist_6dof import WristLimits
     config = BottleConfig(bottle_radius=proposals["radius_m"])

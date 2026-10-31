@@ -8,6 +8,7 @@ All poses use metres and xyzw quaternions in the env-0 world frame.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, replace
+from importlib.resources import files
 import json
 import math
 from pathlib import Path
@@ -44,6 +45,39 @@ def compose_pose(parent: Pose7, child: Pose7) -> Pose7:
     translated = _rotate(parent[3:7], child[:3])
     quaternion = _quat_normalize(_quat_mul(parent[3:7], child[3:7]))
     return (*tuple(parent[i] + translated[i] for i in range(3)), *quaternion)
+
+
+def _inverse_pose(pose: Pose7) -> Pose7:
+    quaternion = _quat_normalize(pose[3:7])
+    inverse = (-quaternion[0], -quaternion[1], -quaternion[2], quaternion[3])
+    translation = _rotate(inverse, tuple(-value for value in pose[:3]))
+    return (*translation, *inverse)
+
+
+def _reframe_sample(sample: "GraspInitSample", bottle_pose: Pose7) -> "GraspInitSample":
+    """Move the entire captured assembly without changing its relative grasp."""
+    if len(bottle_pose) != 7 or not all(math.isfinite(x) for x in bottle_pose):
+        raise ValueError("Bottle pose must contain seven finite values")
+    target = (*bottle_pose[:3], *_quat_normalize(bottle_pose[3:7]))
+    delta = compose_pose(target, _inverse_pose(sample.bottle.root_pose))
+
+    def body(state):
+        velocity = (*_rotate(delta[3:7], state.root_velocity[:3]),
+                    *_rotate(delta[3:7], state.root_velocity[3:6]))
+        return replace(state, root_pose=compose_pose(delta, state.root_pose),
+                       root_velocity=velocity)
+
+    def hand(state):
+        return replace(body(state),
+                       wrist_target_pose=compose_pose(delta, state.wrist_target_pose))
+
+    return replace(sample, left=hand(sample.left), right=hand(sample.right),
+                   bottle=body(sample.bottle), cap=body(sample.cap),
+                   source="rigid_reframe_of_" + sample.source,
+                   validated=False, validation=None,
+                   metadata={**sample.metadata,
+                             "requested_bottle_pose_xyzw": list(target),
+                             "rigid_reframe_requires_new_physx_validation": True})
 
 
 def rotate_sample_world_z(sample: "GraspInitSample", yaw_rad: float,
@@ -254,6 +288,33 @@ class BimanualGraspInitializer:
         self.bottle = bottle
         self.left_spec = left_spec
         self.right_spec = right_spec
+
+    def left_png_cylindrical_candidate(
+        self, *, bottle_pose: Pose7 | None = None,
+    ) -> GraspInitSample:
+        """Load the measured photo-style pose as an *unvalidated* Reset candidate.
+
+        The 20 joint positions are captured PhysX state, not the more deeply
+        closed position-drive commands used during formation. Fixed-wrist
+        fixtures must be constructed with the returned root poses as their
+        initial anchors. A transformed bottle pose requires its own PhysX hold.
+        """
+        resource = files("dexteroushands_lab.scenes").joinpath(
+            "presets/left_png_cylindrical_v1.json")
+        sample = grasp_sample_from_dict(json.loads(resource.read_text(encoding="utf-8")))
+        metadata = sample.metadata
+        if sample.validated or sample.validation is not None:
+            raise ValueError("The photo-style candidate must remain unvalidated")
+        if (metadata.get("asset_variant") != self.left_spec.variant or
+                metadata.get("left_usd_sha256") != self.left_spec.usd_sha256 or
+                metadata.get("right_usd_sha256") != self.right_spec.usd_sha256):
+            raise ValueError("Photo-style candidate does not match official hand assets")
+        if metadata.get("bottle_parameters") != asdict(self.bottle):
+            raise ValueError("Photo-style candidate requires the pinned 70 mm bottle")
+        if (tuple(metadata.get("left_joint_order", ())) != self.left_spec.joint_names or
+                tuple(metadata.get("right_joint_order", ())) != self.right_spec.joint_names):
+            raise ValueError("Photo-style candidate joint order does not match USD")
+        return sample if bottle_pose is None else _reframe_sample(sample, bottle_pose)
 
     def generate(
         self, *, mode: Mode, seed: int,

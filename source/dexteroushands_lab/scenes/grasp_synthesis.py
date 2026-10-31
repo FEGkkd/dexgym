@@ -15,7 +15,8 @@ from dexteroushands_lab.scenes.grasp_init import (BodyInit, HandInit,
                                                   GraspInitSample, _rotate)
 from dexteroushands_lab.scenes.fingertip_sites import FingertipSiteTracker
 from dexteroushands_lab.scenes.antipodal_contact_analysis import (
-    CylindricalPowerGraspSeries, analyze_bottle_contacts)
+    CylindricalPowerGraspSeries, analyze_bottle_contacts,
+    analyze_cylindrical_power_grasp)
 
 
 def _clip(vector, limit):
@@ -142,6 +143,8 @@ class GraspSynthesisFixture:
             self.visualizer.update(tips, bottle_pose, f.config.bottle_radius,
                                    f.config.bottle_height, details[:64])
         coverage = self._coverage(details, bottle_pose)
+        power_contact = analyze_cylindrical_power_grasp(
+            details, bottle_pose, bottle_radius_m=f.config.bottle_radius)
         signed_normal_resultant = [0.0, 0.0, 0.0]
         signed_normal_moment = [0.0, 0.0, 0.0]
         friction_pairs = {}
@@ -184,12 +187,13 @@ class GraspSynthesisFixture:
                 "official_tip_sites_w_m": tip_sites,
                 "fingertip_observations": tips,
                 "contact_coverage": coverage,
+                "power_contact_analysis": power_contact,
                 "wrist_target_w": (*controller.target_pos, *controller.target_quat),
                 "wrist_commanded_wrench": commanded,
                 "wrist_composed_force_body": composed,
                 "minimum_separation_m": minimum,
                 "contact_peak_n": contact.get("peak_force_n", 0.0),
-                "contact_pairs": details[:10],
+                "contact_pairs": details[:64],
                 "support_wrench": support,
                 "temporary_support_joint_enabled": bool(
                     f.temporary_support_joint and

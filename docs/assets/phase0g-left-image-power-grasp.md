@@ -110,3 +110,90 @@ The `phase0g_left_image_power_*_physx.json` files preserve actual trajectories,
 joint states, contact point/normal/force data and the rejected release result.
 The preview command is for visual inspection; it does not mark the sample
 validated.
+
+## Revised sidewall pose after image review (candidate 9718)
+
+The original screenshot hid the thumb behind an opaque bottle and showed only
+the back of the four fingers. It was insufficient evidence for the requested
+opposition. Candidate 9718 moves the wrist 3 mm radially away from the bottle
+and increases thumb CMC flexion by 0.08 rad. Its official-model command starts
+from a collision-free open hand and follows the same staged finger closure.
+The measured release pose has the long-finger distal surfaces around 17–23°
+on one side of the bottle and the thumb middle surface near −136° on the other.
+The index-to-little fingertip sites remain in descending axial order along the
+body. This makes the intended cylindrical arrangement explicit, but the
+photo-specific appearance is still under review.
+
+![Candidate 9718 from an oblique diagnostic view; bottle body shown as a
+visual outline only](phase0g_left_image_power_oblique_outline_unvalidated.png)
+
+The `--bottle_wireframe` viewer option hides only the visual shell and draws
+the measured 70 mm diameter bottle boundary. The rigid collider, gravity and
+finger drives remain active. The outline is a diagnostic view; the ordinary
+opaque bottle can be restored by omitting the option. To inspect candidate
+9718 in the GUI:
+
+```bash
+./scripts/run_isaaclab.sh scripts/environments/preview_grasp_initialization.py \
+  --viz kit --device cuda:0 \
+  --left_png_cylindrical_candidate \
+  --focus_left --interactive_static --bottle_wireframe \
+  --camera_eye -0.38 0.62 0.51 --camera_target 0 0 0.51
+```
+
+The exact *PhysX-captured* release state is packaged as
+`scenes/presets/left_png_cylindrical_v1.json`. Call
+`BimanualGraspInitializer.left_png_cylindrical_candidate()` to obtain it,
+or pass `--left_png_cylindrical_candidate` to the preview script. Its actual
+20 finger joint positions differ from the deeper position-drive targets;
+do not reset directly to those targets. The loader checks official USD hashes,
+joint order and the complete 70 mm bottle config. It can rigidly reframe the
+whole assembly to another bottle pose, while keeping the candidate
+unvalidated. For a fixed-wrist fixture, pass the returned left and right root
+poses as the initial anchors before calling ResetManager.
+
+The offline check of the **captured** joint state, rather than the deeper
+commanded target, reports a 3.18° half arc for the four long-finger distal
+collision surfaces, 155.02° opposition to the thumb middle surface, a 3.90 mm
+palm gap and 0.33 mm maximum official-MJCF convex penetration. All five
+nearest surfaces lie on the bottle body's specified axial band; the four
+fingertip sites are ordered from index to little finger along the bottle.
+`phase0g_left_image_power_captured_geometry.json` records every collision
+surface and fingertip site. This establishes the intended **geometry** for
+the 70 mm bottle, not sustained five-finger force or photograph identity.
+
+In the gravity-on, unsupported 1 s PhysX hold, the bottle moved 0.55 mm and
+rotated 0.85°. Maximum measured contact penetration was 0.088 mm and monitored
+contact peak was 19.2 N. Thumb, index, ring and little-finger sidewall contact
+ratios were 100%, 100%, 100% and 95%; middle-finger contact was 6.2%. The
+five-digit topology held for only 1.2% of samples, so `release_passed=false`,
+automatic bank admission was refused, and no bank entry was created. These numbers
+come from `phase0g_left_image_power_radial_relief_physx.json.gz`. The archive
+contains the original JSON unchanged; `gzip -dc` extracts it for inspection.
+Millimetre-scale
+middle PIP, DIP, MCP flexion and small abduction adjustments did not resolve
+the missing sustained middle-finger load. The 25 measured candidate summaries
+and raw-report SHA-256 hashes are in
+`phase0g_left_image_power_measured_tuning.json`; the selected candidate 9718
+has its full compressed PhysX trace in this directory. Each committed grid JSON has
+the exact joint targets and can be rerun with the synthesis command above by
+substituting its path for `--reach_scan` and setting `--candidate_count` to
+the number of `best` entries. The next model change should address contact load sharing
+between the middle finger and its neighbours, with a repeat hold and Reset
+replay before admitting any candidate.
+
+An independent Isaac Sim process then reset and replayed the captured pose
+for 1 s. Bottle displacement was 0.124 mm, while strict five-digit topology
+was present in only 0.2% of sampled steps. The separate
+`phase0g_left_image_power_radial_relief_replay.json.gz` therefore records
+`replay.passed=false` and `validated=false`. The packaged preset is an
+inspectable candidate, not a validated initial-state bank entry.
+
+The independent replay can be repeated directly from the packaged candidate:
+
+```bash
+./scripts/run_isaaclab.sh scripts/environments/validate_left_power_candidate.py \
+  --headless --device cuda:0 \
+  --candidate source/dexteroushands_lab/scenes/presets/left_png_cylindrical_v1.json \
+  --duration_s 1.0 --output /tmp/phase0g-left-preset-replay.json
+```

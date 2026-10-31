@@ -1,6 +1,8 @@
 """Offline contracts for reproducible bottle-relative initial states."""
 
 import math
+import json
+from importlib.resources import files
 from types import SimpleNamespace
 
 import pytest
@@ -31,6 +33,60 @@ def _spec(side):
         joints=tuple(SimpleNamespace(name=f"{side}_{i}", lower=-0.5, upper=1.0)
                      for i in range(20)),
     )
+
+
+def _photo_specs():
+    preset = json.loads(files("dexteroushands_lab.scenes").joinpath(
+        "presets/left_png_cylindrical_v1.json").read_text(encoding="utf-8"))
+    metadata = preset["metadata"]
+    return tuple(SimpleNamespace(
+        side=side, variant=metadata["asset_variant"],
+        usd_sha256=metadata[f"{side}_usd_sha256"],
+        joint_names=tuple(metadata[f"{side}_joint_order"]),
+    ) for side in ("left", "right"))
+
+
+def test_photo_style_candidate_uses_measured_joint_state_and_never_self_validates():
+    left, right = _photo_specs()
+    initializer = BimanualGraspInitializer(BottleConfig(), left, right)
+    sample = initializer.left_png_cylindrical_candidate()
+    assert sample.seed == 9718
+    assert sample.mode == "stable_pregrasp"
+    assert sample.metadata["preset_id"] == "left_png_cylindrical_v1"
+    assert not sample.validated and sample.validation is None
+    assert sample.left.joint_position != sample.left.joint_target
+    assert sample.left.root_pose == pytest.approx(sample.left.wrist_target_pose,
+                                                 abs=1e-6)
+    assert sample.metadata["hardware_candidate_unverified"] is True
+    with pytest.raises(ValueError, match="70 mm bottle"):
+        BimanualGraspInitializer(
+            BottleConfig(bottle_radius=.03), left, right
+        ).left_png_cylindrical_candidate()
+
+
+def test_photo_style_candidate_reframes_complete_assembly_about_bottle_axes():
+    left, right = _photo_specs()
+    initializer = BimanualGraspInitializer(BottleConfig(), left, right)
+    original = initializer.left_png_cylindrical_candidate()
+    upright = initializer.left_png_cylindrical_candidate(
+        bottle_pose=(0., 0., .5, 0., 0., 0., 1.))
+    qz = math.sqrt(.5)
+    target = (.2, -.1, .6, 0., 0., qz, qz)
+    turned = initializer.left_png_cylindrical_candidate(bottle_pose=target)
+    assert turned.bottle.root_pose == pytest.approx(target, abs=1e-6)
+    old_offset = tuple(a-b for a, b in zip(upright.left.root_pose[:3],
+                                            upright.bottle.root_pose[:3]))
+    new_offset = tuple(a-b for a, b in zip(turned.left.root_pose[:3],
+                                            turned.bottle.root_pose[:3]))
+    # The complete captured grasp follows the bottle's local axes.
+    assert new_offset == pytest.approx((-old_offset[1], old_offset[0], old_offset[2]),
+                                       abs=1e-6)
+    assert turned.left.joint_position == original.left.joint_position
+    assert turned.left.joint_target == original.left.joint_target
+    assert turned.cap.root_pose[2] - turned.bottle.root_pose[2] == pytest.approx(
+        upright.cap.root_pose[2] - upright.bottle.root_pose[2], abs=1e-6)
+    assert turned.metadata["rigid_reframe_requires_new_physx_validation"] is True
+    assert not turned.validated
 
 
 def test_modes_keep_full_state_and_do_not_claim_unvalidated_grasp():

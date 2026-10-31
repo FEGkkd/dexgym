@@ -15,3 +15,6 @@ package-dir = {"" = "source"}
 [tool.setuptools.packages.find]
 where = ["source"]
 include = ["dexteroushands_lab*"]
+
+[tool.setuptools.package-data]
+"dexteroushands_lab.scenes" = ["presets/*.json"]

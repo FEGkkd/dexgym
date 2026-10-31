@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 from dataclasses import replace
 import json
+import math
 from pathlib import Path
 
 from isaaclab.app import AppLauncher
@@ -20,6 +21,8 @@ parser.add_argument("--candidate", type=Path,
                     help="Preview one unvalidated GraspInitSample JSON")
 parser.add_argument("--geometry_proposal", type=Path,
                     help="Preview a still unvalidated official-model pose proposal")
+parser.add_argument("--left_png_cylindrical_candidate", action="store_true",
+                    help="Load the captured left.png cylindrical pose preset; still unvalidated")
 parser.add_argument("--sample_index", type=int, default=0)
 parser.add_argument("--steps", type=int, default=500,
                     help="Maximum physics steps in headless or GUI preview")
@@ -29,6 +32,8 @@ parser.add_argument("--interactive_static", action="store_true",
                     help="Render the initialized pose until the GUI closes, without advancing physics")
 parser.add_argument("--focus_left", action="store_true",
                     help="Hide the right hand in the viewer while leaving physics unchanged")
+parser.add_argument("--bottle_wireframe", action="store_true",
+                    help="Show the bottle body as an outline so the opposing thumb remains visible")
 parser.add_argument("--camera_eye", nargs=3, type=float,
                     default=(0.35, -0.65, 0.78), metavar=("X", "Y", "Z"))
 parser.add_argument("--camera_target", nargs=3, type=float,
@@ -45,8 +50,9 @@ from dexteroushands_lab.scenes.phase0_fixture import BimanualPhase0Fixture  # no
 
 def main():
     if sum(bool(x) for x in (args.bank, args.synthesis_report, args.candidate,
-                            args.geometry_proposal)) > 1:
-        raise ValueError("Choose one bank, report, candidate, or geometry proposal")
+                            args.geometry_proposal,
+                            args.left_png_cylindrical_candidate)) > 1:
+        raise ValueError("Choose one bank, report, candidate, preset, or geometry proposal")
     if args.bank:
         samples = GraspInitBank(args.bank).load()
         if not samples:
@@ -60,6 +66,12 @@ def main():
         sample = grasp_sample_from_dict(candidate)
     elif args.candidate:
         sample = grasp_sample_from_dict(json.loads(args.candidate.read_text()))
+    elif args.left_png_cylindrical_candidate:
+        from dexteroushands_lab.assets.wuji_hand2_beta import load_hand2_spec
+        from dexteroushands_lab.scenes.grasp_init import BimanualGraspInitializer
+        specs = (load_hand2_spec(side="left"), load_hand2_spec(side="right"))
+        sample = BimanualGraspInitializer(
+            BottleConfig(), *specs).left_png_cylindrical_candidate()
     elif args.geometry_proposal:
         source = json.loads(args.geometry_proposal.read_text())
         proposal = source["best"][args.sample_index]
@@ -90,7 +102,8 @@ def main():
         fixture = BimanualPhase0Fixture(num_envs=1, device=args.device,
                                         contact_debug=args.contact_debug)
         sample = fixture.initializer.generate(mode=args.mode, seed=args.seed)
-    if args.bank or args.synthesis_report or args.candidate:
+    if (args.bank or args.synthesis_report or args.candidate or
+            args.left_png_cylindrical_candidate):
         wrist_mode = sample.metadata.get("wrist_control_mode", "floating_wrench_pd")
         if wrist_mode not in ("floating_wrench_pd", "fixed_wrist",
                               "pose_command_wrist"):
@@ -109,6 +122,37 @@ def main():
         from pxr import UsdGeom
         prim = fixture.sim.stage.GetPrimAtPath("/World/envs/env_0/RightHand")
         UsdGeom.Imageable(prim).MakeInvisible()
+    if args.bottle_wireframe:
+        from pxr import Gf, UsdGeom
+        bottle_path = "/World/envs/env_0/Bottle"
+        shell = fixture.sim.stage.GetPrimAtPath(bottle_path + "/body_visual")
+        if not shell.IsValid():
+            raise RuntimeError("Bottle visual shell is missing")
+        UsdGeom.Imageable(shell).MakeInvisible()
+        radius = float(fixture.config.bottle_radius)
+        half_height = float(fixture.config.bottle_height) / 2
+        outline_path = bottle_path + "/GraspPreviewOutline"
+        UsdGeom.Xform.Define(fixture.sim.stage, outline_path)
+        for ring_index, height in enumerate((-half_height, 0.0, half_height)):
+            for i in range(16):
+                angle = 2 * math.pi * i / 16
+                marker = UsdGeom.Sphere.Define(
+                    fixture.sim.stage,
+                    f"{outline_path}/Ring_{ring_index}_{i:02d}")
+                marker.CreateRadiusAttr(0.0018)
+                marker.AddTranslateOp().Set(Gf.Vec3f(
+                    radius * math.cos(angle), radius * math.sin(angle),
+                    height))
+                marker.CreateDisplayColorAttr([Gf.Vec3f(0.05, 0.6, 0.9)])
+        for i in range(8):
+            angle = 2 * math.pi * i / 8
+            edge = UsdGeom.Cylinder.Define(
+                fixture.sim.stage, f"{outline_path}/Edge_{i:02d}")
+            edge.CreateRadiusAttr(0.0007)
+            edge.CreateHeightAttr(2 * half_height)
+            edge.AddTranslateOp().Set(Gf.Vec3f(
+                radius * math.cos(angle), radius * math.sin(angle), 0.0))
+            edge.CreateDisplayColorAttr([Gf.Vec3f(0.05, 0.6, 0.9)])
     if not args.headless:
         fixture.sim.set_camera_view(args.camera_eye, args.camera_target)
     print("GRASP_PREVIEW_INITIAL " + json.dumps({"mode": sample.mode,

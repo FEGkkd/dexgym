@@ -1,0 +1,529 @@
+{
+  "status": "measured_PhysX_results_not_validated_grasps",
+  "bottle_radius_m": 0.035,
+  "required_topology_ratio": 0.8,
+  "reports": [
+    {
+      "raw_report": "docs/assets/phase0g_left_image_power_sustained_physx.json",
+      "raw_sha256": "299fb42ed0a796c6ac7b0377fa74b47b6840219d06feaebfe88ccce8c8c368af",
+      "rows": [
+        {
+          "proposal_index": 9705,
+          "aborted": null,
+          "minimum_separation_m": -9.85070364549756e-05,
+          "maximum_contact_force_n": 21.02029800415039,
+          "bottle_displacement_m": 0.0013523099098971692,
+          "bottle_rotation_rad": 0.02603490859309095,
+          "power_grasp_ratio": 0.036,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 0.998,
+            "middle": 0.65,
+            "ring": 0.832,
+            "pinky": 0.534
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        }
+      ]
+    },
+    {
+      "raw_report": "docs/assets/phase0g_left_image_power_distal_load_physx.json",
+      "raw_sha256": "9d59cb2dbd2baf5eb26192bacfe3fd53c38490d7feaf042b963213c0027cfb35",
+      "rows": [
+        {
+          "proposal_index": 9706,
+          "aborted": null,
+          "minimum_separation_m": -9.348810999654233e-05,
+          "maximum_contact_force_n": 19.71466827392578,
+          "bottle_displacement_m": 0.0009206298045365489,
+          "bottle_rotation_rad": 0.01988630908511869,
+          "power_grasp_ratio": 0.034,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 0.98,
+            "middle": 0.488,
+            "ring": 0.776,
+            "pinky": 0.584
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        }
+      ],
+      "compressed_artifact": "docs/assets/phase0g_left_image_power_distal_load_physx.json.gz",
+      "compressed_sha256": "1a195e270d0b394dbec6de3cae97792a899d03b58b0f0f1a767b9a013dae51f9"
+    },
+    {
+      "raw_report": "docs/assets/phase0g_left_image_power_proximal_relief_physx.json",
+      "raw_sha256": "a3e133d23acbd2e9f491b6bdce7618e94532151da85a805b7afffe3d782718ef",
+      "rows": [
+        {
+          "proposal_index": 9707,
+          "aborted": null,
+          "minimum_separation_m": -0.0001435439189663157,
+          "maximum_contact_force_n": 23.635313034057617,
+          "bottle_displacement_m": 0.0010809084872767773,
+          "bottle_rotation_rad": 0.024869781744899358,
+          "power_grasp_ratio": 0.006,
+          "digit_contact_ratio": {
+            "thumb": 0.28,
+            "index": 1.0,
+            "middle": 0.764,
+            "ring": 0.254,
+            "pinky": 1.0
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        }
+      ],
+      "compressed_artifact": "docs/assets/phase0g_left_image_power_proximal_relief_physx.json.gz",
+      "compressed_sha256": "9da53fdb3213f8ca571e837bf28bd37f1121e09d7cce4844e5f3354cf6a2399c"
+    },
+    {
+      "raw_report": "docs/assets/phase0g_left_image_power_radial_relief_physx.json",
+      "raw_sha256": "9dc25fe08f3e07ffe9bbdbf5ccc4d7fc74bf009eac9ac06b9379774ee13980b6",
+      "rows": [
+        {
+          "proposal_index": 9718,
+          "aborted": null,
+          "minimum_separation_m": -8.81037485669367e-05,
+          "maximum_contact_force_n": 19.169509887695312,
+          "bottle_displacement_m": 0.0005494409144273939,
+          "bottle_rotation_rad": 0.014752696769647139,
+          "power_grasp_ratio": 0.012,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.062,
+            "ring": 1.0,
+            "pinky": 0.95
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        }
+      ],
+      "compressed_artifact": "docs/assets/phase0g_left_image_power_radial_relief_physx.json.gz",
+      "compressed_sha256": "a7aa6094d0db0b17f35f3a79c5260de3d76aa6ee842f3bdb7c60f7c0a6d2a579"
+    },
+    {
+      "raw_report": "/tmp/phase0g_left_power_half_radial_physx.json",
+      "raw_sha256": "52efdedfe6c5b5ff6f5c800ba609708fbd16cecd94910ce61addf0a859558fd1",
+      "rows": [
+        {
+          "proposal_index": 9740,
+          "aborted": null,
+          "minimum_separation_m": -0.00010467467654962093,
+          "maximum_contact_force_n": 24.242610931396484,
+          "bottle_displacement_m": 0.002048199412172401,
+          "bottle_rotation_rad": 0.04190930144116374,
+          "power_grasp_ratio": 0.004,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 0.99,
+            "middle": 0.564,
+            "ring": 0.896,
+            "pinky": 0.548
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        }
+      ]
+    },
+    {
+      "raw_report": "/tmp/phase0g_left_power_radial_middle_grid_physx.json",
+      "raw_sha256": "ad15a74d1ef37d6f5ba36d296ce59032fe930e3db051f334b4f809e761a6d1b9",
+      "rows": [
+        {
+          "proposal_index": 9720,
+          "aborted": null,
+          "minimum_separation_m": -7.318603456951678e-05,
+          "maximum_contact_force_n": 19.386804580688477,
+          "bottle_displacement_m": 0.00046181511514220813,
+          "bottle_rotation_rad": 0.00744800257093588,
+          "power_grasp_ratio": 0.018,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.062,
+            "ring": 1.0,
+            "pinky": 0.956
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9721,
+          "aborted": null,
+          "minimum_separation_m": -9.90413100225851e-05,
+          "maximum_contact_force_n": 25.540401458740234,
+          "bottle_displacement_m": 0.0008370547253090287,
+          "bottle_rotation_rad": 0.015831331129576205,
+          "power_grasp_ratio": 0.0,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.002,
+            "ring": 1.0,
+            "pinky": 0.998
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9722,
+          "aborted": null,
+          "minimum_separation_m": -9.657436748966575e-05,
+          "maximum_contact_force_n": 26.915428161621094,
+          "bottle_displacement_m": 0.0010614884050941288,
+          "bottle_rotation_rad": 0.02113584778678842,
+          "power_grasp_ratio": 0.0,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.002,
+            "ring": 1.0,
+            "pinky": 0.998
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9723,
+          "aborted": null,
+          "minimum_separation_m": -0.0001522046804893762,
+          "maximum_contact_force_n": 27.54183578491211,
+          "bottle_displacement_m": 0.0011413188254499984,
+          "bottle_rotation_rad": 0.02614825729914803,
+          "power_grasp_ratio": 0.002,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 0.998,
+            "middle": 0.042,
+            "ring": 1.0,
+            "pinky": 0.96
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        }
+      ]
+    },
+    {
+      "raw_report": "/tmp/phase0g_left_power_radial_middle_dip_grid_physx.json",
+      "raw_sha256": "98b5c13ab27a64d01bf03700bcf2ec5e891b0a81986c213ec633396980fd93fc",
+      "rows": [
+        {
+          "proposal_index": 9730,
+          "aborted": null,
+          "minimum_separation_m": -8.728795364731923e-05,
+          "maximum_contact_force_n": 20.45207977294922,
+          "bottle_displacement_m": 0.0007633452416980093,
+          "bottle_rotation_rad": 0.01739856035081951,
+          "power_grasp_ratio": 0.046,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.076,
+            "ring": 1.0,
+            "pinky": 0.97
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9731,
+          "aborted": null,
+          "minimum_separation_m": -6.831197970313951e-05,
+          "maximum_contact_force_n": 21.4585018157959,
+          "bottle_displacement_m": 0.0006136592868113018,
+          "bottle_rotation_rad": 0.014705559623216579,
+          "power_grasp_ratio": 0.006,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.016,
+            "ring": 1.0,
+            "pinky": 0.99
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9732,
+          "aborted": null,
+          "minimum_separation_m": -9.714929183246568e-05,
+          "maximum_contact_force_n": 24.05081558227539,
+          "bottle_displacement_m": 0.0006693801627575758,
+          "bottle_rotation_rad": 0.011870891894003305,
+          "power_grasp_ratio": 0.0,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.0,
+            "ring": 1.0,
+            "pinky": 1.0
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9733,
+          "aborted": null,
+          "minimum_separation_m": -0.00012306538701523095,
+          "maximum_contact_force_n": 27.861082077026367,
+          "bottle_displacement_m": 0.000910777782828191,
+          "bottle_rotation_rad": 0.017418382237943043,
+          "power_grasp_ratio": 0.0,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.002,
+            "ring": 1.0,
+            "pinky": 0.998
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        }
+      ]
+    },
+    {
+      "raw_report": "/tmp/phase0g_left_power_radial_middle_mcp_grid_physx.json",
+      "raw_sha256": "a7f3380d19ef1c02f9e455cd7329802bcbf91c01ca40925b34b0b92559e545b2",
+      "rows": [
+        {
+          "proposal_index": 9750,
+          "aborted": null,
+          "minimum_separation_m": -8.650268136989325e-05,
+          "maximum_contact_force_n": 19.79671859741211,
+          "bottle_displacement_m": 0.00048048227249767315,
+          "bottle_rotation_rad": 0.01527569310385257,
+          "power_grasp_ratio": 0.036,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.104,
+            "ring": 1.0,
+            "pinky": 0.932
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9751,
+          "aborted": null,
+          "minimum_separation_m": -9.315511852037162e-05,
+          "maximum_contact_force_n": 24.238508224487305,
+          "bottle_displacement_m": 0.0005073900637926208,
+          "bottle_rotation_rad": 0.008574666761865078,
+          "power_grasp_ratio": 0.0,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.0,
+            "ring": 1.0,
+            "pinky": 1.0
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9752,
+          "aborted": null,
+          "minimum_separation_m": -8.060261461650953e-05,
+          "maximum_contact_force_n": 25.153732299804688,
+          "bottle_displacement_m": 0.000981805345722557,
+          "bottle_rotation_rad": 0.018807992204819157,
+          "power_grasp_ratio": 0.0,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.002,
+            "ring": 1.0,
+            "pinky": 0.998
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9753,
+          "aborted": null,
+          "minimum_separation_m": -9.083693294087425e-05,
+          "maximum_contact_force_n": 28.1447811126709,
+          "bottle_displacement_m": 0.0008464411580627573,
+          "bottle_rotation_rad": 0.017735021969395023,
+          "power_grasp_ratio": 0.0,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.002,
+            "ring": 1.0,
+            "pinky": 0.998
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        }
+      ]
+    },
+    {
+      "raw_report": "/tmp/phase0g_left_power_radial_middle_abd_grid_physx.json",
+      "raw_sha256": "b519d27545b12461f554705f8478be33805924f121022726d824903443ee32a9",
+      "rows": [
+        {
+          "proposal_index": 9760,
+          "aborted": null,
+          "minimum_separation_m": -7.602485857205465e-05,
+          "maximum_contact_force_n": 19.244470596313477,
+          "bottle_displacement_m": 0.0006458789495784393,
+          "bottle_rotation_rad": 0.014373020679172118,
+          "power_grasp_ratio": 0.01,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.03,
+            "ring": 1.0,
+            "pinky": 0.98
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9761,
+          "aborted": null,
+          "minimum_separation_m": -8.178839925676584e-05,
+          "maximum_contact_force_n": 19.89701271057129,
+          "bottle_displacement_m": 0.00047325543905063684,
+          "bottle_rotation_rad": 0.015748288486383284,
+          "power_grasp_ratio": 0.028,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.1,
+            "ring": 1.0,
+            "pinky": 0.928
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        }
+      ]
+    },
+    {
+      "raw_report": "/tmp/phase0g_left_power_radial_middle_abd_large_physx.json",
+      "raw_sha256": "b3660c16bfadf2e1fcf98dd6991b05d96c61ca5e21f3f3821e7c3dce4c52c229",
+      "rows": [
+        {
+          "proposal_index": 9762,
+          "aborted": null,
+          "minimum_separation_m": -7.529368303949013e-05,
+          "maximum_contact_force_n": 25.06096649169922,
+          "bottle_displacement_m": 0.00038784702598577205,
+          "bottle_rotation_rad": 0.005505822094207446,
+          "power_grasp_ratio": 0.002,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.002,
+            "ring": 1.0,
+            "pinky": 1.0
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9763,
+          "aborted": null,
+          "minimum_separation_m": -8.420227823080495e-05,
+          "maximum_contact_force_n": 25.121288299560547,
+          "bottle_displacement_m": 0.0006043476557999363,
+          "bottle_rotation_rad": 0.013177805065075935,
+          "power_grasp_ratio": 0.0,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.292,
+            "ring": 0.714,
+            "pinky": 0.994
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        }
+      ]
+    },
+    {
+      "raw_report": "/tmp/phase0g_left_power_load_distribution_grid_physx.json",
+      "raw_sha256": "580bf330fafeb5d85cd1d88ed8be55144d9412a3b40619f0334bf8393fe0b01f",
+      "rows": [
+        {
+          "proposal_index": 9770,
+          "aborted": null,
+          "minimum_separation_m": -7.257005199790001e-05,
+          "maximum_contact_force_n": 18.026430130004883,
+          "bottle_displacement_m": 0.0004759399734942586,
+          "bottle_rotation_rad": 0.02086259905044162,
+          "power_grasp_ratio": 0.026,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.516,
+            "ring": 0.908,
+            "pinky": 0.596
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9771,
+          "aborted": null,
+          "minimum_separation_m": -7.473298319382593e-05,
+          "maximum_contact_force_n": 18.684797286987305,
+          "bottle_displacement_m": 0.00036100304887721547,
+          "bottle_rotation_rad": 0.014639844959131577,
+          "power_grasp_ratio": 0.044,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 1.0,
+            "middle": 0.14,
+            "ring": 1.0,
+            "pinky": 0.904
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9772,
+          "aborted": null,
+          "minimum_separation_m": -7.327064668061212e-05,
+          "maximum_contact_force_n": 16.81464195251465,
+          "bottle_displacement_m": 0.00057762606332564,
+          "bottle_rotation_rad": 0.01579178319134696,
+          "power_grasp_ratio": 0.03,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 0.996,
+            "middle": 0.296,
+            "ring": 0.964,
+            "pinky": 0.762
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        },
+        {
+          "proposal_index": 9773,
+          "aborted": null,
+          "minimum_separation_m": -7.327064668061212e-05,
+          "maximum_contact_force_n": 17.08901596069336,
+          "bottle_displacement_m": 0.0012831238811373622,
+          "bottle_rotation_rad": 0.02969718711666372,
+          "power_grasp_ratio": 0.0,
+          "digit_contact_ratio": {
+            "thumb": 1.0,
+            "index": 0.604,
+            "middle": 0.122,
+            "ring": 0.462,
+            "pinky": 0.886
+          },
+          "release_passed": false,
+          "reset_replay_passed": false
+        }
+      ]
+    }
+  ]
+}
