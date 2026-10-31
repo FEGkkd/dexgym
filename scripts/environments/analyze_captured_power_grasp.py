@@ -7,6 +7,7 @@ not the position-drive targets. USD/PhysX hold and Reset replay remain separate.
 from __future__ import annotations
 
 import argparse
+from hashlib import sha256
 import json
 import math
 from pathlib import Path
@@ -136,6 +137,8 @@ def inspect(sample):
 
 sample = json.loads(args.candidate.read_text(encoding="utf-8"))
 result = inspect(sample)
+result["candidate_state_sha256"] = sha256(json.dumps(
+    sample, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
 if args.output:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")

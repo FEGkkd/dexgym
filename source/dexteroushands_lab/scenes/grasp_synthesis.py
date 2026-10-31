@@ -15,7 +15,8 @@ from dexteroushands_lab.scenes.grasp_init import (BodyInit, HandInit,
                                                   GraspInitSample, _rotate)
 from dexteroushands_lab.scenes.fingertip_sites import FingertipSiteTracker
 from dexteroushands_lab.scenes.antipodal_contact_analysis import (
-    CylindricalPowerGraspSeries, analyze_bottle_contacts,
+    CylindricalPowerGraspSeries, ImageCylindricalContactSeries,
+    analyze_bottle_contacts,
     analyze_cylindrical_power_grasp)
 
 
@@ -75,6 +76,10 @@ class GraspSynthesisFixture:
 
     def _power_series(self):
         return CylindricalPowerGraspSeries(
+            bottle_radius_m=self.fixture.config.bottle_radius)
+
+    def _image_series(self):
+        return ImageCylindricalContactSeries(
             bottle_radius_m=self.fixture.config.bottle_radius)
 
     def _support_wrench(self, target_position):
@@ -290,6 +295,7 @@ class GraspSynthesisFixture:
         release_frictional_steps = 0
         release_step_count = 0
         power_series = self._power_series()
+        image_series = self._image_series()
         for phase, duration in (("approach", limits.approach_s),
                                 ("close", limits.close_s),
                                 ("settle", limits.settle_s),
@@ -342,6 +348,7 @@ class GraspSynthesisFixture:
                     bottle_pose = f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist()
                     coverage = self._coverage(details, bottle_pose)
                     power_series.add(details, bottle_pose)
+                    image_series.add(details, bottle_pose)
                     release_step_count += 1
                     release_coverage_steps += int(coverage["surrounds_bottle_axis"])
                     release_frictional_steps += int(coverage["frictional_opposition"])
@@ -417,6 +424,7 @@ class GraspSynthesisFixture:
                 "release_opposing_contact_coverage_ratio": coverage_ratio,
                 "release_frictional_opposition_ratio": frictional_ratio,
                 "release_power_grasp": power_series.summary(),
+                "release_image_grasp": image_series.summary(),
                 "release_passed": bool(hold_passed),
                 "reset_replay": replay,
                 "contact_summary": summary, "trace": trace,
@@ -451,12 +459,15 @@ class GraspSynthesisFixture:
         frictional_steps = 0
         step_count = 0
         power_series = self._power_series()
+        image_series = self._image_series()
         for step in range(math.ceil(self.limits.release_s / f.dt)):
             f.step()
             sep, details = self._contact_snapshot()
             coverage = self._coverage(
                 details, f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist())
             power_series.add(details,
+                f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist())
+            image_series.add(details,
                 f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist())
             step_count += 1
             coverage_steps += int(coverage["surrounds_bottle_axis"])
@@ -498,6 +509,7 @@ class GraspSynthesisFixture:
                 "opposing_contact_coverage_ratio": coverage_ratio,
                 "frictional_opposition_ratio": frictional_ratio,
                 "power_grasp": power_series.summary(),
+                "image_grasp": image_series.summary(),
                 "left_contact_peak_n": peak_force,
                 "wrist_target_offset_xyz_m": tuple(wrist_target_offset_xyz),
                 "contact_summary": summary, "trace": trace}

@@ -253,7 +253,8 @@ class GraspInitSample:
             if self.metadata.get("wrist_control_mode") != metrics.get("wrist_control_mode"):
                 raise ValueError("Validation wrist mode does not match captured state")
             topology = metrics.get("contact_topology")
-            if topology not in (None, "cylindrical_power_grasp_v1"):
+            if topology not in (None, "cylindrical_power_grasp_v1",
+                                "image_cylindrical_v2"):
                 raise ValueError(f"Unknown left grasp contact topology: {topology}")
             if topology == "cylindrical_power_grasp_v1":
                 for key in ("power_grasp_release_ratio", "power_grasp_replay_ratio"):
@@ -270,6 +271,27 @@ class GraspInitSample:
                     for name in ("thumb", "index", "middle", "ring", "pinky")
                 )):
                     raise ValueError("Left power grasp requires all five sustained digits")
+            if topology == "image_cylindrical_v2":
+                if metrics.get("official_geometry_qualified") is not True:
+                    raise ValueError("Image grasp needs official captured-state geometry")
+                if metrics.get("fresh_process_replay_passed") is not True:
+                    raise ValueError("Image grasp needs an independent-process Reset replay")
+                for key in ("image_grasp_release_ratio", "image_grasp_replay_ratio",
+                            "frictional_opposition_ratio"):
+                    ratio = metrics.get(key)
+                    if (not isinstance(ratio, (int, float)) or not math.isfinite(ratio)
+                            or ratio < .8 or ratio > 1.):
+                        raise ValueError(f"Image grasp lacks sustained topology: {key}")
+                digit_ratios = metrics.get("image_grasp_digit_contact_ratio")
+                if (not isinstance(digit_ratios, dict) or any(
+                    name not in digit_ratios or
+                    not isinstance(digit_ratios[name], (int, float)) or
+                    not math.isfinite(digit_ratios[name]) or
+                    not minimum <= digit_ratios[name] <= 1.
+                    for name, minimum in (("thumb", .8), ("index", .05),
+                                          ("middle", .05), ("ring", .05),
+                                          ("pinky", .05)))):
+                    raise ValueError("Image grasp needs measured contact on all four long digits")
         if metrics.get("support_released") is not True:
             raise ValueError("Candidate support must be removed before acceptance")
         if metrics.get("reset_replay_passed") is not True:
@@ -300,7 +322,7 @@ class BimanualGraspInitializer:
         initial anchors. A transformed bottle pose requires its own PhysX hold.
         """
         resource = files("dexteroushands_lab.scenes").joinpath(
-            "presets/left_png_cylindrical_v1.json")
+            "presets/left_png_cylindrical_v2.json")
         sample = grasp_sample_from_dict(json.loads(resource.read_text(encoding="utf-8")))
         metadata = sample.metadata
         if sample.validated or sample.validation is not None:

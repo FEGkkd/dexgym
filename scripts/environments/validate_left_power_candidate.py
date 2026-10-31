@@ -18,6 +18,8 @@ source = parser.add_mutually_exclusive_group(required=True)
 source.add_argument("--synthesis_report", type=Path)
 source.add_argument("--candidate", type=Path,
                     help="Packaged or exported unvalidated GraspInitSample JSON")
+source.add_argument("--bank", type=Path,
+                    help="Replay a validated bank sample without altering its state")
 parser.add_argument("--sample_index", type=int, default=0)
 parser.add_argument("--duration_s", type=float, default=1.0)
 parser.add_argument("--output", type=Path, required=True)
@@ -28,14 +30,18 @@ if args.duration_s < 1.0:
 app = AppLauncher(args).app
 
 from dexteroushands_lab.assets.bottle import BottleConfig  # noqa: E402
-from dexteroushands_lab.scenes.grasp_init import grasp_sample_from_dict  # noqa: E402
+from dexteroushands_lab.scenes.grasp_init import (  # noqa: E402
+    GraspInitBank, grasp_sample_from_dict)
 from dexteroushands_lab.scenes.grasp_synthesis import (  # noqa: E402
     GraspSynthesisFixture, SynthesisLimits)
 from dexteroushands_lab.scenes.phase0_fixture import BimanualPhase0Fixture  # noqa: E402
 
 
 def main():
-    if args.candidate:
+    if args.bank:
+        record = None
+        sample = GraspInitBank(args.bank).load()[args.sample_index]
+    elif args.candidate:
         record = None
         sample = grasp_sample_from_dict(json.loads(
             args.candidate.read_text(encoding="utf-8")))
@@ -45,7 +51,7 @@ def main():
         if record.get("candidate") is None:
             raise ValueError("Synthesis result has no physically captured release state")
         sample = grasp_sample_from_dict(record["candidate"])
-    if sample.validated:
+    if sample.validated and not args.bank:
         raise ValueError("This diagnostic expects an unvalidated candidate")
     if sample.metadata.get("wrist_control_mode") != "fixed_wrist":
         raise ValueError("This fixture checks the fixed-wrist left grasp only")
@@ -56,13 +62,20 @@ def main():
         left_initial_pose=sample.left.root_pose,
         right_initial_pose=sample.right.root_pose,
         include_hand_hand=False)
+    image_topology = (sample.validation is not None and
+                      sample.validation.get("contact_topology") ==
+                      "image_cylindrical_v2")
     replay = GraspSynthesisFixture(
         fixture, SynthesisLimits(release_s=args.duration_s),
-        require_power_grasp=True).replay_left(sample)
+        require_power_grasp=not image_topology).replay_left(sample)
+    image_passed = replay.get("image_grasp", {}).get("passed") is True
     result = {
-        "status": "independent_PhysX_Reset_replay_of_unvalidated_candidate",
+        "status": ("independent_PhysX_Reset_replay_of_validated_bank_sample"
+                   if args.bank else
+                   "independent_PhysX_Reset_replay_of_unvalidated_candidate"),
         "source_report": str(args.synthesis_report) if args.synthesis_report else None,
         "source_candidate": str(args.candidate) if args.candidate else None,
+        "source_bank": str(args.bank) if args.bank else None,
         "source_proposal_index": (record.get("reach_proposal_index")
                                   if record else sample.seed),
         "source_release_passed": (bool(record.get("release_passed"))
@@ -72,7 +85,8 @@ def main():
         "sample_source": sample.source,
         "captured_state": asdict(sample),
         "replay": replay,
-        "validated": False,
+        "validated": bool(sample.validated and replay.get("passed") and
+                          (not image_topology or image_passed)),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
@@ -82,7 +96,9 @@ def main():
         "bottle_displacement_m": replay.get("bottle_displacement_m"),
         "power_grasp_ratio": replay.get("power_grasp", {}).get(
             "valid_topology_ratio"),
-        "validated": False,
+        "image_grasp_ratio": replay.get("image_grasp", {}).get(
+            "valid_topology_ratio"),
+        "validated": result["validated"],
     }), flush=True)
 
 

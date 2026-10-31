@@ -88,6 +88,40 @@ def test_power_grasp_series_requires_sustained_five_digit_opposition():
     assert not series.summary()["passed"]
 
 
+def test_image_grasp_load_series_allows_one_unloaded_digit_with_geometry_guard():
+    pose = (0, 0, .5, 0, 0, 0, 1)
+    series = analysis.ImageCylindricalContactSeries()
+    # Four long fingers can occupy the same cylinder side while one of them
+    # temporarily carries no normal force. The thumb and three remaining
+    # digits still need force-bearing contact in the sidewall band.
+    for step in range(10):
+        contacts = (_power_contacts() if step == 0 else
+                    [item for item in _power_contacts()
+                     if "pinky" not in item["partner_body"]])
+        observation = series.add(contacts, pose)
+        assert observation["valid_topology"]
+    assert series.summary()["passed"]
+    alternating = analysis.ImageCylindricalContactSeries()
+    for step in range(10):
+        missing = "pinky" if step % 2 else "middle_finger"
+        alternating.add([item for item in _power_contacts()
+                         if missing not in item["partner_body"]], pose)
+    # Load sharing can alternate between the middle and little finger;
+    # three long digits must still oppose the thumb in each valid substep.
+    assert alternating.summary()["passed"]
+    never_pinky = analysis.ImageCylindricalContactSeries()
+    for _ in range(10):
+        never_pinky.add(_power_contacts()[:-1], pose)
+    assert not never_pinky.summary()["passed"]
+    assert not analysis.CylindricalPowerGraspSeries().add(
+        _power_contacts()[:-1], pose)["valid_topology"]
+    assert not analysis.ImageCylindricalContactSeries().add(
+        _power_contacts()[:-2], pose)["valid_topology"]
+    same_side = [_contact("thumb", 55), *_power_contacts()[1:-1]]
+    assert not analysis.ImageCylindricalContactSeries().add(
+        same_side, pose)["valid_topology"]
+
+
 def test_old_physx_hold_cannot_be_curated_as_power_grasp():
     from scripts.environments.curate_left_grasp_bank import validation_metrics
     path = Path(__file__).resolve().parents[1] / "docs/assets/phase0e_pose204.json.gz"

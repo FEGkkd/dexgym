@@ -1,0 +1,125 @@
+{
+  "status": "official_MJCF_captured_state_geometry_only",
+  "preset_id": null,
+  "bottle_radius_m": 0.035,
+  "geometry_qualified": true,
+  "four_finger_axial_order": true,
+  "four_finger_distal_colliders_nearest": true,
+  "all_five_on_body_sidewall_band": true,
+  "all_five_near_surface": true,
+  "four_finger_half_arc_rad": 0.05983346515389499,
+  "thumb_opposition_rad": 2.7061075941114203,
+  "palm_gap_m": 0.0038445254403895383,
+  "minimum_hand_bottle_distance_m": -0.0003019570524587772,
+  "nearest_collision_surfaces": {
+    "thumb": {
+      "body": "l_thumb_middle",
+      "gap_m": -7.45389005110515e-05,
+      "bottle_local_contact_m": [
+        -0.018341547482715527,
+        -0.029809186115391427,
+        0.0440671866279988
+      ],
+      "contact_angle_rad": -2.122388845055048,
+      "contact_axial_m": 0.0440671866279988
+    },
+    "index_finger": {
+      "body": "l_index_finger_distal",
+      "gap_m": -0.0003019570524587772,
+      "bottle_local_contact_m": [
+        0.02835717567597772,
+        0.02051468465101188,
+        0.05238491434302514
+      ],
+      "contact_angle_rad": 0.6262841957727925,
+      "contact_axial_m": 0.05238491434302514
+    },
+    "middle_finger": {
+      "body": "l_middle_finger_distal",
+      "gap_m": -8.727965607599644e-05,
+      "bottle_local_contact_m": [
+        0.029487113851717463,
+        0.018854772995674205,
+        0.025534865374216398
+      ],
+      "contact_angle_rad": 0.5689045710015315,
+      "contact_axial_m": 0.025534865374216398
+    },
+    "ring_finger": {
+      "body": "l_ring_finger_distal",
+      "gap_m": -5.936044246311703e-05,
+      "bottle_local_contact_m": [
+        0.030305662217044393,
+        0.017508561253165807,
+        0.0005133967384172949
+      ],
+      "contact_angle_rad": 0.5238852839024772,
+      "contact_axial_m": 0.0005133967384172949
+    },
+    "pinky": {
+      "body": "l_pinky_distal",
+      "gap_m": -6.353866401891132e-05,
+      "bottle_local_contact_m": [
+        0.028571188250508747,
+        0.020215884211526883,
+        -0.022056711792885764
+      ],
+      "contact_angle_rad": 0.6157830553692488,
+      "contact_axial_m": -0.022056711792885764
+    }
+  },
+  "fingertip_sites": {
+    "thumb": {
+      "site": "l_thumb_tip",
+      "bottle_local_position_m": [
+        0.01913388842528292,
+        -0.05127835134221136,
+        0.056294973521651775
+      ],
+      "radial_distance_m": 0.0547318463295954,
+      "axial_m": 0.056294973521651775
+    },
+    "index_finger": {
+      "site": "l_index_finger_tip",
+      "bottle_local_position_m": [
+        0.032954316510461816,
+        0.01675809924207991,
+        0.049402719242978586
+      ],
+      "radial_distance_m": 0.03697054052727787,
+      "axial_m": 0.049402719242978586
+    },
+    "middle_finger": {
+      "site": "l_middle_finger_tip",
+      "bottle_local_position_m": [
+        0.03267175091525949,
+        0.015586690637796052,
+        0.0236194740172772
+      ],
+      "radial_distance_m": 0.036199284977843395,
+      "axial_m": 0.0236194740172772
+    },
+    "ring_finger": {
+      "site": "l_ring_finger_tip",
+      "bottle_local_position_m": [
+        0.03621965087603162,
+        0.011602054501342432,
+        5.5237039393912584e-05
+      ],
+      "radial_distance_m": 0.03803249634501709,
+      "axial_m": 5.5237039393912584e-05
+    },
+    "pinky": {
+      "site": "l_pinky_tip",
+      "bottle_local_position_m": [
+        0.0350566000664046,
+        0.015231210031818104,
+        -0.021470863060818444
+      ],
+      "radial_distance_m": 0.038222440623921376,
+      "axial_m": -0.021470863060818444
+    }
+  },
+  "physx_grasp_validated": false,
+  "candidate_state_sha256": "f92b4d315a43e6f37313bc8c7f404596a350545bf8ec9750f61cf246bca12093"
+}

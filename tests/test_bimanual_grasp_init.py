@@ -37,7 +37,7 @@ def _spec(side):
 
 def _photo_specs():
     preset = json.loads(files("dexteroushands_lab.scenes").joinpath(
-        "presets/left_png_cylindrical_v1.json").read_text(encoding="utf-8"))
+        "presets/left_png_cylindrical_v2.json").read_text(encoding="utf-8"))
     metadata = preset["metadata"]
     return tuple(SimpleNamespace(
         side=side, variant=metadata["asset_variant"],
@@ -50,9 +50,9 @@ def test_photo_style_candidate_uses_measured_joint_state_and_never_self_validate
     left, right = _photo_specs()
     initializer = BimanualGraspInitializer(BottleConfig(), left, right)
     sample = initializer.left_png_cylindrical_candidate()
-    assert sample.seed == 9718
+    assert sample.seed == 9781
     assert sample.mode == "stable_pregrasp"
-    assert sample.metadata["preset_id"] == "left_png_cylindrical_v1"
+    assert sample.metadata["preset_id"] == "left_png_cylindrical_v2"
     assert not sample.validated and sample.validation is None
     assert sample.left.joint_position != sample.left.joint_target
     assert sample.left.root_pose == pytest.approx(sample.left.wrist_target_pose,

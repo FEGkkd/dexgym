@@ -94,16 +94,20 @@ def analyze_cylindrical_power_grasp(
     force_floor_n=.05, axial_band_m=(-.025, .065),
     radius_tolerance_m=.003, max_four_finger_half_arc_rad=math.radians(70),
     min_thumb_opposition_rad=math.radians(130),
+    minimum_loaded_long_digits=4,
 ):
-    """Classify *measured* bottle-body contact as a five-digit power grasp.
+    """Classify *measured* opposed bottle-body contact.
 
-    The four long digits must share one cylinder side and the thumb must lie
-    across its axis. Only force-bearing sidewall points in the middle/upper
-    body band count. This is a topology check, not a stability certificate;
-    unsupported PhysX hold and Reset replay remain separate requirements.
+    By default all four long digits must share one cylinder side and the
+    thumb must lie across its axis. The image-specific series requests three
+    simultaneous loaded long digits and checks four-digit placement against
+    official geometry separately. Only force-bearing middle/upper sidewall
+    points count. The unsupported PhysX hold and Reset replay are separate.
     """
     if bottle_radius_m <= 0 or force_floor_n < 0 or radius_tolerance_m <= 0:
         raise ValueError("Power-grasp radius, force and tolerance must be positive")
+    if minimum_loaded_long_digits not in (3, 4):
+        raise ValueError("Require three or four loaded long fingers")
     if not axial_band_m[0] < axial_band_m[1]:
         raise ValueError("Power-grasp axial band must be increasing")
     names = ("thumb", "index", "middle", "ring", "pinky")
@@ -149,19 +153,22 @@ def analyze_cylindrical_power_grasp(
         if length > 1e-8:
             units[name] = tuple(component/length for component in vectors[name])
     four = names[1:]
-    four_mean = tuple(sum(units[name][axis] for name in four)/4
-                      for axis in (0, 1)) if all(name in units for name in four) else None
+    loaded_four = [name for name in four if name in units]
+    four_mean = (tuple(sum(units[name][axis] for name in loaded_four)/len(loaded_four)
+                       for axis in (0, 1))
+                 if len(loaded_four) >= minimum_loaded_long_digits else None)
     mean_length = math.hypot(*four_mean) if four_mean is not None else 0.
     group_direction = (tuple(component/mean_length for component in four_mean)
                        if mean_length > 1e-8 else None)
     spread = (max(math.acos(max(-1., min(1., sum(
-        units[name][i]*group_direction[i] for i in (0, 1))))) for name in four)
+        units[name][i]*group_direction[i] for i in (0, 1))))) for name in loaded_four)
               if group_direction is not None else None)
     opposition = (math.acos(max(-1., min(1., sum(
         units["thumb"][i]*group_direction[i] for i in (0, 1)))))
                   if group_direction is not None and "thumb" in units else None)
     in_band_ratio = loaded_force/total_force if total_force else 0.
-    passed = (len(units) == 5 and spread is not None and opposition is not None
+    passed = ("thumb" in units and len(loaded_four) >= minimum_loaded_long_digits
+              and spread is not None and opposition is not None
               and spread <= max_four_finger_half_arc_rad
               and opposition >= min_thumb_opposition_rad
               and in_band_ratio >= .8)
@@ -172,17 +179,24 @@ def analyze_cylindrical_power_grasp(
             "four_finger_half_arc_rad": spread,
             "thumb_to_four_finger_angle_rad": opposition,
             "four_finger_direction_xy": group_direction,
+            "minimum_loaded_long_digits": minimum_loaded_long_digits,
             "axial_band_m": axial_band_m}
 
 
 class CylindricalPowerGraspSeries:
     """Measure sustained, five-digit opposed contact over an unassisted hold."""
 
-    def __init__(self, *, required_ratio=.8, bottle_radius_m=.035):
+    def __init__(self, *, required_ratio=.8, bottle_radius_m=.035,
+                 minimum_loaded_long_digits=4,
+                 max_four_finger_half_arc_rad=math.radians(70)):
         if not 0 < required_ratio <= 1:
             raise ValueError("Power-grasp contact ratio must lie in (0, 1]")
+        if minimum_loaded_long_digits not in (3, 4):
+            raise ValueError("Require three or four loaded long fingers")
         self.required_ratio = required_ratio
         self.bottle_radius_m = bottle_radius_m
+        self.minimum_loaded_long_digits = minimum_loaded_long_digits
+        self.max_four_finger_half_arc_rad = max_four_finger_half_arc_rad
         self.steps = 0
         self.valid_steps = 0
         self.digit_steps = {name: 0 for name in
@@ -191,7 +205,9 @@ class CylindricalPowerGraspSeries:
 
     def add(self, contacts, bottle_pose_xyzw):
         observation = analyze_cylindrical_power_grasp(
-            contacts, bottle_pose_xyzw, bottle_radius_m=self.bottle_radius_m)
+            contacts, bottle_pose_xyzw, bottle_radius_m=self.bottle_radius_m,
+            minimum_loaded_long_digits=self.minimum_loaded_long_digits,
+            max_four_finger_half_arc_rad=self.max_four_finger_half_arc_rad)
         self.steps += 1
         self.valid_steps += int(observation["valid_topology"])
         for name in self.digit_steps:
@@ -208,5 +224,37 @@ class CylindricalPowerGraspSeries:
                 "valid_topology_ratio": valid_ratio,
                 "digit_contact_ratio": ratios,
                 "peak_digit_normal_force_n": self.peak_digit_force_n.copy(),
+                "minimum_loaded_long_digits": self.minimum_loaded_long_digits,
                 "passed": self.steps > 0 and valid_ratio >= self.required_ratio
-                and all(ratio >= self.required_ratio for ratio in ratios.values())}
+                and ratios["thumb"] >= self.required_ratio
+                and sum(ratios[name] >= self.required_ratio for name in
+                        ("index", "middle", "ring", "pinky")) >=
+                    self.minimum_loaded_long_digits}
+
+
+class ImageCylindricalContactSeries(CylindricalPowerGraspSeries):
+    """Measured thumb plus three simultaneous long-digit contacts.
+
+    The unloaded long digit may change between substeps as the compliant hand
+    shares load. Each of the four must also carry force in at least 5% of
+    substeps. Official collision geometry must independently certify that all
+    four distal pads lie on the same bottle side. The original five-digit
+    series remains unchanged.
+    """
+
+    def __init__(self, *, required_ratio=.8, bottle_radius_m=.035):
+        super().__init__(required_ratio=required_ratio,
+                         bottle_radius_m=bottle_radius_m,
+                         minimum_loaded_long_digits=3,
+                         max_four_finger_half_arc_rad=math.radians(45))
+
+    def summary(self):
+        result = super().summary()
+        ratios = result["digit_contact_ratio"]
+        result["passed"] = (
+            self.steps > 0 and result["valid_topology_ratio"] >= self.required_ratio
+            and ratios["thumb"] >= self.required_ratio
+            and all(ratios[name] >= .05 for name in
+                    ("index", "middle", "ring", "pinky")))
+        result["minimum_each_long_digit_ratio"] = .05
+        return result

@@ -34,6 +34,8 @@ parser.add_argument("--focus_left", action="store_true",
                     help="Hide the right hand in the viewer while leaving physics unchanged")
 parser.add_argument("--bottle_wireframe", action="store_true",
                     help="Show the bottle body as an outline so the opposing thumb remains visible")
+parser.add_argument("--bottle_transparent", action="store_true",
+                    help="Make only the visual body shell translucent to reveal the opposed thumb")
 parser.add_argument("--camera_eye", nargs=3, type=float,
                     default=(0.35, -0.65, 0.78), metavar=("X", "Y", "Z"))
 parser.add_argument("--camera_target", nargs=3, type=float,
@@ -49,6 +51,8 @@ from dexteroushands_lab.scenes.phase0_fixture import BimanualPhase0Fixture  # no
 
 
 def main():
+    if args.bottle_wireframe and args.bottle_transparent:
+        raise ValueError("Choose bottle wireframe or transparency")
     if sum(bool(x) for x in (args.bank, args.synthesis_report, args.candidate,
                             args.geometry_proposal,
                             args.left_png_cylindrical_candidate)) > 1:
@@ -122,6 +126,24 @@ def main():
         from pxr import UsdGeom
         prim = fixture.sim.stage.GetPrimAtPath("/World/envs/env_0/RightHand")
         UsdGeom.Imageable(prim).MakeInvisible()
+    if args.bottle_transparent:
+        from pxr import Gf, Sdf, UsdGeom, UsdShade
+        shell = fixture.sim.stage.GetPrimAtPath(
+            "/World/envs/env_0/Bottle/body_visual")
+        if not shell.IsValid():
+            raise RuntimeError("Bottle visual shell is missing")
+        UsdGeom.Mesh(shell).CreateDisplayOpacityAttr([0.25])
+        material = UsdShade.Material.Define(
+            fixture.sim.stage, "/World/GraspPreviewTransparentBottle")
+        shader = UsdShade.Shader.Define(
+            fixture.sim.stage, "/World/GraspPreviewTransparentBottle/Surface")
+        shader.CreateIdAttr("UsdPreviewSurface")
+        shader.CreateInput("diffuseColor", Sdf.ValueTypeNames.Color3f).Set(
+            Gf.Vec3f(0.10, 0.50, 0.72))
+        shader.CreateInput("opacity", Sdf.ValueTypeNames.Float).Set(0.25)
+        material.CreateSurfaceOutput().ConnectToSource(shader.ConnectableAPI(),
+                                                       "surface")
+        UsdShade.MaterialBindingAPI.Apply(shell).Bind(material)
     if args.bottle_wireframe:
         from pxr import Gf, UsdGeom
         bottle_path = "/World/envs/env_0/Bottle"
