@@ -44,7 +44,11 @@ def inspect(proposal: dict, *, radius_m: float = .035, steps: int = 21) -> dict:
     start = np.array([proposal["pregrasp_joints_rad"][name]
                       for name, _, _ in joints])
     goal = np.array([proposal["joints_rad"][name] for name, _, _ in joints])
-    for values in (start, goal):
+    waypoints = [np.array([point[name] for name, _, _ in joints])
+                 for point in proposal.get("joint_waypoints_rad", [])] or [goal]
+    if not np.allclose(waypoints[-1], goal):
+        raise ValueError("Final closing waypoint differs from joint goal")
+    for values in (start, *waypoints):
         for value, (name, _, bounds) in zip(values, joints):
             if not bounds[0] <= value <= bounds[1]:
                 raise ValueError(f"Joint target outside official range: {name}")
@@ -52,29 +56,46 @@ def inspect(proposal: dict, *, radius_m: float = .035, steps: int = 21) -> dict:
     data.qpos[:7] = [*proposal["wrist_position_w_m"], *q]
     path = []
     final_contacts = {}
-    for fraction in np.linspace(0., 1., steps):
-        data.qpos[[address for _, address, _ in joints]] = (
-            (1-fraction)*start + fraction*goal)
-        mujoco.mj_forward(model, data)
-        cross_gap = min(float(mujoco.mj_geomDistance(
-            model, data, a, b, .5, None)) for a, b in cross)
-        bottle_gap = min(float(mujoco.mj_geomDistance(
-            model, data, geom, bottle, .5, None)) for geom in geoms)
-        path.append({"fraction": float(fraction),
-                     "minimum_cross_finger_gap_m": cross_gap,
-                     "minimum_bottle_gap_m": bottle_gap})
-        if fraction == 1.:
-            for digit, ids in groups.items():
-                nearest = None
-                for geom in ids:
-                    points = np.zeros(6)
-                    gap = float(mujoco.mj_geomDistance(
-                        model, data, geom, bottle, .5, points))
-                    if nearest is None or gap < nearest["distance_m"]:
-                        nearest = {"distance_m": gap, "body": body[geom],
-                                   "angle_rad": float(math.atan2(points[4], points[3])),
-                                   "axial_m": float(points[5] - .5)}
-                final_contacts[digit] = nearest
+    final_sites = {}
+    palm_gap = None
+    for segment, (begin, end) in enumerate(zip((start, *waypoints[:-1]), waypoints)):
+        for local_fraction in np.linspace(0., 1., steps):
+          fraction = (segment + local_fraction) / len(waypoints)
+          data.qpos[[address for _, address, _ in joints]] = (
+              (1-local_fraction)*begin + local_fraction*end)
+          mujoco.mj_forward(model, data)
+          cross_gap = min(float(mujoco.mj_geomDistance(
+              model, data, a, b, .5, None)) for a, b in cross)
+          bottle_gap = min(float(mujoco.mj_geomDistance(
+              model, data, geom, bottle, .5, None)) for geom in geoms)
+          path.append({"fraction": float(fraction),
+                       "minimum_cross_finger_gap_m": cross_gap,
+                       "minimum_bottle_gap_m": bottle_gap})
+          if segment == len(waypoints)-1 and local_fraction == 1.:
+              palm_gap = min(float(mujoco.mj_geomDistance(
+                  model, data, geom, bottle, .5, None)) for geom in geoms
+                             if body[geom] == "l_wrist")
+              for i in range(model.nsite):
+                  name = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_SITE, i)
+                  if name.endswith("_tip"):
+                      xyz = data.site_xpos[i]
+                      final_sites[name] = {
+                          "position_w_m": xyz.tolist(),
+                          "radius_m": float(np.linalg.norm(xyz[:2])),
+                          "angle_rad": float(math.atan2(xyz[1], xyz[0])),
+                          "axial_m": float(xyz[2] - .5),
+                      }
+              for digit, ids in groups.items():
+                  nearest = None
+                  for geom in ids:
+                      points = np.zeros(6)
+                      gap = float(mujoco.mj_geomDistance(
+                          model, data, geom, bottle, .5, points))
+                      if nearest is None or gap < nearest["distance_m"]:
+                          nearest = {"distance_m": gap, "body": body[geom],
+                                     "angle_rad": float(math.atan2(points[4], points[3])),
+                                     "axial_m": float(points[5] - .5)}
+                  final_contacts[digit] = nearest
     angles = np.array([final_contacts[name]["angle_rad"] for name in DIGITS])
     vectors = np.column_stack((np.cos(angles), np.sin(angles)))
     four_mean = np.mean(vectors[1:], axis=0)
@@ -82,19 +103,33 @@ def inspect(proposal: dict, *, radius_m: float = .035, steps: int = 21) -> dict:
     spread = max(math.acos(float(np.clip(np.dot(v, four_mean), -1., 1.)))
                  for v in vectors[1:])
     opposition = math.acos(float(np.clip(np.dot(vectors[0], four_mean), -1., 1.)))
+    four_sites = [final_sites[f"l_{digit}_tip"] for digit in DIGITS[1:]]
+    site_dz = [site["axial_m"] for site in four_sites]
+    image_morphology_qualified = (
+        palm_gap is not None and -.002 <= palm_gap <= .005 and
+        all(a > b + .01 for a, b in zip(site_dz, site_dz[1:])) and
+        all(.03 <= site["radius_m"] <= .05 for site in four_sites) and
+        all(proposal["joints_rad"][f"l_{digit}_pip"] >= .7 and
+            proposal["joints_rad"][f"l_{digit}_dip"] >= .6
+            for digit in DIGITS[1:]))
     geometry_qualified = (
         path[0]["minimum_bottle_gap_m"] >= .002 and
+        min(row["minimum_bottle_gap_m"] for row in path) >= -.002 and
         min(row["minimum_cross_finger_gap_m"] for row in path) >= .001 and
         spread <= math.radians(70) and opposition >= math.radians(130) and
         all(-.025 <= item["axial_m"] <= .065 and
             -.003 <= item["distance_m"] <= .003
-            for item in final_contacts.values()))
+            for item in final_contacts.values()) and
+        image_morphology_qualified)
     return {"status": "official_MJCF_geometry_only_not_PhysX_acceptance",
             "proposal_index": proposal["index"],
             "geometry_qualified": geometry_qualified,
             "bottle_radius_m": radius_m,
             "four_finger_half_arc_rad": spread,
             "thumb_opposition_rad": opposition,
+            "palm_bottle_gap_m": palm_gap,
+            "image_morphology_qualified": image_morphology_qualified,
+            "final_tip_sites": final_sites,
             "final_digit_proximity": final_contacts,
             "closing_path": path}
 

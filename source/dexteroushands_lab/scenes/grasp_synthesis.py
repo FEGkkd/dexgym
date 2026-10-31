@@ -24,6 +24,19 @@ def _clip(vector, limit):
     return tuple(float(x * scale) for x in vector)
 
 
+def interpolate_joint_waypoints(start, waypoints, fraction):
+    """Interpolate a staged, position-driven finger closure without pose writes."""
+    points = (tuple(start), *(tuple(point) for point in waypoints))
+    if not waypoints or any(len(point) != len(points[0]) for point in points):
+        raise ValueError("Closing waypoints must have the same joint count as start")
+    if not 0.0 <= fraction <= 1.0:
+        raise ValueError("Closing fraction must be within [0, 1]")
+    segment = min(int(fraction * len(waypoints)), len(waypoints) - 1)
+    blend = min(1.0, fraction * len(waypoints) - segment)
+    return tuple((1.0 - blend) * a + blend * b
+                 for a, b in zip(points[segment], points[segment + 1]))
+
+
 @dataclass(frozen=True)
 class SynthesisLimits:
     approach_s: float = 0.35
@@ -231,7 +244,8 @@ class GraspSynthesisFixture:
             contact_axial_margin_m=self.limits.contact_axial_margin_m)
 
     def run_left(self, *, wrist_goal, joint_goal, seed: int = 0,
-                 pregrasp_joints=None, start_at_goal: bool = False):
+                 pregrasp_joints=None, start_at_goal: bool = False,
+                 joint_waypoints=None):
         """Return all measurements and an unvalidated release-state candidate."""
         f, limits = self.fixture, self.limits
         template = f.initializer.generate(mode="stable_pregrasp", seed=seed)
@@ -242,6 +256,12 @@ class GraspSynthesisFixture:
         opened = tuple(pregrasp_joints) if pregrasp_joints is not None else (0.0,) * 20
         if len(opened) != 20 or len(joint_goal) != 20:
             raise ValueError("Synthesis requires twenty independent finger targets")
+        waypoints = (tuple(tuple(point) for point in joint_waypoints)
+                     if joint_waypoints is not None else (tuple(joint_goal),))
+        if not waypoints or any(len(point) != 20 for point in waypoints):
+            raise ValueError("Synthesis requires twenty joints per waypoint")
+        if any(abs(a-b) > 1e-8 for a, b in zip(waypoints[-1], joint_goal)):
+            raise ValueError("The final closing waypoint must equal joint_goal")
         left = replace(template.left, root_pose=start, wrist_target_pose=start,
                        joint_position=opened, joint_target=opened)
         right_pose = (tuple(float(x) for x in f.right.data.root_pose_w.torch[0])
@@ -289,8 +309,8 @@ class GraspSynthesisFixture:
                     delta_x = desired_x - controller.target_pos[0]
                     controller.command((delta_x, 0.0, 0.0), (0.0, 0.0, 0.0))
                 if phase == "close":
-                    target_joints = tuple(a + fraction*(b-a)
-                                          for a, b in zip(opened, joint_goal))
+                    target_joints = interpolate_joint_waypoints(
+                        opened, waypoints, fraction)
                     self._finger_target(target_joints)
                 if (phase == "settle" and self.pose_compensation and
                         f.temporary_support_joint and step % max(1, round(.05/f.dt)) == 0):

@@ -132,9 +132,13 @@ def main():
         preshape = proposal.get("pregrasp_joints_rad")
         preshape = (tuple(preshape[name] for name in fixture.specs[0].joint_names)
                     if preshape is not None else None)
+        waypoints = proposal.get("joint_waypoints_rad")
+        waypoints = (tuple(tuple(point[name] for name in fixture.specs[0].joint_names)
+                           for point in waypoints) if waypoints is not None else None)
         result = synth.run_left(wrist_goal=wrist, joint_goal=joints,
                                 seed=proposal["index"], pregrasp_joints=preshape,
-                                start_at_goal=args.start_at_goal)
+                                start_at_goal=args.start_at_goal,
+                                joint_waypoints=waypoints)
         record = {**result, "candidate": asdict(result["candidate"])
                   if result["candidate"] is not None else None,
                   "reach_proposal_index": proposal["index"],

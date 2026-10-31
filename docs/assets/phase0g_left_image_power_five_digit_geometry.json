@@ -1,0 +1,411 @@
+{
+  "status": "official_MJCF_geometry_only_not_PhysX_acceptance",
+  "proposal_index": 9703,
+  "geometry_qualified": true,
+  "bottle_radius_m": 0.035,
+  "four_finger_half_arc_rad": 0.06046293947593469,
+  "thumb_opposition_rad": 2.662459618308732,
+  "palm_bottle_gap_m": 0.002945638738536266,
+  "image_morphology_qualified": true,
+  "final_tip_sites": {
+    "l_thumb_tip": {
+      "position_w_m": [
+        0.005306002673191059,
+        -0.05078172482961704,
+        0.5611592639673795
+      ],
+      "radius_m": 0.05105817506569202,
+      "angle_rad": -1.4666876359181547,
+      "axial_m": 0.061159263967379474
+    },
+    "l_index_finger_tip": {
+      "position_w_m": [
+        0.0354286350399747,
+        0.007793542685452546,
+        0.5478062657456034
+      ],
+      "radius_m": 0.03627571485699067,
+      "angle_rad": 0.21652992377447858,
+      "axial_m": 0.04780626574560343
+    },
+    "l_middle_finger_tip": {
+      "position_w_m": [
+        0.033452256753760554,
+        0.007368214639890711,
+        0.5220931727955999
+      ],
+      "radius_m": 0.03425411024824639,
+      "angle_rad": 0.216798874766747,
+      "axial_m": 0.022093172795599858
+    },
+    "l_ring_finger_tip": {
+      "position_w_m": [
+        0.03608709346442232,
+        0.0017610852385504007,
+        0.49893108352968574
+      ],
+      "radius_m": 0.0361300392461369,
+      "angle_rad": 0.04876228688050343,
+      "axial_m": -0.0010689164703142628
+    },
+    "l_pinky_tip": {
+      "position_w_m": [
+        0.03678247307249809,
+        0.004925358717179092,
+        0.4776388259080881
+      ],
+      "radius_m": 0.037110773150420065,
+      "angle_rad": 0.13311321574478888,
+      "axial_m": -0.022361174091911906
+    }
+  },
+  "final_digit_proximity": {
+    "thumb": {
+      "distance_m": -0.0009884753757950047,
+      "body": "l_thumb_middle",
+      "angle_rad": -2.334971596512195,
+      "axial_m": 0.0480270582241864
+    },
+    "index_finger": {
+      "distance_m": -0.0010145896872194994,
+      "body": "l_index_finger_distal",
+      "angle_rad": 0.37645697482646623,
+      "axial_m": 0.05066438140072216
+    },
+    "middle_finger": {
+      "distance_m": -0.0018329620543590232,
+      "body": "l_middle_finger_distal",
+      "angle_rad": 0.3229808594511985,
+      "axial_m": 0.023778017462027012
+    },
+    "ring_finger": {
+      "distance_m": -0.0017632520394069917,
+      "body": "l_ring_finger_distal",
+      "angle_rad": 0.26702508232060146,
+      "axial_m": -0.0007986506344690447
+    },
+    "pinky": {
+      "distance_m": -0.0011834276416324103,
+      "body": "l_pinky_distal",
+      "angle_rad": 0.3434725715783334,
+      "axial_m": -0.023173769074943507
+    }
+  },
+  "closing_path": [
+    {
+      "fraction": 0.0,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.016666666666666666,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.03333333333333333,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.05000000000000001,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.06666666666666667,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904902
+    },
+    {
+      "fraction": 0.08333333333333333,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.10000000000000002,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.11666666666666668,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.13333333333333333,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.15,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.16666666666666666,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.18333333333333335,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.20000000000000004,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.21666666666666667,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.23333333333333336,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.25,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.26666666666666666,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.2833333333333334,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.3,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.3166666666666667,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.3333333333333333,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.3333333333333333,
+      "minimum_cross_finger_gap_m": 0.0023348310490974252,
+      "minimum_bottle_gap_m": 0.002478370053904899
+    },
+    {
+      "fraction": 0.35000000000000003,
+      "minimum_cross_finger_gap_m": 0.00233564788744654,
+      "minimum_bottle_gap_m": 0.0024088257142082124
+    },
+    {
+      "fraction": 0.3666666666666667,
+      "minimum_cross_finger_gap_m": 0.0023367709866286743,
+      "minimum_bottle_gap_m": 0.0023293638412903352
+    },
+    {
+      "fraction": 0.3833333333333333,
+      "minimum_cross_finger_gap_m": 0.002338199897419317,
+      "minimum_bottle_gap_m": 0.002240002416876771
+    },
+    {
+      "fraction": 0.39999999999999997,
+      "minimum_cross_finger_gap_m": 0.0023375275496973656,
+      "minimum_bottle_gap_m": 0.002140761450935531
+    },
+    {
+      "fraction": 0.4166666666666667,
+      "minimum_cross_finger_gap_m": 0.0023362343813019006,
+      "minimum_bottle_gap_m": 0.0020316629762961386
+    },
+    {
+      "fraction": 0.43333333333333335,
+      "minimum_cross_finger_gap_m": 0.0023352472391497867,
+      "minimum_bottle_gap_m": 0.0019127310460720938
+    },
+    {
+      "fraction": 0.45,
+      "minimum_cross_finger_gap_m": 0.002334566518084842,
+      "minimum_bottle_gap_m": 0.0017839917565871737
+    },
+    {
+      "fraction": 0.4666666666666666,
+      "minimum_cross_finger_gap_m": 0.002334192490386441,
+      "minimum_bottle_gap_m": 0.001645473265701236
+    },
+    {
+      "fraction": 0.48333333333333334,
+      "minimum_cross_finger_gap_m": 0.0023341253056605523,
+      "minimum_bottle_gap_m": 0.0014972052239926176
+    },
+    {
+      "fraction": 0.5,
+      "minimum_cross_finger_gap_m": 0.0023343649907803044,
+      "minimum_bottle_gap_m": 0.001339220210808146
+    },
+    {
+      "fraction": 0.5166666666666667,
+      "minimum_cross_finger_gap_m": 0.0023349114498747176,
+      "minimum_bottle_gap_m": 0.0011715521293131784
+    },
+    {
+      "fraction": 0.5333333333333333,
+      "minimum_cross_finger_gap_m": 0.0023357644643675146,
+      "minimum_bottle_gap_m": 0.0009942370566981076
+    },
+    {
+      "fraction": 0.5499999999999999,
+      "minimum_cross_finger_gap_m": 0.002336923693064303,
+      "minimum_bottle_gap_m": 0.0008103394699614111
+    },
+    {
+      "fraction": 0.5666666666666668,
+      "minimum_cross_finger_gap_m": 0.002338388672288945,
+      "minimum_bottle_gap_m": 0.0006279650111887002
+    },
+    {
+      "fraction": 0.5833333333333334,
+      "minimum_cross_finger_gap_m": 0.0023373588927475724,
+      "minimum_bottle_gap_m": 0.00044224024991163077
+    },
+    {
+      "fraction": 0.6,
+      "minimum_cross_finger_gap_m": 0.0023361018282269277,
+      "minimum_bottle_gap_m": 0.00024688906766545844
+    },
+    {
+      "fraction": 0.6166666666666667,
+      "minimum_cross_finger_gap_m": 0.002335150842969115,
+      "minimum_bottle_gap_m": 4.193066333601892e-05
+    },
+    {
+      "fraction": 0.6333333333333333,
+      "minimum_cross_finger_gap_m": 0.0023345063173555625,
+      "minimum_bottle_gap_m": -0.0001725801553054108
+    },
+    {
+      "fraction": 0.65,
+      "minimum_cross_finger_gap_m": 0.0023341685091880526,
+      "minimum_bottle_gap_m": -0.0003966253624472327
+    },
+    {
+      "fraction": 0.6666666666666666,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590232
+    },
+    {
+      "fraction": 0.6666666666666666,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590232
+    },
+    {
+      "fraction": 0.6833333333333332,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590232
+    },
+    {
+      "fraction": 0.7000000000000001,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590316
+    },
+    {
+      "fraction": 0.7166666666666667,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590232
+    },
+    {
+      "fraction": 0.7333333333333334,
+      "minimum_cross_finger_gap_m": 0.002334137553585306,
+      "minimum_bottle_gap_m": -0.0018329620543590488
+    },
+    {
+      "fraction": 0.75,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590232
+    },
+    {
+      "fraction": 0.7666666666666666,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590275
+    },
+    {
+      "fraction": 0.7833333333333333,
+      "minimum_cross_finger_gap_m": 0.002334137553585306,
+      "minimum_bottle_gap_m": -0.0018329620543590232
+    },
+    {
+      "fraction": 0.7999999999999999,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590275
+    },
+    {
+      "fraction": 0.8166666666666668,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590286
+    },
+    {
+      "fraction": 0.8333333333333334,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590232
+    },
+    {
+      "fraction": 0.85,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590275
+    },
+    {
+      "fraction": 0.8666666666666667,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590275
+    },
+    {
+      "fraction": 0.8833333333333333,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590275
+    },
+    {
+      "fraction": 0.9,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590275
+    },
+    {
+      "fraction": 0.9166666666666666,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590232
+    },
+    {
+      "fraction": 0.9333333333333332,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590232
+    },
+    {
+      "fraction": 0.9500000000000001,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590232
+    },
+    {
+      "fraction": 0.9666666666666667,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590232
+    },
+    {
+      "fraction": 0.9833333333333334,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590232
+    },
+    {
+      "fraction": 1.0,
+      "minimum_cross_finger_gap_m": 0.0023341375535853052,
+      "minimum_bottle_gap_m": -0.0018329620543590232
+    }
+  ]
+}

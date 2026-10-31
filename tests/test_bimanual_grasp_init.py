@@ -7,7 +7,20 @@ import pytest
 
 from dexteroushands_lab.assets.bottle import BottleConfig
 from dexteroushands_lab.scenes.grasp_init import BimanualGraspInitializer, GraspInitBank
-from dexteroushands_lab.scenes.grasp_synthesis import GraspSynthesisFixture
+from dexteroushands_lab.scenes.grasp_synthesis import (
+    GraspSynthesisFixture, interpolate_joint_waypoints)
+
+
+def test_staged_joint_closure_reaches_each_waypoint_without_pose_jump():
+    start = (0.0, 0.0)
+    waypoints = ((1.0, 0.0), (1.0, 2.0), (2.0, 2.0))
+    assert interpolate_joint_waypoints(start, waypoints, 0) == start
+    assert interpolate_joint_waypoints(start, waypoints, 1/3) == waypoints[0]
+    assert interpolate_joint_waypoints(start, waypoints, 2/3) == waypoints[1]
+    assert interpolate_joint_waypoints(start, waypoints, 1) == waypoints[2]
+    assert interpolate_joint_waypoints(start, waypoints, .5) == (1.0, 1.0)
+    with pytest.raises(ValueError, match="joint count"):
+        interpolate_joint_waypoints(start, ((1.0,),), .5)
 
 
 def _spec(side):
