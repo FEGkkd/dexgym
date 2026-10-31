@@ -1,5 +1,10 @@
 # DexGym
 
+Phase 1 已增加双手瓶子 `DirectRLEnv` 研究版，包含 GraspHold 和 CapTurn30 两个
+Task ID、52 维动作、批量物理、PPO 训练与独立评估工具。
+[Phase 1 实测报告](docs/assets/phase1-bimanual-rl-v0.md)记录了 checkpoint、
+测试命令和当前 **0% 的 held-out 成功率**；这些任务可运行，但策略尚未达到验收目标。
+
 WujiHand2 Beta 双手自由腕与螺纹瓶的独立 Isaac Lab 基础场景见
 [资产、控制和物理验证说明](docs/assets/wujihand2-beta-bimanual-bottle.md)。此场景不注册 RL task；
 [Phase 0 双手抓握初态、接触监测与 Reset 验证](docs/assets/phase0-bimanual-grasp-reset.md)
@@ -50,6 +55,8 @@ for future arm-hand work.
 | `DexterousHands-Shadow-Hand-Pose-Direct-v0` | DirectTask | architecture baseline |
 | `DexterousHands-Shadow-Hand-Reorientation-Direct-v0` | DirectTask | migration baseline |
 | `DexterousHands-Wuji-Hand-Reorientation-Direct-v0` | DirectTask | official native WUJI USD, 20-DOF, 207/413 PPO chain and contact/friction gates validated |
+| `DexterousHands-WujiHand2-Bimanual-GraspHold-Direct-v0` | DirectTask | Phase 1 experimental; trained, held-out success 0% |
+| `DexterousHands-WujiHand2-Bimanual-CapTurn30-Direct-v0` | DirectTask | Phase 1 experimental; trained, held-out success 0% |
 | `DexterousHands-Allegro-Repose-ManagerBased-v0` | Manager-Based | Isaac Lab manager baseline |
 
 WUJI uses the official native USD at

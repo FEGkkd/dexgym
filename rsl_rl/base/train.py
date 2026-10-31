@@ -86,6 +86,14 @@ def main(argv: list[str] | None = None) -> None:
         dump_yaml(str(log_dir / "params" / "env.yaml"), env_cfg)
         dump_yaml(str(log_dir / "params" / "agent.yaml"), agent_cfg)
         write_policy_artifacts(log_dir, args.task, env_cfg=env_cfg)
+        if args.task.startswith("DexterousHands-WujiHand2-Bimanual-"):
+            from dexteroushands_lab.tasks.direct.bimanual_bottle.experiment_manifest import (
+                write_bimanual_training_manifest,
+            )
+
+            asset_root = os.environ.get("WUJI_DESCRIPTION_ROOT")
+            write_bimanual_training_manifest(
+                log_dir, repo_root, args.task, Path(asset_root) if asset_root else None)
         runner.learn(num_learning_iterations=agent_cfg.max_iterations, init_at_random_ep_len=True)
         env.close()
     finally:

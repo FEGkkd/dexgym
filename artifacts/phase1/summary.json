@@ -1,0 +1,113 @@
+{
+  "schema": "dexgym-phase1-bimanual-rl-result-v1",
+  "base_commit": "8987c9c7a152850a7c7a653daaf00b92a2031064",
+  "branch": "codex/bimanual-bottlecap-rl-v0",
+  "official_wuji_description_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+  "runtime": "Isaac Sim 6.0.1; Isaac Lab 3.0; RTX 5090 32 GiB",
+  "documented_research_round_transitions_total_excluding_smoke": 5967872,
+  "training_rounds": [
+    {
+      "name": "grasp64_seed0",
+      "task": "grasp_hold",
+      "seed": 0,
+      "num_envs": 64,
+      "updates": 50,
+      "transitions": 102400,
+      "stable_success_rate": 0.0,
+      "pregrasp_success_rate": 0.0,
+      "evaluation_split": "not held out; early pipeline check"
+    },
+    {
+      "name": "grasp1024_seed1",
+      "task": "grasp_hold",
+      "seed": 1,
+      "num_envs": 1024,
+      "updates": 29,
+      "transitions": 950272,
+      "stable_success_rate": 0.0,
+      "pregrasp_success_rate": 0.0,
+      "evaluation_split": "held out; stable same-family"
+    },
+    {
+      "name": "grasp1024_leftfirst_seed2",
+      "task": "grasp_hold",
+      "seed": 2,
+      "num_envs": 1024,
+      "updates": 50,
+      "transitions": 1638400,
+      "stable_success_rate": 0.0,
+      "pregrasp_success_rate": 0.0,
+      "evaluation_split": "held out; stable same-family"
+    },
+    {
+      "name": "grasp1024_balanced_seed2",
+      "task": "grasp_hold",
+      "seed": 2,
+      "num_envs": 1024,
+      "updates": 50,
+      "transitions": 1638400,
+      "stable_success_rate": 0.0,
+      "pregrasp_success_rate": 0.0,
+      "evaluation_split": "held out; stable same-family",
+      "checkpoint": "logs/rsl_rl/dexteroushands_bimanual_bottle_phase1/2026-11-01_03-57-47_phase1_round4_balanced_contact/model_98.pt"
+    },
+    {
+      "name": "cap1024_from_grasp_seed5",
+      "task": "cap_turn_30",
+      "seed": 5,
+      "num_envs": 1024,
+      "updates": 25,
+      "transitions": 819200,
+      "stable_success_rate": 0.0,
+      "pregrasp_success_rate": 0.0,
+      "evaluation_split": "held out; stable same-family",
+      "checkpoint": "logs/rsl_rl/dexteroushands_bimanual_bottle_phase1/2026-11-01_04-17-16_phase1_cap1024_from_grasp_round4/model_122.pt"
+    },
+    {
+      "name": "cap1024_supported_progress_seed5",
+      "task": "cap_turn_30",
+      "seed": 5,
+      "num_envs": 1024,
+      "updates": 25,
+      "transitions": 819200,
+      "stable_success_rate": 0.0,
+      "pregrasp_success_rate": 0.0,
+      "evaluation_split": "held out; stable same-family",
+      "checkpoint": "logs/rsl_rl/dexteroushands_bimanual_bottle_phase1/2026-11-01_04-28-05_phase1_cap1024_supported_progress/model_146.pt",
+      "note": "The final strict bilateral progress guard was added after this checkpoint; its PPO update path passed a separate one-update smoke only."
+    }
+  ],
+  "benchmark": {
+    "1024": {"environment_steps_per_second": 8868.06, "gpu_memory_used_gib": 8.576, "full_reset_seconds": 0.0783},
+    "2048": {"environment_steps_per_second": 11667.03, "gpu_memory_used_gib": 16.438, "full_reset_seconds": 0.1012, "initialization_seconds_approximately": 360, "peak_host_memory_gib_greater_than": 36},
+    "4096": "not tested; quadratic contact view allocation extrapolates beyond workstation memory"
+  },
+  "selective_reset": {"16": {"repetitions": 100, "max_peer_error": 0.0}, "1024": {"repetitions": 100, "max_peer_error": 0.0}},
+  "geometry": {
+    "pregrasp_right_tip_radial_gap_mean_mm": {"thumb": 3.11, "index": 6.50, "middle": 7.58},
+    "stable_right_index_tip_radial_gap_mean_mm": 34.91,
+    "stable_right_index_tip_above_cap_center_mean_mm": 30.76,
+    "interpretation": "stable bank is not a right thumb-index-middle sidewall tripod; tip-site distances are not collision-patch distances"
+  },
+  "counterfactuals": {
+    "zero_action_stable": {"episodes": 200, "success_rate": 0.0, "maximum_positive_opening_rad": 0.00534},
+    "random_stable": {"episodes": 64, "success_rate": 0.0, "failure_rate": 1.0},
+    "no_right_cap_contact": {"episodes": 64, "right_contact_steps": 0, "positive_progress_reward_mean": 0.0, "success_rate": 0.0},
+    "left_only": {"episodes": 64, "success_rate": 0.0, "mean_final_opening_rad": 2.88, "positive_progress_reward_mean_before_strict_guard": 0.0211, "positive_progress_reward_mean_after_strict_guard": 0.0000683},
+    "right_only": {"episodes": 64, "success_rate": 0.0, "mean_final_opening_rad": 0.5306, "positive_progress_reward_mean_before_strict_guard": 0.1130, "positive_progress_reward_mean_after_strict_guard": 0.0},
+    "reverse_wrist": {"episodes": 64, "success_rate": 0.0, "mean_final_opening_rad": -0.0915}
+  },
+  "legacy_scalar_thread_fixture": {"status": "pass", "full_travel_angle_rad": 18.807, "max_constraint_error_m": 0.000183},
+  "full_pytest": {"passed": 142, "failed": 2, "skipped": 1, "failed_tests_preexisting": ["test_allegro_config_declares_contract_and_resolves_reference", "test_build_21_keypoints_uses_mano_order_and_fingertips"]},
+  "gates": {
+    "direct_environment_and_1024_training": "Pass",
+    "2048_step_and_contact_benchmark": "Pass",
+    "4096_training": "Not Tested",
+    "grasp_hold_learning_target": "Fail",
+    "cap_turn_learning_target": "Fail",
+    "selective_reset": "Pass",
+    "learning_health": "Fail",
+    "reward_shortcut_exclusion": "Fail",
+    "legacy_compatibility": "Pass"
+  }
+}

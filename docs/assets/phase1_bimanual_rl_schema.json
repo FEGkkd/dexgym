@@ -1,0 +1,75 @@
+{
+  "action": {
+    "dimension": 52,
+    "fields": {
+      "left_finger_target_increment": 20,
+      "left_wrist_rotation_local": 3,
+      "left_wrist_translation_world": 3,
+      "right_finger_target_increment": 20,
+      "right_wrist_rotation_local": 3,
+      "right_wrist_translation_world": 3
+    },
+    "finger_target_increment_rad_per_action": 0.05,
+    "normalized_range": [
+      -1,
+      1
+    ],
+    "wrist_rotation_scale_rad_per_action": 0.02,
+    "wrist_translation_scale_m_per_action": 0.002
+  },
+  "actor": {
+    "deployment_note": "Bottle and cap true poses/velocities are simulator oracle state, not a robot sensor.",
+    "dimension": 277,
+    "fields": {
+      "bottle_and_cap_velocity": 12,
+      "bottle_relative_to_left_wrist": 7,
+      "cap_relative_to_bottle": 7,
+      "cap_relative_to_right_wrist": 7,
+      "left_fingertips_relative_to_bottle": 15,
+      "left_joint_position": 20,
+      "left_joint_target_error": 20,
+      "left_joint_velocity": 20,
+      "left_wrist_pose": 7,
+      "left_wrist_target_error": 6,
+      "left_wrist_velocity": 6,
+      "previous_action": 52,
+      "right_fingertips_relative_to_cap": 15,
+      "right_joint_position": 20,
+      "right_joint_target_error": 20,
+      "right_joint_velocity": 20,
+      "right_wrist_pose": 7,
+      "right_wrist_target_error": 6,
+      "right_wrist_velocity": 6,
+      "thread_progress_and_goal": 4
+    },
+    "oracle_object_state": true
+  },
+  "critic": {
+    "contact_semantics": "Exact PhysX object/body normal-force matrix; no tactile hardware.",
+    "dimension": 421,
+    "inherits_actor": true,
+    "privileged_fields": {
+      "finger_applied_torque": 40,
+      "full_body_velocity": 12,
+      "left_bottle_forces": 21,
+      "left_cap_forces": 21,
+      "object_mass": 2,
+      "relative_slip": 2,
+      "right_bottle_forces": 21,
+      "right_cap_forces": 21,
+      "thread_internal_state": 4
+    }
+  },
+  "quaternion_convention": "xyzw",
+  "tasks": [
+    "DexterousHands-WujiHand2-Bimanual-GraspHold-Direct-v0",
+    "DexterousHands-WujiHand2-Bimanual-CapTurn30-Direct-v0"
+  ],
+  "units": {
+    "angle": "rad",
+    "distance": "m",
+    "force": "N",
+    "torque": "N m"
+  },
+  "version": "phase1-bimanual-bottle-v0"
+}

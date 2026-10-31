@@ -17,6 +17,7 @@ env/
 logs/*
 !logs/README.md
 artifacts/*
+artifacts/**/*
 !artifacts/README.md
 !artifacts/**/
 !artifacts/**/summary.json
