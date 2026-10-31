@@ -135,10 +135,10 @@ bottle clearance. An explicit +30° sidewall-sector optimizer finished near
 +130° instead; its unqualified result is saved as
 `phase1_right_cap_tripod_sector30_unqualified.json`. This is evidence about
 the present *fixed wrist pose and fixed thumb/middle targets*, not a proof
-that the Beta 1 hand cannot make a tripod pinch. The next geometry experiment
-must jointly vary right wrist SE(3), thumb, index and middle targets, require
-separated radial contact sectors, then rerun the official PhysX hold and
-fresh-process Reset replay before adding any stable curriculum states.
+that the Beta 1 hand cannot make a tripod pinch. The follow-up below tests
+closing order and a broader right-wrist/finger search. Any successful proposal
+still needs official PhysX hold and fresh-process Reset replay before entering
+the stable curriculum.
 
 An isolated, bottle-on-ground, hands-away PhysX diagnostic added a cap-local
 axial test force without changing the formal task. At 500 steps (2 ms each):
@@ -196,3 +196,75 @@ The standalone scene smoke now generates its diagnostic USD into a separate
 temporary directory per run. A one-step Isaac/PhysX smoke returned finite
 states and left the existing uncommitted `generated/parameters.json` diff
 unchanged.
+
+## Right tripod follow-up: closure order and wrist search
+
+The previously unqualified +130° index-sector candidate was fitted to an open
+preshape with 4.00 mm cap, 8.17 mm bottle and 2.33 mm inter-digit proxy
+clearance. Native USD/PhysX formation had no support and kept initial
+penetration shallow, but the index displaced the dynamic cap before a stable
+three-digit pinch formed. The right-cap contact ratio during formation was
+10.3%; in the subsequent 1 s hold the bottle moved 399 mm and the tripod
+criterion failed. Delaying index closure until 70% of a slower 0.7 s finger
+trajectory did not solve it: right-cap formation contact ratio was 7.6%,
+hold displacement 398 mm and no loaded tripod occurred. Both results are
+**Fail**, not validated Reset samples.
+
+A second directed fixture restored the existing validated Phase 0E
+thumb-middle hold and changed **only** the four index joint targets over
+0.6 s. During formation the left-bottle and right-cap contact ratios were
+100% and 99.7%, with minimum separation -0.034 mm and peak force 2.86 N.
+When the index approached the cap, the cap shifted about 4 mm in X and the
+middle contact disappeared. In the 1 s hold, loaded index contact lasted
+0.036 s, right-cap contact lasted 20.6% of samples, and the bottle moved
+153 mm. Thus this targeted addition also **failed**. Normal joint tracking,
+modest forces and shallow penetration make a transient force-balance and
+contact-layout failure more plausible than a drive or impact failure; the
+precise contact-wrench feasibility has not been proven.
+
+The new `optimize_right_cap_tripod_wrist.py` searches the official MJCF proxy
+geometry over bounded right-wrist XYZ and world rotation vector, four index
+joints and optionally six thumb/middle joints. Its acceptance requires three
+sidewall-near points, a maximum cyclic contact-sector gap ≤170°, ≥3 mm
+bottle and ≥2 mm inter-digit clearance, and no deep cap penetration. Three
+fixed-thumb/middle seeds (0, 1, 2) found **no geometry-qualified proposal**:
+the closest selected index points remained on the cap top plane at z=0.658 m,
+about 3–4 mm away. One bounded thumb/middle joint search found an index point
+at the requested +20° sector but still on that top plane; its middle contact
+was 8.26 mm away. This is a failed search over the stated bounds, not proof
+that every possible WujiHand2 Beta pose is unreachable. No resulting pose was
+used for RL training or promoted to a bank.
+
+Ignored raw evidence is retained locally at
+`artifacts/phase1/sector130_{direct,delayed,index_join}.json.gz` and
+`artifacts/phase1/right_tripod_wrist_seed{0,1,2}.json`, plus
+`right_tripod_wrist_fingers_seed0.json`. The three uncompressed PhysX result
+SHA-256 values are, in order,
+`323dd521b13c7355832fe3117fbabbe60fd3945f66d243922407b17135a03552`,
+`268e937a9da8347ba56154986da647cd8fbdf24b967ff0bee8a33810dabe5a08`,
+and `c39d8f7d52d09072bd2a7eab964e8d1d861ba5e74d9dcb975fff5fa16efe9b51`.
+
+Reproduction of the most informative dynamic ablation:
+
+```bash
+export WUJI_DESCRIPTION_ROOT=/tmp/wuji-description-v2026.9.11
+export ISAACLAB_PYTHON=/home/ubuntu/miniconda3/envs/allo_track/bin/python
+scripts/run_isaaclab.sh scripts/environments/validate_right_index_join.py \
+  --headless --bimanual_bank docs/assets/phase0e_bimanual_grasp_init_bank.json \
+  --sample_index 0 \
+  --right_proposal docs/assets/phase1_right_cap_tripod_sector30_unqualified.json \
+  --right_proposal_index 45066 --close_s 0.6 \
+  --output /tmp/right_index_join_physx.json
+$ISAACLAB_PYTHON scripts/environments/optimize_right_cap_tripod_wrist.py \
+  --proposal docs/assets/phase0e_right_cap_sidewall_preshape45066.json \
+  --proposal_index 45066 --adjust_opposing_digits --seed 0 --maxiter 120 \
+  --output /tmp/right_tripod_wrist_fingers_seed0.json
+```
+
+The next minimal experiment is a force-aware contact-layout search around
+the cap's *actual USD collision surface*, then a gradual physical formation
+run. The bank remains four same-family thumb-middle states; there is still
+no independently validated right tripod state. More PPO on the current bank
+would not address this measured geometry mismatch.
+The latest complete offline suite returned **149 passed, 1 skipped, 2 failed**;
+the two failures remain the same unmodified Allegro/MANO user-worktree tests.

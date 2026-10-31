@@ -25,6 +25,8 @@ parser.add_argument("--middle_mcp_delta_rad", type=float, default=0.0,
                     help="Directed right middle MCP preload within 0.1 rad")
 parser.add_argument("--index_pip_delta_rad", type=float, default=0.0,
                     help="Directed right index PIP preload within 0.1 rad")
+parser.add_argument("--index_delay_fraction", type=float, default=0.0,
+                    help="Hold index at open target until this fraction of finger closure")
 parser.add_argument("--require_tripod", action="store_true",
                     help="Require loaded right thumb, index, middle contact over 80%% of both holds")
 parser.add_argument("--right_wrist_dy_m", type=float, default=0.0,
@@ -84,7 +86,8 @@ def main():
                             approach_down_m=args.approach_down_m,
                             follow_cap_during_formation=args.follow_cap,
                             middle_mcp_delta_rad=args.middle_mcp_delta_rad,
-                            index_pip_delta_rad=args.index_pip_delta_rad)
+                            index_pip_delta_rad=args.index_pip_delta_rad,
+                            index_delay_fraction=args.index_delay_fraction)
     print("BIMANUAL_STAGE formation_done", flush=True)
     output = {**result,
               "candidate": asdict(result["candidate"])

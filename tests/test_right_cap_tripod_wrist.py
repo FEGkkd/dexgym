@@ -1,0 +1,21 @@
+"""Geometry objective for a physically meaningful cap tripod proposal."""
+
+import importlib.util
+import math
+from pathlib import Path
+
+import pytest
+
+
+def test_cyclic_contact_gap_identifies_missing_opposition(monkeypatch):
+    pytest.importorskip("mujoco")
+    root = Path(__file__).resolve().parents[1]
+    monkeypatch.syspath_prepend(str(root / "scripts/environments"))
+    path = root / "scripts/environments/optimize_right_cap_tripod_wrist.py"
+    spec = importlib.util.spec_from_file_location("optimize_right_cap_tripod_wrist", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    assert module.max_cyclic_gap_deg((-96, 95, 130)) == pytest.approx(191)
+    assert module.max_cyclic_gap_deg((-96, 20, 95)) == pytest.approx(169)
+    q = module.world_delta_quaternion((0.0, 0.0, math.pi / 2), (1, 0, 0, 0))
+    assert sum(x*x for x in q) == pytest.approx(1.0)

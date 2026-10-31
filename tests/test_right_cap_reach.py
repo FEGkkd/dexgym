@@ -9,7 +9,8 @@ from pathlib import Path
 import pytest
 
 from dexteroushands_lab.scenes.bimanual_grasp_synthesis import (
-    _hand_digit_times, _right_radial_opposition, _right_tripod_held)
+    _hand_digit_times, _right_radial_opposition, _right_tripod_held,
+    _staggered_close_targets, _index_join_targets)
 
 
 def test_digit_contact_time_keeps_longest_body_per_finger():
@@ -26,6 +27,22 @@ def test_digit_contact_time_keeps_longest_body_per_finger():
 def test_right_tripod_requires_each_loaded_digit():
     assert not _right_tripod_held({"thumb": 1.0, "middle": 1.0}, 1.0)
     assert _right_tripod_held({"thumb": 1.0, "index": .9, "middle": .95}, 1.0)
+
+
+def test_index_closure_can_wait_for_thumb_and_middle():
+    names = ("r_thumb_ip", "r_index_finger_pip", "r_middle_finger_pip")
+    opened = (0.0, 0.0, 0.0)
+    closed = (1.0, 1.0, 1.0)
+    assert _staggered_close_targets(names, opened, closed, .5, .75) == (
+        .5, 0.0, .5)
+    assert _staggered_close_targets(names, opened, closed, 1.0, .75) == closed
+
+
+def test_index_join_keeps_existing_thumb_middle_targets():
+    names = ("r_thumb_ip", "r_index_finger_pip", "r_middle_finger_pip")
+    initial = (.2, .3, .4)
+    goal = {"r_index_finger_pip": .9}
+    assert _index_join_targets(names, initial, goal, .5) == pytest.approx((.2, .6, .4))
 
 
 def test_right_reach_quaternion_composition_stays_unit_length():
