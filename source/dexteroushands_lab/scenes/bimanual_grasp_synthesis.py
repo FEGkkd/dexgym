@@ -25,6 +25,12 @@ def _hand_digit_times(summary, prefix, dt):
     return times
 
 
+def _right_tripod_held(times, hold_s, ratio=.8):
+    """Loaded thumb, index and middle contact for the requested hold interval."""
+    return all(times.get(name, 0.0) > ratio * hold_s
+               for name in ("thumb", "index", "middle"))
+
+
 def _right_radial_opposition(points, cap_pose, cap_height):
     """Require loaded thumb/long-finger contacts with opposed radial normals.
 
@@ -60,7 +66,8 @@ class BimanualGraspSynthesisFixture:
     """A one-env, gravity-on, unsupported right-cap contact experiment."""
 
     def __init__(self, fixture, *, max_penetration_m=.002,
-                 max_contact_force_n=100.0, hold_s=1.0):
+                 max_contact_force_n=100.0, hold_s=1.0,
+                 require_right_tripod=False):
         if fixture.num_envs != 1 or fixture.control_mode != "pose_command_wrist":
             raise ValueError("Right-cap synthesis needs one pose-command wrist environment")
         if fixture.temporary_support_joint is not None:
@@ -69,6 +76,7 @@ class BimanualGraspSynthesisFixture:
         self.max_penetration_m = max_penetration_m
         self.max_contact_force_n = max_contact_force_n
         self.hold_s = hold_s
+        self.require_right_tripod = require_right_tripod
         self.left_capture = GraspSynthesisFixture(fixture)
 
     def _right_target(self, canonical):
@@ -162,6 +170,8 @@ class BimanualGraspSynthesisFixture:
                   and rt.get("thumb", 0) > .8*self.hold_s
                   and max((v for k,v in rt.items() if k != "thumb"), default=0)
                       > .8*self.hold_s
+                  and (not self.require_right_tripod
+                       or _right_tripod_held(rt, self.hold_s))
                   and opposing_ratio > .8
                   and summary.get("bottle_ground", {}).get("contact_ratio", 0) == 0
                   and summary.get("cap_ground", {}).get("contact_ratio", 0) == 0
@@ -177,6 +187,7 @@ class BimanualGraspSynthesisFixture:
                 "right_contact_ratio": right.get("contact_ratio", 0),
                 "left_finger_contact_time_s": lt,
                 "right_finger_contact_time_s": rt,
+                "right_tripod_held": _right_tripod_held(rt, self.hold_s),
                 "right_radial_opposition_ratio": opposing_ratio,
                 "right_min_radial_normal_dot": min(normal_dots) if normal_dots else None,
                 "max_thread_lateral_error_m": max_thread_lateral,
@@ -238,7 +249,7 @@ class BimanualGraspSynthesisFixture:
     def run(self, left_sample, right_proposal, *, close_s=1.2,
             settle_s=.3, approach_m=0.0, approach_s=.2,
             approach_down_m=0.0, follow_cap_during_formation=False,
-            middle_mcp_delta_rad=0.0):
+            middle_mcp_delta_rad=0.0, index_pip_delta_rad=0.0):
         f = self.fixture
         if (not left_sample.validated or
                 left_sample.validation.get("scope") != "left_only" or
@@ -251,18 +262,21 @@ class BimanualGraspSynthesisFixture:
         names = f.specs[1].joint_names
         pregrasp = tuple(right_proposal["pregrasp_joints_rad"][n] for n in names)
         closed = tuple(right_proposal["joints_rad"][n] +
-                       (middle_mcp_delta_rad if n == "r_middle_finger_mcp_flex" else 0.0)
+                       (middle_mcp_delta_rad if n == "r_middle_finger_mcp_flex" else 0.0) +
+                       (index_pip_delta_rad if n == "r_index_finger_pip" else 0.0)
                        for n in names)
-        if not -.1 <= middle_mcp_delta_rad <= .1 or any(
+        if (not -.1 <= middle_mcp_delta_rad <= .1
+                or not -.1 <= index_pip_delta_rad <= .1) or any(
             not joint.lower <= target <= joint.upper
             for joint,target in zip(f.specs[1].joints, closed)
         ):
-            raise ValueError("Middle MCP adjustment exceeds the directed 0.1 rad or joint limit")
+            raise ValueError("Finger adjustment exceeds the directed 0.1 rad or joint limit")
         right = HandInit(pose, (0.0,)*6, pregrasp, (0.0,)*20, pose, pregrasp)
         candidate = replace(left_sample, right=right, validated=False, validation=None,
                             source="pose_left_bank_plus_right_cap_synthesis",
                             metadata={**left_sample.metadata,
                                       "right_cap_proposal_index": right_proposal["index"],
+                                      "right_wrist_dx_m": right_proposal.get("right_wrist_dx_m", 0.0),
                                       "right_wrist_dy_m": right_proposal.get("right_wrist_dy_m", 0.0),
                                       "right_cap_proposal_backend": "official_beta1_MJCF_geometry_only"})
         cap_reference = candidate.cap.root_pose[:3]
@@ -353,10 +367,12 @@ class BimanualGraspSynthesisFixture:
                                    "approach_m": approach_m,
                                    "approach_down_m": approach_down_m,
                                    "middle_mcp_delta_rad": middle_mcp_delta_rad,
+                                   "index_pip_delta_rad": index_pip_delta_rad,
                                    "close_s": close_s,
                                    "settle_s": settle_s,
                                    "follow_cap_during_formation": follow_cap_during_formation,
                                    "follow_cap_latched_on_contact": follow_latched,
+                                   "require_right_tripod": self.require_right_tripod,
                                    "support_used": False}})
             release = self._measure_hold("unsupported_hold")
             if release["passed"]:

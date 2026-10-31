@@ -14,6 +14,13 @@ def yaw(angle):
 
 
 class BottleThreadTests(unittest.TestCase):
+    def test_axial_spring_parameters_are_finite_and_positive(self):
+        for value in (0.0, -1.0, float("nan"), float("inf")):
+            with self.assertRaises(ValueError):
+                BottleConfig(axial_stiffness=value)
+            with self.assertRaises(ValueError):
+                BottleConfig(axial_damping=value)
+
     def test_geometry_has_pitch_handedness_and_no_high_density_mesh(self):
         cfg = BottleConfig()
         helix = sample_helix(cfg, segments_per_turn=8)

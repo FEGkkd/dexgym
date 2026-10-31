@@ -52,7 +52,10 @@ class BimanualBottleDirectEnv(DirectRLEnv):
     def __init__(self, cfg, render_mode=None, **kwargs):
         from isaaclab_physx.physics import PhysxManager
 
-        self.bottle_cfg = BottleConfig(allow_detachment=False)
+        self.bottle_cfg = BottleConfig(
+            allow_detachment=False,
+            axial_stiffness=cfg.thread_axial_stiffness,
+        )
         self._asset_dir = Path(tempfile.mkdtemp(prefix="dexgym-phase1-bottle-"))
         build_bottle_usd(self.bottle_cfg, self._asset_dir)
         cfg.scene = make_bimanual_bottle_scene_cfg(

@@ -25,6 +25,7 @@ class BimanualBottleDirectEnvCfg(DirectRLEnvCfg):
     wrist_rotation_scale = 0.02
     finger_increment_scale = 0.05
     cap_goal_rad = 0.5235987755982988
+    thread_axial_stiffness = 500.0
     sim = SimulationCfg(
         dt=0.002, render_interval=decimation,
         physics=PhysxCfg(solver_type=1, min_position_iteration_count=8,

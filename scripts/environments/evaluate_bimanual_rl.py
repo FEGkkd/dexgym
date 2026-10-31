@@ -18,6 +18,8 @@ parser.add_argument("--seed", type=int, default=1001)
 parser.add_argument("--held-out", action="store_true")
 parser.add_argument("--source", choices=("mixed", "stable", "pregrasp"), default="mixed")
 parser.add_argument("--no-right-cap-contact", action="store_true")
+parser.add_argument("--thread-axial-stiffness", type=float,
+                    help="Controlled thread stiffness ablation in N/m; default uses task config")
 parser.add_argument("--output", type=Path)
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
@@ -42,6 +44,8 @@ cfg.sim.device = args.device
 cfg.seed = args.seed
 cfg.evaluation_mode = args.held_out
 cfg.no_right_cap_contact_counterfactual = args.no_right_cap_contact
+if args.thread_axial_stiffness is not None:
+    cfg.thread_axial_stiffness = args.thread_axial_stiffness
 if args.source == "stable":
     cfg.stable_reset_probability = 1.0
 elif args.source == "pregrasp":
@@ -130,6 +134,7 @@ try:
                "checkpoint": str(args.checkpoint) if args.checkpoint else None,
                "held_out": args.held_out, "seed": args.seed,
                "source": args.source,
+               "thread_axial_stiffness_n_per_m": cfg.thread_axial_stiffness,
                "no_right_cap_contact_counterfactual": args.no_right_cap_contact,
                "counterfactual_right_contact_steps": counterfactual_right_contact_steps,
                "num_envs": args.num_envs, "episodes": total,

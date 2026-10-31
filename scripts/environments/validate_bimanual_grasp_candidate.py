@@ -36,7 +36,10 @@ def main():
         right_initial_pose=sample.right.root_pose,
         include_hand_hand=True,
     )
-    replay = BimanualGraspSynthesisFixture(fixture).replay(sample)
+    require_tripod = sample.metadata.get("right_cap_synthesis", {}).get(
+        "require_right_tripod", False)
+    replay = BimanualGraspSynthesisFixture(
+        fixture, require_right_tripod=require_tripod).replay(sample)
     summary = {
         "source_result": str(args.result), "left_seed": sample.seed,
         "source_result_sha256": sha256(raw).hexdigest(),
@@ -47,6 +50,7 @@ def main():
         "left_contact_ratio": replay["left_contact_ratio"],
         "right_contact_ratio": replay["right_contact_ratio"],
         "right_radial_opposition_ratio": replay["right_radial_opposition_ratio"],
+        "right_tripod_held": replay["right_tripod_held"],
         "minimum_separation_m": replay["minimum_separation_m"],
         "max_thread_lateral_error_m": replay["max_thread_lateral_error_m"],
         "cross_contact_ratios": replay["cross_contact_ratios"],

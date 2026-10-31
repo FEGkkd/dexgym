@@ -50,6 +50,10 @@ def curate(result_path: Path, replay_path: Path, left_bank_path: Path,
     holds = [result["unsupported_hold"], result["reset_replay"], fresh["replay"]]
     if any(hold.get("passed") is not True for hold in holds):
         raise ValueError("All three unsupported hold runs must pass")
+    require_tripod = sample.metadata.get("right_cap_synthesis", {}).get(
+        "require_right_tripod", False)
+    if require_tripod and any(hold.get("right_tripod_held") is not True for hold in holds):
+        raise ValueError("Requested right tripod was not loaded in all three holds")
     left_thumb, left_other = _digit_times(holds, "left")
     right_thumb, right_other = _digit_times(holds, "right")
     cross = {name: max(hold["cross_contact_ratios"][name] for hold in holds)
@@ -77,6 +81,7 @@ def curate(result_path: Path, replay_path: Path, left_bank_path: Path,
         "right_other_contact_time_s": right_other,
         "right_radial_opposition_ratio": min(
             hold["right_radial_opposition_ratio"] for hold in holds),
+        "right_tripod_held": require_tripod,
         "right_min_radial_normal_dot": min(
             hold["right_min_radial_normal_dot"] for hold in holds),
         "max_thread_lateral_error_m": max(

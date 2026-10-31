@@ -7,6 +7,7 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.task_contract import (
 )
 from dexteroushands_lab.tasks.direct.bimanual_bottle import register_tasks
 from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env import BimanualBottleDirectEnv
+from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env_cfg import CapTurn30DirectEnvCfg
 from isaaclab.envs import DirectRLEnv
 
 
@@ -30,3 +31,10 @@ def test_both_tasks_are_registered_with_shared_environment():
     assert hold.entry_point == turn.entry_point
     assert hold.kwargs["env_cfg_entry_point"] != turn.kwargs["env_cfg_entry_point"]
     assert issubclass(BimanualBottleDirectEnv, DirectRLEnv)
+
+
+def test_thread_stiffness_ablation_keeps_original_task_default():
+    cfg = CapTurn30DirectEnvCfg()
+    assert cfg.thread_axial_stiffness == 500.0
+    cfg.thread_axial_stiffness = 800.0
+    assert cfg.thread_axial_stiffness == 800.0

@@ -81,13 +81,116 @@ scripts/run_isaaclab.sh scripts/rsl_rl/play.py --task DexterousHands-WujiHand2-B
 | Gate | Status | Evidence / remaining requirement |
 |---|---|---|
 | Direct environment and 52-D contract | Pass | Both task IDs register; 1/2/16/64/128/512/1024 GPU smoke ran before the latest diagnostics; 2-env smoke repeated after. |
-| 1024-env PPO sampling, update, checkpoint | Pass | GraspHold rounds 2–4 and a saved checkpoint; CapTurn follow-up still underway. |
+| 1024-env PPO sampling, update, checkpoint | Pass | GraspHold rounds 2–4 and CapTurn rounds 1–2 saved checkpoints; all held-out success rates remain zero. |
 | 2048-env smoke/performance | Pass | 20 policy steps, 11,667 env steps/s, 16.83 GiB GPU; slow six-minute startup. |
 | 4096-env target | Not Tested | 2048 startup already peaks >36 GiB host; quadratic filter allocation would exceed this 32 GiB GPU. |
 | Independent GraspHold learning on geometric pregrasp | Fail | Round 4 held-out 0/200; right tripod contact almost absent. |
 | Independent 30-degree opening | Fail | Both CapTurn rounds scored 0/200 stable and 0/200 natural pregrasp. Relative angle alone failed the contact/axial checks. |
 | Learning health | Fail | 1024-env PPO finite and checkpointed; KL/clip/variance logged. Joint clipping remains high, especially 98.8% on final pregrasp evaluation, and genuine success did not improve. |
 | No reward shortcut | Fail | Zero, random, no-right-contact, left-only, right-only and reverse controls ran. Final strict guard suppresses most unsupported positive progress, but true cap-sidewall contact position is not resolved in the batch view. |
-| Legacy compatibility | Pass | 142 passed, one skipped; the same two pre-existing user-worktree Allegro/MANO failures remain. |
+| Legacy compatibility | Pass for Phase 1 code | Latest full suite: 146 passed, one skipped; the same two pre-existing user-worktree Allegro/MANO failures remain. |
 
 No policy is claimed to have learned a bilateral suspended grasp or 30-degree cap opening. Current model files are research checkpoints only.
+
+## Directed physical blocker follow-up (2026-11-01)
+
+The Phase 0E right formation search optimized thumb and middle contact, while
+its index finger collision surface was **15.4 mm** from the cap. A new
+deterministic official Beta 1 MJCF proxy optimization, seed 0, moved only the
+four index joints. The index distal collision surface could reach the cap
+sidewall at **1.0 mm** clearance, with 5.64 mm bottle and 4.48 mm other-digit
+clearance. An independently fitted open preshape had 4.00 mm cap, 8.18 mm
+bottle and 2.33 mm inter-digit minimum clearances. These are *offline geometry
+proposals*, never a validated PhysX grasp or a training bank entry. The new
+files are `phase1_right_cap_tripod_refined45066.json` and
+`phase1_right_cap_tripod_preshape45066.json`.
+
+Official USD/PhysX then formed this candidate without support and measured a
+1 s hold and indexed Reset replay. The old thumb-middle radial-opposition
+criterion passed, with 0.036 mm bottle motion, 0.147 mm worst formation
+penetration and 8.87 N worst formation force. **The requested tripod failed**:
+right thumb and middle were loaded for 1.0 s each, but the index was never
+loaded during the 1 s hold. Its raw contact manifold showed an approximately
+0.20 mm gap and zero normal force. A 0.02 rad index PIP preload still had no
+loaded index contact; 0.04 rad disrupted middle contact; a +0.5 mm right-wrist
+X offset also failed. Their raw contact traces are retained locally as
+`artifacts/phase1/right_tripod_{original,pip02,pip04,wrist_dx05}_physx.json.gz`
+(ignored by Git). The unsupported-hold results were respectively old-criterion
+Pass but tripod Fail, tripod Fail, tripod Fail, tripod Fail. No candidate was
+promoted to the stable bank. The synthesis fixture and its fresh-process
+validator/curator now carry a separate, explicit `require_right_tripod`
+criterion so an old thumb-middle hold cannot be mislabeled a tripod success.
+
+The index joints tracked their commanded positions to within about 0.3 mrad,
+so drive saturation is not the observed cause. The no-preload index point was
+on the cap's negative-X side, close to the middle finger's sector. During
+preload, the cap shifted in positive X while the wrist remained fixed; the
+index lost contact. Moving its target farther into the cap did not establish
+a stable third contact. In 10,000 deterministic fixed-wrist index-joint
+samples, 32 brought an index collision surface within 3 mm of the cap in the
+opposite positive-X sector, but **none** preserved 2 mm inter-digit and 3 mm
+bottle clearance. An explicit +30° sidewall-sector optimizer finished near
++130° instead; its unqualified result is saved as
+`phase1_right_cap_tripod_sector30_unqualified.json`. This is evidence about
+the present *fixed wrist pose and fixed thumb/middle targets*, not a proof
+that the Beta 1 hand cannot make a tripod pinch. The next geometry experiment
+must jointly vary right wrist SE(3), thumb, index and middle targets, require
+separated radial contact sectors, then rerun the official PhysX hold and
+fresh-process Reset replay before adding any stable curriculum states.
+
+An isolated, bottle-on-ground, hands-away PhysX diagnostic added a cap-local
+axial test force without changing the formal task. At 500 steps (2 ms each):
+
+| Axial load | Axial stiffness | Max screw error | Final screw error |
+| ---: | ---: | ---: | ---: |
+| 0 N | 500 N/m | 0.130 mm | -0.119 mm |
+| 0.5 N | 500 N/m | 0.841 mm | 0.831 mm |
+| 0.5 N | 800 N/m | 0.536 mm | 0.519 mm |
+| 0.5 N | 2000 N/m | 2.350 mm | 1.998 mm |
+
+The 2000 N/m result rules out blindly stiffening the explicit wrench spring.
+The exact cause of its worse error is not yet isolated; solver/contact
+interaction and finite force limits remain candidates. The 500/800 N/m
+comparison was also run with the **same** CapTurn Round 2 checkpoint,
+held-out stable family, 64 environments, 200 episodes and seed 1004. At
+500 N/m, success was 0/200 and mean final absolute screw error 1.238 mm;
+at 800 N/m, success remained 0/200 and the error increased to 2.598 mm.
+Changing the thread stiffness can alter the grasp and cap motion, so the
+isolated static improvement does not transfer to this policy. The formal
+task default remains **500 N/m**. Both paired evaluation JSON files are in
+ignored `artifacts/phase1/`.
+
+Reproduction with the pinned official checkout and Isaac Lab Python:
+
+```bash
+export WUJI_DESCRIPTION_ROOT=/tmp/wuji-description-v2026.9.11
+export ISAACLAB_PYTHON=/home/ubuntu/miniconda3/envs/allo_track/bin/python
+$ISAACLAB_PYTHON scripts/environments/optimize_right_cap_tripod.py \
+  --proposal docs/assets/phase0e_right_cap_sidewall_preshape45066.json \
+  --proposal_index 45066 --output /tmp/right_tripod_refined.json
+$ISAACLAB_PYTHON scripts/environments/prepare_right_cap_preshape.py \
+  --reach_scan /tmp/right_tripod_refined.json --output /tmp/right_tripod_open.json
+scripts/run_isaaclab.sh scripts/environments/generate_bimanual_grasp_bank.py \
+  --headless --left_bank docs/assets/phase0e_pose_left_grasp_init_bank.json \
+  --left_sample_index 0 --right_preshape docs/assets/phase1_right_cap_tripod_preshape45066.json \
+  --right_proposal_index 45066 --close_s 0.35 --settle_s 0.05 \
+  --follow_cap --hand_hand --require_tripod --output /tmp/right_tripod_physx.json
+scripts/run_isaaclab.sh scripts/environments/smoke_bimanual_scene.py \
+  --headless --bottle_center_z 0.1 --steps 500 --test_axial_force 0.5 \
+  --axial_stiffness 800
+scripts/run_isaaclab.sh scripts/environments/evaluate_bimanual_rl.py \
+  --task cap_turn_30 --policy learned --checkpoint \
+  logs/rsl_rl/dexteroushands_bimanual_bottle_phase1/2026-11-01_04-28-05_phase1_cap1024_supported_progress/model_146.pt \
+  --num-envs 64 --episodes 200 --seed 1004 --held-out --source stable \
+  --thread-axial-stiffness 800 --headless
+```
+
+This follow-up made no new PPO update because neither blocker produced a
+physically validated task improvement. The learning gates remain **Fail**.
+The full offline test suite after these changes was **146 passed, 1 skipped,
+2 failed**; the two failures are the existing user-worktree Allegro asset
+fixture and MANO keypoint-order tests, which were not modified here.
+The standalone scene smoke now generates its diagnostic USD into a separate
+temporary directory per run. A one-step Isaac/PhysX smoke returned finite
+states and left the existing uncommitted `generated/parameters.json` diff
+unchanged.

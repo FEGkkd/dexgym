@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 
 from dexteroushands_lab.scenes.bimanual_grasp_synthesis import (
-    _hand_digit_times, _right_radial_opposition)
+    _hand_digit_times, _right_radial_opposition, _right_tripod_held)
 
 
 def test_digit_contact_time_keeps_longest_body_per_finger():
@@ -21,6 +21,11 @@ def test_digit_contact_time_keeps_longest_body_per_finger():
     }}
     assert _hand_digit_times(summary, "r_", .002) == {
         "thumb": pytest.approx(.7), "middle": pytest.approx(.84)}
+
+
+def test_right_tripod_requires_each_loaded_digit():
+    assert not _right_tripod_held({"thumb": 1.0, "middle": 1.0}, 1.0)
+    assert _right_tripod_held({"thumb": 1.0, "index": .9, "middle": .95}, 1.0)
 
 
 def test_right_reach_quaternion_composition_stays_unit_length():

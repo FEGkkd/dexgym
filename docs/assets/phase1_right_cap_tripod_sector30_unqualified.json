@@ -1,0 +1,71 @@
+{
+  "source": "official_beta1_right_MJCF_proxy_geometry_only",
+  "seed": 23,
+  "samples": 100000,
+  "cap_radius_m": 0.017,
+  "cap_height_m": 0.025,
+  "bottle_radius_m": 0.035,
+  "best": [
+    {
+      "index": 45066,
+      "wrist_position_w_m": [
+        0.09560519153401226,
+        0.0005325454821731718,
+        0.6469542839618373
+      ],
+      "wrist_quaternion_wxyz": [
+        0.4349972462110955,
+        -0.44608623072852854,
+        0.7419583190955017,
+        -0.24755266766519682
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.2865064999949598,
+        "r_thumb_cmc_abd": 0.017963880620129657,
+        "r_thumb_mcp": 0.678185604069953,
+        "r_thumb_ip": 0.052100421870938836,
+        "r_index_finger_mcp_flex": 0.8587728913446157,
+        "r_index_finger_mcp_abd": 0.12340577715247365,
+        "r_index_finger_pip": 0.7658573642005517,
+        "r_index_finger_dip": 1.3531597140194531,
+        "r_middle_finger_mcp_flex": 0.906810714160702,
+        "r_middle_finger_mcp_abd": 0.09276781002866057,
+        "r_middle_finger_pip": 1.3787172695912024,
+        "r_middle_finger_dip": 0.044493252264886166,
+        "r_ring_finger_mcp_flex": 0.39192008394321814,
+        "r_ring_finger_mcp_abd": 0.5289125285446628,
+        "r_ring_finger_pip": 1.1252613354965146,
+        "r_ring_finger_dip": 0.45525728878786675,
+        "r_pinky_mcp_flex": 1.1483303211741958,
+        "r_pinky_mcp_abd": -0.14249311987503283,
+        "r_pinky_pip": 1.3846303539505997,
+        "r_pinky_dip": 1.329216926827206
+      },
+      "index_refinement": {
+        "backend": "official_beta1_MJCF_proxy_geometry_only",
+        "index_sidewall_distance_m": 0.0009999998586740244,
+        "index_nearest_cap_point_w_m": [
+          -0.010943647210141539,
+          0.013009096255671225,
+          0.6380020505506322
+        ],
+        "index_contact_body": "r_index_finger_distal",
+        "minimum_index_bottle_clearance_m": 0.004999999848011479,
+        "minimum_index_other_digit_clearance_m": 0.0020001289145077645,
+        "objective_m": 0.029691831677182444,
+        "index_sidewall_azimuth_deg": 130.07156664811862,
+        "target_sidewall_azimuth_deg": 30.0,
+        "optimizer_evaluations": 1399,
+        "seed": 0
+      }
+    }
+  ],
+  "preshape_backend": "official_beta1_right_MJCF_geometry_only",
+  "clearance_targets_m": {
+    "cap": 0.004,
+    "bottle": 0.004,
+    "cross_digit": 0.002
+  },
+  "official_source_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+  "right_mjcf_sha256": "ee860215e6ae0b2f6ded7fa69d3b7ced36ab6d8a72aace99d20259aa78dc1742"
+}

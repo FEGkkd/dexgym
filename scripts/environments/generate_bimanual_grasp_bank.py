@@ -23,8 +23,14 @@ parser.add_argument("--approach_down_m", type=float, default=0.0,
                     help="Bounded right wrist downward approach during formation")
 parser.add_argument("--middle_mcp_delta_rad", type=float, default=0.0,
                     help="Directed right middle MCP preload within 0.1 rad")
+parser.add_argument("--index_pip_delta_rad", type=float, default=0.0,
+                    help="Directed right index PIP preload within 0.1 rad")
+parser.add_argument("--require_tripod", action="store_true",
+                    help="Require loaded right thumb, index, middle contact over 80%% of both holds")
 parser.add_argument("--right_wrist_dy_m", type=float, default=0.0,
                     help="Directed right wrist Y offset within 2 mm")
+parser.add_argument("--right_wrist_dx_m", type=float, default=0.0,
+                    help="Directed right wrist X offset within 2 mm")
 parser.add_argument("--close_s", type=float, default=1.2)
 parser.add_argument("--settle_s", type=float, default=.3)
 parser.add_argument("--follow_cap", action="store_true",
@@ -50,11 +56,13 @@ def main():
     if len(matches) != 1:
         raise ValueError("Right proposal index absent or ambiguous")
     proposal = dict(matches[0])
-    if abs(args.right_wrist_dy_m) > .002:
-        raise ValueError("Right wrist Y offset exceeds the 2 mm directed search bound")
+    if abs(args.right_wrist_dy_m) > .002 or abs(args.right_wrist_dx_m) > .002:
+        raise ValueError("Right wrist X/Y offset exceeds the 2 mm directed search bound")
     proposal["wrist_position_w_m"] = list(proposal["wrist_position_w_m"])
+    proposal["wrist_position_w_m"][0] += args.right_wrist_dx_m
     proposal["wrist_position_w_m"][1] += args.right_wrist_dy_m
     proposal["right_wrist_dy_m"] = args.right_wrist_dy_m
+    proposal["right_wrist_dx_m"] = args.right_wrist_dx_m
     print("BIMANUAL_STAGE proposal_loaded", flush=True)
     q = proposal["wrist_quaternion_wxyz"]
     right_pose = (*proposal["wrist_position_w_m"], *q[1:4], q[0])
@@ -67,14 +75,16 @@ def main():
         include_hand_hand=args.hand_hand,
     )
     print("BIMANUAL_STAGE fixture_ready", flush=True)
-    experiment = BimanualGraspSynthesisFixture(fixture)
+    experiment = BimanualGraspSynthesisFixture(
+        fixture, require_right_tripod=args.require_tripod)
     print("BIMANUAL_STAGE formation_start", flush=True)
     result = experiment.run(sample, proposal, close_s=args.close_s,
                             settle_s=args.settle_s,
                             approach_m=args.approach_m,
                             approach_down_m=args.approach_down_m,
                             follow_cap_during_formation=args.follow_cap,
-                            middle_mcp_delta_rad=args.middle_mcp_delta_rad)
+                            middle_mcp_delta_rad=args.middle_mcp_delta_rad,
+                            index_pip_delta_rad=args.index_pip_delta_rad)
     print("BIMANUAL_STAGE formation_done", flush=True)
     output = {**result,
               "candidate": asdict(result["candidate"])
@@ -100,6 +110,7 @@ def main():
         "unsupported_hold_passed": hold.get("passed"),
         "left_contact_ratio": hold.get("left_contact_ratio"),
         "right_contact_ratio": hold.get("right_contact_ratio"),
+        "right_tripod_held": hold.get("right_tripod_held"),
         "hold_bottle_displacement_m": hold.get("bottle_displacement_m"),
         "reset_replay_passed": result["reset_replay"] is not None and
                                result["reset_replay"]["passed"],

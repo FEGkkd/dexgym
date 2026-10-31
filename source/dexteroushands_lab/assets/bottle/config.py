@@ -61,6 +61,7 @@ class BottleConfig:
             self.thread_pitch, self.thread_clearance, self.thread_height,
             self.cap_mass, self.bottle_mass, self.max_constraint_force,
             self.max_constraint_torque, self.friction_velocity_scale,
+            self.axial_stiffness, self.axial_damping,
             self.breakaway_stiffness,
             self.breakaway_damping,
             self.slip_angle_ratio, self.slip_speed, self.restick_speed,
@@ -70,7 +71,7 @@ class BottleConfig:
             self.detachment_max_constraint_error,
         )
         if any(not math.isfinite(x) or x <= 0 for x in numeric):
-            raise ValueError("Bottle dimensions, mass, pitch and limits must be finite and positive")
+            raise ValueError("Bottle dimensions, mass, pitch, spring parameters and limits must be finite and positive")
         if (not isinstance(self.thread_turns, (int, float))
                 or not math.isfinite(self.thread_turns) or not 0 < self.thread_turns <= 10):
             raise ValueError("thread_turns must be finite and in (0, 10]")

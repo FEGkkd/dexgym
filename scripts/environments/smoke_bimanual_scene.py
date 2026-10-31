@@ -13,6 +13,7 @@ import json
 import math
 from pathlib import Path
 import sys
+import tempfile
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / "source"))
@@ -36,6 +37,12 @@ parser.add_argument("--left_fingers", type=float, nargs=20, default=None,
 parser.add_argument("--right_fingers", type=float, nargs=20, default=None,
                     help="20 canonical right finger target positions in radians")
 parser.add_argument("--test_torque", type=float, default=0.0, help="N m about bottle-local +Z, env 0 only")
+parser.add_argument("--test_axial_force", type=float, default=0.0,
+                    help="Diagnostic N along bottle-local +Z on cap in env 0; not a policy action")
+parser.add_argument("--axial_stiffness", type=float, default=None,
+                    help="Diagnostic thread axial stiffness override in N/m; does not change bank or task")
+parser.add_argument("--axial_damping", type=float, default=None,
+                    help="Diagnostic thread axial damping override in N s/m; does not change bank or task")
 parser.add_argument("--torque_cycle_steps", type=int, default=0,
                     help="Reverse scripted test torque every N physics steps; 0 keeps the torque constant")
 parser.add_argument("--allow_detachment", action="store_true",
@@ -113,10 +120,17 @@ def main():
         raise ValueError("environment count, steps and fixture force must be valid")
     base_config = (BottleConfig.pco1881_reference()
                    if args.bottle_profile == "pco1881_reference" else BottleConfig())
-    config = replace(base_config, allow_detachment=args.allow_detachment)
+    config = replace(base_config, allow_detachment=args.allow_detachment,
+                     axial_stiffness=(base_config.axial_stiffness if args.axial_stiffness is None
+                                      else args.axial_stiffness),
+                     axial_damping=(base_config.axial_damping if args.axial_damping is None
+                                    else args.axial_damping))
     if args.bottle_center_z < config.bottle_height / 2:
         raise ValueError("bottle center must keep the sample body above the ground")
-    asset_dir = REPO_ROOT / "source/dexteroushands_lab/assets/bottle/generated"
+    # Each smoke run may override physical parameters. Keep its generated USD
+    # out of the tracked asset directory so diagnostics never rewrite a user's
+    # uncommitted bottle profile or another concurrent run's assets.
+    asset_dir = Path(tempfile.mkdtemp(prefix="dexgym-bottle-smoke-"))
     if args.bottle_profile != "engineering_example":
         asset_dir /= args.bottle_profile
     build_bottle_usd(config, asset_dir)
@@ -286,6 +300,9 @@ def main():
             cap_torque = tuple(result.cap_torque[j] + applied * result.state.axis_world[j]
                                for j in range(3))
             cap_force = result.cap_force
+            if i == 0 and args.test_axial_force and not result.state.detached:
+                cap_force = tuple(cap_force[j] + args.test_axial_force *
+                                  result.state.axis_world[j] for j in range(3))
             if result.state.detached and i == 0 and args.detach_probe_force:
                 cap_force = (cap_force[0] + args.detach_probe_force,
                              cap_force[1], cap_force[2])
@@ -383,6 +400,9 @@ def main():
         "asset_variant": args.variant,
         "bottle_profile": args.bottle_profile,
         "test_torque_nm": args.test_torque,
+        "test_axial_force_n": args.test_axial_force,
+        "axial_stiffness_n_per_m": config.axial_stiffness,
+        "axial_damping_n_s_per_m": config.axial_damping,
         "fixture_hold_bottle": args.fixture_hold_bottle,
         "torque_cycle_steps": args.torque_cycle_steps,
         "allow_detachment": args.allow_detachment,
