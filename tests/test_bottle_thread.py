@@ -218,3 +218,24 @@ def test_reset_from_pose_clears_detached_and_restores_unwrapped_reference():
 
 if __name__ == "__main__":
     unittest.main()
+def test_coupler_snapshot_preserves_rotated_engagement_and_stick_reference():
+    import math
+    from dexteroushands_lab.assets.bottle import BottleConfig, ThreadCoupler
+
+    cfg = BottleConfig()
+    original = ThreadCoupler(cfg)
+    bottle_pos = (0.0, 0.0, 0.5)
+    q0 = (0.0, 0.0, 0.0, 1.0)
+    cap_pos = (0.0, 0.0, 0.5 + cfg.cap_initial_z)
+    original.reset_from_pose(bottle_pos, q0, cap_pos, q0)
+    angle = 0.35
+    cap_quat = (0.0, 0.0, math.sin(angle / 2), math.cos(angle / 2))
+    shifted_cap = (0.0, 0.0, cap_pos[2] + cfg.thread_pitch * angle / (2*math.pi))
+    before = original.observe(bottle_pos, q0, shifted_cap, cap_quat)
+    snapshot = original.snapshot_state()
+    restored = ThreadCoupler(cfg)
+    after = restored.restore_state(snapshot, bottle_pos, q0, shifted_cap, cap_quat)
+    assert math.isclose(after.theta_unwrapped, before.theta_unwrapped, abs_tol=1e-8)
+    assert math.isclose(after.axial, before.axial, abs_tol=1e-8)
+    assert math.isclose(after.constraint_error, before.constraint_error, abs_tol=1e-8)
+    assert restored.snapshot_state()["stick_reference_rad"] == snapshot["stick_reference_rad"]

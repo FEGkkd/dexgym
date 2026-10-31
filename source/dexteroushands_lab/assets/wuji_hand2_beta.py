@@ -197,14 +197,17 @@ def make_wuji_hand2_beta_cfg(
     friction: float = 0.7, root: str | Path | None = None,
     position: tuple[float, float, float] = (0.0, 0.0, 0.5),
     orientation_xyzw: tuple[float, float, float, float] = (0.0, 0.0, 0.0, 1.0),
+    control_mode: str = "floating_wrench_pd",
 ):
-    """Create an Isaac Lab 3.0 articulation with a free physics-controlled base.
+    """Create an official hand with a fixed or floating articulated wrist.
 
     Source: https://isaac-sim.github.io/IsaacLab/v3.0.0/source/api/lab/isaaclab.sim.schemas.html
     ``fix_root_link=False`` disables the official USD's world fixed joint.
     """
     if friction < 0:
         raise ValueError("friction must be nonnegative")
+    if control_mode not in ("fixed_wrist", "pose_command_wrist", "floating_wrench_pd"):
+        raise ValueError(f"Unknown wrist control mode: {control_mode}")
     spec = load_hand2_spec(root, variant=variant, side=side)
     import isaaclab.sim as sim_utils
     from isaaclab.actuators import ImplicitActuatorCfg
@@ -212,7 +215,9 @@ def make_wuji_hand2_beta_cfg(
 
     return ArticulationCfg(
         prim_path=prim_path,
-        articulation_root_prim_path=f"/{spec.root_body}",
+        articulation_root_prim_path=("/root_joint" if control_mode in
+                                     ("fixed_wrist", "pose_command_wrist")
+                                     else f"/{spec.root_body}"),
         spawn=sim_utils.UsdFileCfg(
             func=spawn_floating_wuji_hand2_beta,
             usd_path=str(spec.usd_path),
@@ -222,7 +227,7 @@ def make_wuji_hand2_beta_cfg(
                 max_angular_velocity=360.0,
             ),
             articulation_props=sim_utils.ArticulationRootPropertiesCfg(
-                fix_root_link=False,
+                fix_root_link=control_mode in ("fixed_wrist", "pose_command_wrist"),
                 enabled_self_collisions=True,
                 solver_position_iteration_count=16,
                 solver_velocity_iteration_count=4,
@@ -244,7 +249,7 @@ def make_wuji_hand2_beta_cfg(
 
 
 def spawn_floating_wuji_hand2_beta(prim_path, cfg, translation=None, orientation=None, **kwargs):
-    """Reference the official USD and move its articulation root to the wrist.
+    """Reference official USD and preserve or release its fixed root joint.
 
     Isaac Lab's ``fix_root_link=False`` disables the official world joint, but
     PhysX 5.4 then requires ArticulationRootAPI on the free wrist rigid body.
@@ -267,9 +272,13 @@ def spawn_floating_wuji_hand2_beta(prim_path, cfg, translation=None, orientation
     wrist = prim.GetChild(root_body)
     if not fixed_joint or not wrist or not wrist.HasAPI(UsdPhysics.RigidBodyAPI):
         raise RuntimeError(f"Official USD root structure changed: {cfg.usd_path}")
-    UsdPhysics.Joint(fixed_joint).CreateJointEnabledAttr(False)
-    fixed_joint.RemoveAPI(UsdPhysics.ArticulationRootAPI)
-    UsdPhysics.ArticulationRootAPI.Apply(wrist)
+    fixed_mode = bool(cfg.articulation_props and cfg.articulation_props.fix_root_link)
+    if fixed_mode:
+        UsdPhysics.Joint(fixed_joint).CreateJointEnabledAttr(True)
+    else:
+        UsdPhysics.Joint(fixed_joint).CreateJointEnabledAttr(False)
+        fixed_joint.RemoveAPI(UsdPhysics.ArticulationRootAPI)
+        UsdPhysics.ArticulationRootAPI.Apply(wrist)
     # The official Beta 1 USD contains five fixed fingertip marker links with
     # mass=0. PhysX 5.4 interprets each zero as its fallback 1 kg body mass.
     # Their total then exceeds the physical hand by 5 kg and a 40 N wrist
@@ -289,7 +298,8 @@ def spawn_floating_wuji_hand2_beta(prim_path, cfg, translation=None, orientation
             mass_api.CreateDiagonalInertiaAttr(Gf.Vec3f(inertia, inertia, inertia))
     if cfg.articulation_props is not None:
         sim_utils.modify_articulation_root_properties(
-            str(wrist.GetPath()), cfg.articulation_props.replace(fix_root_link=None)
+            str((fixed_joint if fixed_mode else wrist).GetPath()),
+            cfg.articulation_props.replace(fix_root_link=None),
         )
     if cfg.physics_material is not None:
         material = UsdShade.Material.Define(

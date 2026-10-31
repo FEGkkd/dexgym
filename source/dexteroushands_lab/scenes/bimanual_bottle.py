@@ -14,6 +14,9 @@ def make_bimanual_bottle_scene_cfg(
     variant: str = "beta1", contact_debug: bool = False,
     bottle_tilt_radians: float = 0.0,
     bottle_center_z: float = 0.5,
+    wrist_control_mode: str = "floating_wrench_pd",
+    left_initial_pose: tuple[float, ...] | None = None,
+    right_initial_pose: tuple[float, ...] | None = None,
 ):
     """Build a scene without registering an RL task or policy observation."""
     import isaaclab.sim as sim_utils
@@ -24,6 +27,10 @@ def make_bimanual_bottle_scene_cfg(
 
     left_orientation = (0.0, -0.7071067811865475, 0.0, 0.7071067811865476)
     right_orientation = (0.0, 0.7071067811865475, 0.0, 0.7071067811865476)
+    left_pose = left_initial_pose or (-0.30, 0.0, 0.62, *left_orientation)
+    right_pose = right_initial_pose or (0.30, 0.0, 0.62, *right_orientation)
+    if len(left_pose) != 7 or len(right_pose) != 7:
+        raise ValueError("Each initial wrist pose must have xyz and xyzw quaternion")
     bottle_orientation = (
         0.0, math.sin(bottle_tilt_radians / 2),
         0.0, math.cos(bottle_tilt_radians / 2),
@@ -49,11 +56,13 @@ def make_bimanual_bottle_scene_cfg(
         )
         left_hand: ArticulationCfg = make_wuji_hand2_beta_cfg(
             "{ENV_REGEX_NS}/LeftHand", side="left", variant=variant,
-            position=(-0.30, 0.0, 0.62), orientation_xyzw=left_orientation,
+            position=left_pose[:3], orientation_xyzw=left_pose[3:7],
+            control_mode=wrist_control_mode,
         )
         right_hand: ArticulationCfg = make_wuji_hand2_beta_cfg(
             "{ENV_REGEX_NS}/RightHand", side="right", variant=variant,
-            position=(0.30, 0.0, 0.62), orientation_xyzw=right_orientation,
+            position=right_pose[:3], orientation_xyzw=right_pose[3:7],
+            control_mode=wrist_control_mode,
         )
         bottle_body: RigidObjectCfg = RigidObjectCfg(
             prim_path="{ENV_REGEX_NS}/Bottle",

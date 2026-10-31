@@ -27,6 +27,7 @@ app = AppLauncher(args).app
 import torch  # noqa: E402
 from dexteroushands_lab.scenes.grasp_init import GraspInitBank  # noqa: E402
 from dexteroushands_lab.scenes.phase0_fixture import BimanualPhase0Fixture  # noqa: E402
+from dexteroushands_lab.scenes.antipodal_contact_analysis import analyze_bottle_contacts  # noqa: E402
 
 
 def orientation_change(q0, q1):
@@ -56,11 +57,16 @@ def run_hold(fixture, sample, *, duration):
     first_step_bottle_velocity_w = None
     first_step_left_velocity_w = None
     count = math.ceil(duration / fixture.dt)
+    opposing_steps = 0
     for step in range(count):
         fixture.step()
+        bottle_pose = fixture.bottle.data.root_pose_w.torch[0].detach().cpu().tolist()
+        points_now = fixture.monitor.raw_contact_points(0, fixture.dt)
+        opposing_steps += int(analyze_bottle_contacts(points_now, bottle_pose)[
+            "surrounds_bottle_axis"])
         if step == 0:
             initial_contact_summary = copy.deepcopy(fixture.monitor.summary(0))
-            initial_contact_points = fixture.monitor.raw_contact_points(0, fixture.dt)
+            initial_contact_points = points_now
             first_step_bottle_velocity_w = fixture.bottle.data.root_vel_w.torch[
                 0].detach().cpu().tolist()
             first_step_left_velocity_w = fixture.left.data.root_vel_w.torch[
@@ -85,6 +91,7 @@ def run_hold(fixture, sample, *, duration):
             "first_step_bottle_velocity_w": first_step_bottle_velocity_w,
             "first_step_left_velocity_w": first_step_left_velocity_w,
             "initial_min_separation_m": min(separations) if separations else None,
+            "opposing_contact_coverage_ratio": opposing_steps / count,
             "bottle_trajectory": trajectory,
             "initial_geometry": initial_geometry, "finite": True}
 
@@ -92,13 +99,10 @@ def run_hold(fixture, sample, *, duration):
 def pass_hold(result, *, require_right=True):
     contacts = result["contact_summary"]
     separation = result["initial_min_separation_m"]
-    left_bodies = contacts.get("left_bottle", {}).get("bodies", {})
-    digits = {name.split("|")[-1].split("_")[1]
-              for name, data in left_bodies.items() if data["samples"] * result["dt_s"] >= 0.05}
     return (result["duration_s"] >= 1.0 and result["bottle_displacement_m"] < 0.02
             and result["bottle_rotation_rad"] < math.radians(10)
             and separation is not None and separation >= -0.002
-            and "thumb" in digits and len(digits - {"thumb"}) >= 2
+            and result["opposing_contact_coverage_ratio"] > 0.8
             and result["correct_contact_ratios"]["left_bottle"] > 0.8
             and (not require_right or result["correct_contact_ratios"]["right_cap"] > 0.8)
             and contacts.get("bottle_ground", {}).get("contact_ratio", 0.0) == 0.0
@@ -155,6 +159,8 @@ def main():
                     "max_peak_force_guard_n": args.max_peak_force,
                     "initial_min_separation_m": hold["initial_min_separation_m"],
                     "max_initial_penetration_guard_m": 0.002,
+                    "opposing_contact_coverage_ratio": hold[
+                        "opposing_contact_coverage_ratio"],
                     "left_thumb_contact_time_s": max(
                         (data["samples"] * fixture.dt for name, data in
                          contacts["left_bottle"]["bodies"].items() if "|l_thumb_" in name),

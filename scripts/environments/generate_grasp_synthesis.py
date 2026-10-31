@@ -17,10 +17,19 @@ from isaaclab.app import AppLauncher
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--reach_scan", type=Path, required=True)
 parser.add_argument("--candidate_count", type=int, default=3)
+parser.add_argument("--proposal_index", type=int,
+                    help="Run one reproducible proposal by its original index")
+parser.add_argument("--control_mode", choices=("floating_wrench_pd", "fixed_wrist",
+                                               "pose_command_wrist"),
+                    default="floating_wrench_pd")
 parser.add_argument("--radius", type=float, default=None,
                     help="Select one radius from a multi-radius reach scan")
 parser.add_argument("--fixed_support", action="store_true",
                     help="Use a removable world fixed joint only during synthesis")
+parser.add_argument("--start_at_goal", action="store_true",
+                    help="Use a collision-checked preshape at the goal wrist pose for contact comparison")
+parser.add_argument("--visualize_grasp", action="store_true",
+                    help="GUI markers for live fingertip sites, bottle axis, contacts and normals")
 parser.add_argument("--strong_wrist", action="store_true",
                     help="Use bounded 80 N / 8 Nm wrist pose gains for contact search")
 parser.add_argument("--wrist_torque", type=float,
@@ -44,6 +53,12 @@ from dexteroushands_lab.scenes.phase0_fixture import BimanualPhase0Fixture  # no
 
 
 def main():
+    if args.control_mode != "floating_wrench_pd" and (
+        args.strong_wrist or args.wrist_torque is not None or
+        args.wrist_kp_rotation is not None or args.wrist_kd_rotation is not None or
+        args.pose_compensation
+    ):
+        raise ValueError("Wrench PD gain options are only valid in floating_wrench_pd mode")
     proposals = json.loads(args.reach_scan.read_text())
     if isinstance(proposals, list):
         matching = [item for item in proposals if args.radius is None or
@@ -51,6 +66,14 @@ def main():
         if not matching:
             raise ValueError("Requested radius is absent from reach scan")
         proposals = matching[0]
+    selected = proposals["best"]
+    if args.proposal_index is not None:
+        selected = [item for item in selected if item["index"] == args.proposal_index]
+        if len(selected) != 1:
+            raise ValueError("Requested proposal index is absent or not unique")
+    selected = selected[:args.candidate_count]
+    if (args.control_mode == "fixed_wrist" or args.start_at_goal) and len(selected) != 1:
+        raise ValueError("A fixed-wrist fixture has one authored wrist anchor per run")
     from dexteroushands_lab.assets.bottle import BottleConfig
     from dexteroushands_lab.assets.wrist_6dof import WristLimits
     config = BottleConfig(bottle_radius=proposals["radius_m"])
@@ -72,15 +95,28 @@ def main():
             kd_rotation=(args.wrist_kd_rotation if args.wrist_kd_rotation is not None
                          else defaults.kd_rotation),
         )
+    fixed_pose = None
+    if args.control_mode == "fixed_wrist" or args.start_at_goal:
+        q = selected[0]["wrist_quaternion_wxyz"]
+        fixed_pose = (*selected[0]["wrist_position_w_m"], q[1], q[2], q[3], q[0])
     fixture = BimanualPhase0Fixture(num_envs=1, device=args.device, config=config,
                                     include_hand_hand=False,
                                     wrist_limits=wrist_limits,
-                                    temporary_bottle_support=args.fixed_support)
+                                    temporary_bottle_support=args.fixed_support,
+                                    control_mode=args.control_mode,
+                                    left_initial_pose=fixed_pose)
+    if args.visualize_grasp and args.headless:
+        raise ValueError("Grasp markers require a GUI run")
+    visualizer = None
+    if args.visualize_grasp:
+        from dexteroushands_lab.scenes.grasp_visualization import GraspDebugMarkers
+        visualizer = GraspDebugMarkers()
     synth = GraspSynthesisFixture(fixture, SynthesisLimits(
         close_s=args.close_s, settle_s=args.settle_s),
-                                  pose_compensation=args.pose_compensation)
+                                  pose_compensation=args.pose_compensation,
+                                  visualizer=visualizer)
     records = []
-    for proposal in proposals["best"][:args.candidate_count]:
+    for proposal in selected:
         q = proposal["wrist_quaternion_wxyz"]
         wrist = (*proposal["wrist_position_w_m"], q[1], q[2], q[3], q[0])
         joints = tuple(proposal["joints_rad"][name]
@@ -89,7 +125,8 @@ def main():
         preshape = (tuple(preshape[name] for name in fixture.specs[0].joint_names)
                     if preshape is not None else None)
         result = synth.run_left(wrist_goal=wrist, joint_goal=joints,
-                                seed=proposal["index"], pregrasp_joints=preshape)
+                                seed=proposal["index"], pregrasp_joints=preshape,
+                                start_at_goal=args.start_at_goal)
         record = {**result, "candidate": asdict(result["candidate"])
                   if result["candidate"] is not None else None,
                   "reach_proposal_index": proposal["index"],
@@ -112,6 +149,7 @@ def main():
               "fixture": "bounded_support_then_gravity_on_release",
               "support_kind": "temporary_world_fixed_joint" if args.fixed_support
                               else "bounded_bottle_wrench",
+              "wrist_control_mode": args.control_mode,
               "wrist_limits": vars(wrist_limits) if wrist_limits else "default",
               "pose_compensation": args.pose_compensation,
               "results": records}

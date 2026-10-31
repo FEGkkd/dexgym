@@ -94,6 +94,45 @@ class ThreadCoupler:
         self._sliding = False
         self._detached = False
 
+    def snapshot_state(self) -> dict[str, float | bool | None]:
+        """Capture the actual engaged angle, stick and axial reference at an episode boundary."""
+        return {
+            "last_wrapped_rad": self._last_wrapped,
+            "theta_unwrapped_rad": self._theta,
+            "initial_theta_rad": self._initial_theta,
+            "initial_axial_m": self._initial_axial,
+            "stick_reference_rad": self._stick_reference,
+            "sliding": self._sliding,
+            "detached": self._detached,
+        }
+
+    def restore_state(self, snapshot: dict, bottle_pos, bottle_quat,
+                      cap_pos, cap_quat) -> ThreadState:
+        """Restore a measured state without re-zeroing thread travel or breakaway."""
+        keys = ("last_wrapped_rad", "theta_unwrapped_rad", "initial_theta_rad",
+                "initial_axial_m", "stick_reference_rad", "sliding", "detached")
+        if not isinstance(snapshot, dict) or any(key not in snapshot for key in keys):
+            raise ValueError("Incomplete thread coupler snapshot")
+        if snapshot["detached"] is not False or not isinstance(snapshot["sliding"], bool):
+            raise ValueError("Reset snapshots must describe an engaged cap")
+        values = [snapshot[key] for key in keys[:5]]
+        if any(not isinstance(value, (int, float)) or not math.isfinite(value)
+               for value in values):
+            raise ValueError("Thread coupler snapshot has nonfinite state")
+        self.reset()
+        self._last_wrapped = float(snapshot["last_wrapped_rad"])
+        self._theta = float(snapshot["theta_unwrapped_rad"])
+        self._initial_theta = float(snapshot["initial_theta_rad"])
+        self._initial_axial = float(snapshot["initial_axial_m"])
+        self._stick_reference = float(snapshot["stick_reference_rad"])
+        self._sliding = snapshot["sliding"]
+        state = self.observe(bottle_pos, bottle_quat, cap_pos, cap_quat)
+        if (abs(state.theta_unwrapped -
+                (snapshot["theta_unwrapped_rad"] - snapshot["initial_theta_rad"])) > 1e-4):
+            self.reset()
+            raise ValueError("Thread snapshot angle disagrees with cap pose")
+        return state
+
     def reset_from_pose(
         self, bottle_pos, bottle_quat, cap_pos, cap_quat,
         *, initial_angle_unwrapped: float = 0.0,

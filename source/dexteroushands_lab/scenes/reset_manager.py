@@ -19,7 +19,8 @@ class BimanualResetManager:
     """Restore physical and episode-local state in selected environments."""
 
     def __init__(self, scene, specs, left_controllers, right_controllers,
-                 thread_couplers, thread_joints, contact_monitor):
+                 thread_couplers, thread_joints, contact_monitor,
+                 control_mode: str = "floating_wrench_pd"):
         self.scene = scene
         self.specs = specs
         self.controllers = (left_controllers, right_controllers)
@@ -27,11 +28,17 @@ class BimanualResetManager:
         self.joints = thread_joints
         self.contact_monitor = contact_monitor
         self.num_envs = len(thread_couplers)
+        self.control_mode = control_mode
         if not (len(left_controllers) == len(right_controllers) == len(thread_joints)
                 == self.num_envs):
             raise ValueError("Reset manager requires one controller/coupler/joint per environment")
         self.init_valid = [False] * self.num_envs
         self.sample_seed = [None] * self.num_envs
+        self.fixed_anchors = (
+            (scene["left_hand"].data.root_pose_w.torch.detach().cpu().tolist(),
+             scene["right_hand"].data.root_pose_w.torch.detach().cpu().tolist())
+            if control_mode == "fixed_wrist" else None
+        )
 
     def reset(self, env_ids: Sequence[int], init_samples: Sequence[GraspInitSample]) -> None:
         import torch
@@ -42,17 +49,27 @@ class BimanualResetManager:
             raise ValueError("Provide exactly one init sample for each distinct environment")
         if any(env < 0 or env >= self.num_envs for env in ids):
             raise IndexError("Reset environment index out of range")
-        for sample in samples:
+        for env, sample in zip(ids, samples):
+            sample_mode = sample.metadata.get("wrist_control_mode")
+            if sample_mode is not None and sample_mode != self.control_mode:
+                raise ValueError("Init sample wrist control mode differs from fixture")
+            if self.control_mode == "fixed_wrist":
+                origin = self.scene.env_origins[env].detach().cpu().tolist()
+                for side, hand in enumerate((sample.left, sample.right)):
+                    pose = hand.root_pose
+                    anchored = self.fixed_anchors[side][env]
+                    position = [pose[i] + origin[i] for i in range(3)]
+                    if (math.dist(position, anchored[:3]) > 2e-4
+                            or abs(sum(a*b for a, b in zip(pose[3:7],
+                                                             anchored[3:7]))) < 0.999999):
+                        raise ValueError("Fixed-wrist sample differs from the authored root anchor")
             if (sample.metadata.get("asset_variant") != self.specs[0].variant
                     or sample.metadata.get("left_joint_order") != list(self.specs[0].joint_names)
                     or sample.metadata.get("right_joint_order") != list(self.specs[1].joint_names)
                     or sample.metadata.get("left_usd_sha256") != self.specs[0].usd_sha256
                     or sample.metadata.get("right_usd_sha256") != self.specs[1].usd_sha256):
                 raise ValueError("Init sample asset identity or canonical joint order mismatch")
-            if (sample.metadata.get("bottle_parameters") != asdict(self.couplers[0].config)
-                    or not math.isclose(sample.thread_initial_engagement_m,
-                                        self.couplers[0].config.initial_engagement,
-                                        abs_tol=1e-9)):
+            if sample.metadata.get("bottle_parameters") != asdict(self.couplers[0].config):
                 raise ValueError("Init sample bottle profile or thread engagement mismatch")
             for state in (sample.left, sample.right, sample.bottle, sample.cap):
                 if (len(state.root_pose) != 7 or len(state.root_velocity) != 6
@@ -74,13 +91,21 @@ class BimanualResetManager:
                         > 1e-3):
                     raise ValueError("Init sample wrist target quaternion is not unit length")
             probe = ThreadCoupler(self.couplers[0].config)
-            thread = probe.reset_from_pose(
-                sample.bottle.root_pose[:3], sample.bottle.root_pose[3:7],
-                sample.cap.root_pose[:3], sample.cap.root_pose[3:7],
-                initial_angle_unwrapped=sample.thread_initial_angle_rad,
-            )
-            if abs(thread.axial - self.couplers[0].config.cap_initial_z) > 1e-4:
-                raise ValueError("Init sample cap axial position does not match the D6 engagement")
+            snapshot = sample.metadata.get("thread_coupler_state")
+            restore_kwargs = (sample.bottle.root_pose[:3], sample.bottle.root_pose[3:7],
+                              sample.cap.root_pose[:3], sample.cap.root_pose[3:7])
+            thread = (probe.restore_state(snapshot, *restore_kwargs) if snapshot is not None
+                      else probe.reset_from_pose(
+                          *restore_kwargs,
+                          initial_angle_unwrapped=sample.thread_initial_angle_rad))
+            expected_engagement = (self.couplers[0].config.initial_engagement -
+                                   (thread.axial - self.couplers[0].config.cap_initial_z))
+            if (not math.isfinite(sample.thread_initial_engagement_m)
+                    or not 0 <= expected_engagement <= self.couplers[0].config.cap_height
+                    or not math.isclose(sample.thread_initial_engagement_m,
+                                        expected_engagement, abs_tol=1e-4)
+                    or abs(thread.theta_unwrapped - sample.thread_initial_angle_rad) > 1e-4):
+                raise ValueError("Init sample cap engagement or thread angle mismatch")
         if not ids:
             return
         env_tensor = torch.tensor(ids, device=self.scene["bottle_body"].device, dtype=torch.long)
@@ -138,11 +163,15 @@ class BimanualResetManager:
                     pose[:3], pose[3:7], target_pos=target_position,
                     target_quat=target[3:7],
                 )
-            self.couplers[env].reset_from_pose(
-                bottle_pose[index][:3], bottle_pose[index][3:7],
-                cap_pose[index][:3], cap_pose[index][3:7],
-                initial_angle_unwrapped=samples[index].thread_initial_angle_rad,
-            )
+            restore_kwargs = (bottle_pose[index][:3], bottle_pose[index][3:7],
+                              cap_pose[index][:3], cap_pose[index][3:7])
+            snapshot = samples[index].metadata.get("thread_coupler_state")
+            if snapshot is not None:
+                self.couplers[env].restore_state(snapshot, *restore_kwargs)
+            else:
+                self.couplers[env].reset_from_pose(
+                    *restore_kwargs,
+                    initial_angle_unwrapped=samples[index].thread_initial_angle_rad)
             self.joints[env].GetJointEnabledAttr().Set(True)
             self.joints[env].CreateCollisionEnabledAttr(False)
             self.init_valid[env] = samples[index].validated

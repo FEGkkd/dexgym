@@ -7,7 +7,6 @@ empty bank is a valid result when no candidate passes the hold and ablation.
 from __future__ import annotations
 
 import argparse
-import copy
 from dataclasses import replace
 import itertools
 import json
@@ -32,6 +31,7 @@ app = AppLauncher(args).app
 import torch  # noqa: E402
 from dexteroushands_lab.scenes.grasp_init import GraspInitBank  # noqa: E402
 from dexteroushands_lab.scenes.phase0_fixture import BimanualPhase0Fixture  # noqa: E402
+from dexteroushands_lab.scenes.antipodal_contact_analysis import analyze_bottle_contacts  # noqa: E402
 
 
 def relocate(hand, dx, dy):
@@ -55,17 +55,19 @@ def evaluate(fixture, sample, duration):
     fixture.reset_manager.reset([0], [sample])
     start = fixture.bottle.data.root_pose_w.torch[0].detach().clone()
     steps = math.ceil(duration / fixture.dt)
-    initial_summary = None
+    initial_points = None
+    coverage_steps = 0
     for step in range(steps):
         fixture.step()
+        points = fixture.monitor.raw_contact_points(0, fixture.dt)
+        pose = fixture.bottle.data.root_pose_w.torch[0].detach().cpu().tolist()
+        coverage_steps += int(analyze_bottle_contacts(points, pose)[
+            "surrounds_bottle_axis"])
         if step == 0:
-            initial_summary = copy.deepcopy(fixture.monitor.summary(0))
+            initial_points = points
     end = fixture.bottle.data.root_pose_w.torch[0].detach()
     contacts = fixture.monitor.summary(0)
-    separations = [detail["minimum_separation_m"]
-                   for data in initial_summary.values()
-                   for detail in data["bodies"].values()
-                   if detail["minimum_separation_m"] is not None]
+    separations = [item["separation_m"] for item in initial_points]
     dot = float(torch.dot(end[3:7], start[3:7]).abs().clamp(max=1))
     return {"duration_s": steps * fixture.dt,
             "displacement_m": float(torch.linalg.vector_norm(end[:3] - start[:3])),
@@ -73,6 +75,7 @@ def evaluate(fixture, sample, duration):
             "left_ratio": contacts.get("left_bottle", {}).get("contact_ratio", 0),
             "right_ratio": contacts.get("right_cap", {}).get("contact_ratio", 0),
             "ground_ratio": contacts.get("bottle_ground", {}).get("contact_ratio", 0),
+            "opposing_contact_coverage_ratio": coverage_steps / steps,
             "initial_min_separation_m": min(separations) if separations else None,
             "left_peak_n": contacts.get("left_bottle", {}).get("peak_force_n", 0),
             "right_peak_n": contacts.get("right_cap", {}).get("peak_force_n", 0)}
@@ -144,9 +147,26 @@ def main():
                       and hold["rotation_rad"] < math.radians(10)
                       and hold["left_ratio"] > 0.8 and hold["right_ratio"] > 0.8
                       and left_only["left_ratio"] > 0.8
-                      and hold["ground_ratio"] == 0
-                      and max(hold["left_peak_n"], hold["right_peak_n"]) < 100)
-            record.update({"hold": hold, "left_only": left_only, "passed": passed})
+                      and hold["opposing_contact_coverage_ratio"] > 0.8
+                      and left_only["opposing_contact_coverage_ratio"] > 0.8
+                      and hold["initial_min_separation_m"] is not None
+                      and hold["initial_min_separation_m"] >= -0.002
+                      and left_only["initial_min_separation_m"] is not None
+                      and left_only["initial_min_separation_m"] >= -0.002
+                      and hold["ground_ratio"] == left_only["ground_ratio"] == 0
+                      and max(hold["left_peak_n"], hold["right_peak_n"],
+                              left_only["left_peak_n"]) < 100)
+            replay = evaluate(fixture, sample, args.hold_duration) if passed else None
+            passed = bool(passed and replay is not None and
+                          replay["displacement_m"] < 0.02 and
+                          replay["left_ratio"] > 0.8 and replay["right_ratio"] > 0.8 and
+                          replay["opposing_contact_coverage_ratio"] > 0.8 and
+                          replay["ground_ratio"] == 0 and
+                          replay["initial_min_separation_m"] is not None and
+                          replay["initial_min_separation_m"] >= -0.002 and
+                          max(replay["left_peak_n"], replay["right_peak_n"]) < 100)
+            record.update({"hold": hold, "left_only": left_only,
+                           "replay": replay, "passed": passed})
             if passed:
                 GraspInitBank(args.bank).add(sample.with_validation({
                     "passed": True, "fixture": "gravity_on_no_support",
@@ -159,7 +179,13 @@ def main():
                     "left_only_contact_ratio": left_only["left_ratio"],
                     "ground_contact_ratio": hold["ground_ratio"],
                     "max_contact_peak_n": max(hold["left_peak_n"], hold["right_peak_n"]),
-                    "max_peak_force_guard_n": 100.0}))
+                    "max_peak_force_guard_n": 100.0,
+                    "initial_min_separation_m": hold["initial_min_separation_m"],
+                    "max_initial_penetration_guard_m": 0.002,
+                    "opposing_contact_coverage_ratio": hold[
+                        "opposing_contact_coverage_ratio"],
+                    "support_released": True,
+                    "reset_replay_passed": True}))
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps({"metadata": provenance,
         "search": "bimanual_unsupported", "pip_dip_fraction": 0.75,

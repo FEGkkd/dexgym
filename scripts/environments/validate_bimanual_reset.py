@@ -13,6 +13,8 @@ from isaaclab.app import AppLauncher
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--num_envs", type=int, default=2)
 parser.add_argument("--iterations", type=int, default=100)
+parser.add_argument("--control_mode", choices=("floating_wrench_pd", "pose_command_wrist"),
+                    default="floating_wrench_pd")
 parser.add_argument("--output", type=Path, default=None)
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
@@ -35,7 +37,9 @@ def snapshot(fixture, env):
                         asset.data.joint_pos_target.torch[env].clone()))
         assets.append(row)
     controllers = [(controller[env].initial_pos, controller[env].initial_quat,
-                    controller[env].target_pos, controller[env].target_quat)
+                    controller[env].target_pos, controller[env].target_quat,
+                    getattr(controller[env], "current_pose", None),
+                    getattr(controller[env], "current_velocity", None))
                    for controller in fixture.controllers]
     coupler = fixture.couplers[env]
     coupler_state = tuple(getattr(coupler, name) for name in (
@@ -51,7 +55,8 @@ def unchanged(a, b):
 
 def main():
     fixture = BimanualPhase0Fixture(num_envs=args.num_envs, device=args.device,
-                                    include_hand_hand=False)
+                                    include_hand_hand=False,
+                                    control_mode=args.control_mode)
     samples = [fixture.initializer.generate(mode="near_contact", seed=i)
                for i in range(args.num_envs)]
     fixture.reset_manager.reset(range(args.num_envs), samples)
@@ -121,17 +126,23 @@ def main():
                     or any(not math.isclose(a, b, abs_tol=1e-6)
                            for a, b in zip(controller.target_quat,
                                            state.wrist_target_pose[3:7]))):
-                raise AssertionError("Wrist PD target was not restored")
+                raise AssertionError("Wrist target was not restored")
             hand = fixture.left if side == 0 else fixture.right
             pose = hand.data.root_pose_w.torch[selected].detach().cpu().tolist()
             velocity = hand.data.root_vel_w.torch[selected].detach().cpu().tolist()
-            force, torque = controller.wrench(pose[:3], pose[3:7],
-                                               velocity[:3], velocity[3:6])
-            force_norm = math.sqrt(sum(x * x for x in force))
-            torque_norm = math.sqrt(sum(x * x for x in torque))
+            if args.control_mode == "floating_wrench_pd":
+                force, torque = controller.wrench(pose[:3], pose[3:7],
+                                                   velocity[:3], velocity[3:6])
+                force_norm = math.sqrt(sum(x * x for x in force))
+                torque_norm = math.sqrt(sum(x * x for x in torque))
+            else:
+                force_norm = torque_norm = 0.0
+                if (math.dist(controller.current_pos, pose[:3]) > 1e-6
+                        or any(abs(v) > 1e-12 for v in controller.current_velocity)):
+                    raise AssertionError("Pose wrist trajectory did not reset")
             max_initial_wrist_force = max(max_initial_wrist_force, force_norm)
             if force_norm > 0.001 or torque_norm > 0.001:
-                raise AssertionError("Reset introduced an initial wrist PD impulse")
+                raise AssertionError("Reset introduced an initial wrist impulse")
         coupler = fixture.couplers[selected]
         if (coupler.detached or coupler._sliding
                 or abs(coupler._theta - sample.thread_initial_angle_rad) > 1e-6):
@@ -145,6 +156,7 @@ def main():
             raise AssertionError("Episode validity or provenance did not reset")
         fixture.step()
     result = {"num_envs": args.num_envs, "iterations": args.iterations,
+              "control_mode": args.control_mode,
               "other_env_unchanged": True, "max_bottle_position_reset_error_m": max_pose_error,
               "post_reset_finite": True, "detached_recovered": True,
               "max_root_pose_velocity_error": max_root_error,

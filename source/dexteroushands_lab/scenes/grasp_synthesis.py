@@ -13,6 +13,8 @@ import math
 from dexteroushands_lab.assets.wrist_6dof import _orientation_error
 from dexteroushands_lab.scenes.grasp_init import (BodyInit, HandInit,
                                                   GraspInitSample, _rotate)
+from dexteroushands_lab.scenes.fingertip_sites import FingertipSiteTracker
+from dexteroushands_lab.scenes.antipodal_contact_analysis import analyze_bottle_contacts
 
 
 def _clip(vector, limit):
@@ -30,6 +32,8 @@ class SynthesisLimits:
     start_clearance_m: float = 0.08
     max_penetration_m: float = 0.002
     max_contact_force_n: float = 100.0
+    max_precontact_finger_speed_rad_s: float = 8.5
+    max_finger_speed_rad_s: float = 25.0
     max_support_force_n: float = 10.0
     max_support_torque_nm: float = 0.4
 
@@ -38,12 +42,14 @@ class GraspSynthesisFixture:
     """Drive a single left grasp candidate through a reproducible trajectory."""
 
     def __init__(self, fixture, limits: SynthesisLimits | None = None,
-                 pose_compensation: bool = False):
+                 pose_compensation: bool = False, visualizer=None):
         if fixture.num_envs != 1:
             raise ValueError("Synthesis currently requires exactly one environment")
         self.fixture = fixture
         self.limits = limits or SynthesisLimits()
         self.pose_compensation = pose_compensation
+        self.tip_tracker = FingertipSiteTracker(fixture.left, fixture.specs[0])
+        self.visualizer = visualizer
 
     def _support_wrench(self, target_position):
         bottle = self.fixture.bottle.data
@@ -68,11 +74,10 @@ class GraspSynthesisFixture:
         )
 
     def _contact_snapshot(self):
-        details = [{"body": item["partner_body"],
-                    "separation_m": item["separation_m"],
-                    "normal_force_n": item["normal_force_n"],
-                    "point_w_m": item["point_w_m"],
-                    "normal_w": item["normal_w"]}
+        details = [{**item,
+                    "body": next((body for body in
+                                  (item["source_body"], item["partner_body"])
+                                  if body.startswith("l_")), "unknown")}
                    for item in self.fixture.monitor.raw_contact_points(0, self.fixture.dt)
                    if item["category"] == "left_bottle"]
         minimum = min((item["separation_m"] for item in details), default=None)
@@ -103,16 +108,39 @@ class GraspSynthesisFixture:
         left_vel = f.left.data.root_vel_w.torch[0].detach().cpu().tolist()
         left_joint = f.left.data.joint_pos.torch[0].detach().cpu().tolist()
         left_joint_vel = f.left.data.joint_vel.torch[0].detach().cpu().tolist()
+        left_joint_target = f.left.data.joint_pos_target.torch[0].detach().cpu().tolist()
         applied_joint_torque = f.left.data.applied_torque.torch[0].detach().cpu().tolist()
-        tip_sites = {}
-        for digit in ("thumb", "index_finger", "middle_finger", "ring_finger", "pinky"):
-            name = f"l_{digit}_tip"
-            if name in f.left.body_names:
-                tip_sites[name] = f.left.data.body_link_pose_w.torch[
-                    0, f.left.body_names.index(name), :3].detach().cpu().tolist()
+        bottle_contacts = f.monitor.raw_contact_points(0, f.dt)
+        tips = self.tip_tracker.observe(0, bottle_pose, f.config.bottle_radius,
+                                        bottle_contacts)
+        if self.visualizer is not None:
+            self.visualizer.update(tips, bottle_pose, f.config.bottle_radius,
+                                   f.config.bottle_height, details[:64])
+        coverage = analyze_bottle_contacts(details, bottle_pose)
+        signed_normal_resultant = [0.0, 0.0, 0.0]
+        signed_normal_moment = [0.0, 0.0, 0.0]
+        friction_pairs = {}
+        for item in details:
+            force = [item["signed_normal_force_scalar_n"] * n
+                     for n in item["normal_w"]]
+            arm = [item["point_w_m"][i] - bottle_pose[i] for i in range(3)]
+            moment = (arm[1]*force[2] - arm[2]*force[1],
+                      arm[2]*force[0] - arm[0]*force[2],
+                      arm[0]*force[1] - arm[1]*force[0])
+            signed_normal_resultant = [a+b for a,b in zip(signed_normal_resultant, force)]
+            signed_normal_moment = [a+b for a,b in zip(signed_normal_moment, moment)]
+            if item.get("pair_friction_force_vector_w_n") is not None:
+                friction_pairs[(item["source_path"], item["partner_path"])] = (
+                    item["pair_friction_force_vector_w_n"])
+        limits = {joint.name: joint.usd_drive_max_force for joint in f.specs[0].joints}
+        saturation = sum(abs(torque) >= .99*limits[name] for name, torque in
+                         zip(f.left.joint_names, applied_joint_torque))
+        tip_sites = {item["site_body"]: item["site_position_w_m"]
+                     for item in tips.values()}
         controller = f.controllers[0][0]
-        commanded = controller.wrench(left_pose[:3], left_pose[3:7],
-                                      left_vel[:3], left_vel[3:6])
+        commanded = (controller.wrench(left_pose[:3], left_pose[3:7],
+                                       left_vel[:3], left_vel[3:6])
+                     if hasattr(controller, "wrench") else None)
         composed = f.left.permanent_wrench_composer.out_force_b.torch[
             0, f.root_body_ids[0]].detach().cpu().tolist()
         contact = f.monitor.summary(0).get("left_bottle", {})
@@ -121,7 +149,16 @@ class GraspSynthesisFixture:
                 "left_velocity_w": left_vel, "left_joint_position_rad": left_joint,
                 "left_joint_velocity_rad_s": left_joint_vel,
                 "isaaclab_applied_torque_buffer_nm": applied_joint_torque,
+                "left_joint_position_target_rad": left_joint_target,
+                "left_joint_target_error_rad": [a-b for a,b in
+                                                zip(left_joint_target, left_joint)],
+                "left_joint_torque_near_limit_count": saturation,
+                "reported_signed_normal_resultant_w_n": signed_normal_resultant,
+                "reported_signed_normal_moment_about_bottle_w_nm": signed_normal_moment,
+                "reported_pair_friction_vectors_w_n": list(friction_pairs.values()),
                 "official_tip_sites_w_m": tip_sites,
+                "fingertip_observations": tips,
+                "contact_coverage": coverage,
                 "wrist_target_w": (*controller.target_pos, *controller.target_quat),
                 "wrist_commanded_wrench": commanded,
                 "wrist_composed_force_body": composed,
@@ -154,27 +191,37 @@ class GraspSynthesisFixture:
         cap = body(f.cap)
         thread = f.couplers[0].observe(bottle.root_pose[:3], bottle.root_pose[3:7],
                                        cap.root_pose[:3], cap.root_pose[3:7])
+        engagement = f.config.initial_engagement - (thread.axial - f.config.cap_initial_z)
         return replace(template, left=left, right=right, bottle=bottle, cap=cap,
+                       thread_initial_engagement_m=engagement,
                        thread_initial_angle_rad=thread.theta_unwrapped,
                        source=source,
-                       metadata={**template.metadata, "synthesis": {
+                       metadata={**template.metadata,
+                                 "wrist_control_mode": f.control_mode,
+                                 "thread_coupler_state": f.couplers[0].snapshot_state(),
+                                 "synthesis": {
                            "limits": asdict(self.limits), "support": (
                                "temporary_world_fixed_joint" if f.temporary_support_joint
                                else "bounded_bottle_wrench"),
                            "support_removed_before_acceptance": True}})
 
     def run_left(self, *, wrist_goal, joint_goal, seed: int = 0,
-                 pregrasp_joints=None):
+                 pregrasp_joints=None, start_at_goal: bool = False):
         """Return all measurements and an unvalidated release-state candidate."""
         f, limits = self.fixture, self.limits
         template = f.initializer.generate(mode="stable_pregrasp", seed=seed)
-        start = (wrist_goal[0] - limits.start_clearance_m, *wrist_goal[1:])
+        fixed_wrist = f.control_mode == "fixed_wrist"
+        stationary_start = fixed_wrist or start_at_goal
+        start = (wrist_goal if stationary_start else
+                 (wrist_goal[0] - limits.start_clearance_m, *wrist_goal[1:]))
         opened = tuple(pregrasp_joints) if pregrasp_joints is not None else (0.0,) * 20
         if len(opened) != 20 or len(joint_goal) != 20:
             raise ValueError("Synthesis requires twenty independent finger targets")
         left = replace(template.left, root_pose=start, wrist_target_pose=start,
                        joint_position=opened, joint_target=opened)
-        right_pose = (template.right.root_pose[0] + 0.4, *template.right.root_pose[1:])
+        right_pose = (tuple(float(x) for x in f.right.data.root_pose_w.torch[0])
+                      if fixed_wrist else
+                      (template.right.root_pose[0] + 0.4, *template.right.root_pose[1:]))
         right = replace(template.right, root_pose=right_pose, wrist_target_pose=right_pose,
                         joint_position=opened, joint_target=opened)
         f.reset_manager.reset([0], [replace(template, left=left, right=right)])
@@ -190,6 +237,8 @@ class GraspSynthesisFixture:
         release_sample = None
         release_start_pose = None
         release_initial_separation = None
+        release_coverage_steps = 0
+        release_step_count = 0
         for phase, duration in (("approach", limits.approach_s),
                                 ("close", limits.close_s),
                                 ("settle", limits.settle_s),
@@ -205,7 +254,7 @@ class GraspSynthesisFixture:
             steps = math.ceil(duration / f.dt)
             for step in range(steps):
                 fraction = (step + 1) / steps
-                if phase == "approach":
+                if phase == "approach" and not stationary_start:
                     desired_x = start[0] + fraction*(wrist_goal[0] - start[0])
                     controller = f.controllers[0][0]
                     delta_x = desired_x - controller.target_pos[0]
@@ -234,6 +283,11 @@ class GraspSynthesisFixture:
                                     for vector in support)
                 f.step(bottle_support_wrenches={0: support} if support else None)
                 minimum, details = self._contact_snapshot()
+                if phase == "release":
+                    coverage = analyze_bottle_contacts(
+                        details, f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist())
+                    release_step_count += 1
+                    release_coverage_steps += int(coverage["surrounds_bottle_axis"])
                 if phase == "release" and step == 0:
                     release_initial_separation = minimum
                 contact = f.monitor.summary(0).get("left_bottle", {})
@@ -247,7 +301,17 @@ class GraspSynthesisFixture:
                     abort = f"penetration {minimum:.6f} m in {phase}"
                 if max_force >= limits.max_contact_force_n:
                     abort = f"contact peak {max_force:.3f} N in {phase}"
+                finger_speed = float(f.left.data.joint_vel.torch[0].abs().max())
+                speed_guard = (limits.max_precontact_finger_speed_rad_s
+                               if phase == "approach" and stationary_start
+                               else limits.max_finger_speed_rad_s)
+                if finger_speed > speed_guard:
+                    reason = f"finger speed {finger_speed:.3f} rad/s in {phase}"
+                    abort = f"{abort}; {reason}" if abort else reason
                 if abort:
+                    if not trace or abs(trace[-1]["t_s"] - elapsed) > 1e-12:
+                        trace.append(self._record(elapsed, phase + "_abort",
+                                                  minimum, details, support))
                     break
             if abort:
                 break
@@ -256,6 +320,8 @@ class GraspSynthesisFixture:
         summary = f.monitor.summary(0)
         left = summary.get("left_bottle", {})
         finger_time = self._left_finger_contact_times(left, f.dt)
+        coverage_ratio = (release_coverage_steps / release_step_count
+                          if release_step_count else 0.0)
         if release_start_pose:
             current = f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist()
             dot = min(1.0, abs(sum(a*b for a, b in zip(release_start_pose[3:7],
@@ -270,7 +336,7 @@ class GraspSynthesisFixture:
             and displacement is not None and displacement < 0.02
             and rotation is not None and rotation < math.radians(10)
             and left.get("contact_ratio", 0.0) > 0.8
-            and self._opposition_contact_passed(finger_time)
+            and coverage_ratio > 0.8
             and summary.get("bottle_ground", {}).get("contact_ratio", 0.0) == 0
             and max_force < limits.max_contact_force_n)
         replay = self.replay_left(release_sample) if hold_passed else None
@@ -282,6 +348,7 @@ class GraspSynthesisFixture:
                 "release_initial_min_separation_m": release_initial_separation,
                 "release_contact_ratio": left.get("contact_ratio", 0.0),
                 "release_finger_contact_time_s": finger_time,
+                "release_opposing_contact_coverage_ratio": coverage_ratio,
                 "release_passed": bool(hold_passed),
                 "reset_replay": replay,
                 "contact_summary": summary, "trace": trace,
@@ -300,9 +367,15 @@ class GraspSynthesisFixture:
         first_sep = None
         minimum = None
         trace = []
+        coverage_steps = 0
+        step_count = 0
         for step in range(math.ceil(self.limits.release_s / f.dt)):
             f.step()
             sep, details = self._contact_snapshot()
+            coverage = analyze_bottle_contacts(
+                details, f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist())
+            step_count += 1
+            coverage_steps += int(coverage["surrounds_bottle_axis"])
             if step == 0:
                 first_sep = sep
             if sep is not None:
@@ -318,11 +391,12 @@ class GraspSynthesisFixture:
         left = summary.get("left_bottle", {})
         finger_time = self._left_finger_contact_times(left, f.dt)
         peak_force = left.get("peak_force_n", 0.0)
+        coverage_ratio = coverage_steps / step_count if step_count else 0.0
         return {"passed": first_sep is not None and first_sep >=
                 -self.limits.max_penetration_m and displacement < 0.02 and
                 rotation < math.radians(10) and left.get("contact_ratio", 0.0) > 0.8 and
                 minimum is not None and minimum >= -self.limits.max_penetration_m and
-                self._opposition_contact_passed(finger_time) and
+                coverage_ratio > 0.8 and
                 peak_force < self.limits.max_contact_force_n and
                 summary.get("bottle_ground", {}).get("contact_ratio", 0.0) == 0,
                 "initial_min_separation_m": first_sep,
@@ -331,5 +405,6 @@ class GraspSynthesisFixture:
                 "bottle_rotation_rad": rotation,
                 "left_contact_ratio": left.get("contact_ratio", 0.0),
                 "left_finger_contact_time_s": finger_time,
+                "opposing_contact_coverage_ratio": coverage_ratio,
                 "left_contact_peak_n": peak_force,
                 "contact_summary": summary, "trace": trace}

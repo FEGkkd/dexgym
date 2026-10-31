@@ -68,6 +68,7 @@ def test_bank_round_trip_preserves_full_validated_state(tmp_path):
         "max_initial_penetration_guard_m": 0.002,
         "left_thumb_contact_time_s": 0.4,
         "left_other_finger_count": 2,
+        "opposing_contact_coverage_ratio": 0.9,
         "support_released": True, "reset_replay_passed": True,
     })
     bank = GraspInitBank(tmp_path / "bank.json")
@@ -81,8 +82,7 @@ def test_bank_round_trip_preserves_full_validated_state(tmp_path):
     {"max_initial_penetration_guard_m": 0.005},
     {"max_contact_peak_n": 312.0},
     {"max_peak_force_guard_n": 500.0},
-    {"left_thumb_contact_time_s": 0.0},
-    {"left_other_finger_count": 1},
+    {"opposing_contact_coverage_ratio": 0.1},
     {"support_released": False},
     {"reset_replay_passed": False},
 ])
@@ -100,6 +100,7 @@ def test_bank_rejects_unphysical_or_unreplayed_grasp(overrides):
         "max_initial_penetration_guard_m": 0.002,
         "left_thumb_contact_time_s": 0.4,
         "left_other_finger_count": 2,
+        "opposing_contact_coverage_ratio": 0.9,
         "support_released": True, "reset_replay_passed": True,
     }
     metrics.update(overrides)

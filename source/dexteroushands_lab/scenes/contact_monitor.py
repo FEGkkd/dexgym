@@ -194,12 +194,28 @@ class BimanualContactMonitor:
             forces, points, normals, distances = map(wp.to_torch,
                                                      (forces, points, normals, distances))
             counts, starts = map(wp.to_torch, (counts, starts))
+            try:
+                friction_vectors, _, friction_counts, friction_starts = (
+                    view.get_friction_data(dt=dt))
+                friction_vectors, friction_counts, friction_starts = map(
+                    wp.to_torch, (friction_vectors, friction_counts, friction_starts))
+                friction_counts = friction_counts.reshape(-1)
+                friction_starts = friction_starts.reshape(-1)
+            except (AttributeError, NotImplementedError):
+                friction_vectors = friction_counts = friction_starts = None
             for index, partner in enumerate(filters):
                 category = classify_contact_pair(source, partner)
                 if category is None:
                     continue
                 count = int(counts.reshape(-1)[index].item())
                 start = int(starts.reshape(-1)[index].item())
+                pair_friction = None
+                if friction_counts is not None:
+                    fcount = int(friction_counts[index].item())
+                    if fcount:
+                        fstart = int(friction_starts[index].item())
+                        pair_friction = friction_vectors[fstart:fstart + fcount].sum(dim=0)
+                        pair_friction = pair_friction.detach().cpu().tolist()
                 for point_index in range(start, start + count):
                     result.append({
                         "category": category, "source_path": source,
@@ -208,8 +224,11 @@ class BimanualContactMonitor:
                         "partner_body": partner.rsplit("/", 1)[-1],
                         "point_w_m": points[point_index].detach().cpu().tolist(),
                         "normal_w": normals[point_index].detach().cpu().tolist(),
+                        "signed_normal_force_scalar_n": float(
+                            forces[point_index].reshape(-1)[0]),
                         "separation_m": float(distances.reshape(-1)[point_index]),
                         "normal_force_n": float(forces[point_index].norm()),
+                        "pair_friction_force_vector_w_n": pair_friction,
                     })
         return result
 

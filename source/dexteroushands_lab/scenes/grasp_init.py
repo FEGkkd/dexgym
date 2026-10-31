@@ -118,12 +118,10 @@ class GraspInitSample:
                 or depth_guard <= 0 or depth_guard > 0.002
                 or separation < -depth_guard):
             raise ValueError("Initial contact penetration exceeds the 2 mm hard guard")
-        thumb_time = metrics.get("left_thumb_contact_time_s")
-        other_count = metrics.get("left_other_finger_count")
-        if (not isinstance(thumb_time, (int, float)) or not math.isfinite(thumb_time)
-                or thumb_time < 0.05 or not isinstance(other_count, int)
-                or other_count < 2):
-            raise ValueError("Left grasp lacks thumb and two other finger contacts")
+        coverage = metrics.get("opposing_contact_coverage_ratio")
+        if (not isinstance(coverage, (int, float)) or not math.isfinite(coverage)
+                or not 0.8 < coverage <= 1.0):
+            raise ValueError("Left grasp lacks sustained opposing contact coverage")
         if metrics.get("support_released") is not True:
             raise ValueError("Candidate support must be removed before acceptance")
         if metrics.get("reset_replay_passed") is not True:
