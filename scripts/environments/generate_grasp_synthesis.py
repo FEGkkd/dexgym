@@ -26,10 +26,14 @@ parser.add_argument("--radius", type=float, default=None,
                     help="Select one radius from a multi-radius reach scan")
 parser.add_argument("--fixed_support", action="store_true",
                     help="Use a removable world fixed joint only during synthesis")
+parser.add_argument("--ramp_fixed_support", action="store_true",
+                    help="Release the fixed joint before settle and taper bounded wrench support")
 parser.add_argument("--start_at_goal", action="store_true",
                     help="Use a collision-checked preshape at the goal wrist pose for contact comparison")
 parser.add_argument("--visualize_grasp", action="store_true",
                     help="GUI markers for live fingertip sites, bottle axis, contacts and normals")
+parser.add_argument("--require_power_grasp", action="store_true",
+                    help="Require sustained four-finger sidewall contact opposite the thumb")
 parser.add_argument("--strong_wrist", action="store_true",
                     help="Use bounded 80 N / 8 Nm wrist pose gains for contact search")
 parser.add_argument("--wrist_torque", type=float,
@@ -53,6 +57,8 @@ from dexteroushands_lab.scenes.phase0_fixture import BimanualPhase0Fixture  # no
 
 
 def main():
+    if args.ramp_fixed_support and not args.fixed_support:
+        raise ValueError("--ramp_fixed_support requires --fixed_support")
     if args.control_mode != "floating_wrench_pd" and (
         args.strong_wrist or args.wrist_torque is not None or
         args.wrist_kp_rotation is not None or args.wrist_kd_rotation is not None or
@@ -114,7 +120,9 @@ def main():
     synth = GraspSynthesisFixture(fixture, SynthesisLimits(
         close_s=args.close_s, settle_s=args.settle_s),
                                   pose_compensation=args.pose_compensation,
-                                  visualizer=visualizer)
+                                  visualizer=visualizer,
+                                  require_power_grasp=args.require_power_grasp,
+                                  ramp_fixed_support=args.ramp_fixed_support)
     records = []
     for proposal in selected:
         q = proposal["wrist_quaternion_wxyz"]
@@ -138,6 +146,7 @@ def main():
             "max_force_n": result["maximum_contact_force_n"],
             "bottle_displacement_m": result["bottle_displacement_m"],
             "release_passed": result["release_passed"],
+            "power_grasp_ratio": result["release_power_grasp"]["valid_topology_ratio"],
             "reset_replay_passed": result["reset_replay"] is not None and
                                    result["reset_replay"]["passed"],
             "left_contact_ratio": result["contact_summary"].get(
@@ -147,11 +156,14 @@ def main():
               "right_usd_sha256": fixture.specs[1].usd_sha256,
               "bottle_radius_m": config.bottle_radius, "dt_s": fixture.dt,
               "fixture": "bounded_support_then_gravity_on_release",
-              "support_kind": "temporary_world_fixed_joint" if args.fixed_support
+              "support_kind": "fixed_then_bounded_wrench" if args.ramp_fixed_support
+                              else "temporary_world_fixed_joint" if args.fixed_support
                               else "bounded_bottle_wrench",
               "wrist_control_mode": args.control_mode,
               "wrist_limits": vars(wrist_limits) if wrist_limits else "default",
               "pose_compensation": args.pose_compensation,
+              "required_grasp_topology": (
+                  "cylindrical_power_grasp_v1" if args.require_power_grasp else None),
               "results": records}
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -160,5 +172,11 @@ def main():
 
 try:
     main()
+except Exception:
+    # Isaac Kit can exit from app.close() before Python prints the pending
+    # exception; preserve the actual failure in headless experiment logs.
+    import traceback
+    traceback.print_exc()
+    raise
 finally:
     app.close()

@@ -14,7 +14,8 @@ from dexteroushands_lab.assets.wrist_6dof import _orientation_error
 from dexteroushands_lab.scenes.grasp_init import (BodyInit, HandInit,
                                                   GraspInitSample, _rotate)
 from dexteroushands_lab.scenes.fingertip_sites import FingertipSiteTracker
-from dexteroushands_lab.scenes.antipodal_contact_analysis import analyze_bottle_contacts
+from dexteroushands_lab.scenes.antipodal_contact_analysis import (
+    CylindricalPowerGraspSeries, analyze_bottle_contacts)
 
 
 def _clip(vector, limit):
@@ -43,7 +44,9 @@ class GraspSynthesisFixture:
     """Drive a single left grasp candidate through a reproducible trajectory."""
 
     def __init__(self, fixture, limits: SynthesisLimits | None = None,
-                 pose_compensation: bool = False, visualizer=None):
+                 pose_compensation: bool = False, visualizer=None,
+                 require_power_grasp: bool = False,
+                 ramp_fixed_support: bool = False):
         if fixture.num_envs != 1:
             raise ValueError("Synthesis currently requires exactly one environment")
         self.fixture = fixture
@@ -51,6 +54,14 @@ class GraspSynthesisFixture:
         self.pose_compensation = pose_compensation
         self.tip_tracker = FingertipSiteTracker(fixture.left, fixture.specs[0])
         self.visualizer = visualizer
+        self.require_power_grasp = require_power_grasp
+        if ramp_fixed_support and fixture.temporary_support_joint is None:
+            raise ValueError("A fixed support joint is needed for staged support release")
+        self.ramp_fixed_support = ramp_fixed_support
+
+    def _power_series(self):
+        return CylindricalPowerGraspSeries(
+            bottle_radius_m=self.fixture.config.bottle_radius)
 
     def _support_wrench(self, target_position):
         bottle = self.fixture.bottle.data
@@ -201,10 +212,14 @@ class GraspSynthesisFixture:
                        source=source,
                        metadata={**template.metadata,
                                  "wrist_control_mode": f.control_mode,
+                                 "requested_grasp_topology": (
+                                     "cylindrical_power_grasp_v1"
+                                     if self.require_power_grasp else None),
                                  "thread_coupler_state": f.couplers[0].snapshot_state(),
                                  "synthesis": {
                            "limits": asdict(self.limits), "support": (
                                support_kind if support_kind is not None else
+                               "fixed_then_bounded_wrench" if self.ramp_fixed_support else
                                "temporary_world_fixed_joint" if f.temporary_support_joint
                                else "bounded_bottle_wrench"),
                            "support_removed_before_acceptance": True}})
@@ -250,10 +265,13 @@ class GraspSynthesisFixture:
         release_coverage_steps = 0
         release_frictional_steps = 0
         release_step_count = 0
+        power_series = self._power_series()
         for phase, duration in (("approach", limits.approach_s),
                                 ("close", limits.close_s),
                                 ("settle", limits.settle_s),
                                 ("release", limits.release_s)):
+            if phase == "settle" and self.ramp_fixed_support:
+                f.temporary_support_joint.GetJointEnabledAttr().Set(False)
             if phase == "release":
                 release_sample = self._capture(
                     template, target_joints, "support_assisted_release_start")
@@ -285,7 +303,9 @@ class GraspSynthesisFixture:
                                                    world_rotation_error)
                     controller.command(tuple(.5*x for x in position_error),
                                        tuple(.25*x for x in local_rotation_error))
-                support = (None if phase == "release" or f.temporary_support_joint
+                support = (None if phase == "release" or
+                           (f.temporary_support_joint and
+                            not (self.ramp_fixed_support and phase == "settle"))
                            else self._support_wrench(initial_bottle))
                 if phase == "settle" and support is not None:
                     # Ramp the fixture away before the measured hold. A
@@ -295,8 +315,9 @@ class GraspSynthesisFixture:
                 f.step(bottle_support_wrenches={0: support} if support else None)
                 minimum, details = self._contact_snapshot()
                 if phase == "release":
-                    coverage = self._coverage(
-                        details, f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist())
+                    bottle_pose = f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist()
+                    coverage = self._coverage(details, bottle_pose)
+                    power_series.add(details, bottle_pose)
                     release_step_count += 1
                     release_coverage_steps += int(coverage["surrounds_bottle_axis"])
                     release_frictional_steps += int(coverage["frictional_opposition"])
@@ -358,7 +379,8 @@ class GraspSynthesisFixture:
                      if digit != "thumb"), default=0.0) > 0.8*limits.release_s
             and self._opposition_contact_passed(finger_time)
             and summary.get("bottle_ground", {}).get("contact_ratio", 0.0) == 0
-            and max_force < limits.max_contact_force_n)
+            and max_force < limits.max_contact_force_n
+            and (not self.require_power_grasp or power_series.summary()["passed"]))
         replay = self.replay_left(release_sample) if hold_passed else None
         return {"seed": seed, "wrist_goal": wrist_goal, "joint_goal": joint_goal,
                 "aborted": abort, "minimum_separation_m": min_separation,
@@ -370,6 +392,7 @@ class GraspSynthesisFixture:
                 "release_finger_contact_time_s": finger_time,
                 "release_opposing_contact_coverage_ratio": coverage_ratio,
                 "release_frictional_opposition_ratio": frictional_ratio,
+                "release_power_grasp": power_series.summary(),
                 "release_passed": bool(hold_passed),
                 "reset_replay": replay,
                 "contact_summary": summary, "trace": trace,
@@ -403,11 +426,14 @@ class GraspSynthesisFixture:
         coverage_steps = 0
         frictional_steps = 0
         step_count = 0
+        power_series = self._power_series()
         for step in range(math.ceil(self.limits.release_s / f.dt)):
             f.step()
             sep, details = self._contact_snapshot()
             coverage = self._coverage(
                 details, f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist())
+            power_series.add(details,
+                f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist())
             step_count += 1
             coverage_steps += int(coverage["surrounds_bottle_axis"])
             frictional_steps += int(coverage["frictional_opposition"])
@@ -437,6 +463,7 @@ class GraspSynthesisFixture:
                      if digit != "thumb"), default=0.0) > 0.8*self.limits.release_s and
                 self._opposition_contact_passed(finger_time) and
                 peak_force < self.limits.max_contact_force_n and
+                (not self.require_power_grasp or power_series.summary()["passed"]) and
                 summary.get("bottle_ground", {}).get("contact_ratio", 0.0) == 0,
                 "initial_min_separation_m": first_sep,
                 "minimum_separation_m": minimum,
@@ -446,6 +473,7 @@ class GraspSynthesisFixture:
                 "left_finger_contact_time_s": finger_time,
                 "opposing_contact_coverage_ratio": coverage_ratio,
                 "frictional_opposition_ratio": frictional_ratio,
+                "power_grasp": power_series.summary(),
                 "left_contact_peak_n": peak_force,
                 "wrist_target_offset_xyz_m": tuple(wrist_target_offset_xyz),
                 "contact_summary": summary, "trace": trace}

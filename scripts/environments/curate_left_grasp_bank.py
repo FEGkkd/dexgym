@@ -31,6 +31,23 @@ def validation_metrics(result: dict, output: dict, digest: str) -> dict:
             raise ValueError(f"Asset provenance changed between result and sample: {outer}")
     if output["wrist_control_mode"] != metadata["wrist_control_mode"]:
         raise ValueError("Wrist control mode changed between result and sample")
+    topology = output.get("required_grasp_topology")
+    if topology not in (None, "cylindrical_power_grasp_v1"):
+        raise ValueError(f"Unknown requested grasp topology: {topology}")
+    if topology == "cylindrical_power_grasp_v1":
+        release_power = result.get("release_power_grasp") or {}
+        replay_power = replay.get("power_grasp") or {}
+        if (metadata.get("requested_grasp_topology") != topology or
+                release_power.get("passed") is not True or
+                replay_power.get("passed") is not True):
+            raise ValueError("Left power grasp lacks measured release and replay topology")
+        try:
+            digit_ratios = {name: min(
+                release_power["digit_contact_ratio"][name],
+                replay_power["digit_contact_ratio"][name])
+                for name in ("thumb", "index", "middle", "ring", "pinky")}
+        except (KeyError, TypeError) as exc:
+            raise ValueError("Left power grasp lacks per-digit contact evidence") from exc
     release = result["release_finger_contact_time_s"]
     repeated = replay["left_finger_contact_time_s"]
     times = {digit: min(release.get(digit, 0.0), repeated.get(digit, 0.0))
@@ -40,7 +57,7 @@ def validation_metrics(result: dict, output: dict, digest: str) -> dict:
     ground = max(result["contact_summary"].get("bottle_ground", {}).get(
         "contact_ratio", 0.0), replay["contact_summary"].get(
         "bottle_ground", {}).get("contact_ratio", 0.0))
-    return {
+    metrics = {
         "scope": "left_only", "fixture": "gravity_on_no_support", "passed": True,
         "wrist_control_mode": output["wrist_control_mode"],
         "duration_s": limits["release_s"],
@@ -88,6 +105,14 @@ def validation_metrics(result: dict, output: dict, digest: str) -> dict:
             "contact_ratio": replay["left_contact_ratio"],
         },
     }
+    if topology == "cylindrical_power_grasp_v1":
+        metrics.update({
+            "contact_topology": topology,
+            "power_grasp_release_ratio": release_power["valid_topology_ratio"],
+            "power_grasp_replay_ratio": replay_power["valid_topology_ratio"],
+            "power_grasp_digit_contact_ratio": digit_ratios,
+        })
+    return metrics
 
 
 def curate(paths: list[Path], bank_path: Path) -> list[dict]:

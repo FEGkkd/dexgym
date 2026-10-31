@@ -1,0 +1,502 @@
+{
+  "fixture": "official_Beta1_USD_PhysX_6.0.1",
+  "proposal_index": 9505,
+  "requested_topology": "five_force_bearing_digits_opposed_on_70mm_body",
+  "status": "failed_strict_power_grasp_gate",
+  "geometry_qualified": true,
+  "support": "fixed_then_bounded_wrench_then_none",
+  "release_s": 1.0,
+  "release_passed": false,
+  "reset_replay_not_run_by_synthesis": true,
+  "release_bottle_displacement_m": 6.197641007852621e-05,
+  "release_bottle_rotation_rad": 0.002030632815933309,
+  "minimum_separation_m": -7.021715282462537e-05,
+  "formation_peak_force_n": 56.8637580871582,
+  "release_power_grasp": {
+    "step_count": 500,
+    "valid_topology_ratio": 0.0,
+    "digit_contact_ratio": {
+      "thumb": 1.0,
+      "index": 0.0,
+      "middle": 1.0,
+      "ring": 1.0,
+      "pinky": 0.044
+    },
+    "peak_digit_normal_force_n": {
+      "thumb": 2.485502004623413,
+      "index": 0.0,
+      "middle": 1.0727548599243164,
+      "ring": 0.662614107131958,
+      "pinky": 0.8937408924102783
+    },
+    "passed": false
+  },
+  "diagnostic_file": "phase0f_left_power_physx_diagnostic.json.gz",
+  "candidate_file": "phase0f_left_power_pose_candidate.json",
+  "source_asset_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+  "left_usd_sha256": "8d1b83a6130b64fd759ea3c0720d6b255da8c1e76abe5a4226788183058dbfda",
+  "joint_target_tune": [
+    {
+      "index_delta_abd_rad": 0.0,
+      "pinky_delta_flex_rad": 0.0,
+      "passed": false,
+      "bottle_displacement_m": 0.00013982770937640465,
+      "max_force_n": 2.6372628211975098,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.0,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.0,
+          "middle": 0.998,
+          "ring": 0.998,
+          "pinky": 0.042
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.6372628211975098,
+          "index": 0.0,
+          "middle": 1.5933893918991089,
+          "ring": 1.034079670906067,
+          "pinky": 0.9351150393486023
+        },
+        "passed": false
+      }
+    },
+    {
+      "index_delta_abd_rad": -0.002,
+      "pinky_delta_flex_rad": 0.004,
+      "passed": false,
+      "bottle_displacement_m": 0.0010294305981044768,
+      "max_force_n": 2.752497434616089,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.0,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.0,
+          "middle": 0.956,
+          "ring": 0.966,
+          "pinky": 0.318
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.752497434616089,
+          "index": 0.0,
+          "middle": 1.8775067329406738,
+          "ring": 1.3585690259933472,
+          "pinky": 1.4405051469802856
+        },
+        "passed": false
+      }
+    },
+    {
+      "index_delta_abd_rad": -0.004,
+      "pinky_delta_flex_rad": 0.004,
+      "passed": false,
+      "bottle_displacement_m": 0.0011299031054465888,
+      "max_force_n": 2.7268850803375244,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.0,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.0,
+          "middle": 0.962,
+          "ring": 0.976,
+          "pinky": 0.24
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.7268850803375244,
+          "index": 0.0,
+          "middle": 1.8526610136032104,
+          "ring": 1.3175463676452637,
+          "pinky": 1.802605390548706
+        },
+        "passed": false
+      }
+    },
+    {
+      "index_delta_abd_rad": -0.006,
+      "pinky_delta_flex_rad": 0.004,
+      "passed": false,
+      "bottle_displacement_m": 0.0010679707450885723,
+      "max_force_n": 2.7682571411132812,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.0,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.0,
+          "middle": 0.996,
+          "ring": 0.96,
+          "pinky": 0.472
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.768256902694702,
+          "index": 0.0,
+          "middle": 1.8320140838623047,
+          "ring": 1.1512892246246338,
+          "pinky": 1.9814449548721313
+        },
+        "passed": false
+      }
+    },
+    {
+      "index_delta_abd_rad": -0.008,
+      "pinky_delta_flex_rad": 0.004,
+      "passed": false,
+      "bottle_displacement_m": 0.0008886964139662754,
+      "max_force_n": 2.7183756828308105,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.062,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.094,
+          "middle": 0.954,
+          "ring": 0.948,
+          "pinky": 0.362
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.7183756828308105,
+          "index": 1.3668757677078247,
+          "middle": 1.8386460542678833,
+          "ring": 1.360285073518753,
+          "pinky": 1.937538981437683
+        },
+        "passed": false
+      }
+    }
+  ],
+  "index_only": [
+    {
+      "index_delta_abd_rad": 0.0,
+      "pinky_delta_flex_rad": 0.0,
+      "passed": false,
+      "bottle_displacement_m": 0.00013982770937640465,
+      "max_force_n": 2.6372628211975098,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.0,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.0,
+          "middle": 0.998,
+          "ring": 0.998,
+          "pinky": 0.042
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.6372628211975098,
+          "index": 0.0,
+          "middle": 1.5933893918991089,
+          "ring": 1.034079670906067,
+          "pinky": 0.9351150393486023
+        },
+        "passed": false
+      }
+    },
+    {
+      "index_delta_abd_rad": -0.004,
+      "pinky_delta_flex_rad": 0.0,
+      "passed": false,
+      "bottle_displacement_m": 0.0008235841124205513,
+      "max_force_n": 2.8058793544769287,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.0,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.0,
+          "middle": 0.978,
+          "ring": 0.994,
+          "pinky": 0.528
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.8058793544769287,
+          "index": 0.0,
+          "middle": 1.8158433437347412,
+          "ring": 1.2593793869018555,
+          "pinky": 1.4994300603866577
+        },
+        "passed": false
+      }
+    },
+    {
+      "index_delta_abd_rad": -0.008,
+      "pinky_delta_flex_rad": 0.0,
+      "passed": false,
+      "bottle_displacement_m": 0.0012656478167200956,
+      "max_force_n": 2.761166572570801,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.026,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.03,
+          "middle": 0.954,
+          "ring": 0.996,
+          "pinky": 0.172
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.7611663341522217,
+          "index": 0.8886274099349976,
+          "middle": 1.7988865375518799,
+          "ring": 1.8271231651306152,
+          "pinky": 1.7477924823760986
+        },
+        "passed": false
+      }
+    },
+    {
+      "index_delta_abd_rad": -0.012,
+      "pinky_delta_flex_rad": 0.0,
+      "passed": false,
+      "bottle_displacement_m": 0.0013473075798279325,
+      "max_force_n": 2.740553855895996,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.032,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.156,
+          "middle": 0.984,
+          "ring": 0.99,
+          "pinky": 0.37
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.740553855895996,
+          "index": 1.545654058456421,
+          "middle": 2.0205845832824707,
+          "ring": 1.8035052716732025,
+          "pinky": 0.9939732551574707
+        },
+        "passed": false
+      }
+    },
+    {
+      "index_delta_abd_rad": -0.016,
+      "pinky_delta_flex_rad": 0.0,
+      "passed": false,
+      "bottle_displacement_m": 0.002439308025621907,
+      "max_force_n": 2.8144054412841797,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.006,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.204,
+          "middle": 0.966,
+          "ring": 0.998,
+          "pinky": 0.052
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.814405679702759,
+          "index": 1.8528413772583008,
+          "middle": 2.4041643142700195,
+          "ring": 2.1066116094589233,
+          "pinky": 0.6101929545402527
+        },
+        "passed": false
+      }
+    },
+    {
+      "index_delta_abd_rad": -0.02,
+      "pinky_delta_flex_rad": 0.0,
+      "passed": false,
+      "bottle_displacement_m": 0.002574515708096559,
+      "max_force_n": 3.1006338596343994,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.0,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.182,
+          "middle": 0.972,
+          "ring": 0.994,
+          "pinky": 0.088
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 3.1006336212158203,
+          "index": 1.7814606428146362,
+          "middle": 1.9844685792922974,
+          "ring": 2.2540992498397827,
+          "pinky": 0.21053342521190643
+        },
+        "passed": false
+      }
+    }
+  ],
+  "wrist_y": [
+    {
+      "wrist_y_delta_m": 0.0,
+      "passed": false,
+      "minimum_separation_m": -2.1153160560061224e-05,
+      "bottle_displacement_m": 0.00013982770937640465,
+      "max_force_n": 2.6372628211975098,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.0,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.0,
+          "middle": 0.998,
+          "ring": 0.998,
+          "pinky": 0.042
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.6372628211975098,
+          "index": 0.0,
+          "middle": 1.5933893918991089,
+          "ring": 1.034079670906067,
+          "pinky": 0.9351150393486023
+        },
+        "passed": false
+      }
+    },
+    {
+      "wrist_y_delta_m": -0.0002,
+      "passed": false,
+      "minimum_separation_m": -0.0001706213952274993,
+      "bottle_displacement_m": 0.0009286733965377617,
+      "max_force_n": 2.781680107116699,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.0,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.0,
+          "middle": 0.978,
+          "ring": 0.998,
+          "pinky": 0.456
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.78167986869812,
+          "index": 0.0,
+          "middle": 1.9204474687576294,
+          "ring": 1.2048228979110718,
+          "pinky": 1.5357296466827393
+        },
+        "passed": false
+      }
+    },
+    {
+      "wrist_y_delta_m": -0.0004,
+      "passed": false,
+      "minimum_separation_m": -0.00037741687265224755,
+      "bottle_displacement_m": 0.0010779133380805464,
+      "max_force_n": 2.7315611839294434,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.0,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.0,
+          "middle": 0.97,
+          "ring": 0.996,
+          "pinky": 0.502
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.7315609455108643,
+          "index": 0.0,
+          "middle": 1.8580076694488525,
+          "ring": 1.4185019731521606,
+          "pinky": 1.4670354127883911
+        },
+        "passed": false
+      }
+    },
+    {
+      "wrist_y_delta_m": -0.0006,
+      "passed": false,
+      "minimum_separation_m": -0.0005654820124618709,
+      "bottle_displacement_m": 0.0012300233280053302,
+      "max_force_n": 2.7234346866607666,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.0,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.0,
+          "middle": 0.978,
+          "ring": 0.992,
+          "pinky": 0.444
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.7234344482421875,
+          "index": 0.0,
+          "middle": 1.9236338138580322,
+          "ring": 1.2790930271148682,
+          "pinky": 1.7446876764297485
+        },
+        "passed": false
+      }
+    },
+    {
+      "wrist_y_delta_m": -0.0008,
+      "passed": false,
+      "minimum_separation_m": -0.0007535362965427339,
+      "bottle_displacement_m": 0.0011864203978364614,
+      "max_force_n": 2.7120251655578613,
+      "power_grasp": {
+        "step_count": 500,
+        "valid_topology_ratio": 0.0,
+        "digit_contact_ratio": {
+          "thumb": 1.0,
+          "index": 0.0,
+          "middle": 0.994,
+          "ring": 0.992,
+          "pinky": 0.348
+        },
+        "peak_digit_normal_force_n": {
+          "thumb": 2.7120254039764404,
+          "index": 0.0,
+          "middle": 1.9268221855163574,
+          "ring": 1.1285310983657837,
+          "pinky": 1.9282828569412231
+        },
+        "passed": false
+      }
+    }
+  ],
+  "sampled_physx_contact_locations": {
+    "thumb": {
+      "sampled_frames": 21,
+      "median_angle_deg": -145.53621003837742,
+      "median_axial_m": 0.02411189868646819,
+      "median_radial_m": 0.03496242151093001,
+      "median_separation_m": -4.180204996373504e-06,
+      "peak_normal_force_n": 2.481137990951538
+    },
+    "index": {
+      "sampled_frames": 21,
+      "median_angle_deg": 109.7610952523522,
+      "median_axial_m": 0.022395318668482943,
+      "median_radial_m": 0.03501569383032523,
+      "median_separation_m": 6.161121564218774e-05,
+      "peak_normal_force_n": 0.0
+    },
+    "middle": {
+      "sampled_frames": 21,
+      "median_angle_deg": 51.09836881538306,
+      "median_axial_m": 0.0427717836341498,
+      "median_radial_m": 0.03495553037138,
+      "median_separation_m": -3.8893369946890743e-07,
+      "peak_normal_force_n": 1.0590821504592896
+    },
+    "ring": {
+      "sampled_frames": 21,
+      "median_angle_deg": 57.79395961599624,
+      "median_axial_m": 0.02203822806146251,
+      "median_radial_m": 0.03500195461539837,
+      "median_separation_m": -3.106834185473417e-07,
+      "peak_normal_force_n": 0.6162418127059937
+    },
+    "pinky": {
+      "sampled_frames": 21,
+      "median_angle_deg": 58.4082090755751,
+      "median_axial_m": 0.022237605383836772,
+      "median_radial_m": 0.03499990740381279,
+      "median_separation_m": -2.7602857244346524e-07,
+      "peak_normal_force_n": 0.006840115413069725
+    }
+  }
+}

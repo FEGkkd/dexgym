@@ -106,6 +106,19 @@ def test_left_only_bank_requires_replayed_sustained_physical_contact(tmp_path):
         candidate.with_validation({**metrics, "left_other_contact_time_s": .4})
     with pytest.raises(ValueError, match="penetration guard"):
         candidate.with_validation({**metrics, "minimum_separation_m": -.04})
+    power = {**metrics, "contact_topology": "cylindrical_power_grasp_v1",
+             "power_grasp_release_ratio": 1.0,
+             "power_grasp_replay_ratio": 1.0,
+             "power_grasp_digit_contact_ratio": {
+                 name: 1.0 for name in ("thumb", "index", "middle", "ring", "pinky")}}
+    assert candidate.with_validation(power).validated
+    for missing in ("index", "pinky"):
+        bad = {**power, "power_grasp_digit_contact_ratio": {
+            **power["power_grasp_digit_contact_ratio"], missing: 0.0}}
+        with pytest.raises(ValueError, match="power grasp"):
+            candidate.with_validation(bad)
+    with pytest.raises(ValueError, match="power grasp"):
+        candidate.with_validation({**power, "power_grasp_replay_ratio": .5})
 
 
 def test_radial_bimanual_bank_requires_replay_and_opposed_cap_force():

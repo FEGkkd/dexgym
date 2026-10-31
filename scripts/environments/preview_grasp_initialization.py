@@ -24,6 +24,10 @@ parser.add_argument("--contact_debug", action="store_true",
                     help="Display Isaac Lab contact markers when the visualizer is installed")
 parser.add_argument("--interactive_static", action="store_true",
                     help="Render the initialized pose until the GUI closes, without advancing physics")
+parser.add_argument("--camera_eye", nargs=3, type=float,
+                    default=(0.35, -0.65, 0.78), metavar=("X", "Y", "Z"))
+parser.add_argument("--camera_target", nargs=3, type=float,
+                    default=(0.0, 0.0, 0.55), metavar=("X", "Y", "Z"))
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 app = AppLauncher(args).app
@@ -70,7 +74,7 @@ def main():
             contact_debug=args.contact_debug)
     fixture.reset_manager.reset([0], [sample])
     if not args.headless:
-        fixture.sim.set_camera_view((0.35, -0.65, 0.78), (0.0, 0.0, 0.55))
+        fixture.sim.set_camera_view(args.camera_eye, args.camera_target)
     print("GRASP_PREVIEW_INITIAL " + json.dumps({"mode": sample.mode,
           "seed": sample.seed, "validated": sample.validated,
           "source": sample.source, "asset_variant": sample.metadata["asset_variant"],

@@ -1,0 +1,109 @@
+{
+  "radius_m": 0.035,
+  "source": "official_beta1_MJCF_five_digit_geometry_proposal_only",
+  "best": [
+    {
+      "wrist_position_w_m": [
+        -0.10605844153521958,
+        0.06427083529115138,
+        0.5192387073052115
+      ],
+      "wrist_quaternion_wxyz": [
+        0.47914799002196157,
+        0.3930801314164499,
+        -0.7407378154447505,
+        -0.25925412766951206
+      ],
+      "joints_rad": {
+        "l_thumb_cmc_flex": 0.6632896153959369,
+        "l_thumb_cmc_abd": -0.43745727809912516,
+        "l_thumb_mcp": 0.06980886677006684,
+        "l_thumb_ip": -0.024000462165923567,
+        "l_index_finger_mcp_flex": 1.4606320406619162,
+        "l_index_finger_mcp_abd": 0.5081290733097771,
+        "l_index_finger_pip": 0.5109582614325269,
+        "l_index_finger_dip": -0.5226002304903076,
+        "l_middle_finger_mcp_flex": 0.5812496116863599,
+        "l_middle_finger_mcp_abd": -0.09236062169130023,
+        "l_middle_finger_pip": 0.5231732252335898,
+        "l_middle_finger_dip": -0.5718180354299328,
+        "l_ring_finger_mcp_flex": 0.746519990559898,
+        "l_ring_finger_mcp_abd": -0.2715823520124707,
+        "l_ring_finger_pip": 0.39237576663044704,
+        "l_ring_finger_dip": -0.05698849828771468,
+        "l_pinky_mcp_flex": 0.712955253419779,
+        "l_pinky_mcp_abd": -0.30167757104934456,
+        "l_pinky_pip": 0.6395287286960809,
+        "l_pinky_dip": 0.6697357243386273
+      },
+      "contact": {
+        "thumb": {
+          "distance_m": -0.0020000146581129275,
+          "body": "l_thumb_distal",
+          "angle_deg": -144.08293629619087,
+          "axial_m": 0.02323394702219983
+        },
+        "index_finger": {
+          "distance_m": -0.001300402325604073,
+          "body": "l_index_finger_distal",
+          "angle_deg": 101.42926394781679,
+          "axial_m": -0.013390244728862688
+        },
+        "middle_finger": {
+          "distance_m": -0.0009932657882354438,
+          "body": "l_middle_finger_distal",
+          "angle_deg": 50.76892349376856,
+          "axial_m": 0.042261027321544464
+        },
+        "ring_finger": {
+          "distance_m": -0.0015102762423277929,
+          "body": "l_ring_finger_distal",
+          "angle_deg": 57.92077215276126,
+          "axial_m": 0.02301523260556082
+        },
+        "pinky": {
+          "distance_m": -0.001992774544702179,
+          "body": "l_pinky_distal",
+          "angle_deg": 73.85090373387412,
+          "axial_m": -0.0055864054594170764
+        }
+      },
+      "minimum_self_distance_m": 0.0023378255142725373,
+      "minimum_bottle_distance_m": -0.0020000146581129275,
+      "thumb_group_dot": -0.8025679852269663,
+      "long_group_spread_deg": 36.90340624512395,
+      "objective_norm": 0.3468511920216118,
+      "index": 9505,
+      "optimizer_nfev": 14,
+      "optimizer_status": 3,
+      "source": "official_beta1_MJCF_directed_index_distal_geometry_proposal_only",
+      "pregrasp_joints_rad": {
+        "l_thumb_cmc_flex": 0.594859491717691,
+        "l_thumb_cmc_abd": -0.4005497112422336,
+        "l_thumb_mcp": 0.014909504036209349,
+        "l_thumb_ip": -0.18538533392495554,
+        "l_index_finger_mcp_flex": 1.5067750451242627,
+        "l_index_finger_mcp_abd": 0.6282632831328417,
+        "l_index_finger_pip": 0.4902792383931095,
+        "l_index_finger_dip": -0.20856568219503696,
+        "l_middle_finger_mcp_flex": 0.5037114446005047,
+        "l_middle_finger_mcp_abd": -0.04825841892282935,
+        "l_middle_finger_pip": 0.5254080191089266,
+        "l_middle_finger_dip": -0.6011884327084556,
+        "l_ring_finger_mcp_flex": 0.6530408748083482,
+        "l_ring_finger_mcp_abd": -0.2350558843258747,
+        "l_ring_finger_pip": 0.43854323804370704,
+        "l_ring_finger_dip": -0.011772680949846397,
+        "l_pinky_mcp_flex": 0.6477792732981063,
+        "l_pinky_mcp_abd": -0.26280857535481345,
+        "l_pinky_pip": 0.5984393942408304,
+        "l_pinky_dip": 0.6277487242368048
+      },
+      "minimum_mjcf_convex_distance_m": -0.0020000146581129275
+    }
+  ],
+  "asset_variant": "hand2_beta1_left",
+  "official_source_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+  "left_usd_sha256": "8d1b83a6130b64fd759ea3c0720d6b255da8c1e76abe5a4226788183058dbfda",
+  "status": "MJCF geometry proposal; PhysX hold and five-digit force gate assessed separately"
+}

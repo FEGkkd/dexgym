@@ -218,6 +218,24 @@ class GraspInitSample:
                 raise ValueError("Left-only grasp lacks a third supporting digit")
             if self.metadata.get("wrist_control_mode") != metrics.get("wrist_control_mode"):
                 raise ValueError("Validation wrist mode does not match captured state")
+            topology = metrics.get("contact_topology")
+            if topology not in (None, "cylindrical_power_grasp_v1"):
+                raise ValueError(f"Unknown left grasp contact topology: {topology}")
+            if topology == "cylindrical_power_grasp_v1":
+                for key in ("power_grasp_release_ratio", "power_grasp_replay_ratio"):
+                    ratio = metrics.get(key)
+                    if (not isinstance(ratio, (int, float)) or not math.isfinite(ratio)
+                            or ratio < .8 or ratio > 1.):
+                        raise ValueError(f"Left power grasp lacks sustained topology: {key}")
+                digit_ratios = metrics.get("power_grasp_digit_contact_ratio")
+                if (not isinstance(digit_ratios, dict) or any(
+                    name not in digit_ratios or
+                    not isinstance(digit_ratios[name], (int, float)) or
+                    not math.isfinite(digit_ratios[name]) or
+                    not .8 <= digit_ratios[name] <= 1.
+                    for name in ("thumb", "index", "middle", "ring", "pinky")
+                )):
+                    raise ValueError("Left power grasp requires all five sustained digits")
         if metrics.get("support_released") is not True:
             raise ValueError("Candidate support must be removed before acceptance")
         if metrics.get("reset_replay_passed") is not True:

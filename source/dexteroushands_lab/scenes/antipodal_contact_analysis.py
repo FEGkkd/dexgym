@@ -87,3 +87,126 @@ def analyze_bottle_contacts(contacts, bottle_pose_xyzw, *, force_floor_n=0.05,
             "total_normal_force_n":total,
             "reported_pair_axial_friction_sum_n":axial_friction,
             "contact_distribution":accepted}
+
+
+def analyze_cylindrical_power_grasp(
+    contacts, bottle_pose_xyzw, *, bottle_radius_m=.035,
+    force_floor_n=.05, axial_band_m=(-.025, .065),
+    radius_tolerance_m=.003, max_four_finger_half_arc_rad=math.radians(70),
+    min_thumb_opposition_rad=math.radians(130),
+):
+    """Classify *measured* bottle-body contact as a five-digit power grasp.
+
+    The four long digits must share one cylinder side and the thumb must lie
+    across its axis. Only force-bearing sidewall points in the middle/upper
+    body band count. This is a topology check, not a stability certificate;
+    unsupported PhysX hold and Reset replay remain separate requirements.
+    """
+    if bottle_radius_m <= 0 or force_floor_n < 0 or radius_tolerance_m <= 0:
+        raise ValueError("Power-grasp radius, force and tolerance must be positive")
+    if not axial_band_m[0] < axial_band_m[1]:
+        raise ValueError("Power-grasp axial band must be increasing")
+    names = ("thumb", "index", "middle", "ring", "pinky")
+    body_terms = ("_thumb_", "_index_finger_", "_middle_finger_",
+                  "_ring_finger_", "_pinky_")
+    center = bottle_pose_xyzw[:3]
+    axes = tuple(_rotate(bottle_pose_xyzw[3:7], axis) for axis in
+                 ((1., 0., 0.), (0., 1., 0.), (0., 0., 1.)))
+    vectors = {name: [0., 0.] for name in names}
+    digit_forces = {name: 0. for name in names}
+    loaded_force = 0.
+    total_force = 0.
+    for contact in contacts:
+        if contact.get("category") != "left_bottle":
+            continue
+        force = float(contact["normal_force_n"])
+        if not math.isfinite(force) or force < force_floor_n:
+            continue
+        total_force += force
+        offset = tuple(float(a)-float(b) for a,b in
+                       zip(contact["point_w_m"], center))
+        local = tuple(sum(a*b for a,b in zip(offset, axis)) for axis in axes)
+        radius = math.hypot(*local[:2])
+        if (not axial_band_m[0] <= local[2] <= axial_band_m[1]
+                or abs(radius-bottle_radius_m) > radius_tolerance_m):
+            continue
+        loaded_force += force
+        body = next((part for part in
+                     (contact.get("source_body", ""), contact.get("partner_body", ""))
+                     if part.startswith("l_")), "")
+        digit = next((name for name, term in zip(names, body_terms)
+                      if term in body), None)
+        if digit is None:
+            continue  # The palm may assist, but cannot stand in for a digit.
+        unit = (local[0]/radius, local[1]/radius)
+        vectors[digit][0] += force*unit[0]
+        vectors[digit][1] += force*unit[1]
+        digit_forces[digit] += force
+    loaded_digits = [name for name in names if digit_forces[name] > 0]
+    units = {}
+    for name in loaded_digits:
+        length = math.hypot(*vectors[name])
+        if length > 1e-8:
+            units[name] = tuple(component/length for component in vectors[name])
+    four = names[1:]
+    four_mean = tuple(sum(units[name][axis] for name in four)/4
+                      for axis in (0, 1)) if all(name in units for name in four) else None
+    mean_length = math.hypot(*four_mean) if four_mean is not None else 0.
+    group_direction = (tuple(component/mean_length for component in four_mean)
+                       if mean_length > 1e-8 else None)
+    spread = (max(math.acos(max(-1., min(1., sum(
+        units[name][i]*group_direction[i] for i in (0, 1))))) for name in four)
+              if group_direction is not None else None)
+    opposition = (math.acos(max(-1., min(1., sum(
+        units["thumb"][i]*group_direction[i] for i in (0, 1)))))
+                  if group_direction is not None and "thumb" in units else None)
+    in_band_ratio = loaded_force/total_force if total_force else 0.
+    passed = (len(units) == 5 and spread is not None and opposition is not None
+              and spread <= max_four_finger_half_arc_rad
+              and opposition >= min_thumb_opposition_rad
+              and in_band_ratio >= .8)
+    return {"valid_topology": passed,
+            "loaded_digits": loaded_digits,
+            "digit_normal_force_n": digit_forces,
+            "in_band_sidewall_force_ratio": in_band_ratio,
+            "four_finger_half_arc_rad": spread,
+            "thumb_to_four_finger_angle_rad": opposition,
+            "four_finger_direction_xy": group_direction,
+            "axial_band_m": axial_band_m}
+
+
+class CylindricalPowerGraspSeries:
+    """Measure sustained, five-digit opposed contact over an unassisted hold."""
+
+    def __init__(self, *, required_ratio=.8, bottle_radius_m=.035):
+        if not 0 < required_ratio <= 1:
+            raise ValueError("Power-grasp contact ratio must lie in (0, 1]")
+        self.required_ratio = required_ratio
+        self.bottle_radius_m = bottle_radius_m
+        self.steps = 0
+        self.valid_steps = 0
+        self.digit_steps = {name: 0 for name in
+                            ("thumb", "index", "middle", "ring", "pinky")}
+        self.peak_digit_force_n = {name: 0. for name in self.digit_steps}
+
+    def add(self, contacts, bottle_pose_xyzw):
+        observation = analyze_cylindrical_power_grasp(
+            contacts, bottle_pose_xyzw, bottle_radius_m=self.bottle_radius_m)
+        self.steps += 1
+        self.valid_steps += int(observation["valid_topology"])
+        for name in self.digit_steps:
+            force = observation["digit_normal_force_n"][name]
+            self.digit_steps[name] += int(force > 0.)
+            self.peak_digit_force_n[name] = max(self.peak_digit_force_n[name], force)
+        return observation
+
+    def summary(self):
+        ratios = {name: count/self.steps if self.steps else 0.
+                  for name, count in self.digit_steps.items()}
+        valid_ratio = self.valid_steps/self.steps if self.steps else 0.
+        return {"step_count": self.steps,
+                "valid_topology_ratio": valid_ratio,
+                "digit_contact_ratio": ratios,
+                "peak_digit_normal_force_n": self.peak_digit_force_n.copy(),
+                "passed": self.steps > 0 and valid_ratio >= self.required_ratio
+                and all(ratio >= self.required_ratio for ratio in ratios.values())}
