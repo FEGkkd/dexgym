@@ -7,6 +7,7 @@ import pytest
 
 from dexteroushands_lab.assets.bottle import BottleConfig
 from dexteroushands_lab.scenes.grasp_init import BimanualGraspInitializer, GraspInitBank
+from dexteroushands_lab.scenes.grasp_synthesis import GraspSynthesisFixture
 
 
 def _spec(side):
@@ -104,3 +105,16 @@ def test_bank_rejects_unphysical_or_unreplayed_grasp(overrides):
     metrics.update(overrides)
     with pytest.raises(ValueError):
         sample.with_validation(metrics)
+
+
+def test_replay_opposition_requires_thumb_and_two_other_fingers():
+    contacts = {"bodies": {
+        "Bottle|l_thumb_distal": {"samples": 30},
+        "l_index_finger_distal|Bottle": {"samples": 26},
+        "Bottle|l_middle_finger_distal": {"samples": 25},
+        "Bottle|l_ring_finger_distal": {"samples": 1},
+    }}
+    times = GraspSynthesisFixture._left_finger_contact_times(contacts, 0.002)
+    assert GraspSynthesisFixture._opposition_contact_passed(times)
+    assert not GraspSynthesisFixture._opposition_contact_passed(
+        {"thumb": 0.06, "index": 0.052, "middle": 0.049})

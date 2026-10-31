@@ -78,6 +78,23 @@ class GraspSynthesisFixture:
         minimum = min((item["separation_m"] for item in details), default=None)
         return minimum, sorted(details, key=lambda x: x["separation_m"])
 
+    @staticmethod
+    def _left_finger_contact_times(contact_summary, dt):
+        times = {}
+        for pair, detail in contact_summary.get("bodies", {}).items():
+            hand_body = next((body for body in pair.split("|") if body.startswith("l_")), None)
+            if hand_body is None:
+                continue
+            digit = hand_body.split("_")[1]
+            times[digit] = max(times.get(digit, 0.0), detail["samples"] * dt)
+        return times
+
+    @staticmethod
+    def _opposition_contact_passed(times):
+        return (times.get("thumb", 0.0) >= 0.05 and
+                sum(time >= 0.05 for digit, time in times.items()
+                    if digit != "thumb") >= 2)
+
     def _record(self, t, phase, minimum, details, support):
         f = self.fixture
         bottle_pose = f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist()
@@ -238,13 +255,7 @@ class GraspSynthesisFixture:
         displacement = math.dist(release_start_pose[:3], bottle_end) if release_start_pose else None
         summary = f.monitor.summary(0)
         left = summary.get("left_bottle", {})
-        bodies = left.get("bodies", {})
-        finger_time = {}
-        for name, detail in bodies.items():
-            body = name.split("|")[-1]
-            digit = body.split("_")[1]
-            finger_time[digit] = max(finger_time.get(digit, 0.0),
-                                     detail["samples"] * f.dt)
+        finger_time = self._left_finger_contact_times(left, f.dt)
         if release_start_pose:
             current = f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist()
             dot = min(1.0, abs(sum(a*b for a, b in zip(release_start_pose[3:7],
@@ -259,9 +270,7 @@ class GraspSynthesisFixture:
             and displacement is not None and displacement < 0.02
             and rotation is not None and rotation < math.radians(10)
             and left.get("contact_ratio", 0.0) > 0.8
-            and finger_time.get("thumb", 0.0) >= 0.05
-            and len([key for key, value in finger_time.items()
-                     if key != "thumb" and value >= 0.05]) >= 2
+            and self._opposition_contact_passed(finger_time)
             and summary.get("bottle_ground", {}).get("contact_ratio", 0.0) == 0
             and max_force < limits.max_contact_force_n)
         replay = self.replay_left(release_sample) if hold_passed else None
@@ -307,13 +316,20 @@ class GraspSynthesisFixture:
         rotation = 2.0 * math.acos(dot)
         summary = f.monitor.summary(0)
         left = summary.get("left_bottle", {})
+        finger_time = self._left_finger_contact_times(left, f.dt)
+        peak_force = left.get("peak_force_n", 0.0)
         return {"passed": first_sep is not None and first_sep >=
                 -self.limits.max_penetration_m and displacement < 0.02 and
                 rotation < math.radians(10) and left.get("contact_ratio", 0.0) > 0.8 and
+                minimum is not None and minimum >= -self.limits.max_penetration_m and
+                self._opposition_contact_passed(finger_time) and
+                peak_force < self.limits.max_contact_force_n and
                 summary.get("bottle_ground", {}).get("contact_ratio", 0.0) == 0,
                 "initial_min_separation_m": first_sep,
                 "minimum_separation_m": minimum,
                 "bottle_displacement_m": displacement,
                 "bottle_rotation_rad": rotation,
                 "left_contact_ratio": left.get("contact_ratio", 0.0),
+                "left_finger_contact_time_s": finger_time,
+                "left_contact_peak_n": peak_force,
                 "contact_summary": summary, "trace": trace}
