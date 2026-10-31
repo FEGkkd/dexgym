@@ -22,6 +22,8 @@ parser.add_argument("--steps", type=int, default=500,
                     help="Maximum physics steps in headless or GUI preview")
 parser.add_argument("--contact_debug", action="store_true",
                     help="Display Isaac Lab contact markers when the visualizer is installed")
+parser.add_argument("--interactive_static", action="store_true",
+                    help="Render the initialized pose until the GUI closes, without advancing physics")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 app = AppLauncher(args).app
@@ -67,11 +69,21 @@ def main():
                               sample.validation.get("scope") == "bimanual",
             contact_debug=args.contact_debug)
     fixture.reset_manager.reset([0], [sample])
+    if not args.headless:
+        fixture.sim.set_camera_view((0.35, -0.65, 0.78), (0.0, 0.0, 0.55))
     print("GRASP_PREVIEW_INITIAL " + json.dumps({"mode": sample.mode,
           "seed": sample.seed, "validated": sample.validated,
           "source": sample.source, "asset_variant": sample.metadata["asset_variant"],
           "wrist_control_mode": fixture.control_mode}),
           flush=True)
+    if args.interactive_static:
+        if args.headless:
+            raise ValueError("--interactive_static requires a GUI")
+        fixture.step()  # Refresh live contact points once, then hold this visual state.
+        print("GRASP_PREVIEW_STATIC_GUI_READY", flush=True)
+        while app.is_running():
+            fixture.sim.render()
+        return
     for step in range(args.steps):
         if not app.is_running():
             break

@@ -148,10 +148,14 @@ PYTHONPATH=source "$ISAACLAB_PYTHON" scripts/environments/curate_bimanual_grasp_
   --bank /tmp/rechecked_bimanual_bank.json
 ./scripts/run_isaaclab.sh scripts/environments/preview_grasp_initialization.py \
   --bank docs/assets/phase0e_bimanual_grasp_init_bank.json \
-  --sample_index 0 --contact_debug --steps 500
+  --viz kit --sample_index 0 --contact_debug --interactive_static
 ```
 
-Add `--headless` to the preview command for CI or remove it for a GUI. For a
+`--interactive_static` advances one physics step to refresh contacts, then
+renders without further physics advancement until the window closes. It is
+only a visual inspection mode; use the recorded 1 s dynamic runs for physical
+acceptance. For headless inspection omit `--interactive_static` and use
+`--headless --steps 500`. For a
 later physical snapshot use `derive_bimanual_grasp_snapshot.py` with
 `--parent_result`, `--parent_fresh_replay`, `--offset_s 0.2` and `--output`;
 for the 5° orientation experiment use `validate_bimanual_world_yaw.py` with
