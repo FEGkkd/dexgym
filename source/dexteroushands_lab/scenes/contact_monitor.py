@@ -174,6 +174,45 @@ class BimanualContactMonitor:
     def reset(self, env_ids) -> None:
         self.history.reset(env_ids)
 
+    def raw_contact_points(self, env_id: int, dt: float) -> list[dict]:
+        """Return unfiltered PhysX points, including zero-force penetration.
+
+        ContactHistory intentionally applies a force floor to classify usable
+        contact. Geometry acceptance must inspect *all* reported signed
+        distances, or an initially interpenetrating zero-force pair can pass.
+        Normals are returned in the backend convention without reorientation.
+        """
+        import warp as wp
+
+        if not 0 <= env_id < self.history.num_envs or dt <= 0:
+            raise ValueError("Invalid environment or physics time step")
+        result = []
+        for env, source, filters, view in self._views:
+            if env != env_id:
+                continue
+            forces, points, normals, distances, counts, starts = view.get_contact_data(dt=dt)
+            forces, points, normals, distances = map(wp.to_torch,
+                                                     (forces, points, normals, distances))
+            counts, starts = map(wp.to_torch, (counts, starts))
+            for index, partner in enumerate(filters):
+                category = classify_contact_pair(source, partner)
+                if category is None:
+                    continue
+                count = int(counts.reshape(-1)[index].item())
+                start = int(starts.reshape(-1)[index].item())
+                for point_index in range(start, start + count):
+                    result.append({
+                        "category": category, "source_path": source,
+                        "partner_path": partner,
+                        "source_body": source.rsplit("/", 1)[-1],
+                        "partner_body": partner.rsplit("/", 1)[-1],
+                        "point_w_m": points[point_index].detach().cpu().tolist(),
+                        "normal_w": normals[point_index].detach().cpu().tolist(),
+                        "separation_m": float(distances.reshape(-1)[point_index]),
+                        "normal_force_n": float(forces[point_index].norm()),
+                    })
+        return result
+
     def update_after_physics_step(self, dt: float) -> None:
         import warp as wp
 

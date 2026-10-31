@@ -23,11 +23,12 @@ from dexteroushands_lab.scenes.reset_manager import BimanualResetManager
 class BimanualPhase0Fixture:
     def __init__(self, *, num_envs: int, device: str, config: BottleConfig | None = None,
                  variant: str = "beta1", contact_debug: bool = False,
-                 include_hand_hand: bool = True):
+                 include_hand_hand: bool = True, wrist_limits=None,
+                 temporary_bottle_support: bool = False):
         import isaaclab.sim as sim_utils
         from isaaclab.scene import InteractiveScene
         from isaaclab_physx.physics import PhysxManager
-        from pxr import UsdPhysics
+        from pxr import Gf, Sdf, UsdPhysics
 
         self.config = config or BottleConfig()
         self.num_envs = num_envs
@@ -47,6 +48,17 @@ class BimanualPhase0Fixture:
         self.joints = [author_thread_joint(
             self.sim.stage, f"/World/envs/env_{env}", self.config)
             for env in range(num_envs)]
+        self.temporary_support_joint = None
+        if temporary_bottle_support:
+            if num_envs != 1:
+                raise ValueError("Temporary grasp support is only implemented for env 0")
+            support = UsdPhysics.FixedJoint.Define(
+                self.sim.stage, "/World/envs/env_0/TemporaryGraspSupport")
+            support.CreateBody1Rel().SetTargets([Sdf.Path("/World/envs/env_0/Bottle")])
+            support.CreateLocalPos0Attr(Gf.Vec3f(0, 0, 0.5))
+            support.CreateLocalPos1Attr(Gf.Vec3f(0, 0, 0))
+            support.CreateJointEnabledAttr(True)
+            self.temporary_support_joint = support
         for side in ("LeftHand", "RightHand"):
             path = f"/World/envs/env_0/{side}/root_joint"
             joint = UsdPhysics.Joint(self.sim.stage.GetPrimAtPath(path))
@@ -60,7 +72,7 @@ class BimanualPhase0Fixture:
             if set(hand.joint_names) != set(spec.joint_names):
                 raise RuntimeError(f"Pinned {spec.side} joint order mismatch")
         self.controllers = tuple(
-            [Wrist6DoFController(tuple(p[:3]), tuple(p[3:7]))
+            [Wrist6DoFController(tuple(p[:3]), tuple(p[3:7]), limits=wrist_limits)
              for p in hand.data.root_pose_w.torch.detach().cpu().tolist()]
             for hand in (self.left, self.right)
         )
@@ -79,8 +91,12 @@ class BimanualPhase0Fixture:
             self.right.body_names.index(self.specs[1].root_body),
         )
 
-    def step(self):
-        """Advance exactly one physical step without any root-pose writes."""
+    def step(self, *, bottle_support_wrenches=None):
+        """Advance one step; optional bounded bottle wrench is synthesis-only.
+
+        ``bottle_support_wrenches`` maps environment IDs to world-frame
+        ``(force, torque)`` pairs. The normal hold fixture passes none.
+        """
         import torch
 
         def rows(asset, field):
@@ -106,7 +122,11 @@ class BimanualPhase0Fixture:
             if coupled.state.detached:
                 self.joints[env].GetJointEnabledAttr().Set(False)
                 self.joints[env].CreateCollisionEnabledAttr(True)
-            wrenches[2].append((coupled.bottle_force, coupled.bottle_torque))
+            support = (bottle_support_wrenches or {}).get(env, ((0.0,) * 3, (0.0,) * 3))
+            wrenches[2].append((
+                tuple(a + b for a, b in zip(coupled.bottle_force, support[0])),
+                tuple(a + b for a, b in zip(coupled.bottle_torque, support[1])),
+            ))
             wrenches[3].append((coupled.cap_force, coupled.cap_torque))
             thread_states.append(coupled.state)
         for index, (asset, pairs) in enumerate(zip(self.assets, wrenches)):
@@ -115,6 +135,17 @@ class BimanualPhase0Fixture:
             if index < 2:
                 kwargs["body_ids"] = torch.tensor([self.root_body_ids[index]],
                                                    device=asset.device, dtype=torch.long)
+                # A translation wrench applied at the wrist link COM creates
+                # an unintended moment about the whole free hand's COM. Place
+                # the force at the mass-weighted articulation COM; the
+                # composer adds the equivalent root-link moment in PhysX.
+                masses = asset.data.body_mass.torch
+                body_com = asset.data.body_com_pos_w.torch
+                articulation_com = (
+                    (body_com * masses[..., None]).sum(dim=1) /
+                    masses.sum(dim=1)[:, None]
+                )
+                kwargs["positions"] = articulation_com[:, None, :]
             asset.permanent_wrench_composer.add_forces_and_torques_index(
                 forces=torch.tensor([pair[0] for pair in pairs], device=asset.device,
                                     dtype=torch.float32)[:, None, :],

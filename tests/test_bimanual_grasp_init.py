@@ -63,7 +63,44 @@ def test_bank_round_trip_preserves_full_validated_state(tmp_path):
         "left_contact_ratio": 0.9, "right_contact_ratio": 0.9,
         "left_only_contact_ratio": 0.9, "ground_contact_ratio": 0.0,
         "max_contact_peak_n": 5.0, "max_peak_force_guard_n": 100.0,
+        "initial_min_separation_m": -0.001,
+        "max_initial_penetration_guard_m": 0.002,
+        "left_thumb_contact_time_s": 0.4,
+        "left_other_finger_count": 2,
+        "support_released": True, "reset_replay_passed": True,
     })
     bank = GraspInitBank(tmp_path / "bank.json")
     bank.add(sample)
     assert bank.load() == (sample,)
+
+
+@pytest.mark.parametrize("overrides", [
+    {"initial_min_separation_m": -0.04},
+    {"initial_min_separation_m": -0.0021},
+    {"max_initial_penetration_guard_m": 0.005},
+    {"max_contact_peak_n": 312.0},
+    {"max_peak_force_guard_n": 500.0},
+    {"left_thumb_contact_time_s": 0.0},
+    {"left_other_finger_count": 1},
+    {"support_released": False},
+    {"reset_replay_passed": False},
+])
+def test_bank_rejects_unphysical_or_unreplayed_grasp(overrides):
+    init = BimanualGraspInitializer(BottleConfig(), _spec("left"), _spec("right"))
+    sample = init.generate(mode="stable_pregrasp", seed=17)
+    metrics = {
+        "fixture": "gravity_on_no_support", "passed": True,
+        "duration_s": 1.0, "hold_displacement_m": 0.01,
+        "hold_rotation_rad": 0.05, "left_only_displacement_m": 0.01,
+        "left_contact_ratio": 0.9, "right_contact_ratio": 0.9,
+        "left_only_contact_ratio": 0.9, "ground_contact_ratio": 0.0,
+        "max_contact_peak_n": 5.0, "max_peak_force_guard_n": 100.0,
+        "initial_min_separation_m": -0.001,
+        "max_initial_penetration_guard_m": 0.002,
+        "left_thumb_contact_time_s": 0.4,
+        "left_other_finger_count": 2,
+        "support_released": True, "reset_replay_passed": True,
+    }
+    metrics.update(overrides)
+    with pytest.raises(ValueError):
+        sample.with_validation(metrics)

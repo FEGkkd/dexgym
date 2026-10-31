@@ -41,7 +41,8 @@ def run_hold(fixture, sample, *, duration):
     for hand, spec, obj, key in ((fixture.left, fixture.specs[0], fixture.bottle, "left"),
                                   (fixture.right, fixture.specs[1], fixture.cap, "right")):
         tips = {}
-        for body in spec.fingertip_bodies:
+        for body in (f"{'l' if spec.side == 'left' else 'r'}_{digit}_tip"
+                     for digit in ("thumb", "index_finger", "middle_finger", "ring_finger", "pinky")):
             point = hand.data.body_link_pose_w.torch[0, hand.body_names.index(body), :3]
             tips[body] = {"position_w_m": point.detach().cpu().tolist(),
                           "center_distance_m": float(torch.linalg.vector_norm(
@@ -51,11 +52,19 @@ def run_hold(fixture, sample, *, duration):
                                  "tips": tips}
     trajectory = []
     initial_contact_summary = None
+    initial_contact_points = None
+    first_step_bottle_velocity_w = None
+    first_step_left_velocity_w = None
     count = math.ceil(duration / fixture.dt)
     for step in range(count):
         fixture.step()
         if step == 0:
             initial_contact_summary = copy.deepcopy(fixture.monitor.summary(0))
+            initial_contact_points = fixture.monitor.raw_contact_points(0, fixture.dt)
+            first_step_bottle_velocity_w = fixture.bottle.data.root_vel_w.torch[
+                0].detach().cpu().tolist()
+            first_step_left_velocity_w = fixture.left.data.root_vel_w.torch[
+                0].detach().cpu().tolist()
         pose = fixture.bottle.data.root_pose_w.torch[0].detach().clone()
         if step % max(1, count // 20) == 0 or step == count - 1:
             trajectory.append({"t_s": (step + 1) * fixture.dt,
@@ -65,28 +74,36 @@ def run_hold(fixture, sample, *, duration):
     summary = fixture.monitor.summary(0)
     displacement = float(torch.linalg.vector_norm(end[:3] - start[:3]))
     tilt = orientation_change(start[3:7], end[3:7])
-    separations = [detail["minimum_separation_m"]
-                   for data in initial_contact_summary.values()
-                   for detail in data["bodies"].values()
-                   if detail["minimum_separation_m"] is not None]
-    return {"duration_s": count * fixture.dt,
+    separations = [item["separation_m"] for item in initial_contact_points]
+    return {"duration_s": count * fixture.dt, "dt_s": fixture.dt,
             "bottle_displacement_m": displacement, "bottle_rotation_rad": tilt,
             "correct_contact_ratios": {role: summary.get(role, {}).get("contact_ratio", 0.0)
                                        for role in ("left_bottle", "right_cap")},
             "contact_summary": summary, "initial_contact_summary": initial_contact_summary,
+            "initial_raw_contact_points": sorted(initial_contact_points,
+                                                 key=lambda item: item["separation_m"])[:30],
+            "first_step_bottle_velocity_w": first_step_bottle_velocity_w,
+            "first_step_left_velocity_w": first_step_left_velocity_w,
             "initial_min_separation_m": min(separations) if separations else None,
             "bottle_trajectory": trajectory,
             "initial_geometry": initial_geometry, "finite": True}
 
 
-def pass_hold(result):
+def pass_hold(result, *, require_right=True):
     contacts = result["contact_summary"]
+    separation = result["initial_min_separation_m"]
+    left_bodies = contacts.get("left_bottle", {}).get("bodies", {})
+    digits = {name.split("|")[-1].split("_")[1]
+              for name, data in left_bodies.items() if data["samples"] * result["dt_s"] >= 0.05}
     return (result["duration_s"] >= 1.0 and result["bottle_displacement_m"] < 0.02
             and result["bottle_rotation_rad"] < math.radians(10)
-            and min(result["correct_contact_ratios"].values()) > 0.8
+            and separation is not None and separation >= -0.002
+            and "thumb" in digits and len(digits - {"thumb"}) >= 2
+            and result["correct_contact_ratios"]["left_bottle"] > 0.8
+            and (not require_right or result["correct_contact_ratios"]["right_cap"] > 0.8)
             and contacts.get("bottle_ground", {}).get("contact_ratio", 0.0) == 0.0
             and all(contacts.get(role, {}).get("peak_force_n", 0.0) < args.max_peak_force
-                    for role in ("left_bottle", "right_cap")))
+                    for role in (("left_bottle", "right_cap") if require_right else ("left_bottle",))))
 
 
 def main():
@@ -109,10 +126,13 @@ def main():
             wrist_target_pose=(sample.right.wrist_target_pose[0] + 0.35,
                                *sample.right.wrist_target_pose[1:])))
         ablation = run_hold(fixture, left_only, duration=args.duration)
-        passed = (pass_hold(hold) and ablation["bottle_displacement_m"] < 0.02
+        passed = (pass_hold(hold) and pass_hold(ablation, require_right=False)
+                  and ablation["bottle_displacement_m"] < 0.02
                   and ablation["correct_contact_ratios"]["left_bottle"] > 0.8)
+        replay = run_hold(fixture, sample, duration=args.duration) if passed else None
+        passed = passed and replay is not None and pass_hold(replay)
         results["seeds"][str(seed)] = {"sample": asdict(sample), "hold": hold, "left_only": ablation,
-                                       "passed": passed}
+                                       "replay": replay, "passed": passed}
         print("GRASP_SEED_RESULT " + json.dumps({"seed": seed,
               "hold_displacement_m": hold["bottle_displacement_m"],
               "left_contact_ratio": hold["correct_contact_ratios"]["left_bottle"],
@@ -133,6 +153,17 @@ def main():
                     "left_only_contact_ratio": ablation["correct_contact_ratios"]["left_bottle"],
                     "ground_contact_ratio": contacts.get("bottle_ground", {}).get("contact_ratio", 0.0),
                     "max_peak_force_guard_n": args.max_peak_force,
+                    "initial_min_separation_m": hold["initial_min_separation_m"],
+                    "max_initial_penetration_guard_m": 0.002,
+                    "left_thumb_contact_time_s": max(
+                        (data["samples"] * fixture.dt for name, data in
+                         contacts["left_bottle"]["bodies"].items() if "|l_thumb_" in name),
+                        default=0.0),
+                    "left_other_finger_count": len({
+                        name.split("|")[-1].split("_")[1]
+                        for name, data in contacts["left_bottle"]["bodies"].items()
+                        if "|l_thumb_" not in name and data["samples"] * fixture.dt >= 0.05}),
+                    "support_released": True, "reset_replay_passed": True,
                     "max_contact_peak_n": max(contacts.get(role, {}).get("peak_force_n", 0.0)
                                               for role in ("left_bottle", "right_cap"))}))
     # A separate no-contact episode checks gravity and absence of hidden support.

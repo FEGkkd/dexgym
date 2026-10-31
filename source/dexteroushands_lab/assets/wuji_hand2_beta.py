@@ -16,6 +16,8 @@ import xml.etree.ElementTree as ET
 
 SOURCE_TAG = "v2026.9.11"
 SOURCE_COMMIT = "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95"
+BETA1_TIP_MARKER_MASS_KG = 0.001
+BETA1_TIP_MARKER_INERTIA_KG_M2 = 1.0e-6
 USD_SHA256 = {
     ("beta1", "left"): "8d1b83a6130b64fd759ea3c0720d6b255da8c1e76abe5a4226788183058dbfda",
     ("beta1", "right"): "22600d3f0aeb185552bb6eeb454b5b7199966a60fc844d4a4b5e4791ec77f0ed",
@@ -249,7 +251,7 @@ def spawn_floating_wuji_hand2_beta(prim_path, cfg, translation=None, orientation
     The override lives on the scene layer; upstream USD bytes remain intact.
     """
     import isaaclab.sim as sim_utils
-    from pxr import Usd, UsdPhysics, UsdShade
+    from pxr import Gf, Usd, UsdPhysics, UsdShade
 
     # The upstream colliders are instanced. Isaac Lab's recursive material
     # binding cannot author on instance proxies; bind to rigid-body ancestors.
@@ -268,6 +270,23 @@ def spawn_floating_wuji_hand2_beta(prim_path, cfg, translation=None, orientation
     UsdPhysics.Joint(fixed_joint).CreateJointEnabledAttr(False)
     fixed_joint.RemoveAPI(UsdPhysics.ArticulationRootAPI)
     UsdPhysics.ArticulationRootAPI.Apply(wrist)
+    # The official Beta 1 USD contains five fixed fingertip marker links with
+    # mass=0. PhysX 5.4 interprets each zero as its fallback 1 kg body mass.
+    # Their total then exceeds the physical hand by 5 kg and a 40 N wrist
+    # cannot even hover. Author a small positive marker mass in the scene
+    # layer; keep upstream USD, physical links, and collision meshes intact.
+    if Path(cfg.usd_path).name == "wujihand2.usd":
+        prefix = "l" if side == "left" else "r"
+        for digit in ("thumb", "index_finger", "middle_finger", "ring_finger", "pinky"):
+            tip = prim.GetChild(f"{prefix}_{digit}_tip")
+            if not tip or not tip.HasAPI(UsdPhysics.RigidBodyAPI):
+                raise RuntimeError(f"Official zero-mass tip marker missing: {prefix}_{digit}_tip")
+            mass_api = UsdPhysics.MassAPI(tip)
+            if mass_api.GetMassAttr().Get() != 0.0:
+                raise RuntimeError(f"Official tip marker mass changed: {tip.GetPath()}")
+            mass_api.CreateMassAttr(BETA1_TIP_MARKER_MASS_KG)
+            inertia = BETA1_TIP_MARKER_INERTIA_KG_M2
+            mass_api.CreateDiagonalInertiaAttr(Gf.Vec3f(inertia, inertia, inertia))
     if cfg.articulation_props is not None:
         sim_utils.modify_articulation_root_properties(
             str(wrist.GetPath()), cfg.articulation_props.replace(fix_root_link=None)

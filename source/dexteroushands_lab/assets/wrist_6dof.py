@@ -63,13 +63,13 @@ class WristLimits:
     max_target_rotation: float = 1.2  # rad from initial wrist orientation
     min_height: float = 0.10  # world z, m
     max_force: float = 40.0  # N
-    max_torque: float = 2.0  # N m
+    max_torque: float = 2.0  # N m; measured stable with Beta 1 marker-mass proxy
     max_linear_speed: float = 0.50  # m/s, soft resistance threshold
     max_angular_speed: float = 3.0  # rad/s, soft resistance threshold
     kp_position: float = 1200.0  # N/m
     kd_position: float = 80.0  # N s/m
-    kp_rotation: float = 8.0  # N m/rad
-    kd_rotation: float = 1.2  # N m s/rad
+    kp_rotation: float = 4.0  # N m/rad
+    kd_rotation: float = 0.05  # N m s/rad
 
     def __post_init__(self):
         if any(value <= 0 for key, value in vars(self).items() if key != "min_height"):

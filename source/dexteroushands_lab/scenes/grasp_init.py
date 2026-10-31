@@ -15,6 +15,7 @@ import random
 from typing import Literal
 
 from dexteroushands_lab.assets.bottle import BottleConfig
+from dexteroushands_lab.assets.wuji_hand2_beta import BETA1_TIP_MARKER_MASS_KG
 from dexteroushands_lab.assets.wrist_6dof import _quat_mul, _quat_normalize
 
 
@@ -107,8 +108,26 @@ class GraspInitSample:
         guard = metrics.get("max_peak_force_guard_n")
         if (not isinstance(peak, (int, float)) or not isinstance(guard, (int, float))
                 or not math.isfinite(peak) or not math.isfinite(guard)
-                or guard <= 0 or peak < 0 or peak >= guard):
+                or guard <= 0 or guard > 100.0 or peak < 0 or peak >= guard):
             raise ValueError("Contact peak failed the configured finite force guard")
+        separation = metrics.get("initial_min_separation_m")
+        depth_guard = metrics.get("max_initial_penetration_guard_m")
+        if (not isinstance(separation, (int, float))
+                or not isinstance(depth_guard, (int, float))
+                or not math.isfinite(separation) or not math.isfinite(depth_guard)
+                or depth_guard <= 0 or depth_guard > 0.002
+                or separation < -depth_guard):
+            raise ValueError("Initial contact penetration exceeds the 2 mm hard guard")
+        thumb_time = metrics.get("left_thumb_contact_time_s")
+        other_count = metrics.get("left_other_finger_count")
+        if (not isinstance(thumb_time, (int, float)) or not math.isfinite(thumb_time)
+                or thumb_time < 0.05 or not isinstance(other_count, int)
+                or other_count < 2):
+            raise ValueError("Left grasp lacks thumb and two other finger contacts")
+        if metrics.get("support_released") is not True:
+            raise ValueError("Candidate support must be removed before acceptance")
+        if metrics.get("reset_replay_passed") is not True:
+            raise ValueError("An independently reset one-second replay is required")
         return replace(self, validated=True, validation=metrics)
 
 
@@ -168,6 +187,9 @@ class BimanualGraspInitializer:
             "right_usd_sha256": self.right_spec.usd_sha256,
             "left_asset_tree_sha256": self.left_spec.asset_tree_sha256,
             "right_asset_tree_sha256": self.right_spec.asset_tree_sha256,
+            "beta1_tip_marker_mass_override_kg": (
+                BETA1_TIP_MARKER_MASS_KG if self.left_spec.variant == "beta1" else None),
+            "hardware_candidate_unverified": True,
             "left_joint_order": list(self.left_spec.joint_names),
             "right_joint_order": list(self.right_spec.joint_names),
             "bottle_profile": self.bottle.source_profile,
@@ -203,20 +225,25 @@ class GraspInitBank:
             return ()
         result = []
         for item in json.loads(self.path.read_text(encoding="utf-8")):
-            def body(data):
-                return BodyInit(tuple(data["root_pose"]), tuple(data["root_velocity"]))
-            def hand(data):
-                return HandInit(tuple(data["root_pose"]), tuple(data["root_velocity"]),
-                                tuple(data["joint_position"]), tuple(data["joint_velocity"]),
-                                tuple(data["wrist_target_pose"]), tuple(data["joint_target"]))
-            sample = GraspInitSample(
-                item["mode"], item["seed"], item["source"], hand(item["left"]),
-                hand(item["right"]), body(item["bottle"]), body(item["cap"]),
-                item["thread_initial_engagement_m"], item["thread_initial_angle_rad"],
-                item["metadata"], item["validated"], item["validation"],
-            )
+            sample = grasp_sample_from_dict(item)
             if not sample.validated or sample.validation is None:
                 raise ValueError("Bank contains an unvalidated sample")
             sample.with_validation(sample.validation)
             result.append(sample)
         return tuple(result)
+
+
+def grasp_sample_from_dict(item: dict) -> GraspInitSample:
+    """Deserialize a candidate or bank entry without promoting validation."""
+    def body(data):
+        return BodyInit(tuple(data["root_pose"]), tuple(data["root_velocity"]))
+    def hand(data):
+        return HandInit(tuple(data["root_pose"]), tuple(data["root_velocity"]),
+                        tuple(data["joint_position"]), tuple(data["joint_velocity"]),
+                        tuple(data["wrist_target_pose"]), tuple(data["joint_target"]))
+    return GraspInitSample(
+        item["mode"], item["seed"], item["source"], hand(item["left"]),
+        hand(item["right"]), body(item["bottle"]), body(item["cap"]),
+        item["thread_initial_engagement_m"], item["thread_initial_angle_rad"],
+        item["metadata"], item.get("validated", False), item.get("validation"),
+    )
