@@ -87,6 +87,11 @@ class MjcfGeometryScreen:
                     self.colliders[side].append(index)
         self.joints = {mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_JOINT, i):
                        int(model.jnt_qposadr[i]) for i in range(model.njnt)}
+        self.right_tip_sites = {
+            digit: mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE,
+                                     f"r_{digit}_tip") for digit in DIGITS}
+        if any(index < 0 for index in self.right_tip_sites.values()):
+            raise ValueError("Pinned right MJCF is missing a fingertip site")
         self.self_pairs = {}
         for side, geoms in self.colliders.items():
             self.self_pairs[side] = [(a, b) for ix, a in enumerate(geoms)
@@ -168,6 +173,23 @@ class MjcfGeometryScreen:
         left_arc = max(wrap(a - mean_angle) for a in long_angles)
         left_opposition = wrap(left["thumb"]["azimuth_rad"] - mean_angle)
         right = per_digit["r"]
+        right_sites = {}
+        for digit, index in self.right_tip_sites.items():
+            point = data.site_xpos[index].copy()
+            delta_xy = point[:2] - np.asarray(sample.cap.root_pose[:2])
+            right_sites[digit] = {
+                "position_w_m": point.tolist(),
+                "radial_gap_to_cap_sidewall_m": (
+                    float(np.linalg.norm(delta_xy)) - self.bottle.cap_outer_radius),
+                "axial_rel_cap_m": float(point[2] - sample.cap.root_pose[2]),
+                "azimuth_rad": math.atan2(delta_xy[1], delta_xy[0]),
+            }
+        site_index = right_sites["index_finger"]["azimuth_rad"]
+        site_middle = right_sites["middle_finger"]["azimuth_rad"]
+        site_other_mean = math.atan2(math.sin(site_index) + math.sin(site_middle),
+                                     math.cos(site_index) + math.cos(site_middle))
+        site_opposition = wrap(right_sites["thumb"]["azimuth_rad"] - site_other_mean)
+        site_index_middle_spread = wrap(site_index - site_middle)
         index_middle_angle = math.atan2(
             math.sin(right["index_finger"]["azimuth_rad"]) +
             math.sin(right["middle_finger"]["azimuth_rad"]),
@@ -185,6 +207,16 @@ class MjcfGeometryScreen:
                     and .0005 <= right[d].get("sidewall_gap_m", math.inf) <= .009
                     for d in DIGITS[:3])
             and right_opposition >= math.radians(90)
+            # right.png depicts a fingertip tripod, not merely proximal
+            # phalanx contact around the cap. Query the actual MJCF tip sites.
+            and all(.001 <= right_sites[d]["radial_gap_to_cap_sidewall_m"] <= .012
+                    and abs(right_sites[d]["axial_rel_cap_m"]) <=
+                    self.bottle.cap_height/2 - .001
+                    for d in DIGITS[:3])
+            and site_opposition >= math.radians(125)
+            and math.radians(20) <= site_index_middle_spread <= math.radians(125)
+            and all(right_sites[d]["radial_gap_to_cap_sidewall_m"] >= .020
+                    for d in DIGITS[3:])
             and all(right[d]["gap_m"] >= .01 for d in DIGITS[3:])
             and by_object["l_proxy_cap"]["minimum_gap_m"] >= .003
             and by_object["r_proxy_bottle"]["minimum_gap_m"] >= .003
@@ -202,6 +234,9 @@ class MjcfGeometryScreen:
             "left_four_finger_half_arc_rad": left_arc,
             "left_thumb_opposition_rad": left_opposition,
             "right_thumb_tripod_opposition_rad": right_opposition,
+            "right_fingertip_sites": right_sites,
+            "right_thumb_tripod_site_opposition_rad": site_opposition,
+            "right_index_middle_site_separation_rad": site_index_middle_spread,
         }
 
 

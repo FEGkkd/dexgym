@@ -12,21 +12,25 @@ future policy.
 | Template | Object frame | Topology | Initial geometric target |
 |---|---|---|---|
 | `left_cylindrical_pregrasp` | bottle | Thumb opposite the four long fingers; pads approach the middle to upper body, following `left.png` | Each of five digits within 0.5–12 mm of the 35 mm radius body; four long-finger contact directions within a 75° half arc and thumb at least 125° opposite |
-| `right_cap_tripod_pregrasp` | cap | Thumb opposite index and middle at the cap sidewall, following `right.png`; ring and pinky clear | Three target digits within 0.5–9 mm of the sidewall, thumb at least 90° opposite the index/middle mean, ring and pinky at least 10 mm clear |
+| `right_cap_tripod_pregrasp` | cap | Thumb, index and middle fingertips surround the cap sidewall, following `right.png`; ring and pinky are curled clear | Three actual fingertip sites 1–12 mm radially outside the sidewall and within its axial height; thumb at least 125° opposite the index/middle site mean; ring and pinky sites at least 20 mm clear |
 
 The templates are [left_cylindrical_pregrasp.json](../../source/dexteroushands_lab/scenes/presets/left_cylindrical_pregrasp.json)
 and [right_cap_tripod_pregrasp.json](../../source/dexteroushands_lab/scenes/presets/right_cap_tripod_pregrasp.json).
 Their wrist positions are expressed in the named object's local frame. All
 quaternions use `xyzw`, metres and radians. The left center was opened from
 the previously measured `left.png` inspired cylindrical pose. The right center
-was optimized using the pinned official right MJCF collision meshes so its
-thumb, index and middle approach the cap sidewall. These centers are geometric
+was refined using the pinned official right MJCF fingertip sites and collision
+meshes. The earlier body-near-cap pose left actual fingertips far from the
+sidewall; this revision brings the thumb, index and middle sites around the
+cap and curls the ring and pinky away. These centers are geometric
 presets; they are not claims that the user's physical Beta hardware matches
 the Beta 1 candidate or that a grasp can hold the bottle.
 
-Each local wrist translation is sampled independently within ±4 mm, each
-rotation axis within ±0.06, ±0.06, ±0.08 rad, and each of the 40 finger joints
-within ±0.08 rad on the left or ±0.06 rad on the right. Out-of-limit draws are
+The left wrist translation is sampled within ±4 mm per axis, rotation within
+±0.06, ±0.06, ±0.08 rad, and its finger joints within ±0.08 rad each. The
+right wrist translation is sampled within ±2.5 mm per axis, rotation within
+±0.04, ±0.04, ±0.05 rad, and its finger joints within ±0.04 rad each.
+Out-of-limit draws are
 rejected rather than clipped. `PregraspResetGenerator.draw(seed=...)` is
 deterministic and marks `geometry_qualified=false`. Its output must not be
 used directly as an admissible training Reset.
@@ -36,7 +40,9 @@ used directly as an admissible training Reset.
 The offline first stage uses the pinned official Beta 1 MJCF collision meshes
 and an engineering cylinder proxy for the bottle/neck/cap. It measures each
 digit's nearest distance, cap sidewall point, angular topology, cross-object
-clearance, cross-digit self clearance and hand-to-hand clearance. It only
+clearance, cross-digit self clearance and hand-to-hand clearance. For the
+right hand it also checks the five **actual fingertip sites** and requires a
+three-site tripod around the cap; distal body proximity alone cannot pass. It only
 proposes samples. The second stage resets the **official native USD** in
 Isaac/PhysX, advances one 2 ms physics step to refresh contact data, and
 rejects reported penetration below -0.1 mm, contact peaks of 50 N or more,
@@ -72,7 +78,7 @@ Isaac Sim 6.0.1 / Isaac Lab 3.0 Python. Then run:
 PYTHONPATH=source "$ISAACLAB_PYTHON" scripts/environments/generate_pregrasp_reset_candidates.py --seeds 5000 --max_accepted 32 --output /tmp/pregrasp_candidates.json
 ./scripts/run_isaaclab.sh scripts/environments/validate_pregrasp_reset_physx.py --candidates /tmp/pregrasp_candidates.json --bank docs/assets/phase0_pregrasp_reset_bank.json --report docs/assets/phase0_pregrasp_reset_physx_report.json --max 32 --headless --device cuda:0
 ./scripts/run_isaaclab.sh scripts/environments/validate_bimanual_reset.py --pregrasp_bank docs/assets/phase0_pregrasp_reset_bank.json --control_mode pose_command_wrist --num_envs 16 --iterations 100 --headless --device cuda:0
-./scripts/run_isaaclab.sh scripts/environments/preview_grasp_initialization.py --pregrasp_bank docs/assets/phase0_pregrasp_reset_bank.json --sample_index 0 --interactive_static --device cuda:0
+./scripts/run_isaaclab.sh scripts/environments/preview_grasp_initialization.py --pregrasp_bank docs/assets/phase0_pregrasp_reset_bank.json --sample_index 3 --interactive_static --viz kit --device cuda:0
 ```
 
 Use `--headless --steps 2` instead of `--interactive_static` for a headless
@@ -81,15 +87,17 @@ preview smoke test. For smaller Reset fixtures, set `--num_envs 1` or `2`.
 ## Measured result on this workstation
 
 On an RTX 5090 with Isaac Sim 6.0.1 and Isaac Lab 3.0, the deterministic
-search accepted 32 of its first 4569 MJCF candidates (the remaining 431
+search accepted 32 of its first 2262 MJCF candidates (the remaining 2738
 seeds of the requested 5000 were not needed). All 32 passed the native USD
-one-step probe. The deliberate overlap was reported at -4.09 mm; the minimum
-crossed-finger self overlap was reported at -9.27 mm. The minimum
-reported separation among accepted candidates was +0.043 mm (some had no
+one-step probe. The deliberate overlap was reported at -4.51 mm; the minimum
+crossed-finger self overlap was reported at -18.66 mm. The minimum
+reported separation among accepted candidates was +0.060 mm (some had no
 contact points within the backend's reporting distance). No candidate
 produced a contact impulse. The measured proxy gaps in the bank were
-0.56–11.37 mm for left body digits and 0.52–8.90 mm for the right tripod's
-cap sidewall. The full [PhysX report](phase0_pregrasp_reset_physx_report.json)
+0.51–11.51 mm for left body digits and 0.50–8.89 mm for the right tripod's
+collision bodies at the cap sidewall. The three right fingertip sites were
+1.02–11.05 mm radially outside the cap sidewall. The full
+[PhysX report](phase0_pregrasp_reset_physx_report.json)
 and per-sample bank evidence record the exact numbers. The compact
 [validation summary](phase0_pregrasp_reset_validation.json) records the 1, 2
 and 16 environment Reset results.
@@ -102,7 +110,7 @@ restored to engaged, and contact history was invalidated. The headless
 preview ran two physics steps with no reported contact. None of these tests
 proves that the hand can close and hold the bottle for one second.
 
-The full CPU test suite reported 120 passed, 1 skipped and 2 failures in
+The full CPU test suite reported 121 passed, 1 skipped and 2 failures in
 unrelated, locally modified Allegro Fly and MANO helper files. The focused
-pregrasp and existing grasp/Reset/contact contracts reported 26 passed. See the
+pregrasp and existing grasp/Reset/contact contracts reported 27 passed. See the
 working tree before treating the unrelated failures as a repository baseline.

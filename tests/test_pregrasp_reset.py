@@ -1,6 +1,7 @@
 """CPU contracts for geometry-only bimanual pregrasp Reset states."""
 
 from dataclasses import replace
+from pathlib import Path
 from types import SimpleNamespace
 import math
 
@@ -98,3 +99,19 @@ def test_template_rejects_wrong_bottle_profile():
     specs = (_spec("left"), _spec("right"))
     with pytest.raises(ValueError, match="70 mm"):
         PregraspResetGenerator(BottleConfig(bottle_radius=.03), *specs)
+
+
+def test_checked_in_bank_uses_actual_right_tripod_fingertip_sites():
+    bank_path = (Path(__file__).resolve().parents[1] / "docs/assets" /
+                 "phase0_pregrasp_reset_bank.json")
+    samples = PregraspResetBank(bank_path).load()
+    assert len(samples) >= 3
+    for sample in samples:
+        geometry = sample.metadata["geometry_evidence"]["official_mjcf"]
+        sites = geometry["right_fingertip_sites"]
+        for digit in ("thumb", "index_finger", "middle_finger"):
+            assert .001 <= sites[digit]["radial_gap_to_cap_sidewall_m"] <= .012
+            assert abs(sites[digit]["axial_rel_cap_m"]) <= .0115
+        for digit in ("ring_finger", "pinky"):
+            assert sites[digit]["radial_gap_to_cap_sidewall_m"] >= .020
+        assert geometry["right_thumb_tripod_site_opposition_rad"] >= math.radians(125)

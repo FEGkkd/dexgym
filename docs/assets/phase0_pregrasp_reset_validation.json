@@ -1,19 +1,19 @@
 {
   "bottle_profile": "engineering_example_70mm",
   "mjcf_screen": {
-    "attempted": 4569,
+    "attempted": 2262,
     "qualified": 32,
-    "rejected": 4537,
+    "rejected": 2230,
     "seed_request": 5000,
     "seed_start": 0
   },
   "native_physx": {
     "accepted_max_peak_normal_force_n": 0.0,
-    "accepted_min_reported_separation_m": 4.275640094419941e-05,
+    "accepted_min_reported_separation_m": 6.0041435062885284e-05,
     "attempted": 32,
-    "negative_control_min_separation_m": -0.004091325681656599,
+    "negative_control_min_separation_m": -0.004513607360422611,
     "qualified": 32,
-    "self_collision_negative_control_min_separation_m": -0.009266719222068787
+    "self_collision_negative_control_min_separation_m": -0.01865624450147152
   },
   "official_asset_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
   "one_second_hold_test_performed": false,
@@ -79,5 +79,6 @@
       "right_usd_sha256": "22600d3f0aeb185552bb6eeb454b5b7199966a60fc844d4a4b5e4791ec77f0ed"
     }
   },
+  "right_fingertip_site_topology_required": true,
   "scope": "geometry_only_pregrasp_reset_no_hold_validation"
 }
