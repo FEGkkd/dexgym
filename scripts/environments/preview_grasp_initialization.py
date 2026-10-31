@@ -28,12 +28,11 @@ app = AppLauncher(args).app
 
 from dexteroushands_lab.scenes.grasp_init import (  # noqa: E402
     GraspInitBank, grasp_sample_from_dict)
+from dexteroushands_lab.assets.bottle import BottleConfig  # noqa: E402
 from dexteroushands_lab.scenes.phase0_fixture import BimanualPhase0Fixture  # noqa: E402
 
 
 def main():
-    fixture = BimanualPhase0Fixture(num_envs=1, device=args.device,
-                                    contact_debug=args.contact_debug)
     if sum(bool(x) for x in (args.bank, args.synthesis_report, args.candidate)) > 1:
         raise ValueError("Choose one bank, synthesis report, or candidate JSON")
     if args.bank:
@@ -50,11 +49,28 @@ def main():
     elif args.candidate:
         sample = grasp_sample_from_dict(json.loads(args.candidate.read_text()))
     else:
+        fixture = BimanualPhase0Fixture(num_envs=1, device=args.device,
+                                        contact_debug=args.contact_debug)
         sample = fixture.initializer.generate(mode=args.mode, seed=args.seed)
+    if args.bank or args.synthesis_report or args.candidate:
+        wrist_mode = sample.metadata.get("wrist_control_mode", "floating_wrench_pd")
+        if wrist_mode not in ("floating_wrench_pd", "fixed_wrist",
+                              "pose_command_wrist"):
+            raise ValueError(f"Unknown sample wrist control mode: {wrist_mode}")
+        fixture = BimanualPhase0Fixture(
+            num_envs=1, device=args.device,
+            config=BottleConfig(**sample.metadata["bottle_parameters"]),
+            control_mode=wrist_mode,
+            left_initial_pose=sample.left.root_pose,
+            right_initial_pose=sample.right.root_pose,
+            include_hand_hand=sample.validation is not None and
+                              sample.validation.get("scope") == "bimanual",
+            contact_debug=args.contact_debug)
     fixture.reset_manager.reset([0], [sample])
     print("GRASP_PREVIEW_INITIAL " + json.dumps({"mode": sample.mode,
           "seed": sample.seed, "validated": sample.validated,
-          "source": sample.source, "asset_variant": sample.metadata["asset_variant"]}),
+          "source": sample.source, "asset_variant": sample.metadata["asset_variant"],
+          "wrist_control_mode": fixture.control_mode}),
           flush=True)
     for step in range(args.steps):
         if not app.is_running():

@@ -108,6 +108,65 @@ def test_left_only_bank_requires_replayed_sustained_physical_contact(tmp_path):
         candidate.with_validation({**metrics, "minimum_separation_m": -.04})
 
 
+def test_radial_bimanual_bank_requires_replay_and_opposed_cap_force():
+    from dataclasses import replace
+    init = BimanualGraspInitializer(BottleConfig(), _spec("left"), _spec("right"))
+    candidate = init.generate(mode="stable_pregrasp", seed=31)
+    candidate = replace(candidate, metadata={**candidate.metadata,
+                                              "wrist_control_mode": "pose_command_wrist"})
+    metrics = {
+        "scope": "bimanual", "contact_evidence_version": "radial_contact_v1",
+        "wrist_control_mode": "pose_command_wrist",
+        "fixture": "gravity_on_no_support", "passed": True,
+        "duration_s": 1.0, "hold_displacement_m": .001,
+        "hold_rotation_rad": .01, "left_only_displacement_m": .008,
+        "left_contact_ratio": 1.0, "right_contact_ratio": 1.0,
+        "left_only_contact_ratio": 1.0, "ground_contact_ratio": 0.0,
+        "max_contact_peak_n": 3.0, "max_peak_force_guard_n": 100.0,
+        "initial_min_separation_m": -.00005,
+        "minimum_separation_m": -.00008,
+        "max_initial_penetration_guard_m": .002,
+        "left_thumb_contact_time_s": 1.0,
+        "left_other_contact_time_s": .99,
+        "right_thumb_contact_time_s": 1.0,
+        "right_other_contact_time_s": 1.0,
+        "right_radial_opposition_ratio": 1.0,
+        "max_thread_lateral_error_m": .00001,
+        "cross_contact_ratios": {"left_cap": 0, "right_bottle": 0,
+                                 "hand_hand": 0},
+        "hand_hand_monitored": True,
+        "fresh_process_replay_passed": True,
+        "support_released": True, "reset_replay_passed": True,
+    }
+    assert candidate.with_validation(metrics).validated
+    for change in ({"right_radial_opposition_ratio": 0.0},
+                   {"fresh_process_replay_passed": False},
+                   {"hand_hand_monitored": False},
+                   {"minimum_separation_m": -.003},
+                   {"cross_contact_ratios": {"left_cap": 0,
+                                             "right_bottle": .2,
+                                             "hand_hand": 0}}):
+        with pytest.raises(ValueError):
+            candidate.with_validation({**metrics, **change})
+
+
+def test_world_yaw_variant_rotates_pose_velocity_and_wrist_target():
+    from dataclasses import replace
+    from dexteroushands_lab.scenes.grasp_init import rotate_sample_world_z
+    init = BimanualGraspInitializer(BottleConfig(), _spec("left"), _spec("right"))
+    sample = init.generate(mode="stable_pregrasp", seed=9)
+    left = replace(sample.left, root_velocity=(1, 0, 0, 0, 1, 0))
+    sample = replace(sample, left=left)
+    variant = rotate_sample_world_z(sample, math.pi/2,
+                                    parent_result_sha256="a"*64)
+    assert variant.left.root_pose[:3] == pytest.approx(
+        (-sample.left.root_pose[1], sample.left.root_pose[0], sample.left.root_pose[2]))
+    assert variant.left.root_velocity == pytest.approx((0, 1, 0, -1, 0, 0))
+    assert variant.left.wrist_target_pose == pytest.approx(variant.left.root_pose)
+    assert variant.metadata["world_yaw_augmentation"]["same_relative_grasp_family"]
+    assert not variant.validated
+
+
 @pytest.mark.parametrize("overrides", [
     {"initial_min_separation_m": -0.04},
     {"initial_min_separation_m": -0.0021},

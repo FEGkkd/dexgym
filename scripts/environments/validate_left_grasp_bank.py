@@ -12,13 +12,17 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--bank", type=Path, required=True)
 parser.add_argument("--sample_index", type=int, required=True)
 parser.add_argument("--output", type=Path)
+parser.add_argument("--duration_s", type=float, default=1.0,
+                    help="Unsupported hold duration after Reset; default Phase 0 acceptance is 1 s")
+parser.add_argument("--left_wrist_dx_m", type=float, default=0.0,
+                    help="Diagnostic inward/outward X command after Reset; not bank replay evidence")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 app = AppLauncher(args).app
 
 from dexteroushands_lab.assets.bottle import BottleConfig  # noqa: E402
 from dexteroushands_lab.scenes.grasp_init import GraspInitBank  # noqa: E402
-from dexteroushands_lab.scenes.grasp_synthesis import GraspSynthesisFixture  # noqa: E402
+from dexteroushands_lab.scenes.grasp_synthesis import GraspSynthesisFixture, SynthesisLimits  # noqa: E402
 from dexteroushands_lab.scenes.phase0_fixture import BimanualPhase0Fixture  # noqa: E402
 
 
@@ -36,10 +40,16 @@ def main():
         left_initial_pose=sample.left.root_pose,
         right_initial_pose=sample.right.root_pose,
         include_hand_hand=False)
-    replay = GraspSynthesisFixture(fixture).replay_left(sample)
+    replay = GraspSynthesisFixture(
+        fixture, SynthesisLimits(release_s=args.duration_s)).replay_left(
+            sample, wrist_target_offset_xyz=(args.left_wrist_dx_m, 0.0, 0.0))
     summary = {"sample_index": args.sample_index, "seed": sample.seed,
+               "hold_duration_s": args.duration_s,
+               "left_wrist_dx_m": args.left_wrist_dx_m,
                "persisted_validation_passed": sample.validation["passed"],
-               "fresh_process_replay_passed": replay["passed"],
+               "fresh_process_replay_passed": replay["passed"] and
+                                              args.left_wrist_dx_m == 0.0,
+               "diagnostic_hold_passed": replay["passed"],
                "bottle_displacement_m": replay["bottle_displacement_m"],
                "bottle_rotation_rad": replay["bottle_rotation_rad"],
                "contact_ratio": replay["left_contact_ratio"],

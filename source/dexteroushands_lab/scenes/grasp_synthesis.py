@@ -171,7 +171,8 @@ class GraspSynthesisFixture:
                     f.temporary_support_joint and
                     f.temporary_support_joint.GetJointEnabledAttr().Get())}
 
-    def _capture(self, template, target_joints, source):
+    def _capture(self, template, target_joints, source,
+                 right_target_joints=None, support_kind=None):
         f = self.fixture
         def body(asset):
             pose = tuple(float(x) for x in asset.data.root_pose_w.torch[0].detach().cpu())
@@ -187,7 +188,8 @@ class GraspSynthesisFixture:
                             target_pose, tuple(targets))
         left = hand(f.left, f.specs[0], f.controllers[0][0], target_joints)
         right = hand(f.right, f.specs[1], f.controllers[1][0],
-                     template.right.joint_target)
+                     (template.right.joint_target if right_target_joints is None
+                      else right_target_joints))
         bottle = body(f.bottle)
         cap = body(f.cap)
         thread = f.couplers[0].observe(bottle.root_pose[:3], bottle.root_pose[3:7],
@@ -202,6 +204,7 @@ class GraspSynthesisFixture:
                                  "thread_coupler_state": f.couplers[0].snapshot_state(),
                                  "synthesis": {
                            "limits": asdict(self.limits), "support": (
+                               support_kind if support_kind is not None else
                                "temporary_world_fixed_joint" if f.temporary_support_joint
                                else "bounded_bottle_wrench"),
                            "support_removed_before_acceptance": True}})
@@ -372,13 +375,25 @@ class GraspSynthesisFixture:
                 "contact_summary": summary, "trace": trace,
                 "candidate": release_sample}
 
-    def replay_left(self, sample):
-        """Restore the release state and repeat the unassisted one-second hold."""
+    def replay_left(self, sample, *, wrist_target_offset_xyz=(0.0, 0.0, 0.0)):
+        """Restore the release state and repeat the unassisted hold.
+
+        A nonzero wrist offset is an explicitly labeled diagnostic command,
+        not a replay of the persisted sample or bank admission evidence.
+        """
         f = self.fixture
         try:
             if f.temporary_support_joint:
                 f.temporary_support_joint.GetJointEnabledAttr().Set(False)
             f.reset_manager.reset([0], [sample])
+            if any(wrist_target_offset_xyz):
+                if f.control_mode != "pose_command_wrist":
+                    raise ValueError("Wrist-offset diagnostic needs pose-command control")
+                controller = f.controllers[0][0]
+                controller.set_target(
+                    tuple(a+b for a,b in zip(controller.target_pos,
+                                             wrist_target_offset_xyz)),
+                    controller.target_quat)
         except (ValueError, RuntimeError) as exc:
             return {"passed": False, "reset_error": str(exc)}
         start = f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist()
@@ -432,4 +447,5 @@ class GraspSynthesisFixture:
                 "opposing_contact_coverage_ratio": coverage_ratio,
                 "frictional_opposition_ratio": frictional_ratio,
                 "left_contact_peak_n": peak_force,
+                "wrist_target_offset_xyz_m": tuple(wrist_target_offset_xyz),
                 "contact_summary": summary, "trace": trace}

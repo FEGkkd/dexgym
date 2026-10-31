@@ -1,0 +1,3528 @@
+{
+  "source": "official_beta1_right_MJCF_proxy_geometry_only",
+  "seed": 23,
+  "samples": 100000,
+  "cap_radius_m": 0.017,
+  "cap_height_m": 0.025,
+  "bottle_radius_m": 0.035,
+  "best": [
+    {
+      "index": 45066,
+      "score": 0.004164495845944912,
+      "wrist_position_w_m": [
+        0.09560519153401226,
+        0.0005325454821731718,
+        0.6469542839618373
+      ],
+      "wrist_quaternion_wxyz": [
+        0.4349972462110955,
+        -0.44608623072852854,
+        0.7419583190955017,
+        -0.24755266766519682
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.2865064999949598,
+        "r_thumb_cmc_abd": 0.017963880620129657,
+        "r_thumb_mcp": 0.678185604069953,
+        "r_thumb_ip": 0.052100421870938836,
+        "r_index_finger_mcp_flex": 0.26214182116906054,
+        "r_index_finger_mcp_abd": 0.051159726635065794,
+        "r_index_finger_pip": 0.4098767443993213,
+        "r_index_finger_dip": 1.0155906395512304,
+        "r_middle_finger_mcp_flex": 1.1057372110784627,
+        "r_middle_finger_mcp_abd": 0.10415587037252261,
+        "r_middle_finger_pip": 0.9187826642203369,
+        "r_middle_finger_dip": 0.03624826258211489,
+        "r_ring_finger_mcp_flex": 0.39192008394321814,
+        "r_ring_finger_mcp_abd": 0.5289125285446628,
+        "r_ring_finger_pip": 1.1252613354965146,
+        "r_ring_finger_dip": 0.45525728878786675,
+        "r_pinky_mcp_flex": 1.1483303211741958,
+        "r_pinky_mcp_abd": -0.14249311987503283,
+        "r_pinky_pip": 1.3846303539505997,
+        "r_pinky_dip": 1.329216926827206
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.02009261866103986,
+        "thumb": 0.0008877084345762876,
+        "index": 0.015383293595026439,
+        "middle": -0.0009112427047955893,
+        "ring": 0.032285851800004595,
+        "pinky": 0.02586293189082276
+      },
+      "minimum_cap_distance_m": -0.0009112427047955893,
+      "minimum_bottle_distance_m": 0.004990537754077877,
+      "minimum_self_distance_m": 0.0023345710067062897,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.0008877084345762876,
+        "middle": 0.007164495845944912,
+        "pinky": 0.02832956229565776
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          -0.002250005053156624,
+          -0.016850444291516022,
+          0.641536148616154
+        ],
+        "middle": [
+          -0.003813593798205485,
+          0.016566728741042775,
+          0.6448551202911682
+        ],
+        "pinky": [
+          0.007351113836031995,
+          0.015328441707397918,
+          0.6447148915499372
+        ]
+      },
+      "sidewall_opposing_digit": "middle",
+      "sidewall_angular_separation_rad": 2.7825954408400784,
+      "body_cap_distances_m": {
+        "r_wrist": 0.02009261866103986,
+        "r_thumb_proximal": 0.04163017680600503,
+        "r_thumb_proximal_abd": 0.02498438453717295,
+        "r_thumb_middle": 0.003669794433219074,
+        "r_thumb_distal": 0.0008877084345762876,
+        "r_index_finger_proximal": 0.015383293595026439,
+        "r_index_finger_proximal_abd": 0.01721226275569671,
+        "r_index_finger_middle": 0.0260778182850727,
+        "r_index_finger_distal": 0.03258090358366329,
+        "r_middle_finger_proximal": 0.016452651680258747,
+        "r_middle_finger_proximal_abd": 0.0036549823022277656,
+        "r_middle_finger_middle": -0.0009112427047955893,
+        "r_middle_finger_distal": 0.007164495845944912,
+        "r_ring_finger_proximal": 0.032285851800004595,
+        "r_ring_finger_proximal_abd": 0.03441000475883705,
+        "r_ring_finger_middle": 0.04376476732539746,
+        "r_ring_finger_distal": 0.042939403510441156,
+        "r_pinky_proximal": 0.04181208787997382,
+        "r_pinky_proximal_abd": 0.027809256127902294,
+        "r_pinky_middle": 0.02586293189082276,
+        "r_pinky_distal": 0.02832956229565776
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.03419007557644643,
+        "r_thumb_proximal": 0.03601213665683787,
+        "r_thumb_proximal_abd": 0.022626656329970907,
+        "r_thumb_middle": 0.007669794417000045,
+        "r_thumb_distal": 0.004990537754077877,
+        "r_index_finger_proximal": 0.03265855692754459,
+        "r_index_finger_proximal_abd": 0.03507522832739769,
+        "r_index_finger_middle": 0.043954819509223295,
+        "r_index_finger_distal": 0.04750177403905607,
+        "r_middle_finger_proximal": 0.03486794399677051,
+        "r_middle_finger_proximal_abd": 0.022086279822760114,
+        "r_middle_finger_middle": 0.012133126767476892,
+        "r_middle_finger_distal": 0.01181319877439902,
+        "r_ring_finger_proximal": 0.05018930113447666,
+        "r_ring_finger_proximal_abd": 0.052562460445367096,
+        "r_ring_finger_middle": 0.059237174063143036,
+        "r_ring_finger_distal": 0.056118827062124725,
+        "r_pinky_proximal": 0.054835552772002624,
+        "r_pinky_proximal_abd": 0.03810169004260241,
+        "r_pinky_middle": 0.03356411144659088,
+        "r_pinky_distal": 0.03253056341348245
+      }
+    },
+    {
+      "index": 24059,
+      "score": 0.004247981339921619,
+      "wrist_position_w_m": [
+        0.09894361682196218,
+        0.031882089965346624,
+        0.6725590681729373
+      ],
+      "wrist_quaternion_wxyz": [
+        0.6565958500443729,
+        -0.4937045768729791,
+        0.554713163829313,
+        -0.13202646080863367
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.18487538717966057,
+        "r_thumb_cmc_abd": 0.21113868466318836,
+        "r_thumb_mcp": 0.6235704045670034,
+        "r_thumb_ip": 1.2786738992815188,
+        "r_index_finger_mcp_flex": 0.3991279011634436,
+        "r_index_finger_mcp_abd": 0.06075010805716974,
+        "r_index_finger_pip": 0.14415711500718897,
+        "r_index_finger_dip": 1.2299819160727505,
+        "r_middle_finger_mcp_flex": 0.23953526499460007,
+        "r_middle_finger_mcp_abd": 0.5222592095313545,
+        "r_middle_finger_pip": 0.7142191229144492,
+        "r_middle_finger_dip": 1.0091496942671012,
+        "r_ring_finger_mcp_flex": 1.3919068476812984,
+        "r_ring_finger_mcp_abd": -0.04593006743366995,
+        "r_ring_finger_pip": 0.5472688992783541,
+        "r_ring_finger_dip": 1.2604205956156027,
+        "r_pinky_mcp_flex": 1.3422270122413957,
+        "r_pinky_mcp_abd": 0.14557351954794467,
+        "r_pinky_pip": 0.9229335753286847,
+        "r_pinky_dip": 0.26203722173765953
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.027423002308637614,
+        "thumb": 0.007247981339921619,
+        "index": 0.011468146055498871,
+        "middle": 0.01822896379860639,
+        "ring": 0.0013265950938442556,
+        "pinky": 0.023686225531095898
+      },
+      "minimum_cap_distance_m": 0.0013265950938442556,
+      "minimum_bottle_distance_m": 0.010647936147822931,
+      "minimum_self_distance_m": 0.0022719091734850518,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.007247981339921619,
+        "index": 0.02363877081293245,
+        "ring": 0.0013265950938442556,
+        "pinky": 0.03899086989661275
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.011968461027208898,
+          -0.012072942498721147,
+          0.641008187571326
+        ],
+        "index": [
+          -0.01050162264330061,
+          -0.013368467445318912,
+          0.640748968338495
+        ],
+        "ring": [
+          0.006341641351550135,
+          0.015772874974483236,
+          0.6530947567166023
+        ],
+        "pinky": [
+          0.004842725698417398,
+          0.016295643827599036,
+          0.6454890671038014
+        ]
+      },
+      "sidewall_opposing_digit": "ring",
+      "sidewall_angular_separation_rad": 1.9782594249446093,
+      "body_cap_distances_m": {
+        "r_wrist": 0.027423002308637614,
+        "r_thumb_proximal": 0.06158967175649007,
+        "r_thumb_proximal_abd": 0.0497063909276167,
+        "r_thumb_middle": 0.027194720252650673,
+        "r_thumb_distal": 0.007247981339921619,
+        "r_index_finger_proximal": 0.017838301645408117,
+        "r_index_finger_proximal_abd": 0.011468146055498871,
+        "r_index_finger_middle": 0.012324258906441713,
+        "r_index_finger_distal": 0.02363877081293245,
+        "r_middle_finger_proximal": 0.021102542768164596,
+        "r_middle_finger_proximal_abd": 0.022817199018514416,
+        "r_middle_finger_middle": 0.024394727755268387,
+        "r_middle_finger_distal": 0.01822896379860639,
+        "r_ring_finger_proximal": 0.023474507500101813,
+        "r_ring_finger_proximal_abd": 0.0020998086573702393,
+        "r_ring_finger_middle": 0.0013265950938442556,
+        "r_ring_finger_distal": 0.015892084376155646,
+        "r_pinky_proximal": 0.03504110741204055,
+        "r_pinky_proximal_abd": 0.02524757603081202,
+        "r_pinky_middle": 0.023686225531095898,
+        "r_pinky_distal": 0.03899086989661275
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.04168082281185205,
+        "r_thumb_proximal": 0.06008410653243024,
+        "r_thumb_proximal_abd": 0.04170892539601379,
+        "r_thumb_middle": 0.028739298998795203,
+        "r_thumb_distal": 0.011263369009930175,
+        "r_index_finger_proximal": 0.03007390857771426,
+        "r_index_finger_proximal_abd": 0.02413769585988676,
+        "r_index_finger_middle": 0.02481118932171479,
+        "r_index_finger_distal": 0.027642712893147098,
+        "r_middle_finger_proximal": 0.039152678863623704,
+        "r_middle_finger_proximal_abd": 0.04115552920302729,
+        "r_middle_finger_middle": 0.04245270949507867,
+        "r_middle_finger_distal": 0.03380802988384647,
+        "r_ring_finger_proximal": 0.041767649733028135,
+        "r_ring_finger_proximal_abd": 0.012377632928505721,
+        "r_ring_finger_middle": 0.010647936147822931,
+        "r_ring_finger_distal": 0.019435067024737882,
+        "r_pinky_proximal": 0.05272707766461808,
+        "r_pinky_proximal_abd": 0.03764599840700167,
+        "r_pinky_middle": 0.035732193166356584,
+        "r_pinky_distal": 0.0433058977892068
+      }
+    },
+    {
+      "index": 37705,
+      "score": 0.014260459390727204,
+      "wrist_position_w_m": [
+        0.11094520953447723,
+        -0.05882470578161223,
+        0.6140462117131509
+      ],
+      "wrist_quaternion_wxyz": [
+        0.3345783501309752,
+        -0.01518931195995743,
+        0.9290146318509837,
+        -0.15734810527171783
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.1402266936653653,
+        "r_thumb_cmc_abd": 0.38098434363088035,
+        "r_thumb_mcp": 0.14972159240816524,
+        "r_thumb_ip": 0.17861982111865138,
+        "r_index_finger_mcp_flex": 1.3335625716758004,
+        "r_index_finger_mcp_abd": -0.22168917060680676,
+        "r_index_finger_pip": 1.3247274114048764,
+        "r_index_finger_dip": 0.6177130496456013,
+        "r_middle_finger_mcp_flex": 1.296895047732588,
+        "r_middle_finger_mcp_abd": 0.17791103236256606,
+        "r_middle_finger_pip": 0.22269865460227806,
+        "r_middle_finger_dip": 1.2379876196897244,
+        "r_ring_finger_mcp_flex": 1.380213720979207,
+        "r_ring_finger_mcp_abd": 0.46200376071535126,
+        "r_ring_finger_pip": 0.7586347291548707,
+        "r_ring_finger_dip": 1.171046773364918,
+        "r_pinky_mcp_flex": 0.3339718323592858,
+        "r_pinky_mcp_abd": -0.20351922088789565,
+        "r_pinky_pip": 0.9814802294718773,
+        "r_pinky_dip": 0.776447156697882
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.04083927083716805,
+        "thumb": 0.006792996074325069,
+        "index": 0.013425786603898312,
+        "middle": 0.037422846623080944,
+        "ring": 0.06369747854874457,
+        "pinky": 0.06404788436950237
+      },
+      "minimum_cap_distance_m": 0.006792996074325069,
+      "minimum_bottle_distance_m": 0.010792996071338186,
+      "minimum_self_distance_m": 0.002280217495746242,
+      "digit_sidewall_distances_m": {
+        "wrist": 0.04083927083716805,
+        "thumb": 0.006792996074325069,
+        "index": 0.013425786603898312
+      },
+      "digit_sidewall_points_w_m": {
+        "wrist": [
+          0.01206793439696461,
+          -0.011973510733990129,
+          0.650118290795628
+        ],
+        "thumb": [
+          0.001758712085158518,
+          -0.016908782676546774,
+          0.6397307109850622
+        ],
+        "index": [
+          0.01691596553802728,
+          0.0016882267674963164,
+          0.6430963436471555
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 1.5666286555445144,
+      "body_cap_distances_m": {
+        "r_wrist": 0.04083927083716805,
+        "r_thumb_proximal": 0.06972775847445073,
+        "r_thumb_proximal_abd": 0.040282586186276,
+        "r_thumb_middle": 0.012999447392661368,
+        "r_thumb_distal": 0.006792996074325069,
+        "r_index_finger_proximal": 0.029139459404060153,
+        "r_index_finger_proximal_abd": 0.014587950474784046,
+        "r_index_finger_middle": 0.013425786603898312,
+        "r_index_finger_distal": 0.035712351819471404,
+        "r_middle_finger_proximal": 0.04380636057941385,
+        "r_middle_finger_proximal_abd": 0.038484610693069805,
+        "r_middle_finger_middle": 0.037422846623080944,
+        "r_middle_finger_distal": 0.048683192690218764,
+        "r_ring_finger_proximal": 0.06369747854874457,
+        "r_ring_finger_proximal_abd": 0.06429692930566311,
+        "r_ring_finger_middle": 0.07025993501986452,
+        "r_ring_finger_distal": 0.08723938948949159,
+        "r_pinky_proximal": 0.0829043158738832,
+        "r_pinky_proximal_abd": 0.07303551910096366,
+        "r_pinky_middle": 0.06604554707387049,
+        "r_pinky_distal": 0.06404788436950237
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.045782826341471294,
+        "r_thumb_proximal": 0.04680299185703797,
+        "r_thumb_proximal_abd": 0.020054867662294917,
+        "r_thumb_middle": 0.016789910031102025,
+        "r_thumb_distal": 0.010792996071338186,
+        "r_index_finger_proximal": 0.03576782419227086,
+        "r_index_finger_proximal_abd": 0.018953473424779876,
+        "r_index_finger_middle": 0.017659217749682394,
+        "r_index_finger_distal": 0.026013698325378802,
+        "r_middle_finger_proximal": 0.05570054073031089,
+        "r_middle_finger_proximal_abd": 0.050153399034149844,
+        "r_middle_finger_middle": 0.049588129941656074,
+        "r_middle_finger_distal": 0.05792136732010506,
+        "r_ring_finger_proximal": 0.07473853981529979,
+        "r_ring_finger_proximal_abd": 0.07473505342168515,
+        "r_ring_finger_middle": 0.08003147658052727,
+        "r_ring_finger_distal": 0.08900986737171339,
+        "r_pinky_proximal": 0.09298262096428282,
+        "r_pinky_proximal_abd": 0.0879201704509278,
+        "r_pinky_middle": 0.08054687631743505,
+        "r_pinky_distal": 0.07757842456285245
+      }
+    },
+    {
+      "index": 94374,
+      "score": 0.014860987833873658,
+      "wrist_position_w_m": [
+        0.08792121796536093,
+        -0.016339097913825713,
+        0.7038609662739344
+      ],
+      "wrist_quaternion_wxyz": [
+        0.823327028475182,
+        -0.11077837047444075,
+        0.4022089165491417,
+        0.38482300381554657
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.8892253564515852,
+        "r_thumb_cmc_abd": -0.0836848087969971,
+        "r_thumb_mcp": 1.0953484217518314,
+        "r_thumb_ip": 0.09521955693926099,
+        "r_index_finger_mcp_flex": 0.5729601685252802,
+        "r_index_finger_mcp_abd": 0.13006008994575385,
+        "r_index_finger_pip": 0.9395119564734862,
+        "r_index_finger_dip": 0.13672212241416803,
+        "r_middle_finger_mcp_flex": 0.6969967583549261,
+        "r_middle_finger_mcp_abd": 0.061385249956667165,
+        "r_middle_finger_pip": 0.9944896940693813,
+        "r_middle_finger_dip": 0.0815035026116393,
+        "r_ring_finger_mcp_flex": 0.08798862562600353,
+        "r_ring_finger_mcp_abd": 0.376180781839703,
+        "r_ring_finger_pip": 0.7614316126466014,
+        "r_ring_finger_dip": 1.0982255425621845,
+        "r_pinky_mcp_flex": 1.218462179990409,
+        "r_pinky_mcp_abd": 0.5185976490600166,
+        "r_pinky_pip": 0.791943863949124,
+        "r_pinky_dip": 0.6919110700838442
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.04607551966994984,
+        "thumb": 0.00756187369842486,
+        "index": 0.008395715828512264,
+        "middle": 0.012509529765689557,
+        "ring": 0.05388040165929741,
+        "pinky": 0.04742025246800185
+      },
+      "minimum_cap_distance_m": 0.00756187369842486,
+      "minimum_bottle_distance_m": 0.008963420876168037,
+      "minimum_self_distance_m": 0.0023386009958452315,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.00756187369842486,
+        "middle": 0.012509529765689557
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.012840652453601636,
+          -0.011140809870224259,
+          0.6509600727037843
+        ],
+        "middle": [
+          -0.010093274899377789,
+          -0.013679393326869788,
+          0.6418980169111048
+        ]
+      },
+      "sidewall_opposing_digit": "middle",
+      "sidewall_angular_separation_rad": 1.4918378898189724,
+      "body_cap_distances_m": {
+        "r_wrist": 0.04607551966994984,
+        "r_thumb_proximal": 0.046057742951851575,
+        "r_thumb_proximal_abd": 0.01814805149039473,
+        "r_thumb_middle": 0.00756187369842486,
+        "r_thumb_distal": 0.00929327257516336,
+        "r_index_finger_proximal": 0.03508924619959019,
+        "r_index_finger_proximal_abd": 0.028179600857207488,
+        "r_index_finger_middle": 0.012952894508262366,
+        "r_index_finger_distal": 0.008395715828512264,
+        "r_middle_finger_proximal": 0.04235132114440764,
+        "r_middle_finger_proximal_abd": 0.032943419861506285,
+        "r_middle_finger_middle": 0.015192667639562368,
+        "r_middle_finger_distal": 0.012509529765689557,
+        "r_ring_finger_proximal": 0.05388040165929741,
+        "r_ring_finger_proximal_abd": 0.05651859882894357,
+        "r_ring_finger_middle": 0.0687248725220456,
+        "r_ring_finger_distal": 0.05906175438815911,
+        "r_pinky_proximal": 0.05157646357469306,
+        "r_pinky_proximal_abd": 0.04824308461370749,
+        "r_pinky_middle": 0.04742025246800185,
+        "r_pinky_distal": 0.05206455410386387
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.04537800007902743,
+        "r_thumb_proximal": 0.05865222064185028,
+        "r_thumb_proximal_abd": 0.02631096031451455,
+        "r_thumb_middle": 0.015711469724124263,
+        "r_thumb_distal": 0.016456065313460055,
+        "r_index_finger_proximal": 0.0355832816478095,
+        "r_index_finger_proximal_abd": 0.01211139518461653,
+        "r_index_finger_middle": 0.008963420876168037,
+        "r_index_finger_distal": 0.009329492185776986,
+        "r_middle_finger_proximal": 0.046771392071058224,
+        "r_middle_finger_proximal_abd": 0.03256233272181137,
+        "r_middle_finger_middle": 0.019192667646107057,
+        "r_middle_finger_distal": 0.01657485774487262,
+        "r_ring_finger_proximal": 0.06204213136106447,
+        "r_ring_finger_proximal_abd": 0.06435956380882214,
+        "r_ring_finger_middle": 0.07417193506184126,
+        "r_ring_finger_distal": 0.06613047610301633,
+        "r_pinky_proximal": 0.06718578730304803,
+        "r_pinky_proximal_abd": 0.06499568023280472,
+        "r_pinky_middle": 0.06480428935814281,
+        "r_pinky_distal": 0.07049652146649671
+      }
+    },
+    {
+      "index": 11591,
+      "score": 0.016601616201066108,
+      "wrist_position_w_m": [
+        0.11713698870572259,
+        -0.018728294875767,
+        0.6517513331970093
+      ],
+      "wrist_quaternion_wxyz": [
+        0.6343838730757282,
+        0.05923563845775735,
+        0.7433898646164504,
+        0.20351842644703205
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.8188642913538914,
+        "r_thumb_cmc_abd": -0.2904779977808176,
+        "r_thumb_mcp": 0.6169269289081667,
+        "r_thumb_ip": 0.03166458966435432,
+        "r_index_finger_mcp_flex": 0.3116217050344565,
+        "r_index_finger_mcp_abd": 0.5312934890741727,
+        "r_index_finger_pip": 0.878417218148278,
+        "r_index_finger_dip": 1.331366528413147,
+        "r_middle_finger_mcp_flex": 1.1879890727704767,
+        "r_middle_finger_mcp_abd": 0.0484516704080834,
+        "r_middle_finger_pip": 1.1832789232519194,
+        "r_middle_finger_dip": 0.8496182918797731,
+        "r_ring_finger_mcp_flex": 0.09629976564593602,
+        "r_ring_finger_mcp_abd": -0.2781653999173028,
+        "r_ring_finger_pip": 0.6576041257077253,
+        "r_ring_finger_dip": 0.3409082894194633,
+        "r_pinky_mcp_flex": 0.7412250754938455,
+        "r_pinky_mcp_abd": -0.18214056477911567,
+        "r_pinky_pip": 0.10257197849921826,
+        "r_pinky_dip": 0.9922209504973223
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.02902715780162972,
+        "thumb": 0.0006283642493041216,
+        "index": 0.00623814100721061,
+        "middle": 0.01064931683544257,
+        "ring": 0.02706507493283647,
+        "pinky": 0.0444097940474236
+      },
+      "minimum_cap_distance_m": 0.0006283642493041216,
+      "minimum_bottle_distance_m": 0.015756947139338694,
+      "minimum_self_distance_m": 0.0015373919748599937,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.009298081059208905,
+        "index": 0.00960267094073715
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.013858153653982594,
+          0.009846399190573113,
+          0.6532630612554402
+        ],
+        "index": [
+          0.0033052134926958845,
+          -0.0166755978533814,
+          0.6532747182904743
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 1.9928727050677606,
+      "body_cap_distances_m": {
+        "r_wrist": 0.02902715780162972,
+        "r_thumb_proximal": 0.06445900059247622,
+        "r_thumb_proximal_abd": 0.037705344980174846,
+        "r_thumb_middle": 0.009298081059208905,
+        "r_thumb_distal": 0.0006283642493041216,
+        "r_index_finger_proximal": 0.016000229606308796,
+        "r_index_finger_proximal_abd": 0.00960267094073715,
+        "r_index_finger_middle": 0.00623814100721061,
+        "r_index_finger_distal": 0.012533503811925572,
+        "r_middle_finger_proximal": 0.02507824877907205,
+        "r_middle_finger_proximal_abd": 0.01085615252907045,
+        "r_middle_finger_middle": 0.01064931683544257,
+        "r_middle_finger_distal": 0.023807729286234543,
+        "r_ring_finger_proximal": 0.04342489862053527,
+        "r_ring_finger_proximal_abd": 0.03371963575851833,
+        "r_ring_finger_middle": 0.028100653299506013,
+        "r_ring_finger_distal": 0.02706507493283647,
+        "r_pinky_proximal": 0.059540285562061784,
+        "r_pinky_proximal_abd": 0.046464688234296544,
+        "r_pinky_middle": 0.0444097940474236,
+        "r_pinky_distal": 0.046224716935934114
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.03302715780282749,
+        "r_thumb_proximal": 0.05689472524784888,
+        "r_thumb_proximal_abd": 0.039867722682767816,
+        "r_thumb_middle": 0.017905369739225283,
+        "r_thumb_distal": 0.015756947139338694,
+        "r_index_finger_proximal": 0.02001103228450156,
+        "r_index_finger_proximal_abd": 0.01649117960187126,
+        "r_index_finger_middle": 0.020010012382693794,
+        "r_index_finger_distal": 0.030972592693510256,
+        "r_middle_finger_proximal": 0.03479587954155085,
+        "r_middle_finger_proximal_abd": 0.028567551657767826,
+        "r_middle_finger_middle": 0.029079372774551776,
+        "r_middle_finger_distal": 0.04093744709234229,
+        "r_ring_finger_proximal": 0.056361971519624104,
+        "r_ring_finger_proximal_abd": 0.04823904797955142,
+        "r_ring_finger_middle": 0.044748388558224085,
+        "r_ring_finger_distal": 0.04398734334717288,
+        "r_pinky_proximal": 0.07443125528028592,
+        "r_pinky_proximal_abd": 0.0647422362086793,
+        "r_pinky_middle": 0.06278378803765962,
+        "r_pinky_distal": 0.06430334649130387
+      }
+    },
+    {
+      "index": 18928,
+      "score": 0.01941955457783045,
+      "wrist_position_w_m": [
+        0.10233351982614114,
+        0.03733712523405132,
+        0.646308373344962
+      ],
+      "wrist_quaternion_wxyz": [
+        0.563527759084615,
+        -0.5632311594151291,
+        0.5804026639494675,
+        0.16834450833134912
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.8472077623007797,
+        "r_thumb_cmc_abd": -0.13817509523699278,
+        "r_thumb_mcp": 0.7106330220847714,
+        "r_thumb_ip": 0.28351001361375394,
+        "r_index_finger_mcp_flex": 0.057804265758918214,
+        "r_index_finger_mcp_abd": -0.23262665814957462,
+        "r_index_finger_pip": 1.0420523591519124,
+        "r_index_finger_dip": 0.9364333680628185,
+        "r_middle_finger_mcp_flex": 0.930272689836825,
+        "r_middle_finger_mcp_abd": 0.6372709867804665,
+        "r_middle_finger_pip": 1.0561887877059009,
+        "r_middle_finger_dip": 0.5403841931457867,
+        "r_ring_finger_mcp_flex": 0.2080525122768546,
+        "r_ring_finger_mcp_abd": 0.012277688901722317,
+        "r_ring_finger_pip": 1.0587476000644287,
+        "r_ring_finger_dip": 1.1692350783518373,
+        "r_pinky_mcp_flex": 1.3841960204893629,
+        "r_pinky_mcp_abd": -0.23725357537422043,
+        "r_pinky_pip": 0.7489562115230066,
+        "r_pinky_dip": 1.1900047000982383
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.05102050214712545,
+        "thumb": 0.015333938472894465,
+        "index": 0.05165259623128359,
+        "middle": 0.0030881005880116774,
+        "ring": 0.02023816249044984,
+        "pinky": 0.0001841616509766593
+      },
+      "minimum_cap_distance_m": 0.0001841616509766593,
+      "minimum_bottle_distance_m": 0.0048460462123103495,
+      "minimum_self_distance_m": 0.0011707147067117382,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.015333938472894465,
+        "index": 0.06502091851487929,
+        "pinky": 0.0001841616509766593
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.011214711796711128,
+          -0.012776159020479712,
+          0.6436165318419713
+        ],
+        "index": [
+          0.005700158978383919,
+          -0.01601587298808326,
+          0.6461715650704327
+        ],
+        "pinky": [
+          0.01326913455095279,
+          0.010626855991575725,
+          0.650746813914808
+        ]
+      },
+      "sidewall_opposing_digit": "pinky",
+      "sidewall_angular_separation_rad": 1.525662950931908,
+      "body_cap_distances_m": {
+        "r_wrist": 0.05102050214712545,
+        "r_thumb_proximal": 0.05648005255648288,
+        "r_thumb_proximal_abd": 0.03368349698133119,
+        "r_thumb_middle": 0.017510812842381526,
+        "r_thumb_distal": 0.015333938472894465,
+        "r_index_finger_proximal": 0.0582816585334289,
+        "r_index_finger_proximal_abd": 0.06107021297867037,
+        "r_index_finger_middle": 0.06502091851487929,
+        "r_index_finger_distal": 0.05165259623128359,
+        "r_middle_finger_proximal": 0.043325056890516585,
+        "r_middle_finger_proximal_abd": 0.026613363367419512,
+        "r_middle_finger_middle": 0.01001283053855928,
+        "r_middle_finger_distal": 0.0030881005880116774,
+        "r_ring_finger_proximal": 0.04965124602837687,
+        "r_ring_finger_proximal_abd": 0.05035739868668072,
+        "r_ring_finger_middle": 0.03796012391251629,
+        "r_ring_finger_distal": 0.02023816249044984,
+        "r_pinky_proximal": 0.04208496524054869,
+        "r_pinky_proximal_abd": 0.008226788404181635,
+        "r_pinky_middle": 0.0001841616509766593,
+        "r_pinky_distal": 0.00023259128684951415
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.05726662451248635,
+        "r_thumb_proximal": 0.04648047564688593,
+        "r_thumb_proximal_abd": 0.017710321274221036,
+        "r_thumb_middle": 0.017914853092639238,
+        "r_thumb_distal": 0.019429354303134336,
+        "r_index_finger_proximal": 0.06138171481546151,
+        "r_index_finger_proximal_abd": 0.06554423636696176,
+        "r_index_finger_middle": 0.06071534233331325,
+        "r_index_finger_distal": 0.04704254131219454,
+        "r_middle_finger_proximal": 0.053349762297826724,
+        "r_middle_finger_proximal_abd": 0.04339261634378541,
+        "r_middle_finger_middle": 0.028012830538559186,
+        "r_middle_finger_distal": 0.021088100588011582,
+        "r_ring_finger_proximal": 0.06380809914497472,
+        "r_ring_finger_proximal_abd": 0.06559359422172857,
+        "r_ring_finger_middle": 0.05430369592978438,
+        "r_ring_finger_distal": 0.03783750046361425,
+        "r_pinky_proximal": 0.0569112939020585,
+        "r_pinky_proximal_abd": 0.02480927788220342,
+        "r_pinky_middle": 0.0052920812647698915,
+        "r_pinky_distal": 0.0048460462123103495
+      }
+    },
+    {
+      "index": 29385,
+      "score": 0.02045131930589144,
+      "wrist_position_w_m": [
+        0.06385590953761307,
+        0.03359821489671387,
+        0.6381852157875629
+      ],
+      "wrist_quaternion_wxyz": [
+        0.2865314990683605,
+        -0.7866286529738284,
+        0.543016092659183,
+        -0.06518117424051295
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.5444827360225364,
+        "r_thumb_cmc_abd": 0.06827452098112102,
+        "r_thumb_mcp": 1.3365383934393245,
+        "r_thumb_ip": 0.7373472957605126,
+        "r_index_finger_mcp_flex": 0.40840556420992774,
+        "r_index_finger_mcp_abd": 0.11603634954822145,
+        "r_index_finger_pip": 0.09510534454096284,
+        "r_index_finger_dip": 1.2262557359188644,
+        "r_middle_finger_mcp_flex": 0.7369222864018893,
+        "r_middle_finger_mcp_abd": 0.40609231421860775,
+        "r_middle_finger_pip": 1.0502398042604082,
+        "r_middle_finger_dip": 0.09243773866176712,
+        "r_ring_finger_mcp_flex": 1.3263975005598967,
+        "r_ring_finger_mcp_abd": 0.3178249209087813,
+        "r_ring_finger_pip": 1.0338285870720312,
+        "r_ring_finger_dip": 0.9084710699032772,
+        "r_pinky_mcp_flex": 0.8047410313583819,
+        "r_pinky_mcp_abd": 0.6040889216774221,
+        "r_pinky_pip": 1.1330512671073123,
+        "r_pinky_dip": 1.0118264318137775
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.02534334786320182,
+        "thumb": 0.009289981471171906,
+        "index": 0.039625171153606094,
+        "middle": 0.0342701509147952,
+        "ring": 0.005818723419393809,
+        "pinky": 0.02806057967355614
+      },
+      "minimum_cap_distance_m": 0.005818723419393809,
+      "minimum_bottle_distance_m": 0.010635684740139909,
+      "minimum_self_distance_m": 0.0023169580732681273,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.02063259588649763,
+        "ring": 0.005818723419393809
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.014607820084618792,
+          -0.00869549263691611,
+          0.6492836848913879
+        ],
+        "ring": [
+          -0.00925621855405035,
+          0.014259117015808738,
+          0.6488186329140355
+        ]
+      },
+      "sidewall_opposing_digit": "ring",
+      "sidewall_angular_separation_rad": 2.6834984926780265,
+      "body_cap_distances_m": {
+        "r_wrist": 0.02534334786320182,
+        "r_thumb_proximal": 0.024413482314170534,
+        "r_thumb_proximal_abd": 0.02063259588649763,
+        "r_thumb_middle": 0.009289981471171906,
+        "r_thumb_distal": 0.011740952626240241,
+        "r_index_finger_proximal": 0.039625171153606094,
+        "r_index_finger_proximal_abd": 0.043466191009498535,
+        "r_index_finger_middle": 0.062425624877096485,
+        "r_index_finger_distal": 0.07463145017566732,
+        "r_middle_finger_proximal": 0.04324590470591265,
+        "r_middle_finger_proximal_abd": 0.04542379657915766,
+        "r_middle_finger_middle": 0.03972124953007609,
+        "r_middle_finger_distal": 0.0342701509147952,
+        "r_ring_finger_proximal": 0.029543126379636013,
+        "r_ring_finger_proximal_abd": 0.020865386444927293,
+        "r_ring_finger_middle": 0.00677334193570316,
+        "r_ring_finger_distal": 0.005818723419393809,
+        "r_pinky_proximal": 0.036165992502506406,
+        "r_pinky_proximal_abd": 0.03839732401663096,
+        "r_pinky_middle": 0.03696243619736506,
+        "r_pinky_distal": 0.02806057967355614
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.03506321990944621,
+        "r_thumb_proximal": 0.028413482307585086,
+        "r_thumb_proximal_abd": 0.025801027000222954,
+        "r_thumb_middle": 0.025131854779249976,
+        "r_thumb_distal": 0.030120309605039017,
+        "r_index_finger_proximal": 0.05666451340237865,
+        "r_index_finger_proximal_abd": 0.06099807486098905,
+        "r_index_finger_middle": 0.08078957519710542,
+        "r_index_finger_distal": 0.09264290753205154,
+        "r_middle_finger_proximal": 0.061499629910825776,
+        "r_middle_finger_proximal_abd": 0.06384961733084367,
+        "r_middle_finger_middle": 0.05813417461700583,
+        "r_middle_finger_distal": 0.05217876073246529,
+        "r_ring_finger_proximal": 0.047933799029949174,
+        "r_ring_finger_proximal_abd": 0.03930426730811235,
+        "r_ring_finger_middle": 0.018199660387508736,
+        "r_ring_finger_distal": 0.010635684740139909,
+        "r_pinky_proximal": 0.054039452332002955,
+        "r_pinky_proximal_abd": 0.056328752033835444,
+        "r_pinky_middle": 0.05062672214259871,
+        "r_pinky_distal": 0.037194444586840916
+      }
+    },
+    {
+      "index": 72105,
+      "score": 0.024241053416106943,
+      "wrist_position_w_m": [
+        0.1204212829167898,
+        0.0135458221226996,
+        0.6854026716978272
+      ],
+      "wrist_quaternion_wxyz": [
+        0.7261233062721566,
+        0.1013340672608104,
+        0.5699260663004693,
+        0.3710264543830355
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.7233647088003327,
+        "r_thumb_cmc_abd": 0.07961845180232457,
+        "r_thumb_mcp": 0.20438866786349696,
+        "r_thumb_ip": 0.4839942415904784,
+        "r_index_finger_mcp_flex": 1.2526382953995558,
+        "r_index_finger_mcp_abd": 0.22231768740496188,
+        "r_index_finger_pip": 0.6565166200657645,
+        "r_index_finger_dip": 0.19698070847028032,
+        "r_middle_finger_mcp_flex": 0.03127697638874311,
+        "r_middle_finger_mcp_abd": 0.6104121158953921,
+        "r_middle_finger_pip": 1.0890831781331205,
+        "r_middle_finger_dip": 0.0309603683281489,
+        "r_ring_finger_mcp_flex": 0.8884725380994367,
+        "r_ring_finger_mcp_abd": 0.2538576164955196,
+        "r_ring_finger_pip": 1.3045431865853094,
+        "r_ring_finger_dip": 1.339309588384617,
+        "r_pinky_mcp_flex": 0.09555215363772238,
+        "r_pinky_mcp_abd": 0.563688876278277,
+        "r_pinky_pip": 0.8333427291690767,
+        "r_pinky_dip": 0.4423377869620834
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.0342280951665655,
+        "thumb": 0.015295695395655277,
+        "index": 0.0135613751887278,
+        "middle": 0.009552294164456729,
+        "ring": 0.025654931876101086,
+        "pinky": 0.049777281826540794
+      },
+      "minimum_cap_distance_m": 0.009552294164456729,
+      "minimum_bottle_distance_m": 0.01936543225650635,
+      "minimum_self_distance_m": 0.002335175541074537,
+      "digit_sidewall_distances_m": {
+        "wrist": 0.0342280951665655,
+        "thumb": 0.015295695395655277,
+        "index": 0.02329382281356698,
+        "middle": 0.014945358020451664
+      },
+      "digit_sidewall_points_w_m": {
+        "wrist": [
+          0.01683826927571311,
+          -0.0023393776402481866,
+          0.6507264171732091
+        ],
+        "thumb": [
+          0.005572059443022182,
+          0.01606088892462679,
+          0.6421822063607684
+        ],
+        "index": [
+          0.016389737247883528,
+          0.004514035102492651,
+          0.6492911898339029
+        ],
+        "middle": [
+          0.010370731759893056,
+          -0.013470260679041068,
+          0.6533118304817316
+        ]
+      },
+      "sidewall_opposing_digit": "middle",
+      "sidewall_angular_separation_rad": 2.1515374302006567,
+      "body_cap_distances_m": {
+        "r_wrist": 0.0342280951665655,
+        "r_thumb_proximal": 0.07733086372819287,
+        "r_thumb_proximal_abd": 0.056192851389434445,
+        "r_thumb_middle": 0.030669339213949452,
+        "r_thumb_distal": 0.015295695395655277,
+        "r_index_finger_proximal": 0.02329382281356698,
+        "r_index_finger_proximal_abd": 0.0135613751887278,
+        "r_index_finger_middle": 0.014644024554799098,
+        "r_index_finger_distal": 0.040613954139502834,
+        "r_middle_finger_proximal": 0.020139615250560353,
+        "r_middle_finger_proximal_abd": 0.014945358020451664,
+        "r_middle_finger_middle": 0.009552294164456729,
+        "r_middle_finger_distal": 0.010497968885440754,
+        "r_ring_finger_proximal": 0.030951012776620334,
+        "r_ring_finger_proximal_abd": 0.025654931876101086,
+        "r_ring_finger_middle": 0.02766657451110512,
+        "r_ring_finger_distal": 0.04592676363729899,
+        "r_pinky_proximal": 0.049777281826540794,
+        "r_pinky_proximal_abd": 0.050276813833583636,
+        "r_pinky_middle": 0.05439607591559309,
+        "r_pinky_distal": 0.06116353975114128
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.0394731240270389,
+        "r_thumb_proximal": 0.08646397431353335,
+        "r_thumb_proximal_abd": 0.06137108702329047,
+        "r_thumb_middle": 0.03469074432051193,
+        "r_thumb_distal": 0.01936543225650635,
+        "r_index_finger_proximal": 0.028742139571504895,
+        "r_index_finger_proximal_abd": 0.027060379043571357,
+        "r_index_finger_middle": 0.031079578272124094,
+        "r_index_finger_distal": 0.05782218804605875,
+        "r_middle_finger_proximal": 0.026542906365828546,
+        "r_middle_finger_proximal_abd": 0.022776105253224845,
+        "r_middle_finger_middle": 0.023550610062952736,
+        "r_middle_finger_distal": 0.027896240058800096,
+        "r_ring_finger_proximal": 0.044787899220391614,
+        "r_ring_finger_proximal_abd": 0.04336269083340574,
+        "r_ring_finger_middle": 0.04597254134318937,
+        "r_ring_finger_distal": 0.06432917952713335,
+        "r_pinky_proximal": 0.06566573764847075,
+        "r_pinky_proximal_abd": 0.06590609456847239,
+        "r_pinky_middle": 0.0711282102110277,
+        "r_pinky_distal": 0.0793213168889807
+      }
+    },
+    {
+      "index": 67901,
+      "score": 0.024609500240352928,
+      "wrist_position_w_m": [
+        0.07664458330870519,
+        0.010901222942393332,
+        0.6414460932232151
+      ],
+      "wrist_quaternion_wxyz": [
+        0.3361581146631193,
+        0.06672379966939751,
+        0.7644603806321925,
+        0.5460274562212958
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.9496185610107388,
+        "r_thumb_cmc_abd": -0.09681933543663629,
+        "r_thumb_mcp": 0.7100703322999177,
+        "r_thumb_ip": 0.12010651848315236,
+        "r_index_finger_mcp_flex": 0.07877422023047143,
+        "r_index_finger_mcp_abd": -0.2001262526840296,
+        "r_index_finger_pip": 0.5263098510131307,
+        "r_index_finger_dip": 1.1013316452823545,
+        "r_middle_finger_mcp_flex": 0.4504380659533171,
+        "r_middle_finger_mcp_abd": 0.2326414565202884,
+        "r_middle_finger_pip": 0.34227119806190365,
+        "r_middle_finger_dip": 0.3899990199990213,
+        "r_ring_finger_mcp_flex": 0.9177955204662543,
+        "r_ring_finger_mcp_abd": 0.14152288614761271,
+        "r_ring_finger_pip": 1.100241479750689,
+        "r_ring_finger_dip": 0.7859322717384964,
+        "r_pinky_mcp_flex": 0.8224866008284758,
+        "r_pinky_mcp_abd": 0.5825311447076635,
+        "r_pinky_pip": 1.0298658864964874,
+        "r_pinky_dip": 0.36540022527769445
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.010787261996132426,
+        "thumb": 9.361722970198052e-05,
+        "index": 0.012521442031576844,
+        "middle": 0.033525702581948945,
+        "ring": 0.04603850116707578,
+        "pinky": 0.060854920286254
+      },
+      "minimum_cap_distance_m": 9.361722970198052e-05,
+      "minimum_bottle_distance_m": 0.014788454494629406,
+      "minimum_self_distance_m": 0.0023364831962719257,
+      "digit_sidewall_distances_m": {
+        "wrist": 0.010787261996132426,
+        "thumb": 0.016518279144801785,
+        "index": 0.012521442031576844,
+        "middle": 0.033525702581948945
+      },
+      "digit_sidewall_points_w_m": {
+        "wrist": [
+          0.013380501032510445,
+          -0.010486285906789818,
+          0.6401898018071454
+        ],
+        "thumb": [
+          0.015688791346554574,
+          0.006546894383053904,
+          0.6511160843692507
+        ],
+        "index": [
+          0.008919086755355746,
+          -0.014472383751468563,
+          0.6425672682302669
+        ],
+        "middle": [
+          0.009885655689651458,
+          -0.013830177564083293,
+          0.6477110270126278
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 1.4138184203974666,
+      "body_cap_distances_m": {
+        "r_wrist": 0.010787261996132426,
+        "r_thumb_proximal": 0.016518279144801785,
+        "r_thumb_proximal_abd": 9.361722970198052e-05,
+        "r_thumb_middle": 0.003634729073875914,
+        "r_thumb_distal": 0.019885992955884897,
+        "r_index_finger_proximal": 0.012521442031576844,
+        "r_index_finger_proximal_abd": 0.020856929038753802,
+        "r_index_finger_middle": 0.04344080535110708,
+        "r_index_finger_distal": 0.06046585921676343,
+        "r_middle_finger_proximal": 0.033525702581948945,
+        "r_middle_finger_proximal_abd": 0.03855179573039191,
+        "r_middle_finger_middle": 0.06045972783164837,
+        "r_middle_finger_distal": 0.08029129834848572,
+        "r_ring_finger_proximal": 0.04603850116707578,
+        "r_ring_finger_proximal_abd": 0.04802483322035548,
+        "r_ring_finger_middle": 0.05953154145791693,
+        "r_ring_finger_distal": 0.06259291448523543,
+        "r_pinky_proximal": 0.060854920286254,
+        "r_pinky_proximal_abd": 0.06287831349029017,
+        "r_pinky_middle": 0.0829489772420484,
+        "r_pinky_distal": 0.08907819940110319
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.014788454494629406,
+        "r_thumb_proximal": 0.022746587950426153,
+        "r_thumb_proximal_abd": 0.017734205287550465,
+        "r_thumb_middle": 0.022056299606843008,
+        "r_thumb_distal": 0.03796733092495825,
+        "r_index_finger_proximal": 0.016636553678627795,
+        "r_index_finger_proximal_abd": 0.02531886017679605,
+        "r_index_finger_middle": 0.04740488625726157,
+        "r_index_finger_distal": 0.06853324222181337,
+        "r_middle_finger_proximal": 0.03823535544552843,
+        "r_middle_finger_proximal_abd": 0.044655130986228246,
+        "r_middle_finger_middle": 0.07060783287609397,
+        "r_middle_finger_distal": 0.09325530836364893,
+        "r_ring_finger_proximal": 0.05472357958345257,
+        "r_ring_finger_proximal_abd": 0.05771846528793799,
+        "r_ring_finger_middle": 0.07470025371006399,
+        "r_ring_finger_distal": 0.08057836747899808,
+        "r_pinky_proximal": 0.07038220232153786,
+        "r_pinky_proximal_abd": 0.0736994312545755,
+        "r_pinky_middle": 0.0971974257851085,
+        "r_pinky_distal": 0.1056404805799132
+      }
+    },
+    {
+      "index": 66960,
+      "score": 0.02576681334544819,
+      "wrist_position_w_m": [
+        0.1242207229579048,
+        -0.026336440291451137,
+        0.7016654375759436
+      ],
+      "wrist_quaternion_wxyz": [
+        0.6602467289653587,
+        -0.1848225957242512,
+        0.6774343622794332,
+        -0.26645365413773514
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.03630647029519586,
+        "r_thumb_cmc_abd": 0.407871299140853,
+        "r_thumb_mcp": 0.3058463110004398,
+        "r_thumb_ip": 0.5450450117458777,
+        "r_index_finger_mcp_flex": 0.9394788234642995,
+        "r_index_finger_mcp_abd": 0.13601026583084708,
+        "r_index_finger_pip": 0.4705294792678319,
+        "r_index_finger_dip": 1.2386213895370597,
+        "r_middle_finger_mcp_flex": 0.33746733304886756,
+        "r_middle_finger_mcp_abd": -0.01913802117317237,
+        "r_middle_finger_pip": 1.1331896485869084,
+        "r_middle_finger_dip": 0.6896479772411023,
+        "r_ring_finger_mcp_flex": 0.2876496448868709,
+        "r_ring_finger_mcp_abd": -0.10804733131049712,
+        "r_ring_finger_pip": 0.9061300298712126,
+        "r_ring_finger_dip": 0.5926721937608515,
+        "r_pinky_mcp_flex": 0.25132039226828373,
+        "r_pinky_mcp_abd": -0.04639870848142269,
+        "r_pinky_pip": 0.8691927856456306,
+        "r_pinky_dip": 0.7947662090132707
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.046082533103926925,
+        "thumb": 0.021230068406135217,
+        "index": -2.813481957513098e-05,
+        "middle": 0.007478076831677888,
+        "ring": 0.027081336506614297,
+        "pinky": 0.052607321143674945
+      },
+      "minimum_cap_distance_m": -2.813481957513098e-05,
+      "minimum_bottle_distance_m": 0.013825211720748702,
+      "minimum_self_distance_m": 0.0020044381925107607,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.021230068406135217,
+        "index": 0.010536744939312974
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.0086733369803917,
+          -0.014620985782536641,
+          0.6512142576481519
+        ],
+        "index": [
+          0.01021279743062986,
+          0.013590392489879845,
+          0.646663892562144
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 1.9617372165800824,
+      "body_cap_distances_m": {
+        "r_wrist": 0.046082533103926925,
+        "r_thumb_proximal": 0.08637650416327464,
+        "r_thumb_proximal_abd": 0.06533780222235895,
+        "r_thumb_middle": 0.038477390707890045,
+        "r_thumb_distal": 0.021230068406135217,
+        "r_index_finger_proximal": 0.030387857091042553,
+        "r_index_finger_proximal_abd": 0.00035522762992864793,
+        "r_index_finger_middle": -2.813481957513098e-05,
+        "r_index_finger_distal": 0.010536744939312974,
+        "r_middle_finger_proximal": 0.04106266002853528,
+        "r_middle_finger_proximal_abd": 0.02846105489242401,
+        "r_middle_finger_middle": 0.010537443477231444,
+        "r_middle_finger_distal": 0.007478076831677888,
+        "r_ring_finger_proximal": 0.05819041512437008,
+        "r_ring_finger_proximal_abd": 0.04608811274132052,
+        "r_ring_finger_middle": 0.03010908648437304,
+        "r_ring_finger_distal": 0.027081336506614297,
+        "r_pinky_proximal": 0.07496491971271013,
+        "r_pinky_proximal_abd": 0.06622787949198108,
+        "r_pinky_middle": 0.05561538153824262,
+        "r_pinky_distal": 0.052607321143674945
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.058904463406897846,
+        "r_thumb_proximal": 0.09390425849236342,
+        "r_thumb_proximal_abd": 0.06866989590277335,
+        "r_thumb_middle": 0.04281205073105445,
+        "r_thumb_distal": 0.02696295830449464,
+        "r_index_finger_proximal": 0.04548266473321896,
+        "r_index_finger_proximal_abd": 0.01774789696897264,
+        "r_index_finger_middle": 0.013825211720748702,
+        "r_index_finger_distal": 0.015927870644219348,
+        "r_middle_finger_proximal": 0.058829502450256095,
+        "r_middle_finger_proximal_abd": 0.04646105489242391,
+        "r_middle_finger_middle": 0.02887443215256591,
+        "r_middle_finger_distal": 0.025328494650188504,
+        "r_ring_finger_proximal": 0.07607785568702757,
+        "r_ring_finger_proximal_abd": 0.06409028903447964,
+        "r_ring_finger_middle": 0.04836441935416882,
+        "r_ring_finger_distal": 0.043973153916351156,
+        "r_pinky_proximal": 0.09257698808492588,
+        "r_pinky_proximal_abd": 0.08465168600052657,
+        "r_pinky_middle": 0.07339278778050075,
+        "r_pinky_distal": 0.06919798288897343
+      }
+    },
+    {
+      "index": 6248,
+      "score": 0.02710205494404924,
+      "wrist_position_w_m": [
+        0.11211237214589453,
+        -0.002480402893631911,
+        0.637998064106851
+      ],
+      "wrist_quaternion_wxyz": [
+        0.4920946418344261,
+        0.19261540840485758,
+        0.7653336142314157,
+        0.3674324793079084
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.8347468566738613,
+        "r_thumb_cmc_abd": -0.043876630203680766,
+        "r_thumb_mcp": 0.35037291442724305,
+        "r_thumb_ip": 0.6785666115239123,
+        "r_index_finger_mcp_flex": 0.030655605646040304,
+        "r_index_finger_mcp_abd": 0.1009797533477581,
+        "r_index_finger_pip": 0.19290611671572305,
+        "r_index_finger_dip": 0.9152623337241893,
+        "r_middle_finger_mcp_flex": 0.8478640197807154,
+        "r_middle_finger_mcp_abd": 0.3621886758295227,
+        "r_middle_finger_pip": 0.4013576765886064,
+        "r_middle_finger_dip": 0.5615447641813646,
+        "r_ring_finger_mcp_flex": 0.008883977592803238,
+        "r_ring_finger_mcp_abd": -0.20400847627654847,
+        "r_ring_finger_pip": 0.4032811512972851,
+        "r_ring_finger_dip": 0.47445089203140695,
+        "r_pinky_mcp_flex": 1.3297418519139435,
+        "r_pinky_mcp_abd": -0.04982170553143095,
+        "r_pinky_pip": 0.7783355686117143,
+        "r_pinky_dip": 0.7007480807912202
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.016374480266668507,
+        "thumb": 0.006851044014767506,
+        "index": 0.002673787060839613,
+        "middle": 0.022652968209092208,
+        "ring": 0.04131492953252798,
+        "pinky": 0.06090287214921253
+      },
+      "minimum_cap_distance_m": 0.002673787060839613,
+      "minimum_bottle_distance_m": 0.00809878567214884,
+      "minimum_self_distance_m": 0.002334905470653235,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.030102054944049238,
+        "index": 0.002673787060839613
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.015524456884185626,
+          0.006927570888531048,
+          0.651843223456865
+        ],
+        "index": [
+          0.006253452202534895,
+          -0.015808046544413666,
+          0.6455760377997996
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 1.6138196812109236,
+      "body_cap_distances_m": {
+        "r_wrist": 0.016374480266668507,
+        "r_thumb_proximal": 0.059047096353149586,
+        "r_thumb_proximal_abd": 0.030102054944049238,
+        "r_thumb_middle": 0.007023779261535016,
+        "r_thumb_distal": 0.006851044014767506,
+        "r_index_finger_proximal": 0.006611664130223674,
+        "r_index_finger_proximal_abd": 0.002673787060839613,
+        "r_index_finger_middle": 0.007715628348690668,
+        "r_index_finger_distal": 0.027735048584777492,
+        "r_middle_finger_proximal": 0.02447378013137762,
+        "r_middle_finger_proximal_abd": 0.022652968209092208,
+        "r_middle_finger_middle": 0.030642159791183544,
+        "r_middle_finger_distal": 0.054366668237976035,
+        "r_ring_finger_proximal": 0.04557171027535674,
+        "r_ring_finger_proximal_abd": 0.041822674165495524,
+        "r_ring_finger_middle": 0.04131492953252798,
+        "r_ring_finger_distal": 0.04657578539173818,
+        "r_pinky_proximal": 0.06403346212557341,
+        "r_pinky_proximal_abd": 0.06148877988080727,
+        "r_pinky_middle": 0.06090287214921253,
+        "r_pinky_distal": 0.0696468229356211
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.020374480270657924,
+        "r_thumb_proximal": 0.05480704612764487,
+        "r_thumb_proximal_abd": 0.03610002899377329,
+        "r_thumb_middle": 0.024499484976930642,
+        "r_thumb_distal": 0.02523089231345312,
+        "r_index_finger_proximal": 0.011568824929692247,
+        "r_index_finger_proximal_abd": 0.00809878567214884,
+        "r_index_finger_middle": 0.013149410049568286,
+        "r_index_finger_distal": 0.035294498686792256,
+        "r_middle_finger_proximal": 0.0328749985072501,
+        "r_middle_finger_proximal_abd": 0.03299710245471267,
+        "r_middle_finger_middle": 0.04840665541944462,
+        "r_middle_finger_distal": 0.07276090910783094,
+        "r_ring_finger_proximal": 0.055388442076941796,
+        "r_ring_finger_proximal_abd": 0.05337800704208646,
+        "r_ring_finger_middle": 0.05318787910758166,
+        "r_ring_finger_distal": 0.06065713415740016,
+        "r_pinky_proximal": 0.07563749045832363,
+        "r_pinky_proximal_abd": 0.07588930111172046,
+        "r_pinky_middle": 0.0770383730783485,
+        "r_pinky_distal": 0.08633130408203893
+      }
+    },
+    {
+      "index": 94009,
+      "score": 0.028608944393014334,
+      "wrist_position_w_m": [
+        0.09434815153335578,
+        -0.013213716155201852,
+        0.6025905488747825
+      ],
+      "wrist_quaternion_wxyz": [
+        0.4707164335801026,
+        0.4093981738681647,
+        0.7720419369894702,
+        0.1215336246500861
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.1481424495581767,
+        "r_thumb_cmc_abd": 0.3791877196478644,
+        "r_thumb_mcp": 0.48641952086786294,
+        "r_thumb_ip": 1.2584089985886315,
+        "r_index_finger_mcp_flex": 0.16893310391863237,
+        "r_index_finger_mcp_abd": 0.006750957017233605,
+        "r_index_finger_pip": 1.2638691437811385,
+        "r_index_finger_dip": 1.1292683631816294,
+        "r_middle_finger_mcp_flex": 1.2850139960117015,
+        "r_middle_finger_mcp_abd": 0.14423078235577985,
+        "r_middle_finger_pip": 0.6107478899193358,
+        "r_middle_finger_dip": 0.8545785257234718,
+        "r_ring_finger_mcp_flex": 1.269093168682038,
+        "r_ring_finger_mcp_abd": 0.23540211360315505,
+        "r_ring_finger_pip": 0.5473663108572983,
+        "r_ring_finger_dip": 0.04907290676719762,
+        "r_pinky_mcp_flex": 0.10533638065876283,
+        "r_pinky_mcp_abd": 0.06249132815657005,
+        "r_pinky_pip": 0.86592625734624,
+        "r_pinky_dip": 0.6330648182412725
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.0034693353361054022,
+        "thumb": 0.019661759814284304,
+        "index": 8.753947807383006e-06,
+        "middle": 0.002921375472043845,
+        "ring": 0.01618738780679745,
+        "pinky": 0.02688442096222265
+      },
+      "minimum_cap_distance_m": 8.753947807383006e-06,
+      "minimum_bottle_distance_m": 0.003234961018827315,
+      "minimum_self_distance_m": 0.0013638523071362034,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.019661759814284304,
+        "index": 0.008602709808372936,
+        "middle": 0.002921375472043845,
+        "ring": 0.01618738780679745
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.009141315335755068,
+          0.014333051103380451,
+          0.6414004717745874
+        ],
+        "index": [
+          -0.0051949361056132124,
+          0.01618680446221597,
+          0.649661167102132
+        ],
+        "middle": [
+          0.016881654129008824,
+          0.00200243698240511,
+          0.6396603112179713
+        ],
+        "ring": [
+          0.0163105388709747,
+          -0.0047923190024477804,
+          0.6502702975241088
+        ]
+      },
+      "sidewall_opposing_digit": "middle",
+      "sidewall_angular_separation_rad": 0.884996023212931,
+      "body_cap_distances_m": {
+        "r_wrist": 0.0034693353361054022,
+        "r_thumb_proximal": 0.06049530323990619,
+        "r_thumb_proximal_abd": 0.047474568250326456,
+        "r_thumb_middle": 0.02728031845304613,
+        "r_thumb_distal": 0.019661759814284304,
+        "r_index_finger_proximal": 0.0010450765089041944,
+        "r_index_finger_proximal_abd": 8.753947807383006e-06,
+        "r_index_finger_middle": 0.008602709808372936,
+        "r_index_finger_distal": 0.027391007268464374,
+        "r_middle_finger_proximal": 0.002921375472043845,
+        "r_middle_finger_proximal_abd": 0.006628955998968005,
+        "r_middle_finger_middle": 0.030137829997117675,
+        "r_middle_finger_distal": 0.05959719556672807,
+        "r_ring_finger_proximal": 0.01618738780679745,
+        "r_ring_finger_proximal_abd": 0.019330948883982634,
+        "r_ring_finger_middle": 0.040224391991613456,
+        "r_ring_finger_distal": 0.06891276082147368,
+        "r_pinky_proximal": 0.031164891531242824,
+        "r_pinky_proximal_abd": 0.02688442096222265,
+        "r_pinky_middle": 0.02791306511981078,
+        "r_pinky_distal": 0.04495849214136129
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.007464525114988905,
+        "r_thumb_proximal": 0.03759232531571513,
+        "r_thumb_proximal_abd": 0.02138868135742063,
+        "r_thumb_middle": 0.01663501572881706,
+        "r_thumb_distal": 0.01919754850806996,
+        "r_index_finger_proximal": 0.003234961018827315,
+        "r_index_finger_proximal_abd": 0.004008751304698811,
+        "r_index_finger_middle": 0.015877320589059486,
+        "r_index_finger_distal": 0.041188727317260795,
+        "r_middle_finger_proximal": 0.006921375473544383,
+        "r_middle_finger_proximal_abd": 0.010981564106767499,
+        "r_middle_finger_middle": 0.04375080530150077,
+        "r_middle_finger_distal": 0.0726161504160935,
+        "r_ring_finger_proximal": 0.022289432318523567,
+        "r_ring_finger_proximal_abd": 0.027073146953923342,
+        "r_ring_finger_middle": 0.0550872789002925,
+        "r_ring_finger_distal": 0.08293938472758615,
+        "r_pinky_proximal": 0.039850101295456124,
+        "r_pinky_proximal_abd": 0.0402876429171495,
+        "r_pinky_middle": 0.045324418505746644,
+        "r_pinky_distal": 0.06335841907169627
+      }
+    },
+    {
+      "index": 13255,
+      "score": 0.029042430174699232,
+      "wrist_position_w_m": [
+        0.1287719581425943,
+        0.031889215904204626,
+        0.6727891296868483
+      ],
+      "wrist_quaternion_wxyz": [
+        0.5130144405803385,
+        -0.015839887185946727,
+        0.5120839250774935,
+        0.688720070425719
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.3337463126423793,
+        "r_thumb_cmc_abd": -0.2647041168141843,
+        "r_thumb_mcp": 0.5495182535043442,
+        "r_thumb_ip": 0.10090527472072953,
+        "r_index_finger_mcp_flex": 0.7388841393405537,
+        "r_index_finger_mcp_abd": -0.16015922833782698,
+        "r_index_finger_pip": 1.334648869511619,
+        "r_index_finger_dip": 0.5252035344365772,
+        "r_middle_finger_mcp_flex": 0.45111468904390234,
+        "r_middle_finger_mcp_abd": 0.11133107991983959,
+        "r_middle_finger_pip": 0.6703223596086915,
+        "r_middle_finger_dip": 0.8434789161431812,
+        "r_ring_finger_mcp_flex": 0.11255517691185196,
+        "r_ring_finger_mcp_abd": 0.5066707563622264,
+        "r_ring_finger_pip": 0.24984396598167513,
+        "r_ring_finger_dip": 0.22105581343242936,
+        "r_pinky_mcp_flex": 0.1790632027056378,
+        "r_pinky_mcp_abd": 0.620148519527348,
+        "r_pinky_pip": 0.432954091126554,
+        "r_pinky_dip": 0.7655233844844799
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.05967471211252905,
+        "thumb": -0.0015973875169133995,
+        "index": 0.003920026604564553,
+        "middle": 0.04542912236069547,
+        "ring": 0.08268076436619065,
+        "pinky": 0.09389737550787272
+      },
+      "minimum_cap_distance_m": -0.0015973875169133995,
+      "minimum_bottle_distance_m": 0.002402528096329136,
+      "minimum_self_distance_m": 0.002336873393916895,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.01848574822115008,
+        "index": 0.003920026604564553,
+        "middle": 0.04542912236069547,
+        "ring": 0.08268076436619065
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.012274841213066379,
+          0.01176130405336193,
+          0.647037766350208
+        ],
+        "index": [
+          0.014927191748622025,
+          -0.008135044255332267,
+          0.6506388904441817
+        ],
+        "middle": [
+          0.0063922491104650946,
+          -0.01575243318462556,
+          0.6520823102094407
+        ],
+        "ring": [
+          0.01597877632330366,
+          -0.0058033358651838245,
+          0.6442077017055245
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 1.2630183283638474,
+      "body_cap_distances_m": {
+        "r_wrist": 0.05967471211252905,
+        "r_thumb_proximal": 0.07509148290812445,
+        "r_thumb_proximal_abd": 0.05151651609153591,
+        "r_thumb_middle": 0.01848574822115008,
+        "r_thumb_distal": -0.0015973875169133995,
+        "r_index_finger_proximal": 0.04810987054948503,
+        "r_index_finger_proximal_abd": 0.019768862266603387,
+        "r_index_finger_middle": 0.005047492161585268,
+        "r_index_finger_distal": 0.003920026604564553,
+        "r_middle_finger_proximal": 0.06481005192829037,
+        "r_middle_finger_proximal_abd": 0.05851097641309632,
+        "r_middle_finger_middle": 0.05151723154986134,
+        "r_middle_finger_distal": 0.04542912236069547,
+        "r_ring_finger_proximal": 0.08268076436619065,
+        "r_ring_finger_proximal_abd": 0.0845370984342427,
+        "r_ring_finger_middle": 0.09560907018745043,
+        "r_ring_finger_distal": 0.10713802663078954,
+        "r_pinky_proximal": 0.09389737550787272,
+        "r_pinky_proximal_abd": 0.0958378756931183,
+        "r_pinky_middle": 0.10727194425626196,
+        "r_pinky_distal": 0.11368403269751821
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.04664405986180478,
+        "r_thumb_proximal": 0.08193115841285777,
+        "r_thumb_proximal_abd": 0.05445953244112584,
+        "r_thumb_middle": 0.023269077564219656,
+        "r_thumb_distal": 0.002402528096329136,
+        "r_index_finger_proximal": 0.03686845607554408,
+        "r_index_finger_proximal_abd": 0.01749231982655106,
+        "r_index_finger_middle": 0.012255496621919026,
+        "r_index_finger_distal": 0.011034388650345823,
+        "r_middle_finger_proximal": 0.056250328212157176,
+        "r_middle_finger_proximal_abd": 0.0480704040548307,
+        "r_middle_finger_middle": 0.046482282505952356,
+        "r_middle_finger_distal": 0.04784977163570917,
+        "r_ring_finger_proximal": 0.07817188394481865,
+        "r_ring_finger_proximal_abd": 0.07875789422739128,
+        "r_ring_finger_middle": 0.0883411128983328,
+        "r_ring_finger_distal": 0.10088489068449213,
+        "r_pinky_proximal": 0.09828490438982125,
+        "r_pinky_proximal_abd": 0.09890658644259817,
+        "r_pinky_middle": 0.11143212754179947,
+        "r_pinky_distal": 0.12318484133384715
+      }
+    },
+    {
+      "index": 78686,
+      "score": 0.02909287302290476,
+      "wrist_position_w_m": [
+        0.06605056554537389,
+        0.03046587984144354,
+        0.6662645633159642
+      ],
+      "wrist_quaternion_wxyz": [
+        0.5137923576320733,
+        -0.4926726238385529,
+        0.6912723862826639,
+        -0.12423198832016986
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.06484249454730508,
+        "r_thumb_cmc_abd": -0.17362128981786734,
+        "r_thumb_mcp": 0.009507407738180906,
+        "r_thumb_ip": 0.4458740097435911,
+        "r_index_finger_mcp_flex": 1.3210619241263917,
+        "r_index_finger_mcp_abd": 0.2653683305976345,
+        "r_index_finger_pip": 1.1009519802245733,
+        "r_index_finger_dip": 1.0081948883535714,
+        "r_middle_finger_mcp_flex": 0.1763536059009321,
+        "r_middle_finger_mcp_abd": -0.1038219139223765,
+        "r_middle_finger_pip": 0.5926141752361702,
+        "r_middle_finger_dip": 0.8802540205530563,
+        "r_ring_finger_mcp_flex": 0.17961927578130843,
+        "r_ring_finger_mcp_abd": 0.3389418291933091,
+        "r_ring_finger_pip": 0.0802368298503865,
+        "r_ring_finger_dip": 0.7451409715500604,
+        "r_pinky_mcp_flex": 1.296319999818349,
+        "r_pinky_mcp_abd": 0.6063279765115348,
+        "r_pinky_pip": 0.400520612811961,
+        "r_pinky_dip": 1.168181847890719
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.00963000650457449,
+        "thumb": 0.006639660170021169,
+        "index": 0.006264517018355284,
+        "middle": 0.03551455568288597,
+        "ring": 0.04288526809148867,
+        "pinky": 0.04666357566805069
+      },
+      "minimum_cap_distance_m": 0.006264517018355284,
+      "minimum_bottle_distance_m": 0.009376760490497564,
+      "minimum_self_distance_m": 0.002334509172303602,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.018770015313809955,
+        "index": 0.016322857709094803
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.01670755154072447,
+          0.0031397008627745714,
+          0.6460244689842001
+        ],
+        "index": [
+          -0.006840602371542843,
+          0.015562973978705196,
+          0.6503811539788208
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 1.799165907355048,
+      "body_cap_distances_m": {
+        "r_wrist": 0.00963000650457449,
+        "r_thumb_proximal": 0.018770015313809955,
+        "r_thumb_proximal_abd": 0.006639660170021169,
+        "r_thumb_middle": 0.006659087038724772,
+        "r_thumb_distal": 0.022555937001553453,
+        "r_index_finger_proximal": 0.011337675717777218,
+        "r_index_finger_proximal_abd": 0.006264517018355284,
+        "r_index_finger_middle": 0.009819016908903876,
+        "r_index_finger_distal": 0.016322857709094803,
+        "r_middle_finger_proximal": 0.03551455568288597,
+        "r_middle_finger_proximal_abd": 0.042844791264912696,
+        "r_middle_finger_middle": 0.05710701251252013,
+        "r_middle_finger_distal": 0.06605227611100115,
+        "r_ring_finger_proximal": 0.04288526809148867,
+        "r_ring_finger_proximal_abd": 0.05022795676069699,
+        "r_ring_finger_middle": 0.07260720827248272,
+        "r_ring_finger_distal": 0.09448002251506121,
+        "r_pinky_proximal": 0.04666357566805069,
+        "r_pinky_proximal_abd": 0.04767681596765011,
+        "r_pinky_middle": 0.058769771120401715,
+        "r_pinky_distal": 0.07362541118013277
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.026828908871515927,
+        "r_thumb_proximal": 0.023275606761041213,
+        "r_thumb_proximal_abd": 0.009376760490497564,
+        "r_thumb_middle": 0.009860240203688106,
+        "r_thumb_distal": 0.011923299088375838,
+        "r_index_finger_proximal": 0.02933767571777713,
+        "r_index_finger_proximal_abd": 0.024648264226131616,
+        "r_index_finger_middle": 0.02208619868417577,
+        "r_index_finger_distal": 0.021855421053307213,
+        "r_middle_finger_proximal": 0.05351455568288588,
+        "r_middle_finger_proximal_abd": 0.0608447912649126,
+        "r_middle_finger_middle": 0.07536048497311743,
+        "r_middle_finger_distal": 0.08198884272440592,
+        "r_ring_finger_proximal": 0.06128088739333934,
+        "r_ring_finger_proximal_abd": 0.06841544720697378,
+        "r_ring_finger_middle": 0.09103260652039571,
+        "r_ring_finger_distal": 0.112431522049409,
+        "r_pinky_proximal": 0.06398074854511834,
+        "r_pinky_proximal_abd": 0.06522072128442634,
+        "r_pinky_middle": 0.07334758647617658,
+        "r_pinky_distal": 0.0838104288903519
+      }
+    },
+    {
+      "index": 54094,
+      "score": 0.030120505396770362,
+      "wrist_position_w_m": [
+        0.09307712360575895,
+        -0.04081366642841222,
+        0.6841132915593446
+      ],
+      "wrist_quaternion_wxyz": [
+        0.49144600813714023,
+        -0.23588287730862134,
+        0.7110581816644481,
+        -0.44411299414307204
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.9884786125465465,
+        "r_thumb_cmc_abd": -0.25011018496472254,
+        "r_thumb_mcp": 1.3140473100434298,
+        "r_thumb_ip": 1.1850460458785885,
+        "r_index_finger_mcp_flex": 0.15125509623679173,
+        "r_index_finger_mcp_abd": 0.488419409109016,
+        "r_index_finger_pip": 0.16035186892375958,
+        "r_index_finger_dip": 0.9550479256174323,
+        "r_middle_finger_mcp_flex": 0.12437811407658851,
+        "r_middle_finger_mcp_abd": -0.12039231647256579,
+        "r_middle_finger_pip": 0.4862818570238884,
+        "r_middle_finger_dip": 1.0351040942237797,
+        "r_ring_finger_mcp_flex": 0.9059478155753252,
+        "r_ring_finger_mcp_abd": -0.2280454273965317,
+        "r_ring_finger_pip": 0.10520316589684761,
+        "r_ring_finger_dip": 0.4200161847582379,
+        "r_pinky_mcp_flex": 1.1727580631485637,
+        "r_pinky_mcp_abd": 0.3908485184882023,
+        "r_pinky_pip": 1.0730042265428725,
+        "r_pinky_dip": 0.12033620606689437
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.026284938668263508,
+        "thumb": 0.006543146755347024,
+        "index": 0.018756498196102762,
+        "middle": 0.03106852336284966,
+        "ring": 0.007781411536159456,
+        "pinky": 0.047637796112516985
+      },
+      "minimum_cap_distance_m": 0.006543146755347024,
+      "minimum_bottle_distance_m": 0.01940448823281663,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.023817308393931955,
+        "ring": 0.012303197002838407
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.013910234899386344,
+          -0.00977268463724212,
+          0.643395623900124
+        ],
+        "ring": [
+          -0.0007749665081494635,
+          0.01698232689919867,
+          0.6534884909623855
+        ]
+      },
+      "sidewall_opposing_digit": "ring",
+      "sidewall_angular_separation_rad": 2.228836083669515,
+      "body_cap_distances_m": {
+        "r_wrist": 0.026284938668263508,
+        "r_thumb_proximal": 0.05190691394133166,
+        "r_thumb_proximal_abd": 0.023817308393931955,
+        "r_thumb_middle": 0.006543146755347024,
+        "r_thumb_distal": 0.0074259715099007535,
+        "r_index_finger_proximal": 0.018756498196102762,
+        "r_index_finger_proximal_abd": 0.020623257710976454,
+        "r_index_finger_middle": 0.026109310955510154,
+        "r_index_finger_distal": 0.03629651001702103,
+        "r_middle_finger_proximal": 0.032389126027806206,
+        "r_middle_finger_proximal_abd": 0.03447316566828231,
+        "r_middle_finger_middle": 0.0327001120284775,
+        "r_middle_finger_distal": 0.03106852336284966,
+        "r_ring_finger_proximal": 0.03514609229540002,
+        "r_ring_finger_proximal_abd": 0.010799750078210019,
+        "r_ring_finger_middle": 0.007781411536159456,
+        "r_ring_finger_distal": 0.012303197002838407,
+        "r_pinky_proximal": 0.05016289492945451,
+        "r_pinky_proximal_abd": 0.047637796112516985,
+        "r_pinky_middle": 0.04815161411008078,
+        "r_pinky_distal": 0.057312797223038246
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.0426304966685459,
+        "r_thumb_proximal": 0.05924350506184684,
+        "r_thumb_proximal_abd": 0.028023791818483093,
+        "r_thumb_middle": 0.01954119760393425,
+        "r_thumb_distal": 0.022651727169997887,
+        "r_index_finger_proximal": 0.036908626094032365,
+        "r_index_finger_proximal_abd": 0.038980250262596626,
+        "r_index_finger_middle": 0.04454371860148016,
+        "r_index_finger_distal": 0.053156615055065394,
+        "r_middle_finger_proximal": 0.05061945076646387,
+        "r_middle_finger_proximal_abd": 0.0525594411507703,
+        "r_middle_finger_middle": 0.05070208493630574,
+        "r_middle_finger_distal": 0.044978272561790135,
+        "r_ring_finger_proximal": 0.053009074770055196,
+        "r_ring_finger_proximal_abd": 0.028382553618333167,
+        "r_ring_finger_middle": 0.02026700421756689,
+        "r_ring_finger_distal": 0.01940448823281663,
+        "r_pinky_proximal": 0.06591266812076757,
+        "r_pinky_proximal_abd": 0.06189262293118417,
+        "r_pinky_middle": 0.06107926900051409,
+        "r_pinky_distal": 0.06432990139419888
+      }
+    },
+    {
+      "index": 95818,
+      "score": 0.030154643352987523,
+      "wrist_position_w_m": [
+        0.06558124800918322,
+        -0.014970697365969524,
+        0.6701348931993294
+      ],
+      "wrist_quaternion_wxyz": [
+        0.702596494236781,
+        -0.3340053971013564,
+        0.5806306012353437,
+        0.24013884713313965
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.6919935995597504,
+        "r_thumb_cmc_abd": 0.18467585742637876,
+        "r_thumb_mcp": 0.347972990021926,
+        "r_thumb_ip": 1.0201990868361719,
+        "r_index_finger_mcp_flex": 0.9906355114843258,
+        "r_index_finger_mcp_abd": 0.4377436353222786,
+        "r_index_finger_pip": 0.6102278544147645,
+        "r_index_finger_dip": 0.00951347678210821,
+        "r_middle_finger_mcp_flex": 0.9318555718180975,
+        "r_middle_finger_mcp_abd": -0.28412652314431935,
+        "r_middle_finger_pip": 1.0773767515405714,
+        "r_middle_finger_dip": 1.289580515840227,
+        "r_ring_finger_mcp_flex": 1.2336572727093824,
+        "r_ring_finger_mcp_abd": 0.5122151958103038,
+        "r_ring_finger_pip": 0.2384079344933633,
+        "r_ring_finger_dip": 0.8244987858936401,
+        "r_pinky_mcp_flex": 0.3852521165354511,
+        "r_pinky_mcp_abd": 0.6189683362767606,
+        "r_pinky_pip": 0.48387255142968394,
+        "r_pinky_dip": 0.1283417267330261
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.029462040498494397,
+        "thumb": 0.016297620121792283,
+        "index": 0.042892169542872095,
+        "middle": 0.01629007256715561,
+        "ring": 0.038026118143149226,
+        "pinky": 0.050637804441039394
+      },
+      "minimum_cap_distance_m": 0.01629007256715561,
+      "minimum_bottle_distance_m": 0.015909526035198483,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.01986457078583191,
+        "index": 0.04374645038144347,
+        "middle": 0.01629007256715561
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.01558799376559699,
+          -0.006783395188034813,
+          0.6415276789366106
+        ],
+        "index": [
+          -0.010672125902880636,
+          -0.013232752121651134,
+          0.6528219467446437
+        ],
+        "middle": [
+          -0.010491889258245558,
+          -0.013376107770922638,
+          0.6385206317590006
+        ]
+      },
+      "sidewall_opposing_digit": "middle",
+      "sidewall_angular_separation_rad": 1.825485800180634,
+      "body_cap_distances_m": {
+        "r_wrist": 0.029462040498494397,
+        "r_thumb_proximal": 0.01986457078583191,
+        "r_thumb_proximal_abd": 0.016297620121792283,
+        "r_thumb_middle": 0.018955575482929757,
+        "r_thumb_distal": 0.03725036972867031,
+        "r_index_finger_proximal": 0.04451936796153462,
+        "r_index_finger_proximal_abd": 0.04493162182911726,
+        "r_index_finger_middle": 0.04374645038144347,
+        "r_index_finger_distal": 0.042892169542872095,
+        "r_middle_finger_proximal": 0.050641609293445265,
+        "r_middle_finger_proximal_abd": 0.05138354545581772,
+        "r_middle_finger_middle": 0.03483844624472519,
+        "r_middle_finger_distal": 0.01629007256715561,
+        "r_ring_finger_proximal": 0.040496760651133897,
+        "r_ring_finger_proximal_abd": 0.038026118143149226,
+        "r_ring_finger_middle": 0.03841704127674094,
+        "r_ring_finger_distal": 0.04352330649805794,
+        "r_pinky_proximal": 0.050637804441039394,
+        "r_pinky_proximal_abd": 0.05491991120060864,
+        "r_pinky_middle": 0.07358731808284737,
+        "r_pinky_distal": 0.08344465856881511
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.03675474347787167,
+        "r_thumb_proximal": 0.023913417614120688,
+        "r_thumb_proximal_abd": 0.017180759953697052,
+        "r_thumb_middle": 0.015909526035198483,
+        "r_thumb_distal": 0.022933916067326802,
+        "r_index_finger_proximal": 0.04246023380157207,
+        "r_index_finger_proximal_abd": 0.043740808227710044,
+        "r_index_finger_middle": 0.04871205596454668,
+        "r_index_finger_distal": 0.04890470016424554,
+        "r_middle_finger_proximal": 0.057033618624461026,
+        "r_middle_finger_proximal_abd": 0.05193350688874764,
+        "r_middle_finger_middle": 0.03396060779021927,
+        "r_middle_finger_distal": 0.020290072551694148,
+        "r_ring_finger_proximal": 0.05362974603681854,
+        "r_ring_finger_proximal_abd": 0.05311342085603495,
+        "r_ring_finger_middle": 0.054144953025937546,
+        "r_ring_finger_distal": 0.060470005297169574,
+        "r_pinky_proximal": 0.06635034617692337,
+        "r_pinky_proximal_abd": 0.07053610132296291,
+        "r_pinky_middle": 0.08972325711162055,
+        "r_pinky_distal": 0.09980349436297083
+      }
+    },
+    {
+      "index": 46126,
+      "score": 0.03035630591079661,
+      "wrist_position_w_m": [
+        0.07510071420716555,
+        0.019507633274791006,
+        0.6812531935106533
+      ],
+      "wrist_quaternion_wxyz": [
+        0.4294722045916117,
+        0.040223488725993406,
+        0.49048314596636716,
+        0.7572066956656328
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 1.2633305844360987,
+        "r_thumb_cmc_abd": 0.21258216076472042,
+        "r_thumb_mcp": 0.6981546337846192,
+        "r_thumb_ip": 0.21987098615464448,
+        "r_index_finger_mcp_flex": 1.3840057510130197,
+        "r_index_finger_mcp_abd": 0.6492931565095694,
+        "r_index_finger_pip": 1.0483858680567604,
+        "r_index_finger_dip": 0.41203550009464585,
+        "r_middle_finger_mcp_flex": 1.2081730025919823,
+        "r_middle_finger_mcp_abd": 0.16524047482008025,
+        "r_middle_finger_pip": 0.31797821675366456,
+        "r_middle_finger_dip": 0.9733156036402204,
+        "r_ring_finger_mcp_flex": 0.3455768714435325,
+        "r_ring_finger_mcp_abd": 0.2684730467709952,
+        "r_ring_finger_pip": 0.1401753544289702,
+        "r_ring_finger_dip": 0.9135832006285257,
+        "r_pinky_mcp_flex": 1.0375107930019902,
+        "r_pinky_mcp_abd": -0.17610899750461012,
+        "r_pinky_pip": 0.7679809658325671,
+        "r_pinky_dip": 1.3460921029956703
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.006476855472419454,
+        "thumb": 0.0010759240880004646,
+        "index": 0.003157553631834787,
+        "middle": 0.023711324888638096,
+        "ring": 0.04383067579395257,
+        "pinky": 0.05190033279101217
+      },
+      "minimum_cap_distance_m": 0.0010759240880004646,
+      "minimum_bottle_distance_m": 0.007161458899974158,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.020955707117759327,
+        "index": 0.003157553631834787,
+        "middle": 0.023711324888638096,
+        "ring": 0.04383067579395257
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.008908700120684836,
+          -0.014478779717819702,
+          0.6463995764005815
+        ],
+        "index": [
+          0.013296251592673761,
+          -0.010592907702054162,
+          0.64047167507903
+        ],
+        "middle": [
+          0.012799993620878067,
+          -0.011187500314543814,
+          0.6457785886341119
+        ],
+        "ring": [
+          0.013667564900264804,
+          -0.010109286309802068,
+          0.6519552254461759
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 0.3464918106746472,
+      "body_cap_distances_m": {
+        "r_wrist": 0.006476855472419454,
+        "r_thumb_proximal": 0.022870429970398648,
+        "r_thumb_proximal_abd": 0.0010759240880004646,
+        "r_thumb_middle": 0.0021652067471827387,
+        "r_thumb_distal": 0.020955707117759327,
+        "r_index_finger_proximal": 0.003157553631834787,
+        "r_index_finger_proximal_abd": 0.0032060149673676292,
+        "r_index_finger_middle": 0.02395626299478637,
+        "r_index_finger_distal": 0.041266805810294536,
+        "r_middle_finger_proximal": 0.023711324888638096,
+        "r_middle_finger_proximal_abd": 0.02447394924238214,
+        "r_middle_finger_middle": 0.03121933249956554,
+        "r_middle_finger_distal": 0.047856223639236785,
+        "r_ring_finger_proximal": 0.04383067579395257,
+        "r_ring_finger_proximal_abd": 0.04677501174737804,
+        "r_ring_finger_middle": 0.06617092470816449,
+        "r_ring_finger_distal": 0.08761185438692211,
+        "r_pinky_proximal": 0.05581496932998275,
+        "r_pinky_proximal_abd": 0.053376556915146575,
+        "r_pinky_middle": 0.05190033279101217,
+        "r_pinky_distal": 0.05288720368525161
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.010476855442470921,
+        "r_thumb_proximal": 0.03917118856283187,
+        "r_thumb_proximal_abd": 0.019082719311198693,
+        "r_thumb_middle": 0.018075180001064846,
+        "r_thumb_distal": 0.025759739597437305,
+        "r_index_finger_proximal": 0.007161458899974158,
+        "r_index_finger_proximal_abd": 0.007715380921584022,
+        "r_index_finger_middle": 0.03684338306328302,
+        "r_index_finger_distal": 0.05862070046151562,
+        "r_middle_finger_proximal": 0.028221812406144107,
+        "r_middle_finger_proximal_abd": 0.02907844776184791,
+        "r_middle_finger_middle": 0.040944352611052684,
+        "r_middle_finger_distal": 0.06181966605118312,
+        "r_ring_finger_proximal": 0.04912228673123354,
+        "r_ring_finger_proximal_abd": 0.05129520585473893,
+        "r_ring_finger_middle": 0.06331720532962334,
+        "r_ring_finger_distal": 0.0818951433399749,
+        "r_pinky_proximal": 0.06603257324007489,
+        "r_pinky_proximal_abd": 0.06509622057575425,
+        "r_pinky_middle": 0.06464807386356666,
+        "r_pinky_distal": 0.0687352177025933
+      }
+    },
+    {
+      "index": 47950,
+      "score": 0.03039124968582572,
+      "wrist_position_w_m": [
+        0.0716712285241612,
+        0.06788113321595377,
+        0.6856391935557238
+      ],
+      "wrist_quaternion_wxyz": [
+        0.7695891844285713,
+        -0.37386817110784165,
+        0.46656662148102795,
+        -0.2242112074871005
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 1.250352365008844,
+        "r_thumb_cmc_abd": 0.3453733378018045,
+        "r_thumb_mcp": 0.7295942911722266,
+        "r_thumb_ip": 1.1970339014974045,
+        "r_index_finger_mcp_flex": 0.6089549857360558,
+        "r_index_finger_mcp_abd": 0.4993438544318905,
+        "r_index_finger_pip": 0.26805063577324884,
+        "r_index_finger_dip": 0.8975861667191849,
+        "r_middle_finger_mcp_flex": 0.9621745587006064,
+        "r_middle_finger_mcp_abd": 0.3493936856171604,
+        "r_middle_finger_pip": 1.3736598417556556,
+        "r_middle_finger_dip": 1.263268690710468,
+        "r_ring_finger_mcp_flex": 0.8933840580912995,
+        "r_ring_finger_mcp_abd": 0.49163428704237305,
+        "r_ring_finger_pip": 0.8798925429361478,
+        "r_ring_finger_dip": 0.9618656889781729,
+        "r_pinky_mcp_flex": 1.2706487626385745,
+        "r_pinky_mcp_abd": 0.6134642448140353,
+        "r_pinky_pip": 0.9446385595622431,
+        "r_pinky_dip": 0.9824968058031887
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.006861817852967338,
+        "thumb": 0.01214768534283866,
+        "index": -0.002272658530431212,
+        "middle": 0.009334781930973453,
+        "ring": 0.03261785779717209,
+        "pinky": 0.055039259289903206
+      },
+      "minimum_cap_distance_m": -0.002272658530431212,
+      "minimum_bottle_distance_m": 0.0036980222053170837,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.01214768534283866,
+        "index": -0.002272658530431212,
+        "ring": 0.05882728635735942,
+        "pinky": 0.1016771739421977
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          -0.001004562346876816,
+          0.016970293294046087,
+          0.653401665196486
+        ],
+        "index": [
+          0.006705045982151389,
+          0.01562143313264991,
+          0.6432815736876089
+        ],
+        "ring": [
+          -0.0061085098727347055,
+          0.01586461808976498,
+          0.653055257162086
+        ],
+        "pinky": [
+          0.0006068106973910519,
+          0.016989166570142517,
+          0.6515395415447246
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 0.4645667168411598,
+      "body_cap_distances_m": {
+        "r_wrist": 0.006861817852967338,
+        "r_thumb_proximal": 0.059759375003763944,
+        "r_thumb_proximal_abd": 0.030736072269098184,
+        "r_thumb_middle": 0.01214768534283866,
+        "r_thumb_distal": 0.014007696351887906,
+        "r_index_finger_proximal": -0.002272658530431212,
+        "r_index_finger_proximal_abd": -0.00034439129495217547,
+        "r_index_finger_middle": 0.014818367757508645,
+        "r_index_finger_distal": 0.04303214547235868,
+        "r_middle_finger_proximal": 0.009334781930973453,
+        "r_middle_finger_proximal_abd": 0.01234020716483893,
+        "r_middle_finger_middle": 0.03603924051670521,
+        "r_middle_finger_distal": 0.05236767935791502,
+        "r_ring_finger_proximal": 0.03261785779717209,
+        "r_ring_finger_proximal_abd": 0.03432625912602613,
+        "r_ring_finger_middle": 0.05882728635735942,
+        "r_ring_finger_distal": 0.0808453614720259,
+        "r_pinky_proximal": 0.055039259289903206,
+        "r_pinky_proximal_abd": 0.057201679682566973,
+        "r_pinky_middle": 0.08133646016235922,
+        "r_pinky_distal": 0.1016771739421977
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.015581847065854732,
+        "r_thumb_proximal": 0.06216620844196285,
+        "r_thumb_proximal_abd": 0.03481367749017881,
+        "r_thumb_middle": 0.01984805122111339,
+        "r_thumb_distal": 0.021191959581984405,
+        "r_index_finger_proximal": 0.0036980222053170837,
+        "r_index_finger_proximal_abd": 0.003910141684740732,
+        "r_index_finger_middle": 0.018627652411539783,
+        "r_index_finger_distal": 0.028029906107503055,
+        "r_middle_finger_proximal": 0.022886490072251173,
+        "r_middle_finger_proximal_abd": 0.023481334089820016,
+        "r_middle_finger_middle": 0.03953056950180489,
+        "r_middle_finger_distal": 0.04311869095847051,
+        "r_ring_finger_proximal": 0.04628189039258578,
+        "r_ring_finger_proximal_abd": 0.046835203997596254,
+        "r_ring_finger_middle": 0.0641693669177435,
+        "r_ring_finger_distal": 0.07278391809689973,
+        "r_pinky_proximal": 0.06732766540456693,
+        "r_pinky_proximal_abd": 0.06858045552552754,
+        "r_pinky_middle": 0.08765796654004386,
+        "r_pinky_distal": 0.09818166830656604
+      }
+    },
+    {
+      "index": 84857,
+      "score": 0.030404940513536344,
+      "wrist_position_w_m": [
+        0.09723886102454293,
+        0.06545611075009514,
+        0.6746524904469358
+      ],
+      "wrist_quaternion_wxyz": [
+        0.5491644882863193,
+        -0.27702186925088035,
+        0.5983732774980831,
+        0.5134458779055254
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.28436341380214,
+        "r_thumb_cmc_abd": 0.30800294591904637,
+        "r_thumb_mcp": 0.7825515944840191,
+        "r_thumb_ip": 0.917829256660526,
+        "r_index_finger_mcp_flex": 0.6678862075060465,
+        "r_index_finger_mcp_abd": 0.2967909551314785,
+        "r_index_finger_pip": 0.2304694064983415,
+        "r_index_finger_dip": 0.9316328066490807,
+        "r_middle_finger_mcp_flex": 0.5725395626321795,
+        "r_middle_finger_mcp_abd": 0.266624106343804,
+        "r_middle_finger_pip": 0.6443614383007583,
+        "r_middle_finger_dip": 1.146783034652028,
+        "r_ring_finger_mcp_flex": 1.2968757783745166,
+        "r_ring_finger_mcp_abd": 0.3700731617666467,
+        "r_ring_finger_pip": 0.41226615696647,
+        "r_ring_finger_dip": 0.3816272697444249,
+        "r_pinky_mcp_flex": 0.7803191184380301,
+        "r_pinky_mcp_abd": 0.20614392706038526,
+        "r_pinky_pip": 1.0508589154455972,
+        "r_pinky_dip": 1.039320025951385
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.04351685975575675,
+        "thumb": 0.014098207502655476,
+        "index": 0.011353850661677295,
+        "middle": 0.02730586165177208,
+        "ring": 0.0449590199205144,
+        "pinky": 0.05861520177806798
+      },
+      "minimum_cap_distance_m": 0.011353850661677295,
+      "minimum_bottle_distance_m": 0.018421440163768652,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "wrist": 0.04351685975575675,
+        "thumb": 0.014098207502655476,
+        "index": 0.013933548713490696
+      },
+      "digit_sidewall_points_w_m": {
+        "wrist": [
+          0.016922843818906345,
+          0.001617824776241815,
+          0.6385809689743953
+        ],
+        "thumb": [
+          0.016991712522810024,
+          -0.0005307593995284944,
+          0.6530453026966254
+        ],
+        "index": [
+          0.012266983057033855,
+          -0.011769499842576282,
+          0.6527605740244176
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 0.7334778970558792,
+      "body_cap_distances_m": {
+        "r_wrist": 0.04351685975575675,
+        "r_thumb_proximal": 0.0651721760574764,
+        "r_thumb_proximal_abd": 0.039970824516608244,
+        "r_thumb_middle": 0.01442144015944887,
+        "r_thumb_distal": 0.014098207502655476,
+        "r_index_finger_proximal": 0.029934926770445222,
+        "r_index_finger_proximal_abd": 0.013933548713490696,
+        "r_index_finger_middle": 0.011353850661677295,
+        "r_index_finger_distal": 0.01345930676214363,
+        "r_middle_finger_proximal": 0.04034669235672079,
+        "r_middle_finger_proximal_abd": 0.033399821481773256,
+        "r_middle_finger_middle": 0.0292630037465474,
+        "r_middle_finger_distal": 0.02730586165177208,
+        "r_ring_finger_proximal": 0.05165194765323803,
+        "r_ring_finger_proximal_abd": 0.045206830036870246,
+        "r_ring_finger_middle": 0.0449590199205144,
+        "r_ring_finger_distal": 0.05602445790285784,
+        "r_pinky_proximal": 0.06519093775213924,
+        "r_pinky_proximal_abd": 0.061188919427407465,
+        "r_pinky_middle": 0.05898175162078568,
+        "r_pinky_distal": 0.05861520177806798
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.045694761426171994,
+        "r_thumb_proximal": 0.06881327045488542,
+        "r_thumb_proximal_abd": 0.03579415761660163,
+        "r_thumb_middle": 0.018421440163768652,
+        "r_thumb_distal": 0.018713639721173052,
+        "r_index_finger_proximal": 0.034258704554664614,
+        "r_index_finger_proximal_abd": 0.021664258449567972,
+        "r_index_finger_middle": 0.020280232406104725,
+        "r_index_finger_distal": 0.026862953460801142,
+        "r_middle_finger_proximal": 0.04884164089599954,
+        "r_middle_finger_proximal_abd": 0.04529339599577979,
+        "r_middle_finger_middle": 0.04433923229788471,
+        "r_middle_finger_distal": 0.04531856725255145,
+        "r_ring_finger_proximal": 0.06509469854898214,
+        "r_ring_finger_proximal_abd": 0.062266966575080726,
+        "r_ring_finger_middle": 0.06296912527950177,
+        "r_ring_finger_distal": 0.0742891286366982,
+        "r_pinky_proximal": 0.08071891407361083,
+        "r_pinky_proximal_abd": 0.07877457235336781,
+        "r_pinky_middle": 0.07726246014075952,
+        "r_pinky_distal": 0.0770353636963514
+      }
+    },
+    {
+      "index": 92039,
+      "score": 0.030542521940147956,
+      "wrist_position_w_m": [
+        0.0928546837663615,
+        -0.03430542128142264,
+        0.6620990308651424
+      ],
+      "wrist_quaternion_wxyz": [
+        0.5370381923607412,
+        -0.3122397915693639,
+        0.7497802523892736,
+        -0.22787247669191038
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.6959998797542596,
+        "r_thumb_cmc_abd": 0.4031382959729825,
+        "r_thumb_mcp": 0.2881202552972679,
+        "r_thumb_ip": 0.48231705860346635,
+        "r_index_finger_mcp_flex": 0.31062050268981933,
+        "r_index_finger_mcp_abd": 0.015576663914976141,
+        "r_index_finger_pip": 0.35352421343510804,
+        "r_index_finger_dip": 1.2857753720490743,
+        "r_middle_finger_mcp_flex": 0.7751752808839982,
+        "r_middle_finger_mcp_abd": -0.0944009413195438,
+        "r_middle_finger_pip": 0.8555939531738256,
+        "r_middle_finger_dip": 0.6594103908956851,
+        "r_ring_finger_mcp_flex": 0.6572213174899403,
+        "r_ring_finger_mcp_abd": 0.20346940390002016,
+        "r_ring_finger_pip": 1.1964993040520444,
+        "r_ring_finger_dip": 1.3099066787750955,
+        "r_pinky_mcp_flex": 0.9879632857733611,
+        "r_pinky_mcp_abd": 0.2837805987477509,
+        "r_pinky_pip": 1.3536477487655607,
+        "r_pinky_dip": 0.25596214381208676
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.03269326592030687,
+        "thumb": 0.019313548317107576,
+        "index": 0.02812278327058817,
+        "middle": -0.0017863471984333366,
+        "ring": 0.004958885373558363,
+        "pinky": 0.024934374090056916
+      },
+      "minimum_cap_distance_m": -0.0017863471984333366,
+      "minimum_bottle_distance_m": 0.004216717525158399,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.02725174435268126,
+        "middle": -0.0017863471984333366
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.00960459502659664,
+          -0.014026822675655477,
+          0.6429831372298933
+        ],
+        "middle": [
+          -0.016346931860691374,
+          0.004666283688903499,
+          0.649588419096314
+        ]
+      },
+      "sidewall_opposing_digit": "middle",
+      "sidewall_angular_separation_rad": 2.4492589518112973,
+      "body_cap_distances_m": {
+        "r_wrist": 0.03269326592030687,
+        "r_thumb_proximal": 0.04713487775813242,
+        "r_thumb_proximal_abd": 0.02725174435268126,
+        "r_thumb_middle": 0.020371836496284115,
+        "r_thumb_distal": 0.019313548317107576,
+        "r_index_finger_proximal": 0.02812278327058817,
+        "r_index_finger_proximal_abd": 0.028881819990795785,
+        "r_index_finger_middle": 0.033556028759949445,
+        "r_index_finger_distal": 0.035184055312173036,
+        "r_middle_finger_proximal": 0.02493886917381502,
+        "r_middle_finger_proximal_abd": 0.01487076419476047,
+        "r_middle_finger_middle": 0.002045460819708276,
+        "r_middle_finger_distal": -0.0017863471984333366,
+        "r_ring_finger_proximal": 0.03222604399981053,
+        "r_ring_finger_proximal_abd": 0.032492158146290376,
+        "r_ring_finger_middle": 0.012077970603374923,
+        "r_ring_finger_distal": 0.004958885373558363,
+        "r_pinky_proximal": 0.037860038242099284,
+        "r_pinky_proximal_abd": 0.030548980807933907,
+        "r_pinky_middle": 0.025589170292755085,
+        "r_pinky_distal": 0.024934374090056916
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.04562456666392441,
+        "r_thumb_proximal": 0.04764048356138516,
+        "r_thumb_proximal_abd": 0.03139379927403785,
+        "r_thumb_middle": 0.027569202724247562,
+        "r_thumb_distal": 0.029389577295555004,
+        "r_index_finger_proximal": 0.04197697210136816,
+        "r_index_finger_proximal_abd": 0.042591574247008615,
+        "r_index_finger_middle": 0.04771682520936081,
+        "r_index_finger_distal": 0.043201656450504236,
+        "r_middle_finger_proximal": 0.0427008475876804,
+        "r_middle_finger_proximal_abd": 0.03231947618548031,
+        "r_middle_finger_middle": 0.013268597127849887,
+        "r_middle_finger_distal": 0.004216717525158399,
+        "r_ring_finger_proximal": 0.05064653914239516,
+        "r_ring_finger_proximal_abd": 0.05049997829594781,
+        "r_ring_finger_middle": 0.030303268577206405,
+        "r_ring_finger_distal": 0.02187189422410997,
+        "r_pinky_proximal": 0.05553706905477888,
+        "r_pinky_proximal_abd": 0.048442920239295056,
+        "r_pinky_middle": 0.03991806941287339,
+        "r_pinky_distal": 0.03813857154402621
+      }
+    },
+    {
+      "index": 17174,
+      "score": 0.03065255844961752,
+      "wrist_position_w_m": [
+        0.07556403692642857,
+        0.027600863217768196,
+        0.6484570208501224
+      ],
+      "wrist_quaternion_wxyz": [
+        0.3729348357364141,
+        0.04378054052165681,
+        0.6680979805997509,
+        0.6423768059981774
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.12383064243787692,
+        "r_thumb_cmc_abd": 0.02019659548474806,
+        "r_thumb_mcp": 0.1214092844707427,
+        "r_thumb_ip": 0.4080475857152922,
+        "r_index_finger_mcp_flex": 1.1181806042924851,
+        "r_index_finger_mcp_abd": -0.24439031083790674,
+        "r_index_finger_pip": 1.131835371221312,
+        "r_index_finger_dip": 1.0904926170650548,
+        "r_middle_finger_mcp_flex": 1.1662888799593927,
+        "r_middle_finger_mcp_abd": 0.16194465851036483,
+        "r_middle_finger_pip": 0.7438755090402923,
+        "r_middle_finger_dip": 1.3962286340338403,
+        "r_ring_finger_mcp_flex": 0.06507628283597575,
+        "r_ring_finger_mcp_abd": 0.2138399696433116,
+        "r_ring_finger_pip": 0.2153223223432736,
+        "r_ring_finger_dip": 1.3751587375270002,
+        "r_pinky_mcp_flex": 1.2205895337112123,
+        "r_pinky_mcp_abd": 0.12819919307402178,
+        "r_pinky_pip": 0.9126602233398721,
+        "r_pinky_dip": 1.2815964367208441
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.002957813092983235,
+        "thumb": -0.0011974778737782407,
+        "index": -0.0018294788788391987,
+        "middle": 0.020428134515729182,
+        "ring": 0.03998918015747035,
+        "pinky": 0.05015410257453572
+      },
+      "minimum_cap_distance_m": -0.0018294788788391987,
+      "minimum_bottle_distance_m": 0.002640784091196703,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.024143000148477554,
+        "index": -0.0018294788788391987,
+        "middle": 0.020428134515729182,
+        "ring": 0.03998918015747035
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.013091455225262248,
+          0.010844989625571967,
+          0.6502904766108129
+        ],
+        "index": [
+          0.0018908548311071997,
+          -0.016894514861265315,
+          0.6470708387914492
+        ],
+        "middle": [
+          0.011651222417054767,
+          -0.012379378665428114,
+          0.643604046896922
+        ],
+        "ring": [
+          0.014107687561322364,
+          -0.009485417843352308,
+          0.6473167667607153
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 2.151159942274901,
+      "body_cap_distances_m": {
+        "r_wrist": 0.002957813092983235,
+        "r_thumb_proximal": 0.024143000148477554,
+        "r_thumb_proximal_abd": 0.003306023642495297,
+        "r_thumb_middle": -0.0011974778737782407,
+        "r_thumb_distal": 0.0066473505270059395,
+        "r_index_finger_proximal": -0.0006309491932049589,
+        "r_index_finger_proximal_abd": -0.0018294788788391987,
+        "r_index_finger_middle": 0.004280999288300233,
+        "r_index_finger_distal": 0.018372981636168618,
+        "r_middle_finger_proximal": 0.020428134515729182,
+        "r_middle_finger_proximal_abd": 0.02115681985388398,
+        "r_middle_finger_middle": 0.026443688346412884,
+        "r_middle_finger_distal": 0.03735283649528209,
+        "r_ring_finger_proximal": 0.03998918015747035,
+        "r_ring_finger_proximal_abd": 0.045159656047119794,
+        "r_ring_finger_middle": 0.0677542025164097,
+        "r_ring_finger_distal": 0.0867096883740115,
+        "r_pinky_proximal": 0.05018739636591043,
+        "r_pinky_proximal_abd": 0.05015410257453572,
+        "r_pinky_middle": 0.05257522886979983,
+        "r_pinky_distal": 0.057174923261433044
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.0068913821377850504,
+        "r_thumb_proximal": 0.029905855624243517,
+        "r_thumb_proximal_abd": 0.007306023519587158,
+        "r_thumb_middle": 0.002640784091196703,
+        "r_thumb_distal": 0.009265236268827038,
+        "r_index_finger_proximal": 0.0033689859977849676,
+        "r_index_finger_proximal_abd": 0.003660128952960615,
+        "r_index_finger_middle": 0.01871367355902091,
+        "r_index_finger_distal": 0.036578636527890326,
+        "r_middle_finger_proximal": 0.024538057147349326,
+        "r_middle_finger_proximal_abd": 0.0258885661828822,
+        "r_middle_finger_middle": 0.04020569534507096,
+        "r_middle_finger_distal": 0.05570618103097314,
+        "r_ring_finger_proximal": 0.04451796896695647,
+        "r_ring_finger_proximal_abd": 0.04882039059529799,
+        "r_ring_finger_middle": 0.06695164075553164,
+        "r_ring_finger_distal": 0.0890014481192571,
+        "r_pinky_proximal": 0.05958628868464852,
+        "r_pinky_proximal_abd": 0.060812129849736156,
+        "r_pinky_middle": 0.06784107520240831,
+        "r_pinky_distal": 0.07497758594554212
+      }
+    },
+    {
+      "index": 1935,
+      "score": 0.030890265654831925,
+      "wrist_position_w_m": [
+        0.09403890563400574,
+        -0.010155143880168103,
+        0.6035413538840741
+      ],
+      "wrist_quaternion_wxyz": [
+        0.30301773770845475,
+        0.24616911880274733,
+        0.8485399442293736,
+        0.35715679838012404
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.9251071463830849,
+        "r_thumb_cmc_abd": 0.3390287203641911,
+        "r_thumb_mcp": 1.0329423837054388,
+        "r_thumb_ip": 1.010541237955229,
+        "r_index_finger_mcp_flex": 0.44595612612514784,
+        "r_index_finger_mcp_abd": -0.2528884142411601,
+        "r_index_finger_pip": 1.184403254740618,
+        "r_index_finger_dip": 1.2551459589861338,
+        "r_middle_finger_mcp_flex": 0.5664673022418304,
+        "r_middle_finger_mcp_abd": 0.4935608504059608,
+        "r_middle_finger_pip": 0.8916461918769489,
+        "r_middle_finger_dip": 0.22386327480631807,
+        "r_ring_finger_mcp_flex": 0.13417284542795083,
+        "r_ring_finger_mcp_abd": -0.2764115016063523,
+        "r_ring_finger_pip": 0.41393277513484006,
+        "r_ring_finger_dip": 0.7632750571625605,
+        "r_pinky_mcp_flex": 0.6468868139902807,
+        "r_pinky_mcp_abd": -0.03337697791570693,
+        "r_pinky_pip": 0.936781680579919,
+        "r_pinky_dip": 0.17464023134279594
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.01633280584526559,
+        "thumb": 0.015508311182109814,
+        "index": 0.0048013665983332975,
+        "middle": 0.033932250413272934,
+        "ring": 0.05367977066823629,
+        "pinky": 0.0705337673494281
+      },
+      "minimum_cap_distance_m": 0.0048013665983332975,
+      "minimum_bottle_distance_m": 0.015664265680790036,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.016188604005986113,
+        "index": 0.012327146746177289,
+        "middle": 0.033932250413272934,
+        "ring": 0.05523120179675003
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.0168883814254353,
+          -0.0019448837498806327,
+          0.6393500302742319
+        ],
+        "index": [
+          0.011245224239121093,
+          -0.01274931102493633,
+          0.6471387689410534
+        ],
+        "middle": [
+          0.0109295065233256,
+          -0.013020978731710748,
+          0.6491255595453513
+        ],
+        "ring": [
+          0.011707135571054326,
+          -0.012326515187560517,
+          0.6534647644871308
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 0.7333448365280442,
+      "body_cap_distances_m": {
+        "r_wrist": 0.01633280584526559,
+        "r_thumb_proximal": 0.042401481229330476,
+        "r_thumb_proximal_abd": 0.015508311182109814,
+        "r_thumb_middle": 0.016188604005986113,
+        "r_thumb_distal": 0.027458253811972824,
+        "r_index_finger_proximal": 0.012327146746177289,
+        "r_index_finger_proximal_abd": 0.0048013665983332975,
+        "r_index_finger_middle": 0.006962107074400262,
+        "r_index_finger_distal": 0.02226329203973521,
+        "r_middle_finger_proximal": 0.033932250413272934,
+        "r_middle_finger_proximal_abd": 0.034889212118077155,
+        "r_middle_finger_middle": 0.050283719607503954,
+        "r_middle_finger_distal": 0.06273666859180155,
+        "r_ring_finger_proximal": 0.05523120179675003,
+        "r_ring_finger_proximal_abd": 0.05368029922545619,
+        "r_ring_finger_middle": 0.05367977066823629,
+        "r_ring_finger_distal": 0.05940307304422433,
+        "r_pinky_proximal": 0.0719785116730145,
+        "r_pinky_proximal_abd": 0.07097600352509861,
+        "r_pinky_middle": 0.0705337673494281,
+        "r_pinky_distal": 0.07187556348666042
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.016888582155205032,
+        "r_thumb_proximal": 0.027929761812747627,
+        "r_thumb_proximal_abd": 0.01950831118576066,
+        "r_thumb_middle": 0.020188604025067804,
+        "r_thumb_distal": 0.03248172277803541,
+        "r_index_finger_proximal": 0.01683272627275457,
+        "r_index_finger_proximal_abd": 0.015664265680790036,
+        "r_index_finger_middle": 0.02341727426712748,
+        "r_index_finger_distal": 0.04026329203973511,
+        "r_middle_finger_proximal": 0.037156661442944466,
+        "r_middle_finger_proximal_abd": 0.04042866174938599,
+        "r_middle_finger_middle": 0.06361445579283996,
+        "r_middle_finger_distal": 0.07938855504700008,
+        "r_ring_finger_proximal": 0.05416885206041584,
+        "r_ring_finger_proximal_abd": 0.06175372446501222,
+        "r_ring_finger_middle": 0.06409095260396173,
+        "r_ring_finger_distal": 0.07381773985099961,
+        "r_pinky_proximal": 0.07085254010862166,
+        "r_pinky_proximal_abd": 0.07932471791895906,
+        "r_pinky_middle": 0.08265043269169857,
+        "r_pinky_distal": 0.08693456304931331
+      }
+    },
+    {
+      "index": 42673,
+      "score": 0.030921330128867143,
+      "wrist_position_w_m": [
+        0.10590654406285283,
+        -0.05567391006021047,
+        0.6494264888640351
+      ],
+      "wrist_quaternion_wxyz": [
+        0.6276199956083225,
+        0.3246481466440547,
+        0.6831650410432982,
+        0.18434274786250315
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.2195341203403641,
+        "r_thumb_cmc_abd": 0.0362610396098586,
+        "r_thumb_mcp": 1.0568161957646567,
+        "r_thumb_ip": 0.09992902086829292,
+        "r_index_finger_mcp_flex": 1.247706722838199,
+        "r_index_finger_mcp_abd": 0.32734280685870404,
+        "r_index_finger_pip": 0.6017615888121483,
+        "r_index_finger_dip": 0.33612536666523424,
+        "r_middle_finger_mcp_flex": 1.1625992260412126,
+        "r_middle_finger_mcp_abd": 0.3859694343785644,
+        "r_middle_finger_pip": 0.45715334504087696,
+        "r_middle_finger_dip": 1.3063778092366636,
+        "r_ring_finger_mcp_flex": 1.2924829964189335,
+        "r_ring_finger_mcp_abd": 0.37180770452737294,
+        "r_ring_finger_pip": 0.15897476300194582,
+        "r_ring_finger_dip": 0.048661915424508456,
+        "r_pinky_mcp_flex": 0.8754363632496486,
+        "r_pinky_mcp_abd": 0.0928044081385922,
+        "r_pinky_pip": 1.2157495684095265,
+        "r_pinky_dip": 0.1484594663989321
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.022952082300747783,
+        "thumb": 3.727267202903735e-05,
+        "index": 0.009770153734549146,
+        "middle": 0.021359914809956696,
+        "ring": 0.04288992397447852,
+        "pinky": 0.06100362386778129
+      },
+      "minimum_cap_distance_m": 3.727267202903735e-05,
+      "minimum_bottle_distance_m": 0.01638483325457911,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.01508280062422274,
+        "index": 0.012163042620308847
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.016973005915321915,
+          0.0009576377099456276,
+          0.6473455185793942
+        ],
+        "index": [
+          0.014520515045675952,
+          -0.008840511455795482,
+          0.6512831772957131
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 0.6032476383613409,
+      "body_cap_distances_m": {
+        "r_wrist": 0.022952082300747783,
+        "r_thumb_proximal": 0.06934750137924225,
+        "r_thumb_proximal_abd": 0.04473088712932405,
+        "r_thumb_middle": 0.01508280062422274,
+        "r_thumb_distal": 3.727267202903735e-05,
+        "r_index_finger_proximal": 0.012163042620308847,
+        "r_index_finger_proximal_abd": 0.009770153734549146,
+        "r_index_finger_middle": 0.018221858309618953,
+        "r_index_finger_distal": 0.04637204066315505,
+        "r_middle_finger_proximal": 0.02179138699245061,
+        "r_middle_finger_proximal_abd": 0.021359914809956696,
+        "r_middle_finger_middle": 0.031038123072979363,
+        "r_middle_finger_distal": 0.055611405915999626,
+        "r_ring_finger_proximal": 0.04288992397447852,
+        "r_ring_finger_proximal_abd": 0.04371694987755874,
+        "r_ring_finger_middle": 0.054177488323263544,
+        "r_ring_finger_distal": 0.07522189253483123,
+        "r_pinky_proximal": 0.06342698349887778,
+        "r_pinky_proximal_abd": 0.06100362386778129,
+        "r_pinky_middle": 0.061097046122559936,
+        "r_pinky_distal": 0.06850008391790571
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.02695208229386841,
+        "r_thumb_proximal": 0.06308327759984232,
+        "r_thumb_proximal_abd": 0.03756218611073278,
+        "r_thumb_middle": 0.020297150451085502,
+        "r_thumb_distal": 0.01638483325457911,
+        "r_index_finger_proximal": 0.018223401846827192,
+        "r_index_finger_proximal_abd": 0.0202656311432816,
+        "r_index_finger_middle": 0.03647187379691095,
+        "r_index_finger_distal": 0.0644597688422112,
+        "r_middle_finger_proximal": 0.0323503581856233,
+        "r_middle_finger_proximal_abd": 0.0333393589974435,
+        "r_middle_finger_middle": 0.04941894776954252,
+        "r_middle_finger_distal": 0.07403477720092642,
+        "r_ring_finger_proximal": 0.055391078379367555,
+        "r_ring_finger_proximal_abd": 0.05662337297686772,
+        "r_ring_finger_middle": 0.07176633124554141,
+        "r_ring_finger_distal": 0.09354294854748807,
+        "r_pinky_proximal": 0.0765181292490189,
+        "r_pinky_proximal_abd": 0.07652314864526015,
+        "r_pinky_middle": 0.07837655844472394,
+        "r_pinky_distal": 0.08631926423571039
+      }
+    },
+    {
+      "index": 38385,
+      "score": 0.031079007813270394,
+      "wrist_position_w_m": [
+        0.11432780678641793,
+        0.005386541662013841,
+        0.6387265542520434
+      ],
+      "wrist_quaternion_wxyz": [
+        0.5037721487760175,
+        0.14396117577469325,
+        0.7444066347700914,
+        0.41394149839974925
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.8489734431051353,
+        "r_thumb_cmc_abd": 0.6206318852250519,
+        "r_thumb_mcp": 0.011568826792159047,
+        "r_thumb_ip": 0.8906018119026653,
+        "r_index_finger_mcp_flex": 1.1473908694026054,
+        "r_index_finger_mcp_abd": 0.22671268733990085,
+        "r_index_finger_pip": 0.15406784947139,
+        "r_index_finger_dip": 1.0884870712632526,
+        "r_middle_finger_mcp_flex": 0.41728956441089066,
+        "r_middle_finger_mcp_abd": 0.3281875721225486,
+        "r_middle_finger_pip": 0.11549333619018622,
+        "r_middle_finger_dip": 0.5250391126622381,
+        "r_ring_finger_mcp_flex": 0.6047037138067475,
+        "r_ring_finger_mcp_abd": 0.1278168680096619,
+        "r_ring_finger_pip": 0.14365224730442067,
+        "r_ring_finger_dip": 0.6635235124753627,
+        "r_pinky_mcp_flex": 1.3870950388461047,
+        "r_pinky_mcp_abd": 0.5885387867007887,
+        "r_pinky_pip": 0.7681246110978106,
+        "r_pinky_dip": 1.0562862674157705
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.020184097848841145,
+        "thumb": -0.0015929667812169996,
+        "index": 0.001154017257766233,
+        "middle": 0.0263351608346079,
+        "ring": 0.04215295309341792,
+        "pinky": 0.06356858322973981
+      },
+      "minimum_cap_distance_m": -0.0015929667812169996,
+      "minimum_bottle_distance_m": 0.0024069856898185048,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "thumb": -0.0015929667812169996,
+        "index": 0.009596486465486147,
+        "middle": 0.027256649925336895
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.01601440599982634,
+          -0.005704213313619694,
+          0.6375425907629921
+        ],
+        "index": [
+          0.015567172876772352,
+          -0.006831041505965241,
+          0.6412321017314746
+        ],
+        "middle": [
+          0.012960490534573202,
+          -0.01100116743399327,
+          0.6513450735055627
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 0.0713290651352676,
+      "body_cap_distances_m": {
+        "r_wrist": 0.020184097848841145,
+        "r_thumb_proximal": 0.06016933727871651,
+        "r_thumb_proximal_abd": 0.027263043447720903,
+        "r_thumb_middle": -0.0015929667812169996,
+        "r_thumb_distal": -0.0008550203573547968,
+        "r_index_finger_proximal": 0.009596486465486147,
+        "r_index_finger_proximal_abd": 0.001154017257766233,
+        "r_index_finger_middle": 0.008715635950475753,
+        "r_index_finger_distal": 0.035641786241399354,
+        "r_middle_finger_proximal": 0.027256649925336895,
+        "r_middle_finger_proximal_abd": 0.0263351608346079,
+        "r_middle_finger_middle": 0.0297225214465213,
+        "r_middle_finger_distal": 0.04654041876062668,
+        "r_ring_finger_proximal": 0.045598649025867924,
+        "r_ring_finger_proximal_abd": 0.04215295309341792,
+        "r_ring_finger_middle": 0.04235793897183048,
+        "r_ring_finger_distal": 0.05405157919098766,
+        "r_pinky_proximal": 0.06356858322973981,
+        "r_pinky_proximal_abd": 0.0639193430269578,
+        "r_pinky_middle": 0.07517890316518853,
+        "r_pinky_distal": 0.09173994301342178
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.024159706020483503,
+        "r_thumb_proximal": 0.05497234229209826,
+        "r_thumb_proximal_abd": 0.03159398784001046,
+        "r_thumb_middle": 0.0024069856898185048,
+        "r_thumb_distal": 0.003144835055131168,
+        "r_index_finger_proximal": 0.013652198301373715,
+        "r_index_finger_proximal_abd": 0.01329729952448994,
+        "r_index_finger_middle": 0.026809000041796028,
+        "r_index_finger_distal": 0.05364178624139926,
+        "r_middle_finger_proximal": 0.03321295837499754,
+        "r_middle_finger_proximal_abd": 0.03356520161627194,
+        "r_middle_finger_middle": 0.04193678161795316,
+        "r_middle_finger_distal": 0.061404475703649826,
+        "r_ring_finger_proximal": 0.05538224710819993,
+        "r_ring_finger_proximal_abd": 0.054556113353735204,
+        "r_ring_finger_middle": 0.05755585718540098,
+        "r_ring_finger_distal": 0.07160685645996061,
+        "r_pinky_proximal": 0.07452532130516173,
+        "r_pinky_proximal_abd": 0.07516268122599988,
+        "r_pinky_middle": 0.09043493039450848,
+        "r_pinky_distal": 0.10767073570083069
+      }
+    },
+    {
+      "index": 67439,
+      "score": 0.03119404511067007,
+      "wrist_position_w_m": [
+        0.07840519100297347,
+        -0.06577232326494642,
+        0.6280786836770486
+      ],
+      "wrist_quaternion_wxyz": [
+        0.5499800297908087,
+        0.20830661788815766,
+        0.8060809779793675,
+        0.06605888823712022
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.5515148735411701,
+        "r_thumb_cmc_abd": 0.307993249005818,
+        "r_thumb_mcp": 1.2830699608780889,
+        "r_thumb_ip": 1.2862734922104366,
+        "r_index_finger_mcp_flex": 0.21732402861420838,
+        "r_index_finger_mcp_abd": 0.1759210388120318,
+        "r_index_finger_pip": 0.4894520109241067,
+        "r_index_finger_dip": 1.2820329509288941,
+        "r_middle_finger_mcp_flex": 0.27924670638390203,
+        "r_middle_finger_mcp_abd": -0.24999848184625068,
+        "r_middle_finger_pip": 0.1697590738268615,
+        "r_middle_finger_dip": 1.2907604266742518,
+        "r_ring_finger_mcp_flex": 1.3146191000441163,
+        "r_ring_finger_mcp_abd": 0.4279064551233163,
+        "r_ring_finger_pip": 1.0422074222829425,
+        "r_ring_finger_dip": 0.9269887050233332,
+        "r_pinky_mcp_flex": 0.6619139594680845,
+        "r_pinky_mcp_abd": -0.0018779613880163248,
+        "r_pinky_pip": 1.3408089817625217,
+        "r_pinky_dip": 0.6942543672680132
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.02511172039885034,
+        "thumb": 0.00928256551042821,
+        "index": 0.019845560753012338,
+        "middle": 0.03096779205349589,
+        "ring": 0.038296258567931236,
+        "pinky": 0.044998314542094915
+      },
+      "minimum_cap_distance_m": 0.00928256551042821,
+      "minimum_bottle_distance_m": 0.01078758802258608,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.00928256551042821,
+        "index": 0.02158903225815212
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.010062056669165991,
+          -0.013702372626135094,
+          0.6380203048664025
+        ],
+        "index": [
+          -0.00510750148934832,
+          -0.01621460540796894,
+          0.639344742618369
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 0.9385515925859225,
+      "body_cap_distances_m": {
+        "r_wrist": 0.02511172039885034,
+        "r_thumb_proximal": 0.04412537233890786,
+        "r_thumb_proximal_abd": 0.012964476521109219,
+        "r_thumb_middle": 0.00928256551042821,
+        "r_thumb_distal": 0.011486035148138857,
+        "r_index_finger_proximal": 0.019845560753012338,
+        "r_index_finger_proximal_abd": 0.02158903225815212,
+        "r_index_finger_middle": 0.02867021207390998,
+        "r_index_finger_distal": 0.02838290330161155,
+        "r_middle_finger_proximal": 0.03255382367487747,
+        "r_middle_finger_proximal_abd": 0.03096779205349589,
+        "r_middle_finger_middle": 0.032642711938946474,
+        "r_middle_finger_distal": 0.03815612799415427,
+        "r_ring_finger_proximal": 0.04095160305601518,
+        "r_ring_finger_proximal_abd": 0.038296258567931236,
+        "r_ring_finger_middle": 0.04098584627645895,
+        "r_ring_finger_distal": 0.04914736235921595,
+        "r_pinky_proximal": 0.05563971084007123,
+        "r_pinky_proximal_abd": 0.05235572260480085,
+        "r_pinky_middle": 0.04732619136290227,
+        "r_pinky_distal": 0.044998314542094915
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.027894854691217864,
+        "r_thumb_proximal": 0.027309654531863643,
+        "r_thumb_proximal_abd": 0.01078758802258608,
+        "r_thumb_middle": 0.011482729308612123,
+        "r_thumb_distal": 0.018008346345476312,
+        "r_index_finger_proximal": 0.023845560753379486,
+        "r_index_finger_proximal_abd": 0.025589032258160196,
+        "r_index_finger_middle": 0.03468625857613844,
+        "r_index_finger_distal": 0.04362457979594759,
+        "r_middle_finger_proximal": 0.03978584717580451,
+        "r_middle_finger_proximal_abd": 0.04003715394641915,
+        "r_middle_finger_middle": 0.04261368589399805,
+        "r_middle_finger_distal": 0.05198862757865977,
+        "r_ring_finger_proximal": 0.05252934613323342,
+        "r_ring_finger_proximal_abd": 0.05238703481696156,
+        "r_ring_finger_middle": 0.05851345110078903,
+        "r_ring_finger_distal": 0.06557366911177939,
+        "r_pinky_proximal": 0.06902354226716231,
+        "r_pinky_proximal_abd": 0.06879134958138006,
+        "r_pinky_middle": 0.06543546954601183,
+        "r_pinky_distal": 0.06284497558548274
+      }
+    },
+    {
+      "index": 64276,
+      "score": 0.03124596136693619,
+      "wrist_position_w_m": [
+        0.07931870756697902,
+        0.042582792106009834,
+        0.6266323264371224
+      ],
+      "wrist_quaternion_wxyz": [
+        0.4425201402212225,
+        -0.5078665445408526,
+        0.7317329777212289,
+        0.10399205618674603
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 1.2104809032288855,
+        "r_thumb_cmc_abd": 0.6028730357389855,
+        "r_thumb_mcp": 0.8669246716829065,
+        "r_thumb_ip": 0.5340798682729234,
+        "r_index_finger_mcp_flex": 0.44108822467031633,
+        "r_index_finger_mcp_abd": 0.07984755685855532,
+        "r_index_finger_pip": 0.05864243027514457,
+        "r_index_finger_dip": 0.9462234985625534,
+        "r_middle_finger_mcp_flex": 1.2705596873605722,
+        "r_middle_finger_mcp_abd": 0.10309181527710742,
+        "r_middle_finger_pip": 1.3718752331921222,
+        "r_middle_finger_dip": 0.863242323490271,
+        "r_ring_finger_mcp_flex": 0.8196259295313928,
+        "r_ring_finger_mcp_abd": 0.18783539757577167,
+        "r_ring_finger_pip": 0.6487230676732704,
+        "r_ring_finger_dip": 1.0100366113797639,
+        "r_pinky_mcp_flex": 1.357693637308894,
+        "r_pinky_mcp_abd": 0.16397848802121512,
+        "r_pinky_pip": 0.22219558172450005,
+        "r_pinky_dip": 0.6339801649147783
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.020482903333883952,
+        "thumb": 0.0082173602135439,
+        "index": 0.010111514898199607,
+        "middle": -0.004158620739744697,
+        "ring": 0.024620161298138803,
+        "pinky": 0.03235532152377835
+      },
+      "minimum_cap_distance_m": -0.004158620739744697,
+      "minimum_bottle_distance_m": 0.011566870127364298,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.0082173602135439,
+        "middle": 0.0033844404190982104
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.016837259754470736,
+          0.002346632161013969,
+          0.6384419949468783
+        ],
+        "middle": [
+          -0.0017134036144857215,
+          0.01691343395212952,
+          0.650042416986149
+        ]
+      },
+      "sidewall_opposing_digit": "middle",
+      "sidewall_angular_separation_rad": 1.5332768451612462,
+      "body_cap_distances_m": {
+        "r_wrist": 0.020482903333883952,
+        "r_thumb_proximal": 0.032526515205464276,
+        "r_thumb_proximal_abd": 0.0082173602135439,
+        "r_thumb_middle": 0.00963130473273784,
+        "r_thumb_distal": 0.022325064623886677,
+        "r_index_finger_proximal": 0.010578920709288526,
+        "r_index_finger_proximal_abd": 0.010111514898199607,
+        "r_index_finger_middle": 0.017859642745851098,
+        "r_index_finger_distal": 0.036019800577206926,
+        "r_middle_finger_proximal": 0.011580443329722391,
+        "r_middle_finger_proximal_abd": 0.003965299093365404,
+        "r_middle_finger_middle": -0.004158620739744697,
+        "r_middle_finger_distal": 0.0033844404190982104,
+        "r_ring_finger_proximal": 0.024620161298138803,
+        "r_ring_finger_proximal_abd": 0.024678205335240202,
+        "r_ring_finger_middle": 0.029165671880285498,
+        "r_ring_finger_distal": 0.030337489511458912,
+        "r_pinky_proximal": 0.0387664185100652,
+        "r_pinky_proximal_abd": 0.03297685423933856,
+        "r_pinky_middle": 0.03235532152377835,
+        "r_pinky_distal": 0.04005400818239103
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.02568534609421017,
+        "r_thumb_proximal": 0.016982078097993212,
+        "r_thumb_proximal_abd": 0.012217360171459175,
+        "r_thumb_middle": 0.013631304715600784,
+        "r_thumb_distal": 0.03636556031703058,
+        "r_index_finger_proximal": 0.020545737560881832,
+        "r_index_finger_proximal_abd": 0.022412351144305682,
+        "r_index_finger_middle": 0.03188395218282634,
+        "r_index_finger_distal": 0.05080478759749708,
+        "r_middle_finger_proximal": 0.02667044213874878,
+        "r_middle_finger_proximal_abd": 0.02196529909336531,
+        "r_middle_finger_middle": 0.01264203424465606,
+        "r_middle_finger_distal": 0.011566870127364298,
+        "r_ring_finger_proximal": 0.04164589866161561,
+        "r_ring_finger_proximal_abd": 0.04281211028277505,
+        "r_ring_finger_middle": 0.047580790763489346,
+        "r_ring_finger_distal": 0.04679266970224147,
+        "r_pinky_proximal": 0.052613828873961314,
+        "r_pinky_proximal_abd": 0.04825361443698049,
+        "r_pinky_middle": 0.04670851650032378,
+        "r_pinky_distal": 0.05173325698544703
+      }
+    },
+    {
+      "index": 42789,
+      "score": 0.03137066878024822,
+      "wrist_position_w_m": [
+        0.0936861717388132,
+        -0.006951584321054569,
+        0.6159572454574616
+      ],
+      "wrist_quaternion_wxyz": [
+        0.3797629905524893,
+        0.012942389393340914,
+        0.8746821257217404,
+        0.3009048761757088
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.312877533224271,
+        "r_thumb_cmc_abd": 0.35602114359627685,
+        "r_thumb_mcp": 0.7927278788008464,
+        "r_thumb_ip": 0.12995967903595362,
+        "r_index_finger_mcp_flex": 1.1537864058959608,
+        "r_index_finger_mcp_abd": 0.35964888055416516,
+        "r_index_finger_pip": 1.321981763163983,
+        "r_index_finger_dip": 1.2562387141538556,
+        "r_middle_finger_mcp_flex": 1.0025697839700756,
+        "r_middle_finger_mcp_abd": 0.3547285489812661,
+        "r_middle_finger_pip": 0.910342315954196,
+        "r_middle_finger_dip": 0.4770773706224812,
+        "r_ring_finger_mcp_flex": 1.1836056940186945,
+        "r_ring_finger_mcp_abd": 0.3326659930124743,
+        "r_ring_finger_pip": 0.2523247758703644,
+        "r_ring_finger_dip": 1.2741269510795359,
+        "r_pinky_mcp_flex": 1.3582061064125497,
+        "r_pinky_mcp_abd": 0.07667542236597119,
+        "r_pinky_pip": 1.2003964847749842,
+        "r_pinky_dip": 0.7497642981835361
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.024200175434198935,
+        "thumb": -0.0013976305602927707,
+        "index": 0.01042027086375681,
+        "middle": 0.03207201754061434,
+        "ring": 0.047363878369174266,
+        "pinky": 0.0560627683652383
+      },
+      "minimum_cap_distance_m": -0.0013976305602927707,
+      "minimum_bottle_distance_m": 0.0025990910257081934,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.0026249111139182947,
+        "index": 0.015950317927501227
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.007115018257717147,
+          -0.015439446697893341,
+          0.6418423719452891
+        ],
+        "index": [
+          0.012188176499937097,
+          -0.011851090811711935,
+          0.6460248311865984
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 0.367592869187859,
+      "body_cap_distances_m": {
+        "r_wrist": 0.024200175434198935,
+        "r_thumb_proximal": 0.036142045021510895,
+        "r_thumb_proximal_abd": 0.006548223438909461,
+        "r_thumb_middle": -0.0013976305602927707,
+        "r_thumb_distal": 0.0026249111139182947,
+        "r_index_finger_proximal": 0.015950317927501227,
+        "r_index_finger_proximal_abd": 0.01042027086375681,
+        "r_index_finger_middle": 0.015557033987414976,
+        "r_index_finger_distal": 0.019376512412186672,
+        "r_middle_finger_proximal": 0.03306826487762819,
+        "r_middle_finger_proximal_abd": 0.03207201754061434,
+        "r_middle_finger_middle": 0.03725802899406432,
+        "r_middle_finger_distal": 0.044061641271938796,
+        "r_ring_finger_proximal": 0.0482699227686149,
+        "r_ring_finger_proximal_abd": 0.047363878369174266,
+        "r_ring_finger_middle": 0.050574495271566586,
+        "r_ring_finger_distal": 0.06432403030938783,
+        "r_pinky_proximal": 0.06354755692653584,
+        "r_pinky_proximal_abd": 0.05759965838954822,
+        "r_pinky_middle": 0.0560627683652383,
+        "r_pinky_distal": 0.05657604523826666
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.02422594503523969,
+        "r_thumb_proximal": 0.016667590117144398,
+        "r_thumb_proximal_abd": 0.005325692068304557,
+        "r_thumb_middle": 0.0025990910257081934,
+        "r_thumb_distal": 0.006876320370103877,
+        "r_index_finger_proximal": 0.020651426927390158,
+        "r_index_finger_proximal_abd": 0.020757853982055603,
+        "r_index_finger_middle": 0.03392199368406125,
+        "r_index_finger_distal": 0.03508758288478231,
+        "r_middle_finger_proximal": 0.04141475509737808,
+        "r_middle_finger_proximal_abd": 0.042460009092950224,
+        "r_middle_finger_middle": 0.054501716337030374,
+        "r_middle_finger_distal": 0.062473791692686235,
+        "r_ring_finger_proximal": 0.057842246116661625,
+        "r_ring_finger_proximal_abd": 0.05848274421730441,
+        "r_ring_finger_middle": 0.0669644520590593,
+        "r_ring_finger_distal": 0.08238530960143152,
+        "r_pinky_proximal": 0.07334180628700716,
+        "r_pinky_proximal_abd": 0.07174266718290244,
+        "r_pinky_middle": 0.07065403154912385,
+        "r_pinky_distal": 0.07022603610362223
+      }
+    },
+    {
+      "index": 60836,
+      "score": 0.03145760474247121,
+      "wrist_position_w_m": [
+        0.08252155695593058,
+        -0.06356841761444401,
+        0.645338035640372
+      ],
+      "wrist_quaternion_wxyz": [
+        0.674302372089091,
+        0.4869416525821311,
+        0.5550717517508885,
+        -0.009974386387570311
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.3687058321787976,
+        "r_thumb_cmc_abd": 0.6158773343549349,
+        "r_thumb_mcp": 1.3757657394696146,
+        "r_thumb_ip": 0.4706419067291443,
+        "r_index_finger_mcp_flex": 0.7551893389638653,
+        "r_index_finger_mcp_abd": 0.5219473659892642,
+        "r_index_finger_pip": 0.3091637398019818,
+        "r_index_finger_dip": 0.14450352414199497,
+        "r_middle_finger_mcp_flex": 1.1090649381493025,
+        "r_middle_finger_mcp_abd": 0.568537992517756,
+        "r_middle_finger_pip": 0.4934927350601894,
+        "r_middle_finger_dip": 0.024503802301914467,
+        "r_ring_finger_mcp_flex": 0.20675711373341718,
+        "r_ring_finger_mcp_abd": -0.11082396075967132,
+        "r_ring_finger_pip": 0.09101777089847451,
+        "r_ring_finger_dip": 0.4340990079008969,
+        "r_pinky_mcp_flex": 0.8259212098350941,
+        "r_pinky_mcp_abd": 0.49263210520443673,
+        "r_pinky_pip": 0.28041238653218786,
+        "r_pinky_dip": 1.315478598173391
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.0057901285330869716,
+        "thumb": 0.017280934531321453,
+        "index": 0.004528729341203575,
+        "middle": -0.0010185682977519907,
+        "ring": 0.0017094972532519558,
+        "pinky": 0.027632573889540827
+      },
+      "minimum_cap_distance_m": -0.0010185682977519907,
+      "minimum_bottle_distance_m": 0.006868645575188367,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "wrist": 0.0057901285330869716,
+        "thumb": 0.01928291366749393,
+        "index": 0.006461518041824161
+      },
+      "digit_sidewall_points_w_m": {
+        "wrist": [
+          0.01391276915274359,
+          -0.00976907644056769,
+          0.6435657420322801
+        ],
+        "thumb": [
+          0.01596529473689111,
+          -0.005840322245559315,
+          0.6487776777053846
+        ],
+        "index": [
+          0.01696558508535744,
+          0.0010811672911705814,
+          0.6385119297953886
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 0.4143336616811771,
+      "body_cap_distances_m": {
+        "r_wrist": 0.0057901285330869716,
+        "r_thumb_proximal": 0.06342914861199297,
+        "r_thumb_proximal_abd": 0.042223806829356725,
+        "r_thumb_middle": 0.01928291366749393,
+        "r_thumb_distal": 0.017280934531321453,
+        "r_index_finger_proximal": 0.006461518041824161,
+        "r_index_finger_proximal_abd": 0.004528729341203575,
+        "r_index_finger_middle": 0.007083857591599554,
+        "r_index_finger_distal": 0.03431575153939989,
+        "r_middle_finger_proximal": -0.0010185682977519907,
+        "r_middle_finger_proximal_abd": 0.00026352964530040673,
+        "r_middle_finger_middle": 0.024050367411696277,
+        "r_middle_finger_distal": 0.053514676206500716,
+        "r_ring_finger_proximal": 0.005018891460926215,
+        "r_ring_finger_proximal_abd": 0.0017094972532519558,
+        "r_ring_finger_middle": 0.00666742868215564,
+        "r_ring_finger_distal": 0.023108463904673658,
+        "r_pinky_proximal": 0.027632573889540827,
+        "r_pinky_proximal_abd": 0.029423929752323684,
+        "r_pinky_middle": 0.049661360197208,
+        "r_pinky_distal": 0.07415999008058018
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.009946215238595941,
+        "r_thumb_proximal": 0.05825750494527297,
+        "r_thumb_proximal_abd": 0.032274225154602904,
+        "r_thumb_middle": 0.0246704728789717,
+        "r_thumb_distal": 0.025411518350092817,
+        "r_index_finger_proximal": 0.010461518047131907,
+        "r_index_finger_proximal_abd": 0.011408520321636051,
+        "r_index_finger_middle": 0.02477586359270564,
+        "r_index_finger_distal": 0.05246498220292865,
+        "r_middle_finger_proximal": 0.006868645575188367,
+        "r_middle_finger_proximal_abd": 0.0103715201540651,
+        "r_middle_finger_middle": 0.04240853008988809,
+        "r_middle_finger_distal": 0.07178841834191795,
+        "r_ring_finger_proximal": 0.020104406518292508,
+        "r_ring_finger_proximal_abd": 0.020138439409637995,
+        "r_ring_finger_middle": 0.024667428682155546,
+        "r_ring_finger_distal": 0.03976305917998079,
+        "r_pinky_proximal": 0.044121370758131315,
+        "r_pinky_proximal_abd": 0.046390059424877686,
+        "r_pinky_middle": 0.06806894700182155,
+        "r_pinky_distal": 0.09243343714104138
+      }
+    },
+    {
+      "index": 17167,
+      "score": 0.03165549837292408,
+      "wrist_position_w_m": [
+        0.09499680903549365,
+        0.046507101644045507,
+        0.6434059546982938
+      ],
+      "wrist_quaternion_wxyz": [
+        0.3737343316990663,
+        -0.06177993427229339,
+        0.6631164610741773,
+        0.645586902038155
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.9942405525718437,
+        "r_thumb_cmc_abd": 0.6086360651418916,
+        "r_thumb_mcp": 0.748976258400831,
+        "r_thumb_ip": 0.3498264329207546,
+        "r_index_finger_mcp_flex": 0.9861255271145574,
+        "r_index_finger_mcp_abd": 0.15853389886698033,
+        "r_index_finger_pip": 0.9826814365085103,
+        "r_index_finger_dip": 0.483217878996215,
+        "r_middle_finger_mcp_flex": 0.130192849408113,
+        "r_middle_finger_mcp_abd": -0.044877894083559244,
+        "r_middle_finger_pip": 0.02123135494440402,
+        "r_middle_finger_dip": 0.19009984543920944,
+        "r_ring_finger_mcp_flex": 1.38418494921014,
+        "r_ring_finger_mcp_abd": -0.030453444489606962,
+        "r_ring_finger_pip": 1.0303398220269975,
+        "r_ring_finger_dip": 0.3106367927530589,
+        "r_pinky_mcp_flex": 1.309872925992471,
+        "r_pinky_mcp_abd": 0.030247508921375843,
+        "r_pinky_pip": 0.04871002129652353,
+        "r_pinky_dip": 1.2901207979737301
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.028260400103463527,
+        "thumb": 0.02071679449041996,
+        "index": 0.007625643883410987,
+        "middle": 0.04291948025298292,
+        "ring": 0.035112787094977456,
+        "pinky": 0.05450526659501295
+      },
+      "minimum_cap_distance_m": 0.007625643883410987,
+      "minimum_bottle_distance_m": 0.015434253497374041,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "thumb": 0.02071679449041996,
+        "index": 0.011870462178014983
+      },
+      "digit_sidewall_points_w_m": {
+        "thumb": [
+          0.016690016217548124,
+          0.003231618563153805,
+          0.6391113867243785
+        ],
+        "index": [
+          0.010926758962440405,
+          -0.013023284477301701,
+          0.6510538310610285
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 1.063972156345983,
+      "body_cap_distances_m": {
+        "r_wrist": 0.028260400103463527,
+        "r_thumb_proximal": 0.04491240950067362,
+        "r_thumb_proximal_abd": 0.02071679449041996,
+        "r_thumb_middle": 0.02150549958588618,
+        "r_thumb_distal": 0.03625292676113422,
+        "r_index_finger_proximal": 0.0192714651047699,
+        "r_index_finger_proximal_abd": 0.011870462178014983,
+        "r_index_finger_middle": 0.007625643883410987,
+        "r_index_finger_distal": 0.012955117219559787,
+        "r_middle_finger_proximal": 0.04291948025298292,
+        "r_middle_finger_proximal_abd": 0.04536253666613881,
+        "r_middle_finger_middle": 0.05338468620765105,
+        "r_middle_finger_distal": 0.070609110657607,
+        "r_ring_finger_proximal": 0.054116148597818055,
+        "r_ring_finger_proximal_abd": 0.03697299224597462,
+        "r_ring_finger_middle": 0.035112787094977456,
+        "r_ring_finger_distal": 0.03736908073700071,
+        "r_pinky_proximal": 0.06706510950780692,
+        "r_pinky_proximal_abd": 0.05647501956338194,
+        "r_pinky_middle": 0.05450526659501295,
+        "r_pinky_distal": 0.05646709308689444
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.01719851486140088,
+        "r_thumb_proximal": 0.047103185748103196,
+        "r_thumb_proximal_abd": 0.024716794490343637,
+        "r_thumb_middle": 0.025218040755143598,
+        "r_thumb_distal": 0.0285813788459812,
+        "r_index_finger_proximal": 0.015434253497374041,
+        "r_index_finger_proximal_abd": 0.017229343150823764,
+        "r_index_finger_middle": 0.018085205448186776,
+        "r_index_finger_distal": 0.03135393275695828,
+        "r_middle_finger_proximal": 0.036556725175945506,
+        "r_middle_finger_proximal_abd": 0.03709854323654973,
+        "r_middle_finger_middle": 0.04151964448519332,
+        "r_middle_finger_distal": 0.05590397858130541,
+        "r_ring_finger_proximal": 0.05910505508594275,
+        "r_ring_finger_proximal_abd": 0.050629492397304486,
+        "r_ring_finger_middle": 0.049954768152180806,
+        "r_ring_finger_distal": 0.05458161278388896,
+        "r_pinky_proximal": 0.07559469842816197,
+        "r_pinky_proximal_abd": 0.07023522500330726,
+        "r_pinky_middle": 0.0691462294055019,
+        "r_pinky_distal": 0.0737439672212153
+      }
+    },
+    {
+      "index": 13126,
+      "score": 0.0316584391010418,
+      "wrist_position_w_m": [
+        0.10985474524722633,
+        -0.002324580015190425,
+        0.6037294848061852
+      ],
+      "wrist_quaternion_wxyz": [
+        0.301564123604173,
+        -0.4132382312004969,
+        0.8548574263953249,
+        -0.08667193413033576
+      ],
+      "joints_rad": {
+        "r_thumb_cmc_flex": 0.452186868131644,
+        "r_thumb_cmc_abd": 0.2722208047123151,
+        "r_thumb_mcp": 1.023214948223354,
+        "r_thumb_ip": 1.1064329561706996,
+        "r_index_finger_mcp_flex": 1.2544597891760996,
+        "r_index_finger_mcp_abd": 0.2490822372279729,
+        "r_index_finger_pip": 0.18465847574900612,
+        "r_index_finger_dip": 0.0037148590832406735,
+        "r_middle_finger_mcp_flex": 1.2069028935441368,
+        "r_middle_finger_mcp_abd": 0.5640448687126842,
+        "r_middle_finger_pip": 0.1621262208967682,
+        "r_middle_finger_dip": 0.5713241879139483,
+        "r_ring_finger_mcp_flex": 0.2993857283097476,
+        "r_ring_finger_mcp_abd": 0.1250634257570556,
+        "r_ring_finger_pip": 0.407382789740165,
+        "r_ring_finger_dip": 0.2991853953282893,
+        "r_pinky_mcp_flex": 0.44176551347177434,
+        "r_pinky_mcp_abd": 0.29712053679442546,
+        "r_pinky_pip": 1.3843477911722104,
+        "r_pinky_dip": 0.11529448364670111
+      },
+      "digit_cap_distances_m": {
+        "wrist": 0.04218093240623411,
+        "thumb": 0.014162540607877038,
+        "index": -0.0032572010539568476,
+        "middle": 0.027126010224464633,
+        "ring": 0.048992556455830547,
+        "pinky": 0.054423752126206565
+      },
+      "minimum_cap_distance_m": -0.0032572010539568476,
+      "minimum_bottle_distance_m": 0.008504033318927176,
+      "minimum_self_distance_m": null,
+      "digit_sidewall_distances_m": {
+        "wrist": 0.04218093240623411,
+        "thumb": 0.014162540607877038,
+        "index": 0.005438290061509985
+      },
+      "digit_sidewall_points_w_m": {
+        "wrist": [
+          0.014660407527708398,
+          -0.008606535371867417,
+          0.6485664543044718
+        ],
+        "thumb": [
+          0.015647428372976106,
+          -0.006645147494982378,
+          0.6470765170730044
+        ],
+        "index": [
+          0.0028695959784657108,
+          0.01675605616317604,
+          0.6499710503281048
+        ]
+      },
+      "sidewall_opposing_digit": "index",
+      "sidewall_angular_separation_rad": 1.8027839391256117,
+      "body_cap_distances_m": {
+        "r_wrist": 0.04218093240623411,
+        "r_thumb_proximal": 0.05745952837087174,
+        "r_thumb_proximal_abd": 0.031466388896696285,
+        "r_thumb_middle": 0.014162540607877038,
+        "r_thumb_distal": 0.015836559647814157,
+        "r_index_finger_proximal": 0.026972639957010196,
+        "r_index_finger_proximal_abd": -0.0012726697691967902,
+        "r_index_finger_middle": -0.0032572010539568476,
+        "r_index_finger_distal": 0.005438290061509985,
+        "r_middle_finger_proximal": 0.036360730750505554,
+        "r_middle_finger_proximal_abd": 0.027609025226081326,
+        "r_middle_finger_middle": 0.027126010224464633,
+        "r_middle_finger_distal": 0.03634262571566734,
+        "r_ring_finger_proximal": 0.05092727013638916,
+        "r_ring_finger_proximal_abd": 0.048992556455830547,
+        "r_ring_finger_middle": 0.050097869107825196,
+        "r_ring_finger_distal": 0.05471051738888696,
+        "r_pinky_proximal": 0.06394631544180195,
+        "r_pinky_proximal_abd": 0.06332984667517223,
+        "r_pinky_middle": 0.05624618617750434,
+        "r_pinky_distal": 0.054423752126206565
+      },
+      "body_bottle_distances_m": {
+        "r_wrist": 0.040975657811784444,
+        "r_thumb_proximal": 0.0311683274569232,
+        "r_thumb_proximal_abd": 0.014600978284516902,
+        "r_thumb_middle": 0.016669930043456828,
+        "r_thumb_distal": 0.021141347896250644,
+        "r_index_finger_proximal": 0.033881159802346864,
+        "r_index_finger_proximal_abd": 0.010563401847313157,
+        "r_index_finger_middle": 0.008504033318927176,
+        "r_index_finger_distal": 0.012582272657430352,
+        "r_middle_finger_proximal": 0.04520824503071718,
+        "r_middle_finger_proximal_abd": 0.040421452846112475,
+        "r_middle_finger_middle": 0.03965404464631622,
+        "r_middle_finger_distal": 0.048526982865226255,
+        "r_ring_finger_proximal": 0.062166248124650415,
+        "r_ring_finger_proximal_abd": 0.06335586711711011,
+        "r_ring_finger_middle": 0.06729509211948842,
+        "r_ring_finger_distal": 0.07305609199398391,
+        "r_pinky_proximal": 0.07311532988868512,
+        "r_pinky_proximal_abd": 0.07442961712121551,
+        "r_pinky_middle": 0.06675668292363629,
+        "r_pinky_distal": 0.06403054827194665
+      }
+    }
+  ],
+  "official_source_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+  "right_mjcf_sha256": "ee860215e6ae0b2f6ded7fa69d3b7ced36ab6d8a72aace99d20259aa78dc1742"
+}

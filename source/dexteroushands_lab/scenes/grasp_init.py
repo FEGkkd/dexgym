@@ -46,6 +46,44 @@ def compose_pose(parent: Pose7, child: Pose7) -> Pose7:
     return (*tuple(parent[i] + translated[i] for i in range(3)), *quaternion)
 
 
+def rotate_sample_world_z(sample: "GraspInitSample", yaw_rad: float,
+                          *, parent_result_sha256: str) -> "GraspInitSample":
+    """Rotate one complete candidate about world Z without changing its grasp.
+
+    Both rigid-body twists and wrist targets rotate with the objects. This
+    creates a new world-space initial state, not a new relative hand grasp;
+    native PhysX hold and Reset replay are still required for admission.
+    """
+    if not math.isfinite(yaw_rad) or abs(yaw_rad) > math.pi:
+        raise ValueError("World-yaw augmentation must be finite within ±pi")
+    if len(parent_result_sha256) != 64 or any(
+        char not in "0123456789abcdef" for char in parent_result_sha256
+    ):
+        raise ValueError("A SHA-256 parent result digest is required")
+    turn = (0.0, 0.0, math.sin(yaw_rad/2), math.cos(yaw_rad/2))
+    world = (0.0, 0.0, 0.0, *turn)
+
+    def body(state):
+        velocity = (*_rotate(turn, state.root_velocity[:3]),
+                    *_rotate(turn, state.root_velocity[3:6]))
+        return replace(state, root_pose=compose_pose(world, state.root_pose),
+                       root_velocity=velocity)
+
+    def hand(state):
+        return replace(body(state),
+                       wrist_target_pose=compose_pose(world, state.wrist_target_pose))
+
+    return replace(sample, left=hand(sample.left), right=hand(sample.right),
+                   bottle=body(sample.bottle), cap=body(sample.cap),
+                   source="world_yaw_transform_of_physx_bimanual_grasp",
+                   validated=False, validation=None,
+                   metadata={**sample.metadata,
+                             "world_yaw_augmentation": {
+                                 "yaw_rad": yaw_rad,
+                                 "parent_result_sha256": parent_result_sha256,
+                                 "same_relative_grasp_family": True}})
+
+
 @dataclass(frozen=True)
 class BodyInit:
     root_pose: Pose7
@@ -129,10 +167,44 @@ class GraspInitSample:
                     or worst < -depth_guard):
                 raise ValueError("Left-only hold exceeded the penetration guard")
         if scope == "bimanual":
-            coverage = metrics.get("opposing_contact_coverage_ratio")
-            if (not isinstance(coverage, (int, float)) or not math.isfinite(coverage)
-                    or not 0.8 < coverage <= 1.0):
-                raise ValueError("Left grasp lacks sustained opposing contact coverage")
+            if metrics.get("contact_evidence_version") == "radial_contact_v1":
+                if (self.metadata.get("wrist_control_mode") != "pose_command_wrist"
+                        or metrics.get("wrist_control_mode") != "pose_command_wrist"):
+                    raise ValueError("Bimanual radial contact evidence requires pose-command wrists")
+                worst = metrics.get("minimum_separation_m")
+                if (not isinstance(worst, (int, float)) or not math.isfinite(worst)
+                        or worst < -depth_guard):
+                    raise ValueError("Bimanual hold exceeded the penetration guard")
+                duration = metrics["duration_s"]
+                for key in ("left_thumb_contact_time_s", "left_other_contact_time_s",
+                            "right_thumb_contact_time_s", "right_other_contact_time_s"):
+                    value = metrics.get(key)
+                    if (not isinstance(value, (int, float)) or not math.isfinite(value)
+                            or value <= .8*duration):
+                        raise ValueError(f"Bimanual grasp lacks sustained contact: {key}")
+                ratio = metrics.get("right_radial_opposition_ratio")
+                if (not isinstance(ratio, (int, float)) or not math.isfinite(ratio)
+                        or not .8 < ratio <= 1.0):
+                    raise ValueError("Right cap lacks opposed radial contact")
+                lateral = metrics.get("max_thread_lateral_error_m")
+                if (not isinstance(lateral, (int, float)) or not math.isfinite(lateral)
+                        or lateral < 0 or lateral >= .001):
+                    raise ValueError("Bottle-local cap joint drift is too large")
+                cross = metrics.get("cross_contact_ratios")
+                if (not isinstance(cross, dict) or any(
+                    name not in cross or not isinstance(cross[name], (int, float))
+                    or not math.isfinite(cross[name]) or not 0 <= cross[name] <= .1
+                    for name in ("left_cap", "right_bottle", "hand_hand"))):
+                    raise ValueError("Cross or hand-hand contact invalidates the bimanual grasp")
+                if metrics.get("hand_hand_monitored") is not True:
+                    raise ValueError("Bimanual bank requires hand-hand contact monitoring")
+                if metrics.get("fresh_process_replay_passed") is not True:
+                    raise ValueError("Bimanual bank requires fresh-process Reset replay")
+            else:
+                coverage = metrics.get("opposing_contact_coverage_ratio")
+                if (not isinstance(coverage, (int, float)) or not math.isfinite(coverage)
+                        or not 0.8 < coverage <= 1.0):
+                    raise ValueError("Left grasp lacks sustained opposing contact coverage")
         else:
             duration = metrics["duration_s"]
             for key in ("left_thumb_contact_time_s", "left_other_contact_time_s"):
