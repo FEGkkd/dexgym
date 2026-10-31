@@ -15,6 +15,8 @@ parser.add_argument("--mode", choices=("stable_pregrasp", "weak_contact", "near_
                     default="stable_pregrasp")
 parser.add_argument("--seed", type=int, default=0)
 parser.add_argument("--bank", type=Path)
+parser.add_argument("--pregrasp_bank", type=Path,
+                    help="Preview one geometry-qualified pregrasp Reset state")
 parser.add_argument("--synthesis_report", type=Path,
                     help="Preview an unvalidated support-release candidate from a PhysX report")
 parser.add_argument("--candidate", type=Path,
@@ -47,13 +49,15 @@ app = AppLauncher(args).app
 from dexteroushands_lab.scenes.grasp_init import (  # noqa: E402
     GraspInitBank, grasp_sample_from_dict)
 from dexteroushands_lab.assets.bottle import BottleConfig  # noqa: E402
+from dexteroushands_lab.scenes.pregrasp_reset import PregraspResetBank  # noqa: E402
 from dexteroushands_lab.scenes.phase0_fixture import BimanualPhase0Fixture  # noqa: E402
 
 
 def main():
     if args.bottle_wireframe and args.bottle_transparent:
         raise ValueError("Choose bottle wireframe or transparency")
-    if sum(bool(x) for x in (args.bank, args.synthesis_report, args.candidate,
+    if sum(bool(x) for x in (args.bank, args.pregrasp_bank,
+                            args.synthesis_report, args.candidate,
                             args.geometry_proposal,
                             args.left_png_cylindrical_candidate)) > 1:
         raise ValueError("Choose one bank, report, candidate, preset, or geometry proposal")
@@ -61,6 +65,11 @@ def main():
         samples = GraspInitBank(args.bank).load()
         if not samples:
             raise RuntimeError(f"No validated initial states in {args.bank}")
+        sample = samples[args.sample_index]
+    elif args.pregrasp_bank:
+        samples = PregraspResetBank(args.pregrasp_bank).load()
+        if not samples:
+            raise RuntimeError(f"No geometry-qualified pregrasps in {args.pregrasp_bank}")
         sample = samples[args.sample_index]
     elif args.synthesis_report:
         records = json.loads(args.synthesis_report.read_text())["results"]
@@ -106,7 +115,7 @@ def main():
         fixture = BimanualPhase0Fixture(num_envs=1, device=args.device,
                                         contact_debug=args.contact_debug)
         sample = fixture.initializer.generate(mode=args.mode, seed=args.seed)
-    if (args.bank or args.synthesis_report or args.candidate or
+    if (args.bank or args.pregrasp_bank or args.synthesis_report or args.candidate or
             args.left_png_cylindrical_candidate):
         wrist_mode = sample.metadata.get("wrist_control_mode", "floating_wrench_pd")
         if wrist_mode not in ("floating_wrench_pd", "fixed_wrist",

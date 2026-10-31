@@ -16,6 +16,8 @@ parser.add_argument("--iterations", type=int, default=100)
 parser.add_argument("--control_mode", choices=("floating_wrench_pd", "pose_command_wrist"),
                     default="floating_wrench_pd")
 parser.add_argument("--output", type=Path, default=None)
+parser.add_argument("--pregrasp_bank", type=Path, default=None,
+                    help="Use geometry-qualified randomized pregrasps instead of legacy near-contact samples")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 if args.num_envs < 1 or args.iterations < 1:
@@ -24,6 +26,7 @@ app = AppLauncher(args).app
 
 import torch  # noqa: E402
 from dexteroushands_lab.scenes.phase0_fixture import BimanualPhase0Fixture  # noqa: E402
+from dexteroushands_lab.scenes.pregrasp_reset import PregraspResetBank  # noqa: E402
 
 
 def snapshot(fixture, env):
@@ -54,11 +57,16 @@ def unchanged(a, b):
 
 
 def main():
+    if args.pregrasp_bank and args.control_mode != "pose_command_wrist":
+        raise ValueError("Geometry pregrasp bank requires pose_command_wrist")
     fixture = BimanualPhase0Fixture(num_envs=args.num_envs, device=args.device,
                                     include_hand_hand=False,
                                     control_mode=args.control_mode)
-    samples = [fixture.initializer.generate(mode="near_contact", seed=i)
-               for i in range(args.num_envs)]
+    bank = PregraspResetBank(args.pregrasp_bank) if args.pregrasp_bank else None
+    def new_sample(seed):
+        return (bank.draw_runtime(seed=seed) if bank else
+                fixture.initializer.generate(mode="near_contact", seed=seed))
+    samples = [new_sample(i) for i in range(args.num_envs)]
     fixture.reset_manager.reset(range(args.num_envs), samples)
     fixture.step()
     fixture.couplers[0]._detached = True
@@ -77,7 +85,7 @@ def main():
         selected = rng.randrange(args.num_envs)
         others = {env: snapshot(fixture, env) for env in range(args.num_envs)
                   if env != selected}
-        sample = fixture.initializer.generate(mode="near_contact", seed=10000 + iteration)
+        sample = new_sample(10000 + iteration)
         fixture.reset_manager.reset([selected], [sample])
         for env, before in others.items():
             if not unchanged(before, snapshot(fixture, env)):
@@ -154,6 +162,9 @@ def main():
         if (fixture.reset_manager.init_valid[selected] != sample.validated
                 or fixture.reset_manager.sample_seed[selected] != sample.seed):
             raise AssertionError("Episode validity or provenance did not reset")
+        if fixture.reset_manager.pregrasp_geometry_qualified[selected] != bool(
+                sample.metadata.get("geometry_qualified", False)):
+            raise AssertionError("Pregrasp geometric eligibility did not reset")
         fixture.step()
     result = {"num_envs": args.num_envs, "iterations": args.iterations,
               "control_mode": args.control_mode,
@@ -167,6 +178,7 @@ def main():
               "asset_commit": fixture.specs[0].source_commit,
               "left_usd_sha256": fixture.specs[0].usd_sha256,
               "right_usd_sha256": fixture.specs[1].usd_sha256}
+    result["pregrasp_bank"] = str(args.pregrasp_bank) if bank else None
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")

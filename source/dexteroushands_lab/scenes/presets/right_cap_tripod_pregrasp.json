@@ -1,0 +1,47 @@
+{
+  "template_id": "right_cap_tripod_pregrasp",
+  "object_frame": "cap",
+  "wrist_local_pose_xyzw": [
+    0.09652766066401226,
+    0.0013993194001731717,
+    -0.0012829341581627185,
+    -0.44608623072852854,
+    0.7419583190955017,
+    -0.24755266766519682,
+    0.4349972462110955
+  ],
+  "joint_center_rad": {
+    "r_thumb_cmc_flex": 0.251260965620482,
+    "r_thumb_cmc_abd": 0.02285153306812511,
+    "r_thumb_mcp": 0.6508896778379333,
+    "r_thumb_ip": 0.027327074017939244,
+    "r_index_finger_mcp_flex": 0.457633886,
+    "r_index_finger_mcp_abd": -0.424828952,
+    "r_index_finger_pip": 1.26357759,
+    "r_index_finger_dip": 0.376445418,
+    "r_middle_finger_mcp_flex": 0.8312661971797393,
+    "r_middle_finger_mcp_abd": 0.18747258611684928,
+    "r_middle_finger_pip": 1.3284380589435898,
+    "r_middle_finger_dip": 0.12014359683649115,
+    "r_ring_finger_mcp_flex": 0.39192008394321814,
+    "r_ring_finger_mcp_abd": 0.5289125285446628,
+    "r_ring_finger_pip": 1.1252613354965146,
+    "r_ring_finger_dip": 0.45525728878786675,
+    "r_pinky_mcp_flex": 1.1483303211741958,
+    "r_pinky_mcp_abd": -0.14249311987503283,
+    "r_pinky_pip": 1.3846303539505997,
+    "r_pinky_dip": 1.329216926827206
+  },
+  "wrist_translation_halfwidth_m": [
+    0.004,
+    0.004,
+    0.004
+  ],
+  "wrist_rotation_halfwidth_rad": [
+    0.06,
+    0.06,
+    0.08
+  ],
+  "joint_halfwidth_rad": 0.06,
+  "notes": "Geometric pregrasp only; not a 1s hold validation."
+}

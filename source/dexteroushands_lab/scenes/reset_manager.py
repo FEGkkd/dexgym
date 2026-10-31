@@ -13,6 +13,8 @@ import math
 
 from dexteroushands_lab.assets.bottle import ThreadCoupler
 from dexteroushands_lab.scenes.grasp_init import GraspInitSample
+from dexteroushands_lab.scenes.pregrasp_reset import (
+    has_pregrasp_geometry_evidence, validate_pregrasp_state)
 
 
 class BimanualResetManager:
@@ -33,6 +35,8 @@ class BimanualResetManager:
                 == self.num_envs):
             raise ValueError("Reset manager requires one controller/coupler/joint per environment")
         self.init_valid = [False] * self.num_envs
+        # Distinct from init_valid, which means a gravity-on hold was validated.
+        self.pregrasp_geometry_qualified = [False] * self.num_envs
         self.sample_seed = [None] * self.num_envs
         self.fixed_anchors = (
             (scene["left_hand"].data.root_pose_w.torch.detach().cpu().tolist(),
@@ -50,6 +54,9 @@ class BimanualResetManager:
         if any(env < 0 or env >= self.num_envs for env in ids):
             raise IndexError("Reset environment index out of range")
         for env, sample in zip(ids, samples):
+            if sample.mode == "geometry_pregrasp":
+                validate_pregrasp_state(sample, self.couplers[0].config,
+                                        *self.specs)
             sample_mode = sample.metadata.get("wrist_control_mode")
             if sample_mode is not None and sample_mode != self.control_mode:
                 raise ValueError("Init sample wrist control mode differs from fixture")
@@ -175,5 +182,9 @@ class BimanualResetManager:
             self.joints[env].GetJointEnabledAttr().Set(True)
             self.joints[env].CreateCollisionEnabledAttr(False)
             self.init_valid[env] = samples[index].validated
+            self.pregrasp_geometry_qualified[env] = (
+                samples[index].mode == "geometry_pregrasp" and
+                samples[index].metadata.get("geometry_qualified") is True and
+                has_pregrasp_geometry_evidence(samples[index]))
             self.sample_seed[env] = samples[index].seed
         self.contact_monitor.reset(ids)

@@ -22,7 +22,7 @@ from dexteroushands_lab.assets.wrist_6dof import _quat_mul, _quat_normalize
 
 Pose7 = tuple[float, float, float, float, float, float, float]
 Velocity6 = tuple[float, float, float, float, float, float]
-Mode = Literal["stable_pregrasp", "weak_contact", "near_contact"]
+Mode = Literal["stable_pregrasp", "weak_contact", "near_contact", "geometry_pregrasp"]
 ZERO_VEL: Velocity6 = (0.0,) * 6
 LEFT_LOCAL_QUAT = (0.0, -math.sqrt(0.5), 0.0, math.sqrt(0.5))
 RIGHT_LOCAL_QUAT = (0.0, math.sqrt(0.5), 0.0, math.sqrt(0.5))

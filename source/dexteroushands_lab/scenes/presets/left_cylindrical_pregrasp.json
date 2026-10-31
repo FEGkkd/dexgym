@@ -1,0 +1,47 @@
+{
+  "template_id": "left_cylindrical_pregrasp",
+  "object_frame": "bottle",
+  "wrist_local_pose_xyzw": [
+    -0.0866789511871175,
+    -0.004928275653707048,
+    -0.0030431583137655593,
+    0.24022649136357244,
+    -0.7530914449537693,
+    0.15175330062200498,
+    0.5933931615168132
+  ],
+  "joint_center_rad": {
+    "l_thumb_cmc_flex": 0.7798641562461853,
+    "l_thumb_cmc_abd": -0.5340224504470825,
+    "l_thumb_mcp": -0.27857926666736604,
+    "l_thumb_ip": 0.6000006198883057,
+    "l_index_finger_mcp_flex": -0.013153882622718813,
+    "l_index_finger_mcp_abd": 2.1601634216494858e-05,
+    "l_index_finger_pip": 0.9792184352874755,
+    "l_index_finger_dip": 1.0499836921691894,
+    "l_middle_finger_mcp_flex": 0.11140253961086273,
+    "l_middle_finger_mcp_abd": 2.5747813197085634e-05,
+    "l_middle_finger_pip": 1.154087734222412,
+    "l_middle_finger_dip": 0.8899804472923278,
+    "l_ring_finger_mcp_flex": 0.10890000879764557,
+    "l_ring_finger_mcp_abd": 1.5615541997249238e-05,
+    "l_ring_finger_pip": 1.1337356090545654,
+    "l_ring_finger_dip": 0.6999814629554748,
+    "l_pinky_mcp_flex": -0.010034105181694036,
+    "l_pinky_mcp_abd": -2.6290377718396485e-05,
+    "l_pinky_pip": 0.9815163016319275,
+    "l_pinky_dip": 0.899986207485199
+  },
+  "wrist_translation_halfwidth_m": [
+    0.004,
+    0.004,
+    0.004
+  ],
+  "wrist_rotation_halfwidth_rad": [
+    0.06,
+    0.06,
+    0.08
+  ],
+  "joint_halfwidth_rad": 0.08,
+  "notes": "Geometric pregrasp only; not a 1s hold validation."
+}

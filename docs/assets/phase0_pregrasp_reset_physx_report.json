@@ -1,0 +1,2074 @@
+{
+  "status": "geometry_only_no_hold_claim",
+  "negative_control": {
+    "qualified": false,
+    "backend": "official_native_USD_PhysX_one_step_contact",
+    "physics_dt_s": 0.002,
+    "minimum_reported_separation_m": -0.004091325681656599,
+    "peak_normal_force_n": 13.906221389770508,
+    "root_translation_after_one_step_m": {
+      "left_hand": 1.618597726706472e-08,
+      "right_hand": 2.9628095188771542e-08,
+      "bottle_body": 0.0036040945466763634,
+      "bottle_cap": 0.0036805428587106306
+    },
+    "contacts": [
+      {
+        "category": "left_bottle",
+        "source_path": "/World/envs/env_0/Bottle",
+        "partner_path": "/World/envs/env_0/LeftHand/l_index_finger_distal",
+        "source_body": "Bottle",
+        "partner_body": "l_index_finger_distal",
+        "point_w_m": [
+          0.015309209004044533,
+          0.031311627477407455,
+          0.5597431063652039
+        ],
+        "normal_w": [
+          0.4392402172088623,
+          0.8983696103096008,
+          0.00013520036009140313
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": -0.0002923525753431022,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          0.05579609051346779,
+          -0.027274753898382187,
+          -0.0375555083155632
+        ]
+      },
+      {
+        "category": "left_bottle",
+        "source_path": "/World/envs/env_0/Bottle",
+        "partner_path": "/World/envs/env_0/LeftHand/l_index_finger_distal",
+        "source_body": "Bottle",
+        "partner_body": "l_index_finger_distal",
+        "point_w_m": [
+          0.015321223065257072,
+          0.03133619949221611,
+          0.5625781416893005
+        ],
+        "normal_w": [
+          0.4392402172088623,
+          0.8983696103096008,
+          0.00013520036009140313
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": -0.0002376481133978814,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          0.05579609051346779,
+          -0.027274753898382187,
+          -0.0375555083155632
+        ]
+      },
+      {
+        "category": "left_bottle",
+        "source_path": "/World/envs/env_0/Bottle",
+        "partner_path": "/World/envs/env_0/LeftHand/l_middle_finger_distal",
+        "source_body": "Bottle",
+        "partner_body": "l_middle_finger_distal",
+        "point_w_m": [
+          0.015822943300008774,
+          0.031061284244060516,
+          0.5600364804267883
+        ],
+        "normal_w": [
+          0.4392402172088623,
+          0.8983696103096008,
+          0.00013520036009140313
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": -0.00029085061396472156,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          -0.5984950661659241,
+          0.46645429730415344,
+          -2.425530195236206
+        ]
+      },
+      {
+        "category": "left_bottle",
+        "source_path": "/World/envs/env_0/Bottle",
+        "partner_path": "/World/envs/env_0/LeftHand/l_ring_finger_distal",
+        "source_body": "Bottle",
+        "partner_body": "l_ring_finger_distal",
+        "point_w_m": [
+          0.019961204379796982,
+          0.026177044957876205,
+          0.529900312423706
+        ],
+        "normal_w": [
+          0.6140455007553101,
+          0.7892705202102661,
+          0.0002702189376577735
+        ],
+        "signed_normal_force_scalar_n": -13.906221389770508,
+        "separation_m": -0.004091325681656599,
+        "normal_force_n": 13.906221389770508,
+        "pair_friction_force_vector_w_n": [
+          -0.08234737068414688,
+          0.0722113698720932,
+          -0.23215457797050476
+        ]
+      },
+      {
+        "category": "left_bottle",
+        "source_path": "/World/envs/env_0/Bottle",
+        "partner_path": "/World/envs/env_0/LeftHand/l_ring_finger_distal",
+        "source_body": "Bottle",
+        "partner_body": "l_ring_finger_distal",
+        "point_w_m": [
+          0.02280234545469284,
+          0.025905754417181015,
+          0.5023102164268494
+        ],
+        "normal_w": [
+          0.659135103225708,
+          0.7520245909690857,
+          0.00011490940232761204
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": -0.0009768304880708456,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          -0.08234737068414688,
+          0.0722113698720932,
+          -0.23215457797050476
+        ]
+      },
+      {
+        "category": "left_bottle",
+        "source_path": "/World/envs/env_0/Bottle",
+        "partner_path": "/World/envs/env_0/LeftHand/l_pinky_distal",
+        "source_body": "Bottle",
+        "partner_body": "l_pinky_distal",
+        "point_w_m": [
+          0.022785434499382973,
+          0.025996506214141846,
+          0.5012158751487732
+        ],
+        "normal_w": [
+          0.659135103225708,
+          0.7520245909690857,
+          0.00011490940232761204
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": -0.0008626317721791565,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          0.2612075209617615,
+          -0.1689826399087906,
+          -0.4055924415588379
+        ]
+      },
+      {
+        "category": "left_bottle",
+        "source_path": "/World/envs/env_0/Bottle",
+        "partner_path": "/World/envs/env_0/LeftHand/l_pinky_distal",
+        "source_body": "Bottle",
+        "partner_body": "l_pinky_distal",
+        "point_w_m": [
+          0.018568331375718117,
+          0.028622347861528397,
+          0.4835033714771271
+        ],
+        "normal_w": [
+          0.5431949496269226,
+          0.8396065831184387,
+          1.887104008346796e-05
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": -0.0017645369516685605,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          0.2612075209617615,
+          -0.1689826399087906,
+          -0.4055924415588379
+        ]
+      }
+    ],
+    "same_hand_contacts": [],
+    "no_one_second_hold_required_or_performed": true
+  },
+  "self_collision_negative_control": {
+    "qualified": false,
+    "backend": "official_native_USD_PhysX_one_step_contact",
+    "physics_dt_s": 0.002,
+    "minimum_reported_separation_m": -0.009266719222068787,
+    "peak_normal_force_n": 589.6715698242188,
+    "root_translation_after_one_step_m": {
+      "left_hand": 1.6181537611539938e-08,
+      "right_hand": 2.9628095188771542e-08,
+      "bottle_body": 4.127060297083193e-05,
+      "bottle_cap": 0.00050760111339274
+    },
+    "contacts": [
+      {
+        "category": "right_cap",
+        "source_path": "/World/envs/env_0/Cap",
+        "partner_path": "/World/envs/env_0/RightHand/r_index_finger_proximal_abd",
+        "source_body": "Cap",
+        "partner_body": "r_index_finger_proximal_abd",
+        "point_w_m": [
+          0.011347336694598198,
+          -0.007345834746956825,
+          0.6578603386878967
+        ],
+        "normal_w": [
+          1.40450051588914e-09,
+          1.765066741654664e-07,
+          0.9999997615814209
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": -0.00013968389248475432,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          0.011600587517023087,
+          -0.014687522314488888,
+          -0.00026888420688919723
+        ]
+      },
+      {
+        "category": "right_cap",
+        "source_path": "/World/envs/env_0/Cap",
+        "partner_path": "/World/envs/env_0/RightHand/r_index_finger_proximal_abd",
+        "source_body": "Cap",
+        "partner_body": "r_index_finger_proximal_abd",
+        "point_w_m": [
+          0.013330229558050632,
+          -0.01052833441644907,
+          0.657842218875885
+        ],
+        "normal_w": [
+          0.04060943052172661,
+          -0.03000379167497158,
+          0.9987245202064514
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": -0.00031591946026310325,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          0.011600587517023087,
+          -0.014687522314488888,
+          -0.00026888420688919723
+        ]
+      },
+      {
+        "category": "right_cap",
+        "source_path": "/World/envs/env_0/Cap",
+        "partner_path": "/World/envs/env_0/RightHand/r_index_finger_proximal_abd",
+        "source_body": "Cap",
+        "partner_body": "r_index_finger_proximal_abd",
+        "point_w_m": [
+          0.01344324555248022,
+          -0.010715615004301071,
+          0.6576738357543945
+        ],
+        "normal_w": [
+          1.40450051588914e-09,
+          1.765066741654664e-07,
+          0.9999997615814209
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": -0.00032614011433906853,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          0.011600587517023087,
+          -0.014687522314488888,
+          -0.00026888420688919723
+        ]
+      },
+      {
+        "category": "right_cap",
+        "source_path": "/World/envs/env_0/Cap",
+        "partner_path": "/World/envs/env_0/RightHand/r_index_finger_proximal_abd",
+        "source_body": "Cap",
+        "partner_body": "r_index_finger_proximal_abd",
+        "point_w_m": [
+          -0.0006988160312175751,
+          0.012005400843918324,
+          0.6584651470184326
+        ],
+        "normal_w": [
+          0.04060943052172661,
+          -0.03000379167497158,
+          0.9987245202064514
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": 0.0009314764174632728,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          0.011600587517023087,
+          -0.014687522314488888,
+          -0.00026888420688919723
+        ]
+      },
+      {
+        "category": "right_cap",
+        "source_path": "/World/envs/env_0/Cap",
+        "partner_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "source_body": "Cap",
+        "partner_body": "r_index_finger_middle",
+        "point_w_m": [
+          -0.004620756488293409,
+          0.01628406159579754,
+          0.6579110622406006
+        ],
+        "normal_w": [
+          9.836217884640064e-08,
+          -3.799493697442813e-07,
+          1.000000238418579
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": -8.894223719835281e-05,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          -0.01576784998178482,
+          -0.03915829956531525,
+          -0.0007531270384788513
+        ]
+      },
+      {
+        "category": "right_cap",
+        "source_path": "/World/envs/env_0/Cap",
+        "partner_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "source_body": "Cap",
+        "partner_body": "r_index_finger_middle",
+        "point_w_m": [
+          -0.004568335134536028,
+          0.016139505431056023,
+          0.6579446196556091
+        ],
+        "normal_w": [
+          -0.6794916987419128,
+          -0.07705420255661011,
+          0.7296258211135864
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": -7.591419853270054e-05,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          -0.01576784998178482,
+          -0.03915829956531525,
+          -0.0007531270384788513
+        ]
+      },
+      {
+        "category": "right_cap",
+        "source_path": "/World/envs/env_0/Cap",
+        "partner_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "source_body": "Cap",
+        "partner_body": "r_index_finger_middle",
+        "point_w_m": [
+          -0.004620756488293409,
+          0.01628405973315239,
+          0.657955527305603
+        ],
+        "normal_w": [
+          1.3713447799545975e-07,
+          -9.241456488950917e-09,
+          1.0
+        ],
+        "signed_normal_force_scalar_n": -0.06559767574071884,
+        "separation_m": -8.895155042409897e-05,
+        "normal_force_n": 0.06559767574071884,
+        "pair_friction_force_vector_w_n": [
+          -0.01576784998178482,
+          -0.03915829956531525,
+          -0.0007531270384788513
+        ]
+      },
+      {
+        "category": "right_cap",
+        "source_path": "/World/envs/env_0/Cap",
+        "partner_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "source_body": "Cap",
+        "partner_body": "r_index_finger_middle",
+        "point_w_m": [
+          -0.005040539428591728,
+          0.016719752922654152,
+          0.6581057906150818
+        ],
+        "normal_w": [
+          9.836217884640064e-08,
+          -3.799493697442813e-07,
+          1.000000238418579
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": 0.00010577754437690601,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          -0.01576784998178482,
+          -0.03915829956531525,
+          -0.0007531270384788513
+        ]
+      },
+      {
+        "category": "right_cap",
+        "source_path": "/World/envs/env_0/Cap",
+        "partner_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "source_body": "Cap",
+        "partner_body": "r_index_finger_middle",
+        "point_w_m": [
+          -0.004576890729367733,
+          0.01630193181335926,
+          0.6579537987709045
+        ],
+        "normal_w": [
+          -0.6794916987419128,
+          -0.07705420255661011,
+          0.7296258211135864
+        ],
+        "signed_normal_force_scalar_n": -0.0,
+        "separation_m": -6.332418706733733e-05,
+        "normal_force_n": 0.0,
+        "pair_friction_force_vector_w_n": [
+          -0.01576784998178482,
+          -0.03915829956531525,
+          -0.0007531270384788513
+        ]
+      }
+    ],
+    "same_hand_contacts": [
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_proximal_abd",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_proximal_abd",
+        "separation_m": 0.00038794148713350296,
+        "normal_force_n": 0.0
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_proximal_abd",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_proximal_abd",
+        "separation_m": 0.0002845910785254091,
+        "normal_force_n": 0.0
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_proximal_abd",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_middle",
+        "separation_m": -0.00034185871481895447,
+        "normal_force_n": 36.191993713378906
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_proximal_abd",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_middle",
+        "separation_m": -0.0003222738450858742,
+        "normal_force_n": 0.155012845993042
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_proximal_abd",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_middle",
+        "separation_m": 0.00012420359416864812,
+        "normal_force_n": 0.0
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_proximal_abd",
+        "separation_m": -0.0025178752839565277,
+        "normal_force_n": 589.6715698242188
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_proximal_abd",
+        "separation_m": -0.0023186132311820984,
+        "normal_force_n": 69.3941650390625
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_proximal_abd",
+        "separation_m": -0.0013093904126435518,
+        "normal_force_n": 9.231073379516602
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_proximal_abd",
+        "separation_m": -0.0010554587934166193,
+        "normal_force_n": 0.18015560507774353
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_middle",
+        "separation_m": -0.005854208488017321,
+        "normal_force_n": 10.923001289367676
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_middle",
+        "separation_m": -0.0057587334886193275,
+        "normal_force_n": 0.0026146734599024057
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_middle",
+        "separation_m": -0.005792515818029642,
+        "normal_force_n": 0.31570395827293396
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_distal",
+        "separation_m": -0.0025032740086317062,
+        "normal_force_n": 346.88421630859375
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_distal",
+        "separation_m": -0.0013031256385147572,
+        "normal_force_n": 3.19860577583313
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_distal",
+        "separation_m": -0.0010363333858549595,
+        "normal_force_n": 0.2919677495956421
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_middle",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_distal",
+        "separation_m": -0.002743787132203579,
+        "normal_force_n": 10.778177261352539
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_middle",
+        "separation_m": -0.007313142530620098,
+        "normal_force_n": 31.22635841369629
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_middle",
+        "separation_m": -0.0077613783068954945,
+        "normal_force_n": 0.9933896660804749
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_middle",
+        "separation_m": -0.0076717715710401535,
+        "normal_force_n": 0.8291816115379333
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_distal",
+        "separation_m": -0.009266719222068787,
+        "normal_force_n": 0.0
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_distal",
+        "separation_m": -0.00897221826016903,
+        "normal_force_n": 0.0
+      },
+      {
+        "source_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+        "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_distal",
+        "separation_m": -0.009047234430909157,
+        "normal_force_n": 0.0
+      }
+    ],
+    "no_one_second_hold_required_or_performed": true
+  },
+  "attempted": 32,
+  "qualified": 32,
+  "results": [
+    {
+      "seed": 192,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.6181537611539938e-08,
+          "right_hand": 2.9628095188771542e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 232,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 2.24290524992164e-08,
+          "right_hand": 1.490277474224442e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 294,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.468538764093889e-08,
+          "right_hand": 2.096039671683242e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 423,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0015290463343262672,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 2.9001444062335258e-08,
+          "right_hand": 2.4765326277700868e-09,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_thumb_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_thumb_distal",
+            "point_w_m": [
+              -0.009396132081747055,
+              -0.034521378576755524,
+              0.5685659050941467
+            ],
+            "normal_w": [
+              -0.2882823646068573,
+              -0.9575455188751221,
+              0.00017632573144510388
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0015290463343262672,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_thumb_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_thumb_distal",
+            "point_w_m": [
+              -0.010358404368162155,
+              -0.034406036138534546,
+              0.5715177655220032
+            ],
+            "normal_w": [
+              -0.2882823646068573,
+              -0.9575455188751221,
+              0.00017632573144510388
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0018629750702530146,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 672,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0011062317062169313,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.9296192216974886e-08,
+          "right_hand": 1.9248844043184778e-09,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_index_finger_proximal",
+            "source_body": "Bottle",
+            "partner_body": "l_index_finger_proximal",
+            "point_w_m": [
+              -0.022315718233585358,
+              0.02767646685242653,
+              0.5444290637969971
+            ],
+            "normal_w": [
+              -0.6487545371055603,
+              0.7609978318214417,
+              3.633600863395259e-05
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0011062317062169313,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 745,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0006323832785710692,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.719371779634379e-08,
+          "right_hand": 1.614810182754937e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_index_finger_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_index_finger_distal",
+            "point_w_m": [
+              0.02435906231403351,
+              0.02557229995727539,
+              0.5552822351455688
+            ],
+            "normal_w": [
+              0.6841911673545837,
+              0.7293028235435486,
+              0.00010191040200879797
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0006323832785710692,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_index_finger_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_index_finger_distal",
+            "point_w_m": [
+              0.024188850075006485,
+              0.025783726945519447,
+              0.5563866496086121
+            ],
+            "normal_w": [
+              0.6841911673545837,
+              0.7293028235435486,
+              0.00010191040200879797
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0007078527705743909,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 779,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 2.2855141855537595e-08,
+          "right_hand": 1.3780536666684797e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 1067,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0016497790347784758,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.2302096592807131e-08,
+          "right_hand": 2.7928863711056483e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_middle_finger_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_middle_finger_distal",
+            "point_w_m": [
+              0.02588050439953804,
+              0.0247214213013649,
+              0.5286804437637329
+            ],
+            "normal_w": [
+              0.7096858024597168,
+              0.7045183777809143,
+              7.631859625689685e-05
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0016497790347784758,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 1432,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.3778725742249748e-08,
+          "right_hand": 2.234827170708359e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 1474,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0011050300672650337,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.4820883593081837e-08,
+          "right_hand": 6.503372908029109e-09,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_index_finger_proximal",
+            "source_body": "Bottle",
+            "partner_body": "l_index_finger_proximal",
+            "point_w_m": [
+              -0.02033259905874729,
+              0.029293816536664963,
+              0.5451279878616333
+            ],
+            "normal_w": [
+              -0.5661221146583557,
+              0.8243213891983032,
+              -6.312417326626019e-07
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0013174026971682906,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_index_finger_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_index_finger_distal",
+            "point_w_m": [
+              0.02829606831073761,
+              0.021524742245674133,
+              0.5447927713394165
+            ],
+            "normal_w": [
+              0.7958947420120239,
+              0.6054348945617676,
+              2.1881535303691635e-06
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0011050300672650337,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_index_finger_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_index_finger_distal",
+            "point_w_m": [
+              0.028412768617272377,
+              0.02161351777613163,
+              0.5476705431938171
+            ],
+            "normal_w": [
+              0.7958947420120239,
+              0.6054348945617676,
+              2.1881535303691635e-06
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0013982872478663921,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_ring_finger_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_ring_finger_distal",
+            "point_w_m": [
+              0.02771633118391037,
+              0.022292662411928177,
+              0.5447523593902588
+            ],
+            "normal_w": [
+              0.7958947420120239,
+              0.6054348945617676,
+              2.1881535303691635e-06
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0011120644630864263,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_pinky_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_pinky_distal",
+            "point_w_m": [
+              0.029798340052366257,
+              0.019704323261976242,
+              0.49526384472846985
+            ],
+            "normal_w": [
+              0.8307478427886963,
+              0.556648850440979,
+              -2.7867734388564713e-05
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0015167857054620981,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 1545,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 4.17763056952641e-08,
+          "right_hand": 1.6311454439328953e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 1842,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0012302359100431204,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 3.164526973963291e-08,
+          "right_hand": 1.9612515812961205e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_ring_finger_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_ring_finger_distal",
+            "point_w_m": [
+              0.029284970834851265,
+              0.020250754430890083,
+              0.5105456709861755
+            ],
+            "normal_w": [
+              0.8231199383735657,
+              0.5678675770759583,
+              7.612591434735805e-05
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0012302359100431204,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 1881,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 3.062069059843887e-08,
+          "right_hand": 1.9777444150002204e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 2117,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0006282653193920851,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.233153323156531e-08,
+          "right_hand": 1.0425688096845836e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_index_finger_proximal",
+            "source_body": "Bottle",
+            "partner_body": "l_index_finger_proximal",
+            "point_w_m": [
+              -0.02212553471326828,
+              0.02763017639517784,
+              0.5525511503219604
+            ],
+            "normal_w": [
+              -0.6350576281547546,
+              0.7724647521972656,
+              -9.908859510687762e-07
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0007945764227770269,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_ring_finger_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_ring_finger_distal",
+            "point_w_m": [
+              0.028689490631222725,
+              0.020560283213853836,
+              0.5023323893547058
+            ],
+            "normal_w": [
+              0.8222311735153198,
+              0.5691535472869873,
+              -0.0002026692673098296
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0006282653193920851,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 2265,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 3.217278921516534e-08,
+          "right_hand": 2.877862290742228e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 2554,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 3.991865080167765e-08,
+          "right_hand": 1.7026950925452275e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 2660,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0012196444440633059,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.735575931772903e-08,
+          "right_hand": 4.2344722894961e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_pinky_proximal",
+            "source_body": "Bottle",
+            "partner_body": "l_pinky_proximal",
+            "point_w_m": [
+              -0.021699529141187668,
+              0.02823161892592907,
+              0.4632337689399719
+            ],
+            "normal_w": [
+              -0.6172226071357727,
+              0.7867885828018188,
+              6.0163896705489606e-05
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0012196444440633059,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 2702,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 4.275640094419941e-05,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 4.393992643835705e-08,
+          "right_hand": 1.0453133346696541e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "right_cap",
+            "source_path": "/World/envs/env_0/Cap",
+            "partner_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+            "source_body": "Cap",
+            "partner_body": "r_index_finger_distal",
+            "point_w_m": [
+              -0.016656670719385147,
+              -0.005525416694581509,
+              0.6431682109832764
+            ],
+            "normal_w": [
+              -0.8803691864013672,
+              -0.468048632144928,
+              -0.07668326050043106
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0001884784287540242,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "right_cap",
+            "source_path": "/World/envs/env_0/Cap",
+            "partner_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+            "source_body": "Cap",
+            "partner_body": "r_index_finger_distal",
+            "point_w_m": [
+              -0.017093323171138763,
+              -0.004669536370784044,
+              0.6429572105407715
+            ],
+            "normal_w": [
+              -0.8803691864013672,
+              -0.468048632144928,
+              -0.07668326050043106
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.00010599993402138352,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "right_cap",
+            "source_path": "/World/envs/env_0/Cap",
+            "partner_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+            "source_body": "Cap",
+            "partner_body": "r_index_finger_distal",
+            "point_w_m": [
+              -0.01714874804019928,
+              -0.004560896195471287,
+              0.6429304480552673
+            ],
+            "normal_w": [
+              -0.8803691864013672,
+              -0.468048632144928,
+              -0.07668326050043106
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.00013216825027484447,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "right_cap",
+            "source_path": "/World/envs/env_0/Cap",
+            "partner_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+            "source_body": "Cap",
+            "partner_body": "r_index_finger_distal",
+            "point_w_m": [
+              -0.01703764498233795,
+              -0.004639934748411179,
+              0.642137348651886
+            ],
+            "normal_w": [
+              -0.8803691864013672,
+              -0.468048632144928,
+              -0.07668326050043106
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 4.275640094419941e-05,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 2753,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.8504622397437885e-08,
+          "right_hand": 1.496642603887259e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 2851,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.2170325018573312e-08,
+          "right_hand": 1.913799674412845e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 2858,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0008562658913433552,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 2.228707666484975e-08,
+          "right_hand": 9.591709335708197e-09,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_thumb_middle",
+            "source_body": "Bottle",
+            "partner_body": "l_thumb_middle",
+            "point_w_m": [
+              -0.02135326713323593,
+              -0.0282607264816761,
+              0.5552133321762085
+            ],
+            "normal_w": [
+              -0.6081423163414001,
+              -0.7938280701637268,
+              -6.495694105979055e-05
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0008562658913433552,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_thumb_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_thumb_distal",
+            "point_w_m": [
+              -0.006584065034985542,
+              -0.03499361872673035,
+              0.5641610622406006
+            ],
+            "normal_w": [
+              -0.18513545393943787,
+              -0.982712984085083,
+              0.00010672989446902648
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.001250527799129486,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_index_finger_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_index_finger_distal",
+            "point_w_m": [
+              0.02718544378876686,
+              0.023238416761159897,
+              0.5652776956558228
+            ],
+            "normal_w": [
+              0.7628702521324158,
+              0.6465516090393066,
+              1.9095648440270452e-07
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0015275839250534773,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_index_finger_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_index_finger_distal",
+            "point_w_m": [
+              0.027452878654003143,
+              0.023266999050974846,
+              0.5618525743484497
+            ],
+            "normal_w": [
+              0.7628702521324158,
+              0.6465516090393066,
+              1.9095648440270452e-07
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0019725800957530737,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 2866,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0012476062402129173,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.0814511825043291e-08,
+          "right_hand": 1.7258653281731236e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_index_finger_proximal",
+            "source_body": "Bottle",
+            "partner_body": "l_index_finger_proximal",
+            "point_w_m": [
+              -0.019882747903466225,
+              0.029558224603533745,
+              0.5495831370353699
+            ],
+            "normal_w": [
+              -0.5545562505722046,
+              0.8321463465690613,
+              -3.2324085623258725e-05
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0012476062402129173,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 2878,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.0509033254716928e-08,
+          "right_hand": 2.5191879860330917e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 3337,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 3.946315255271184e-08,
+          "right_hand": 1.8921267322333515e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 3347,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0014627169584855437,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 2.782145526143128e-08,
+          "right_hand": 1.2025175351159627e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_thumb_middle",
+            "source_body": "Bottle",
+            "partner_body": "l_thumb_middle",
+            "point_w_m": [
+              -0.02009139582514763,
+              -0.029544483870267868,
+              0.548095166683197
+            ],
+            "normal_w": [
+              -0.5925572514533997,
+              -0.8055283427238464,
+              0.0001398587628500536
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0014627169584855437,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 3610,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.00015660915232729167,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.7369348438141837e-08,
+          "right_hand": 1.8725492117573353e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_middle_finger_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_middle_finger_distal",
+            "point_w_m": [
+              0.02778496779501438,
+              0.021966753527522087,
+              0.5261403918266296
+            ],
+            "normal_w": [
+              0.7823668718338013,
+              0.6228179335594177,
+              -2.1284452031977708e-06
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0009417624678462744,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "right_cap",
+            "source_path": "/World/envs/env_0/Cap",
+            "partner_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+            "source_body": "Cap",
+            "partner_body": "r_index_finger_distal",
+            "point_w_m": [
+              -0.016525551676750183,
+              -0.005814746487885714,
+              0.6406806707382202
+            ],
+            "normal_w": [
+              -0.8660252094268799,
+              -0.4999997615814209,
+              -8.349501001703175e-08
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.00021891668438911438,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "right_cap",
+            "source_path": "/World/envs/env_0/Cap",
+            "partner_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+            "source_body": "Cap",
+            "partner_body": "r_index_finger_distal",
+            "point_w_m": [
+              -0.01715175434947014,
+              -0.004706655628979206,
+              0.6402387619018555
+            ],
+            "normal_w": [
+              -0.8681111335754395,
+              -0.4961720407009125,
+              -0.014004789292812347
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0001748024660628289,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "right_cap",
+            "source_path": "/World/envs/env_0/Cap",
+            "partner_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+            "source_body": "Cap",
+            "partner_body": "r_index_finger_distal",
+            "point_w_m": [
+              -0.017210857942700386,
+              -0.00460206950083375,
+              0.6401970386505127
+            ],
+            "normal_w": [
+              -0.8660252094268799,
+              -0.4999997615814209,
+              -8.349501001703175e-08
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.00020607226178981364,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "right_cap",
+            "source_path": "/World/envs/env_0/Cap",
+            "partner_path": "/World/envs/env_0/RightHand/r_index_finger_distal",
+            "source_body": "Cap",
+            "partner_body": "r_index_finger_distal",
+            "point_w_m": [
+              -0.01713596098124981,
+              -0.0046976287849247456,
+              0.6389399170875549
+            ],
+            "normal_w": [
+              -0.8681111335754395,
+              -0.4961720407009125,
+              -0.014004789292812347
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.00015660915232729167,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 4224,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0014343532966449857,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.315899883937799e-08,
+          "right_hand": 8.66249707593296e-09,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_thumb_middle",
+            "source_body": "Bottle",
+            "partner_body": "l_thumb_middle",
+            "point_w_m": [
+              -0.022209390997886658,
+              -0.027967464178800583,
+              0.5524879693984985
+            ],
+            "normal_w": [
+              -0.6356490254402161,
+              -0.7719782590866089,
+              5.265847721602768e-05
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0014343532966449857,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 4231,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.001061888411641121,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.868576659641693e-08,
+          "right_hand": 1.9887290710714745e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_ring_finger_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_ring_finger_distal",
+            "point_w_m": [
+              0.03100372850894928,
+              0.017325108870863914,
+              0.4934249520301819
+            ],
+            "normal_w": [
+              0.8758676648139954,
+              0.48255136609077454,
+              -1.0126526831299998e-05
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.001061888411641121,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 4445,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0009313618647865951,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 4.100005228085325e-08,
+          "right_hand": 4.1045174003952825e-09,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_pinky_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_pinky_distal",
+            "point_w_m": [
+              0.024776311591267586,
+              0.025381654500961304,
+              0.48141977190971375
+            ],
+            "normal_w": [
+              0.7091070413589478,
+              0.7051008939743042,
+              -0.0001111550081986934
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0009313618647865951,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_pinky_distal",
+            "source_body": "Bottle",
+            "partner_body": "l_pinky_distal",
+            "point_w_m": [
+              0.025160707533359528,
+              0.02501857280731201,
+              0.48067888617515564
+            ],
+            "normal_w": [
+              0.7091070413589478,
+              0.7051008939743042,
+              -0.0001111550081986934
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0009644983219914138,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 4475,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.3203905937136318e-08,
+          "right_hand": 2.3765080374492242e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 4533,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": 0.0013085040263831615,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 1.0572952271690208e-08,
+          "right_hand": 2.6580802108941726e-08,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [
+          {
+            "category": "left_bottle",
+            "source_path": "/World/envs/env_0/Bottle",
+            "partner_path": "/World/envs/env_0/LeftHand/l_index_finger_proximal",
+            "source_body": "Bottle",
+            "partner_body": "l_index_finger_proximal",
+            "point_w_m": [
+              -0.0227404423058033,
+              0.02745603770017624,
+              0.5411373972892761
+            ],
+            "normal_w": [
+              -0.6544936299324036,
+              0.7560675740242004,
+              7.753222598694265e-05
+            ],
+            "signed_normal_force_scalar_n": -0.0,
+            "separation_m": 0.0013085040263831615,
+            "normal_force_n": 0.0,
+            "pair_friction_force_vector_w_n": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    },
+    {
+      "seed": 4568,
+      "physx": {
+        "qualified": true,
+        "backend": "official_native_USD_PhysX_one_step_contact",
+        "physics_dt_s": 0.002,
+        "minimum_reported_separation_m": null,
+        "peak_normal_force_n": 0.0,
+        "root_translation_after_one_step_m": {
+          "left_hand": 9.496859918886347e-09,
+          "right_hand": 5.896515310949101e-09,
+          "bottle_body": 3.9249658584594727e-05,
+          "bottle_cap": 3.92155647277459e-05
+        },
+        "contacts": [],
+        "same_hand_contacts": [],
+        "no_one_second_hold_required_or_performed": true
+      }
+    }
+  ]
+}

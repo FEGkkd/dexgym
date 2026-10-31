@@ -1,0 +1,83 @@
+{
+  "bottle_profile": "engineering_example_70mm",
+  "mjcf_screen": {
+    "attempted": 4569,
+    "qualified": 32,
+    "rejected": 4537,
+    "seed_request": 5000,
+    "seed_start": 0
+  },
+  "native_physx": {
+    "accepted_max_peak_normal_force_n": 0.0,
+    "accepted_min_reported_separation_m": 4.275640094419941e-05,
+    "attempted": 32,
+    "negative_control_min_separation_m": -0.004091325681656599,
+    "qualified": 32,
+    "self_collision_negative_control_min_separation_m": -0.009266719222068787
+  },
+  "official_asset_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+  "one_second_hold_test_performed": false,
+  "reset_checks": {
+    "1": {
+      "asset_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+      "asset_variant": "beta1",
+      "contact_history_invalidated": true,
+      "control_mode": "pose_command_wrist",
+      "detached_recovered": true,
+      "finger_targets_restored": true,
+      "iterations": 100,
+      "left_usd_sha256": "8d1b83a6130b64fd759ea3c0720d6b255da8c1e76abe5a4226788183058dbfda",
+      "max_bottle_position_reset_error_m": 0.0,
+      "max_initial_wrist_force_n": 0.0,
+      "max_joint_state_target_error": 0.0,
+      "max_root_pose_velocity_error": 0.0,
+      "num_envs": 1,
+      "other_env_unchanged": true,
+      "post_reset_finite": true,
+      "pregrasp_bank": "docs/assets/phase0_pregrasp_reset_bank.json",
+      "random_reset_seed": 2201,
+      "right_usd_sha256": "22600d3f0aeb185552bb6eeb454b5b7199966a60fc844d4a4b5e4791ec77f0ed"
+    },
+    "16": {
+      "asset_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+      "asset_variant": "beta1",
+      "contact_history_invalidated": true,
+      "control_mode": "pose_command_wrist",
+      "detached_recovered": true,
+      "finger_targets_restored": true,
+      "iterations": 100,
+      "left_usd_sha256": "8d1b83a6130b64fd759ea3c0720d6b255da8c1e76abe5a4226788183058dbfda",
+      "max_bottle_position_reset_error_m": 0.0,
+      "max_initial_wrist_force_n": 0.0,
+      "max_joint_state_target_error": 0.0,
+      "max_root_pose_velocity_error": 2.384185791015625e-07,
+      "num_envs": 16,
+      "other_env_unchanged": true,
+      "post_reset_finite": true,
+      "pregrasp_bank": "docs/assets/phase0_pregrasp_reset_bank.json",
+      "random_reset_seed": 2201,
+      "right_usd_sha256": "22600d3f0aeb185552bb6eeb454b5b7199966a60fc844d4a4b5e4791ec77f0ed"
+    },
+    "2": {
+      "asset_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+      "asset_variant": "beta1",
+      "contact_history_invalidated": true,
+      "control_mode": "pose_command_wrist",
+      "detached_recovered": true,
+      "finger_targets_restored": true,
+      "iterations": 100,
+      "left_usd_sha256": "8d1b83a6130b64fd759ea3c0720d6b255da8c1e76abe5a4226788183058dbfda",
+      "max_bottle_position_reset_error_m": 0.0,
+      "max_initial_wrist_force_n": 0.0,
+      "max_joint_state_target_error": 0.0,
+      "max_root_pose_velocity_error": 5.960464477539063e-08,
+      "num_envs": 2,
+      "other_env_unchanged": true,
+      "post_reset_finite": true,
+      "pregrasp_bank": "docs/assets/phase0_pregrasp_reset_bank.json",
+      "random_reset_seed": 2201,
+      "right_usd_sha256": "22600d3f0aeb185552bb6eeb454b5b7199966a60fc844d4a4b5e4791ec77f0ed"
+    }
+  },
+  "scope": "geometry_only_pregrasp_reset_no_hold_validation"
+}
