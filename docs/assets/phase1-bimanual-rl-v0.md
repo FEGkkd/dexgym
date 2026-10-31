@@ -122,8 +122,10 @@ validator/curator now carry a separate, explicit `require_right_tripod`
 criterion so an old thumb-middle hold cannot be mislabeled a tripod success.
 
 The index joints tracked their commanded positions to within about 0.3 mrad,
-so drive saturation is not the observed cause. The no-preload index point was
-on the cap's negative-X side, close to the middle finger's sector. During
+so drive saturation is not the observed cause. In the first unsupported hold
+frame, loaded thumb and middle contact points were near -96° and +95° about
+the cap's local axis. The unloaded index point was near the cap's negative-X
+sector. During
 preload, the cap shifted in positive X while the wrist remained fixed; the
 index lost contact. Moving its target farther into the cap did not establish
 a stable third contact. In 10,000 deterministic fixed-wrist index-joint
