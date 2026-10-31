@@ -1,0 +1,318 @@
+{
+  "asset_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+  "asset_variant": "beta1",
+  "cases": {
+    "cap_ground": {
+      "env0": {
+        "active_steps": 7,
+        "active_time_s": 0.014,
+        "bodies": {
+          "Cap|CollisionPlane": {
+            "latest_friction_force_n": 9.621594654163346e-05,
+            "latest_position_w": [
+              0.7499982714653015,
+              -5.491007414093474e-06,
+              0.0030001222621649504
+            ],
+            "minimum_separation_m": -1.8626570863489178e-07,
+            "partner_body": "CollisionPlane",
+            "peak_force_n": 0.3430369198322296,
+            "samples": 7,
+            "source_body": "Cap"
+          }
+        },
+        "contact_ratio": 0.875,
+        "elapsed_time_s": 0.016,
+        "mean_force_n": 0.20177220020975387,
+        "peak_force_n": 0.3430369198322296
+      },
+      "env1": null
+    },
+    "hand_hand": {
+      "env0": {
+        "active_steps": 8,
+        "active_time_s": 0.016,
+        "bodies": {
+          "l_index_finger_distal|r_index_finger_distal": {
+            "latest_friction_force_n": 14.100302696228027,
+            "latest_position_w": [
+              1.3670274019241333,
+              0.004809126257896423,
+              0.6523601412773132
+            ],
+            "minimum_separation_m": -0.009277897886931896,
+            "partner_body": "r_index_finger_distal",
+            "peak_force_n": 337.6800537109375,
+            "samples": 8,
+            "source_body": "l_index_finger_distal"
+          }
+        },
+        "contact_ratio": 1.0,
+        "elapsed_time_s": 0.016,
+        "mean_force_n": 103.85025429725647,
+        "peak_force_n": 337.6800537109375
+      },
+      "env1": null
+    },
+    "left_bottle": {
+      "all_env0_categories": [
+        "left_bottle"
+      ],
+      "env0": {
+        "active_steps": 4,
+        "active_time_s": 0.008,
+        "bodies": {
+          "Bottle|l_index_finger_middle": {
+            "latest_friction_force_n": 10.650955200195312,
+            "latest_position_w": [
+              1.352756142616272,
+              0.007012649439275265,
+              0.6490848064422607
+            ],
+            "minimum_separation_m": -0.017479736357927322,
+            "partner_body": "l_index_finger_middle",
+            "peak_force_n": 33.862098693847656,
+            "samples": 2,
+            "source_body": "Bottle"
+          },
+          "Bottle|l_middle_finger_middle": {
+            "latest_friction_force_n": 5.408245086669922,
+            "latest_position_w": [
+              1.364829659461975,
+              0.010887340642511845,
+              0.6553751826286316
+            ],
+            "minimum_separation_m": -0.021028466522693634,
+            "partner_body": "l_middle_finger_middle",
+            "peak_force_n": 3.964246988296509,
+            "samples": 1,
+            "source_body": "Bottle"
+          },
+          "Bottle|l_pinky_distal": {
+            "latest_friction_force_n": 3.628732919692993,
+            "latest_position_w": [
+              1.3574484586715698,
+              0.015053844079375267,
+              0.5882281064987183
+            ],
+            "minimum_separation_m": -0.029430603608489037,
+            "partner_body": "l_pinky_distal",
+            "peak_force_n": 3.7542824745178223,
+            "samples": 1,
+            "source_body": "Bottle"
+          },
+          "Bottle|l_ring_finger_distal": {
+            "latest_friction_force_n": 3.2468206882476807,
+            "latest_position_w": [
+              1.369680404663086,
+              0.012222697027027607,
+              0.6042308807373047
+            ],
+            "minimum_separation_m": -0.014261499978601933,
+            "partner_body": "l_ring_finger_distal",
+            "peak_force_n": 2.7279345989227295,
+            "samples": 2,
+            "source_body": "Bottle"
+          }
+        },
+        "contact_ratio": 0.5,
+        "elapsed_time_s": 0.016,
+        "mean_force_n": 9.545503934224447,
+        "peak_force_n": 33.862098693847656
+      },
+      "env1": null,
+      "other_env_categories": []
+    },
+    "left_cap": {
+      "all_env0_categories": [
+        "left_bottle",
+        "left_cap"
+      ],
+      "env0": {
+        "active_steps": 8,
+        "active_time_s": 0.016,
+        "bodies": {
+          "Cap|l_index_finger_distal": {
+            "latest_friction_force_n": 75.6702651977539,
+            "latest_position_w": [
+              1.3653054237365723,
+              0.005516772624105215,
+              0.6516391038894653
+            ],
+            "minimum_separation_m": -0.01189985778182745,
+            "partner_body": "l_index_finger_distal",
+            "peak_force_n": 191.73374938964844,
+            "samples": 8,
+            "source_body": "Cap"
+          },
+          "Cap|l_index_finger_middle": {
+            "latest_friction_force_n": 23.79586410522461,
+            "latest_position_w": [
+              1.3583598136901855,
+              0.005339375697076321,
+              0.6465665102005005
+            ],
+            "minimum_separation_m": -0.010893537662923336,
+            "partner_body": "l_index_finger_middle",
+            "peak_force_n": 99.5558090209961,
+            "samples": 7,
+            "source_body": "Cap"
+          }
+        },
+        "contact_ratio": 1.0,
+        "elapsed_time_s": 0.016,
+        "mean_force_n": 80.30706354777018,
+        "peak_force_n": 191.73374938964844
+      },
+      "env1": null,
+      "other_env_categories": []
+    },
+    "right_bottle": {
+      "all_env0_categories": [
+        "right_bottle"
+      ],
+      "env0": {
+        "active_steps": 5,
+        "active_time_s": 0.01,
+        "bodies": {
+          "Bottle|r_index_finger_distal": {
+            "latest_friction_force_n": 5.017476558685303,
+            "latest_position_w": [
+              1.6301732063293457,
+              -0.007133087143301964,
+              0.5824524164199829
+            ],
+            "minimum_separation_m": -0.0336083360016346,
+            "partner_body": "r_index_finger_distal",
+            "peak_force_n": 4.54566764831543,
+            "samples": 5,
+            "source_body": "Bottle"
+          },
+          "Bottle|r_index_finger_middle": {
+            "latest_friction_force_n": 11.48221206665039,
+            "latest_position_w": [
+              1.6472973823547363,
+              -0.008954773657023907,
+              0.5891436338424683
+            ],
+            "minimum_separation_m": -0.017358720302581787,
+            "partner_body": "r_index_finger_middle",
+            "peak_force_n": 3.5925352573394775,
+            "samples": 2,
+            "source_body": "Bottle"
+          },
+          "Bottle|r_middle_finger_distal": {
+            "latest_friction_force_n": 26.294872283935547,
+            "latest_position_w": [
+              1.6412160396575928,
+              -0.018133927136659622,
+              0.6176376342773438
+            ],
+            "minimum_separation_m": -0.03359604626893997,
+            "partner_body": "r_middle_finger_distal",
+            "peak_force_n": 2.503809928894043,
+            "samples": 1,
+            "source_body": "Bottle"
+          },
+          "Bottle|r_pinky_distal": {
+            "latest_friction_force_n": 6.070676803588867,
+            "latest_position_w": [
+              1.6316994428634644,
+              -0.020183034241199493,
+              0.6215342283248901
+            ],
+            "minimum_separation_m": -0.027565432712435722,
+            "partner_body": "r_pinky_distal",
+            "peak_force_n": 12.552183151245117,
+            "samples": 2,
+            "source_body": "Bottle"
+          },
+          "Bottle|r_ring_finger_distal": {
+            "latest_friction_force_n": 3.9680521488189697,
+            "latest_position_w": [
+              1.6334408521652222,
+              -0.013099566102027893,
+              0.6201192140579224
+            ],
+            "minimum_separation_m": -0.02144736610352993,
+            "partner_body": "r_ring_finger_distal",
+            "peak_force_n": 2.1229419708251953,
+            "samples": 2,
+            "source_body": "Bottle"
+          },
+          "Bottle|r_ring_finger_middle": {
+            "latest_friction_force_n": 6.86768913269043,
+            "latest_position_w": [
+              1.6358387470245361,
+              -0.02057570219039917,
+              0.6191539764404297
+            ],
+            "minimum_separation_m": -0.033549290150403976,
+            "partner_body": "r_ring_finger_middle",
+            "peak_force_n": 1.1048986911773682,
+            "samples": 1,
+            "source_body": "Bottle"
+          }
+        },
+        "contact_ratio": 0.625,
+        "elapsed_time_s": 0.016,
+        "mean_force_n": 4.204810610184302,
+        "peak_force_n": 12.552183151245117
+      },
+      "env1": null,
+      "other_env_categories": []
+    },
+    "right_cap": {
+      "all_env0_categories": [
+        "right_bottle",
+        "right_cap"
+      ],
+      "env0": {
+        "active_steps": 8,
+        "active_time_s": 0.016,
+        "bodies": {
+          "Cap|r_index_finger_distal": {
+            "latest_friction_force_n": 60.25513458251953,
+            "latest_position_w": [
+              1.6449270248413086,
+              -0.00808580219745636,
+              0.5837068557739258
+            ],
+            "minimum_separation_m": -0.01076354831457138,
+            "partner_body": "r_index_finger_distal",
+            "peak_force_n": 105.04479217529297,
+            "samples": 8,
+            "source_body": "Cap"
+          },
+          "Cap|r_index_finger_middle": {
+            "latest_friction_force_n": 40.59766387939453,
+            "latest_position_w": [
+              1.6503146886825562,
+              -0.007109229918569326,
+              0.5824354290962219
+            ],
+            "minimum_separation_m": -0.012032663449645042,
+            "partner_body": "r_index_finger_middle",
+            "peak_force_n": 49.818138122558594,
+            "samples": 8,
+            "source_body": "Cap"
+          }
+        },
+        "contact_ratio": 1.0,
+        "elapsed_time_s": 0.016,
+        "mean_force_n": 67.00257968902588,
+        "peak_force_n": 105.04479217529297
+      },
+      "env1": null,
+      "other_env_categories": []
+    }
+  },
+  "contact_placement": "episode_boundary_object_pair_translation_for_classification_only",
+  "detection_force_floor_n": 0.01,
+  "left_usd_sha256": "8d1b83a6130b64fd759ea3c0720d6b255da8c1e76abe5a4226788183058dbfda",
+  "no_contact": [
+    {},
+    {}
+  ],
+  "right_usd_sha256": "22600d3f0aeb185552bb6eeb454b5b7199966a60fc844d4a4b5e4791ec77f0ed"
+}

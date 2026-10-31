@@ -89,6 +89,32 @@ class Wrist6DoFController:
         self.initial_quat = _quat_normalize(initial_quat)
         self.target_quat = self.initial_quat
 
+    def reset_to(
+        self, position_world: Vector3, quaternion_xyzw: QuaternionXYZW,
+        *, target_pos: Vector3 | None = None,
+        target_quat: QuaternionXYZW | None = None,
+    ) -> None:
+        """Re-anchor a new episode without retaining the previous PD target.
+
+        This only updates controller state; the ResetManager separately writes
+        the matching articulation root at an episode boundary.
+        """
+        position = tuple(float(x) for x in position_world)
+        target_position = tuple(float(x) for x in (target_pos or position))
+        if (not all(math.isfinite(x) for x in (*position, *target_position))
+                or target_position[2] < self.limits.min_height
+                or _norm(tuple(a - b for a, b in zip(target_position, position)))
+                > self.limits.max_target_radius):
+            raise ValueError("Reset wrist target is outside the configured workspace")
+        orientation = _quat_normalize(quaternion_xyzw)
+        target_orientation = _quat_normalize(target_quat or orientation)
+        if _norm(_orientation_error(target_orientation, orientation)) > self.limits.max_target_rotation:
+            raise ValueError("Reset wrist orientation target exceeds controller limit")
+        self.initial_pos = position
+        self.target_pos = target_position
+        self.initial_quat = orientation
+        self.target_quat = target_orientation
+
     @property
     def target_rot_angle(self) -> float:
         return _norm(_orientation_error(self.target_quat, self.initial_quat))

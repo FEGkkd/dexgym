@@ -5,6 +5,15 @@ from dexteroushands_lab.assets.wrist_6dof import Wrist6DoFController, WristLimit
 
 
 class WristControllerTests(unittest.TestCase):
+    def test_reset_target_matches_restored_pose_without_command_shock(self):
+        ctrl = Wrist6DoFController((0, 0, 0.5), (0, 0, 0, 1), WristLimits())
+        ctrl.command((0.01, 0, 0), (0, 0, 0.08))
+        ctrl.reset_to((0.2, 0.1, 0.6), (0, 0, 0, 1))
+        self.assertEqual(ctrl.target_pos, (0.2, 0.1, 0.6))
+        self.assertEqual(ctrl.target_rot_angle, 0.0)
+        self.assertEqual(ctrl.wrench((0.2, 0.1, 0.6), (0, 0, 0, 1),
+                                     (0, 0, 0), (0, 0, 0)), ((0, 0, 0), (0, 0, 0)))
+
     def test_translation_and_rotation_commands_are_bounded(self):
         ctrl = Wrist6DoFController((0.0, 0.0, 0.5), (0.0, 0.0, 0.0, 1.0), WristLimits())
         ctrl.command((1.0, 0.0, 0.0), (0.0, 0.0, 1.0))

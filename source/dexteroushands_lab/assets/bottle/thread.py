@@ -94,6 +94,32 @@ class ThreadCoupler:
         self._sliding = False
         self._detached = False
 
+    def reset_from_pose(
+        self, bottle_pos, bottle_quat, cap_pos, cap_quat,
+        *, initial_angle_unwrapped: float = 0.0,
+    ) -> ThreadState:
+        """Re-engage at an episode boundary with an explicit angle reference.
+
+        The visible cap orientation must agree with the requested angle modulo
+        one turn. This restores a detached coupler without carrying the old
+        sliding or stick reference into the next episode.
+        """
+        if not math.isfinite(initial_angle_unwrapped):
+            raise ValueError("Initial unwrapped thread angle must be finite")
+        self.reset()
+        state = self.observe(bottle_pos, bottle_quat, cap_pos, cap_quat)
+        mismatch = math.atan2(
+            math.sin(self._theta - initial_angle_unwrapped),
+            math.cos(self._theta - initial_angle_unwrapped),
+        )
+        if abs(mismatch) > 1e-4:
+            self.reset()
+            raise ValueError("Cap orientation differs from the requested thread angle")
+        self._theta = initial_angle_unwrapped
+        self._initial_theta = initial_angle_unwrapped
+        self._stick_reference = initial_angle_unwrapped
+        return state
+
     @property
     def detached(self) -> bool:
         return self._detached

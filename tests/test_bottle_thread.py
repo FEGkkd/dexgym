@@ -1,6 +1,8 @@
 import math
 import unittest
 
+import pytest
+
 from dexteroushands_lab.assets.bottle import BottleConfig, ThreadCoupler, sample_helix
 
 
@@ -196,6 +198,22 @@ class BottleThreadTests(unittest.TestCase):
         released_bottom = cap_bottom + cfg.thread_pitch * cfg.thread_turns
         self.assertGreater(released_bottom,
                            cfg.bottle_height / 2 + cfg.neck_height)
+
+
+def test_reset_from_pose_clears_detached_and_restores_unwrapped_reference():
+    cfg = BottleConfig()
+    coupler = ThreadCoupler(cfg)
+    coupler._detached = True
+    coupler._sliding = True
+    coupler._stick_reference = 9.0
+    identity = (0.0, 0.0, 0.0, 1.0)
+    state = coupler.reset_from_pose((0, 0, 0.5), identity,
+                                    (0, 0, 0.5 + cfg.cap_initial_z), identity,
+                                    initial_angle_unwrapped=2 * math.pi)
+    assert not coupler.detached and not coupler._sliding
+    assert coupler._theta == pytest.approx(2 * math.pi)
+    assert coupler._stick_reference == pytest.approx(2 * math.pi)
+    assert state.theta_unwrapped == pytest.approx(0.0)
 
 
 if __name__ == "__main__":

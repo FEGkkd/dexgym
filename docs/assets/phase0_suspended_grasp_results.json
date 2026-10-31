@@ -1,0 +1,5680 @@
+{
+  "asset_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+  "bottle_profile": "engineering_example",
+  "dt_s": 0.002,
+  "fixture": "gravity_on_no_support",
+  "left_asset_sha256": "8d1b83a6130b64fd759ea3c0720d6b255da8c1e76abe5a4226788183058dbfda",
+  "max_peak_force_guard_n": 100.0,
+  "no_contact_free_fall": {
+    "contacts": {
+      "left_bottle": 0.0,
+      "right_cap": 0.0
+    },
+    "displacement_m": 0.050028055906295776,
+    "expected_g_t2_over_2_m": 0.04905000000000001
+  },
+  "right_asset_sha256": "22600d3f0aeb185552bb6eeb454b5b7199966a60fc844d4a4b5e4791ec77f0ed",
+  "seeds": {
+    "0": {
+      "hold": {
+        "bottle_displacement_m": 0.48878616094589233,
+        "bottle_rotation_rad": 1.5707918091586972,
+        "bottle_trajectory": [
+          {
+            "position_w_m": [
+              0.0037027073558419943,
+              0.0019578824285417795,
+              0.4996074140071869
+            ],
+            "quaternion_xyzw": [
+              -0.00801089871674776,
+              -0.004424664191901684,
+              -0.014497390016913414,
+              0.9998530149459839
+            ],
+            "t_s": 0.002
+          },
+          {
+            "position_w_m": [
+              0.04472818225622177,
+              0.012299426831305027,
+              0.4628404378890991
+            ],
+            "quaternion_xyzw": [
+              0.08847745507955551,
+              -0.07537226378917694,
+              -0.07788169384002686,
+              0.9901641607284546
+            ],
+            "t_s": 0.052000000000000005
+          },
+          {
+            "position_w_m": [
+              0.0555732399225235,
+              0.015091799199581146,
+              0.38675424456596375
+            ],
+            "quaternion_xyzw": [
+              0.15656891465187073,
+              -0.05242323875427246,
+              -0.1035151332616806,
+              0.9808273911476135
+            ],
+            "t_s": 0.10200000000000001
+          },
+          {
+            "position_w_m": [
+              0.06638938188552856,
+              0.017649078741669655,
+              0.2866095304489136
+            ],
+            "quaternion_xyzw": [
+              0.22091230750083923,
+              -0.025818610563874245,
+              -0.12799951434135437,
+              0.9665128588676453
+            ],
+            "t_s": 0.152
+          },
+          {
+            "position_w_m": [
+              0.07719525694847107,
+              0.019929595291614532,
+              0.16233494877815247
+            ],
+            "quaternion_xyzw": [
+              0.2812138497829437,
+              0.002912938827648759,
+              -0.14721493422985077,
+              0.9482815861701965
+            ],
+            "t_s": 0.202
+          },
+          {
+            "position_w_m": [
+              0.08526220917701721,
+              0.0037019366864115,
+              0.09322738647460938
+            ],
+            "quaternion_xyzw": [
+              0.4012870192527771,
+              0.04749405011534691,
+              -0.16922970116138458,
+              0.8989295363426208
+            ],
+            "t_s": 0.252
+          },
+          {
+            "position_w_m": [
+              0.09092731028795242,
+              -0.029406966641545296,
+              0.06664501875638962
+            ],
+            "quaternion_xyzw": [
+              0.5655112266540527,
+              0.10860960185527802,
+              -0.17224594950675964,
+              0.7992072701454163
+            ],
+            "t_s": 0.302
+          },
+          {
+            "position_w_m": [
+              0.09576797485351562,
+              -0.058231860399246216,
+              0.03499998897314072
+            ],
+            "quaternion_xyzw": [
+              0.6822450757026672,
+              0.18585745990276337,
+              -0.18075259029865265,
+              0.6836132407188416
+            ],
+            "t_s": 0.352
+          },
+          {
+            "position_w_m": [
+              0.10022837668657303,
+              -0.060586586594581604,
+              0.03499998897314072
+            ],
+            "quaternion_xyzw": [
+              0.6647948026657104,
+              0.2409311980009079,
+              -0.23370005190372467,
+              0.6673710942268372
+            ],
+            "t_s": 0.402
+          },
+          {
+            "position_w_m": [
+              0.10489566624164581,
+              -0.060519516468048096,
+              0.03499998524785042
+            ],
+            "quaternion_xyzw": [
+              0.6490764021873474,
+              0.28053510189056396,
+              -0.2730197012424469,
+              0.6522729992866516
+            ],
+            "t_s": 0.452
+          },
+          {
+            "position_w_m": [
+              0.10958527028560638,
+              -0.06044527515769005,
+              0.03499997779726982
+            ],
+            "quaternion_xyzw": [
+              0.6331066489219666,
+              0.3149220049381256,
+              -0.3072178363800049,
+              0.6368807554244995
+            ],
+            "t_s": 0.502
+          },
+          {
+            "position_w_m": [
+              0.11426518857479095,
+              -0.060362569987773895,
+              0.03499998524785042
+            ],
+            "quaternion_xyzw": [
+              0.6181086897850037,
+              0.34342628717422485,
+              -0.33543699979782104,
+              0.6224805116653442
+            ],
+            "t_s": 0.552
+          },
+          {
+            "position_w_m": [
+              0.11890357732772827,
+              -0.06027727574110031,
+              0.03499997407197952
+            ],
+            "quaternion_xyzw": [
+              0.6017980575561523,
+              0.37126678228378296,
+              -0.36290886998176575,
+              0.6068748831748962
+            ],
+            "t_s": 0.602
+          },
+          {
+            "position_w_m": [
+              0.1234525665640831,
+              -0.06018662080168724,
+              0.03499997407197952
+            ],
+            "quaternion_xyzw": [
+              0.5854147672653198,
+              0.39659741520881653,
+              -0.38785362243652344,
+              0.5912439227104187
+            ],
+            "t_s": 0.652
+          },
+          {
+            "position_w_m": [
+              0.12375617027282715,
+              -0.060446202754974365,
+              0.03500036150217056
+            ],
+            "quaternion_xyzw": [
+              0.6366696357727051,
+              0.30775710940361023,
+              -0.3385264575481415,
+              0.6207552552223206
+            ],
+            "t_s": 0.7020000000000001
+          },
+          {
+            "position_w_m": [
+              0.1157764345407486,
+              -0.05928061902523041,
+              0.03500004857778549
+            ],
+            "quaternion_xyzw": [
+              0.7052345871925354,
+              0.05154670029878616,
+              -0.180106982588768,
+              0.6837751865386963
+            ],
+            "t_s": 0.752
+          },
+          {
+            "position_w_m": [
+              0.1070496067404747,
+              -0.05747665464878082,
+              0.03499998897314072
+            ],
+            "quaternion_xyzw": [
+              0.7032737135887146,
+              -0.07353021949529648,
+              -0.083258718252182,
+              0.7021874189376831
+            ],
+            "t_s": 0.802
+          },
+          {
+            "position_w_m": [
+              0.1123427078127861,
+              -0.06516101956367493,
+              0.03499732166528702
+            ],
+            "quaternion_xyzw": [
+              0.6976507902145386,
+              -0.11535689979791641,
+              -0.07051776349544525,
+              0.7035647630691528
+            ],
+            "t_s": 0.852
+          },
+          {
+            "position_w_m": [
+              0.11849218606948853,
+              -0.07665470242500305,
+              0.03498208522796631
+            ],
+            "quaternion_xyzw": [
+              0.672714352607727,
+              -0.21809625625610352,
+              -0.029829688370227814,
+              0.7063989639282227
+            ],
+            "t_s": 0.902
+          },
+          {
+            "position_w_m": [
+              0.12149901688098907,
+              -0.08291452378034592,
+              0.03499234467744827
+            ],
+            "quaternion_xyzw": [
+              0.6598760485649109,
+              -0.2541764974594116,
+              -0.016347892582416534,
+              0.7068879008293152
+            ],
+            "t_s": 0.9520000000000001
+          },
+          {
+            "position_w_m": [
+              0.12350548058748245,
+              -0.08622290194034576,
+              0.035001154989004135
+            ],
+            "quaternion_xyzw": [
+              0.6438068747520447,
+              -0.29242148995399475,
+              -0.0002573441306594759,
+              0.7071083784103394
+            ],
+            "t_s": 1.0
+          }
+        ],
+        "contact_summary": {
+          "bottle_ground": {
+            "active_steps": 383,
+            "active_time_s": 0.7660000000000006,
+            "bodies": {
+              "Bottle|CollisionPlane": {
+                "latest_friction_force_n": 0.5525449514389038,
+                "latest_position_w": [
+                  0.12343733757734299,
+                  -0.08607719838619232,
+                  -4.063269898324506e-06
+                ],
+                "minimum_separation_m": -0.0001145021160482429,
+                "partner_body": "CollisionPlane",
+                "peak_force_n": 354.10858154296875,
+                "samples": 383,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 0.766,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 4.6831349723974816,
+            "peak_force_n": 354.10858154296875
+          },
+          "left_bottle": {
+            "active_steps": 6,
+            "active_time_s": 0.012,
+            "bodies": {
+              "Bottle|l_index_finger_middle": {
+                "latest_friction_force_n": 7.031500816345215,
+                "latest_position_w": [
+                  -0.003800008213147521,
+                  0.0010344969341531396,
+                  0.4938713312149048
+                ],
+                "minimum_separation_m": -0.03863900527358055,
+                "partner_body": "l_index_finger_middle",
+                "peak_force_n": 251.47047424316406,
+                "samples": 3,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal": {
+                "latest_friction_force_n": 26.962677001953125,
+                "latest_position_w": [
+                  -0.0212508887052536,
+                  0.024896224960684776,
+                  0.48975157737731934
+                ],
+                "minimum_separation_m": -0.004542178008705378,
+                "partner_body": "l_index_finger_proximal",
+                "peak_force_n": 49.0230598449707,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal_abd": {
+                "latest_friction_force_n": 11.544774055480957,
+                "latest_position_w": [
+                  -0.005278243683278561,
+                  -0.0011215079575777054,
+                  0.4853065609931946
+                ],
+                "minimum_separation_m": -0.03863900527358055,
+                "partner_body": "l_index_finger_proximal_abd",
+                "peak_force_n": 295.253173828125,
+                "samples": 3,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_distal": {
+                "latest_friction_force_n": 13.51339054107666,
+                "latest_position_w": [
+                  -0.004101939499378204,
+                  0.007830269634723663,
+                  0.46909162402153015
+                ],
+                "minimum_separation_m": -0.03923282027244568,
+                "partner_body": "l_middle_finger_distal",
+                "peak_force_n": 119.71781921386719,
+                "samples": 4,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_middle": {
+                "latest_friction_force_n": 19.552425384521484,
+                "latest_position_w": [
+                  -0.007743724621832371,
+                  -0.0003466896014288068,
+                  0.48055243492126465
+                ],
+                "minimum_separation_m": -0.03874548152089119,
+                "partner_body": "l_middle_finger_middle",
+                "peak_force_n": 272.3895568847656,
+                "samples": 4,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal": {
+                "latest_friction_force_n": 59.92442321777344,
+                "latest_position_w": [
+                  -0.011915838345885277,
+                  -0.010729264467954636,
+                  0.48878324031829834
+                ],
+                "minimum_separation_m": -0.03873268887400627,
+                "partner_body": "l_middle_finger_proximal",
+                "peak_force_n": 108.95393371582031,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal_abd": {
+                "latest_friction_force_n": 18.927505493164062,
+                "latest_position_w": [
+                  -0.00827033445239067,
+                  -0.0001991067547351122,
+                  0.48534244298934937
+                ],
+                "minimum_separation_m": -0.027690550312399864,
+                "partner_body": "l_middle_finger_proximal_abd",
+                "peak_force_n": 312.02227783203125,
+                "samples": 4,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_middle": {
+                "latest_friction_force_n": 8.480445861816406,
+                "latest_position_w": [
+                  -0.017942793667316437,
+                  -0.0016087843105196953,
+                  0.4483143091201782
+                ],
+                "minimum_separation_m": -0.03397047519683838,
+                "partner_body": "l_pinky_middle",
+                "peak_force_n": 14.364191055297852,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_proximal_abd": {
+                "latest_friction_force_n": 5.935888290405273,
+                "latest_position_w": [
+                  -0.016096826642751694,
+                  -0.0008797161281108856,
+                  0.44761356711387634
+                ],
+                "minimum_separation_m": -0.029309185221791267,
+                "partner_body": "l_pinky_proximal_abd",
+                "peak_force_n": 4.571608543395996,
+                "samples": 2,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_distal": {
+                "latest_friction_force_n": 17.766490936279297,
+                "latest_position_w": [
+                  -0.02231871709227562,
+                  0.026953134685754776,
+                  0.4436921179294586
+                ],
+                "minimum_separation_m": -1.1548883776413277e-05,
+                "partner_body": "l_ring_finger_distal",
+                "peak_force_n": 32.30271530151367,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_middle": {
+                "latest_friction_force_n": 14.978646278381348,
+                "latest_position_w": [
+                  -0.009863687679171562,
+                  -0.007830429822206497,
+                  0.46557843685150146
+                ],
+                "minimum_separation_m": -0.03936932608485222,
+                "partner_body": "l_ring_finger_middle",
+                "peak_force_n": 26.03005599975586,
+                "samples": 2,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_proximal_abd": {
+                "latest_friction_force_n": 14.360810279846191,
+                "latest_position_w": [
+                  -0.005929728038609028,
+                  0.011880594305694103,
+                  0.47200196981430054
+                ],
+                "minimum_separation_m": -0.041561949998140335,
+                "partner_body": "l_ring_finger_proximal_abd",
+                "peak_force_n": 176.4635772705078,
+                "samples": 2,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 0.012,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 73.97073219503675,
+            "peak_force_n": 312.02227783203125
+          },
+          "right_bottle": {
+            "active_steps": 116,
+            "active_time_s": 0.23200000000000018,
+            "bodies": {
+              "Bottle|r_thumb_proximal": {
+                "latest_friction_force_n": 0.3738371431827545,
+                "latest_position_w": [
+                  0.12109914422035217,
+                  -0.03542496636509895,
+                  0.0613672100007534
+                ],
+                "minimum_separation_m": -8.152200462063774e-05,
+                "partner_body": "r_thumb_proximal",
+                "peak_force_n": 36.97820281982422,
+                "samples": 59,
+                "source_body": "Bottle"
+              },
+              "Bottle|r_thumb_proximal_abd": {
+                "latest_friction_force_n": 1.5655642747879028,
+                "latest_position_w": [
+                  0.10700168460607529,
+                  -0.023770976811647415,
+                  0.06086117774248123
+                ],
+                "minimum_separation_m": -0.0005323908408172429,
+                "partner_body": "r_thumb_proximal_abd",
+                "peak_force_n": 346.0616455078125,
+                "samples": 57,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 0.232,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 13.75602381342444,
+            "peak_force_n": 346.0616455078125
+          },
+          "right_cap": {
+            "active_steps": 12,
+            "active_time_s": 0.024000000000000007,
+            "bodies": {
+              "Cap|r_index_finger_middle": {
+                "latest_friction_force_n": 0.06014932319521904,
+                "latest_position_w": [
+                  0.010573419742286205,
+                  0.008009972050786018,
+                  0.6486088633537292
+                ],
+                "minimum_separation_m": -0.007878734730184078,
+                "partner_body": "r_index_finger_middle",
+                "peak_force_n": 87.34925842285156,
+                "samples": 7,
+                "source_body": "Cap"
+              },
+              "Cap|r_index_finger_proximal_abd": {
+                "latest_friction_force_n": 1.853384256362915,
+                "latest_position_w": [
+                  0.015199250541627407,
+                  -0.010049963369965553,
+                  0.6516429781913757
+                ],
+                "minimum_separation_m": -0.007978489622473717,
+                "partner_body": "r_index_finger_proximal_abd",
+                "peak_force_n": 55.85388946533203,
+                "samples": 7,
+                "source_body": "Cap"
+              }
+            },
+            "contact_ratio": 0.024,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 20.079170675149985,
+            "peak_force_n": 87.34925842285156
+          }
+        },
+        "correct_contact_ratios": {
+          "left_bottle": 0.012,
+          "right_cap": 0.024
+        },
+        "duration_s": 1.0,
+        "finite": true,
+        "initial_contact_summary": {
+          "left_bottle": {
+            "active_steps": 1,
+            "active_time_s": 0.002,
+            "bodies": {
+              "Bottle|l_index_finger_middle": {
+                "latest_friction_force_n": 148.9210662841797,
+                "latest_position_w": [
+                  -0.01452643983066082,
+                  -0.006331241689622402,
+                  0.4876437783241272
+                ],
+                "minimum_separation_m": -0.03863900527358055,
+                "partner_body": "l_index_finger_middle",
+                "peak_force_n": 251.47047424316406,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal": {
+                "latest_friction_force_n": 26.962677001953125,
+                "latest_position_w": [
+                  -0.0212508887052536,
+                  0.024896224960684776,
+                  0.48975157737731934
+                ],
+                "minimum_separation_m": -0.004542178008705378,
+                "partner_body": "l_index_finger_proximal",
+                "peak_force_n": 49.0230598449707,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal_abd": {
+                "latest_friction_force_n": 45.745391845703125,
+                "latest_position_w": [
+                  -0.018166471272706985,
+                  0.009116479195654392,
+                  0.4868009090423584
+                ],
+                "minimum_separation_m": -0.03863900527358055,
+                "partner_body": "l_index_finger_proximal_abd",
+                "peak_force_n": 295.253173828125,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_distal": {
+                "latest_friction_force_n": 51.61129379272461,
+                "latest_position_w": [
+                  0.00488356314599514,
+                  0.014600886031985283,
+                  0.4662848711013794
+                ],
+                "minimum_separation_m": -0.03923282027244568,
+                "partner_body": "l_middle_finger_distal",
+                "peak_force_n": 93.83932495117188,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_middle": {
+                "latest_friction_force_n": 169.37490844726562,
+                "latest_position_w": [
+                  -0.021622855216264725,
+                  0.02539600245654583,
+                  0.46648162603378296
+                ],
+                "minimum_separation_m": -0.0033027082681655884,
+                "partner_body": "l_middle_finger_middle",
+                "peak_force_n": 272.3895568847656,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal": {
+                "latest_friction_force_n": 59.92442321777344,
+                "latest_position_w": [
+                  -0.011915838345885277,
+                  -0.010729264467954636,
+                  0.48878324031829834
+                ],
+                "minimum_separation_m": -0.03873268887400627,
+                "partner_body": "l_middle_finger_proximal",
+                "peak_force_n": 108.95393371582031,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal_abd": {
+                "latest_friction_force_n": 171.61190795898438,
+                "latest_position_w": [
+                  -0.01659081131219864,
+                  -0.0012898817658424377,
+                  0.47372251749038696
+                ],
+                "minimum_separation_m": -0.009956360794603825,
+                "partner_body": "l_middle_finger_proximal_abd",
+                "peak_force_n": 312.02227783203125,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_middle": {
+                "latest_friction_force_n": 8.480445861816406,
+                "latest_position_w": [
+                  -0.017942793667316437,
+                  -0.0016087843105196953,
+                  0.4483143091201782
+                ],
+                "minimum_separation_m": -0.03397047519683838,
+                "partner_body": "l_pinky_middle",
+                "peak_force_n": 14.364191055297852,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_proximal_abd": {
+                "latest_friction_force_n": 8.909526824951172,
+                "latest_position_w": [
+                  -0.02260199934244156,
+                  0.02671857550740242,
+                  0.44381555914878845
+                ],
+                "minimum_separation_m": -1.1528484719747212e-05,
+                "partner_body": "l_pinky_proximal_abd",
+                "peak_force_n": 4.571608543395996,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_distal": {
+                "latest_friction_force_n": 17.766490936279297,
+                "latest_position_w": [
+                  -0.02231871709227562,
+                  0.026953134685754776,
+                  0.4436921179294586
+                ],
+                "minimum_separation_m": -1.1548883776413277e-05,
+                "partner_body": "l_ring_finger_distal",
+                "peak_force_n": 32.30271530151367,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_middle": {
+                "latest_friction_force_n": 17.487077713012695,
+                "latest_position_w": [
+                  -0.010339086875319481,
+                  -0.025537515059113503,
+                  0.46369534730911255
+                ],
+                "minimum_separation_m": -0.01502782292664051,
+                "partner_body": "l_ring_finger_middle",
+                "peak_force_n": 26.03005599975586,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_proximal_abd": {
+                "latest_friction_force_n": 105.84558868408203,
+                "latest_position_w": [
+                  0.0010585729032754898,
+                  -0.015437895432114601,
+                  0.47389787435531616
+                ],
+                "minimum_separation_m": -0.041561949998140335,
+                "partner_body": "l_ring_finger_proximal_abd",
+                "peak_force_n": 176.4635772705078,
+                "samples": 1,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 1.0,
+            "elapsed_time_s": 0.002,
+            "mean_force_n": 136.39032912254333,
+            "peak_force_n": 312.02227783203125
+          },
+          "right_cap": {
+            "active_steps": 1,
+            "active_time_s": 0.002,
+            "bodies": {
+              "Cap|r_index_finger_middle": {
+                "latest_friction_force_n": 84.73703002929688,
+                "latest_position_w": [
+                  0.01113072782754898,
+                  -0.004575693979859352,
+                  0.6535049676895142
+                ],
+                "minimum_separation_m": -0.007878734730184078,
+                "partner_body": "r_index_finger_middle",
+                "peak_force_n": 87.34925842285156,
+                "samples": 1,
+                "source_body": "Cap"
+              },
+              "Cap|r_index_finger_proximal_abd": {
+                "latest_friction_force_n": 81.80643463134766,
+                "latest_position_w": [
+                  0.01043005008250475,
+                  -0.001620330149307847,
+                  0.6536605954170227
+                ],
+                "minimum_separation_m": -0.007978489622473717,
+                "partner_body": "r_index_finger_proximal_abd",
+                "peak_force_n": 55.85388946533203,
+                "samples": 1,
+                "source_body": "Cap"
+              }
+            },
+            "contact_ratio": 1.0,
+            "elapsed_time_s": 0.002,
+            "mean_force_n": 71.6015739440918,
+            "peak_force_n": 87.34925842285156
+          }
+        },
+        "initial_geometry": {
+          "left": {
+            "object_center_w_m": [
+              0.0,
+              0.0,
+              0.5
+            ],
+            "tips": {
+              "l_index_finger_distal": {
+                "center_distance_m": 0.03606113791465759,
+                "position_w_m": [
+                  -0.014205613173544407,
+                  -0.029666153714060783,
+                  0.4852173924446106
+                ]
+              },
+              "l_middle_finger_distal": {
+                "center_distance_m": 0.043051790446043015,
+                "position_w_m": [
+                  -0.0104177575558424,
+                  -0.024819526821374893,
+                  0.4664006233215332
+                ]
+              },
+              "l_pinky_distal": {
+                "center_distance_m": 0.08131059259176254,
+                "position_w_m": [
+                  -0.033062271773815155,
+                  -0.028280984610319138,
+                  0.431308776140213
+                ]
+              },
+              "l_ring_finger_distal": {
+                "center_distance_m": 0.06319595873355865,
+                "position_w_m": [
+                  -0.020285770297050476,
+                  -0.028010476380586624,
+                  0.44710737466812134
+                ]
+              },
+              "l_thumb_distal": {
+                "center_distance_m": 0.04999316856265068,
+                "position_w_m": [
+                  -0.031186211854219437,
+                  0.03091544657945633,
+                  0.4761049747467041
+                ]
+              }
+            }
+          },
+          "right": {
+            "object_center_w_m": [
+              0.0,
+              0.0,
+              0.6455000042915344
+            ],
+            "tips": {
+              "r_index_finger_distal": {
+                "center_distance_m": 0.03808777779340744,
+                "position_w_m": [
+                  0.014621594920754433,
+                  0.0312814861536026,
+                  0.6615734696388245
+                ]
+              },
+              "r_middle_finger_distal": {
+                "center_distance_m": 0.04509344696998596,
+                "position_w_m": [
+                  0.010831753723323345,
+                  0.0264350026845932,
+                  0.6803895831108093
+                ]
+              },
+              "r_pinky_distal": {
+                "center_distance_m": 0.08264176547527313,
+                "position_w_m": [
+                  0.03224761039018631,
+                  0.029480716213583946,
+                  0.715647280216217
+                ]
+              },
+              "r_ring_finger_distal": {
+                "center_distance_m": 0.0651303380727768,
+                "position_w_m": [
+                  0.02069672755897045,
+                  0.029625864699482918,
+                  0.6996840834617615
+                ]
+              },
+              "r_thumb_distal": {
+                "center_distance_m": 0.05064063519239426,
+                "position_w_m": [
+                  0.03264021873474121,
+                  -0.029676614329218864,
+                  0.670367419719696
+                ]
+              }
+            }
+          }
+        },
+        "initial_min_separation_m": -0.041561949998140335
+      },
+      "left_only": {
+        "bottle_displacement_m": 0.4839107096195221,
+        "bottle_rotation_rad": 2.086163540634178,
+        "bottle_trajectory": [
+          {
+            "position_w_m": [
+              0.002814654493704438,
+              0.0018421488348394632,
+              0.5001842975616455
+            ],
+            "quaternion_xyzw": [
+              -0.00023564614821225405,
+              -0.02585744857788086,
+              -0.008441062644124031,
+              0.9996299147605896
+            ],
+            "t_s": 0.002
+          },
+          {
+            "position_w_m": [
+              0.044776637107133865,
+              0.032423388212919235,
+              0.4952751696109772
+            ],
+            "quaternion_xyzw": [
+              -0.14571227133274078,
+              -0.2334585189819336,
+              -0.21022935211658478,
+              0.9381197690963745
+            ],
+            "t_s": 0.052000000000000005
+          },
+          {
+            "position_w_m": [
+              0.0579712949693203,
+              0.05334930494427681,
+              0.46350327134132385
+            ],
+            "quaternion_xyzw": [
+              -0.2887968122959137,
+              -0.3890019953250885,
+              -0.34547027945518494,
+              0.8036940693855286
+            ],
+            "t_s": 0.10200000000000001
+          },
+          {
+            "position_w_m": [
+              0.06830272078514099,
+              0.07884768396615982,
+              0.41011157631874084
+            ],
+            "quaternion_xyzw": [
+              -0.39344093203544617,
+              -0.5411572456359863,
+              -0.3966766893863678,
+              0.628490686416626
+            ],
+            "t_s": 0.152
+          },
+          {
+            "position_w_m": [
+              0.07638248056173325,
+              0.10969003289937973,
+              0.33245599269866943
+            ],
+            "quaternion_xyzw": [
+              -0.46645668148994446,
+              -0.6690595149993896,
+              -0.38117727637290955,
+              0.43529456853866577
+            ],
+            "t_s": 0.202
+          },
+          {
+            "position_w_m": [
+              0.08319766074419022,
+              0.14543545246124268,
+              0.2281549572944641
+            ],
+            "quaternion_xyzw": [
+              -0.5129764676094055,
+              -0.7616345286369324,
+              -0.31615379452705383,
+              0.2383585274219513
+            ],
+            "t_s": 0.252
+          },
+          {
+            "position_w_m": [
+              0.0849461480975151,
+              0.1712612807750702,
+              0.13444866240024567
+            ],
+            "quaternion_xyzw": [
+              -0.525939404964447,
+              -0.7885465025901794,
+              -0.2893179953098297,
+              0.1337050050497055
+            ],
+            "t_s": 0.302
+          },
+          {
+            "position_w_m": [
+              0.07399498671293259,
+              0.1563461571931839,
+              0.1245739534497261
+            ],
+            "quaternion_xyzw": [
+              -0.4821576774120331,
+              -0.756977915763855,
+              -0.3987579345703125,
+              0.18841581046581268
+            ],
+            "t_s": 0.352
+          },
+          {
+            "position_w_m": [
+              0.0632932260632515,
+              0.14327864348888397,
+              0.08881857991218567
+            ],
+            "quaternion_xyzw": [
+              -0.4348653554916382,
+              -0.7109503149986267,
+              -0.4993433356285095,
+              0.2368500679731369
+            ],
+            "t_s": 0.402
+          },
+          {
+            "position_w_m": [
+              0.05319513753056526,
+              0.12704052031040192,
+              0.03940219059586525
+            ],
+            "quaternion_xyzw": [
+              -0.3418266177177429,
+              -0.6366309523582458,
+              -0.639781653881073,
+              0.2617916464805603
+            ],
+            "t_s": 0.452
+          },
+          {
+            "position_w_m": [
+              0.04639936983585358,
+              0.12522724270820618,
+              0.034999992698431015
+            ],
+            "quaternion_xyzw": [
+              -0.2754421532154083,
+              -0.651253879070282,
+              -0.6767111420631409,
+              0.2050902247428894
+            ],
+            "t_s": 0.502
+          },
+          {
+            "position_w_m": [
+              0.03986991196870804,
+              0.12590821087360382,
+              0.03499998524785042
+            ],
+            "quaternion_xyzw": [
+              -0.22215141355991364,
+              -0.6713036298751831,
+              -0.6911386251449585,
+              0.14942379295825958
+            ],
+            "t_s": 0.552
+          },
+          {
+            "position_w_m": [
+              0.033442605286836624,
+              0.12657497823238373,
+              0.034999996423721313
+            ],
+            "quaternion_xyzw": [
+              -0.17325447499752045,
+              -0.6855530142784119,
+              -0.7000453472137451,
+              0.09968149662017822
+            ],
+            "t_s": 0.602
+          },
+          {
+            "position_w_m": [
+              0.023713961243629456,
+              0.13611258566379547,
+              0.0350005179643631
+            ],
+            "quaternion_xyzw": [
+              0.2103920429944992,
+              -0.675152063369751,
+              -0.7055264711380005,
+              -0.04622840881347656
+            ],
+            "t_s": 0.652
+          },
+          {
+            "position_w_m": [
+              0.008334377780556679,
+              0.14410066604614258,
+              0.035000212490558624
+            ],
+            "quaternion_xyzw": [
+              0.48237818479537964,
+              -0.5170586705207825,
+              -0.6804161071777344,
+              -0.19234201312065125
+            ],
+            "t_s": 0.7020000000000001
+          },
+          {
+            "position_w_m": [
+              -0.008834567852318287,
+              0.14393937587738037,
+              0.03500004857778549
+            ],
+            "quaternion_xyzw": [
+              0.6165804862976074,
+              -0.3461763560771942,
+              -0.6256960034370422,
+              -0.3293856382369995
+            ],
+            "t_s": 0.752
+          },
+          {
+            "position_w_m": [
+              -0.022378524765372276,
+              0.13668787479400635,
+              0.035397812724113464
+            ],
+            "quaternion_xyzw": [
+              0.6794188618659973,
+              -0.20096813142299652,
+              -0.5506327152252197,
+              -0.441367506980896
+            ],
+            "t_s": 0.802
+          },
+          {
+            "position_w_m": [
+              -0.02799253538250923,
+              0.13335020840168,
+              0.03500000014901161
+            ],
+            "quaternion_xyzw": [
+              0.6973932981491089,
+              -0.11680471897125244,
+              -0.5209203958511353,
+              -0.4781642556190491
+            ],
+            "t_s": 0.852
+          },
+          {
+            "position_w_m": [
+              -0.029807977378368378,
+              0.13193300366401672,
+              0.03500001132488251
+            ],
+            "quaternion_xyzw": [
+              0.7017592191696167,
+              -0.0868012085556984,
+              -0.5086315274238586,
+              -0.49121636152267456
+            ],
+            "t_s": 0.902
+          },
+          {
+            "position_w_m": [
+              -0.031010320410132408,
+              0.13094763457775116,
+              0.03500000014901161
+            ],
+            "quaternion_xyzw": [
+              0.703837513923645,
+              -0.06791629642248154,
+              -0.5021986961364746,
+              -0.497791588306427
+            ],
+            "t_s": 0.9520000000000001
+          },
+          {
+            "position_w_m": [
+              -0.0320577509701252,
+              0.13006490468978882,
+              0.03500000387430191
+            ],
+            "quaternion_xyzw": [
+              0.7053048610687256,
+              -0.050447478890419006,
+              -0.4964143931865692,
+              -0.5035601258277893
+            ],
+            "t_s": 1.0
+          }
+        ],
+        "contact_summary": {
+          "bottle_ground": {
+            "active_steps": 284,
+            "active_time_s": 0.5680000000000004,
+            "bodies": {
+              "Bottle|CollisionPlane": {
+                "latest_friction_force_n": 0.1590859591960907,
+                "latest_position_w": [
+                  -0.0320221409201622,
+                  0.13009528815746307,
+                  2.885869321289647e-10
+                ],
+                "minimum_separation_m": -0.0003570745757315308,
+                "partner_body": "CollisionPlane",
+                "peak_force_n": 86.78001403808594,
+                "samples": 284,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 0.568,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 0.9941514421674148,
+            "peak_force_n": 86.78001403808594
+          },
+          "cap_ground": {
+            "active_steps": 8,
+            "active_time_s": 0.016,
+            "bodies": {
+              "Cap|CollisionPlane": {
+                "latest_friction_force_n": 0.1468275934457779,
+                "latest_position_w": [
+                  0.09891873598098755,
+                  0.25587698817253113,
+                  0.011737567372620106
+                ],
+                "minimum_separation_m": 1.07932100945618e-05,
+                "partner_body": "CollisionPlane",
+                "peak_force_n": 34.91899871826172,
+                "samples": 8,
+                "source_body": "Cap"
+              }
+            },
+            "contact_ratio": 0.016,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 12.622377622872591,
+            "peak_force_n": 34.91899871826172
+          },
+          "left_bottle": {
+            "active_steps": 30,
+            "active_time_s": 0.06000000000000004,
+            "bodies": {
+              "Bottle|l_index_finger_distal": {
+                "latest_friction_force_n": 39.90330123901367,
+                "latest_position_w": [
+                  -0.011188547126948833,
+                  -0.010919147171080112,
+                  0.4831995368003845
+                ],
+                "minimum_separation_m": -0.03873269259929657,
+                "partner_body": "l_index_finger_distal",
+                "peak_force_n": 72.55145263671875,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_middle": {
+                "latest_friction_force_n": 8.314424514770508,
+                "latest_position_w": [
+                  -0.002932625589892268,
+                  0.0016394797712564468,
+                  0.49225056171417236
+                ],
+                "minimum_separation_m": -0.03863900527358055,
+                "partner_body": "l_index_finger_middle",
+                "peak_force_n": 89.13377380371094,
+                "samples": 4,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal": {
+                "latest_friction_force_n": 78.3653564453125,
+                "latest_position_w": [
+                  -0.018657885491847992,
+                  0.026952577754855156,
+                  0.48958200216293335
+                ],
+                "minimum_separation_m": -0.004542178008705378,
+                "partner_body": "l_index_finger_proximal",
+                "peak_force_n": 153.7118377685547,
+                "samples": 2,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal_abd": {
+                "latest_friction_force_n": 12.563735961914062,
+                "latest_position_w": [
+                  -0.004491274245083332,
+                  -0.0011319546028971672,
+                  0.4869586229324341
+                ],
+                "minimum_separation_m": -0.03863900527358055,
+                "partner_body": "l_index_finger_proximal_abd",
+                "peak_force_n": 94.4677963256836,
+                "samples": 4,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_distal": {
+                "latest_friction_force_n": 16.368566513061523,
+                "latest_position_w": [
+                  -0.007452856283634901,
+                  0.004323314875364304,
+                  0.46477481722831726
+                ],
+                "minimum_separation_m": -0.03923282027244568,
+                "partner_body": "l_middle_finger_distal",
+                "peak_force_n": 53.59963607788086,
+                "samples": 3,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_middle": {
+                "latest_friction_force_n": 0.038149647414684296,
+                "latest_position_w": [
+                  -0.002023974433541298,
+                  0.04166436195373535,
+                  0.03749266266822815
+                ],
+                "minimum_separation_m": -0.0033027082681655884,
+                "partner_body": "l_middle_finger_middle",
+                "peak_force_n": 266.5092468261719,
+                "samples": 25,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal_abd": {
+                "latest_friction_force_n": 27.77462387084961,
+                "latest_position_w": [
+                  -0.018679961562156677,
+                  0.02743585966527462,
+                  0.4657773971557617
+                ],
+                "minimum_separation_m": -0.009956360794603825,
+                "partner_body": "l_middle_finger_proximal_abd",
+                "peak_force_n": 170.9007568359375,
+                "samples": 2,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_middle": {
+                "latest_friction_force_n": 70.46113586425781,
+                "latest_position_w": [
+                  -0.017942793667316437,
+                  -0.0016087843105196953,
+                  0.4483143091201782
+                ],
+                "minimum_separation_m": -0.03397047519683838,
+                "partner_body": "l_pinky_middle",
+                "peak_force_n": 128.11114501953125,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_proximal_abd": {
+                "latest_friction_force_n": 24.75139045715332,
+                "latest_position_w": [
+                  -0.02260199934244156,
+                  0.02671857550740242,
+                  0.44381555914878845
+                ],
+                "minimum_separation_m": -1.1528484719747212e-05,
+                "partner_body": "l_pinky_proximal_abd",
+                "peak_force_n": 45.002525329589844,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_distal": {
+                "latest_friction_force_n": 24.968833923339844,
+                "latest_position_w": [
+                  -0.02231871709227562,
+                  0.026953134685754776,
+                  0.4436921179294586
+                ],
+                "minimum_separation_m": -1.1548883776413277e-05,
+                "partner_body": "l_ring_finger_distal",
+                "peak_force_n": 45.397884368896484,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_middle": {
+                "latest_friction_force_n": 39.38521194458008,
+                "latest_position_w": [
+                  -0.010339086875319481,
+                  -0.025537515059113503,
+                  0.46369534730911255
+                ],
+                "minimum_separation_m": -0.01502782292664051,
+                "partner_body": "l_ring_finger_middle",
+                "peak_force_n": 71.61540222167969,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_proximal_abd": {
+                "latest_friction_force_n": 16.98786735534668,
+                "latest_position_w": [
+                  0.0010585729032754898,
+                  -0.015437895432114601,
+                  0.47389787435531616
+                ],
+                "minimum_separation_m": -0.041561949998140335,
+                "partner_body": "l_ring_finger_proximal_abd",
+                "peak_force_n": 20.657012939453125,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_thumb_middle": {
+                "latest_friction_force_n": 21.85658836364746,
+                "latest_position_w": [
+                  -0.022617176175117493,
+                  0.025749854743480682,
+                  0.47717058658599854
+                ],
+                "minimum_separation_m": -0.001432549674063921,
+                "partner_body": "l_thumb_middle",
+                "peak_force_n": 39.73924255371094,
+                "samples": 1,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 0.06,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 35.996643970066565,
+            "peak_force_n": 266.5092468261719
+          }
+        },
+        "correct_contact_ratios": {
+          "left_bottle": 0.06,
+          "right_cap": 0.0
+        },
+        "duration_s": 1.0,
+        "finite": true,
+        "initial_contact_summary": {
+          "left_bottle": {
+            "active_steps": 1,
+            "active_time_s": 0.002,
+            "bodies": {
+              "Bottle|l_index_finger_distal": {
+                "latest_friction_force_n": 39.90330123901367,
+                "latest_position_w": [
+                  -0.011188547126948833,
+                  -0.010919147171080112,
+                  0.4831995368003845
+                ],
+                "minimum_separation_m": -0.03873269259929657,
+                "partner_body": "l_index_finger_distal",
+                "peak_force_n": 72.55145263671875,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_middle": {
+                "latest_friction_force_n": 49.01714324951172,
+                "latest_position_w": [
+                  -0.01452643983066082,
+                  -0.006331241689622402,
+                  0.4876437783241272
+                ],
+                "minimum_separation_m": -0.03863900527358055,
+                "partner_body": "l_index_finger_middle",
+                "peak_force_n": 89.13377380371094,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal": {
+                "latest_friction_force_n": 84.53504180908203,
+                "latest_position_w": [
+                  -0.0212508887052536,
+                  0.024896224960684776,
+                  0.48975157737731934
+                ],
+                "minimum_separation_m": -0.004542178008705378,
+                "partner_body": "l_index_finger_proximal",
+                "peak_force_n": 153.7118377685547,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal_abd": {
+                "latest_friction_force_n": 57.443359375,
+                "latest_position_w": [
+                  -0.018166471272706985,
+                  0.009116479195654392,
+                  0.4868009090423584
+                ],
+                "minimum_separation_m": -0.03863900527358055,
+                "partner_body": "l_index_finger_proximal_abd",
+                "peak_force_n": 94.4677963256836,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_distal": {
+                "latest_friction_force_n": 29.473350524902344,
+                "latest_position_w": [
+                  0.00488356314599514,
+                  0.014600886031985283,
+                  0.4662848711013794
+                ],
+                "minimum_separation_m": -0.03923282027244568,
+                "partner_body": "l_middle_finger_distal",
+                "peak_force_n": 53.59963607788086,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_middle": {
+                "latest_friction_force_n": 146.57701110839844,
+                "latest_position_w": [
+                  -0.021622855216264725,
+                  0.02539600245654583,
+                  0.46648162603378296
+                ],
+                "minimum_separation_m": -0.0033027082681655884,
+                "partner_body": "l_middle_finger_middle",
+                "peak_force_n": 266.5092468261719,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal_abd": {
+                "latest_friction_force_n": 93.99494934082031,
+                "latest_position_w": [
+                  -0.01659081131219864,
+                  -0.0012898817658424377,
+                  0.47372251749038696
+                ],
+                "minimum_separation_m": -0.009956360794603825,
+                "partner_body": "l_middle_finger_proximal_abd",
+                "peak_force_n": 170.9007568359375,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_middle": {
+                "latest_friction_force_n": 70.46113586425781,
+                "latest_position_w": [
+                  -0.017942793667316437,
+                  -0.0016087843105196953,
+                  0.4483143091201782
+                ],
+                "minimum_separation_m": -0.03397047519683838,
+                "partner_body": "l_pinky_middle",
+                "peak_force_n": 128.11114501953125,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_proximal_abd": {
+                "latest_friction_force_n": 24.75139045715332,
+                "latest_position_w": [
+                  -0.02260199934244156,
+                  0.02671857550740242,
+                  0.44381555914878845
+                ],
+                "minimum_separation_m": -1.1528484719747212e-05,
+                "partner_body": "l_pinky_proximal_abd",
+                "peak_force_n": 45.002525329589844,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_distal": {
+                "latest_friction_force_n": 24.968833923339844,
+                "latest_position_w": [
+                  -0.02231871709227562,
+                  0.026953134685754776,
+                  0.4436921179294586
+                ],
+                "minimum_separation_m": -1.1548883776413277e-05,
+                "partner_body": "l_ring_finger_distal",
+                "peak_force_n": 45.397884368896484,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_middle": {
+                "latest_friction_force_n": 39.38521194458008,
+                "latest_position_w": [
+                  -0.010339086875319481,
+                  -0.025537515059113503,
+                  0.46369534730911255
+                ],
+                "minimum_separation_m": -0.01502782292664051,
+                "partner_body": "l_ring_finger_middle",
+                "peak_force_n": 71.61540222167969,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_proximal_abd": {
+                "latest_friction_force_n": 16.98786735534668,
+                "latest_position_w": [
+                  0.0010585729032754898,
+                  -0.015437895432114601,
+                  0.47389787435531616
+                ],
+                "minimum_separation_m": -0.041561949998140335,
+                "partner_body": "l_ring_finger_proximal_abd",
+                "peak_force_n": 20.657012939453125,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_thumb_middle": {
+                "latest_friction_force_n": 21.85658836364746,
+                "latest_position_w": [
+                  -0.022617176175117493,
+                  0.025749854743480682,
+                  0.47717058658599854
+                ],
+                "minimum_separation_m": -0.001432549674063921,
+                "partner_body": "l_thumb_middle",
+                "peak_force_n": 39.73924255371094,
+                "samples": 1,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 1.0,
+            "elapsed_time_s": 0.002,
+            "mean_force_n": 96.26136251596304,
+            "peak_force_n": 266.5092468261719
+          }
+        },
+        "initial_geometry": {
+          "left": {
+            "object_center_w_m": [
+              0.0,
+              0.0,
+              0.5
+            ],
+            "tips": {
+              "l_index_finger_distal": {
+                "center_distance_m": 0.03606113791465759,
+                "position_w_m": [
+                  -0.014205613173544407,
+                  -0.029666153714060783,
+                  0.4852173924446106
+                ]
+              },
+              "l_middle_finger_distal": {
+                "center_distance_m": 0.043051790446043015,
+                "position_w_m": [
+                  -0.0104177575558424,
+                  -0.024819526821374893,
+                  0.4664006233215332
+                ]
+              },
+              "l_pinky_distal": {
+                "center_distance_m": 0.08131059259176254,
+                "position_w_m": [
+                  -0.033062271773815155,
+                  -0.028280984610319138,
+                  0.431308776140213
+                ]
+              },
+              "l_ring_finger_distal": {
+                "center_distance_m": 0.06319595873355865,
+                "position_w_m": [
+                  -0.020285770297050476,
+                  -0.028010476380586624,
+                  0.44710737466812134
+                ]
+              },
+              "l_thumb_distal": {
+                "center_distance_m": 0.04999316856265068,
+                "position_w_m": [
+                  -0.031186211854219437,
+                  0.03091544657945633,
+                  0.4761049747467041
+                ]
+              }
+            }
+          },
+          "right": {
+            "object_center_w_m": [
+              0.0,
+              0.0,
+              0.6455000042915344
+            ],
+            "tips": {
+              "r_index_finger_distal": {
+                "center_distance_m": 0.36631375551223755,
+                "position_w_m": [
+                  0.3646215796470642,
+                  0.0312814861536026,
+                  0.6615734696388245
+                ]
+              },
+              "r_middle_finger_distal": {
+                "center_distance_m": 0.3634771704673767,
+                "position_w_m": [
+                  0.36083176732063293,
+                  0.0264350026845932,
+                  0.6803895831108093
+                ]
+              },
+              "r_pinky_distal": {
+                "center_distance_m": 0.38974735140800476,
+                "position_w_m": [
+                  0.3822476267814636,
+                  0.029480716213583946,
+                  0.715647280216217
+                ]
+              },
+              "r_ring_finger_distal": {
+                "center_distance_m": 0.3758053779602051,
+                "position_w_m": [
+                  0.3706967532634735,
+                  0.029625864699482918,
+                  0.6996840834617615
+                ]
+              },
+              "r_thumb_distal": {
+                "center_distance_m": 0.3845941126346588,
+                "position_w_m": [
+                  0.38264021277427673,
+                  -0.029676614329218864,
+                  0.670367419719696
+                ]
+              }
+            }
+          }
+        },
+        "initial_min_separation_m": -0.041561949998140335
+      },
+      "passed": false,
+      "sample": {
+        "bottle": {
+          "root_pose": [
+            0.0,
+            0.0,
+            0.5,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "root_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "cap": {
+          "root_pose": [
+            0.0,
+            0.0,
+            0.6455,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "root_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "left": {
+          "joint_position": [
+            0.7100500000000001,
+            0.65,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002
+          ],
+          "joint_target": [
+            0.7100500000000001,
+            0.65,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002
+          ],
+          "joint_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "root_pose": [
+            -0.1086223125938998,
+            0.031547726417641815,
+            0.46568228632332337,
+            0.0,
+            -0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ],
+          "root_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "wrist_target_pose": [
+            -0.1086223125938998,
+            0.031547726417641815,
+            0.46568228632332337,
+            0.0,
+            -0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ]
+        },
+        "metadata": {
+          "asset_source_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+          "asset_variant": "beta1",
+          "bottle_parameters": {
+            "allow_detachment": false,
+            "axial_damping": 3.5,
+            "axial_stiffness": 500.0,
+            "body_angular_damping": 1.0,
+            "bottle_height": 0.2,
+            "bottle_mass": 0.03,
+            "bottle_radius": 0.035,
+            "breakaway_damping": 0.003,
+            "breakaway_stiffness": 0.2,
+            "breakaway_torque": 0.02,
+            "cap_height": 0.025,
+            "cap_mass": 0.006,
+            "cap_outer_radius": 0.017,
+            "cap_top_clearance": 0.002,
+            "detachment_angle_margin": 0.06,
+            "detachment_max_constraint_error": 0.0005,
+            "detachment_overlap_fraction": 0.05,
+            "dynamic_friction": 0.4,
+            "end_stop_damping": 0.02,
+            "end_stop_stiffness": 0.5,
+            "engagement_resistance_exponent": 1.5,
+            "friction_velocity_scale": 20.0,
+            "initial_engagement": 0.009,
+            "lateral_damping": 0.1,
+            "lateral_stiffness": 10.0,
+            "loose_breakaway_torque": 0.004,
+            "loose_running_resistance_torque": 0.001,
+            "max_body_angular_velocity_deg": 1080.0,
+            "max_body_linear_velocity": 5.0,
+            "max_constraint_force": 8.0,
+            "max_constraint_torque": 0.08,
+            "neck_height": 0.04,
+            "neck_outer_radius": 0.012,
+            "restick_speed": 0.05,
+            "running_resistance_torque": 0.006,
+            "slip_angle_ratio": 1.5,
+            "slip_speed": 0.1,
+            "source_profile": "engineering_example",
+            "static_friction": 0.6,
+            "thread_clearance": 0.0005,
+            "thread_handedness": "right",
+            "thread_height": 0.001,
+            "thread_pitch": 0.003,
+            "thread_turns": 3.0,
+            "tilt_damping": 0.0001,
+            "tilt_stiffness": 0.001,
+            "visual_radial_segments": 64
+          },
+          "bottle_profile": "engineering_example",
+          "coordinates": "env0_world_z_up_xyzw; hand offsets bottle/cap local",
+          "left_asset_tree_sha256": "6f0d85a3b7b80c2418a97c147f005fefbe957984d3a3e0e97ec51e957c2ce2b9",
+          "left_joint_order": [
+            "l_thumb_cmc_flex",
+            "l_thumb_cmc_abd",
+            "l_thumb_mcp",
+            "l_thumb_ip",
+            "l_index_finger_mcp_flex",
+            "l_index_finger_mcp_abd",
+            "l_index_finger_pip",
+            "l_index_finger_dip",
+            "l_middle_finger_mcp_flex",
+            "l_middle_finger_mcp_abd",
+            "l_middle_finger_pip",
+            "l_middle_finger_dip",
+            "l_ring_finger_mcp_flex",
+            "l_ring_finger_mcp_abd",
+            "l_ring_finger_pip",
+            "l_ring_finger_dip",
+            "l_pinky_mcp_flex",
+            "l_pinky_mcp_abd",
+            "l_pinky_pip",
+            "l_pinky_dip"
+          ],
+          "left_usd_sha256": "8d1b83a6130b64fd759ea3c0720d6b255da8c1e76abe5a4226788183058dbfda",
+          "right_asset_tree_sha256": "9f934ba533996b5a30976226ef8f76ed96b35cd6a8e34b4b50deeb567cf0a707",
+          "right_joint_order": [
+            "r_thumb_cmc_flex",
+            "r_thumb_cmc_abd",
+            "r_thumb_mcp",
+            "r_thumb_ip",
+            "r_index_finger_mcp_flex",
+            "r_index_finger_mcp_abd",
+            "r_index_finger_pip",
+            "r_index_finger_dip",
+            "r_middle_finger_mcp_flex",
+            "r_middle_finger_mcp_abd",
+            "r_middle_finger_pip",
+            "r_middle_finger_dip",
+            "r_ring_finger_mcp_flex",
+            "r_ring_finger_mcp_abd",
+            "r_ring_finger_pip",
+            "r_ring_finger_dip",
+            "r_pinky_mcp_flex",
+            "r_pinky_mcp_abd",
+            "r_pinky_pip",
+            "r_pinky_dip"
+          ],
+          "right_usd_sha256": "22600d3f0aeb185552bb6eeb454b5b7199966a60fc844d4a4b5e4791ec77f0ed",
+          "schema": "dexgym-bimanual-grasp-init-v1",
+          "units": "m,rad,s,N"
+        },
+        "mode": "stable_pregrasp",
+        "right": {
+          "joint_position": [
+            0.7100500000000001,
+            0.65,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002
+          ],
+          "joint_target": [
+            0.7100500000000001,
+            0.65,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002
+          ],
+          "joint_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "root_pose": [
+            0.10903566700117186,
+            -0.029932351671788347,
+            0.6811197365498016,
+            0.0,
+            0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ],
+          "root_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "wrist_target_pose": [
+            0.10903566700117186,
+            -0.029932351671788347,
+            0.6811197365498016,
+            0.0,
+            0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ]
+        },
+        "seed": 0,
+        "source": "bottle_relative_geometry_candidate",
+        "thread_initial_angle_rad": 0.0,
+        "thread_initial_engagement_m": 0.009,
+        "validated": false,
+        "validation": null
+      }
+    },
+    "1": {
+      "hold": {
+        "bottle_displacement_m": 0.5289204716682434,
+        "bottle_rotation_rad": 1.7887910186973337,
+        "bottle_trajectory": [
+          {
+            "position_w_m": [
+              0.006257487926632166,
+              0.001666173804551363,
+              0.5002561807632446
+            ],
+            "quaternion_xyzw": [
+              0.009397244080901146,
+              -0.012843826785683632,
+              -0.05886247381567955,
+              0.9981392025947571
+            ],
+            "t_s": 0.002
+          },
+          {
+            "position_w_m": [
+              0.05720816180109978,
+              0.003892216831445694,
+              0.47156721353530884
+            ],
+            "quaternion_xyzw": [
+              0.091403529047966,
+              -0.09052328020334244,
+              -0.460261732339859,
+              0.8784132599830627
+            ],
+            "t_s": 0.052000000000000005
+          },
+          {
+            "position_w_m": [
+              0.08661799132823944,
+              0.002237078733742237,
+              0.4108654856681824
+            ],
+            "quaternion_xyzw": [
+              0.15778544545173645,
+              -0.06980660557746887,
+              -0.6849839091300964,
+              0.7078331112861633
+            ],
+            "t_s": 0.10200000000000001
+          },
+          {
+            "position_w_m": [
+              0.11594627797603607,
+              0.0004328882205300033,
+              0.3258289694786072
+            ],
+            "quaternion_xyzw": [
+              0.21000663936138153,
+              -0.04820029065012932,
+              -0.7783353924751282,
+              0.5897185206413269
+            ],
+            "t_s": 0.152
+          },
+          {
+            "position_w_m": [
+              0.14517934620380402,
+              -0.0014877011999487877,
+              0.21642576158046722
+            ],
+            "quaternion_xyzw": [
+              0.25621354579925537,
+              -0.02131703868508339,
+              -0.8355575799942017,
+              0.4855343699455261
+            ],
+            "t_s": 0.202
+          },
+          {
+            "position_w_m": [
+              0.17041927576065063,
+              -0.004861171822994947,
+              0.10138357430696487
+            ],
+            "quaternion_xyzw": [
+              0.31089264154434204,
+              0.014479082077741623,
+              -0.8675709366798401,
+              0.3878876566886902
+            ],
+            "t_s": 0.252
+          },
+          {
+            "position_w_m": [
+              0.17287524044513702,
+              -0.01607574336230755,
+              0.08460904657840729
+            ],
+            "quaternion_xyzw": [
+              0.4591728746891022,
+              0.10843516886234283,
+              -0.8446206450462341,
+              0.25301775336265564
+            ],
+            "t_s": 0.302
+          },
+          {
+            "position_w_m": [
+              0.1700265258550644,
+              -0.03025638870894909,
+              0.05403907597064972
+            ],
+            "quaternion_xyzw": [
+              0.592441201210022,
+              0.22454845905303955,
+              -0.7598757743835449,
+              0.1455337107181549
+            ],
+            "t_s": 0.352
+          },
+          {
+            "position_w_m": [
+              0.16932398080825806,
+              -0.04254966229200363,
+              0.03499997407197952
+            ],
+            "quaternion_xyzw": [
+              0.6249100565910339,
+              0.33088868856430054,
+              -0.7052686214447021,
+              0.05095214024186134
+            ],
+            "t_s": 0.402
+          },
+          {
+            "position_w_m": [
+              0.17444540560245514,
+              -0.05071467533707619,
+              0.034999970346689224
+            ],
+            "quaternion_xyzw": [
+              0.5793845057487488,
+              0.40535610914230347,
+              -0.7061722278594971,
+              -0.036343373358249664
+            ],
+            "t_s": 0.452
+          },
+          {
+            "position_w_m": [
+              0.17930495738983154,
+              -0.058453161269426346,
+              0.03499997779726982
+            ],
+            "quaternion_xyzw": [
+              0.5276516675949097,
+              0.4707266390323639,
+              -0.6970627307891846,
+              -0.11875828355550766
+            ],
+            "t_s": 0.502
+          },
+          {
+            "position_w_m": [
+              0.1839347630739212,
+              -0.065824955701828,
+              0.03499997407197952
+            ],
+            "quaternion_xyzw": [
+              0.4719669222831726,
+              0.5265426635742188,
+              -0.6794552206993103,
+              -0.1958070546388626
+            ],
+            "t_s": 0.552
+          },
+          {
+            "position_w_m": [
+              0.1884489208459854,
+              -0.0729953944683075,
+              0.034999970346689224
+            ],
+            "quaternion_xyzw": [
+              0.4155298173427582,
+              0.572131872177124,
+              -0.6560659408569336,
+              -0.2637753486633301
+            ],
+            "t_s": 0.602
+          },
+          {
+            "position_w_m": [
+              0.1928064227104187,
+              -0.07989806681871414,
+              0.034999970346689224
+            ],
+            "quaternion_xyzw": [
+              0.3582746088504791,
+              0.6096222400665283,
+              -0.6278281211853027,
+              -0.325317919254303
+            ],
+            "t_s": 0.652
+          },
+          {
+            "position_w_m": [
+              0.19689881801605225,
+              -0.0863984078168869,
+              0.03499997407197952
+            ],
+            "quaternion_xyzw": [
+              0.29257187247276306,
+              0.6437403559684753,
+              -0.5902460813522339,
+              -0.38937076926231384
+            ],
+            "t_s": 0.7020000000000001
+          },
+          {
+            "position_w_m": [
+              0.2009621113538742,
+              -0.09283386915922165,
+              0.034999966621398926
+            ],
+            "quaternion_xyzw": [
+              0.23255304992198944,
+              0.6677716374397278,
+              -0.552322268486023,
+              -0.44152021408081055
+            ],
+            "t_s": 0.752
+          },
+          {
+            "position_w_m": [
+              0.20492957532405853,
+              -0.09910212457180023,
+              0.034999966621398926
+            ],
+            "quaternion_xyzw": [
+              0.17354488372802734,
+              0.6854795217514038,
+              -0.5124279260635376,
+              -0.48725515604019165
+            ],
+            "t_s": 0.802
+          },
+          {
+            "position_w_m": [
+              0.20883524417877197,
+              -0.10525763779878616,
+              0.034999966621398926
+            ],
+            "quaternion_xyzw": [
+              0.1133362352848053,
+              0.6979647278785706,
+              -0.4688441753387451,
+              -0.5293252468109131
+            ],
+            "t_s": 0.852
+          },
+          {
+            "position_w_m": [
+              0.2126721441745758,
+              -0.11128479987382889,
+              0.034999966621398926
+            ],
+            "quaternion_xyzw": [
+              0.05476128309965134,
+              0.704983115196228,
+              -0.4238632619380951,
+              -0.5659856796264648
+            ],
+            "t_s": 0.902
+          },
+          {
+            "position_w_m": [
+              0.21647599339485168,
+              -0.11724308133125305,
+              0.034999970346689224
+            ],
+            "quaternion_xyzw": [
+              -0.0040587191469967365,
+              0.7070950269699097,
+              -0.3759194612503052,
+              -0.5989027619361877
+            ],
+            "t_s": 0.9520000000000001
+          },
+          {
+            "position_w_m": [
+              0.2200782597064972,
+              -0.12287133932113647,
+              0.034999970346689224
+            ],
+            "quaternion_xyzw": [
+              -0.05906570330262184,
+              0.704635500907898,
+              -0.3288404941558838,
+              -0.6259903311729431
+            ],
+            "t_s": 1.0
+          }
+        ],
+        "contact_summary": {
+          "bottle_ground": {
+            "active_steps": 369,
+            "active_time_s": 0.7380000000000005,
+            "bodies": {
+              "Bottle|CollisionPlane": {
+                "latest_friction_force_n": 0.1563827395439148,
+                "latest_position_w": [
+                  0.21992412209510803,
+                  -0.12262944877147675,
+                  -3.3400823440388194e-08
+                ],
+                "minimum_separation_m": -2.4225559513979533e-07,
+                "partner_body": "CollisionPlane",
+                "peak_force_n": 36.966575622558594,
+                "samples": 369,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 0.738,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 0.501111385864294,
+            "peak_force_n": 36.966575622558594
+          },
+          "left_bottle": {
+            "active_steps": 2,
+            "active_time_s": 0.004,
+            "bodies": {
+              "Bottle|l_index_finger_distal": {
+                "latest_friction_force_n": 24.067644119262695,
+                "latest_position_w": [
+                  -0.0155487684533,
+                  -0.006579939275979996,
+                  0.48610690236091614
+                ],
+                "minimum_separation_m": -0.036232586950063705,
+                "partner_body": "l_index_finger_distal",
+                "peak_force_n": 43.75934982299805,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_distal": {
+                "latest_friction_force_n": 30.165645599365234,
+                "latest_position_w": [
+                  -0.011569869704544544,
+                  0.00176488165743649,
+                  0.4707706570625305
+                ],
+                "minimum_separation_m": -0.038325805217027664,
+                "partner_body": "l_middle_finger_distal",
+                "peak_force_n": 67.3536148071289,
+                "samples": 2,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal_abd": {
+                "latest_friction_force_n": 94.94314575195312,
+                "latest_position_w": [
+                  -0.022826749831438065,
+                  0.025847185403108597,
+                  0.4679509997367859
+                ],
+                "minimum_separation_m": -0.001052643172442913,
+                "partner_body": "l_middle_finger_proximal_abd",
+                "peak_force_n": 172.6253662109375,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_distal": {
+                "latest_friction_force_n": 85.62455749511719,
+                "latest_position_w": [
+                  -0.019555680453777313,
+                  -0.0016760160215198994,
+                  0.4455301761627197
+                ],
+                "minimum_separation_m": -0.031186481937766075,
+                "partner_body": "l_ring_finger_distal",
+                "peak_force_n": 155.6846466064453,
+                "samples": 1,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 0.004,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 98.85537261962891,
+            "peak_force_n": 172.6253662109375
+          },
+          "right_cap": {
+            "active_steps": 9,
+            "active_time_s": 0.018000000000000002,
+            "bodies": {
+              "Cap|r_index_finger_middle": {
+                "latest_friction_force_n": 0.34448370337486267,
+                "latest_position_w": [
+                  0.014011381193995476,
+                  -0.006923029664903879,
+                  0.6512892246246338
+                ],
+                "minimum_separation_m": -0.007700893096625805,
+                "partner_body": "r_index_finger_middle",
+                "peak_force_n": 41.59183120727539,
+                "samples": 3,
+                "source_body": "Cap"
+              },
+              "Cap|r_index_finger_proximal_abd": {
+                "latest_friction_force_n": 0.03283976390957832,
+                "latest_position_w": [
+                  0.015718894079327583,
+                  -0.01087530329823494,
+                  0.6516827940940857
+                ],
+                "minimum_separation_m": -0.007800271734595299,
+                "partner_body": "r_index_finger_proximal_abd",
+                "peak_force_n": 90.93110656738281,
+                "samples": 9,
+                "source_body": "Cap"
+              }
+            },
+            "contact_ratio": 0.018,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 13.697006811698278,
+            "peak_force_n": 90.93110656738281
+          }
+        },
+        "correct_contact_ratios": {
+          "left_bottle": 0.004,
+          "right_cap": 0.018
+        },
+        "duration_s": 1.0,
+        "finite": true,
+        "initial_contact_summary": {
+          "left_bottle": {
+            "active_steps": 1,
+            "active_time_s": 0.002,
+            "bodies": {
+              "Bottle|l_index_finger_distal": {
+                "latest_friction_force_n": 24.067644119262695,
+                "latest_position_w": [
+                  -0.0155487684533,
+                  -0.006579939275979996,
+                  0.48610690236091614
+                ],
+                "minimum_separation_m": -0.036232586950063705,
+                "partner_body": "l_index_finger_distal",
+                "peak_force_n": 43.75934982299805,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_distal": {
+                "latest_friction_force_n": 37.04448699951172,
+                "latest_position_w": [
+                  -0.005307151935994625,
+                  0.01492139883339405,
+                  0.4617971181869507
+                ],
+                "minimum_separation_m": -0.038325805217027664,
+                "partner_body": "l_middle_finger_distal",
+                "peak_force_n": 67.3536148071289,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal_abd": {
+                "latest_friction_force_n": 94.94314575195312,
+                "latest_position_w": [
+                  -0.022826749831438065,
+                  0.025847185403108597,
+                  0.4679509997367859
+                ],
+                "minimum_separation_m": -0.001052643172442913,
+                "partner_body": "l_middle_finger_proximal_abd",
+                "peak_force_n": 172.6253662109375,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_distal": {
+                "latest_friction_force_n": 85.62455749511719,
+                "latest_position_w": [
+                  -0.019555680453777313,
+                  -0.0016760160215198994,
+                  0.4455301761627197
+                ],
+                "minimum_separation_m": -0.031186481937766075,
+                "partner_body": "l_ring_finger_distal",
+                "peak_force_n": 155.6846466064453,
+                "samples": 1,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 1.0,
+            "elapsed_time_s": 0.002,
+            "mean_force_n": 109.85574436187744,
+            "peak_force_n": 172.6253662109375
+          },
+          "right_cap": {
+            "active_steps": 1,
+            "active_time_s": 0.002,
+            "bodies": {
+              "Cap|r_index_finger_middle": {
+                "latest_friction_force_n": 51.282508850097656,
+                "latest_position_w": [
+                  0.011091182008385658,
+                  -0.004624721594154835,
+                  0.6536455750465393
+                ],
+                "minimum_separation_m": -0.007700893096625805,
+                "partner_body": "r_index_finger_middle",
+                "peak_force_n": 41.59183120727539,
+                "samples": 1,
+                "source_body": "Cap"
+              },
+              "Cap|r_index_finger_proximal_abd": {
+                "latest_friction_force_n": 80.12360382080078,
+                "latest_position_w": [
+                  0.010396500118076801,
+                  -0.0016747424378991127,
+                  0.6537864804267883
+                ],
+                "minimum_separation_m": -0.007800271734595299,
+                "partner_body": "r_index_finger_proximal_abd",
+                "peak_force_n": 90.93110656738281,
+                "samples": 1,
+                "source_body": "Cap"
+              }
+            },
+            "contact_ratio": 1.0,
+            "elapsed_time_s": 0.002,
+            "mean_force_n": 66.2614688873291,
+            "peak_force_n": 90.93110656738281
+          }
+        },
+        "initial_geometry": {
+          "left": {
+            "object_center_w_m": [
+              0.0,
+              0.0,
+              0.5
+            ],
+            "tips": {
+              "l_index_finger_distal": {
+                "center_distance_m": 0.036316629499197006,
+                "position_w_m": [
+                  -0.01704583317041397,
+                  -0.029129276052117348,
+                  0.4865902066230774
+                ]
+              },
+              "l_middle_finger_distal": {
+                "center_distance_m": 0.042473193258047104,
+                "position_w_m": [
+                  -0.013257978484034538,
+                  -0.024282649159431458,
+                  0.4677734375
+                ]
+              },
+              "l_pinky_distal": {
+                "center_distance_m": 0.0811818465590477,
+                "position_w_m": [
+                  -0.035902492702007294,
+                  -0.027744106948375702,
+                  0.4326815903186798
+                ]
+              },
+              "l_ring_finger_distal": {
+                "center_distance_m": 0.06280048936605453,
+                "position_w_m": [
+                  -0.023125991225242615,
+                  -0.02747359685599804,
+                  0.44848018884658813
+                ]
+              },
+              "l_thumb_distal": {
+                "center_distance_m": 0.05151987075805664,
+                "position_w_m": [
+                  -0.034026432782411575,
+                  0.031452327966690063,
+                  0.4774777889251709
+                ]
+              }
+            }
+          },
+          "right": {
+            "object_center_w_m": [
+              0.0,
+              0.0,
+              0.6455000042915344
+            ],
+            "tips": {
+              "r_index_finger_distal": {
+                "center_distance_m": 0.03807956352829933,
+                "position_w_m": [
+                  0.014606209471821785,
+                  0.031186450272798538,
+                  0.6617516875267029
+                ]
+              },
+              "r_middle_finger_distal": {
+                "center_distance_m": 0.0451723150908947,
+                "position_w_m": [
+                  0.010816368274390697,
+                  0.02633996680378914,
+                  0.6805678009986877
+                ]
+              },
+              "r_pinky_distal": {
+                "center_distance_m": 0.08275330811738968,
+                "position_w_m": [
+                  0.03223222494125366,
+                  0.029385680332779884,
+                  0.7158254981040955
+                ]
+              },
+              "r_ring_finger_distal": {
+                "center_distance_m": 0.06523071974515915,
+                "position_w_m": [
+                  0.020681342110037804,
+                  0.029530828818678856,
+                  0.6998623013496399
+                ]
+              },
+              "r_thumb_distal": {
+                "center_distance_m": 0.05077415704727173,
+                "position_w_m": [
+                  0.03262484073638916,
+                  -0.029771650210022926,
+                  0.6705456376075745
+                ]
+              }
+            }
+          }
+        },
+        "initial_min_separation_m": -0.038325805217027664
+      },
+      "left_only": {
+        "bottle_displacement_m": 0.5761181712150574,
+        "bottle_rotation_rad": 1.5876267987295234,
+        "bottle_trajectory": [
+          {
+            "position_w_m": [
+              0.005770160350948572,
+              0.0002824220573529601,
+              0.5000070333480835
+            ],
+            "quaternion_xyzw": [
+              0.00027976842829957604,
+              -0.01145730260759592,
+              -0.07130126655101776,
+              0.9973888993263245
+            ],
+            "t_s": 0.002
+          },
+          {
+            "position_w_m": [
+              0.05455159395933151,
+              0.026669161394238472,
+              0.48347213864326477
+            ],
+            "quaternion_xyzw": [
+              -0.2346164733171463,
+              -0.07671824842691422,
+              -0.3098488748073578,
+              0.9181845784187317
+            ],
+            "t_s": 0.052000000000000005
+          },
+          {
+            "position_w_m": [
+              0.07885078340768814,
+              0.05233253538608551,
+              0.44454872608184814
+            ],
+            "quaternion_xyzw": [
+              -0.4760280251502991,
+              -0.1407938152551651,
+              -0.42288655042648315,
+              0.7581170201301575
+            ],
+            "t_s": 0.10200000000000001
+          },
+          {
+            "position_w_m": [
+              0.10444217920303345,
+              0.08492374420166016,
+              0.38475778698921204
+            ],
+            "quaternion_xyzw": [
+              -0.6692989468574524,
+              -0.22745156288146973,
+              -0.4332304000854492,
+              0.5591208934783936
+            ],
+            "t_s": 0.152
+          },
+          {
+            "position_w_m": [
+              0.13231568038463593,
+              0.12465445697307587,
+              0.3000681698322296
+            ],
+            "quaternion_xyzw": [
+              -0.8066611886024475,
+              -0.308417946100235,
+              -0.3662334382534027,
+              0.34648093581199646
+            ],
+            "t_s": 0.202
+          },
+          {
+            "position_w_m": [
+              0.16270960867404938,
+              0.1698301136493683,
+              0.18705427646636963
+            ],
+            "quaternion_xyzw": [
+              -0.8867540955543518,
+              -0.3672270178794861,
+              -0.24537880718708038,
+              0.13638412952423096
+            ],
+            "t_s": 0.252
+          },
+          {
+            "position_w_m": [
+              0.1696862131357193,
+              0.19585280120372772,
+              0.1623602658510208
+            ],
+            "quaternion_xyzw": [
+              -0.8875496983528137,
+              -0.4235391616821289,
+              -0.17814114689826965,
+              0.03370257094502449
+            ],
+            "t_s": 0.302
+          },
+          {
+            "position_w_m": [
+              0.1626548320055008,
+              0.20920315384864807,
+              0.17595992982387543
+            ],
+            "quaternion_xyzw": [
+              -0.8660390377044678,
+              -0.4831624925136566,
+              -0.1257518082857132,
+              -0.02677525393664837
+            ],
+            "t_s": 0.352
+          },
+          {
+            "position_w_m": [
+              0.15569241344928741,
+              0.2225250005722046,
+              0.16443732380867004
+            ],
+            "quaternion_xyzw": [
+              -0.838170051574707,
+              -0.5354735851287842,
+              -0.06764761358499527,
+              -0.07850374281406403
+            ],
+            "t_s": 0.402
+          },
+          {
+            "position_w_m": [
+              0.147942453622818,
+              0.23729532957077026,
+              0.15687522292137146
+            ],
+            "quaternion_xyzw": [
+              -0.8419342637062073,
+              -0.5213508605957031,
+              -0.05384260416030884,
+              -0.12822182476520538
+            ],
+            "t_s": 0.452
+          },
+          {
+            "position_w_m": [
+              0.13842730224132538,
+              0.2534724771976471,
+              0.1514323651790619
+            ],
+            "quaternion_xyzw": [
+              -0.846781849861145,
+              -0.4897058606147766,
+              -0.0561293289065361,
+              -0.1999954879283905
+            ],
+            "t_s": 0.502
+          },
+          {
+            "position_w_m": [
+              0.12699861824512482,
+              0.27164313197135925,
+              0.13728374242782593
+            ],
+            "quaternion_xyzw": [
+              -0.8330909013748169,
+              -0.4551020860671997,
+              -0.07255776971578598,
+              -0.3059036433696747
+            ],
+            "t_s": 0.552
+          },
+          {
+            "position_w_m": [
+              0.11394686996936798,
+              0.2916032075881958,
+              0.1074225902557373
+            ],
+            "quaternion_xyzw": [
+              -0.7905420660972595,
+              -0.41277503967285156,
+              -0.09855303168296814,
+              -0.44152817130088806
+            ],
+            "t_s": 0.602
+          },
+          {
+            "position_w_m": [
+              0.10050830990076065,
+              0.31196457147598267,
+              0.057901930063962936
+            ],
+            "quaternion_xyzw": [
+              -0.7045837044715881,
+              -0.35065314173698425,
+              -0.13302233815193176,
+              -0.6024193167686462
+            ],
+            "t_s": 0.652
+          },
+          {
+            "position_w_m": [
+              0.0924556702375412,
+              0.3236730694770813,
+              0.03499998524785042
+            ],
+            "quaternion_xyzw": [
+              -0.6310656070709229,
+              -0.3189923167228699,
+              -0.13914796710014343,
+              -0.6932803988456726
+            ],
+            "t_s": 0.7020000000000001
+          },
+          {
+            "position_w_m": [
+              0.09269114583730698,
+              0.32422858476638794,
+              0.03499998524785042
+            ],
+            "quaternion_xyzw": [
+              -0.6275132894515991,
+              -0.3259251117706299,
+              -0.13046447932720184,
+              -0.6949667930603027
+            ],
+            "t_s": 0.752
+          },
+          {
+            "position_w_m": [
+              0.09299423545598984,
+              0.3247434198856354,
+              0.03499998524785042
+            ],
+            "quaternion_xyzw": [
+              -0.6235426068305969,
+              -0.3334583640098572,
+              -0.12104185670614243,
+              -0.6966698169708252
+            ],
+            "t_s": 0.802
+          },
+          {
+            "position_w_m": [
+              0.0932772159576416,
+              0.32525813579559326,
+              0.03499998524785042
+            ],
+            "quaternion_xyzw": [
+              -0.6203582882881165,
+              -0.33934590220451355,
+              -0.11347667127847672,
+              -0.6979419589042664
+            ],
+            "t_s": 0.852
+          },
+          {
+            "position_w_m": [
+              0.09357471764087677,
+              0.3257920742034912,
+              0.034999992698431015
+            ],
+            "quaternion_xyzw": [
+              -0.616710364818573,
+              -0.3459310233592987,
+              -0.1050344705581665,
+              -0.699262261390686
+            ],
+            "t_s": 0.902
+          },
+          {
+            "position_w_m": [
+              0.09385290741920471,
+              0.3263235092163086,
+              0.03499998524785042
+            ],
+            "quaternion_xyzw": [
+              -0.6138644814491272,
+              -0.3509564697742462,
+              -0.09838347136974335,
+              -0.7002289295196533
+            ],
+            "t_s": 0.9520000000000001
+          },
+          {
+            "position_w_m": [
+              0.09412655234336853,
+              0.3268445134162903,
+              0.034999992698431015
+            ],
+            "quaternion_xyzw": [
+              -0.6109694838523865,
+              -0.35597243905067444,
+              -0.09173212200403214,
+              -0.7011313438415527
+            ],
+            "t_s": 1.0
+          }
+        ],
+        "contact_summary": {
+          "bottle_ground": {
+            "active_steps": 175,
+            "active_time_s": 0.35000000000000026,
+            "bodies": {
+              "Bottle|CollisionPlane": {
+                "latest_friction_force_n": 0.15884527564048767,
+                "latest_position_w": [
+                  0.0941239595413208,
+                  0.3268275260925293,
+                  -1.8430384329803928e-08
+                ],
+                "minimum_separation_m": -4.8014051401423785e-08,
+                "partner_body": "CollisionPlane",
+                "peak_force_n": 8.734809875488281,
+                "samples": 175,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 0.35,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 0.458509635925293,
+            "peak_force_n": 8.734809875488281
+          },
+          "cap_ground": {
+            "active_steps": 99,
+            "active_time_s": 0.19800000000000015,
+            "bodies": {
+              "Cap|CollisionPlane": {
+                "latest_friction_force_n": 0.35875850915908813,
+                "latest_position_w": [
+                  0.18888451159000397,
+                  0.20260678231716156,
+                  0.012344194576144218
+                ],
+                "minimum_separation_m": 3.6908313632011414e-06,
+                "partner_body": "CollisionPlane",
+                "peak_force_n": 49.067787170410156,
+                "samples": 99,
+                "source_body": "Cap"
+              }
+            },
+            "contact_ratio": 0.198,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 1.9103506027974866,
+            "peak_force_n": 49.067787170410156
+          },
+          "left_bottle": {
+            "active_steps": 3,
+            "active_time_s": 0.006,
+            "bodies": {
+              "Bottle|l_index_finger_distal": {
+                "latest_friction_force_n": 20.790218353271484,
+                "latest_position_w": [
+                  -0.013400495052337646,
+                  -0.003144531976431608,
+                  0.4835517108440399
+                ],
+                "minimum_separation_m": -0.036232586950063705,
+                "partner_body": "l_index_finger_distal",
+                "peak_force_n": 150.8297882080078,
+                "samples": 2,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_middle": {
+                "latest_friction_force_n": 29.047607421875,
+                "latest_position_w": [
+                  -0.016061723232269287,
+                  -0.0067970119416713715,
+                  0.49593499302864075
+                ],
+                "minimum_separation_m": -0.03511859476566315,
+                "partner_body": "l_index_finger_middle",
+                "peak_force_n": 0.4150993525981903,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal_abd": {
+                "latest_friction_force_n": 28.77725601196289,
+                "latest_position_w": [
+                  -0.01872102916240692,
+                  0.009482402354478836,
+                  0.4889068901538849
+                ],
+                "minimum_separation_m": -0.036232590675354004,
+                "partner_body": "l_index_finger_proximal_abd",
+                "peak_force_n": 53.90779495239258,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_distal": {
+                "latest_friction_force_n": 25.071292877197266,
+                "latest_position_w": [
+                  -0.008297305554151535,
+                  0.003597121685743332,
+                  0.4732244312763214
+                ],
+                "minimum_separation_m": -0.038325805217027664,
+                "partner_body": "l_middle_finger_distal",
+                "peak_force_n": 63.65833282470703,
+                "samples": 3,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal_abd": {
+                "latest_friction_force_n": 153.93478393554688,
+                "latest_position_w": [
+                  -0.022826749831438065,
+                  0.025847185403108597,
+                  0.4679509997367859
+                ],
+                "minimum_separation_m": -0.001052643172442913,
+                "partner_body": "l_middle_finger_proximal_abd",
+                "peak_force_n": 279.8819580078125,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_proximal_abd": {
+                "latest_friction_force_n": 6.995193958282471,
+                "latest_position_w": [
+                  -0.019383398815989494,
+                  -0.0011028135195374489,
+                  0.44969868659973145
+                ],
+                "minimum_separation_m": -0.031186478212475777,
+                "partner_body": "l_pinky_proximal_abd",
+                "peak_force_n": 2.300501585006714,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_distal": {
+                "latest_friction_force_n": 61.594322204589844,
+                "latest_position_w": [
+                  -0.019555680453777313,
+                  -0.0016760160215198994,
+                  0.4455301761627197
+                ],
+                "minimum_separation_m": -0.031186481937766075,
+                "partner_body": "l_ring_finger_distal",
+                "peak_force_n": 112.20314025878906,
+                "samples": 1,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 0.006,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 78.75829448401927,
+            "peak_force_n": 279.8819580078125
+          }
+        },
+        "correct_contact_ratios": {
+          "left_bottle": 0.006,
+          "right_cap": 0.0
+        },
+        "duration_s": 1.0,
+        "finite": true,
+        "initial_contact_summary": {
+          "left_bottle": {
+            "active_steps": 1,
+            "active_time_s": 0.002,
+            "bodies": {
+              "Bottle|l_index_finger_distal": {
+                "latest_friction_force_n": 90.6356430053711,
+                "latest_position_w": [
+                  -0.0155487684533,
+                  -0.006579939275979996,
+                  0.48610690236091614
+                ],
+                "minimum_separation_m": -0.036232586950063705,
+                "partner_body": "l_index_finger_distal",
+                "peak_force_n": 150.8297882080078,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_middle": {
+                "latest_friction_force_n": 29.047607421875,
+                "latest_position_w": [
+                  -0.016061723232269287,
+                  -0.0067970119416713715,
+                  0.49593499302864075
+                ],
+                "minimum_separation_m": -0.03511859476566315,
+                "partner_body": "l_index_finger_middle",
+                "peak_force_n": 0.4150993525981903,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal_abd": {
+                "latest_friction_force_n": 28.77725601196289,
+                "latest_position_w": [
+                  -0.01872102916240692,
+                  0.009482402354478836,
+                  0.4889068901538849
+                ],
+                "minimum_separation_m": -0.036232590675354004,
+                "partner_body": "l_index_finger_proximal_abd",
+                "peak_force_n": 53.90779495239258,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_distal": {
+                "latest_friction_force_n": 35.012081146240234,
+                "latest_position_w": [
+                  -0.005307151935994625,
+                  0.01492139883339405,
+                  0.4617971181869507
+                ],
+                "minimum_separation_m": -0.038325805217027664,
+                "partner_body": "l_middle_finger_distal",
+                "peak_force_n": 63.65833282470703,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal_abd": {
+                "latest_friction_force_n": 153.93478393554688,
+                "latest_position_w": [
+                  -0.022826749831438065,
+                  0.025847185403108597,
+                  0.4679509997367859
+                ],
+                "minimum_separation_m": -0.001052643172442913,
+                "partner_body": "l_middle_finger_proximal_abd",
+                "peak_force_n": 279.8819580078125,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_proximal_abd": {
+                "latest_friction_force_n": 6.995193958282471,
+                "latest_position_w": [
+                  -0.019383398815989494,
+                  -0.0011028135195374489,
+                  0.44969868659973145
+                ],
+                "minimum_separation_m": -0.031186478212475777,
+                "partner_body": "l_pinky_proximal_abd",
+                "peak_force_n": 2.300501585006714,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_distal": {
+                "latest_friction_force_n": 61.594322204589844,
+                "latest_position_w": [
+                  -0.019555680453777313,
+                  -0.0016760160215198994,
+                  0.4455301761627197
+                ],
+                "minimum_separation_m": -0.031186481937766075,
+                "partner_body": "l_ring_finger_distal",
+                "peak_force_n": 112.20314025878906,
+                "samples": 1,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 1.0,
+            "elapsed_time_s": 0.002,
+            "mean_force_n": 94.7423735984734,
+            "peak_force_n": 279.8819580078125
+          }
+        },
+        "initial_geometry": {
+          "left": {
+            "object_center_w_m": [
+              0.0,
+              0.0,
+              0.5
+            ],
+            "tips": {
+              "l_index_finger_distal": {
+                "center_distance_m": 0.036316629499197006,
+                "position_w_m": [
+                  -0.01704583317041397,
+                  -0.029129276052117348,
+                  0.4865902066230774
+                ]
+              },
+              "l_middle_finger_distal": {
+                "center_distance_m": 0.042473193258047104,
+                "position_w_m": [
+                  -0.013257978484034538,
+                  -0.024282649159431458,
+                  0.4677734375
+                ]
+              },
+              "l_pinky_distal": {
+                "center_distance_m": 0.0811818465590477,
+                "position_w_m": [
+                  -0.035902492702007294,
+                  -0.027744106948375702,
+                  0.4326815903186798
+                ]
+              },
+              "l_ring_finger_distal": {
+                "center_distance_m": 0.06280048936605453,
+                "position_w_m": [
+                  -0.023125991225242615,
+                  -0.02747359685599804,
+                  0.44848018884658813
+                ]
+              },
+              "l_thumb_distal": {
+                "center_distance_m": 0.05151987075805664,
+                "position_w_m": [
+                  -0.034026432782411575,
+                  0.031452327966690063,
+                  0.4774777889251709
+                ]
+              }
+            }
+          },
+          "right": {
+            "object_center_w_m": [
+              0.0,
+              0.0,
+              0.6455000042915344
+            ],
+            "tips": {
+              "r_index_finger_distal": {
+                "center_distance_m": 0.36629825830459595,
+                "position_w_m": [
+                  0.36460620164871216,
+                  0.031186450272798538,
+                  0.6617516875267029
+                ]
+              },
+              "r_middle_finger_distal": {
+                "center_distance_m": 0.3634721636772156,
+                "position_w_m": [
+                  0.3608163893222809,
+                  0.02633996680378914,
+                  0.6805678009986877
+                ]
+              },
+              "r_pinky_distal": {
+                "center_distance_m": 0.3897572159767151,
+                "position_w_m": [
+                  0.3822322487831116,
+                  0.029385680332779884,
+                  0.7158254981040955
+                ]
+              },
+              "r_ring_finger_distal": {
+                "center_distance_m": 0.3758084774017334,
+                "position_w_m": [
+                  0.37068137526512146,
+                  0.029530828818678856,
+                  0.6998623013496399
+                ]
+              },
+              "r_thumb_distal": {
+                "center_distance_m": 0.38459768891334534,
+                "position_w_m": [
+                  0.3826248347759247,
+                  -0.029771650210022926,
+                  0.6705456376075745
+                ]
+              }
+            }
+          }
+        },
+        "initial_min_separation_m": -0.038325805217027664
+      },
+      "passed": false,
+      "sample": {
+        "bottle": {
+          "root_pose": [
+            0.0,
+            0.0,
+            0.5,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "root_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "cap": {
+          "root_pose": [
+            0.0,
+            0.0,
+            0.6455,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "root_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "left": {
+          "joint_position": [
+            0.7100500000000001,
+            0.65,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002
+          ],
+          "joint_target": [
+            0.7100500000000001,
+            0.65,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002
+          ],
+          "joint_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "root_pose": [
+            -0.1114625430235504,
+            0.03208460242162339,
+            0.4670550984759064,
+            0.0,
+            -0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ],
+          "root_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "wrist_target_pose": [
+            -0.1114625430235504,
+            0.03208460242162339,
+            0.4670550984759064,
+            0.0,
+            -0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ]
+        },
+        "metadata": {
+          "asset_source_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+          "asset_variant": "beta1",
+          "bottle_parameters": {
+            "allow_detachment": false,
+            "axial_damping": 3.5,
+            "axial_stiffness": 500.0,
+            "body_angular_damping": 1.0,
+            "bottle_height": 0.2,
+            "bottle_mass": 0.03,
+            "bottle_radius": 0.035,
+            "breakaway_damping": 0.003,
+            "breakaway_stiffness": 0.2,
+            "breakaway_torque": 0.02,
+            "cap_height": 0.025,
+            "cap_mass": 0.006,
+            "cap_outer_radius": 0.017,
+            "cap_top_clearance": 0.002,
+            "detachment_angle_margin": 0.06,
+            "detachment_max_constraint_error": 0.0005,
+            "detachment_overlap_fraction": 0.05,
+            "dynamic_friction": 0.4,
+            "end_stop_damping": 0.02,
+            "end_stop_stiffness": 0.5,
+            "engagement_resistance_exponent": 1.5,
+            "friction_velocity_scale": 20.0,
+            "initial_engagement": 0.009,
+            "lateral_damping": 0.1,
+            "lateral_stiffness": 10.0,
+            "loose_breakaway_torque": 0.004,
+            "loose_running_resistance_torque": 0.001,
+            "max_body_angular_velocity_deg": 1080.0,
+            "max_body_linear_velocity": 5.0,
+            "max_constraint_force": 8.0,
+            "max_constraint_torque": 0.08,
+            "neck_height": 0.04,
+            "neck_outer_radius": 0.012,
+            "restick_speed": 0.05,
+            "running_resistance_torque": 0.006,
+            "slip_angle_ratio": 1.5,
+            "slip_speed": 0.1,
+            "source_profile": "engineering_example",
+            "static_friction": 0.6,
+            "thread_clearance": 0.0005,
+            "thread_handedness": "right",
+            "thread_height": 0.001,
+            "thread_pitch": 0.003,
+            "thread_turns": 3.0,
+            "tilt_damping": 0.0001,
+            "tilt_stiffness": 0.001,
+            "visual_radial_segments": 64
+          },
+          "bottle_profile": "engineering_example",
+          "coordinates": "env0_world_z_up_xyzw; hand offsets bottle/cap local",
+          "left_asset_tree_sha256": "6f0d85a3b7b80c2418a97c147f005fefbe957984d3a3e0e97ec51e957c2ce2b9",
+          "left_joint_order": [
+            "l_thumb_cmc_flex",
+            "l_thumb_cmc_abd",
+            "l_thumb_mcp",
+            "l_thumb_ip",
+            "l_index_finger_mcp_flex",
+            "l_index_finger_mcp_abd",
+            "l_index_finger_pip",
+            "l_index_finger_dip",
+            "l_middle_finger_mcp_flex",
+            "l_middle_finger_mcp_abd",
+            "l_middle_finger_pip",
+            "l_middle_finger_dip",
+            "l_ring_finger_mcp_flex",
+            "l_ring_finger_mcp_abd",
+            "l_ring_finger_pip",
+            "l_ring_finger_dip",
+            "l_pinky_mcp_flex",
+            "l_pinky_mcp_abd",
+            "l_pinky_pip",
+            "l_pinky_dip"
+          ],
+          "left_usd_sha256": "8d1b83a6130b64fd759ea3c0720d6b255da8c1e76abe5a4226788183058dbfda",
+          "right_asset_tree_sha256": "9f934ba533996b5a30976226ef8f76ed96b35cd6a8e34b4b50deeb567cf0a707",
+          "right_joint_order": [
+            "r_thumb_cmc_flex",
+            "r_thumb_cmc_abd",
+            "r_thumb_mcp",
+            "r_thumb_ip",
+            "r_index_finger_mcp_flex",
+            "r_index_finger_mcp_abd",
+            "r_index_finger_pip",
+            "r_index_finger_dip",
+            "r_middle_finger_mcp_flex",
+            "r_middle_finger_mcp_abd",
+            "r_middle_finger_pip",
+            "r_middle_finger_dip",
+            "r_ring_finger_mcp_flex",
+            "r_ring_finger_mcp_abd",
+            "r_ring_finger_pip",
+            "r_ring_finger_dip",
+            "r_pinky_mcp_flex",
+            "r_pinky_mcp_abd",
+            "r_pinky_pip",
+            "r_pinky_dip"
+          ],
+          "right_usd_sha256": "22600d3f0aeb185552bb6eeb454b5b7199966a60fc844d4a4b5e4791ec77f0ed",
+          "schema": "dexgym-bimanual-grasp-init-v1",
+          "units": "m,rad,s,N"
+        },
+        "mode": "stable_pregrasp",
+        "right": {
+          "joint_position": [
+            0.7100500000000001,
+            0.65,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002
+          ],
+          "joint_target": [
+            0.7100500000000001,
+            0.65,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002
+          ],
+          "joint_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "root_pose": [
+            0.10902027610295768,
+            -0.030027389477448353,
+            0.6812979642591549,
+            0.0,
+            0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ],
+          "root_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "wrist_target_pose": [
+            0.10902027610295768,
+            -0.030027389477448353,
+            0.6812979642591549,
+            0.0,
+            0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ]
+        },
+        "seed": 1,
+        "source": "bottle_relative_geometry_candidate",
+        "thread_initial_angle_rad": 0.0,
+        "thread_initial_engagement_m": 0.009,
+        "validated": false,
+        "validation": null
+      }
+    },
+    "2": {
+      "hold": {
+        "bottle_displacement_m": 0.5693514347076416,
+        "bottle_rotation_rad": 2.598413469556162,
+        "bottle_trajectory": [
+          {
+            "position_w_m": [
+              0.003816280048340559,
+              0.0012741846730932593,
+              0.499845415353775
+            ],
+            "quaternion_xyzw": [
+              0.000569862371776253,
+              -0.012075872160494328,
+              0.01678525283932686,
+              0.9997859597206116
+            ],
+            "t_s": 0.002
+          },
+          {
+            "position_w_m": [
+              0.04826571047306061,
+              0.03544024005532265,
+              0.47757190465927124
+            ],
+            "quaternion_xyzw": [
+              -0.09055133163928986,
+              -0.04729357361793518,
+              -0.10105183720588684,
+              0.9896222352981567
+            ],
+            "t_s": 0.052000000000000005
+          },
+          {
+            "position_w_m": [
+              0.06247523054480553,
+              0.06477785110473633,
+              0.4222251772880554
+            ],
+            "quaternion_xyzw": [
+              -0.16187605261802673,
+              -0.0005601677112281322,
+              -0.16621029376983643,
+              0.9727126359939575
+            ],
+            "t_s": 0.10200000000000001
+          },
+          {
+            "position_w_m": [
+              0.0767834410071373,
+              0.09450805187225342,
+              0.3431481719017029
+            ],
+            "quaternion_xyzw": [
+              -0.23470059037208557,
+              0.038737788796424866,
+              -0.22101593017578125,
+              0.9458155035972595
+            ],
+            "t_s": 0.152
+          },
+          {
+            "position_w_m": [
+              0.09129209071397781,
+              0.12468904256820679,
+              0.2402186542749405
+            ],
+            "quaternion_xyzw": [
+              -0.3070061206817627,
+              0.07270421832799911,
+              -0.26256418228149414,
+              0.9118779301643372
+            ],
+            "t_s": 0.202
+          },
+          {
+            "position_w_m": [
+              0.10608486831188202,
+              0.15536335110664368,
+              0.11332257837057114
+            ],
+            "quaternion_xyzw": [
+              -0.3778347969055176,
+              0.10044147819280624,
+              -0.2978684902191162,
+              0.8708770275115967
+            ],
+            "t_s": 0.252
+          },
+          {
+            "position_w_m": [
+              0.13510116934776306,
+              0.20399624109268188,
+              0.05890800803899765
+            ],
+            "quaternion_xyzw": [
+              -0.6430703997612,
+              0.14069831371307373,
+              -0.29333147406578064,
+              0.693268358707428
+            ],
+            "t_s": 0.302
+          },
+          {
+            "position_w_m": [
+              0.15720678865909576,
+              0.24108976125717163,
+              0.04025445133447647
+            ],
+            "quaternion_xyzw": [
+              -0.7195884585380554,
+              0.09332501143217087,
+              -0.3298296630382538,
+              0.6038999557495117
+            ],
+            "t_s": 0.352
+          },
+          {
+            "position_w_m": [
+              0.16850531101226807,
+              0.2615842819213867,
+              0.034999966621398926
+            ],
+            "quaternion_xyzw": [
+              -0.7069860100746155,
+              0.013057099655270576,
+              -0.4085027873516083,
+              0.5771704912185669
+            ],
+            "t_s": 0.402
+          },
+          {
+            "position_w_m": [
+              0.17253123223781586,
+              0.2716614007949829,
+              0.03499997407197952
+            ],
+            "quaternion_xyzw": [
+              -0.7040736079216003,
+              -0.06542307138442993,
+              -0.47109293937683105,
+              0.527324914932251
+            ],
+            "t_s": 0.452
+          },
+          {
+            "position_w_m": [
+              0.17040181159973145,
+              0.2749535143375397,
+              0.03499997407197952
+            ],
+            "quaternion_xyzw": [
+              -0.6988660097122192,
+              -0.1076396033167839,
+              -0.5027048587799072,
+              0.4972802996635437
+            ],
+            "t_s": 0.502
+          },
+          {
+            "position_w_m": [
+              0.1673979014158249,
+              0.27716687321662903,
+              0.03499997779726982
+            ],
+            "quaternion_xyzw": [
+              -0.6922341585159302,
+              -0.1442628651857376,
+              -0.5285656452178955,
+              0.46970027685165405
+            ],
+            "t_s": 0.552
+          },
+          {
+            "position_w_m": [
+              0.16440698504447937,
+              0.2793673276901245,
+              0.03499997407197952
+            ],
+            "quaternion_xyzw": [
+              -0.6849914789199829,
+              -0.17546121776103973,
+              -0.5496144890785217,
+              0.4448864161968231
+            ],
+            "t_s": 0.602
+          },
+          {
+            "position_w_m": [
+              0.16140025854110718,
+              0.281581848859787,
+              0.03499997779726982
+            ],
+            "quaternion_xyzw": [
+              -0.6766616106033325,
+              -0.2052534520626068,
+              -0.5688705444335938,
+              0.4199836850166321
+            ],
+            "t_s": 0.652
+          },
+          {
+            "position_w_m": [
+              0.158408060669899,
+              0.28378456830978394,
+              0.03499997407197952
+            ],
+            "quaternion_xyzw": [
+              -0.6680652499198914,
+              -0.23170840740203857,
+              -0.5852089524269104,
+              0.39690107107162476
+            ],
+            "t_s": 0.7020000000000001
+          },
+          {
+            "position_w_m": [
+              0.15540064871311188,
+              0.28600260615348816,
+              0.03499997779726982
+            ],
+            "quaternion_xyzw": [
+              -0.6584481000900269,
+              -0.25777125358581543,
+              -0.6006125807762146,
+              0.37318161129951477
+            ],
+            "t_s": 0.752
+          },
+          {
+            "position_w_m": [
+              0.15240706503391266,
+              0.2882092297077179,
+              0.03499997779726982
+            ],
+            "quaternion_xyzw": [
+              -0.6489320397377014,
+              -0.2808685302734375,
+              -0.6136292219161987,
+              0.3513675332069397
+            ],
+            "t_s": 0.802
+          },
+          {
+            "position_w_m": [
+              0.14939123392105103,
+              0.2904362976551056,
+              0.03499997779726982
+            ],
+            "quaternion_xyzw": [
+              -0.6386343836784363,
+              -0.30355554819107056,
+              -0.6258751749992371,
+              0.3290596008300781
+            ],
+            "t_s": 0.852
+          },
+          {
+            "position_w_m": [
+              0.14640460908412933,
+              0.2926410138607025,
+              0.03499997407197952
+            ],
+            "quaternion_xyzw": [
+              -0.6285958290100098,
+              -0.32383209466934204,
+              -0.6362059116363525,
+              0.30861303210258484
+            ],
+            "t_s": 0.902
+          },
+          {
+            "position_w_m": [
+              0.1434278041124344,
+              0.29484182596206665,
+              0.03499998152256012
+            ],
+            "quaternion_xyzw": [
+              -0.6175153851509094,
+              -0.3444920778274536,
+              -0.6460959315299988,
+              0.2873324751853943
+            ],
+            "t_s": 0.9520000000000001
+          },
+          {
+            "position_w_m": [
+              0.1405962109565735,
+              0.29693225026130676,
+              0.03499997407197952
+            ],
+            "quaternion_xyzw": [
+              -0.6069244742393494,
+              -0.36282604932785034,
+              -0.6542437076568604,
+              0.2682631015777588
+            ],
+            "t_s": 1.0
+          }
+        ],
+        "contact_summary": {
+          "bottle_ground": {
+            "active_steps": 341,
+            "active_time_s": 0.6820000000000005,
+            "bodies": {
+              "Bottle|CollisionPlane": {
+                "latest_friction_force_n": 0.15781231224536896,
+                "latest_position_w": [
+                  0.1407211720943451,
+                  0.2968386709690094,
+                  -1.8766790788049548e-08
+                ],
+                "minimum_separation_m": -1.049251920903771e-07,
+                "partner_body": "CollisionPlane",
+                "peak_force_n": 31.175439834594727,
+                "samples": 341,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 0.682,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 0.5367483202575588,
+            "peak_force_n": 31.175439834594727
+          },
+          "left_bottle": {
+            "active_steps": 7,
+            "active_time_s": 0.014,
+            "bodies": {
+              "Bottle|l_index_finger_distal": {
+                "latest_friction_force_n": 84.072509765625,
+                "latest_position_w": [
+                  -0.01377160381525755,
+                  -0.0014329291880130768,
+                  0.4918525218963623
+                ],
+                "minimum_separation_m": -0.03984789550304413,
+                "partner_body": "l_index_finger_distal",
+                "peak_force_n": 137.12059020996094,
+                "samples": 2,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_middle": {
+                "latest_friction_force_n": 7.152271270751953,
+                "latest_position_w": [
+                  -0.0024517306592315435,
+                  0.0036693180445581675,
+                  0.4911922216415405
+                ],
+                "minimum_separation_m": -0.03949426859617233,
+                "partner_body": "l_index_finger_middle",
+                "peak_force_n": 278.9034423828125,
+                "samples": 3,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal": {
+                "latest_friction_force_n": 129.66529846191406,
+                "latest_position_w": [
+                  -0.021438702940940857,
+                  0.025116601958870888,
+                  0.4881054759025574
+                ],
+                "minimum_separation_m": -0.003965484909713268,
+                "partner_body": "l_index_finger_proximal",
+                "peak_force_n": 235.75555419921875,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal_abd": {
+                "latest_friction_force_n": 7.452426910400391,
+                "latest_position_w": [
+                  -0.0021987815853208303,
+                  0.003424062393605709,
+                  0.4891759753227234
+                ],
+                "minimum_separation_m": -0.039499688893556595,
+                "partner_body": "l_index_finger_proximal_abd",
+                "peak_force_n": 41.4692497253418,
+                "samples": 3,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_distal": {
+                "latest_friction_force_n": 11.447715759277344,
+                "latest_position_w": [
+                  -0.003732302226126194,
+                  0.008318477310240269,
+                  0.4692751169204712
+                ],
+                "minimum_separation_m": -0.03801071643829346,
+                "partner_body": "l_middle_finger_distal",
+                "peak_force_n": 113.02313232421875,
+                "samples": 4,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_middle": {
+                "latest_friction_force_n": 4.121766090393066,
+                "latest_position_w": [
+                  0.005722396541386843,
+                  0.009545214474201202,
+                  0.4663785994052887
+                ],
+                "minimum_separation_m": -0.03734702244400978,
+                "partner_body": "l_middle_finger_middle",
+                "peak_force_n": 223.30209350585938,
+                "samples": 6,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal": {
+                "latest_friction_force_n": 26.923860549926758,
+                "latest_position_w": [
+                  -0.011490552686154842,
+                  -0.010271109640598297,
+                  0.48637494444847107
+                ],
+                "minimum_separation_m": -0.03984789550304413,
+                "partner_body": "l_middle_finger_proximal",
+                "peak_force_n": 48.95334243774414,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal_abd": {
+                "latest_friction_force_n": 4.374803066253662,
+                "latest_position_w": [
+                  0.001642465591430664,
+                  0.0036942092701792717,
+                  0.48435690999031067
+                ],
+                "minimum_separation_m": -0.03174576535820961,
+                "partner_body": "l_middle_finger_proximal_abd",
+                "peak_force_n": 244.0821990966797,
+                "samples": 6,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_middle": {
+                "latest_friction_force_n": 8.462900161743164,
+                "latest_position_w": [
+                  -0.022512277588248253,
+                  0.027189215645194054,
+                  0.4421093165874481
+                ],
+                "minimum_separation_m": 0.0005990103236399591,
+                "partner_body": "l_pinky_middle",
+                "peak_force_n": 1.808907389640808,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_proximal_abd": {
+                "latest_friction_force_n": 5.44892692565918,
+                "latest_position_w": [
+                  -0.015870528295636177,
+                  -0.0006472552195191383,
+                  0.4364509582519531
+                ],
+                "minimum_separation_m": -0.027387084439396858,
+                "partner_body": "l_pinky_proximal_abd",
+                "peak_force_n": 0.5192619562149048,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_distal": {
+                "latest_friction_force_n": 16.741657257080078,
+                "latest_position_w": [
+                  -0.013542253524065018,
+                  -0.010866707190871239,
+                  0.45899999141693115
+                ],
+                "minimum_separation_m": -0.028705116361379623,
+                "partner_body": "l_ring_finger_distal",
+                "peak_force_n": 36.64238739013672,
+                "samples": 2,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_middle": {
+                "latest_friction_force_n": 6.680938243865967,
+                "latest_position_w": [
+                  -0.00854845717549324,
+                  0.0009692758321762085,
+                  0.44427114725112915
+                ],
+                "minimum_separation_m": -0.01633119210600853,
+                "partner_body": "l_ring_finger_middle",
+                "peak_force_n": 88.62055969238281,
+                "samples": 3,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_proximal_abd": {
+                "latest_friction_force_n": 32.9320068359375,
+                "latest_position_w": [
+                  0.012884195894002914,
+                  -0.00596440676599741,
+                  0.4712715148925781
+                ],
+                "minimum_separation_m": -0.041618891060352325,
+                "partner_body": "l_ring_finger_proximal_abd",
+                "peak_force_n": 185.310546875,
+                "samples": 1,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 0.014,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 60.571156347937446,
+            "peak_force_n": 278.9034423828125
+          },
+          "right_cap": {
+            "active_steps": 13,
+            "active_time_s": 0.02600000000000001,
+            "bodies": {
+              "Cap|r_index_finger_distal": {
+                "latest_friction_force_n": 0.31565284729003906,
+                "latest_position_w": [
+                  0.0224444717168808,
+                  0.025073688477277756,
+                  0.6515686511993408
+                ],
+                "minimum_separation_m": -3.5238634154666215e-05,
+                "partner_body": "r_index_finger_distal",
+                "peak_force_n": 0.6245037913322449,
+                "samples": 4,
+                "source_body": "Cap"
+              },
+              "Cap|r_index_finger_middle": {
+                "latest_friction_force_n": 0.04537779837846756,
+                "latest_position_w": [
+                  0.013541932217776775,
+                  0.01487043034285307,
+                  0.6538102030754089
+                ],
+                "minimum_separation_m": -0.006450222339481115,
+                "partner_body": "r_index_finger_middle",
+                "peak_force_n": 61.85844039916992,
+                "samples": 6,
+                "source_body": "Cap"
+              },
+              "Cap|r_index_finger_proximal_abd": {
+                "latest_friction_force_n": 1.5050982236862183,
+                "latest_position_w": [
+                  0.011051394045352936,
+                  -0.003989110235124826,
+                  0.6525458693504333
+                ],
+                "minimum_separation_m": -0.006654371507465839,
+                "partner_body": "r_index_finger_proximal_abd",
+                "peak_force_n": 60.903621673583984,
+                "samples": 5,
+                "source_body": "Cap"
+              }
+            },
+            "contact_ratio": 0.026,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 9.906807419161002,
+            "peak_force_n": 61.85844039916992
+          }
+        },
+        "correct_contact_ratios": {
+          "left_bottle": 0.014,
+          "right_cap": 0.026
+        },
+        "duration_s": 1.0,
+        "finite": true,
+        "initial_contact_summary": {
+          "left_bottle": {
+            "active_steps": 1,
+            "active_time_s": 0.002,
+            "bodies": {
+              "Bottle|l_index_finger_distal": {
+                "latest_friction_force_n": 8.876542091369629,
+                "latest_position_w": [
+                  -0.010789484716951847,
+                  -0.010529697872698307,
+                  0.48175567388534546
+                ],
+                "minimum_separation_m": -0.03984789550304413,
+                "partner_body": "l_index_finger_distal",
+                "peak_force_n": 3.207531452178955,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_middle": {
+                "latest_friction_force_n": 153.39657592773438,
+                "latest_position_w": [
+                  -0.01436748169362545,
+                  -0.005957013927400112,
+                  0.4885798990726471
+                ],
+                "minimum_separation_m": -0.03949426859617233,
+                "partner_body": "l_index_finger_middle",
+                "peak_force_n": 278.9034423828125,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal": {
+                "latest_friction_force_n": 129.66529846191406,
+                "latest_position_w": [
+                  -0.021438702940940857,
+                  0.025116601958870888,
+                  0.4881054759025574
+                ],
+                "minimum_separation_m": -0.003965484909713268,
+                "partner_body": "l_index_finger_proximal",
+                "peak_force_n": 235.75555419921875,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal_abd": {
+                "latest_friction_force_n": 31.814226150512695,
+                "latest_position_w": [
+                  -0.01787266880273819,
+                  0.009076020680367947,
+                  0.48518308997154236
+                ],
+                "minimum_separation_m": -0.039499688893556595,
+                "partner_body": "l_index_finger_proximal_abd",
+                "peak_force_n": 41.4692497253418,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_distal": {
+                "latest_friction_force_n": 49.49918746948242,
+                "latest_position_w": [
+                  0.005212270654737949,
+                  0.015134555287659168,
+                  0.46482226252555847
+                ],
+                "minimum_separation_m": -0.03801071643829346,
+                "partner_body": "l_middle_finger_distal",
+                "peak_force_n": 89.9985580444336,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_middle": {
+                "latest_friction_force_n": 122.81510925292969,
+                "latest_position_w": [
+                  -0.021789144724607468,
+                  0.02563474141061306,
+                  0.465035080909729
+                ],
+                "minimum_separation_m": -0.0027247450780123472,
+                "partner_body": "l_middle_finger_middle",
+                "peak_force_n": 223.30209350585938,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal": {
+                "latest_friction_force_n": 26.923860549926758,
+                "latest_position_w": [
+                  -0.011490552686154842,
+                  -0.010271109640598297,
+                  0.48637494444847107
+                ],
+                "minimum_separation_m": -0.03984789550304413,
+                "partner_body": "l_middle_finger_proximal",
+                "peak_force_n": 48.95334243774414,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal_abd": {
+                "latest_friction_force_n": 134.24124145507812,
+                "latest_position_w": [
+                  -0.01662047952413559,
+                  -0.0009183352813124657,
+                  0.4723726511001587
+                ],
+                "minimum_separation_m": -0.01118102390319109,
+                "partner_body": "l_middle_finger_proximal_abd",
+                "peak_force_n": 244.0821990966797,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_middle": {
+                "latest_friction_force_n": 8.462900161743164,
+                "latest_position_w": [
+                  -0.022512277588248253,
+                  0.027189215645194054,
+                  0.4421093165874481
+                ],
+                "minimum_separation_m": 0.0005990103236399591,
+                "partner_body": "l_pinky_middle",
+                "peak_force_n": 1.808907389640808,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_distal": {
+                "latest_friction_force_n": 17.9179744720459,
+                "latest_position_w": [
+                  -0.010214505717158318,
+                  -0.02485184744000435,
+                  0.4675547480583191
+                ],
+                "minimum_separation_m": -0.016261745244264603,
+                "partner_body": "l_ring_finger_distal",
+                "peak_force_n": 32.57814025878906,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_middle": {
+                "latest_friction_force_n": 7.8424072265625,
+                "latest_position_w": [
+                  -0.010502859950065613,
+                  -0.024790659546852112,
+                  0.46516770124435425
+                ],
+                "minimum_separation_m": -0.01633119210600853,
+                "partner_body": "l_ring_finger_middle",
+                "peak_force_n": 88.62055969238281,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_proximal_abd": {
+                "latest_friction_force_n": 32.9320068359375,
+                "latest_position_w": [
+                  0.012884195894002914,
+                  -0.00596440676599741,
+                  0.4712715148925781
+                ],
+                "minimum_separation_m": -0.041618891060352325,
+                "partner_body": "l_ring_finger_proximal_abd",
+                "peak_force_n": 185.310546875,
+                "samples": 1,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 1.0,
+            "elapsed_time_s": 0.002,
+            "mean_force_n": 122.83251042167346,
+            "peak_force_n": 278.9034423828125
+          },
+          "right_cap": {
+            "active_steps": 1,
+            "active_time_s": 0.002,
+            "bodies": {
+              "Cap|r_index_finger_middle": {
+                "latest_friction_force_n": 34.87907791137695,
+                "latest_position_w": [
+                  0.008112375624477863,
+                  -0.0026237291749566793,
+                  0.6540911197662354
+                ],
+                "minimum_separation_m": -0.006450222339481115,
+                "partner_body": "r_index_finger_middle",
+                "peak_force_n": 61.85844039916992,
+                "samples": 1,
+                "source_body": "Cap"
+              },
+              "Cap|r_index_finger_proximal_abd": {
+                "latest_friction_force_n": 78.17562103271484,
+                "latest_position_w": [
+                  0.010041986592113972,
+                  0.0006663851090706885,
+                  0.654343843460083
+                ],
+                "minimum_separation_m": -0.006654371507465839,
+                "partner_body": "r_index_finger_proximal_abd",
+                "peak_force_n": 60.903621673583984,
+                "samples": 1,
+                "source_body": "Cap"
+              }
+            },
+            "contact_ratio": 1.0,
+            "elapsed_time_s": 0.002,
+            "mean_force_n": 61.38103103637695,
+            "peak_force_n": 61.85844039916992
+          }
+        },
+        "initial_geometry": {
+          "left": {
+            "object_center_w_m": [
+              0.0,
+              0.0,
+              0.5
+            ],
+            "tips": {
+              "l_index_finger_distal": {
+                "center_distance_m": 0.03559205308556557,
+                "position_w_m": [
+                  -0.013759159483015537,
+                  -0.02852691151201725,
+                  0.4837613105773926
+                ]
+              },
+              "l_middle_finger_distal": {
+                "center_distance_m": 0.043463412672281265,
+                "position_w_m": [
+                  -0.00997130386531353,
+                  -0.02368028834462166,
+                  0.4649445414543152
+                ]
+              },
+              "l_pinky_distal": {
+                "center_distance_m": 0.08198238164186478,
+                "position_w_m": [
+                  -0.032615818083286285,
+                  -0.027141746133565903,
+                  0.429852694272995
+                ]
+              },
+              "l_ring_finger_distal": {
+                "center_distance_m": 0.06379219144582748,
+                "position_w_m": [
+                  -0.019839320331811905,
+                  -0.02687123604118824,
+                  0.4456512928009033
+                ]
+              },
+              "l_thumb_distal": {
+                "center_distance_m": 0.05113818868994713,
+                "position_w_m": [
+                  -0.030739758163690567,
+                  0.032054685056209564,
+                  0.4746488928794861
+                ]
+              }
+            }
+          },
+          "right": {
+            "object_center_w_m": [
+              0.0,
+              0.0,
+              0.6455000042915344
+            ],
+            "tips": {
+              "r_index_finger_distal": {
+                "center_distance_m": 0.04000769555568695,
+                "position_w_m": [
+                  0.013925420120358467,
+                  0.03322683274745941,
+                  0.6628975868225098
+                ]
+              },
+              "r_middle_finger_distal": {
+                "center_distance_m": 0.04711269587278366,
+                "position_w_m": [
+                  0.01013557892292738,
+                  0.028380349278450012,
+                  0.6817137002944946
+                ]
+              },
+              "r_pinky_distal": {
+                "center_distance_m": 0.08420956134796143,
+                "position_w_m": [
+                  0.031551435589790344,
+                  0.03142606094479561,
+                  0.7169713973999023
+                ]
+              },
+              "r_ring_finger_distal": {
+                "center_distance_m": 0.066917285323143,
+                "position_w_m": [
+                  0.020000552758574486,
+                  0.03157120943069458,
+                  0.7010082006454468
+                ]
+              },
+              "r_thumb_distal": {
+                "center_distance_m": 0.049753811210393906,
+                "position_w_m": [
+                  0.03194405138492584,
+                  -0.027731267735362053,
+                  0.6716915369033813
+                ]
+              }
+            }
+          }
+        },
+        "initial_min_separation_m": -0.041618891060352325
+      },
+      "left_only": {
+        "bottle_displacement_m": 0.9555500149726868,
+        "bottle_rotation_rad": 3.089246855415157,
+        "bottle_trajectory": [
+          {
+            "position_w_m": [
+              0.005227614659816027,
+              0.0015838221879675984,
+              0.5002021789550781
+            ],
+            "quaternion_xyzw": [
+              -0.007138465531170368,
+              -0.025979844853281975,
+              -0.018400361761450768,
+              0.9994676113128662
+            ],
+            "t_s": 0.002
+          },
+          {
+            "position_w_m": [
+              0.045588843524456024,
+              0.0547829270362854,
+              0.4826202988624573
+            ],
+            "quaternion_xyzw": [
+              -0.35015740990638733,
+              -0.12345818430185318,
+              -0.05389692634344101,
+              0.9269536137580872
+            ],
+            "t_s": 0.052000000000000005
+          },
+          {
+            "position_w_m": [
+              0.05692318081855774,
+              0.10755860805511475,
+              0.4419505000114441
+            ],
+            "quaternion_xyzw": [
+              -0.643091082572937,
+              -0.14297886192798615,
+              -0.10745170712471008,
+              0.7446105480194092
+            ],
+            "t_s": 0.10200000000000001
+          },
+          {
+            "position_w_m": [
+              0.06733354181051254,
+              0.17256802320480347,
+              0.3779767155647278
+            ],
+            "quaternion_xyzw": [
+              -0.8536089658737183,
+              -0.15534932911396027,
+              -0.1317717581987381,
+              0.47943130135536194
+            ],
+            "t_s": 0.152
+          },
+          {
+            "position_w_m": [
+              0.07863255590200424,
+              0.24744008481502533,
+              0.2832450568675995
+            ],
+            "quaternion_xyzw": [
+              -0.9649270176887512,
+              -0.15662524104118347,
+              -0.12757223844528198,
+              0.16765977442264557
+            ],
+            "t_s": 0.202
+          },
+          {
+            "position_w_m": [
+              0.09206140786409378,
+              0.3260209560394287,
+              0.1537058800458908
+            ],
+            "quaternion_xyzw": [
+              -0.9729917049407959,
+              -0.14304716885089874,
+              -0.09675731509923935,
+              -0.15317532420158386
+            ],
+            "t_s": 0.252
+          },
+          {
+            "position_w_m": [
+              0.08520865440368652,
+              0.43151259422302246,
+              0.12484947592020035
+            ],
+            "quaternion_xyzw": [
+              -0.8772976398468018,
+              -0.08693764358758926,
+              -0.07895775139331818,
+              -0.4653562009334564
+            ],
+            "t_s": 0.302
+          },
+          {
+            "position_w_m": [
+              0.07822912186384201,
+              0.5311919450759888,
+              0.07786457240581512
+            ],
+            "quaternion_xyzw": [
+              -0.6977667212486267,
+              -0.031808655709028244,
+              -0.05242396891117096,
+              -0.7136955857276917
+            ],
+            "t_s": 0.352
+          },
+          {
+            "position_w_m": [
+              0.0719119980931282,
+              0.6114885807037354,
+              0.04989158734679222
+            ],
+            "quaternion_xyzw": [
+              -0.6507554054260254,
+              -0.0015896506374701858,
+              -0.0016489828703925014,
+              -0.7592839598655701
+            ],
+            "t_s": 0.402
+          },
+          {
+            "position_w_m": [
+              0.06590234488248825,
+              0.6785987615585327,
+              0.034999992698431015
+            ],
+            "quaternion_xyzw": [
+              -0.7064964771270752,
+              0.02940666489303112,
+              0.03976360335946083,
+              -0.7059862613677979
+            ],
+            "t_s": 0.452
+          },
+          {
+            "position_w_m": [
+              0.06115807592868805,
+              0.7256362438201904,
+              0.03500005230307579
+            ],
+            "quaternion_xyzw": [
+              -0.695655882358551,
+              0.12678448855876923,
+              0.011051747016608715,
+              -0.7070122361183167
+            ],
+            "t_s": 0.502
+          },
+          {
+            "position_w_m": [
+              0.056597620248794556,
+              0.7614734172821045,
+              0.03500005602836609
+            ],
+            "quaternion_xyzw": [
+              -0.6579460501670837,
+              0.2590741813182831,
+              -0.061750710010528564,
+              -0.7043964266777039
+            ],
+            "t_s": 0.552
+          },
+          {
+            "position_w_m": [
+              0.05061618983745575,
+              0.7865124344825745,
+              0.0350000336766243
+            ],
+            "quaternion_xyzw": [
+              -0.5768388509750366,
+              0.4089810252189636,
+              -0.18121491372585297,
+              -0.6834855675697327
+            ],
+            "t_s": 0.602
+          },
+          {
+            "position_w_m": [
+              0.040296733379364014,
+              0.8017697334289551,
+              0.034999996423721313
+            ],
+            "quaternion_xyzw": [
+              -0.48028311133384705,
+              0.5189697742462158,
+              -0.3013709783554077,
+              -0.6396670341491699
+            ],
+            "t_s": 0.652
+          },
+          {
+            "position_w_m": [
+              0.027091285213828087,
+              0.8083490133285522,
+              0.034999992698431015
+            ],
+            "quaternion_xyzw": [
+              -0.3703005909919739,
+              0.6023927330970764,
+              -0.4180091917514801,
+              -0.5703232884407043
+            ],
+            "t_s": 0.7020000000000001
+          },
+          {
+            "position_w_m": [
+              0.01455001812428236,
+              0.8134540915489197,
+              0.034999992698431015
+            ],
+            "quaternion_xyzw": [
+              -0.25671353936195374,
+              0.6588612198829651,
+              -0.5129672288894653,
+              -0.4866873323917389
+            ],
+            "t_s": 0.752
+          },
+          {
+            "position_w_m": [
+              0.0029655550606548786,
+              0.8181707262992859,
+              0.034999996423721313
+            ],
+            "quaternion_xyzw": [
+              -0.1442601978778839,
+              0.6922347545623779,
+              -0.5863490700721741,
+              -0.39521485567092896
+            ],
+            "t_s": 0.802
+          },
+          {
+            "position_w_m": [
+              -0.007801468949764967,
+              0.8225575685501099,
+              0.034999992698431015
+            ],
+            "quaternion_xyzw": [
+              -0.03447593003511429,
+              0.7062658071517944,
+              -0.6408593058586121,
+              -0.2988297939300537
+            ],
+            "t_s": 0.852
+          },
+          {
+            "position_w_m": [
+              -0.017830539494752884,
+              0.8266470432281494,
+              0.03500000014901161
+            ],
+            "quaternion_xyzw": [
+              0.06936436891555786,
+              0.7036963105201721,
+              -0.6777082085609436,
+              -0.20177114009857178
+            ],
+            "t_s": 0.902
+          },
+          {
+            "position_w_m": [
+              -0.027375228703022003,
+              0.83053058385849,
+              0.03500000014901161
+            ],
+            "quaternion_xyzw": [
+              0.1611696183681488,
+              0.6884941458702087,
+              -0.6982928514480591,
+              -0.11129741370677948
+            ],
+            "t_s": 0.9520000000000001
+          },
+          {
+            "position_w_m": [
+              -0.03589896112680435,
+              0.8340036869049072,
+              0.03500000387430191
+            ],
+            "quaternion_xyzw": [
+              0.24300634860992432,
+              0.6640390753746033,
+              -0.7066223621368408,
+              -0.02616991102695465
+            ],
+            "t_s": 1.0
+          }
+        ],
+        "contact_summary": {
+          "bottle_ground": {
+            "active_steps": 315,
+            "active_time_s": 0.6300000000000004,
+            "bodies": {
+              "Bottle|CollisionPlane": {
+                "latest_friction_force_n": 0.1403784602880478,
+                "latest_position_w": [
+                  -0.03553992509841919,
+                  0.833856999874115,
+                  2.3875514898463734e-09
+                ],
+                "minimum_separation_m": -2.4777364160399884e-06,
+                "partner_body": "CollisionPlane",
+                "peak_force_n": 15.827000617980957,
+                "samples": 315,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 0.63,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 0.41263298430140055,
+            "peak_force_n": 15.827000617980957
+          },
+          "cap_ground": {
+            "active_steps": 9,
+            "active_time_s": 0.018000000000000002,
+            "bodies": {
+              "Cap|CollisionPlane": {
+                "latest_friction_force_n": 0.18813210725784302,
+                "latest_position_w": [
+                  0.1264822781085968,
+                  0.28978440165519714,
+                  0.011348402127623558
+                ],
+                "minimum_separation_m": 6.940492767171236e-06,
+                "partner_body": "CollisionPlane",
+                "peak_force_n": 20.80352783203125,
+                "samples": 9,
+                "source_body": "Cap"
+              }
+            },
+            "contact_ratio": 0.018,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 11.065892898374134,
+            "peak_force_n": 20.80352783203125
+          },
+          "left_bottle": {
+            "active_steps": 6,
+            "active_time_s": 0.012,
+            "bodies": {
+              "Bottle|l_index_finger_distal": {
+                "latest_friction_force_n": 48.3315544128418,
+                "latest_position_w": [
+                  -0.010789484716951847,
+                  -0.010529697872698307,
+                  0.48175567388534546
+                ],
+                "minimum_separation_m": -0.03984789550304413,
+                "partner_body": "l_index_finger_distal",
+                "peak_force_n": 87.87554931640625,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_middle": {
+                "latest_friction_force_n": 32.543907165527344,
+                "latest_position_w": [
+                  -0.01436748169362545,
+                  -0.005957013927400112,
+                  0.4885798990726471
+                ],
+                "minimum_separation_m": -0.03949426859617233,
+                "partner_body": "l_index_finger_middle",
+                "peak_force_n": 48.50523376464844,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal": {
+                "latest_friction_force_n": 132.55654907226562,
+                "latest_position_w": [
+                  -0.021438702940940857,
+                  0.025116601958870888,
+                  0.4881054759025574
+                ],
+                "minimum_separation_m": -0.003965484909713268,
+                "partner_body": "l_index_finger_proximal",
+                "peak_force_n": 241.01466369628906,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal_abd": {
+                "latest_friction_force_n": 5.329869747161865,
+                "latest_position_w": [
+                  -0.000732786487787962,
+                  0.002633790485560894,
+                  0.48596036434173584
+                ],
+                "minimum_separation_m": -0.039499688893556595,
+                "partner_body": "l_index_finger_proximal_abd",
+                "peak_force_n": 247.99276733398438,
+                "samples": 3,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_distal": {
+                "latest_friction_force_n": 27.48178482055664,
+                "latest_position_w": [
+                  -0.005933514796197414,
+                  -0.008428330533206463,
+                  0.47074711322784424
+                ],
+                "minimum_separation_m": -0.03801071643829346,
+                "partner_body": "l_middle_finger_distal",
+                "peak_force_n": 168.0640411376953,
+                "samples": 3,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_middle": {
+                "latest_friction_force_n": 26.13314437866211,
+                "latest_position_w": [
+                  -0.007760327309370041,
+                  0.00985980685800314,
+                  0.4655143916606903
+                ],
+                "minimum_separation_m": -0.035859521478414536,
+                "partner_body": "l_middle_finger_middle",
+                "peak_force_n": 417.62933349609375,
+                "samples": 2,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal_abd": {
+                "latest_friction_force_n": 12.123244285583496,
+                "latest_position_w": [
+                  -0.0015579621540382504,
+                  0.004026046022772789,
+                  0.47307562828063965
+                ],
+                "minimum_separation_m": -0.03348022699356079,
+                "partner_body": "l_middle_finger_proximal_abd",
+                "peak_force_n": 257.18994140625,
+                "samples": 4,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_middle": {
+                "latest_friction_force_n": 4.589347839355469,
+                "latest_position_w": [
+                  -0.013912233524024487,
+                  -0.0012274011969566345,
+                  0.44540390372276306
+                ],
+                "minimum_separation_m": -0.025927405804395676,
+                "partner_body": "l_pinky_middle",
+                "peak_force_n": 79.3961181640625,
+                "samples": 2,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_proximal_abd": {
+                "latest_friction_force_n": 7.961169719696045,
+                "latest_position_w": [
+                  -0.022035403177142143,
+                  0.02757251262664795,
+                  0.44238948822021484
+                ],
+                "minimum_separation_m": 0.000581220374442637,
+                "partner_body": "l_pinky_proximal_abd",
+                "peak_force_n": 1.5025633573532104,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_distal": {
+                "latest_friction_force_n": 5.456881523132324,
+                "latest_position_w": [
+                  -0.010214505717158318,
+                  -0.02485184744000435,
+                  0.4675547480583191
+                ],
+                "minimum_separation_m": -0.016261745244264603,
+                "partner_body": "l_ring_finger_distal",
+                "peak_force_n": 3.3084709644317627,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_middle": {
+                "latest_friction_force_n": 179.59898376464844,
+                "latest_position_w": [
+                  -0.010502859950065613,
+                  -0.024790659546852112,
+                  0.46516770124435425
+                ],
+                "minimum_separation_m": -0.01633119210600853,
+                "partner_body": "l_ring_finger_middle",
+                "peak_force_n": 370.4203796386719,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_proximal_abd": {
+                "latest_friction_force_n": 4.333456993103027,
+                "latest_position_w": [
+                  -0.0035340876784175634,
+                  -0.005003821104764938,
+                  0.4705996513366699
+                ],
+                "minimum_separation_m": -0.041618891060352325,
+                "partner_body": "l_ring_finger_proximal_abd",
+                "peak_force_n": 0.7762295007705688,
+                "samples": 2,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 0.012,
+            "elapsed_time_s": 1.0000000000000007,
+            "mean_force_n": 95.02460911395875,
+            "peak_force_n": 417.62933349609375
+          }
+        },
+        "correct_contact_ratios": {
+          "left_bottle": 0.012,
+          "right_cap": 0.0
+        },
+        "duration_s": 1.0,
+        "finite": true,
+        "initial_contact_summary": {
+          "left_bottle": {
+            "active_steps": 1,
+            "active_time_s": 0.002,
+            "bodies": {
+              "Bottle|l_index_finger_distal": {
+                "latest_friction_force_n": 48.3315544128418,
+                "latest_position_w": [
+                  -0.010789484716951847,
+                  -0.010529697872698307,
+                  0.48175567388534546
+                ],
+                "minimum_separation_m": -0.03984789550304413,
+                "partner_body": "l_index_finger_distal",
+                "peak_force_n": 87.87554931640625,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_middle": {
+                "latest_friction_force_n": 32.543907165527344,
+                "latest_position_w": [
+                  -0.01436748169362545,
+                  -0.005957013927400112,
+                  0.4885798990726471
+                ],
+                "minimum_separation_m": -0.03949426859617233,
+                "partner_body": "l_index_finger_middle",
+                "peak_force_n": 48.50523376464844,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal": {
+                "latest_friction_force_n": 132.55654907226562,
+                "latest_position_w": [
+                  -0.021438702940940857,
+                  0.025116601958870888,
+                  0.4881054759025574
+                ],
+                "minimum_separation_m": -0.003965484909713268,
+                "partner_body": "l_index_finger_proximal",
+                "peak_force_n": 241.01466369628906,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_index_finger_proximal_abd": {
+                "latest_friction_force_n": 136.17593383789062,
+                "latest_position_w": [
+                  -0.01787266880273819,
+                  0.009076020680367947,
+                  0.48518308997154236
+                ],
+                "minimum_separation_m": -0.039499688893556595,
+                "partner_body": "l_index_finger_proximal_abd",
+                "peak_force_n": 247.99276733398438,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_distal": {
+                "latest_friction_force_n": 92.4339599609375,
+                "latest_position_w": [
+                  0.005212270654737949,
+                  0.015134555287659168,
+                  0.46482226252555847
+                ],
+                "minimum_separation_m": -0.03801071643829346,
+                "partner_body": "l_middle_finger_distal",
+                "peak_force_n": 168.0640411376953,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_middle": {
+                "latest_friction_force_n": 229.696044921875,
+                "latest_position_w": [
+                  -0.021789144724607468,
+                  0.02563474141061306,
+                  0.465035080909729
+                ],
+                "minimum_separation_m": -0.0027247450780123472,
+                "partner_body": "l_middle_finger_middle",
+                "peak_force_n": 417.62933349609375,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_middle_finger_proximal_abd": {
+                "latest_friction_force_n": 141.45375061035156,
+                "latest_position_w": [
+                  -0.01662047952413559,
+                  -0.0009183352813124657,
+                  0.4723726511001587
+                ],
+                "minimum_separation_m": -0.01118102390319109,
+                "partner_body": "l_middle_finger_proximal_abd",
+                "peak_force_n": 257.18994140625,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_middle": {
+                "latest_friction_force_n": 43.667869567871094,
+                "latest_position_w": [
+                  -0.022512277588248253,
+                  0.027189215645194054,
+                  0.4421093165874481
+                ],
+                "minimum_separation_m": 0.0005990103236399591,
+                "partner_body": "l_pinky_middle",
+                "peak_force_n": 79.3961181640625,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_pinky_proximal_abd": {
+                "latest_friction_force_n": 7.961169719696045,
+                "latest_position_w": [
+                  -0.022035403177142143,
+                  0.02757251262664795,
+                  0.44238948822021484
+                ],
+                "minimum_separation_m": 0.000581220374442637,
+                "partner_body": "l_pinky_proximal_abd",
+                "peak_force_n": 1.5025633573532104,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_distal": {
+                "latest_friction_force_n": 5.456881523132324,
+                "latest_position_w": [
+                  -0.010214505717158318,
+                  -0.02485184744000435,
+                  0.4675547480583191
+                ],
+                "minimum_separation_m": -0.016261745244264603,
+                "partner_body": "l_ring_finger_distal",
+                "peak_force_n": 3.3084709644317627,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_middle": {
+                "latest_friction_force_n": 179.59898376464844,
+                "latest_position_w": [
+                  -0.010502859950065613,
+                  -0.024790659546852112,
+                  0.46516770124435425
+                ],
+                "minimum_separation_m": -0.01633119210600853,
+                "partner_body": "l_ring_finger_middle",
+                "peak_force_n": 370.4203796386719,
+                "samples": 1,
+                "source_body": "Bottle"
+              },
+              "Bottle|l_ring_finger_proximal_abd": {
+                "latest_friction_force_n": 15.082276344299316,
+                "latest_position_w": [
+                  0.012884195894002914,
+                  -0.00596440676599741,
+                  0.4712715148925781
+                ],
+                "minimum_separation_m": -0.041618891060352325,
+                "partner_body": "l_ring_finger_proximal_abd",
+                "peak_force_n": 0.7762295007705688,
+                "samples": 1,
+                "source_body": "Bottle"
+              }
+            },
+            "contact_ratio": 1.0,
+            "elapsed_time_s": 0.002,
+            "mean_force_n": 160.30627431472143,
+            "peak_force_n": 417.62933349609375
+          }
+        },
+        "initial_geometry": {
+          "left": {
+            "object_center_w_m": [
+              0.0,
+              0.0,
+              0.5
+            ],
+            "tips": {
+              "l_index_finger_distal": {
+                "center_distance_m": 0.03559205308556557,
+                "position_w_m": [
+                  -0.013759159483015537,
+                  -0.02852691151201725,
+                  0.4837613105773926
+                ]
+              },
+              "l_middle_finger_distal": {
+                "center_distance_m": 0.043463412672281265,
+                "position_w_m": [
+                  -0.00997130386531353,
+                  -0.02368028834462166,
+                  0.4649445414543152
+                ]
+              },
+              "l_pinky_distal": {
+                "center_distance_m": 0.08198238164186478,
+                "position_w_m": [
+                  -0.032615818083286285,
+                  -0.027141746133565903,
+                  0.429852694272995
+                ]
+              },
+              "l_ring_finger_distal": {
+                "center_distance_m": 0.06379219144582748,
+                "position_w_m": [
+                  -0.019839320331811905,
+                  -0.02687123604118824,
+                  0.4456512928009033
+                ]
+              },
+              "l_thumb_distal": {
+                "center_distance_m": 0.05113818868994713,
+                "position_w_m": [
+                  -0.030739758163690567,
+                  0.032054685056209564,
+                  0.4746488928794861
+                ]
+              }
+            }
+          },
+          "right": {
+            "object_center_w_m": [
+              0.0,
+              0.0,
+              0.6455000042915344
+            ],
+            "tips": {
+              "r_index_finger_distal": {
+                "center_distance_m": 0.3658529818058014,
+                "position_w_m": [
+                  0.36392539739608765,
+                  0.03322683274745941,
+                  0.6628975868225098
+                ]
+              },
+              "r_middle_finger_distal": {
+                "center_distance_m": 0.36306267976760864,
+                "position_w_m": [
+                  0.36013558506965637,
+                  0.028380349278450012,
+                  0.6817137002944946
+                ]
+              },
+              "r_pinky_distal": {
+                "center_distance_m": 0.389457643032074,
+                "position_w_m": [
+                  0.38155144453048706,
+                  0.03142606094479561,
+                  0.7169713973999023
+                ]
+              },
+              "r_ring_finger_distal": {
+                "center_distance_m": 0.3754707872867584,
+                "position_w_m": [
+                  0.37000057101249695,
+                  0.03157120943069458,
+                  0.7010082006454468
+                ]
+              },
+              "r_thumb_distal": {
+                "center_distance_m": 0.3838440477848053,
+                "position_w_m": [
+                  0.38194403052330017,
+                  -0.027731267735362053,
+                  0.6716915369033813
+                ]
+              }
+            }
+          }
+        },
+        "initial_min_separation_m": -0.041618891060352325
+      },
+      "passed": false,
+      "sample": {
+        "bottle": {
+          "root_pose": [
+            0.0,
+            0.0,
+            0.5,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "root_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "cap": {
+          "root_pose": [
+            0.0,
+            0.0,
+            0.6455,
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "root_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "left": {
+          "joint_position": [
+            0.7100500000000001,
+            0.65,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002
+          ],
+          "joint_target": [
+            0.7100500000000001,
+            0.65,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002
+          ],
+          "joint_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "root_pose": [
+            -0.10817586291244301,
+            0.03268696492235609,
+            0.4642262054709072,
+            0.0,
+            -0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ],
+          "root_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "wrist_target_pose": [
+            -0.10817586291244301,
+            0.03268696492235609,
+            0.4642262054709072,
+            0.0,
+            -0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ]
+        },
+        "metadata": {
+          "asset_source_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+          "asset_variant": "beta1",
+          "bottle_parameters": {
+            "allow_detachment": false,
+            "axial_damping": 3.5,
+            "axial_stiffness": 500.0,
+            "body_angular_damping": 1.0,
+            "bottle_height": 0.2,
+            "bottle_mass": 0.03,
+            "bottle_radius": 0.035,
+            "breakaway_damping": 0.003,
+            "breakaway_stiffness": 0.2,
+            "breakaway_torque": 0.02,
+            "cap_height": 0.025,
+            "cap_mass": 0.006,
+            "cap_outer_radius": 0.017,
+            "cap_top_clearance": 0.002,
+            "detachment_angle_margin": 0.06,
+            "detachment_max_constraint_error": 0.0005,
+            "detachment_overlap_fraction": 0.05,
+            "dynamic_friction": 0.4,
+            "end_stop_damping": 0.02,
+            "end_stop_stiffness": 0.5,
+            "engagement_resistance_exponent": 1.5,
+            "friction_velocity_scale": 20.0,
+            "initial_engagement": 0.009,
+            "lateral_damping": 0.1,
+            "lateral_stiffness": 10.0,
+            "loose_breakaway_torque": 0.004,
+            "loose_running_resistance_torque": 0.001,
+            "max_body_angular_velocity_deg": 1080.0,
+            "max_body_linear_velocity": 5.0,
+            "max_constraint_force": 8.0,
+            "max_constraint_torque": 0.08,
+            "neck_height": 0.04,
+            "neck_outer_radius": 0.012,
+            "restick_speed": 0.05,
+            "running_resistance_torque": 0.006,
+            "slip_angle_ratio": 1.5,
+            "slip_speed": 0.1,
+            "source_profile": "engineering_example",
+            "static_friction": 0.6,
+            "thread_clearance": 0.0005,
+            "thread_handedness": "right",
+            "thread_height": 0.001,
+            "thread_pitch": 0.003,
+            "thread_turns": 3.0,
+            "tilt_damping": 0.0001,
+            "tilt_stiffness": 0.001,
+            "visual_radial_segments": 64
+          },
+          "bottle_profile": "engineering_example",
+          "coordinates": "env0_world_z_up_xyzw; hand offsets bottle/cap local",
+          "left_asset_tree_sha256": "6f0d85a3b7b80c2418a97c147f005fefbe957984d3a3e0e97ec51e957c2ce2b9",
+          "left_joint_order": [
+            "l_thumb_cmc_flex",
+            "l_thumb_cmc_abd",
+            "l_thumb_mcp",
+            "l_thumb_ip",
+            "l_index_finger_mcp_flex",
+            "l_index_finger_mcp_abd",
+            "l_index_finger_pip",
+            "l_index_finger_dip",
+            "l_middle_finger_mcp_flex",
+            "l_middle_finger_mcp_abd",
+            "l_middle_finger_pip",
+            "l_middle_finger_dip",
+            "l_ring_finger_mcp_flex",
+            "l_ring_finger_mcp_abd",
+            "l_ring_finger_pip",
+            "l_ring_finger_dip",
+            "l_pinky_mcp_flex",
+            "l_pinky_mcp_abd",
+            "l_pinky_pip",
+            "l_pinky_dip"
+          ],
+          "left_usd_sha256": "8d1b83a6130b64fd759ea3c0720d6b255da8c1e76abe5a4226788183058dbfda",
+          "right_asset_tree_sha256": "9f934ba533996b5a30976226ef8f76ed96b35cd6a8e34b4b50deeb567cf0a707",
+          "right_joint_order": [
+            "r_thumb_cmc_flex",
+            "r_thumb_cmc_abd",
+            "r_thumb_mcp",
+            "r_thumb_ip",
+            "r_index_finger_mcp_flex",
+            "r_index_finger_mcp_abd",
+            "r_index_finger_pip",
+            "r_index_finger_dip",
+            "r_middle_finger_mcp_flex",
+            "r_middle_finger_mcp_abd",
+            "r_middle_finger_pip",
+            "r_middle_finger_dip",
+            "r_ring_finger_mcp_flex",
+            "r_ring_finger_mcp_abd",
+            "r_ring_finger_pip",
+            "r_ring_finger_dip",
+            "r_pinky_mcp_flex",
+            "r_pinky_mcp_abd",
+            "r_pinky_pip",
+            "r_pinky_dip"
+          ],
+          "right_usd_sha256": "22600d3f0aeb185552bb6eeb454b5b7199966a60fc844d4a4b5e4791ec77f0ed",
+          "schema": "dexgym-bimanual-grasp-init-v1",
+          "units": "m,rad,s,N"
+        },
+        "mode": "stable_pregrasp",
+        "right": {
+          "joint_position": [
+            0.7100500000000001,
+            0.65,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002
+          ],
+          "joint_target": [
+            0.7100500000000001,
+            0.65,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002,
+            0.8635000000000002,
+            0.0,
+            1.1517,
+            0.8635000000000002
+          ],
+          "joint_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "root_pose": [
+            0.10833948798063568,
+            -0.027987006731223302,
+            0.6824438799562741,
+            0.0,
+            0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ],
+          "root_velocity": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "wrist_target_pose": [
+            0.10833948798063568,
+            -0.027987006731223302,
+            0.6824438799562741,
+            0.0,
+            0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ]
+        },
+        "seed": 2,
+        "source": "bottle_relative_geometry_candidate",
+        "thread_initial_angle_rad": 0.0,
+        "thread_initial_engagement_m": 0.009,
+        "validated": false,
+        "validation": null
+      }
+    }
+  },
+  "validated_samples": 0
+}
