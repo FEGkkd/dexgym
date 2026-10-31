@@ -30,7 +30,8 @@ class BimanualPhase0Fixture:
                  include_hand_hand: bool = True, wrist_limits=None,
                  temporary_bottle_support: bool = False,
                  control_mode: str = "floating_wrench_pd",
-                 left_initial_pose=None, right_initial_pose=None):
+                 left_initial_pose=None, right_initial_pose=None,
+                 hand_self_collisions: bool = True):
         import isaaclab.sim as sim_utils
         from isaaclab.scene import InteractiveScene
         from isaaclab_physx.physics import PhysxManager
@@ -57,6 +58,7 @@ class BimanualPhase0Fixture:
             variant=variant, contact_debug=contact_debug, bottle_center_z=0.5,
             wrist_control_mode=control_mode,
             left_initial_pose=left_initial_pose, right_initial_pose=right_initial_pose,
+            hand_self_collisions=hand_self_collisions,
         ))
         self.joints = [author_thread_joint(
             self.sim.stage, f"/World/envs/env_{env}", self.config)

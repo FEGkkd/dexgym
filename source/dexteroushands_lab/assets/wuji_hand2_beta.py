@@ -198,6 +198,7 @@ def make_wuji_hand2_beta_cfg(
     position: tuple[float, float, float] = (0.0, 0.0, 0.5),
     orientation_xyzw: tuple[float, float, float, float] = (0.0, 0.0, 0.0, 1.0),
     control_mode: str = "floating_wrench_pd",
+    enabled_self_collisions: bool = True,
 ):
     """Create an official hand with a fixed or floating articulated wrist.
 
@@ -228,7 +229,7 @@ def make_wuji_hand2_beta_cfg(
             ),
             articulation_props=sim_utils.ArticulationRootPropertiesCfg(
                 fix_root_link=control_mode in ("fixed_wrist", "pose_command_wrist"),
-                enabled_self_collisions=True,
+                enabled_self_collisions=enabled_self_collisions,
                 solver_position_iteration_count=16,
                 solver_velocity_iteration_count=4,
             ),

@@ -76,6 +76,38 @@ def test_bank_round_trip_preserves_full_validated_state(tmp_path):
     assert bank.load() == (sample,)
 
 
+def test_left_only_bank_requires_replayed_sustained_physical_contact(tmp_path):
+    from dataclasses import replace
+    init = BimanualGraspInitializer(BottleConfig(), _spec("left"), _spec("right"))
+    candidate = init.generate(mode="stable_pregrasp", seed=23)
+    candidate = replace(candidate, metadata={**candidate.metadata,
+                                              "wrist_control_mode": "fixed_wrist"})
+    metrics = {
+        "scope": "left_only", "wrist_control_mode": "fixed_wrist",
+        "fixture": "gravity_on_no_support", "passed": True,
+        "duration_s": 1.0, "hold_displacement_m": .008,
+        "hold_rotation_rad": .09, "left_only_displacement_m": .008,
+        "left_contact_ratio": 1.0, "left_only_contact_ratio": 1.0,
+        "ground_contact_ratio": 0.0, "max_contact_peak_n": 57.0,
+        "max_peak_force_guard_n": 100.0,
+        "initial_min_separation_m": -.00007,
+        "minimum_separation_m": -.00009,
+        "max_initial_penetration_guard_m": .002,
+        "left_thumb_contact_time_s": 1.0,
+        "left_other_contact_time_s": .946,
+        "left_additional_digit_contact_time_s": .368,
+        "support_released": True, "reset_replay_passed": True,
+    }
+    bank = GraspInitBank(tmp_path / "left_only.json")
+    sample = candidate.with_validation(metrics)
+    bank.add(sample)
+    assert bank.load() == (sample,)
+    with pytest.raises(ValueError, match="sustained contact"):
+        candidate.with_validation({**metrics, "left_other_contact_time_s": .4})
+    with pytest.raises(ValueError, match="penetration guard"):
+        candidate.with_validation({**metrics, "minimum_separation_m": -.04})
+
+
 @pytest.mark.parametrize("overrides", [
     {"initial_min_separation_m": -0.04},
     {"initial_min_separation_m": -0.0021},

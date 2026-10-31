@@ -17,6 +17,7 @@ def make_bimanual_bottle_scene_cfg(
     wrist_control_mode: str = "floating_wrench_pd",
     left_initial_pose: tuple[float, ...] | None = None,
     right_initial_pose: tuple[float, ...] | None = None,
+    hand_self_collisions: bool = True,
 ):
     """Build a scene without registering an RL task or policy observation."""
     import isaaclab.sim as sim_utils
@@ -58,11 +59,13 @@ def make_bimanual_bottle_scene_cfg(
             "{ENV_REGEX_NS}/LeftHand", side="left", variant=variant,
             position=left_pose[:3], orientation_xyzw=left_pose[3:7],
             control_mode=wrist_control_mode,
+            enabled_self_collisions=hand_self_collisions,
         )
         right_hand: ArticulationCfg = make_wuji_hand2_beta_cfg(
             "{ENV_REGEX_NS}/RightHand", side="right", variant=variant,
             position=right_pose[:3], orientation_xyzw=right_pose[3:7],
             control_mode=wrist_control_mode,
+            enabled_self_collisions=hand_self_collisions,
         )
         bottle_body: RigidObjectCfg = RigidObjectCfg(
             prim_path="{ENV_REGEX_NS}/Bottle",

@@ -1,0 +1,19 @@
+{
+  "asset_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+  "asset_variant": "beta1",
+  "contact_history_invalidated": true,
+  "control_mode": "pose_command_wrist",
+  "detached_recovered": true,
+  "finger_targets_restored": true,
+  "iterations": 100,
+  "left_usd_sha256": "8d1b83a6130b64fd759ea3c0720d6b255da8c1e76abe5a4226788183058dbfda",
+  "max_bottle_position_reset_error_m": 0.0,
+  "max_initial_wrist_force_n": 0.0,
+  "max_joint_state_target_error": 0.0,
+  "max_root_pose_velocity_error": 5.960464477539063e-08,
+  "num_envs": 2,
+  "other_env_unchanged": true,
+  "post_reset_finite": true,
+  "random_reset_seed": 2201,
+  "right_usd_sha256": "22600d3f0aeb185552bb6eeb454b5b7199966a60fc844d4a4b5e4791ec77f0ed"
+}

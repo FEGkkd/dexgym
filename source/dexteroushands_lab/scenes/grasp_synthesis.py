@@ -36,6 +36,7 @@ class SynthesisLimits:
     max_finger_speed_rad_s: float = 25.0
     max_support_force_n: float = 10.0
     max_support_torque_nm: float = 0.4
+    contact_axial_margin_m: float = 0.02
 
 
 class GraspSynthesisFixture:
@@ -116,7 +117,7 @@ class GraspSynthesisFixture:
         if self.visualizer is not None:
             self.visualizer.update(tips, bottle_pose, f.config.bottle_radius,
                                    f.config.bottle_height, details[:64])
-        coverage = analyze_bottle_contacts(details, bottle_pose)
+        coverage = self._coverage(details, bottle_pose)
         signed_normal_resultant = [0.0, 0.0, 0.0]
         signed_normal_moment = [0.0, 0.0, 0.0]
         friction_pairs = {}
@@ -205,6 +206,12 @@ class GraspSynthesisFixture:
                                else "bounded_bottle_wrench"),
                            "support_removed_before_acceptance": True}})
 
+    def _coverage(self, details, bottle_pose):
+        return analyze_bottle_contacts(
+            details, bottle_pose, static_friction=self.fixture.config.static_friction,
+            bottle_height=self.fixture.config.bottle_height,
+            contact_axial_margin_m=self.limits.contact_axial_margin_m)
+
     def run_left(self, *, wrist_goal, joint_goal, seed: int = 0,
                  pregrasp_joints=None, start_at_goal: bool = False):
         """Return all measurements and an unvalidated release-state candidate."""
@@ -238,6 +245,7 @@ class GraspSynthesisFixture:
         release_start_pose = None
         release_initial_separation = None
         release_coverage_steps = 0
+        release_frictional_steps = 0
         release_step_count = 0
         for phase, duration in (("approach", limits.approach_s),
                                 ("close", limits.close_s),
@@ -284,10 +292,11 @@ class GraspSynthesisFixture:
                 f.step(bottle_support_wrenches={0: support} if support else None)
                 minimum, details = self._contact_snapshot()
                 if phase == "release":
-                    coverage = analyze_bottle_contacts(
+                    coverage = self._coverage(
                         details, f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist())
                     release_step_count += 1
                     release_coverage_steps += int(coverage["surrounds_bottle_axis"])
+                    release_frictional_steps += int(coverage["frictional_opposition"])
                 if phase == "release" and step == 0:
                     release_initial_separation = minimum
                 contact = f.monitor.summary(0).get("left_bottle", {})
@@ -322,6 +331,8 @@ class GraspSynthesisFixture:
         finger_time = self._left_finger_contact_times(left, f.dt)
         coverage_ratio = (release_coverage_steps / release_step_count
                           if release_step_count else 0.0)
+        frictional_ratio = (release_frictional_steps / release_step_count
+                            if release_step_count else 0.0)
         if release_start_pose:
             current = f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist()
             dot = min(1.0, abs(sum(a*b for a, b in zip(release_start_pose[3:7],
@@ -336,7 +347,13 @@ class GraspSynthesisFixture:
             and displacement is not None and displacement < 0.02
             and rotation is not None and rotation < math.radians(10)
             and left.get("contact_ratio", 0.0) > 0.8
-            and coverage_ratio > 0.8
+            # Cylindrical frictional pinches need not cover 180 degrees on
+            # every substep. The gravity-on hold is the actual stability
+            # proof; require sustained thumb and long-finger contact as well.
+            and finger_time.get("thumb", 0.0) > 0.8*limits.release_s
+            and max((time for digit, time in finger_time.items()
+                     if digit != "thumb"), default=0.0) > 0.8*limits.release_s
+            and self._opposition_contact_passed(finger_time)
             and summary.get("bottle_ground", {}).get("contact_ratio", 0.0) == 0
             and max_force < limits.max_contact_force_n)
         replay = self.replay_left(release_sample) if hold_passed else None
@@ -349,6 +366,7 @@ class GraspSynthesisFixture:
                 "release_contact_ratio": left.get("contact_ratio", 0.0),
                 "release_finger_contact_time_s": finger_time,
                 "release_opposing_contact_coverage_ratio": coverage_ratio,
+                "release_frictional_opposition_ratio": frictional_ratio,
                 "release_passed": bool(hold_passed),
                 "reset_replay": replay,
                 "contact_summary": summary, "trace": trace,
@@ -368,14 +386,16 @@ class GraspSynthesisFixture:
         minimum = None
         trace = []
         coverage_steps = 0
+        frictional_steps = 0
         step_count = 0
         for step in range(math.ceil(self.limits.release_s / f.dt)):
             f.step()
             sep, details = self._contact_snapshot()
-            coverage = analyze_bottle_contacts(
+            coverage = self._coverage(
                 details, f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist())
             step_count += 1
             coverage_steps += int(coverage["surrounds_bottle_axis"])
+            frictional_steps += int(coverage["frictional_opposition"])
             if step == 0:
                 first_sep = sep
             if sep is not None:
@@ -392,11 +412,15 @@ class GraspSynthesisFixture:
         finger_time = self._left_finger_contact_times(left, f.dt)
         peak_force = left.get("peak_force_n", 0.0)
         coverage_ratio = coverage_steps / step_count if step_count else 0.0
+        frictional_ratio = frictional_steps / step_count if step_count else 0.0
         return {"passed": first_sep is not None and first_sep >=
                 -self.limits.max_penetration_m and displacement < 0.02 and
                 rotation < math.radians(10) and left.get("contact_ratio", 0.0) > 0.8 and
                 minimum is not None and minimum >= -self.limits.max_penetration_m and
-                coverage_ratio > 0.8 and
+                finger_time.get("thumb", 0.0) > 0.8*self.limits.release_s and
+                max((time for digit, time in finger_time.items()
+                     if digit != "thumb"), default=0.0) > 0.8*self.limits.release_s and
+                self._opposition_contact_passed(finger_time) and
                 peak_force < self.limits.max_contact_force_n and
                 summary.get("bottle_ground", {}).get("contact_ratio", 0.0) == 0,
                 "initial_min_separation_m": first_sep,
@@ -406,5 +430,6 @@ class GraspSynthesisFixture:
                 "left_contact_ratio": left.get("contact_ratio", 0.0),
                 "left_finger_contact_time_s": finger_time,
                 "opposing_contact_coverage_ratio": coverage_ratio,
+                "frictional_opposition_ratio": frictional_ratio,
                 "left_contact_peak_n": peak_force,
                 "contact_summary": summary, "trace": trace}

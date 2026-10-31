@@ -80,6 +80,9 @@ class GraspInitSample:
             raise ValueError("Only a passing stable_pregrasp PhysX hold may be validated")
         if metrics.get("fixture") != "gravity_on_no_support":
             raise ValueError("A gravity-on no-support fixture is required")
+        scope = metrics.get("scope", "bimanual")
+        if scope not in ("bimanual", "left_only"):
+            raise ValueError("Unknown grasp validation scope")
         limits = {
             "duration_s": (1.0, math.inf),
             "hold_displacement_m": (0.0, 0.02),
@@ -90,6 +93,8 @@ class GraspInitSample:
             "left_only_contact_ratio": (0.8, 1.0),
             "ground_contact_ratio": (0.0, 0.0),
         }
+        if scope == "left_only":
+            limits.pop("right_contact_ratio")
         for name, (lower, upper) in limits.items():
             value = metrics.get(name)
             if not isinstance(value, (int, float)) or not math.isfinite(value):
@@ -118,10 +123,29 @@ class GraspInitSample:
                 or depth_guard <= 0 or depth_guard > 0.002
                 or separation < -depth_guard):
             raise ValueError("Initial contact penetration exceeds the 2 mm hard guard")
-        coverage = metrics.get("opposing_contact_coverage_ratio")
-        if (not isinstance(coverage, (int, float)) or not math.isfinite(coverage)
-                or not 0.8 < coverage <= 1.0):
-            raise ValueError("Left grasp lacks sustained opposing contact coverage")
+        if scope == "left_only":
+            worst = metrics.get("minimum_separation_m")
+            if (not isinstance(worst, (int, float)) or not math.isfinite(worst)
+                    or worst < -depth_guard):
+                raise ValueError("Left-only hold exceeded the penetration guard")
+        if scope == "bimanual":
+            coverage = metrics.get("opposing_contact_coverage_ratio")
+            if (not isinstance(coverage, (int, float)) or not math.isfinite(coverage)
+                    or not 0.8 < coverage <= 1.0):
+                raise ValueError("Left grasp lacks sustained opposing contact coverage")
+        else:
+            duration = metrics["duration_s"]
+            for key in ("left_thumb_contact_time_s", "left_other_contact_time_s"):
+                value = metrics.get(key)
+                if (not isinstance(value, (int, float)) or not math.isfinite(value)
+                        or value <= .8*duration):
+                    raise ValueError(f"Left-only grasp lacks sustained contact: {key}")
+            additional = metrics.get("left_additional_digit_contact_time_s")
+            if (not isinstance(additional, (int, float)) or not math.isfinite(additional)
+                    or additional < .05):
+                raise ValueError("Left-only grasp lacks a third supporting digit")
+            if self.metadata.get("wrist_control_mode") != metrics.get("wrist_control_mode"):
+                raise ValueError("Validation wrist mode does not match captured state")
         if metrics.get("support_released") is not True:
             raise ValueError("Candidate support must be removed before acceptance")
         if metrics.get("reset_replay_passed") is not True:

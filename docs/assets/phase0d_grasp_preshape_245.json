@@ -1,0 +1,245 @@
+{
+  "radius_m": 0.035,
+  "source": "official_beta1_MJCF_contact_point_proposals_only",
+  "seed_source": null,
+  "starts": 13,
+  "max_nfev": 300,
+  "opposition_cosine_target": -0.8,
+  "opposition_weight": 5.0,
+  "self_clearance_target_m": 0.003,
+  "target_contact_m": -0.003,
+  "wrist_x_target_m": null,
+  "orientation_limit_rad": 3.0,
+  "max_goal_overlap_m": 0.004,
+  "contact_axial_margin_m": 0.025,
+  "best": [
+    {
+      "index": 245,
+      "objective_norm": 3.05702345264225,
+      "wrist_position_w_m": [
+        -0.11154931360141639,
+        0.05183920486859196,
+        0.49696671601812614
+      ],
+      "wrist_quaternion_wxyz": [
+        0.47738313887659445,
+        0.43233459831477977,
+        -0.7299909801094681,
+        -0.22870352593509846
+      ],
+      "joints_rad": {
+        "l_thumb_cmc_flex": 0.6130539665550911,
+        "l_thumb_cmc_abd": -0.2531897201742268,
+        "l_thumb_mcp": 0.026194578767365816,
+        "l_thumb_ip": 0.2740156028369475,
+        "l_index_finger_mcp_flex": 1.135459194428335,
+        "l_index_finger_mcp_abd": 0.5072232606526073,
+        "l_index_finger_pip": -0.010604353660349642,
+        "l_index_finger_dip": -0.3098464534771887,
+        "l_middle_finger_mcp_flex": 0.7592086639125487,
+        "l_middle_finger_mcp_abd": 0.05548937352103495,
+        "l_middle_finger_pip": 0.340280376527337,
+        "l_middle_finger_dip": -0.6125670499922304,
+        "l_ring_finger_mcp_flex": 0.9880191376055892,
+        "l_ring_finger_mcp_abd": 0.14150033392638492,
+        "l_ring_finger_pip": 0.6189140568174886,
+        "l_ring_finger_dip": 0.14943859155481043,
+        "l_pinky_mcp_flex": 9.793572518761873e-05,
+        "l_pinky_mcp_abd": 0.0,
+        "l_pinky_pip": 0.0,
+        "l_pinky_dip": 0.0
+      },
+      "minimum_mjcf_convex_distance_m": -0.0040803571845975444,
+      "digit_distances_m": {
+        "wrist": 0.0539942457722639,
+        "thumb": -0.0012740538858894662,
+        "index_finger": -0.0019525595496112033,
+        "middle_finger": -0.001908407744370191,
+        "ring_finger": -0.0018196542621890356,
+        "pinky": 0.030364637450583633
+      },
+      "digit_radial_normals_xy": {
+        "wrist": [
+          -0.7520529331257457,
+          0.6591027126153878
+        ],
+        "thumb": [
+          -0.552442985667791,
+          0.833550686873004
+        ],
+        "index_finger": [
+          -0.8863488479422441,
+          -0.46301805553504777
+        ],
+        "middle_finger": [
+          -0.9938474421508061,
+          -0.11075767120294724
+        ],
+        "ring_finger": [
+          -0.862916232315572,
+          -0.5053469857496905
+        ],
+        "pinky": [
+          -0.7144085803936728,
+          0.6997287905037902
+        ]
+      },
+      "tip_sites_w_m": {
+        "l_thumb_tip": [
+          -0.016749366857895298,
+          -0.03394428244130625,
+          0.5197269120966279
+        ],
+        "l_index_finger_tip": [
+          0.03053677431898525,
+          0.04288950078016772,
+          0.4883019130837019
+        ],
+        "l_middle_finger_tip": [
+          0.044601098939301545,
+          0.03546454076142398,
+          0.5143031356913664
+        ],
+        "l_ring_finger_tip": [
+          0.005583753957342471,
+          0.03515740939822625,
+          0.4543198492653122
+        ],
+        "l_pinky_tip": [
+          0.031203697387470117,
+          0.11649939945145173,
+          0.53258030993832
+        ]
+      },
+      "optimizer_status": 3,
+      "optimizer_nfev": 24,
+      "collision_contact_points_w_m": {
+        "thumb": [
+          -0.025680562968916743,
+          -0.02377981850732945,
+          0.5178528611645679
+        ],
+        "index_finger": [
+          0.002219449969236029,
+          0.034929552685794535,
+          0.4948859024982889
+        ],
+        "middle_finger": [
+          0.016087394354742747,
+          0.031083540689722838,
+          0.5121387487412585
+        ],
+        "ring_finger": [
+          0.0057340609813100445,
+          0.03452676858868246,
+          0.4598993630286393
+        ]
+      },
+      "collision_contact_bodies": {
+        "thumb": "l_thumb_distal",
+        "index_finger": "l_index_finger_distal",
+        "middle_finger": "l_middle_finger_distal",
+        "ring_finger": "l_ring_finger_distal"
+      },
+      "collision_contact_distances_m": {
+        "thumb": -0.0035404461120302428,
+        "index_finger": -0.0040803571845975444,
+        "middle_finger": -0.0024022910619352013,
+        "ring_finger": -0.0026135290192616243
+      },
+      "collision_radial_directions_xy": {
+        "thumb": [
+          -0.7337390309157579,
+          -0.6794314053021134
+        ],
+        "index_finger": [
+          0.06341286638417608,
+          0.997987378866558
+        ],
+        "middle_finger": [
+          0.4596415724154306,
+          0.888104512378735
+        ],
+        "ring_finger": [
+          0.16383183809611418,
+          0.9864882811397451
+        ]
+      },
+      "thumb_opposition_dot": {
+        "index_finger": -0.724592462425394,
+        "middle_finger": -0.9406630588133252,
+        "ring_finger": -0.7904609332866336
+      },
+      "antipodal_objective_norm": 0.6020579814932915,
+      "seed_local_rotation_axis": "y",
+      "seed_local_rotation_deg": -45,
+      "minimum_mjcf_self_clearance_m": 0.0023351127243912344,
+      "collision_contact_axial_heights_m": {
+        "thumb": 0.017852861164567857,
+        "index_finger": -0.005114097501711101,
+        "middle_finger": 0.012138748741258532,
+        "ring_finger": -0.04010063697136068
+      },
+      "diagnostic_wrist_translation_xy_m": [
+        0.0045,
+        0
+      ],
+      "pregrasp_joints_rad": {
+        "l_thumb_cmc_flex": 0.5621246459598406,
+        "l_thumb_cmc_abd": -0.31785547496800737,
+        "l_thumb_mcp": -0.036440944656436734,
+        "l_thumb_ip": 0.06662939476857066,
+        "l_index_finger_mcp_flex": 1.0713463532095204,
+        "l_index_finger_mcp_abd": 0.6972912225915182,
+        "l_index_finger_pip": -0.1940661863738421,
+        "l_index_finger_dip": 0.5144388562998796,
+        "l_middle_finger_mcp_flex": 0.6091821425318652,
+        "l_middle_finger_mcp_abd": 0.10099086778395204,
+        "l_middle_finger_pip": 0.3533059609021504,
+        "l_middle_finger_dip": -0.3989224222157794,
+        "l_ring_finger_mcp_flex": 0.8739836258409189,
+        "l_ring_finger_mcp_abd": 0.26541586448305954,
+        "l_ring_finger_pip": 0.7877480559843356,
+        "l_ring_finger_dip": 0.3971840452094784,
+        "l_pinky_mcp_flex": 9.793572518761873e-05,
+        "l_pinky_mcp_abd": 0.0,
+        "l_pinky_pip": 0.0,
+        "l_pinky_dip": 0.0
+      },
+      "pregrasp_tip_sites_w_m": {
+        "l_thumb_tip": [
+          -0.02352733613334964,
+          -0.04834780106552729,
+          0.5192487495576469
+        ],
+        "l_index_finger_tip": [
+          0.027679357522747,
+          0.058719844932847334,
+          0.4843916170262689
+        ],
+        "l_middle_finger_tip": [
+          0.05296996324282657,
+          0.04322011137096182,
+          0.5203989802479816
+        ],
+        "l_ring_finger_tip": [
+          0.0028904610614456133,
+          0.04358034944692517,
+          0.4536772730827732
+        ],
+        "l_pinky_tip": [
+          0.03570369738747012,
+          0.11649939945145173,
+          0.53258030993832
+        ]
+      },
+      "preshape_minimum_mjcf_clearance_m": 0.0032336264943125526,
+      "preshape_minimum_mjcf_self_clearance_m": 0.002973520478679148,
+      "preshape_max_joint_change_rad": 0.8242853097770684,
+      "preshape_optimizer_evaluations": 52
+    }
+  ],
+  "preshape_clearance_target_m": 0.005,
+  "preshape_self_clearance_target_m": 0.003,
+  "preshape_backend": "official_beta1_MJCF_geometry_only"
+}

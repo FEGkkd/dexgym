@@ -26,3 +26,21 @@ def test_contact_coverage_rejects_one_side_and_accepts_surrounding_patches():
     assert b["surrounds_bottle_axis"]
     assert b["radial_force_imbalance_ratio"]<1e-8
     assert b["reported_pair_axial_friction_sum_n"]==.4
+
+
+def test_frictional_pinch_requires_sidewall_opposition_from_configured_mu():
+    pose = (0, 0, 0.5, 0, 0, 0, 1)
+    thumb = _point(.035, 0, "l_thumb_distal")
+    finger = _point(-.0175, .03031, "l_middle_finger_middle")  # 120 deg
+    pinch = analyze_bottle_contacts([thumb, finger], pose,
+                                    static_friction=.6, bottle_height=.2)
+    assert pinch["frictional_opposition"]
+    assert not pinch["surrounds_bottle_axis"]
+    assert math.degrees(pinch["frictional_opposition_required_angle_rad"]) > 118
+    shallow = analyze_bottle_contacts([thumb, _point(0, .035, "l_middle_finger_middle")],
+                                      pose, static_friction=.6, bottle_height=.2)
+    assert not shallow["frictional_opposition"]
+    rim = {**finger, "point_w_m": [-.0175, .03031, .6]}
+    assert not analyze_bottle_contacts([thumb, rim], pose,
+                                       static_friction=.6, bottle_height=.2)[
+                                           "frictional_opposition"]

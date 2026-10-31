@@ -3,9 +3,13 @@
 WujiHand2 Beta 双手自由腕与螺纹瓶的独立 Isaac Lab 基础场景见
 [资产、控制和物理验证说明](docs/assets/wujihand2-beta-bimanual-bottle.md)。此场景不注册 RL task；
 [Phase 0 双手抓握初态、接触监测与 Reset 验证](docs/assets/phase0-bimanual-grasp-reset.md)
-记录了当前可复现的验证结果。悬空稳定抓握尚未通过，因此未提供已验证初态库。
+记录了早期接触与 Reset 基线；
 [Phase 0B 抓握失败诊断与逐步合拢实验](docs/assets/phase0b-grasp-synthesis.md)
 记录了原始穿透、腕部控制及 PhysX 释放测试的实测结果。
+[Phase 0C 理想腕部控制](docs/assets/phase0c-ideal-wrist-grasp.md)与
+[Phase 0D 左手悬空抓握及初态库](docs/assets/phase0d-left-only-grasp-reset.md)
+记录了四组经过 1 秒无支撑保持、Reset 重放和新进程重放的 Beta 1 候选初态；
+目前尚未验证右手旋盖抓握或双手联合保持。
 原有单手训练与导出接口继续使用第一代 Wuji Hand 资产。
 
 DexGym is a focused Isaac Lab reinforcement-learning workspace for
