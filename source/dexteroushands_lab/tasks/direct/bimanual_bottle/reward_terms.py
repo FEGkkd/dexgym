@@ -5,8 +5,9 @@ import math
 
 
 def digit_contact_score(forces: torch.Tensor, body_names: tuple[str, ...],
-                        digits: tuple[str, ...], scale_n: float = 1.0) -> torch.Tensor:
-    """Average per-digit correct-object normal force, saturated to [0, 1]."""
+                        digits: tuple[str, ...], scale_n: float = 1.0,
+                        aggregation: str = "mean") -> torch.Tensor:
+    """Bounded correct-object contact; balanced mode favors all requested digits."""
     if forces.ndim != 2 or forces.shape[1] != len(body_names) or scale_n <= 0:
         raise ValueError("Contact forces/body order mismatch")
     parts = []
@@ -16,7 +17,14 @@ def digit_contact_score(forces: torch.Tensor, body_names: tuple[str, ...],
             raise ValueError(f"Missing digit in body names: {digit}")
         magnitude = forces[:, selected].sum(dim=-1).clamp_min(0)
         parts.append(1 - torch.exp(-magnitude / scale_n))
-    return torch.stack(parts, dim=-1).mean(dim=-1)
+    per_digit = torch.stack(parts, dim=-1)
+    mean = per_digit.mean(dim=-1)
+    if aggregation == "mean":
+        return mean
+    if aggregation == "balanced":
+        geometric = per_digit.prod(dim=-1).clamp_min(0).pow(1.0 / len(digits))
+        return 0.2 * mean + 0.8 * geometric
+    raise ValueError(f"Unknown contact aggregation: {aggregation}")
 
 
 def signed_progress_reward(current_open: torch.Tensor,
@@ -74,3 +82,25 @@ def grasp_contact_reward(left_score: torch.Tensor, right_score: torch.Tensor) ->
     """Reward each correct contact and give a larger bonus to balanced use."""
     return (0.5 * (left_score + right_score)
             + 0.8 * torch.sqrt((left_score * right_score).clamp_min(0)))
+
+
+def physically_valid_grasp(left_contact: torch.Tensor, right_contact: torch.Tensor,
+                           suspended: torch.Tensor, low_speed: torch.Tensor,
+                           thread_constraint_error_m: torch.Tensor,
+                           tolerance_m: float = 0.001) -> torch.Tensor:
+    """Reject a bilateral hold if cap and bottle violate the thread constraint."""
+    if tolerance_m <= 0:
+        raise ValueError("Thread constraint tolerance must be positive")
+    return (left_contact & right_contact & suspended & low_speed
+            & torch.isfinite(thread_constraint_error_m)
+            & (thread_constraint_error_m.abs() < tolerance_m))
+
+
+def thread_error_penalty(error_m: torch.Tensor, *, tolerance_m: float = 0.001) -> torch.Tensor:
+    """Bounded penalty for hand loading that exceeds the thread travel tolerance."""
+    if tolerance_m <= 0:
+        raise ValueError("Thread constraint tolerance must be positive")
+    magnitude = torch.where(torch.isfinite(error_m), error_m.abs(),
+                            torch.full_like(error_m, float("inf")))
+    excess = torch.relu(magnitude - tolerance_m)
+    return torch.exp(-excess / tolerance_m) - 1.0

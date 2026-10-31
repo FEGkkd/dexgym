@@ -268,3 +268,226 @@ no independently validated right tripod state. More PPO on the current bank
 would not address this measured geometry mismatch.
 The latest complete offline suite returned **149 passed, 1 skipped, 2 failed**;
 the two failures remain the same unmodified Allegro/MANO user-worktree tests.
+
+## Follow-up: physically validated tripod and controlled PPO comparison
+
+The preceding statement that there is no right tripod state describes the
+earlier search only. A later official Beta 1 proxy search and native PhysX
+formation produced a new result. The bounded proxy proposal had a 168.318°
+maximum contact-sector gap, -0.101 mm cap penetration, 3.903 mm bottle
+clearance and 2.335 mm interdigit clearance. These values are *proxy geometry*
+measurements, not the PhysX validation. The 8 mm requested preshape clearance
+resulted in 5.924 mm proxy cap clearance and 2% transient right-cap contact
+in the native open-pose diagnostic. The earlier 4 mm open preshape gave 65%
+contact in that diagnostic, so it was not a clean open start.
+
+The native PhysX sequence first formed a thumb-index pinch. Moving only the
+right middle MCP flexion target by +0.09 rad then yielded an unsupported 1 s
+hold with right thumb/index/middle contact ratios 1.0/1.0/0.826. Independent
+Reset replay yielded 1.0/0.996/0.84, 0.574 mm bottle displacement and no
+cross-object hand contact. This state is saved in
+`phase1_right_tripod_bimanual_grasp_init_bank.json`; the preceding
+thumb-index state is saved separately in
+`phase1_thumb_index_bimanual_grasp_init_bank.json`. Both were curated only
+after native physical hold and fresh-process Reset replay. A world-frame
+15 mm cap/bottle XY offset initially looked like thread radial drift; it was
+caused by a tilted bottle. The bottle-local thread-axis error was 0.047 mm
+near the hand and 0.007 mm in the far-hand control. The cap-bottle native
+contact force was zero in that open-pose diagnostic.
+
+The new right tripod alone did not satisfy the RL hold gate because its
+Phase 0E left source has the thumb plus only one other loaded digit, while
+the task requires at least two long fingers. Targeted left-index joint
+perturbations either failed to load that digit or disrupted the right
+tripod. The user-owned, **uncommitted** Phase 0G left power-grasp bank
+contains a separately validated five-digit left state using the same
+official asset and bottle configuration. A rigid bottle-relative reframe
+combined that left hand state with the right tripod state. Native unsupported
+1 s hold and independent Reset replay passed: left thumb/index/middle/ring/
+pinky ratios 1.0/0.988/1.0/1.0/1.0; right thumb/index/middle
+1.0/1.0/0.830; bottle displacement 0.018 mm; minimum contact separation
+-0.063 mm; peak contact 17 N; no cross contact; bottle-local thread-axis
+error 0.039 mm. This is physically measured, but the composite bank is kept
+in ignored `artifacts/phase1/composite_power_tripod_local_bank.json`
+because one source file is user-owned and uncommitted. Its training run logs
+snapshot and hash that source. It cannot yet be reproduced from the remote
+repository alone, and it supplies only one relative grasp family.
+
+The formal DirectRLEnv 200-episode zero-action control from this local
+composite state succeeded **91/200 = 45.5%**. The previous GraspHold Round 4
+policy and the older thumb-index-only state each scored 0/200 under the
+tripod task predicate. This confirms the old bank/task topology mismatch.
+Training from the composite state is a same-family experiment, never a
+held-out grasp-family result.
+
+| Composite GraspHold comparison | Seed, envs, updates, transitions | 200-episode stable-start deterministic result | 200-episode held-out natural pregrasp | Diagnostic |
+|---|---|---:|---:|---|
+| Zero action | 1002, 64 eval envs | 91/200, 45.5% | not measured in this comparison | Physical stable-start reference, not learned. |
+| Mean per-digit contact reward | 7, 1024, 50, 1,638,400 | 67/200, 33.5% | 0/200, 100% early failure | Training reward 176.49; right thumb contact 15.65% in final rollout, strict right tripod 8.83%, joint target clipping 70.75%. Reward favored index and middle while thumb was nearly absent earlier in training. |
+| Balanced right-digit contact reward | 7, 1024, 50, 1,638,400 | 108/200, 54% | 0/200, 100% early failure | The only major code change was the bounded right-contact aggregation: 0.2 mean + 0.8 geometric mean of saturated thumb/index/middle scores. Final rollout right thumb 15.65%, strict tripod 8.42%, joint target clipping 69.29%. Stable deterministic joint clipping remained 83.44%. |
+
+Both PPO rounds used 500 Hz physics, 50 Hz policy, a 0.85 stable Reset
+probability, the same local composite bank, seed 7 and 50 updates. The
+second model achieved 54% on its *training-family* stable start, above the
+45.5% zero-action reference. It did not improve the held-out natural
+pregrasp: neither correct-hand contact formed before the free bottle dropped.
+Final second-round PPO diagnostics were 6,030 environment steps/s,
+approximate KL 0.0181, clip fraction 0.2857, explained variance 0.8849 and
+six action-std groups near 0.25. The action samples themselves rarely hit
+[-1, 1], but their integrated **joint targets** frequently reached limits.
+This target drift is a distinct issue from Gaussian std or raw action
+clipping. The 54% same-family result does not meet the requested ≥60%
+held-out natural-pregrasp learning target.
+
+The second PPO checkpoint is
+`logs/rsl_rl/dexteroushands_bimanual_bottle_phase1/2026-11-01_07-00-23_phase1_grasp_composite_balanced_seed7/model_49.pt`.
+The first is in the corresponding
+`2026-11-01_06-47-54_phase1_grasp_composite_local_seed7/model_49.pt` run.
+Raw traces and 200-episode JSON summaries are in ignored `artifacts/phase1/`.
+The complete offline suite after this code change was **153 passed, 1
+skipped, 2 failed**, with the same user-owned Allegro asset fixture and MANO
+ordering failures. Focused Phase 1 tests were **22 passed**. No new Phase 1
+offline failure appeared.
+
+The composite curation and evaluation commands on this workstation are:
+
+```bash
+scripts/run_isaaclab.sh scripts/environments/validate_composite_grasp.py --help
+scripts/run_isaaclab.sh scripts/environments/curate_composite_grasp_bank.py --help
+scripts/run_isaaclab.sh scripts/environments/evaluate_bimanual_rl.py \
+  --task grasp_hold --policy learned \
+  --checkpoint logs/rsl_rl/dexteroushands_bimanual_bottle_phase1/2026-11-01_07-00-23_phase1_grasp_composite_balanced_seed7/model_49.pt \
+  --num-envs 64 --episodes 200 --seed 1002 --held-out --source stable \
+  --stable-eval-bank artifacts/phase1/composite_power_tripod_local_bank.json \
+  --headless
+```
+
+The current task gate remains **Fail** for held-out natural-pregrasp grasp
+learning, and CapTurn30 has no new success claim from this GraspHold result.
+
+### CapTurn30 from the local tripod state
+
+A bounded CapTurn30 run resumed the balanced GraspHold checkpoint with seed 9,
+1024 environments, 25 PPO updates and 819,200 further transitions. It used
+only the local composite stable bank at Reset. The final checkpoint is
+`logs/rsl_rl/dexteroushands_bimanual_bottle_phase1/2026-11-01_07-08-41_phase1_cap_composite_tripod_seed9/model_73.pt`.
+Its final rollout had strict right contact rate 51.5%, joint target clipping
+76.5% and mean positive progress reward 0.0068 per step. A training success
+reward alone was not used as evidence.
+
+| CapTurn30 independent evaluation, seed 1004 | Episodes | True 30° successes | Final mean opening | Final mean absolute thread error | Finding |
+|---|---:|---:|---:|---:|---|
+| Learned policy, local stable start, 500 N/m axial stiffness | 200 | 6 (3%) | 2.282 rad | 2.430 mm | Rare successes passed the full contact/pitch predicate; most large-angle turns did not. Mean strict right contact during the rollout was 58.8%. |
+| Zero action, same local stable start | 200 | 0 | 0.00386 rad | 0.359 mm | No breakaway in any episode. |
+| Learned policy, natural pregrasp | 200 | 0 | -0.0219 rad | 0.0136 mm | 100% failed before correct bilateral contact. |
+| Learned policy, right hand moved away at Reset | 64 | 0 | 2.827 rad | 0.160 mm | Zero right contact steps and zero positive progress reward despite unrelated relative rotation. |
+| Learned policy, same stable start, **800 N/m** axial stiffness | 200 | 4 (2%) | 2.500 rad | 2.240 mm | Stiffness reduced mean error slightly but did not improve success. |
+
+The 500 to 800 N/m change was an evaluation-only controlled ablation, not
+a retrained policy or a recalibrated real thread. The 6/200 result is a
+limited *same-family* success under the implemented PhysX success predicate,
+not evidence of a robust opening strategy or real-bottle transfer. Exact
+contact-point sidewall semantics remain unavailable in this batched sensor
+view. No cross-family stable evaluation has yet been made.
+
+### Correction to the GraspHold acceptance rule
+
+The GraspHold 54% and the half finger-increment ablation's apparent 100%
+above used the **original contact/suspension predicate**, which did not
+check cap/bottle thread pitch error. Under half-scale finger increments,
+joint target clipping before the first success was only 6.1%, and both
+hands sustained contact, but final absolute thread error averaged
+**4.25 mm**. Those episodes are **not physically valid assembly holds**.
+The environment now requires <1 mm thread constraint error continuously
+for the 0.5 s GraspHold success window, consistent with CapTurn30. An
+independent 200-episode replay of that same half-scale checkpoint under
+the stricter rule scored **1/200 = 0.5%**; final mean absolute thread error
+was 4.04 mm, and the longer episodes accumulated 57.2% joint target
+clipping. This revised result supersedes the apparent 100% as a physical
+GraspHold claim. The old 54% score is retained only as an explicitly
+contact-only diagnostic from the earlier rule and has not yet been
+recomputed under the corrected rule.
+
+This is a concrete physics/learning blocker: the current 500 N/m axial
+thread spring and 8 N total constraint-force limit allow several
+millimetres of pitch mismatch under learned hand loading. Merely increasing
+axial stiffness to 800 N/m lowered the CapTurn evaluation's final mean
+error from 2.43 to 2.24 mm and lowered success from 3% to 2%, so stiffness
+alone at that level did not fix it. The scalar spring fixture passes with
+small error under its own load; that does not validate the coupled
+hand-loaded situation. Future policy claims must use the corrected gate.
+
+### Final controlled GraspHold rounds under the corrected rule
+
+The strict rule was used for two new 1024-environment, seed-7, 50-update
+rounds, both with 0.025 rad/action finger increments and the same 0.85
+stable Reset probability. They each collected 1,638,400 transitions.
+The second changed only one reward term: beyond 1 mm of thread error,
+a bounded penalty approaches -1 per policy step. It is zero at and below
+1 mm. This was chosen to make the measured 3–4 mm violations comparable
+to the bounded contact reward, and it was verified by a numeric unit test.
+
+| Corrected-rule evaluation, same local stable family | 200-episode physical GraspHold | Mean final absolute thread error | Mean right correct contact over rollout | Joint target clipping | Interpretation |
+|---|---:|---:|---:|---:|---|
+| Zero action | **91/200, 45.5%** | 0.353 mm | 10.54% | 0% | The bank itself can hold under unchanged commands. |
+| Policy trained with corrected success rule, no new error penalty | **0/200** | 3.626 mm | 10.57% | 70.68% | High contact reward, no sustained constraint-valid hold. |
+| Pre-correction balanced checkpoint with 0.025 rad/action inference ablation, corrected rule | **1/200, 0.5%** | 4.043 mm | 28.65% | 57.20% | Smaller motion preserved more contact, but not pitch consistency. |
+| Policy retrained with bounded thread-error penalty | **0/200** | 0.645 mm | **0%** | 66.68% | It learned to avoid the cap rather than satisfy contact and thread consistency together. |
+
+The final penalty-round checkpoint is
+`logs/rsl_rl/dexteroushands_bimanual_bottle_phase1/2026-11-01_07-37-01_phase1_grasp_thread_penalty_seed7/model_49.pt`.
+Its final PPO rollout had mean reward 77.15, strict grasp rate 0.13%,
+right tripod rate 0.16%, joint target clipping 29.59%, mean thread penalty
+-0.0345 per step and **no success bonus**. Deterministic evaluation on
+200 held-out natural pregrasp episodes was **0/200** with 100% early
+failure before bilateral contact. Thus reducing the thread error alone
+did not yield a useful policy. The older 54% result and apparent 100%
+half-scale result were generated by the superseded contact-only success
+rule and must never be presented as physically valid grasp success.
+
+The final full offline suite after this correction returned **155 passed,
+one skipped, two failed**. The failures are the pre-existing user-owned
+Allegro asset fixture and MANO keypoint-order tests. The targeted reward
+suite returned 13 passed. GPU evaluations above ran with 64 parallel
+environments and 200 independent episodes each. No NaN, global Reset leak
+or new test failure was observed in these rounds.
+
+Across the prior six Phase 1 PPO rounds and the five follow-up PPO rounds,
+the recorded total is **13,340,672 environment transitions**. The local
+composite source is one grasp family and includes an uncommitted user-owned
+left-grasp bank, snapshotted with SHA in the ignored run directories. There
+is no independently validated, committed cross-family stable evaluation
+bank. The supported phase status is **PARTIAL**: DirectRLEnv, vectorized
+physics, PPO, checkpoints and counterfactual evaluation work, and rare
+same-family CapTurn30 success (6/200) was measured before the stricter
+GraspHold correction. The requested ≥60% held-out natural-pregrasp
+GraspHold, ≥30% stable CapTurn30 and ≥10% natural-pregrasp CapTurn30
+targets all **Fail**. No checkpoint is suitable as a successful policy.
+
+Next minimal physics experiment: with the official USD and the validated
+composite Reset, hold fixed finger targets and vary one wrist/contact load
+at a time. Log cap/bottle local axial error, D6 motion, thread spring force
+and its 8 N clipping, contact positions and normal/tangential forces at
+500 Hz; repeat at 500 and 800 N/m and with a measured safe force limit.
+Require <1 mm pitch error under the same load before new PPO training.
+Then generate a committed independent stable grasp family and a reachable
+near-contact curriculum to replace the current natural pregrasp starts,
+which all fail before either hand forms contact. These are measurements
+to perform, not claims that either change will automatically solve learning.
+
+Reproduction of the final negative result requires the local composite
+bank and the snapshotted user source in the run directory:
+
+```bash
+scripts/run_isaaclab.sh scripts/environments/evaluate_bimanual_rl.py \
+  --task grasp_hold --policy learned \
+  --checkpoint logs/rsl_rl/dexteroushands_bimanual_bottle_phase1/2026-11-01_07-37-01_phase1_grasp_thread_penalty_seed7/model_49.pt \
+  --num-envs 64 --episodes 200 --seed 1002 --held-out --source stable \
+  --stable-eval-bank artifacts/phase1/composite_power_tripod_local_bank.json \
+  --finger-increment-scale 0.025 --headless
+scripts/run_isaaclab.sh scripts/environments/evaluate_bimanual_rl.py \
+  --task grasp_hold --policy zero --num-envs 64 --episodes 200 --seed 1002 \
+  --held-out --source stable \
+  --stable-eval-bank artifacts/phase1/composite_power_tripod_local_bank.json \
+  --finger-increment-scale 0.025 --headless
+```

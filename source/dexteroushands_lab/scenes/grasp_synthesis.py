@@ -460,8 +460,16 @@ class GraspSynthesisFixture:
         step_count = 0
         power_series = self._power_series()
         image_series = self._image_series()
+        max_thread_lateral = 0.0
         for step in range(math.ceil(self.limits.release_s / f.dt)):
             f.step()
+            bottle_pose = f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist()
+            cap_pose = f.cap.data.root_pose_w.torch[0].detach().cpu().tolist()
+            axis = _rotate(bottle_pose[3:7], (0.0, 0.0, 1.0))
+            delta = tuple(a-b for a, b in zip(cap_pose[:3], bottle_pose[:3]))
+            axial = sum(a*b for a, b in zip(delta, axis))
+            max_thread_lateral = max(max_thread_lateral, math.sqrt(sum(
+                (d-axial*a)**2 for d, a in zip(delta, axis))))
             sep, details = self._contact_snapshot()
             coverage = self._coverage(
                 details, f.bottle.data.root_pose_w.torch[0].detach().cpu().tolist())
@@ -511,5 +519,6 @@ class GraspSynthesisFixture:
                 "power_grasp": power_series.summary(),
                 "image_grasp": image_series.summary(),
                 "left_contact_peak_n": peak_force,
+                "max_thread_lateral_error_m": max_thread_lateral,
                 "wrist_target_offset_xyz_m": tuple(wrist_target_offset_xyz),
                 "contact_summary": summary, "trace": trace}

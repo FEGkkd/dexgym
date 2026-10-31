@@ -22,7 +22,24 @@ def _digit_times(holds, side):
     return thumb, other
 
 
-def curate(result_path: Path, replay_path: Path, left_bank_path: Path,
+def _right_contact_topology(holds):
+    """Name only fingers loaded for >80% of every independent hold."""
+    digits = ("thumb", "index", "middle", "ring", "pinky")
+    loaded = tuple(digit for digit in digits if all(
+        hold["right_finger_contact_time_s"].get(digit, 0.0) >
+        0.8 * hold["duration_s"] for hold in holds))
+    if {"thumb", "index", "middle"}.issubset(loaded):
+        name = "thumb_index_middle_tripod"
+    elif {"thumb", "index"}.issubset(loaded):
+        name = "thumb_index_pinch"
+    elif {"thumb", "middle"}.issubset(loaded):
+        name = "thumb_middle_pinch"
+    else:
+        name = "other_loaded_contact"
+    return name, loaded
+
+
+def curate(result_path: Path, replay_path: Path, source_bank_path: Path,
            target_bank_path: Path):
     raw = result_path.read_bytes()
     result = json.loads(raw)
@@ -36,14 +53,25 @@ def curate(result_path: Path, replay_path: Path, left_bank_path: Path,
             or fresh["summary"].get("source_result_sha256") != sha256(raw).hexdigest()):
         raise ValueError("Fresh-process replay is missing, failed, or is from another result")
     sample = grasp_sample_from_dict(result["candidate"])
-    left_bank = GraspInitBank(left_bank_path).load()
-    source = left_bank[result["left_sample_index"]]
-    if (source.seed != sample.seed or source.validation.get("scope") != "left_only"
+    source_bank = GraspInitBank(source_bank_path).load()
+    source_scope = ("bimanual" if "source_sample_index" in result else "left_only")
+    source_index = result.get("source_sample_index", result.get("left_sample_index"))
+    source = source_bank[source_index]
+    if (source.seed != sample.seed or source.validation.get("scope") != source_scope
+            or source.validation.get("passed") is not True
             or source.validation.get("wrist_control_mode") != "pose_command_wrist"
             or source.metadata["left_usd_sha256"] != sample.metadata["left_usd_sha256"]
             or source.metadata["right_usd_sha256"] != sample.metadata["right_usd_sha256"]
             or source.metadata["bottle_parameters"] != sample.metadata["bottle_parameters"]):
-        raise ValueError("Captured state is not derived from the validated pose-left bank")
+        raise ValueError("Captured state is not derived from the validated source bank")
+    if source_scope == "bimanual" and (
+        Path(result.get("bimanual_bank", "")).resolve() != source_bank_path.resolve()
+        or sample.metadata.get("right_cap_synthesis", {}).get("joined_digit") not in
+            ("index", "middle")
+        or source.validation.get("right_grasp_topology") not in
+            ("thumb_index_pinch", "thumb_middle_pinch")
+    ):
+        raise ValueError("Digit join is missing a matching validated two-digit source")
     if (sample.metadata.get("right_cap_synthesis", {}).get("support_used") is not False
             or sample.metadata.get("synthesis", {}).get("support") != "none"):
         raise ValueError("Bimanual candidate has unsupported formation provenance")
@@ -56,6 +84,9 @@ def curate(result_path: Path, replay_path: Path, left_bank_path: Path,
         raise ValueError("Requested right tripod was not loaded in all three holds")
     left_thumb, left_other = _digit_times(holds, "left")
     right_thumb, right_other = _digit_times(holds, "right")
+    right_topology, right_digits = _right_contact_topology(holds)
+    if require_tripod and right_topology != "thumb_index_middle_tripod":
+        raise ValueError("All three digits must stay loaded in every independent hold")
     cross = {name: max(hold["cross_contact_ratios"][name] for hold in holds)
              for name in ("left_cap", "right_bottle", "hand_hand")}
     ground = max(hold["contact_summary"].get(name, {}).get("contact_ratio", 0.0)
@@ -82,6 +113,10 @@ def curate(result_path: Path, replay_path: Path, left_bank_path: Path,
         "right_radial_opposition_ratio": min(
             hold["right_radial_opposition_ratio"] for hold in holds),
         "right_tripod_held": require_tripod,
+        "right_grasp_topology": right_topology,
+        "right_loaded_digits": right_digits,
+        "source_grasp_topology": (source.validation.get("right_grasp_topology")
+                                  if source_scope == "bimanual" else "left_only"),
         "right_min_radial_normal_dot": min(
             hold["right_min_radial_normal_dot"] for hold in holds),
         "max_thread_lateral_error_m": max(
@@ -100,7 +135,8 @@ def curate(result_path: Path, replay_path: Path, left_bank_path: Path,
         "fresh_process_replay_passed": True,
         "source_result_sha256": sha256(raw).hexdigest(),
         "fresh_replay_result_sha256": sha256(fresh_raw).hexdigest(),
-        "left_only_source_sha256": source.validation["source_result_sha256"],
+        "left_only_source_sha256": source.validation.get(
+            "left_only_source_sha256", source.validation["source_result_sha256"]),
     }
     bank = GraspInitBank(target_bank_path)
     if any(entry.validation.get("source_result_sha256") == metrics["source_result_sha256"]
@@ -117,11 +153,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--formation", type=Path, required=True)
     parser.add_argument("--fresh_replay", type=Path, required=True)
-    parser.add_argument("--left_bank", type=Path, required=True)
+    parser.add_argument("--left_bank", "--source_bank", dest="source_bank",
+                        type=Path, required=True)
     parser.add_argument("--bank", type=Path, required=True)
     args = parser.parse_args()
     print(json.dumps(curate(args.formation, args.fresh_replay,
-                            args.left_bank, args.bank), indent=2))
+                            args.source_bank, args.bank), indent=2))
 
 
 if __name__ == "__main__":

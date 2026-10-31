@@ -42,13 +42,21 @@ def _staggered_close_targets(names, opened, closed, fraction, index_delay_fracti
                  for name, a, b in zip(names, opened, closed))
 
 
-def _index_join_targets(names, initial, index_goal, fraction):
-    """Change index joints only, preserving the loaded thumb/middle targets."""
+def _digit_join_targets(names, initial, goal, fraction, digit):
+    """Change one long finger while preserving all other loaded targets."""
     if not 0 <= fraction <= 1:
-        raise ValueError("Index join fraction must be in [0, 1]")
-    return tuple(a + fraction * (index_goal[name] - a)
-                 if name.startswith("r_index_finger_") else a
+        raise ValueError("Digit join fraction must be in [0, 1]")
+    if digit not in ("index", "middle"):
+        raise ValueError("Only index and middle tripod joins are supported")
+    prefix = f"r_{digit}_finger_"
+    return tuple(a + fraction * (goal[name] - a)
+                 if name.startswith(prefix) else a
                  for name, a in zip(names, initial))
+
+
+def _index_join_targets(names, initial, index_goal, fraction):
+    """Backwards-compatible index-only target interpolation."""
+    return _digit_join_targets(names, initial, index_goal, fraction, "index")
 
 
 def _right_radial_opposition(points, cap_pose, cap_height):
@@ -107,6 +115,15 @@ class BimanualGraspSynthesisFixture:
                               device=f.right.device, dtype=torch.float32)
         ids = torch.tensor([0], device=f.right.device, dtype=torch.long)
         f.right.set_joint_position_target_index(target=target, env_ids=ids)
+
+    def _left_target(self, canonical):
+        import torch
+        f = self.fixture
+        order = [f.specs[0].joint_names.index(name) for name in f.left.joint_names]
+        target = torch.tensor([[canonical[i] for i in order]],
+                              device=f.left.device, dtype=torch.float32)
+        ids = torch.tensor([0], device=f.left.device, dtype=torch.long)
+        f.left.set_joint_position_target_index(target=target, env_ids=ids)
 
     def _points(self):
         return [p for p in self.fixture.monitor.raw_contact_points(
@@ -414,7 +431,12 @@ class BimanualGraspSynthesisFixture:
                 "passed": bool(release and release["passed"] and replay and replay["passed"])}
 
     def join_index(self, existing_sample, right_proposal, *, close_s=.6):
-        """Add the index after resetting an already validated thumb-middle hold.
+        """Add the index after resetting an already validated thumb-middle hold."""
+        return self.join_digit(existing_sample, right_proposal,
+                               digit="index", close_s=close_s)
+
+    def join_digit(self, existing_sample, right_proposal, *, digit, close_s=.6):
+        """Add one missing long finger to a validated, unsupported two-digit hold.
 
         This is an unsupported PhysX trajectory. It never alters bottle/cap
         pose outside Reset and never treats the existing two-digit bank as a
@@ -423,20 +445,22 @@ class BimanualGraspSynthesisFixture:
         if (not existing_sample.validated or
                 existing_sample.validation.get("scope") != "bimanual" or
                 not self.require_right_tripod):
-            raise ValueError("Index joining needs a validated bimanual source and tripod guard")
+            raise ValueError("Digit joining needs a validated bimanual source and tripod guard")
+        if digit not in ("index", "middle"):
+            raise ValueError("Tripod join digit must be index or middle")
         if not .1 <= close_s <= 1.5:
-            raise ValueError("Index joining duration must be in [0.1, 1.5] s")
+            raise ValueError("Digit joining duration must be in [0.1, 1.5] s")
         f = self.fixture
         names = f.specs[1].joint_names
         initial = existing_sample.right.joint_target
         goal = right_proposal["joints_rad"]
         if any(not joint.lower <= goal[name] <= joint.upper
                for name, joint in zip(names, f.specs[1].joints)
-               if name.startswith("r_index_finger_")):
-            raise ValueError("Index join target exceeds official joint limits")
+               if name.startswith(f"r_{digit}_finger_")):
+            raise ValueError("Digit join target exceeds official joint limits")
         f.reset_manager.reset([0], [existing_sample])
         f.step()
-        trace = [self._snapshot(f.dt, "index_join_start")]
+        trace = [self._snapshot(f.dt, f"{digit}_join_start")]
         points = self._points()
         minimum = min((p["separation_m"] for p in points), default=None)
         peak = max((p["normal_force_n"] for p in points), default=0.0)
@@ -448,7 +472,8 @@ class BimanualGraspSynthesisFixture:
             if abort:
                 break
             fraction = (step + 1) / steps
-            self._right_target(_index_join_targets(names, initial, goal, fraction))
+            self._right_target(_digit_join_targets(
+                names, initial, goal, fraction, digit))
             f.step()
             points = self._points()
             sep = min((p["separation_m"] for p in points), default=None)
@@ -456,12 +481,12 @@ class BimanualGraspSynthesisFixture:
                 minimum = sep if minimum is None else min(minimum, sep)
             peak = max(peak, *(p["normal_force_n"] for p in points)) if points else peak
             if step % max(1, round(.05 / f.dt)) == 0 or step == steps - 1:
-                trace.append(self._snapshot((step + 2) * f.dt, "index_join"))
+                trace.append(self._snapshot((step + 2) * f.dt, f"{digit}_join"))
             if sep is not None and sep < -self.max_penetration_m:
-                abort = f"penetration {sep:.6f} m during index join"
+                abort = f"penetration {sep:.6f} m during {digit} join"
             if peak >= self.max_contact_force_n:
-                abort = f"contact peak {peak:.3f} N during index join"
-        target = _index_join_targets(names, initial, goal, 1.0)
+                abort = f"contact peak {peak:.3f} N during {digit} join"
+        target = _digit_join_targets(names, initial, goal, 1.0, digit)
         formation_summary = f.monitor.summary(0)
         captured = None
         hold = None
@@ -469,12 +494,13 @@ class BimanualGraspSynthesisFixture:
         if abort is None:
             captured = self.left_capture._capture(
                 existing_sample, existing_sample.left.joint_target,
-                "unsupported_bimanual_index_join", target, support_kind="none")
+                f"unsupported_bimanual_{digit}_join", target, support_kind="none")
             captured = replace(captured, validated=False, validation=None,
                 metadata={**captured.metadata,
                           "right_cap_proposal_index": right_proposal["index"],
                           "right_cap_synthesis": {
-                              "index_join_duration_s": close_s,
+                              "joined_digit": digit,
+                              "digit_join_duration_s": close_s,
                               "require_right_tripod": True,
                               "support_used": False}})
             hold = self._measure_hold("index_join_hold")
@@ -490,3 +516,89 @@ class BimanualGraspSynthesisFixture:
                 "unsupported_hold": hold, "reset_replay": replay,
                 "candidate": captured,
                 "passed": bool(hold and hold["passed"] and replay and replay["passed"])}
+
+    def join_left_index(self, existing_sample, *, joint_name, delta_rad, close_s=.6):
+        """Load a second left long finger while preserving a verified right tripod."""
+        if (not existing_sample.validated or
+                existing_sample.validation.get("scope") != "bimanual" or
+                existing_sample.validation.get("right_grasp_topology") !=
+                "thumb_index_middle_tripod" or not self.require_right_tripod):
+            raise ValueError("Left index join requires a validated right tripod source")
+        if joint_name not in ("l_index_finger_mcp_abd",
+                              "l_index_finger_mcp_flex",
+                              "l_index_finger_pip"):
+            raise ValueError("Unsupported left index join joint")
+        if not 0 < abs(delta_rad) <= .1 or not .1 <= close_s <= 1.5:
+            raise ValueError("Left index joint change or duration exceeds bounds")
+        f = self.fixture
+        names = f.specs[0].joint_names
+        index = names.index(joint_name)
+        initial = existing_sample.left.joint_target
+        goal = list(initial)
+        goal[index] += delta_rad
+        joint = f.specs[0].joints[index]
+        if not joint.lower <= goal[index] <= joint.upper:
+            raise ValueError("Left index target exceeds official limit")
+        f.reset_manager.reset([0], [existing_sample])
+        f.step()
+        trace = [self._snapshot(f.dt, "left_index_join_start")]
+        points = self._points()
+        minimum = min((p["separation_m"] for p in points), default=None)
+        peak = max((p["normal_force_n"] for p in points), default=0.0)
+        abort = None
+        if minimum is not None and minimum < -self.max_penetration_m:
+            abort = f"initial penetration {minimum:.6f} m"
+        steps = math.ceil(close_s/f.dt)
+        for step in range(steps):
+            if abort:
+                break
+            fraction = (step+1)/steps
+            target = tuple(a + fraction*(b-a) for a,b in zip(initial, goal))
+            self._left_target(target)
+            f.step()
+            points = self._points()
+            sep = min((p["separation_m"] for p in points), default=None)
+            if sep is not None:
+                minimum = sep if minimum is None else min(minimum, sep)
+            peak = max(peak, *(p["normal_force_n"] for p in points)) if points else peak
+            if step % max(1, round(.05/f.dt)) == 0 or step == steps-1:
+                trace.append(self._snapshot((step+2)*f.dt, "left_index_join"))
+            if sep is not None and sep < -self.max_penetration_m:
+                abort = f"penetration {sep:.6f} m during left index join"
+            if peak >= self.max_contact_force_n:
+                abort = f"contact peak {peak:.3f} N during left index join"
+        formation_summary = f.monitor.summary(0)
+        captured = hold = replay = None
+        if abort is None:
+            captured = self.left_capture._capture(
+                existing_sample, tuple(goal), "unsupported_bimanual_left_index_join",
+                existing_sample.right.joint_target, support_kind="none")
+            captured = replace(captured, validated=False, validation=None,
+                metadata={**captured.metadata,
+                          "left_grasp_synthesis": {
+                              "joined_digit": "index",
+                              "joint_name": joint_name,
+                              "delta_rad": delta_rad,
+                              "join_duration_s": close_s,
+                              "require_index_middle": True,
+                              "support_used": False}})
+            hold = self._measure_hold("left_index_join_hold")
+            hold["left_index_middle_held"] = all(
+                hold["left_finger_contact_time_s"].get(digit, 0.0) >
+                .8*self.hold_s for digit in ("index", "middle"))
+            if hold["passed"] and hold["left_index_middle_held"]:
+                replay = self.replay(captured)
+                replay["left_index_middle_held"] = all(
+                    replay["left_finger_contact_time_s"].get(digit, 0.0) >
+                    .8*self.hold_s for digit in ("index", "middle"))
+        return {"seed": existing_sample.seed,
+                "aborted": abort,
+                "formation_minimum_separation_m": minimum,
+                "formation_peak_contact_force_n": peak,
+                "formation_trace": trace,
+                "formation_contact_summary": formation_summary,
+                "unsupported_hold": hold, "reset_replay": replay,
+                "candidate": captured,
+                "passed": bool(hold and hold["passed"] and
+                               hold["left_index_middle_held"] and replay and
+                               replay["passed"] and replay["left_index_middle_held"])}

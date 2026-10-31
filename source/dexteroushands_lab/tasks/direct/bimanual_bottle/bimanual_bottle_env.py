@@ -30,8 +30,9 @@ from .task_contract import ACTOR_FIELDS, CRITIC_FIELDS
 from .reward_terms import (
     digit_contact_score, grasp_contact_reward, physically_supported_turn_reward,
     suspended_bottle, terminal_failure_penalty, thread_opening_progress,
+    physically_valid_grasp, thread_error_penalty,
 )
-from .reset_sampler import split_bank_indices
+from .reset_sampler import split_bank_indices, split_pregrasp_indices
 from .contact_math import surface_slip_speed
 
 
@@ -131,6 +132,22 @@ class BimanualBottleDirectEnv(DirectRLEnv):
     def _load_banks(self):
         root = Path(__file__).resolve().parents[5]
         stable_path = root / "docs/assets/phase0e_bimanual_grasp_init_bank.json"
+        external_stable = self.cfg.stable_eval_bank_path
+        external_train = self.cfg.stable_train_bank_path
+        if external_stable is not None and external_train is not None:
+            raise ValueError("Choose one external stable bank per run")
+        if external_train is not None:
+            if self.cfg.evaluation_mode:
+                raise ValueError("External training bank cannot be used for held-out evaluation")
+            stable_path = Path(external_train)
+            if not stable_path.is_absolute():
+                stable_path = root / stable_path
+        if external_stable is not None:
+            if not self.cfg.evaluation_mode:
+                raise ValueError("External stable bank is reserved for evaluation")
+            stable_path = Path(external_stable)
+            if not stable_path.is_absolute():
+                stable_path = root / stable_path
         pre_path = root / "docs/assets/phase0_pregrasp_reset_bank.json"
         stable = [grasp_sample_from_dict(row) for row in json.loads(stable_path.read_text())]
         pre = [grasp_sample_from_dict(row) for row in json.loads(pre_path.read_text())]
@@ -138,8 +155,13 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             raise RuntimeError("Stable and geometric pregrasp banks are required")
         if any(x.validated or not x.metadata.get("geometry_qualified") for x in pre):
             raise RuntimeError("Pregrasp bank contains invalid training candidates")
-        stable_ids, pre_ids = split_bank_indices(len(stable), len(pre),
-                                                  evaluation=self.cfg.evaluation_mode)
+        if external_stable is None and external_train is None:
+            stable_ids, pre_ids = split_bank_indices(
+                len(stable), len(pre), evaluation=self.cfg.evaluation_mode)
+        else:
+            stable_ids = tuple(range(len(stable)))
+            pre_ids = split_pregrasp_indices(
+                len(pre), evaluation=external_stable is not None)
         stable = [stable[i] for i in stable_ids]
         pre = [pre[i] for i in pre_ids]
         self._stable_count = len(stable)
@@ -322,7 +344,7 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             ("thumb", "index_finger", "middle_finger", "ring_finger", "pinky"))
         right_score = digit_contact_score(
             right_forces, self.contacts.body_names["right"],
-            ("thumb", "index_finger", "middle_finger"))
+            ("thumb", "index_finger", "middle_finger"), aggregation="balanced")
 
         def proximity(hand, tip_ids, obj_pose, radius, half_height):
             tips = hand.data.body_link_pose_w.torch[:, tip_ids, :3]
@@ -361,7 +383,9 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             bp[:, :3], bp[:, 3:], self._bottle_at_reset[:, :3],
             self._bottle_at_reset[:, 3:], self.scene.env_origins)
         low_speed = (torch.linalg.vector_norm(bv[:, :3], dim=-1) < 0.2)
-        grasp_ok = left_contact & right_contact & suspended & low_speed
+        grasp_ok = physically_valid_grasp(
+            left_contact, right_contact, suspended, low_speed,
+            self._latest_thread.constraint_error)
         # Rotation is credited only while the actual bilateral grasp gate is
         # met. The looser partial-contact gate admitted left-only bottle
         # rotation and right-only cap contact in measured counterfactuals.
@@ -438,7 +462,7 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             contact_reward = grasp_contact_reward(m["left_contact_score"],
                                                    m["right_contact_score"])
             progress_reward = zero
-            constraint_penalty = zero
+            constraint_penalty = thread_error_penalty(self._latest_thread.constraint_error)
             holding_reward = holding
             success_bonus = 5.0 * (self._stable_steps == 25).float()
         else:

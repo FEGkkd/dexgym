@@ -1,4 +1,4 @@
-"""Try adding the right index to a verified free-bottle thumb-middle hold.
+"""Try adding the missing right index or middle digit to a verified hold.
 
 The existing bank provides a physical starting state. All index movement is
 through official finger joint drives; the bottle and cap remain free.
@@ -19,6 +19,7 @@ parser.add_argument("--bimanual_bank", type=Path, required=True)
 parser.add_argument("--sample_index", type=int, default=0)
 parser.add_argument("--right_proposal", type=Path, required=True)
 parser.add_argument("--right_proposal_index", type=int, required=True)
+parser.add_argument("--digit", choices=("index", "middle"), default="index")
 parser.add_argument("--close_s", type=float, default=.6)
 parser.add_argument("--output", type=Path, required=True)
 AppLauncher.add_app_launcher_args(parser)
@@ -48,7 +49,8 @@ def main():
     )
     experiment = BimanualGraspSynthesisFixture(
         fixture, require_right_tripod=True)
-    result = experiment.join_index(sample, matches[0], close_s=args.close_s)
+    result = experiment.join_digit(sample, matches[0],
+                                   digit=args.digit, close_s=args.close_s)
     output = {**result,
               "candidate": asdict(result["candidate"])
               if result["candidate"] is not None else None,
@@ -63,7 +65,8 @@ def main():
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(output, indent=2) + "\n")
     hold = result["unsupported_hold"] or {}
-    print("RIGHT_INDEX_JOIN_RESULT " + json.dumps({
+    print("RIGHT_DIGIT_JOIN_RESULT " + json.dumps({
+        "digit": args.digit,
         "source_sample_index": args.sample_index,
         "aborted": result["aborted"],
         "formation_minimum_separation_m": result["formation_minimum_separation_m"],

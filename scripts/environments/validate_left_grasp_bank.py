@@ -55,6 +55,7 @@ def main():
                "contact_ratio": replay["left_contact_ratio"],
                "maximum_contact_force_n": replay["left_contact_peak_n"],
                "minimum_separation_m": replay["minimum_separation_m"]}
+    summary["max_thread_lateral_error_m"] = replay["max_thread_lateral_error_m"]
     print("LEFT_BANK_REPLAY " + json.dumps(summary), flush=True)
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

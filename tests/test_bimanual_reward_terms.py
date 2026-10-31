@@ -5,6 +5,7 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.reward_terms import (
     terminal_failure_penalty,
     suspended_bottle,
     grasp_contact_reward, physically_supported_turn_reward,
+    physically_valid_grasp, thread_error_penalty,
 )
 
 
@@ -18,6 +19,31 @@ def test_contact_score_is_saturated_and_requires_correct_object_view():
     assert score[0] < score[1]
     assert digit_contact_score(torch.zeros_like(force), names,
                                ("thumb", "index_finger", "middle_finger")).sum() == 0
+
+
+def test_balanced_tripod_contact_requires_thumb_without_losing_partial_signal():
+    names = ("r_thumb_distal", "r_index_finger_distal", "r_middle_finger_distal")
+    forces = torch.tensor([[0.0, 2.0, 2.0], [0.5, 0.5, 0.5]])
+    score = digit_contact_score(
+        forces, names, ("thumb", "index_finger", "middle_finger"),
+        aggregation="balanced")
+    assert 0.0 < score[0] < score[1]
+
+
+def test_grasp_success_rejects_large_thread_constraint_error():
+    true = torch.tensor([True, True])
+    constraint_error = torch.tensor([0.0005, 0.00425])
+    valid = physically_valid_grasp(true, true, true, true, constraint_error)
+    assert valid.tolist() == [True, False]
+
+
+def test_thread_error_penalty_is_zero_inside_tolerance_and_bounded_outside():
+    error = torch.tensor([0.0005, 0.001, 0.002, 0.00425, 0.1, float("nan")])
+    penalty = thread_error_penalty(error)
+    assert penalty[0] == 0 and penalty[1] == 0
+    assert 0 > penalty[2] > penalty[3] > -1
+    assert -1 <= penalty[4] < penalty[3]
+    assert penalty[5] == -1
 
 
 def test_cap_progress_uses_real_relative_angle_and_penalizes_reverse():

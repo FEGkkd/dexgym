@@ -31,7 +31,8 @@ def _git_head(path: Path) -> str | None:
 
 
 def write_bimanual_training_manifest(log_dir: Path, repo_root: Path,
-                                     task_id: str, asset_root: Path | None) -> Path:
+                                     task_id: str, asset_root: Path | None,
+                                     extra_inputs: list[Path] | None = None) -> Path:
     task_dir = Path("source/dexteroushands_lab/tasks/direct/bimanual_bottle")
     paths = [p.relative_to(repo_root) for p in (repo_root / task_dir).rglob("*.py")]
     paths += [Path(name) for name in (
@@ -45,6 +46,10 @@ def write_bimanual_training_manifest(log_dir: Path, repo_root: Path,
         "docs/assets/phase0_pregrasp_reset_bank.json",
         "rsl_rl/base/train.py",
     )]
+    for input_path in extra_inputs or []:
+        absolute = (input_path if input_path.is_absolute()
+                    else repo_root / input_path).resolve()
+        paths.append(absolute.relative_to(repo_root.resolve()))
     hashes = snapshot_files(log_dir, repo_root, paths)
     manifest = {
         "schema": "dexgym-phase1-training-manifest-v1",

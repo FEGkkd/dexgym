@@ -85,9 +85,19 @@ def fit(source, *, cap_clearance=.004, bottle_clearance=.004,
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--reach_scan", type=Path, required=True)
+    parser.add_argument("--cap_clearance_m", type=float, default=.004,
+                        help="Target cap proxy clearance before closure; PhysX must verify")
+    parser.add_argument("--bottle_clearance_m", type=float, default=.004)
+    parser.add_argument("--self_clearance_m", type=float, default=.002)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    output = fit(json.loads(args.reach_scan.read_text()))
+    if min(args.cap_clearance_m, args.bottle_clearance_m,
+           args.self_clearance_m) < 0:
+        parser.error("Clearance targets must be nonnegative")
+    output = fit(json.loads(args.reach_scan.read_text()),
+                 cap_clearance=args.cap_clearance_m,
+                 bottle_clearance=args.bottle_clearance_m,
+                 self_clearance=args.self_clearance_m)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(output, indent=2) + "\n")
     for item in output["best"][:5]:

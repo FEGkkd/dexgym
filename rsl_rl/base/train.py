@@ -19,6 +19,13 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--num_envs", type=int, default=None)
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--max_iterations", type=int, default=None)
+    parser.add_argument("--stable_train_bank", type=Path,
+                        help="Validated stable bank for a controlled bimanual training round")
+    parser.add_argument("--stable_reset_probability", type=float)
+    parser.add_argument("--finger_increment_scale", type=float,
+                        help="Controlled bimanual finger target increment in rad/action")
+    parser.add_argument("--source_bank_snapshot", type=Path, action="append",
+                        help="Additional local source bank to hash and snapshot into ignored logs")
     parser.add_argument("--disable_fabric", action="store_true", default=False)
     parser.add_argument("--video", action="store_true", default=False)
     parser.add_argument("--video_length", type=int, default=200)
@@ -32,6 +39,16 @@ def main(argv: list[str] | None = None) -> None:
     args = _parser().parse_args(argv)
     if args.task is None:
         raise SystemExit("--task is required")
+    if (args.stable_train_bank is not None or
+            args.stable_reset_probability is not None or
+            args.source_bank_snapshot or args.finger_increment_scale is not None) and not args.task.startswith(
+                "DexterousHands-WujiHand2-Bimanual-"):
+        raise SystemExit("Stable-bank overrides are for the bimanual tasks only")
+    if (args.stable_reset_probability is not None and
+            not 0 <= args.stable_reset_probability <= 1):
+        raise SystemExit("--stable_reset_probability must be in [0, 1]")
+    if args.finger_increment_scale is not None and args.finger_increment_scale <= 0:
+        raise SystemExit("--finger_increment_scale must be positive")
     if args.video:
         args.enable_cameras = True
     from isaaclab.app import AppLauncher
@@ -53,6 +70,12 @@ def main(argv: list[str] | None = None) -> None:
             args.task, device=args.device, num_envs=args.num_envs, use_fabric=not args.disable_fabric
         )
         cli_args.apply_env_cfg_overrides(env_cfg, args)
+        if args.stable_train_bank is not None:
+            env_cfg.stable_train_bank_path = str(args.stable_train_bank)
+        if args.stable_reset_probability is not None:
+            env_cfg.stable_reset_probability = args.stable_reset_probability
+        if args.finger_increment_scale is not None:
+            env_cfg.finger_increment_scale = args.finger_increment_scale
         agent_cfg = cli_args.parse_rsl_rl_cfg(args.task, args)
         if args.max_iterations is not None:
             agent_cfg.max_iterations = args.max_iterations
@@ -93,7 +116,9 @@ def main(argv: list[str] | None = None) -> None:
 
             asset_root = os.environ.get("WUJI_DESCRIPTION_ROOT")
             write_bimanual_training_manifest(
-                log_dir, repo_root, args.task, Path(asset_root) if asset_root else None)
+                log_dir, repo_root, args.task, Path(asset_root) if asset_root else None,
+                extra_inputs=([args.stable_train_bank] if args.stable_train_bank else []) +
+                             (args.source_bank_snapshot or []))
         runner.learn(num_learning_iterations=agent_cfg.max_iterations, init_at_random_ep_len=True)
         env.close()
     finally:

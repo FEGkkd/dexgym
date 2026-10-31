@@ -16,7 +16,7 @@ from pathlib import Path
 
 import mujoco
 import numpy as np
-from scipy.optimize import differential_evolution
+from scipy.optimize import differential_evolution, minimize
 
 from analyze_right_cap_reach import _model, _mul
 
@@ -31,6 +31,18 @@ OPPOSING_JOINTS = (
     "r_middle_finger_pip",
 )
 TARGET_AZIMUTH_DEG = {"thumb": -100.0, "index": 20.0, "middle": 95.0}
+
+
+def contact_candidate_bodies(digit: str) -> tuple[str, ...]:
+    """Choose finger surfaces that can form the pictured sidewall pinch.
+
+    A proximal index link touching the lid is not an index-finger side pinch.
+    This only guides MJCF proposal search; PhysX decides final contact.
+    """
+    if digit == "index":
+        return ("r_index_finger_middle", "r_index_finger_distal")
+    return ("r_thumb_distal",) if digit == "thumb" else (
+        "r_middle_finger_middle", "r_middle_finger_distal")
 
 
 def max_cyclic_gap_deg(angles) -> float:
@@ -49,8 +61,34 @@ def world_delta_quaternion(rotvec, base_quaternion_wxyz):
     return _mul(twist, base_quaternion_wxyz)
 
 
+def resume_vector(proposal: dict, candidate: dict,
+                  adjust_opposing_digits: bool) -> np.ndarray:
+    """Recover search coordinates for a local repair of a measured near miss."""
+    if candidate["index"] != proposal["index"]:
+        raise ValueError("Resume candidate belongs to a different proposal")
+    joints = INDEX_JOINTS + (OPPOSING_JOINTS if adjust_opposing_digits else ())
+    return np.array([
+        *(np.array(candidate["wrist_position_w_m"])
+          - np.array(proposal["wrist_position_w_m"])),
+        *candidate["tripod_wrist_search"]["wrist_world_rotation_vector_rad"],
+        *(candidate["joints_rad"][name] for name in joints),
+    ], dtype=float)
+
+
+def local_bounds(center: np.ndarray, global_bounds) -> list[tuple[float, float]]:
+    """Small measured-near-miss neighborhood, clipped to real joint limits."""
+    spans = [.006]*3 + [.15]*3 + [.2]*(len(center)-6)
+    return [(max(low, float(value)-span), min(high, float(value)+span))
+            for value, span, (low, high) in zip(center, spans, global_bounds)]
+
+
 def optimize(proposal: dict, *, seed: int, maxiter: int,
-             adjust_opposing_digits: bool = False):
+             adjust_opposing_digits: bool = False,
+             broad_wrist: bool = False,
+             constraint_weight: float = 8.0,
+             sector_weight: float = .017,
+             resume_candidate: dict | None = None,
+             local_de: bool = False):
     model = _model()
     data = mujoco.MjData(model)
     base_position = np.array(proposal["wrist_position_w_m"], dtype=float)
@@ -63,8 +101,11 @@ def optimize(proposal: dict, *, seed: int, maxiter: int,
     index_addresses = [model.jnt_qposadr[i] for i in index_ids]
     opposing_ids = [joint_ids[name] for name in OPPOSING_JOINTS] if adjust_opposing_digits else []
     opposing_addresses = [model.jnt_qposadr[i] for i in opposing_ids]
-    bounds = [(-.025, .025), (-.025, .025), (-.020, .020),
-              (-.65, .65), (-.65, .65), (-.65, .65)]
+    bounds = ([(-.04, .04), (-.04, .04), (-.035, .055),
+               (-1.2, 1.2), (-1.2, 1.2), (-1.2, 1.2)]
+              if broad_wrist else
+              [(-.025, .025), (-.025, .025), (-.020, .020),
+               (-.65, .65), (-.65, .65), (-.65, .65)])
     bounds += [tuple(model.jnt_range[i]) for i in index_ids]
     for name, joint_id in zip(OPPOSING_JOINTS, opposing_ids):
         center = proposal["joints_rad"][name]
@@ -79,8 +120,7 @@ def optimize(proposal: dict, *, seed: int, maxiter: int,
     colliders = [i for i in range(model.ngeom)
                  if i not in proxy.values() and model.geom_contype[i]
                  and model.geom_conaffinity[i]]
-    digits = {digit: [i for i in colliders if body(i).startswith(
-        "r_thumb" if digit == "thumb" else f"r_{digit}_finger")]
+    digits = {digit: [i for i in colliders if body(i) in contact_candidate_bodies(digit)]
         for digit in TARGET_AZIMUTH_DEG}
     if any(not geoms for geoms in digits.values()):
         raise RuntimeError("Official right hand collision geoms are incomplete")
@@ -112,7 +152,7 @@ def optimize(proposal: dict, *, seed: int, maxiter: int,
                                              math.cos(azimuth-target)))
                 axial_error = max(0.0, point[2]-.6535, .6375-point[2])
                 cost = (abs(separation-.001) + 5*axial_error
-                        + .017*angle_error)
+                        + sector_weight*angle_error)
                 options.append((cost, separation, point, body(geom)))
             _, separation, point, collider = min(options, key=lambda item: item[0])
             contact[digit] = {"distance_m": separation,
@@ -131,8 +171,10 @@ def optimize(proposal: dict, *, seed: int, maxiter: int,
         return contact, cap_depth, bottle_depth, self_depth, gap
 
     evaluations = 0
+    best_score = math.inf
+    best_values = None
     def objective(values):
-        nonlocal evaluations
+        nonlocal evaluations, best_score, best_values
         evaluations += 1
         contact, cap_depth, bottle_depth, self_depth, gap = state(values)
         score = 0.0
@@ -143,35 +185,66 @@ def optimize(proposal: dict, *, seed: int, maxiter: int,
             z = item["cap_point_w_m"][2]
             score += (abs(item["distance_m"]-.001)
                       + 5*max(0.0, z-.6535, .6375-z)
-                      + .017*delta)
-        score += (8*max(0.0, -.001-cap_depth)
-                  + 8*max(0.0, .003-bottle_depth)
-                  + 8*max(0.0, .002-self_depth)
-                  + .017*math.radians(max(0.0, gap-170.0))
+                      + sector_weight*delta)
+        score += (constraint_weight*max(0.0, -.001-cap_depth)
+                  + constraint_weight*max(0.0, .003-bottle_depth)
+                  + constraint_weight*max(0.0, .002-self_depth)
+                  + sector_weight*math.radians(max(0.0, gap-170.0))
                   + .02*float(np.linalg.norm(values[:3]))
                   + .001*float(np.linalg.norm(values[3:6])))
+        if score < best_score:
+            best_score = score
+            best_values = np.array(values, copy=True)
         return score
 
-    result = differential_evolution(
-        objective, bounds, seed=seed, maxiter=maxiter, popsize=7,
-        polish=True, workers=1,
-    )
-    contact, cap_depth, bottle_depth, self_depth, gap = state(result.x)
+    if resume_candidate is None:
+        result = differential_evolution(
+            objective, bounds, seed=seed, maxiter=maxiter, popsize=7,
+            polish=True, workers=1,
+        )
+    elif local_de:
+        center = resume_vector(proposal, resume_candidate,
+                               adjust_opposing_digits)
+        result = differential_evolution(
+            objective, local_bounds(center, bounds), x0=center,
+            seed=seed, maxiter=maxiter, popsize=6, polish=True, workers=1,
+        )
+    else:
+        result = minimize(
+            objective, resume_vector(proposal, resume_candidate,
+                                     adjust_opposing_digits),
+            method="Powell", bounds=bounds,
+            options={"maxiter": maxiter, "xtol": 1e-5, "ftol": 1e-6},
+        )
+    # Powell's final point may be worse than an intermediate evaluation when
+    # the nearest collision feature switches abruptly between lid and wall.
+    values = best_values if best_score < result.fun else result.x
+    selected_score = min(best_score, float(result.fun))
+    contact, cap_depth, bottle_depth, self_depth, gap = state(values)
     output = {
         "index": proposal["index"],
-        "wrist_position_w_m": (base_position+result.x[:3]).tolist(),
+        "wrist_position_w_m": (base_position+values[:3]).tolist(),
         "wrist_quaternion_wxyz": list(world_delta_quaternion(
-            result.x[3:6], base_quaternion)),
+            values[3:6], base_quaternion)),
         "joints_rad": {**proposal["joints_rad"],
-                       **dict(zip(INDEX_JOINTS, map(float, result.x[6:10]))),
-                       **dict(zip(OPPOSING_JOINTS, map(float, result.x[10:])))},
+                       **dict(zip(INDEX_JOINTS, map(float, values[6:10]))),
+                       **dict(zip(OPPOSING_JOINTS, map(float, values[10:])))},
         "tripod_wrist_search": {
             "backend": "official_beta1_MJCF_proxy_geometry_only",
             "seed": seed, "maxiter": maxiter, "evaluations": evaluations,
-            "objective_m": float(result.fun),
-            "wrist_translation_delta_m": result.x[:3].tolist(),
-            "wrist_world_rotation_vector_rad": result.x[3:6].tolist(),
+            "objective_m": selected_score,
+            "optimizer_final_objective_m": float(result.fun),
+            "wrist_translation_delta_m": values[:3].tolist(),
+            "wrist_world_rotation_vector_rad": values[3:6].tolist(),
             "adjusted_opposing_digits": adjust_opposing_digits,
+            "broad_wrist": broad_wrist,
+            "constraint_weight": constraint_weight,
+            "sector_weight": sector_weight,
+            "resumed_local_refinement": resume_candidate is not None,
+            "local_de": local_de,
+            "contact_candidate_bodies": {
+                digit: list(contact_candidate_bodies(digit))
+                for digit in TARGET_AZIMUTH_DEG},
             "opposing_joint_names": list(OPPOSING_JOINTS if adjust_opposing_digits else ()),
             "contact": contact,
             "max_cyclic_sector_gap_deg": gap,
@@ -197,14 +270,30 @@ def main():
     parser.add_argument("--maxiter", type=int, default=80)
     parser.add_argument("--adjust_opposing_digits", action="store_true",
                         help="Also vary bounded thumb and middle-finger targets")
+    parser.add_argument("--broad_wrist", action="store_true",
+                        help="Search a wider, image-inspired wrist SE(3) region")
+    parser.add_argument("--constraint_weight", type=float, default=8.0)
+    parser.add_argument("--sector_weight", type=float, default=.017)
+    parser.add_argument("--resume", type=Path,
+                        help="Saved one-candidate search JSON for local repair")
+    parser.add_argument("--local_de", action="store_true",
+                        help="Use bounded differential evolution near --resume")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.local_de and args.resume is None:
+        parser.error("--local_de requires --resume")
     source = json.loads(args.proposal.read_text())
     matches = [item for item in source["best"] if item["index"] == args.proposal_index]
     if len(matches) != 1:
         raise ValueError("Proposal index absent or ambiguous")
+    resume = json.loads(args.resume.read_text())["best"][0] if args.resume else None
     candidate = optimize(matches[0], seed=args.seed, maxiter=args.maxiter,
-                         adjust_opposing_digits=args.adjust_opposing_digits)
+                         adjust_opposing_digits=args.adjust_opposing_digits,
+                         broad_wrist=args.broad_wrist,
+                         constraint_weight=args.constraint_weight,
+                         sector_weight=args.sector_weight,
+                         resume_candidate=resume,
+                         local_de=args.local_de)
     output = {"source": "official_beta1_MJCF_tripod_wrist_geometry_only",
               "official_source_commit": source["official_source_commit"],
               "right_mjcf_sha256": source["right_mjcf_sha256"],

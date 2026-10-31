@@ -40,11 +40,19 @@ def main():
         "require_right_tripod", False)
     replay = BimanualGraspSynthesisFixture(
         fixture, require_right_tripod=require_tripod).replay(sample)
+    left_times = replay["left_finger_contact_time_s"]
+    left_power = (left_times.get("thumb", 0.0) > .8*replay["duration_s"] and
+                  sum(left_times.get(digit, 0.0) > .8*replay["duration_s"]
+                      for digit in ("index", "middle", "ring", "pinky")) >= 2)
+    require_left_power = "composite_left_source_sha256" in sample.metadata
     summary = {
         "source_result": str(args.result), "left_seed": sample.seed,
         "source_result_sha256": sha256(raw).hexdigest(),
         "right_proposal_index": sample.metadata.get("right_cap_proposal_index"),
-        "fresh_process_replay_passed": replay["passed"],
+        "fresh_process_replay_passed": replay["passed"] and
+                                       (not require_left_power or left_power),
+        "left_power_contact": left_power,
+        "left_power_contact_required": require_left_power,
         "bottle_displacement_m": replay["bottle_displacement_m"],
         "bottle_rotation_rad": replay["bottle_rotation_rad"],
         "left_contact_ratio": replay["left_contact_ratio"],
@@ -58,7 +66,7 @@ def main():
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps({"summary": summary, "replay": replay}, indent=2) + "\n")
     print("BIMANUAL_FRESH_REPLAY " + json.dumps(summary), flush=True)
-    if not replay["passed"]:
+    if not summary["fresh_process_replay_passed"]:
         raise RuntimeError("Bimanual candidate failed fresh-process Reset replay")
 
 

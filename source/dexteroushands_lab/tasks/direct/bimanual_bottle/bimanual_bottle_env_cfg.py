@@ -19,6 +19,8 @@ class BimanualBottleDirectEnvCfg(DirectRLEnvCfg):
     state_space = critic_dim()
     task_kind = "grasp_hold"
     evaluation_mode = False
+    stable_eval_bank_path = None
+    stable_train_bank_path = None
     no_right_cap_contact_counterfactual = False
     stable_reset_probability = 0.65
     wrist_translation_scale = 0.002

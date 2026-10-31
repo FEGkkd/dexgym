@@ -16,15 +16,21 @@ parser.add_argument("--num-envs", type=int, default=64)
 parser.add_argument("--episodes", type=int, default=200)
 parser.add_argument("--seed", type=int, default=1001)
 parser.add_argument("--held-out", action="store_true")
+parser.add_argument("--stable-eval-bank", type=Path,
+                    help="Separate physically validated stable bank for evaluation only")
 parser.add_argument("--source", choices=("mixed", "stable", "pregrasp"), default="mixed")
 parser.add_argument("--no-right-cap-contact", action="store_true")
 parser.add_argument("--thread-axial-stiffness", type=float,
                     help="Controlled thread stiffness ablation in N/m; default uses task config")
+parser.add_argument("--finger-increment-scale", type=float,
+                    help="Controlled finger target-increment ablation in rad/action")
 parser.add_argument("--output", type=Path)
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 if args.policy == "learned" and (args.checkpoint is None or not args.checkpoint.is_file()):
     parser.error("--policy learned requires an existing --checkpoint")
+if args.stable_eval_bank and (not args.held_out or args.source != "stable"):
+    parser.error("--stable-eval-bank requires --held-out --source stable")
 app = AppLauncher(args).app
 
 import torch
@@ -43,9 +49,14 @@ cfg.scene.num_envs = args.num_envs
 cfg.sim.device = args.device
 cfg.seed = args.seed
 cfg.evaluation_mode = args.held_out
+cfg.stable_eval_bank_path = str(args.stable_eval_bank) if args.stable_eval_bank else None
 cfg.no_right_cap_contact_counterfactual = args.no_right_cap_contact
 if args.thread_axial_stiffness is not None:
     cfg.thread_axial_stiffness = args.thread_axial_stiffness
+if args.finger_increment_scale is not None:
+    if args.finger_increment_scale <= 0:
+        parser.error("--finger-increment-scale must be positive")
+    cfg.finger_increment_scale = args.finger_increment_scale
 if args.source == "stable":
     cfg.stable_reset_probability = 1.0
 elif args.source == "pregrasp":
@@ -134,7 +145,9 @@ try:
                "checkpoint": str(args.checkpoint) if args.checkpoint else None,
                "held_out": args.held_out, "seed": args.seed,
                "source": args.source,
+               "stable_eval_bank_path": str(args.stable_eval_bank) if args.stable_eval_bank else None,
                "thread_axial_stiffness_n_per_m": cfg.thread_axial_stiffness,
+               "finger_increment_scale_rad": cfg.finger_increment_scale,
                "no_right_cap_contact_counterfactual": args.no_right_cap_contact,
                "counterfactual_right_contact_steps": counterfactual_right_contact_steps,
                "num_envs": args.num_envs, "episodes": total,
@@ -143,7 +156,7 @@ try:
                "raw_action_saturation_fraction": sum_action_saturation / action_samples,
                "mean_step_metrics": {name: value / action_samples
                                      for name, value in step_metric_sums.items()},
-               "same_family_stable_evaluation": True,
+               "same_family_stable_evaluation": None if args.stable_eval_bank else True,
                "groups": {}}
     for name, rows in results.items():
         summary["groups"][name] = {
