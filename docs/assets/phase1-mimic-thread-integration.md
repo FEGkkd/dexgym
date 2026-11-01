@@ -111,8 +111,55 @@ three-file additive probe. An initial full-suite invocation without the
 required model-root variable stopped during collection and is not counted as
 a test result.
 
-Next controlled experiment: set the saved cap world pose from a verified
-slide/spin pair, implement selective articulation Reset and batched state
-readback, then test actual right-finger cap sidewall contact and bottle
-reaction in the full scene. Only after those gates pass should a new stable
-bank be synthesized and the hard-pitch backend connected to PPO.
+The initial integration probe led to the stable-grasp bridge experiment below.
+Selective articulation Reset in the DirectRLEnv and a topology-qualified bank
+are still required before this backend can be connected to PPO.
+
+## Legacy stable-grasp bridge probe
+
+`scripts/environments/probe_mimic_stable_grasp.py` now runs a controlled
+one-family migration test. It reads one of the four committed legacy stable
+rows, computes the signed axial discrepancy, shifts the **right wrist only**
+along the bottle-local axis by the corresponding 1.20–1.26 mm, and restores
+the Bottle root plus slide/spin DOFs. PhysX determines the Cap link pose; the
+script never writes that link or applies a support force or test cap torque.
+Both wrists are fixed, 40 finger joints retain their normal physical drives,
+and gravity remains on. The script records full 1 s contact and bottle motion,
+first-step manifold penetration, point force and per-digit contact ratios.
+
+All four rows passed a **basic physical hold** check in separate fresh Isaac
+Sim processes. Correct object contact was present for all 500 physics steps
+on both sides; bottle displacement was 0.037–0.068 mm, rotation
+0.0012–0.0020 rad, first-step minimum separation -0.015 to -0.032 mm,
+first-step maximum point normal force 5.3–6.7 N, and maximum screw error
+5–12 nm. No ground contact was measured. Row 0 also passed a left-only
+ablation with the right hand moved 0.35 m away: 1 s left-bottle contact,
+0.486 mm bottle displacement, 0.0467 rad rotation and no right-cap contact.
+These are strong fixture results for a free bottle and a hard-pitch cap.
+
+**Zero of four rows passed the Phase 1 target contact topology.** In row 0,
+left thumb and middle finger contact ratios were 1.000 and 0.998, but left
+index was 0.044 and ring/pinky were zero. Right thumb and middle were both
+1.000, while right index was zero. The other three rows showed the same
+two-digit dominant family: left index 0.008–0.028, right index zero. The
+left-only ablation gained left index contact on 48.2% of steps, still short of
+a sustained multi-finger cylindrical grasp. The four rows are variations of
+the same seed-204 family, so even a future pass would not prove cross-family
+generalization. These rows are **not** a new topology-qualified or Reset
+replayed hard-pitch bank, and no new PPO success is inferred.
+
+```bash
+scripts/run_isaaclab.sh scripts/environments/probe_mimic_stable_grasp.py \
+  --bank-index 0 --duration 1.0 --headless \
+  --output artifacts/phase1/mimic_stable_grasp_probe_0.json
+scripts/run_isaaclab.sh scripts/environments/probe_mimic_stable_grasp.py \
+  --bank-index 0 --duration 1.0 --left-only --headless \
+  --output artifacts/phase1/mimic_left_only_probe_0.json
+```
+
+The next small physics experiment should adjust left index/ring and right
+index joint targets around this stable state, with the wrists and hard-pitch
+assembly held fixed. It should require distributed target-object contact,
+normal-force balance, shallow penetration and an independent 1 s replay
+before adding any row to a new bank. A contact-topology-verified bank and a
+batched articulation Reset are prerequisites for meaningful hard-pitch PPO.
