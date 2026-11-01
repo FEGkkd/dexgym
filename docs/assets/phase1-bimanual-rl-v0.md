@@ -1,9 +1,14 @@
 # Phase 1 bimanual bottle RL, v0 research record
 
-**Current physical result:** [the signed-pitch follow-up](phase1-contact-thread-followup.md)
-supersedes earlier loose-gate CapTurn30 success percentages in this historical
-record. With a 0.05 mm pitch-travel tolerance, two trained seeds each scored
-2/200 on the repeated local stable start; natural pregrasp remains 0/200.
+**Current research status: PARTIAL.** The latest
+[strict-hold audit](phase1-strict-hold-audit.md) and
+[Mimic grasp replay audit](phase1-mimic-grasp-replay-audit.md) supersede earlier
+loose-gate GraspHold and CapTurn30 success percentages in this historical
+record. The final Mimic strict-hold checkpoint scored 0/200 on held-out
+pregrasp and 0/200 on the training-family evaluation; no stable Mimic bank
+or learned CapTurn30 result exists. The
+[budget audit](phase1-budget-audit.md) records 24,124,160 logged PPO
+transitions, with other environment interactions uncounted.
 
 ## Scope and reproducibility
 
@@ -42,7 +47,7 @@ The focused offline tests passed and the two-environment GPU smoke passed with `
 | Round | Task, seed, envs | PPO updates / transitions | Deterministic held-out result | Diagnosis |
 |---|---:|---:|---|---|
 | 1 | GraspHold, 0, 64 | 50 / 102,400 | Stable 0/200, pregrasp 0/200; these rows were not yet separated from training | The learned controller was worse than zero action on stable starts. |
-| 2 | GraspHold, 1, 1024 | 29 / 950,272 | Stable 0/200, pregrasp 0/200 | Left contact reward stalled; training stopped rather than extending unchanged. |
+| 2 | GraspHold, 1, 1024 | 32 / 1,048,576 logged | Stable 0/200, pregrasp 0/200 | Left contact reward stalled; training stopped rather than extending unchanged. The update count was corrected from TensorBoard records in the budget audit. |
 | 3 | GraspHold, 2, 1024 | 50 / 1,638,400 | Stable 0/200, pregrasp 0/200 | Left-first reward improved left contact but lost right tripod contact. |
 | 4 | GraspHold, 2, 1024, resumed from round 3 | 50 / 1,638,400 | Stable 0/200, pregrasp 0/200 | Balanced reward improved right contact on stable starts, but no continuous bilateral hold. |
 
