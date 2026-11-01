@@ -11,6 +11,7 @@ parser.add_argument("--num-envs", type=int, default=1)
 parser.add_argument("--steps", type=int, default=10)
 parser.add_argument("--task", choices=("grasp_hold", "cap_turn_30"), default="grasp_hold")
 parser.add_argument("--debug-state", action="store_true")
+parser.add_argument("--solve-articulation-contact-last", action="store_true")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 app = AppLauncher(args).app
@@ -24,6 +25,8 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env_cfg imp
 cfg = GraspHoldDirectEnvCfg() if args.task == "grasp_hold" else CapTurn30DirectEnvCfg()
 cfg.scene.num_envs = args.num_envs
 cfg.sim.device = args.device
+if args.solve_articulation_contact_last:
+    cfg.sim.physics.solve_articulation_contact_last = True
 env = BimanualBottleDirectEnv(cfg)
 start = time.monotonic()
 try:

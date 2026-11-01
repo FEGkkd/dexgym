@@ -24,6 +24,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--stable_reset_probability", type=float)
     parser.add_argument("--finger_increment_scale", type=float,
                         help="Controlled bimanual finger target increment in rad/action")
+    parser.add_argument("--solve_articulation_contact_last", action="store_true",
+                        help="PhysX contact-last articulation solve order for a controlled experiment")
     parser.add_argument("--source_bank_snapshot", type=Path, action="append",
                         help="Additional local source bank to hash and snapshot into ignored logs")
     parser.add_argument("--disable_fabric", action="store_true", default=False)
@@ -41,7 +43,8 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit("--task is required")
     if (args.stable_train_bank is not None or
             args.stable_reset_probability is not None or
-            args.source_bank_snapshot or args.finger_increment_scale is not None) and not args.task.startswith(
+            args.source_bank_snapshot or args.finger_increment_scale is not None or
+            args.solve_articulation_contact_last) and not args.task.startswith(
                 "DexterousHands-WujiHand2-Bimanual-"):
         raise SystemExit("Stable-bank overrides are for the bimanual tasks only")
     if (args.stable_reset_probability is not None and
@@ -76,6 +79,8 @@ def main(argv: list[str] | None = None) -> None:
             env_cfg.stable_reset_probability = args.stable_reset_probability
         if args.finger_increment_scale is not None:
             env_cfg.finger_increment_scale = args.finger_increment_scale
+        if args.solve_articulation_contact_last:
+            env_cfg.sim.physics.solve_articulation_contact_last = True
         agent_cfg = cli_args.parse_rsl_rl_cfg(args.task, args)
         if args.max_iterations is not None:
             agent_cfg.max_iterations = args.max_iterations

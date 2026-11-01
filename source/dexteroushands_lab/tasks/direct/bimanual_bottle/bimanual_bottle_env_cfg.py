@@ -27,6 +27,11 @@ class BimanualBottleDirectEnvCfg(DirectRLEnvCfg):
     wrist_rotation_scale = 0.02
     finger_increment_scale = 0.05
     cap_goal_rad = 0.5235987755982988
+    # Engineering acceptance: 30 degrees at the 3 mm example pitch travels
+    # 0.25 mm; allow at most 20% error (0.05 mm) in that travel. This is a
+    # simulation criterion, not a measured tolerance of the user's bottle.
+    cap_pitch_tolerance_m = 0.00005
+    cap_constraint_tolerance_m = 0.001
     thread_axial_stiffness = 500.0
     sim = SimulationCfg(
         dt=0.002, render_interval=decimation,

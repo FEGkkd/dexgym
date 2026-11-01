@@ -104,3 +104,20 @@ def thread_error_penalty(error_m: torch.Tensor, *, tolerance_m: float = 0.001) -
                             torch.full_like(error_m, float("inf")))
     excess = torch.relu(magnitude - tolerance_m)
     return torch.exp(-excess / tolerance_m) - 1.0
+
+
+def cap_turn_physics_valid(opening_rad: torch.Tensor, axial_travel_m: torch.Tensor,
+                           expected_travel_m: torch.Tensor,
+                           constraint_error_m: torch.Tensor,
+                           bilateral_grasp: torch.Tensor, *, goal_rad: float,
+                           pitch_tolerance_m: float = 0.00005,
+                           constraint_tolerance_m: float = 0.001) -> torch.Tensor:
+    """Check signed thread travel as well as grasp, angle and D6 coupling."""
+    if goal_rad <= 0 or pitch_tolerance_m <= 0 or constraint_tolerance_m <= 0:
+        raise ValueError("Cap goal and physical tolerances must be positive")
+    return (bilateral_grasp & (opening_rad >= goal_rad)
+            & (axial_travel_m > 0)
+            & ((axial_travel_m - expected_travel_m).abs() < pitch_tolerance_m)
+            & (constraint_error_m.abs() < constraint_tolerance_m)
+            & torch.isfinite(opening_rad) & torch.isfinite(axial_travel_m)
+            & torch.isfinite(expected_travel_m) & torch.isfinite(constraint_error_m))

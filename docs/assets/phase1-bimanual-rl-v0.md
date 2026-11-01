@@ -1,5 +1,10 @@
 # Phase 1 bimanual bottle RL, v0 research record
 
+**Current physical result:** [the signed-pitch follow-up](phase1-contact-thread-followup.md)
+supersedes earlier loose-gate CapTurn30 success percentages in this historical
+record. With a 0.05 mm pitch-travel tolerance, two trained seeds each scored
+2/200 on the repeated local stable start; natural pregrasp remains 0/200.
+
 ## Scope and reproducibility
 
 The work branch is `codex/bimanual-bottlecap-rl-v0`, based on `8987c9c7a152850a7c7a653daaf00b92a2031064`. The user chose this baseline and deferred the right-hand `_start` bank. Existing Allegro, MANO, data and tracking edits in the shared working tree were not staged for this work.

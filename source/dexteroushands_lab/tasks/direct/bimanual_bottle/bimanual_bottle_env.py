@@ -30,7 +30,7 @@ from .task_contract import ACTOR_FIELDS, CRITIC_FIELDS
 from .reward_terms import (
     digit_contact_score, grasp_contact_reward, physically_supported_turn_reward,
     suspended_bottle, terminal_failure_penalty, thread_opening_progress,
-    physically_valid_grasp, thread_error_penalty,
+    physically_valid_grasp, thread_error_penalty, cap_turn_physics_valid,
 )
 from .reset_sampler import split_bank_indices, split_pregrasp_indices
 from .contact_math import surface_slip_speed
@@ -397,8 +397,11 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             self.thread.theta_unwrapped, self._latest_thread.axial,
             self._theta_at_reset, self._axial_at_reset,
             sign=sign, pitch=self.bottle_cfg.thread_pitch)
-        cap_ok = (opening >= self.cfg.cap_goal_rad) & (torch.abs(axial_travel - axial_goal) < 0.001)
-        cap_ok &= grasp_ok & (self._latest_thread.constraint_error.abs() < 0.001)
+        cap_ok = cap_turn_physics_valid(
+            opening, axial_travel, axial_goal, self._latest_thread.constraint_error,
+            grasp_ok, goal_rad=self.cfg.cap_goal_rad,
+            pitch_tolerance_m=self.cfg.cap_pitch_tolerance_m,
+            constraint_tolerance_m=self.cfg.cap_constraint_tolerance_m)
         self._success_steps = torch.where(cap_ok, self._success_steps + 1,
                                           torch.zeros_like(self._success_steps))
         self._breakaway_seen |= self.thread.sliding
@@ -432,6 +435,10 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         timeout = self.episode_length_buf >= self.max_episode_length
         self.extras["phase1_episode"] = {
             "success": success.clone(), "failure": failure.clone(),
+            "episode_steps": self.episode_length_buf.clone(),
+            "bottle_z_m": bp[:, 2].clone(), "cap_z_m": cp[:, 2].clone(),
+            "left_bottle_contact_ratio": self.contacts.duration_ratio("Bottle", "left").clone(),
+            "right_cap_contact_ratio": self.contacts.duration_ratio("Cap", "right").clone(),
             "opening_rad": self._metrics["opening"].clone(),
             "maximum_opening_rad": self._maximum_opening.clone(),
             "axial_travel_m": self._metrics["axial_travel"].clone(),
@@ -469,7 +476,9 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             contact_reward = 0.2 * m["left_contact_score"] + 0.2 * m["right_contact_score"]
             progress_reward = physically_supported_turn_reward(
                 m["opening"], self._previous_open,
-                m["axial_travel"] - m["axial_goal"], m["turn_support"])
+                m["axial_travel"] - m["axial_goal"],
+                m["turn_support"] & (m["axial_travel"] > 0),
+                axial_tolerance_m=self.cfg.cap_pitch_tolerance_m)
             constraint_penalty = -10.0 * self._latest_thread.constraint_error.abs().clamp(max=0.01)
             holding_reward = 0.5 * holding
             success_bonus = 25.0 * (self._success_steps == 5).float()
@@ -500,8 +509,10 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             "terminal_failure_penalty": failure_penalty.mean(),
             "action_clip_fraction": (self._action_clip_count.float() /
                                       (self.episode_length_buf.float() + 1)).mean(),
+            # The counter increments once per *hand* with any clipped joint.
+            # Normalize by two hand commands per policy step so this remains a fraction.
             "joint_clip_fraction": (self._joint_clip_count.float() /
-                                     (self.episode_length_buf.float() + 1)).mean(),
+                                     (2 * (self.episode_length_buf.float() + 1))).mean(),
             "stable_reset_fraction": self._source_stable.float().mean(),
             "action_element_saturation_fraction": (self._last_raw_action.abs() > 1).float().mean(),
             "left_wrist_action_abs_mean": self._last_raw_action[:, :6].abs().mean(),

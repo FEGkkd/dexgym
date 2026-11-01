@@ -5,7 +5,7 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.reward_terms import (
     terminal_failure_penalty,
     suspended_bottle,
     grasp_contact_reward, physically_supported_turn_reward,
-    physically_valid_grasp, thread_error_penalty,
+    physically_valid_grasp, thread_error_penalty, cap_turn_physics_valid,
 )
 
 
@@ -65,6 +65,17 @@ def test_positive_turn_reward_requires_contact_and_pitch_consistency():
     assert score[1] == 0  # no right-cap contact cannot earn opening reward
     assert score[2] == 0  # thread travel inconsistent with the pitch
     assert score[3] < 0  # reverse rotation remains penalized
+
+
+def test_cap_turn_requires_correct_signed_axial_travel_at_the_30_degree_scale():
+    opening = torch.full((4,), torch.pi / 6)
+    expected = torch.full((4,), 0.00025)
+    actual = torch.tensor([0.00026, -0.00020, 0.00035, 0.000001])
+    good = cap_turn_physics_valid(
+        opening, actual, expected, torch.zeros(4),
+        torch.ones(4, dtype=torch.bool), goal_rad=torch.pi / 6,
+        pitch_tolerance_m=0.00005)
+    assert good.tolist() == [True, False, False, False]
 
 
 def test_thread_progress_uses_each_reset_angle_and_axial_reference():
