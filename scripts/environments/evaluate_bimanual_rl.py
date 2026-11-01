@@ -20,6 +20,7 @@ parser.add_argument("--held-out", action="store_true")
 parser.add_argument("--stable-eval-bank", type=Path,
                     help="Separate physically validated stable bank for evaluation only")
 parser.add_argument("--source", choices=("mixed", "stable", "pregrasp"), default="mixed")
+parser.add_argument("--thread-backend", choices=("legacy_d6", "mimic"), default="legacy_d6")
 parser.add_argument("--no-right-cap-contact", action="store_true")
 parser.add_argument("--thread-axial-stiffness", type=float,
                     help="Controlled thread stiffness ablation in N/m; default uses task config")
@@ -47,6 +48,10 @@ if args.thread_trace_output and (args.num_envs != 1 or args.thread_trace_substep
     parser.error("--thread-trace-output requires --num-envs 1 and positive --thread-trace-substeps")
 if args.contact_point_output and args.num_envs != 1:
     parser.error("--contact-point-output requires --num-envs 1")
+if args.thread_backend == "mimic" and (args.source != "pregrasp" or args.stable_eval_bank):
+    parser.error("mimic evaluation currently requires --source pregrasp and no legacy stable bank")
+if args.thread_backend == "mimic" and args.thread_trace_output:
+    parser.error("legacy explicit-wrench thread trace is unavailable for the mimic backend")
 app = AppLauncher(args).app
 
 import torch
@@ -64,6 +69,7 @@ cfg = GraspHoldDirectEnvCfg() if args.task == "grasp_hold" else CapTurn30DirectE
 cfg.scene.num_envs = args.num_envs
 cfg.sim.device = args.device
 cfg.seed = args.seed
+cfg.thread_backend = args.thread_backend
 cfg.evaluation_mode = args.held_out
 cfg.stable_eval_bank_path = str(args.stable_eval_bank) if args.stable_eval_bank else None
 cfg.no_right_cap_contact_counterfactual = args.no_right_cap_contact
@@ -256,6 +262,7 @@ try:
                     break
     elapsed = time.monotonic() - start
     summary = {"task": args.task, "policy": args.policy,
+               "thread_backend": args.thread_backend,
                "checkpoint": str(args.checkpoint) if args.checkpoint else None,
                "held_out": args.held_out, "seed": args.seed,
                "source": args.source,
@@ -272,7 +279,8 @@ try:
                "raw_action_saturation_fraction": sum_action_saturation / action_samples,
                "mean_step_metrics": {name: value / action_samples
                                      for name, value in step_metric_sums.items()},
-               "same_family_stable_evaluation": None if args.stable_eval_bank else True,
+               "same_family_stable_evaluation": (
+                   None if args.stable_eval_bank or args.thread_backend == "mimic" else True),
                "groups": {}}
     for name, rows in results.items():
         summary["groups"][name] = {
@@ -305,6 +313,7 @@ try:
         args.episode_rows_output.parent.mkdir(parents=True, exist_ok=True)
         args.episode_rows_output.write_text(json.dumps({
             "checkpoint": summary["checkpoint"], "seed": args.seed,
+            "thread_backend": args.thread_backend,
             "thread_pitch_m": raw_env.bottle_cfg.thread_pitch,
             "thread_sign": raw_env.bottle_cfg.thread_sign,
             "rows_by_source": results,

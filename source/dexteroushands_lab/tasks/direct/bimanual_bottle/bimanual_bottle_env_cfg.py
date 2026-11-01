@@ -18,6 +18,9 @@ class BimanualBottleDirectEnvCfg(DirectRLEnvCfg):
     observation_space = actor_dim()
     state_space = critic_dim()
     task_kind = "grasp_hold"
+    # The hard-pitch mimic backend is experimental and requires geometric
+    # pregrasp resets. Legacy stable states violate its axial constraint.
+    thread_backend = "legacy_d6"
     evaluation_mode = False
     stable_eval_bank_path = None
     stable_train_bank_path = None

@@ -66,24 +66,23 @@ their saved cap angles. Their initial axial discrepancies are about 1.20–1.26
 mm and 0.457 mm respectively. The **32/32** geometry-qualified natural
 pregrasp samples are screw-compatible, but earlier policy evaluation from
 natural pregrasp was 0/200. None of the old stable samples may be silently
-used as validated Reset states for this backend. The existing DirectRLEnv
-continues to use the legacy D6 plus explicit `BatchedThreadCoupler`; the new
-authorer rejects an existing legacy D6 on the same assembly.
+used as validated Reset states for this backend. The DirectRLEnv retains
+legacy D6 as its default; the experimental Mimic switch is described below.
+The new authorer rejects an existing legacy D6 on the same assembly.
 The four committed stable rows are variants of one seed-204 grasp family;
 their measured lateral cap offset is only 2–9 µm, so it is specifically the
 axial mismatch that fails this gate. Forcing such poses into the joint would
 introduce a millimetre-scale solver correction at Reset, so no dynamic hold
 pass is inferred from them.
 
-The implicit drive is bounded and stable in the prior isolated probe under
-low and high diagnostic torques. It does not yet implement the example
-breakaway-to-running-resistance transition, and its current max-force value
-is not a measured real-bottle torque. The isolated probe's explicit viscous
-resistance at the original damping was numerically unstable; that path must
-not be installed as the production backend. One gentle right-middle-finger
-sidewall contact was measured in the full scene, but bilateral grasp,
-contact-driven 30° rotation, full Reset, sustained 1024-env training
-throughput, and learned opening remain **not tested**. A new
+The initial fixed implicit drive was bounded in the isolated low-torque
+probe. A dynamic breakaway-to-running implementation and its later tests are
+described below. Its torque values are not measured from a real bottle. The
+isolated probe's explicit viscous resistance at the original damping was
+numerically unstable; that path must not be installed as the production
+backend. One gentle right-middle-finger sidewall contact was measured in the
+full scene, but bilateral grasp, contact-driven 30° rotation and learned
+opening remain **not tested**. A new
 stable grasp bank compatible with the constrained cap pose is required
 before meaningful stable-start CapTurn PPO can resume.
 
@@ -278,8 +277,48 @@ scripts/run_isaaclab.sh scripts/environments/validate_bimanual_mimic_scene.py \
   --num-envs 1024 --steps 20 --implicit-running-drive --headless
 ```
 
-The DirectRLEnv still uses the legacy D6 plus explicit `BatchedThreadCoupler`.
-The hard-pitch backend still lacks a topology-qualified stable bank, full
-episode Reset and PPO replay. The previous strict CapTurn success rates
-remain the current training evidence; these physical probes do not upgrade
-them.
+## Experimental DirectRLEnv integration (2026-11-01)
+
+The shared GraspHold/CapTurn30 DirectRLEnv now accepts
+`thread_backend="mimic"` through its configuration. The default remains
+`legacy_d6` for prior checkpoints. `MimicThreadRuntime` reads the floating
+Bottle articulation, updates the implicit spin drive every physics substep,
+and exposes physical screw state to the existing reward and observation
+schema. It applies no explicit equal/opposite screw wrenches or Cap root
+writes. The full episode Reset restores both hands, finger drives, wrists,
+Bottle root and screw DOFs, drive mode, contact history and task progress.
+The Cap pose is produced by PhysX from Bottle root and screw angle.
+
+The four legacy stable rows are intentionally **rejected** for this backend:
+their 1.2–1.26 mm axial mismatch would violate the hard-pitch joint. Mimic
+training and evaluation currently require `stable_reset_probability=0`, using
+the 32/32 screw-compatible geometric pregrasp rows. This is an experimental
+pregrasp-only setting, not a validated stable-start CapTurn curriculum.
+
+Measured on this workstation with Isaac Sim 6.0.1 / Isaac Lab 3.0:
+
+| DirectRLEnv check | Result |
+|---|---|
+| 1 env Reset/5 steps | Finite 277/421 Actor/Critic observations and reward; Cap link cache error 0 |
+| 2 env, 5 selective Resets | Maximum immediate peer state change 0 |
+| 16 env, 100 selective Resets | Maximum immediate peer state change 0 |
+| 1024 env, 3 policy steps | Finite observations/rewards; Cap link cache error 0 |
+| 1024 env, 100 selective Resets | Maximum immediate peer state change 0 |
+| 1024 env, 100 policy steps, 10 warmup | 10,271 environment steps/s; 102,707 physics environment steps/s; 8,684 MiB used GPU memory |
+| Default legacy D6, 2 env/5 steps | Smoke passed |
+
+These checks establish a running vectorized environment, **not** a learned
+grasp or contact-driven cap turn. The natural pregrasp source has no
+demonstrated stable hold in the hard-pitch backend. Independent policy
+evaluation, contact topology, PPO learning and cross-family generalization
+remain open. The previous strict CapTurn success rates refer to the legacy
+D6 backend only and are not transferred to Mimic.
+
+```bash
+scripts/run_isaaclab.sh scripts/environments/smoke_bimanual_rl.py \
+  --num-envs 1024 --steps 3 --thread-backend mimic --headless
+scripts/run_isaaclab.sh scripts/environments/validate_bimanual_rl_reset.py \
+  --num-envs 1024 --resets 100 --thread-backend mimic --headless
+scripts/run_isaaclab.sh scripts/environments/benchmark_bimanual_rl.py \
+  --num-envs 1024 --steps 100 --thread-backend mimic --headless
+```

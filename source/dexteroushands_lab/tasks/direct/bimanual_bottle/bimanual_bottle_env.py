@@ -21,6 +21,9 @@ from dexteroushands_lab.assets.batched_wrist_pose import (
 from dexteroushands_lab.assets.bottle import BottleConfig
 from dexteroushands_lab.assets.bottle.batched_thread import BatchedThreadCoupler, _rotate
 from dexteroushands_lab.assets.bottle.generate_usd import build_bottle_usd, author_thread_joint
+from dexteroushands_lab.assets.bottle.mimic_thread import author_mimic_thread
+from dexteroushands_lab.assets.bottle.mimic_runtime import MimicThreadRuntime
+from dexteroushands_lab.assets.bottle.mimic_contract import mimic_reset_geometry
 from dexteroushands_lab.assets.wuji_hand2_beta import load_hand2_spec
 from dexteroushands_lab.scenes.batched_contacts import BatchedContactMonitor
 from dexteroushands_lab.scenes.bimanual_bottle import make_bimanual_bottle_scene_cfg
@@ -52,6 +55,12 @@ class BimanualBottleDirectEnv(DirectRLEnv):
 
     def __init__(self, cfg, render_mode=None, **kwargs):
         from isaaclab_physx.physics import PhysxManager
+
+        if cfg.thread_backend not in ("legacy_d6", "mimic"):
+            raise ValueError("Unknown bottle thread backend")
+        if cfg.thread_backend == "mimic" and cfg.stable_reset_probability != 0:
+            raise ValueError("Legacy stable grasp bank violates hard-pitch mimic geometry; use pregrasp resets")
+        self._mimic_backend = cfg.thread_backend == "mimic"
 
         self.bottle_cfg = BottleConfig(
             allow_detachment=False,
@@ -95,7 +104,12 @@ class BimanualBottleDirectEnv(DirectRLEnv):
                                                 "ring_finger", "pinky")])
         self.wrists = (BatchedWristPoseController(self.num_envs, device=self.device),
                        BatchedWristPoseController(self.num_envs, device=self.device))
-        self.thread = BatchedThreadCoupler(self.num_envs, self.bottle_cfg, device=self.device)
+        self.thread = (MimicThreadRuntime(PhysxManager.get_physics_sim_view(),
+                                          self.bottle_cfg, num_envs=self.num_envs,
+                                          device=self.device)
+                       if self._mimic_backend else
+                       BatchedThreadCoupler(self.num_envs, self.bottle_cfg,
+                                            device=self.device))
         self.contacts = BatchedContactMonitor(
             PhysxManager.get_physics_sim_view(), self.num_envs, *self.specs,
             device=self.device,
@@ -125,9 +139,17 @@ class BimanualBottleDirectEnv(DirectRLEnv):
                                           "action", "drift", "constraint", "success", "failure")}
 
     def _setup_scene(self):
-        self.thread_joints = [author_thread_joint(
-            self.sim.stage, f"/World/envs/env_{env}", self.bottle_cfg)
-            for env in range(self.scene.num_envs)]
+        if self._mimic_backend:
+            self.thread_joints = [author_mimic_thread(
+                self.sim.stage, f"/World/envs/env_{env}", self.bottle_cfg,
+                cap_local_pose_xyzw=(0.0, 0.0,
+                                     0.5 + self.bottle_cfg.cap_initial_z,
+                                     0.0, 0.0, 0.0, 1.0))
+                for env in range(self.scene.num_envs)]
+        else:
+            self.thread_joints = [author_thread_joint(
+                self.sim.stage, f"/World/envs/env_{env}", self.bottle_cfg)
+                for env in range(self.scene.num_envs)]
 
     def _load_banks(self):
         root = Path(__file__).resolve().parents[5]
@@ -164,6 +186,16 @@ class BimanualBottleDirectEnv(DirectRLEnv):
                 len(pre), evaluation=external_stable is not None)
         stable = [stable[i] for i in stable_ids]
         pre = [pre[i] for i in pre_ids]
+        if self._mimic_backend:
+            for sample in pre:
+                geometry = mimic_reset_geometry(sample.bottle.root_pose,
+                                                 sample.cap.root_pose,
+                                                 sample.thread_initial_angle_rad,
+                                                 self.bottle_cfg)
+                if (abs(geometry["pitch_error_m"]) > 5e-5
+                        or geometry["lateral_m"] > 1e-4
+                        or abs(geometry["twist_error_rad"]) > 0.01):
+                    raise RuntimeError("Pregrasp Reset bank is incompatible with the mimic screw")
         self._stable_count = len(stable)
         samples = stable + pre
         for sample in samples:
@@ -220,7 +252,14 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         left_pose = restore_root(self.left, "left")
         right_pose = restore_root(self.right, "right")
         bottle_pose = restore_root(self.bottle, "bottle")
-        cap_pose = restore_root(self.cap, "cap")
+        if self._mimic_backend:
+            # Cap is an articulation link; an independent root write would
+            # conflict with the PhysX screw and can inject an initial impulse.
+            self.cap.reset(env_ids=ids)
+            cap_pose = self._bank["cap_root_pose"][indices].clone()
+            cap_pose[:, :3] += origin
+        else:
+            cap_pose = restore_root(self.cap, "cap")
         for side, (hand, name, pose) in enumerate(((self.left, "left", left_pose),
                                                   (self.right, "right", right_pose))):
             reorder = self._joint_reorder[side]
@@ -246,20 +285,28 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             self.right.write_root_velocity_to_sim_index(
                 root_velocity=torch.zeros(n, 6, device=self.device), env_ids=ids)
             self.wrists[1].reset(ids, right_pose[:, :3], right_pose[:, 3:])
-        self.thread.reset_from_pose(ids, bottle_pose, cap_pose,
-                                    initial_angle=self._bank["thread_angle"][indices])
-        snap_mask = self._bank["snapshot_mask"][indices]
-        if torch.any(snap_mask):
-            snap = {key: self._bank[f"snapshot_{key}"][indices[snap_mask]]
-                    for key in ("last_wrapped_rad", "theta_unwrapped_rad",
-                                "initial_theta_rad", "initial_axial_m",
-                                "stick_reference_rad", "sliding", "detached")}
-            self.thread.reset_from_pose(ids[snap_mask], bottle_pose[snap_mask], cap_pose[snap_mask],
-                                        snapshot=snap)
-        # All bank states are engaged; no per-step stage mutation is required.
-        for env in ids.detach().cpu().tolist():
-            self.thread_joints[env].GetJointEnabledAttr().Set(True)
-            self.thread_joints[env].CreateCollisionEnabledAttr(False)
+        if self._mimic_backend:
+            self._latest_thread = self.thread.reset(
+                ids, bottle_pose_w=bottle_pose,
+                bottle_velocity_w=self._bank["bottle_root_velocity"][indices],
+                angle_rad=self._bank["thread_angle"][indices])
+            self.bottle.update(0.0)
+            self.cap.update(0.0)
+        else:
+            self.thread.reset_from_pose(ids, bottle_pose, cap_pose,
+                                        initial_angle=self._bank["thread_angle"][indices])
+            snap_mask = self._bank["snapshot_mask"][indices]
+            if torch.any(snap_mask):
+                snap = {key: self._bank[f"snapshot_{key}"][indices[snap_mask]]
+                        for key in ("last_wrapped_rad", "theta_unwrapped_rad",
+                                    "initial_theta_rad", "initial_axial_m",
+                                    "stick_reference_rad", "sliding", "detached")}
+                self.thread.reset_from_pose(ids[snap_mask], bottle_pose[snap_mask], cap_pose[snap_mask],
+                                            snapshot=snap)
+            # All bank states are engaged; no per-step stage mutation is required.
+            for env in ids.detach().cpu().tolist():
+                self.thread_joints[env].GetJointEnabledAttr().Set(True)
+                self.thread_joints[env].CreateCollisionEnabledAttr(False)
         self.contacts.reset(ids)
         self._theta_at_reset[ids] = self.thread.theta_unwrapped[ids]
         self._bottle_at_reset[ids] = bottle_pose
@@ -277,25 +324,26 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         self._metrics = None
         for values in self._reward_sums.values():
             values[ids] = 0
-        partial = len(ids) < self.num_envs and self._latest_thread is not None
-        if partial:
-            peer_mask = torch.ones(self.num_envs, device=self.device, dtype=torch.bool)
-            peer_mask[ids] = False
-            peer_thread = {name: getattr(self.thread, name)[peer_mask].clone()
-                           for name in ("last_wrapped", "theta", "initial_theta",
-                                        "initial_axial", "stick_reference", "sliding")}
-            previous_result = self._latest_thread
-        result = self.thread.wrenches(
-            self.bottle.data.root_pose_w.torch, self.cap.data.root_pose_w.torch,
-            self.bottle.data.root_vel_w.torch, self.cap.data.root_vel_w.torch)
-        if partial:
-            for name, values in peer_thread.items():
-                getattr(self.thread, name)[peer_mask] = values
-            for field in fields(result):
-                value = getattr(result, field.name)
-                prior = getattr(previous_result, field.name)
-                value[peer_mask] = prior[peer_mask]
-        self._latest_thread = result
+        if not self._mimic_backend:
+            partial = len(ids) < self.num_envs and self._latest_thread is not None
+            if partial:
+                peer_mask = torch.ones(self.num_envs, device=self.device, dtype=torch.bool)
+                peer_mask[ids] = False
+                peer_thread = {name: getattr(self.thread, name)[peer_mask].clone()
+                               for name in ("last_wrapped", "theta", "initial_theta",
+                                            "initial_axial", "stick_reference", "sliding")}
+                previous_result = self._latest_thread
+            result = self.thread.wrenches(
+                self.bottle.data.root_pose_w.torch, self.cap.data.root_pose_w.torch,
+                self.bottle.data.root_vel_w.torch, self.cap.data.root_vel_w.torch)
+            if partial:
+                for name, values in peer_thread.items():
+                    getattr(self.thread, name)[peer_mask] = values
+                for field in fields(result):
+                    value = getattr(result, field.name)
+                    prior = getattr(previous_result, field.name)
+                    value[peer_mask] = prior[peer_mask]
+            self._latest_thread = result
         self._axial_at_reset[ids] = self._latest_thread.axial[ids]
 
     def _pre_physics_step(self, actions: torch.Tensor):
@@ -322,17 +370,22 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             hand.write_root_pose_to_sim_index(root_pose=pose, env_ids=self._all_ids)
             hand.write_root_velocity_to_sim_index(root_velocity=velocity, env_ids=self._all_ids)
             hand.set_joint_position_target_index(target=self._finger_targets[side], env_ids=self._all_ids)
-        result = self.thread.wrenches(
-            self.bottle.data.root_pose_w.torch, self.cap.data.root_pose_w.torch,
-            self.bottle.data.root_vel_w.torch, self.cap.data.root_vel_w.torch)
-        self._latest_thread = result
-        for obj, force, torque in ((self.bottle, result.bottle_force, result.bottle_torque),
-                                   (self.cap, result.cap_force, result.cap_torque)):
-            obj.permanent_wrench_composer.reset()
-            obj.permanent_wrench_composer.add_forces_and_torques_index(
-                forces=force[:, None, :], torques=torque[:, None, :], is_global=True)
+        if self._mimic_backend:
+            self._latest_thread = self.thread.step()
+        else:
+            result = self.thread.wrenches(
+                self.bottle.data.root_pose_w.torch, self.cap.data.root_pose_w.torch,
+                self.bottle.data.root_vel_w.torch, self.cap.data.root_vel_w.torch)
+            self._latest_thread = result
+            for obj, force, torque in ((self.bottle, result.bottle_force, result.bottle_torque),
+                                       (self.cap, result.cap_force, result.cap_torque)):
+                obj.permanent_wrench_composer.reset()
+                obj.permanent_wrench_composer.add_forces_and_torques_index(
+                    forces=force[:, None, :], torques=torque[:, None, :], is_global=True)
 
     def _update_metrics(self):
+        if self._mimic_backend:
+            self._latest_thread = self.thread.update()
         self.contacts.update(self.physics_dt)
         bp = self.bottle.data.root_pose_w.torch
         cp = self.cap.data.root_pose_w.torch

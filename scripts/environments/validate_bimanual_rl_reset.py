@@ -8,6 +8,7 @@ from isaaclab.app import AppLauncher
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--num-envs", type=int, default=16)
 parser.add_argument("--resets", type=int, default=100)
+parser.add_argument("--thread-backend", choices=("legacy_d6", "mimic"), default="legacy_d6")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 if args.num_envs < 2:
@@ -21,6 +22,9 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env_cfg imp
 cfg = GraspHoldDirectEnvCfg()
 cfg.scene.num_envs = args.num_envs
 cfg.sim.device = args.device
+cfg.thread_backend = args.thread_backend
+if args.thread_backend == "mimic":
+    cfg.stable_reset_probability = 0.0
 env = BimanualBottleDirectEnv(cfg)
 print("RESET_STAGE environment_ready", flush=True)
 try:
@@ -38,11 +42,19 @@ try:
         tensors += [asset.data.joint_pos.torch.clone() for asset in (env.left, env.right)]
         tensors += [wrist.current_pose.clone() for wrist in env.wrists]
         tensors += [wrist.target_pose.clone() for wrist in env.wrists]
-        tensors += [env.thread.theta.clone(), env.thread.stick_reference.clone(),
-                    env.thread.sliding.clone(), env.contacts.steps.clone(),
-                    env._finger_targets[0].clone(), env._finger_targets[1].clone()]
-        tensors += [getattr(env.thread, name).clone() for name in
-                    ("last_wrapped", "initial_theta", "initial_axial", "initialized")]
+        tensors += [env.thread.stick_reference.clone(), env.thread.sliding.clone(),
+                    env.contacts.steps.clone(), env._finger_targets[0].clone(),
+                    env._finger_targets[1].clone()]
+        if args.thread_backend == "mimic":
+            state = env.thread.view.read()
+            tensors += [state.root_pose_w, state.root_velocity_w, state.cap_pose_w,
+                        state.theta_rad, state.spin_velocity_rad_s, state.axial_m,
+                        env.thread.view.theta_at_reset.clone(),
+                        env.thread.drive.breakaway_seen.clone()]
+        else:
+            tensors += [env.thread.theta.clone()]
+            tensors += [getattr(env.thread, name).clone() for name in
+                        ("last_wrapped", "initial_theta", "initial_axial", "initialized")]
         for wrist in env.wrists:
             tensors += [wrist.initial_pos.clone(), wrist.current_velocity.clone(),
                         wrist.workspace_clip_count.clone()]
@@ -64,15 +76,16 @@ try:
         chosen = iteration % args.num_envs
         ids = torch.tensor([chosen], device=env.device)
         before = capture()
-        if iteration % 20 == 0:
+        if iteration % 20 == 0 and args.thread_backend == "legacy_d6":
             env.thread_joints[chosen].GetJointEnabledAttr().Set(False)
             env.thread_joints[chosen].CreateCollisionEnabledAttr(True)
         env._reset_idx(ids)
         after = capture()
-        if not env.thread_joints[chosen].GetJointEnabledAttr().Get():
-            raise AssertionError("Selected D6 joint did not re-engage")
-        if env.thread_joints[chosen].GetCollisionEnabledAttr().Get():
-            raise AssertionError("Selected bottle/cap collision exclusion was not restored")
+        if args.thread_backend == "legacy_d6":
+            if not env.thread_joints[chosen].GetJointEnabledAttr().Get():
+                raise AssertionError("Selected D6 joint did not re-engage")
+            if env.thread_joints[chosen].GetCollisionEnabledAttr().Get():
+                raise AssertionError("Selected bottle/cap collision exclusion was not restored")
         other = torch.arange(args.num_envs, device=env.device) != chosen
         for field_index, (old, new) in enumerate(zip(before, after)):
             delta = (old[other].float() - new[other].float()).abs().max().item()
@@ -85,7 +98,8 @@ try:
         if not torch.isfinite(torch.cat([env.bottle.data.root_pose_w.torch,
                                          env.cap.data.root_pose_w.torch], dim=-1)).all():
             raise AssertionError("Nonfinite reset body state")
-    print("PHASE1_RESET_ISOLATION", json.dumps({"num_envs": args.num_envs,
+    print("PHASE1_RESET_ISOLATION", json.dumps({"thread_backend": args.thread_backend,
+                                                "num_envs": args.num_envs,
                                                 "selective_resets": args.resets,
                                                 "max_peer_state_error": max_error}), flush=True)
 except BaseException as exc:

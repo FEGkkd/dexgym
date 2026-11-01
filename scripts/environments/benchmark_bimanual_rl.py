@@ -15,6 +15,7 @@ parser.add_argument("--num-envs", type=int, default=1024)
 parser.add_argument("--steps", type=int, default=100)
 parser.add_argument("--warmup-steps", type=int, default=10)
 parser.add_argument("--task", choices=("grasp_hold", "cap_turn_30"), default="grasp_hold")
+parser.add_argument("--thread-backend", choices=("legacy_d6", "mimic"), default="legacy_d6")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 app = AppLauncher(args).app
@@ -28,6 +29,9 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env_cfg imp
 cfg = GraspHoldDirectEnvCfg() if args.task == "grasp_hold" else CapTurn30DirectEnvCfg()
 cfg.scene.num_envs = args.num_envs
 cfg.sim.device = args.device
+cfg.thread_backend = args.thread_backend
+if args.thread_backend == "mimic":
+    cfg.stable_reset_probability = 0.0
 env = BimanualBottleDirectEnv(cfg)
 action = torch.zeros(args.num_envs, 52, device=env.device)
 
@@ -51,7 +55,8 @@ try:
     step_s = time.monotonic() - start
     free, total = torch.cuda.mem_get_info() if str(env.device).startswith("cuda") else (0, 0)
     print("PHASE1_BENCHMARK", json.dumps({
-        "task": args.task, "num_envs": args.num_envs, "steps": args.steps,
+        "task": args.task, "thread_backend": args.thread_backend,
+        "num_envs": args.num_envs, "steps": args.steps,
         "physics_dt_s": cfg.sim.dt, "decimation": cfg.decimation,
         "reset_s": reset_s, "step_s": step_s,
         "environment_steps_per_second": args.num_envs * args.steps / step_s,

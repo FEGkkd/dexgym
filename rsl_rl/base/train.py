@@ -22,6 +22,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--stable_train_bank", type=Path,
                         help="Validated stable bank for a controlled bimanual training round")
     parser.add_argument("--stable_reset_probability", type=float)
+    parser.add_argument("--thread_backend", choices=("legacy_d6", "mimic"),
+                        help="Bimanual bottle thread solver; mimic requires pregrasp-only Reset")
     parser.add_argument("--finger_increment_scale", type=float,
                         help="Controlled bimanual finger target increment in rad/action")
     parser.add_argument("--solve_articulation_contact_last", action="store_true",
@@ -44,6 +46,7 @@ def main(argv: list[str] | None = None) -> None:
     if (args.stable_train_bank is not None or
             args.stable_reset_probability is not None or
             args.source_bank_snapshot or args.finger_increment_scale is not None or
+            args.thread_backend is not None or
             args.solve_articulation_contact_last) and not args.task.startswith(
                 "DexterousHands-WujiHand2-Bimanual-"):
         raise SystemExit("Stable-bank overrides are for the bimanual tasks only")
@@ -52,6 +55,9 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit("--stable_reset_probability must be in [0, 1]")
     if args.finger_increment_scale is not None and args.finger_increment_scale <= 0:
         raise SystemExit("--finger_increment_scale must be positive")
+    if args.thread_backend == "mimic" and (
+            args.stable_reset_probability != 0 or args.stable_train_bank is not None):
+        raise SystemExit("Mimic training requires --stable_reset_probability 0 and no legacy stable bank")
     if args.video:
         args.enable_cameras = True
     from isaaclab.app import AppLauncher
@@ -77,6 +83,8 @@ def main(argv: list[str] | None = None) -> None:
             env_cfg.stable_train_bank_path = str(args.stable_train_bank)
         if args.stable_reset_probability is not None:
             env_cfg.stable_reset_probability = args.stable_reset_probability
+        if args.thread_backend is not None:
+            env_cfg.thread_backend = args.thread_backend
         if args.finger_increment_scale is not None:
             env_cfg.finger_increment_scale = args.finger_increment_scale
         if args.solve_articulation_contact_last:

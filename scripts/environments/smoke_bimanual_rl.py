@@ -10,6 +10,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--num-envs", type=int, default=1)
 parser.add_argument("--steps", type=int, default=10)
 parser.add_argument("--task", choices=("grasp_hold", "cap_turn_30"), default="grasp_hold")
+parser.add_argument("--thread-backend", choices=("legacy_d6", "mimic"), default="legacy_d6")
 parser.add_argument("--debug-state", action="store_true")
 parser.add_argument("--solve-articulation-contact-last", action="store_true")
 AppLauncher.add_app_launcher_args(parser)
@@ -25,6 +26,9 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env_cfg imp
 cfg = GraspHoldDirectEnvCfg() if args.task == "grasp_hold" else CapTurn30DirectEnvCfg()
 cfg.scene.num_envs = args.num_envs
 cfg.sim.device = args.device
+cfg.thread_backend = args.thread_backend
+if args.thread_backend == "mimic":
+    cfg.stable_reset_probability = 0.0
 if args.solve_articulation_contact_last:
     cfg.sim.physics.solve_articulation_contact_last = True
 env = BimanualBottleDirectEnv(cfg)
@@ -38,6 +42,11 @@ try:
         print("RL_RESET_BOTTLE", env.bottle.data.root_pose_w.torch[0].tolist(), flush=True)
     if not all(torch.isfinite(value).all() for value in obs.values()):
         raise AssertionError("Nonfinite reset observation")
+    if args.thread_backend == "mimic":
+        cap_error = (env.cap.data.root_pose_w.torch - env.thread.state.cap_pose_w).abs().max()
+        print("RL_MIMIC_RESET_CAP_CACHE_ERROR", float(cap_error), flush=True)
+        if cap_error > 1e-4:
+            raise AssertionError("Reset cap cache does not match the PhysX articulation link")
     for step in range(args.steps):
         obs, reward, terminated, truncated, extras = env.step(
             torch.zeros(args.num_envs, 52, device=env.device))
