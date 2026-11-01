@@ -8,6 +8,7 @@ free dynamic bodies; only equal-and-opposite screw wrenches are applied.
 from __future__ import annotations
 
 import json
+import hashlib
 from dataclasses import fields
 from pathlib import Path
 import tempfile
@@ -40,6 +41,9 @@ from .reward_terms import (
 from .reset_sampler import split_bank_indices, split_pregrasp_indices
 from .contact_math import (
     cap_sidewall_site_mask, gate_digit_forces_by_site, surface_slip_speed,
+)
+from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.contract import (
+    capture_hold_anchor, valid_turn_step,
 )
 
 
@@ -144,6 +148,8 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         self._axial_at_reset = torch.zeros(self.num_envs, device=self.device)
         self._bottle_at_reset = torch.zeros(self.num_envs, 7, device=self.device)
         self._hold_anchor_pose = torch.zeros(self.num_envs, 7, device=self.device)
+        self._hold_anchor_latched = torch.zeros(self.num_envs, device=self.device, dtype=torch.bool)
+        self._invalid_action_count = torch.zeros(self.num_envs, device=self.device, dtype=torch.long)
         self._previous_open = torch.zeros(self.num_envs, device=self.device)
         self._previous_proximity = torch.zeros(self.num_envs, 2, device=self.device)
         self._proximity_fresh = torch.zeros(self.num_envs, device=self.device, dtype=torch.bool)
@@ -186,20 +192,41 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             stable_path = Path(external_stable)
             if not stable_path.is_absolute():
                 stable_path = root / stable_path
-        pre_path = root / "docs/assets/phase0_pregrasp_reset_bank.json"
+        pre_path = root / (self.cfg.pregrasp_bank_path or "docs/assets/phase0_pregrasp_reset_bank.json")
         stable = [grasp_sample_from_dict(row) for row in json.loads(stable_path.read_text())]
         pre = [grasp_sample_from_dict(row) for row in json.loads(pre_path.read_text())]
         if not stable or not pre or any(not x.validated for x in stable):
             raise RuntimeError("Stable and geometric pregrasp banks are required")
-        if any(x.validated or not x.metadata.get("geometry_qualified") for x in pre):
+        if any(x.validated or (not self.cfg.pregrasp_candidate_validation_mode and
+                               not x.metadata.get("geometry_qualified")) for x in pre):
             raise RuntimeError("Pregrasp bank contains invalid training candidates")
-        if external_stable is None and external_train is None:
+        if self.cfg.pregrasp_reset_levels:
+            pre = [s for s in pre if s.metadata.get("phase1b_reset_level") in
+                   self.cfg.pregrasp_reset_levels]
+            if len(pre) < 2:
+                raise RuntimeError("Selected pregrasp level has fewer than two candidates")
+        if self.cfg.pregrasp_candidate_validation_mode:
+            stable_ids, pre_ids = tuple(range(len(stable))), tuple(range(len(pre)))
+        elif external_stable is None and external_train is None:
             stable_ids, pre_ids = split_bank_indices(
                 len(stable), len(pre), evaluation=self.cfg.evaluation_mode)
         else:
             stable_ids = tuple(range(len(stable)))
             pre_ids = split_pregrasp_indices(
                 len(pre), evaluation=external_stable is not None)
+        if self.cfg.pregrasp_split_key and not self.cfg.pregrasp_candidate_validation_mode:
+            from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.reset_split import split_group_indices
+            evaluation_groups = None
+            if self.cfg.pregrasp_split_manifest_path:
+                manifest_path = root / self.cfg.pregrasp_split_manifest_path
+                manifest = json.loads(manifest_path.read_text())
+                if manifest.get("bank_sha256") != hashlib.sha256(pre_path.read_bytes()).hexdigest():
+                    raise RuntimeError("Frozen pregrasp split does not match the Reset bank SHA")
+                evaluation_groups = set(manifest["evaluation_natural_source_seeds_global"])
+            pre_ids = split_group_indices(
+                pre, key=self.cfg.pregrasp_split_key,
+                evaluation=self.cfg.evaluation_mode,
+                evaluation_groups=evaluation_groups)
         stable = [stable[i] for i in stable_ids]
         pre = [pre[i] for i in pre_ids]
         if self._mimic_backend:
@@ -273,6 +300,10 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             self._stable_count + torch.randint(len(self._bank["thread_angle"]) - self._stable_count,
                                                (n,), device=self.device),
         )
+        if self.cfg.pregrasp_candidate_validation_mode:
+            indices = self._stable_count + ids.remainder(
+                len(self._bank["thread_angle"]) - self._stable_count)
+            stable = torch.zeros_like(stable)
         self._source_stable[ids] = stable
         self._reset_sample_index[ids] = indices
         origin = self.scene.env_origins[ids]
@@ -322,6 +353,13 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             self.right.write_root_velocity_to_sim_index(
                 root_velocity=torch.zeros(n, 6, device=self.device), env_ids=ids)
             self.wrists[1].reset(ids, right_pose[:, :3], right_pose[:, 3:])
+        if getattr(self.cfg, "no_left_bottle_contact_counterfactual", False):
+            left_pose = left_pose.clone()
+            left_pose[:, :3] = origin + torch.tensor([-0.35, 0.0, 0.65], device=self.device)
+            self.left.write_root_pose_to_sim_index(root_pose=left_pose, env_ids=ids)
+            self.left.write_root_velocity_to_sim_index(
+                root_velocity=torch.zeros(n, 6, device=self.device), env_ids=ids)
+            self.wrists[0].reset(ids, left_pose[:, :3], left_pose[:, 3:])
         if self._mimic_backend:
             self._latest_thread = self.thread.reset(
                 ids, bottle_pose_w=bottle_pose,
@@ -352,6 +390,7 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         self._theta_at_reset[ids] = self.thread.theta_unwrapped[ids]
         self._bottle_at_reset[ids] = bottle_pose
         self._hold_anchor_pose[ids] = bottle_pose
+        self._hold_anchor_latched[ids] = False
         self._previous_open[ids] = 0
         self._previous_proximity[ids] = 0
         self._proximity_fresh[ids] = False
@@ -363,6 +402,7 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         self._last_action[ids] = 0
         self._last_raw_action[ids] = 0
         self._action_clip_count[ids] = 0
+        self._invalid_action_count[ids] = 0
         self._joint_clip_count[ids] = 0
         self._metrics = None
         for values in self._reward_sums.values():
@@ -393,8 +433,11 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         # Deterministic RSL-RL playback may hand us an inference-mode tensor.
         # Reset writes into this buffer, so own a normal mutable copy.
         self._last_raw_action = actions.detach().clone()
-        clipped = actions.clamp(-1, 1)
-        self._action_clip_count += (actions != clipped).any(dim=-1).long()
+        finite = torch.isfinite(actions)
+        safe = torch.where(finite, actions, torch.zeros_like(actions))
+        self._invalid_action_count += (~finite).any(dim=-1).long()
+        clipped = safe.clamp(-1, 1)
+        self._action_clip_count += (safe != clipped).any(dim=-1).long()
         self._last_action = clipped
         for side, start in ((0, 0), (1, 26)):
             increments = torch.cat((clipped[:, start:start+3] * self.cfg.wrist_translation_scale,
@@ -513,8 +556,8 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         grasp_ok = physically_valid_grasp(
             left_contact, right_contact, suspended, low_speed,
             self._latest_thread.constraint_error)
-        self._hold_anchor_pose = torch.where(
-            (self._hold_motion_steps == 0)[:, None], bp, self._hold_anchor_pose)
+        self._hold_anchor_pose, self._hold_anchor_latched = capture_hold_anchor(
+            self._hold_anchor_pose, self._hold_anchor_latched, bp, grasp_ok)
         if self._mimic_backend:
             cap_spin = self.thread.state.spin_velocity_rad_s
         else:
@@ -545,9 +588,10 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             self.thread.theta_unwrapped, self._latest_thread.axial,
             self._theta_at_reset, self._axial_at_reset,
             sign=sign, pitch=self.bottle_cfg.thread_pitch)
-        cap_ok = cap_turn_physics_valid(
-            opening, axial_travel, axial_goal, self._latest_thread.constraint_error,
-            grasp_ok, goal_rad=self.cfg.cap_goal_rad,
+        cap_ok = valid_turn_step(
+            opening, self._previous_open, axial_travel, axial_goal,
+            self._latest_thread.constraint_error, turn_support,
+            goal_rad=self.cfg.cap_goal_rad,
             pitch_tolerance_m=self.cfg.cap_pitch_tolerance_m,
             constraint_tolerance_m=self.cfg.cap_constraint_tolerance_m)
         self._success_steps = torch.where(cap_ok, self._success_steps + 1,
@@ -700,12 +744,23 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             "terminal_failure_penalty": failure_penalty.mean(),
             "action_clip_fraction": (self._action_clip_count.float() /
                                       (self.episode_length_buf.float() + 1)).mean(),
+            "invalid_action_fraction": (self._invalid_action_count.float() /
+                                         (self.episode_length_buf.float() + 1)).mean(),
+            "wrist_workspace_clip_fraction": (
+                (self.wrists[0].workspace_clip_count.float() +
+                 self.wrists[1].workspace_clip_count.float()) /
+                (2 * (self.episode_length_buf.float() + 1))).mean(),
             # The counter increments once per *hand* with any clipped joint.
             # Normalize by two hand commands per policy step so this remains a fraction.
             "joint_clip_fraction": (self._joint_clip_count.float() /
                                      (2 * (self.episode_length_buf.float() + 1))).mean(),
             "stable_reset_fraction": self._source_stable.float().mean(),
             "action_element_saturation_fraction": (self._last_raw_action.abs() > 1).float().mean(),
+            "clipped_action_abs_mean": self._last_action.abs().mean(),
+            "actual_left_wrist_linear_speed_m_s": torch.linalg.vector_norm(
+                self.wrists[0].current_velocity[:, :3], dim=-1).mean(),
+            "actual_right_wrist_linear_speed_m_s": torch.linalg.vector_norm(
+                self.wrists[1].current_velocity[:, :3], dim=-1).mean(),
             "left_wrist_action_abs_mean": self._last_raw_action[:, :6].abs().mean(),
             "left_finger_action_abs_mean": self._last_raw_action[:, 6:26].abs().mean(),
             "right_wrist_action_abs_mean": self._last_raw_action[:, 26:32].abs().mean(),
@@ -759,7 +814,9 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         actor["thread_progress_and_goal"] = torch.stack(
             (opening / torch.pi, self._latest_thread.axial / 0.2,
              (self.cfg.cap_goal_rad - opening) / torch.pi,
-             self._latest_thread.constraint_error / 0.01), dim=-1)
+             ((bp[:, 2] - self._bottle_at_reset[:, 2]) / 0.1
+              if self.cfg.task_kind == "pregrasp_cap_turn_30" else
+              self._latest_thread.constraint_error / 0.01)), dim=-1)
         actor["previous_action"] = self._last_action
         for key, width in ACTOR_FIELDS.items():
             if actor[key].shape != (self.num_envs, width):

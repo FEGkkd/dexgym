@@ -1,0 +1,119 @@
+{
+  "bank_path": "docs/assets/phase1b_pregrasp_bank.json",
+  "bank_sha256": "fcf06057a357e23528b22fc049f8c2607f195b4712f5b410525daf83b7d33193",
+  "candidate_sha256": "373aeb2ee1623e34704525afe4a12b6e9e7b511ee8d157dc276519601cc74374",
+  "count": 51,
+  "evaluation_natural_source_seeds_global": [
+    1625,
+    1779,
+    1831,
+    1842,
+    1881,
+    2261
+  ],
+  "one_relative_template_family_only": true,
+  "pgs_report_sha256": "d592de4fa46016ab58ee998eec3f1eb7a5ca68ef2f6419d821d1f52690682432",
+  "physx_hz": 500,
+  "policy_hz": 50,
+  "schema": "dexgym-phase1b-frozen-reset-split-v2",
+  "solver": "pgs_mimic",
+  "splits": {
+    "A": {
+      "evaluation_local_shape_seeds": [
+        68000,
+        69000,
+        76000,
+        66003,
+        68003,
+        69003,
+        70004,
+        76002
+      ],
+      "evaluation_natural_source_seeds": [
+        1625,
+        1779,
+        1831,
+        1842,
+        2261
+      ],
+      "train_local_shape_seeds": [
+        45000,
+        48000,
+        49002,
+        52002,
+        53000,
+        55001,
+        56000,
+        61002,
+        63000,
+        65000,
+        45003,
+        48004,
+        49005,
+        51001,
+        52005,
+        53002,
+        55004,
+        56004,
+        61005,
+        62003,
+        63004,
+        65001,
+        45006,
+        46010,
+        48008,
+        49008,
+        52008,
+        53004,
+        55007
+      ],
+      "train_natural_source_seeds": [
+        83,
+        192,
+        260,
+        294,
+        372,
+        458,
+        648,
+        745,
+        860,
+        1258,
+        1299,
+        1368,
+        1485
+      ]
+    },
+    "B": {
+      "evaluation_local_shape_seeds": [
+        166000,
+        168000,
+        171000,
+        176000,
+        166004,
+        168004,
+        171004,
+        176004
+      ],
+      "evaluation_natural_source_seeds": [
+        1625,
+        1779,
+        1881,
+        2261
+      ],
+      "train_local_shape_seeds": [
+        145000,
+        156000,
+        165000,
+        145002,
+        156004,
+        165004
+      ],
+      "train_natural_source_seeds": [
+        83,
+        860,
+        1485
+      ]
+    }
+  },
+  "world_pose_augmentation_is_not_a_new_local_family": true
+}

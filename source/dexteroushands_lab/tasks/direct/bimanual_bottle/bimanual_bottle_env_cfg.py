@@ -32,6 +32,11 @@ class BimanualBottleDirectEnvCfg(DirectRLEnvCfg):
     evaluation_mode = False
     stable_eval_bank_path = None
     stable_train_bank_path = None
+    pregrasp_bank_path = None
+    pregrasp_reset_levels = ()
+    pregrasp_candidate_validation_mode = False
+    pregrasp_split_key = None
+    pregrasp_split_manifest_path = None
     no_right_cap_contact_counterfactual = False
     stable_reset_probability = 0.65
     wrist_translation_scale = 0.002

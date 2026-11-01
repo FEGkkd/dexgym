@@ -59,8 +59,12 @@ def _parser() -> argparse.ArgumentParser:
                         help="Controlled bimanual wrist translation increment in m/action")
     parser.add_argument("--init_action_std", type=float,
                         help="Initial normalized Gaussian action std for a controlled PPO ablation")
+    parser.add_argument("--unified_reward_profile", choices=("baseline", "contact_coverage"),
+                        help="Unified Phase 1B reward profile; same task and actor")
     parser.add_argument("--reset_loaded_action_std", action="store_true",
                         help="On task transfer, restore the loaded Gaussian std to --init_action_std")
+    parser.add_argument("--init_checkpoint", type=Path,
+                        help="Initialize one actor/critic from an explicit checkpoint for a controlled task transfer")
     parser.add_argument("--solve_articulation_contact_last", action="store_true",
                         help="PhysX contact-last articulation solve order for a controlled experiment")
     parser.add_argument("--source_bank_snapshot", type=Path, action="append",
@@ -101,8 +105,11 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit("--wrist_translation_scale must be positive")
     if args.init_action_std is not None and not 0.01 <= args.init_action_std <= 2.0:
         raise SystemExit("--init_action_std must be in [0.01, 2.0]")
-    if args.reset_loaded_action_std and (not args.resume or args.init_action_std is None):
-        raise SystemExit("--reset_loaded_action_std requires --resume and --init_action_std")
+    if args.init_checkpoint is not None and (args.resume or not args.init_checkpoint.is_file()):
+        raise SystemExit("--init_checkpoint must exist and cannot be combined with --resume")
+    if args.reset_loaded_action_std and (
+            not (args.resume or args.init_checkpoint) or args.init_action_std is None):
+        raise SystemExit("--reset_loaded_action_std requires checkpoint loading and --init_action_std")
     if args.right_contact_balance_weight is not None and not 0 <= args.right_contact_balance_weight <= 1:
         raise SystemExit("--right_contact_balance_weight must be in [0, 1]")
     if args.thread_backend == "mimic" and args.stable_reset_probability != 0 and (
@@ -152,6 +159,10 @@ def main(argv: list[str] | None = None) -> None:
         agent_cfg = cli_args.parse_rsl_rl_cfg(args.task, args)
         if args.init_action_std is not None:
             agent_cfg.actor.distribution_cfg.init_std = args.init_action_std
+        if args.unified_reward_profile is not None:
+            if not hasattr(env_cfg, "unified_reward_profile"):
+                raise SystemExit("--unified_reward_profile requires the Phase 1B task")
+            env_cfg.unified_reward_profile = args.unified_reward_profile
         if args.max_iterations is not None:
             agent_cfg.max_iterations = args.max_iterations
         agent_cfg = handle_deprecated_rsl_rl_cfg(agent_cfg, metadata.version("rsl-rl-lib"))
@@ -175,11 +186,13 @@ def main(argv: list[str] | None = None) -> None:
         env = RslRlVecEnvWrapper(env)
         runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=str(log_dir), device=agent_cfg.device)
         runner.add_git_repo_to_log(__file__)
-        if agent_cfg.resume:
-            from isaaclab_tasks.utils import get_checkpoint_path
-
-            resume_path = get_checkpoint_path(str(log_root), agent_cfg.load_run, agent_cfg.load_checkpoint)
-            runner.load(resume_path)
+        if agent_cfg.resume or args.init_checkpoint is not None:
+            if args.init_checkpoint is None:
+                from isaaclab_tasks.utils import get_checkpoint_path
+                resume_path = get_checkpoint_path(str(log_root), agent_cfg.load_run, agent_cfg.load_checkpoint)
+            else:
+                resume_path = args.init_checkpoint.resolve()
+            runner.load(str(resume_path))
             if args.reset_loaded_action_std:
                 loaded_std = float(runner.alg.actor.distribution.std_param.detach().mean())
                 reset_loaded_gaussian_std(runner, args.init_action_std)
@@ -192,6 +205,13 @@ def main(argv: list[str] | None = None) -> None:
                 }, indent=2) + "\n")
                 print("PHASE1_TRANSFER_ACTION_STD", loaded_std,
                       args.init_action_std, flush=True)
+            if args.init_checkpoint is not None:
+                (log_dir / "phase1b_initial_checkpoint.json").write_text(json.dumps({
+                    "source_checkpoint": str(resume_path),
+                    "single_actor_transfer": True,
+                    "runtime_policy_switching": False,
+                    "source_iteration": runner.current_learning_iteration,
+                }, indent=2) + "\n")
         env.seed(agent_cfg.seed)
         dump_yaml(str(log_dir / "params" / "env.yaml"), env_cfg)
         dump_yaml(str(log_dir / "params" / "agent.yaml"), agent_cfg)
@@ -206,7 +226,13 @@ def main(argv: list[str] | None = None) -> None:
                 log_dir, repo_root, args.task, Path(asset_root) if asset_root else None,
                 extra_inputs=([args.stable_train_bank] if args.stable_train_bank else []) +
                              (args.source_bank_snapshot or []))
-        runner.learn(num_learning_iterations=agent_cfg.max_iterations, init_at_random_ep_len=True)
+        print("TRAIN_STAGE learn_enter", agent_cfg.max_iterations, env.num_envs, flush=True)
+        try:
+            runner.learn(num_learning_iterations=agent_cfg.max_iterations, init_at_random_ep_len=True)
+        except BaseException as exc:
+            print("TRAIN_STAGE learn_exception", type(exc).__name__, repr(exc), flush=True)
+            raise
+        print("TRAIN_STAGE learn_return", runner.current_learning_iteration, flush=True)
         env.close()
     finally:
         simulation_app.close()
