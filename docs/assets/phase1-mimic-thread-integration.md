@@ -311,7 +311,8 @@ These checks establish a running vectorized environment, **not** a learned
 grasp or contact-driven cap turn. The natural pregrasp source has no
 demonstrated stable hold in the hard-pitch backend. Independent policy
 evaluation, contact topology, PPO learning and cross-family generalization
-remain open. The previous strict CapTurn success rates refer to the legacy
+were subsequently probed in the [first hard-pitch PPO round](phase1-mimic-ppo-round.md).
+That round did not meet the learning target. The previous strict CapTurn success rates refer to the legacy
 D6 backend only and are not transferred to Mimic.
 
 ```bash
