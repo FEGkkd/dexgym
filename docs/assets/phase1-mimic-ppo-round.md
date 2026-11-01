@@ -129,3 +129,8 @@ Reset with the free bottle and cap before it can become a stable Mimic bank
 row. The contact monitor needs a tested batched sidewall classifier before
 CapTurn reward or success can use its body-only force as proof of a correct
 cap grip. This round intentionally did not start further PPO training.
+
+The subsequent [right-tripod geometry and dynamic replay experiment](phase1-right-tripod-geometry-search.md)
+found sustained three-body contact, but the index contact was on the cap's
+bottom rim. Two offline sidewall proposals failed under dynamic cap springback;
+neither became a validated bank entry.

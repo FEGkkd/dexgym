@@ -32,12 +32,25 @@ parser.add_argument("--right-middle-mcp-abd", action="store_true",
                     help="Also close the right middle MCP abduction toward the cap sidewall")
 parser.add_argument("--right-middle-pip-target-max", type=float,
                     help="Diagnostic upper target bound for right middle PIP; avoids blindly curling past sidewall")
+parser.add_argument("--right-index-pip-target-max", type=float,
+                    help="Diagnostic upper target bound for right index PIP to test bottom-rim contact")
 parser.add_argument("--right-middle-abd-target-min", type=float,
                     help="Diagnostic lower target bound for right middle MCP abduction")
+parser.add_argument("--right-index-abd-target-min", type=float,
+                    help="Diagnostic lower target bound for right index MCP abduction to avoid index-middle collision")
+parser.add_argument("--right-index-dip-extra-rad", type=float, default=0.0,
+                    help="Additional bounded right-index DIP target from the bank pose")
 parser.add_argument("--right-wrist-track-cap", action="store_true",
                     help="Command a bounded right wrist translation following measured free-cap translation")
 parser.add_argument("--max-bottle-displacement-m", type=float, default=0.05,
                     help="Stop the diagnostic if the free bottle moves beyond this limit")
+parser.add_argument("--candidate-json", type=Path,
+                    help="After scripted closing, command an offline MJCF candidate through bounded wrist and finger drives")
+parser.add_argument("--candidate-transition-steps", type=int, default=10)
+parser.add_argument("--candidate-hold-steps", type=int, default=50)
+parser.add_argument("--candidate-offset-xyz", type=float, nargs=3,
+                    default=(0.0, 0.0, 0.0),
+                    help="Small world-frame approach offset from offline candidate for PhysX calibration")
 parser.add_argument("--output", type=Path)
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
@@ -49,6 +62,12 @@ if args.right_wrist_down_steps < 0:
     parser.error("right-wrist-down-steps must be nonnegative")
 if args.max_bottle_displacement_m <= 0:
     parser.error("max-bottle-displacement-m must be positive")
+if not 0 <= args.right_index_dip_extra_rad <= 0.5:
+    parser.error("right-index-dip-extra-rad must be in [0, 0.5]")
+if args.candidate_transition_steps < 1 or args.candidate_hold_steps < 1:
+    parser.error("candidate transition and hold steps must be positive")
+if any(abs(value) > 0.005 for value in args.candidate_offset_xyz):
+    parser.error("candidate offset components must stay within 5 mm")
 app = AppLauncher(args).app
 
 import torch
@@ -120,6 +139,13 @@ def main():
              load_hand2_spec(official, side="right"))
     screen = MjcfGeometryScreen(combined_model(official, config), config)
     commands, evidence = closing_directions(sample, screen, specs)
+    candidate = None
+    if args.candidate_json is not None:
+        proposal = json.loads(args.candidate_json.read_text())
+        if (proposal.get("status") != "MJCF_ONLY_REQUIRES_NATIVE_USD_PHYSX_REPLAY"
+                or proposal.get("source_sample_index") != args.sample_index):
+            raise ValueError("Candidate does not match this bank row and geometry screen")
+        candidate = proposal["candidate"]
     cfg = GraspHoldDirectEnvCfg()
     cfg.scene.num_envs = 1
     cfg.sim.device = args.device
@@ -153,24 +179,61 @@ def main():
         active = set(commands)
         ever_contacted = set()
         previous_forces = {key: 0.0 for key in commands}
-        cap_contact_view = env.contacts.views[("Cap", "right")] if args.contact_points else None
+        cap_contact_view = None
+        if args.contact_points:
+            # The batched production force view has a deliberately small
+            # point budget. This one-env diagnostic needs full manifolds when
+            # all three fingers touch at once; it is not used in PPO.
+            filters = [f"/World/envs/env_0/RightHand/{body}"
+                       for body in env.contacts.body_names["right"]]
+            cap_contact_view = sim_view.create_rigid_contact_view(
+                "/World/envs/env_0/Cap", filter_patterns=filters,
+                max_contact_data_count=256)
         initial_bottle = env.bottle.data.root_pose_w.torch[0, :3].clone()
         initial_cap = env.cap.data.root_pose_w.torch[0, :3].clone()
         initial_right_wrist = env.right.data.root_pose_w.torch[0, :3].clone()
         rows = []
-        for step in range(args.steps):
-            if args.maintain_contact:
+        total_steps = args.steps + (
+            args.candidate_transition_steps + args.candidate_hold_steps
+            if candidate is not None else 0)
+        for step in range(total_steps):
+            if candidate is not None and step == args.steps:
+                proposed_pos = torch.tensor(
+                    [value + offset for value, offset in zip(
+                        candidate["wrist_pose_w_xyzw"][:3], args.candidate_offset_xyz)],
+                    device=env.device)
+                proposed_quat = torch.tensor(
+                    candidate["wrist_pose_w_xyzw"][3:], device=env.device)
+                current_pose = env.right.data.root_pose_w.torch[0]
+                if (float(torch.linalg.vector_norm(proposed_pos - current_pose[:3])) > 0.02
+                        or float(torch.linalg.vector_norm(proposed_quat)) < 0.999
+                        or float(torch.linalg.vector_norm(proposed_quat)) > 1.001
+                        or float(2 * torch.acos(torch.abs(torch.dot(
+                            proposed_quat, current_pose[3:])).clamp(max=1))) > 0.2):
+                    raise ValueError("Candidate wrist transition exceeds diagnostic safety bounds")
+                target = torch.tensor(
+                    [candidate["right_joint_position"][name]
+                     for name in env.right.joint_names], device=env.device)
+                limits = env._joint_limits[1]
+                if bool(((target < limits[:, 0]) | (target > limits[:, 1])).any()):
+                    raise ValueError("Candidate exceeds official finger joint limits")
+                env.wrists[1].target_pos[0] = proposed_pos
+                env.wrists[1].target_quat[0] = proposed_quat
+                env._finger_targets[1][0] = target
+            if args.maintain_contact and step < args.steps:
                 active = {key for key, force in previous_forces.items()
                           if force < args.contact_target_n}
             action = torch.zeros(1, 52, device=env.device)
-            if args.right_wrist_track_cap:
+            if step >= args.steps:
+                pass  # Candidate targets were set once; zero action holds them.
+            elif args.right_wrist_track_cap:
                 desired = initial_right_wrist + (
                     env.cap.data.root_pose_w.torch[0, :3] - initial_cap)
                 error = desired - env.wrists[1].target_pos[0]
                 action[0, 26:29] = (error / cfg.wrist_translation_scale).clamp(-1, 1)
             elif step < args.right_wrist_down_steps:
                 action[0, 28] = -1.0
-            for key in active:
+            for key in active if step < args.steps else ():
                 side, _, name, direction = commands[key]
                 hand = env.left if side == "left" else env.right
                 if (args.right_middle_pip_target_max is not None
@@ -178,15 +241,35 @@ def main():
                         and float(env._finger_targets[1][0, hand.joint_names.index(name)])
                         >= args.right_middle_pip_target_max):
                     continue
+                if (args.right_index_pip_target_max is not None
+                        and name == "r_index_finger_pip" and direction > 0
+                        and float(env._finger_targets[1][0, hand.joint_names.index(name)])
+                        >= args.right_index_pip_target_max):
+                    continue
                 action[0, (6 if side == "left" else 32) + hand.joint_names.index(name)] = direction
-            if args.right_index_mcp_flex and "right_index_finger" in active:
+            if step < args.steps and args.right_index_mcp_flex and "right_index_finger" in active:
                 action[0, 32 + env.right.joint_names.index("r_index_finger_mcp_flex")] = 1.0
-            if args.right_middle_mcp_abd and "right_middle_finger" in active:
+            if step < args.steps and args.right_middle_mcp_abd and (
+                    "right_middle_finger" in active
+                    or args.right_middle_abd_target_min is not None):
                 abd_index = env.right.joint_names.index("r_middle_finger_mcp_abd")
                 if (args.right_middle_abd_target_min is None
                         or float(env._finger_targets[1][0, abd_index])
                         > args.right_middle_abd_target_min):
                     action[0, 32 + abd_index] = -1.0
+            if step < args.steps and args.right_index_abd_target_min is not None:
+                abd_index = env.right.joint_names.index("r_index_finger_mcp_abd")
+                if (float(env._finger_targets[1][0, abd_index])
+                        > args.right_index_abd_target_min):
+                    action[0, 32 + abd_index] = -1.0
+            if step < args.steps and args.right_index_dip_extra_rad > 0:
+                dip_index = env.right.joint_names.index("r_index_finger_dip")
+                canonical_index = sample.metadata["right_joint_order"].index(
+                    "r_index_finger_dip")
+                upper_target = (sample.right.joint_target[canonical_index]
+                                + args.right_index_dip_extra_rad)
+                if float(env._finger_targets[1][0, dip_index]) < upper_target:
+                    action[0, 32 + dip_index] = 1.0
             _, reward, terminated, truncated, extras = env.step(action)
             # The force matrix identifies the finger but cannot distinguish a
             # cap sidewall grasp from a top/edge collision. Inspect actual
@@ -236,7 +319,7 @@ def main():
                     [i for i, body in enumerate(names) if digit in body]].max())
                 if force > env.contacts.force_floor_n:
                     ever_contacted.add(key)
-                if not args.maintain_contact and force > env.contacts.force_floor_n:
+                if step < args.steps and not args.maintain_contact and force > env.contacts.force_floor_n:
                     active.discard(key)
             previous_forces = forces
             displacement = float(torch.linalg.vector_norm(
@@ -250,7 +333,11 @@ def main():
                 "r_index_finger_mcp_flex", "r_index_finger_pip",
                 "r_middle_finger_mcp_abd", "r_middle_finger_pip")
             joint_ids = [env.right.joint_names.index(name) for name in right_joint_names]
+            phase = ("closing" if step < args.steps else
+                     "candidate_transition" if step < args.steps + args.candidate_transition_steps else
+                     "candidate_hold")
             rows.append({"step": step + 1, "time_s": (step + 1) * env.step_dt,
+                         "phase": phase,
                          "reward": float(reward[0]), "terminated": bool(terminated[0]),
                          "truncated": bool(truncated[0]),
                          "bottle_displacement_m": displacement,
@@ -258,14 +345,19 @@ def main():
                              env.bottle.data.root_pose_w.torch[0, :3] - initial_bottle
                          ).detach().cpu().tolist(),
                          "cap_translation_m": (cap[:3] - initial_cap).detach().cpu().tolist(),
+                         "cap_pose_w_xyzw": cap.detach().cpu().tolist(),
+                         "bottle_pose_w_xyzw": env.bottle.data.root_pose_w.torch[0].detach().cpu().tolist(),
                          "right_wrist_position_w_m": (
                              env.right.data.root_pose_w.torch[0, :3].detach().cpu().tolist()),
+                         "right_wrist_pose_w_xyzw": (
+                             env.right.data.root_pose_w.torch[0].detach().cpu().tolist()),
                          "contact_force_n": forces,
                          "cross_object_force_n": cross_forces,
                          "right_cap_contact_points": cap_contact_points,
                          "right_cap_sidewall_force_n": sidewall_forces,
                          "right_tip_radial_gap_m": (radial - config.cap_outer_radius).detach().cpu().tolist(),
                          "right_tip_axial_m": tip_local[:, 2].detach().cpu().tolist(),
+                         "right_tip_cap_local_xyz_m": tip_local.detach().cpu().tolist(),
                          "right_selected_joint_rad": {
                              name: [float(env.right.data.joint_pos.torch[0, joint_id]),
                                     float(env._finger_targets[1][0, joint_id])]
@@ -281,8 +373,13 @@ def main():
                   "right_index_mcp_flex": args.right_index_mcp_flex,
                   "right_middle_mcp_abd": args.right_middle_mcp_abd,
                   "right_middle_pip_target_max": args.right_middle_pip_target_max,
+                  "right_index_pip_target_max": args.right_index_pip_target_max,
                   "right_middle_abd_target_min": args.right_middle_abd_target_min,
+                  "right_index_abd_target_min": args.right_index_abd_target_min,
+                  "right_index_dip_extra_rad": args.right_index_dip_extra_rad,
                   "right_wrist_track_cap": args.right_wrist_track_cap,
+                  "candidate_json": str(args.candidate_json) if args.candidate_json else None,
+                  "candidate_offset_xyz_m": list(args.candidate_offset_xyz),
                   "contact_points_enabled": args.contact_points,
                   "final_right_joint_position": dict(zip(
                       env.right.joint_names,
