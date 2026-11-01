@@ -157,9 +157,23 @@ scripts/run_isaaclab.sh scripts/environments/probe_mimic_stable_grasp.py \
   --output artifacts/phase1/mimic_left_only_probe_0.json
 ```
 
-The next small physics experiment should adjust left index/ring and right
-index joint targets around this stable state, with the wrists and hard-pitch
-assembly held fixed. It should require distributed target-object contact,
-normal-force balance, shallow penetration and an independent 1 s replay
-before adding any row to a new bank. A contact-topology-verified bank and a
-batched articulation Reset are prerequisites for meaningful hard-pitch PPO.
+Any new sample must show distributed target-object contact, normal-force
+balance, shallow penetration and an independent 1 s replay before entering a
+validated bank. A contact-topology-verified bank and a batched articulation
+Reset are prerequisites for meaningful hard-pitch PPO.
+
+An initial controlled right-index ablation already narrowed that next step.
+With row 0, the index tip site was about 52.0 mm from the cap axis and
+30.8 mm above the cap centre after 0.25 s; the example cap sidewall radius is
+about 18 mm. Ramping both right index MCP flex and PIP targets by +0.2 rad
+over 0.2 s moved the real joints to their new targets and brought the tip to
+43.5 mm radial distance and 11.6 mm axial height, but produced **zero** index
+contact during a separate 1 s run. The -0.2 rad control moved the tip farther
+away, to 56.8 mm radial distance and 51.6 mm axial height, again with zero
+contact. Thus the lack of index contact is a measured geometric placement
+problem in this legacy grasp family, not a joint drive failure. Continuing to
+increase the same flex target without checking other collision bodies and
+wrist/index abduction geometry would be blind search. The next experiment
+should start from the existing geometrically qualified tripod pregrasp family
+or explicitly optimize the right wrist/index abduction around the cap while
+retaining thumb and middle contact. No new bank row was marked validated.

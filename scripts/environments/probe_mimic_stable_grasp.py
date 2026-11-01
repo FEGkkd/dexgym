@@ -21,11 +21,18 @@ parser.add_argument("--bank-index", type=int, default=0)
 parser.add_argument("--duration", type=float, default=1.0)
 parser.add_argument("--left-only", action="store_true",
                     help="Move right hand away to test left-hand support through fingers")
+parser.add_argument("--left-index-pip-delta", type=float, default=0.0)
+parser.add_argument("--right-index-mcp-flex-delta", type=float, default=0.0)
+parser.add_argument("--right-index-pip-delta", type=float, default=0.0)
 parser.add_argument("--output", type=Path)
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 if args.bank_index not in range(4) or not 0 < args.duration <= 2.0:
     parser.error("bank-index must be 0..3 and duration must be in (0, 2] s")
+if any(not math.isfinite(value) or abs(value) > 0.5 for value in (
+        args.left_index_pip_delta, args.right_index_mcp_flex_delta,
+        args.right_index_pip_delta)):
+    parser.error("joint target deltas must be finite and within +/-0.5 rad")
 app = AppLauncher(args).app
 
 import torch
@@ -39,6 +46,7 @@ from dexteroushands_lab.assets.bottle import BottleConfig
 from dexteroushands_lab.assets.bottle.generate_usd import build_bottle_usd
 from dexteroushands_lab.assets.bottle.mimic_contract import mimic_reset_geometry
 from dexteroushands_lab.assets.bottle.mimic_thread import author_mimic_thread
+from dexteroushands_lab.assets.bottle.batched_thread import _rotate
 from dexteroushands_lab.assets.wuji_hand2_beta import load_hand2_spec
 from dexteroushands_lab.scenes.batched_contacts import BatchedContactMonitor
 from dexteroushands_lab.scenes.bimanual_bottle import make_bimanual_bottle_scene_cfg
@@ -108,6 +116,8 @@ def main():
                                dtype=torch.float32)[None]
     bottle.write_root_pose_to_sim_index(root_pose=bottle_pose)
     bottle.write_root_velocity_to_sim_index(root_velocity=torch.zeros(1, 6, device=args.device))
+    base_targets = {}
+    final_targets = {}
     for hand, side, pose in ((left, "left", left_pose), (right, "right", right_pose)):
         spec = load_hand2_spec(variant="beta1", side=side)
         order = [spec.joint_names.index(name) for name in hand.joint_names]
@@ -118,9 +128,19 @@ def main():
                          dtype=torch.float32)[order][None]
         target = torch.tensor(row[side]["joint_target"], device=args.device,
                               dtype=torch.float32)[order][None]
+        base_targets[side] = target.clone()
+        offsets = ({"index_finger_pip": args.left_index_pip_delta} if side == "left"
+                   else {"index_finger_mcp_flex": args.right_index_mcp_flex_delta,
+                         "index_finger_pip": args.right_index_pip_delta})
+        for suffix, delta in offsets.items():
+            name = f"{'l' if side == 'left' else 'r'}_{suffix}"
+            index = hand.joint_names.index(name)
+            joint = spec.joints[spec.joint_names.index(name)]
+            target[0, index] = (target[0, index] + delta).clamp(joint.lower, joint.upper)
+        final_targets[side] = target
         hand.write_joint_position_to_sim_index(position=q)
         hand.write_joint_velocity_to_sim_index(velocity=torch.zeros_like(q))
-        hand.set_joint_position_target_index(target=target)
+        hand.set_joint_position_target_index(target=base_targets[side])
     physics_view.update_articulations_kinematic()
     contacts = BatchedContactMonitor(
         physics_view, 1, load_hand2_spec(variant="beta1", side="left"),
@@ -144,6 +164,10 @@ def main():
     initial_contact_points = {}
     start = bottle_pose[0].clone()
     for step in range(steps):
+        alpha = min((step + 1) * 0.002 / 0.2, 1.0)
+        for hand, side in ((left, "left"), (right, "right")):
+            target = base_targets[side] + alpha * (final_targets[side] - base_targets[side])
+            hand.set_joint_position_target_index(target=target)
         scene.write_data_to_sim()
         sim.step()
         scene.update(0.002)
@@ -193,8 +217,28 @@ def main():
                                "left_force_n": left_force,
                                "right_force_n": right_force})
     end = bottle.data.root_pose_w.torch[0]
+    final_index_state = {}
+    final_index_tip = {}
+    for hand, side in ((left, "left"), (right, "right")):
+        final_index_state[side] = {
+            name: {"position_rad": float(hand.data.joint_pos.torch[0, index]),
+                   "target_rad": float(final_targets[side][0, index])}
+            for index, name in enumerate(hand.joint_names) if "index_finger" in name}
+        target_object = bottle if side == "left" else cap
+        obj_pose = target_object.data.root_pose_w.torch[0]
+        prefix = "l" if side == "left" else "r"
+        tip_id = hand.body_names.index(f"{prefix}_index_finger_tip")
+        point = hand.data.body_link_pose_w.torch[0, tip_id, :3]
+        inverse_q = torch.cat((-obj_pose[3:6], obj_pose[6:7]))
+        local = _rotate(inverse_q[None], (point - obj_pose[:3])[None])[0]
+        final_index_tip[side] = {"object_local_xyz_m": local.detach().cpu().tolist(),
+                                 "radial_m": float(torch.linalg.vector_norm(local[:2]))}
     result = {"bank_index": args.bank_index,
               "left_only": args.left_only,
+              "joint_target_deltas_rad": {
+                  "left_index_pip": args.left_index_pip_delta,
+                  "right_index_mcp_flex": args.right_index_mcp_flex_delta,
+                  "right_index_pip": args.right_index_pip_delta},
               "legacy_pitch_error_m": geometry["pitch_error_m"],
               "right_wrist_correction_w_m": correction,
               "duration_s": steps * 0.002,
@@ -203,6 +247,8 @@ def main():
               "digit_contact_ratios": {
                   side: {digit: count / steps for digit, count in counts.items()}
                   for side, counts in digit_steps.items()},
+              "final_index_state": final_index_state,
+              "final_index_tip": final_index_tip,
               "peak_left_force_n": peak_left, "peak_right_force_n": peak_right,
               "bottle_displacement_m": float(torch.linalg.vector_norm(end[:3] - start[:3])),
               "bottle_rotation_rad": _angle(end[3:], start[3:]),
