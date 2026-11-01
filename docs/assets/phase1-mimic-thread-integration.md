@@ -56,6 +56,11 @@ natural pregrasp was 0/200. None of the old stable samples may be silently
 used as validated Reset states for this backend. The existing DirectRLEnv
 continues to use the legacy D6 plus explicit `BatchedThreadCoupler`; the new
 authorer rejects an existing legacy D6 on the same assembly.
+The four committed stable rows are variants of one seed-204 grasp family;
+their measured lateral cap offset is only 2–9 µm, so it is specifically the
+axial mismatch that fails this gate. Forcing such poses into the joint would
+introduce a millimetre-scale solver correction at Reset, so no dynamic hold
+pass is inferred from them.
 
 The implicit drive is bounded and stable in the prior isolated probe under
 low and high diagnostic torques. It does not yet implement the example
@@ -82,6 +87,14 @@ scripts/run_isaaclab.sh scripts/environments/validate_bimanual_mimic_scene.py \
 The local runner currently returns shell status 0 even when the Python script
 raises an exception. Check its output for `Traceback` and require a
 `BIMANUAL_MIMIC_SCENE` result before recording a pass.
+
+The focused bottle/thread/Phase 1 numeric tests returned **39 passed**. The
+full offline suite with `WUJI_DESCRIPTION_ROOT` set returned **161 passed,
+1 skipped, 2 failed**. The two failures are in the existing user-owned
+Allegro asset fixture and MANO keypoint-order test; neither is caused by this
+three-file additive probe. An initial full-suite invocation without the
+required model-root variable stopped during collection and is not counted as
+a test result.
 
 Next controlled experiment: set the saved cap world pose from a verified
 slide/spin pair, implement selective articulation Reset and batched state
