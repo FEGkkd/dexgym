@@ -226,6 +226,22 @@ class BimanualBottleDirectEnv(DirectRLEnv):
                     samples, lambda s, n=name, f=field: getattr(getattr(s, n), f), self.device)
         self._bank["thread_angle"] = _bank_tensor(samples,
                                                    lambda s: s.thread_initial_angle_rad, self.device)
+        self._bank["thread_spin_velocity"] = _bank_tensor(
+            samples, lambda s: float(s.metadata.get("mimic_spin_velocity_rad_s", 0.0)),
+            self.device)
+        drive_states = [s.metadata.get("mimic_drive_state", {}) for s in samples]
+        if any(not isinstance(state, dict) for state in drive_states):
+            raise ValueError("Mimic drive Reset metadata must be a mapping")
+        self._bank["thread_stick_reference"] = torch.tensor(
+            [state.get("stick_reference_rad", sample.thread_initial_angle_rad)
+             for state, sample in zip(drive_states, samples)],
+            device=self.device, dtype=torch.float32)
+        for name in ("sliding", "breakaway_seen"):
+            values = [state.get(name, False) for state in drive_states]
+            if any(type(value) is not bool for value in values):
+                raise ValueError(f"Mimic drive Reset {name} must be boolean")
+            self._bank[f"thread_{name}"] = torch.tensor(
+                values, device=self.device, dtype=torch.bool)
         self._bank["snapshot_mask"] = torch.tensor(
             ["thread_coupler_state" in s.metadata for s in samples], device=self.device, dtype=torch.bool)
         template = {"last_wrapped_rad": 0., "theta_unwrapped_rad": 0.,
@@ -301,7 +317,11 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             self._latest_thread = self.thread.reset(
                 ids, bottle_pose_w=bottle_pose,
                 bottle_velocity_w=self._bank["bottle_root_velocity"][indices],
-                angle_rad=self._bank["thread_angle"][indices])
+                angle_rad=self._bank["thread_angle"][indices],
+                spin_velocity_rad_s=self._bank["thread_spin_velocity"][indices],
+                stick_reference_rad=self._bank["thread_stick_reference"][indices],
+                sliding=self._bank["thread_sliding"][indices],
+                breakaway_seen=self._bank["thread_breakaway_seen"][indices])
             self.bottle.update(0.0)
             self.cap.update(0.0)
         else:

@@ -9,7 +9,7 @@ never a learned grasp or a bank validation.
 from __future__ import annotations
 
 import argparse
-from dataclasses import replace
+from dataclasses import asdict, replace
 import json
 from pathlib import Path
 import sys
@@ -67,6 +67,12 @@ parser.add_argument("--post-close-index-mcp-delta", type=float, default=0.0,
 parser.add_argument("--post-close-index-pip-delta", type=float, default=0.0,
                     help="One bounded right index PIP target adjustment after closing")
 parser.add_argument("--output", type=Path)
+parser.add_argument("--capture-candidate", action="store_true",
+                    help="Save the final live PhysX state as an unvalidated Mimic Reset candidate")
+parser.add_argument("--solver-position-iterations", type=int,
+                    help="Controlled PhysX position solver iteration ablation")
+parser.add_argument("--left-force-relief-target-n", type=float,
+                    help="Diagnostic left-finger target relief above this measured contact force")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 if not 0 <= args.sample_index < 32 or args.steps < 1:
@@ -91,6 +97,10 @@ if any(abs(value) > 0.15 for value in (
         args.post_close_index_dip_delta, args.post_close_index_mcp_delta,
         args.post_close_index_pip_delta)):
     parser.error("post-close right index adjustments must be at most 0.15 rad")
+if args.solver_position_iterations is not None and not 1 <= args.solver_position_iterations <= 255:
+    parser.error("--solver-position-iterations must be in [1, 255]")
+if args.left_force_relief_target_n is not None and not 0.5 <= args.left_force_relief_target_n <= 50:
+    parser.error("--left-force-relief-target-n must be in [0.5, 50] N")
 app = AppLauncher(args).app
 
 import torch
@@ -100,7 +110,7 @@ from isaaclab_physx.physics import PhysxManager
 from dexteroushands_lab.assets.bottle import BottleConfig
 from dexteroushands_lab.assets.bottle.batched_thread import _rotate
 from dexteroushands_lab.assets.wuji_hand2_beta import load_hand2_spec
-from dexteroushands_lab.scenes.grasp_init import grasp_sample_from_dict
+from dexteroushands_lab.scenes.grasp_init import BodyInit, HandInit, grasp_sample_from_dict
 from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env import BimanualBottleDirectEnv
 from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env_cfg import GraspHoldDirectEnvCfg
 
@@ -174,6 +184,9 @@ def main():
     cfg.sim.device = args.device
     cfg.thread_backend = "mimic"
     cfg.right_cap_contact_gate = args.right_cap_contact_gate
+    if args.solver_position_iterations is not None:
+        cfg.sim.physics.min_position_iteration_count = args.solver_position_iterations
+        cfg.sim.physics.max_position_iteration_count = args.solver_position_iterations
     cfg.stable_reset_probability = 0.0
     cfg.evaluation_mode = args.sample_index >= 24
     env = BimanualBottleDirectEnv(cfg)
@@ -317,6 +330,14 @@ def main():
                                 + args.right_index_dip_extra_rad)
                 if float(env._finger_targets[1][0, dip_index]) < upper_target:
                     action[0, 32 + dip_index] = 1.0
+            if args.left_force_relief_target_n is not None:
+                for key, force in previous_forces.items():
+                    side, _, name, direction = commands[key]
+                    if side != "left" or force <= args.left_force_relief_target_n:
+                        continue
+                    index = env.left.joint_names.index(name)
+                    relief = min(0.25 * (force / args.left_force_relief_target_n - 1), 0.5)
+                    action[0, 6 + index] = -direction * relief
             _, reward, terminated, truncated, extras = env.step(action)
             # The force matrix identifies the finger but cannot distinguish a
             # cap sidewall grasp from a top/edge collision. Inspect actual
@@ -394,6 +415,11 @@ def main():
                          "cap_translation_m": (cap[:3] - initial_cap).detach().cpu().tolist(),
                          "cap_pose_w_xyzw": cap.detach().cpu().tolist(),
                          "bottle_pose_w_xyzw": env.bottle.data.root_pose_w.torch[0].detach().cpu().tolist(),
+                         "bottle_velocity_w": env.thread.state.root_velocity_w[0].detach().cpu().tolist(),
+                         "cap_spin_velocity_rad_s": float(env.thread.state.spin_velocity_rad_s[0]),
+                         "maximum_finger_speed_rad_s": max(
+                             float(env.left.data.joint_vel.torch[0].abs().max()),
+                             float(env.right.data.joint_vel.torch[0].abs().max())),
                          "right_wrist_position_w_m": (
                              env.right.data.root_pose_w.torch[0, :3].detach().cpu().tolist()),
                          "right_wrist_pose_w_xyzw": (
@@ -441,6 +467,8 @@ def main():
                   "post_close_index_mcp_delta_rad": args.post_close_index_mcp_delta,
                   "post_close_index_pip_delta_rad": args.post_close_index_pip_delta,
                   "contact_points_enabled": args.contact_points,
+                  "solver_position_iterations": cfg.sim.physics.max_position_iteration_count,
+                  "left_force_relief_target_n": args.left_force_relief_target_n,
                   "final_right_joint_position": dict(zip(
                       env.right.joint_names,
                       env.right.data.joint_pos.torch[0].detach().cpu().tolist())),
@@ -454,6 +482,45 @@ def main():
                   "contacted_digits": sorted(ever_contacted),
                   "unsafe_motion": rows[-1]["bottle_displacement_m"] > args.max_bottle_displacement_m,
                   "terminated": rows[-1]["terminated"] if rows else None}
+        if args.capture_candidate and rows:
+            state = env.thread.view.read()
+
+            def body_from_runtime(pose, velocity):
+                return BodyInit(tuple(float(x) for x in pose[0].detach().cpu()),
+                                tuple(float(x) for x in velocity[0].detach().cpu()))
+
+            def hand_from_runtime(hand, spec, wrist, target):
+                root_state = body_from_runtime(hand.data.root_pose_w.torch,
+                                               hand.data.root_vel_w.torch)
+                order = [hand.joint_names.index(name) for name in spec.joint_names]
+                target_pose = torch.cat((wrist.target_pos[0], wrist.target_quat[0]))
+                return HandInit(
+                    root_state.root_pose, root_state.root_velocity,
+                    tuple(float(hand.data.joint_pos.torch[0, i]) for i in order),
+                    tuple(float(hand.data.joint_vel.torch[0, i]) for i in order),
+                    tuple(float(x) for x in target_pose.detach().cpu()),
+                    tuple(float(target[0, i]) for i in order))
+
+            candidate_sample = replace(
+                sample, mode="stable_pregrasp", validated=False, validation=None,
+                source="scripted_physx_contact_candidate_requires_fresh_reset_replay",
+                left=hand_from_runtime(env.left, specs[0], env.wrists[0], env._finger_targets[0]),
+                right=hand_from_runtime(env.right, specs[1], env.wrists[1], env._finger_targets[1]),
+                bottle=body_from_runtime(state.root_pose_w, state.root_velocity_w),
+                cap=body_from_runtime(state.cap_pose_w, env.cap.data.root_vel_w.torch),
+                thread_initial_angle_rad=float(state.theta_rad[0]),
+                thread_initial_engagement_m=config.initial_engagement - float(state.axial_m[0]),
+                metadata={**sample.metadata,
+                          "wrist_control_mode": "pose_command_wrist",
+                          "mimic_spin_velocity_rad_s": float(state.spin_velocity_rad_s[0]),
+                          "mimic_drive_state": {
+                              "stick_reference_rad": float(env.thread.drive.stick_reference[0]),
+                              "sliding": bool(env.thread.drive.sliding[0]),
+                              "breakaway_seen": bool(env.thread.drive.breakaway_seen[0]),
+                          },
+                          "mimic_candidate_unverified": True,
+                          "source_probe": str(args.output) if args.output else None})
+            result["diagnostic_candidate"] = asdict(candidate_sample)
         self_contacts = []
         for body, filters, view in right_index_self_views:
             normal_forces, _, _, distances, counts, starts = map(

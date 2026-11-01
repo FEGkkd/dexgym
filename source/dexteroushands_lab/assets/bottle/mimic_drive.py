@@ -54,12 +54,15 @@ class BatchedMimicDrive:
         self.target = (wp.to_torch(articulation_view.get_dof_position_targets())
                        .reshape(num_envs, 2).clone())
         self.stick_reference = (wp.to_torch(articulation_view.get_dof_positions())
-                                .reshape(num_envs, 2)[:, self.spin_id].clone())
+                                .reshape(num_envs, 2)[:, self.spin_id].clone().to(self.device))
         self.sliding = torch.zeros(num_envs, device=device, dtype=torch.bool)
         self.breakaway_seen = torch.zeros_like(self.sliding)
         self.last_state = None
 
-    def reset(self, env_ids: torch.Tensor, theta_rad: torch.Tensor) -> None:
+    def reset(self, env_ids: torch.Tensor, theta_rad: torch.Tensor,
+              *, stick_reference_rad: torch.Tensor | None = None,
+              sliding: torch.Tensor | None = None,
+              breakaway_seen: torch.Tensor | None = None) -> None:
         """Reset the resistance mode for selected articulations at an episode boundary."""
         import warp as wp
 
@@ -67,15 +70,40 @@ class BatchedMimicDrive:
         theta = theta_rad.to(device=self.device, dtype=torch.float32)
         if theta.shape != (ids.numel(),):
             raise ValueError("Drive Reset angle shape mismatch")
-        if not bool(torch.isfinite(theta).all()):
+        reference = (theta if stick_reference_rad is None else
+                     stick_reference_rad.to(device=self.device, dtype=torch.float32))
+        sliding_state = (torch.zeros_like(theta, dtype=torch.bool) if sliding is None else
+                         sliding.to(device=self.device, dtype=torch.bool))
+        seen_state = (torch.zeros_like(theta, dtype=torch.bool) if breakaway_seen is None else
+                      breakaway_seen.to(device=self.device, dtype=torch.bool))
+        if (reference.shape != theta.shape or sliding_state.shape != theta.shape
+                or seen_state.shape != theta.shape):
+            raise ValueError("Drive Reset internal state shape mismatch")
+        if (not bool(torch.isfinite(theta).all())
+                or not bool(torch.isfinite(reference).all())
+                or bool((reference.abs() > 2 * torch.pi * self.config.thread_turns).any())):
             raise ValueError("Drive Reset angle must be finite")
-        self.stick_reference[ids] = theta
-        self.sliding[ids] = False
-        self.breakaway_seen[ids] = False
-        self.stiffness[ids, self.spin_id] = self.config.breakaway_stiffness
-        self.damping[ids, self.spin_id] = self.config.breakaway_damping
-        self.max_force[ids, self.spin_id] = self.config.breakaway_torque
-        self.target[ids, self.spin_id] = theta
+        self.stick_reference[ids] = reference
+        self.sliding[ids] = sliding_state
+        self.breakaway_seen[ids] = seen_state
+        cfg = self.config
+        axial = cfg.thread_sign * cfg.thread_pitch * theta / (2 * torch.pi)
+        engagement = (1.0 - axial / (cfg.thread_pitch * cfg.thread_turns)).clamp(0, 1)
+        power = engagement.pow(cfg.engagement_resistance_exponent)
+        breakaway = cfg.loose_breakaway_torque + (
+            cfg.breakaway_torque - cfg.loose_breakaway_torque) * power
+        running = cfg.loose_running_resistance_torque + (
+            cfg.running_resistance_torque - cfg.loose_running_resistance_torque) * power
+        self.stiffness[ids.to(self.stiffness.device), self.spin_id] = torch.where(
+            sliding_state, torch.zeros_like(theta),
+            torch.full_like(theta, cfg.breakaway_stiffness)).to(self.stiffness.device)
+        self.damping[ids.to(self.damping.device), self.spin_id] = torch.where(
+            sliding_state, running / cfg.restick_speed,
+            torch.full_like(theta, cfg.breakaway_damping)).to(self.damping.device)
+        self.max_force[ids.to(self.max_force.device), self.spin_id] = torch.where(
+            sliding_state, running, breakaway).to(self.max_force.device)
+        self.target[ids.to(self.target.device), self.spin_id] = torch.where(
+            sliding_state, theta, reference).to(self.target.device)
         selected_cpu = wp.from_torch(ids.to(device="cpu", dtype=torch.int32))
         selected_gpu = wp.from_torch(ids.to(device=self.device, dtype=torch.int32))
         self.view.set_dof_stiffnesses(wp.from_torch(self.stiffness), selected_cpu)
@@ -115,13 +143,13 @@ class BatchedMimicDrive:
         static_damping = cfg.breakaway_damping
         running_damping = running / cfg.restick_speed
         self.stiffness[:, self.spin_id] = torch.where(
-            self.sliding, 0.0, static_stiffness)
+            self.sliding, 0.0, static_stiffness).to(self.stiffness.device)
         self.damping[:, self.spin_id] = torch.where(
-            self.sliding, running_damping, static_damping)
+            self.sliding, running_damping, static_damping).to(self.damping.device)
         self.max_force[:, self.spin_id] = torch.where(
-            self.sliding, running, breakaway)
+            self.sliding, running, breakaway).to(self.max_force.device)
         self.target[:, self.spin_id] = torch.where(
-            self.sliding, theta_rad, self.stick_reference)
+            self.sliding, theta_rad, self.stick_reference).to(self.target.device)
         self.view.set_dof_stiffnesses(wp.from_torch(self.stiffness), self.ids)
         self.view.set_dof_dampings(wp.from_torch(self.damping), self.ids)
         self.view.set_dof_max_forces(wp.from_torch(self.max_force), self.ids)
@@ -129,6 +157,6 @@ class BatchedMimicDrive:
         state = MimicDriveState(
             sliding=self.sliding.clone(), breakaway_seen=self.breakaway_seen.clone(),
             breakaway_limit_nm=breakaway, running_limit_nm=running,
-            active_force_limit_nm=self.max_force[:, self.spin_id].clone())
+            active_force_limit_nm=self.max_force[:, self.spin_id].clone().to(self.device))
         self.last_state = state
         return state

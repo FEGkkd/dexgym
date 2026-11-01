@@ -56,11 +56,16 @@ class MimicThreadRuntime:
 
     def reset(self, env_ids: torch.Tensor, *, bottle_pose_w: torch.Tensor,
               bottle_velocity_w: torch.Tensor, angle_rad: torch.Tensor,
-              spin_velocity_rad_s: torch.Tensor | None = None) -> MimicRuntimeTelemetry:
+              spin_velocity_rad_s: torch.Tensor | None = None,
+              stick_reference_rad: torch.Tensor | None = None,
+              sliding: torch.Tensor | None = None,
+              breakaway_seen: torch.Tensor | None = None) -> MimicRuntimeTelemetry:
         self.view.reset(env_ids, root_pose_w=bottle_pose_w,
                         root_velocity_w=bottle_velocity_w, theta_rad=angle_rad,
                         spin_velocity_rad_s=spin_velocity_rad_s)
-        self.drive.reset(env_ids, angle_rad)
+        self.drive.reset(env_ids, angle_rad,
+                         stick_reference_rad=stick_reference_rad,
+                         sliding=sliding, breakaway_seen=breakaway_seen)
         return self.update()
 
     def step(self) -> MimicRuntimeTelemetry:

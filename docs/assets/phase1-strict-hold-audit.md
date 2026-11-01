@@ -104,6 +104,8 @@ claimed. The next small physical experiment should use contact feedback
 to close the right index and middle onto the cap's interior sidewall,
 measure cap spin and bottle drift, then independently Reset and replay any
 settled bilateral state before using it as a stable-bank curriculum start.
+The resulting targeted experiment and failed fresh-process replay are
+documented in [the Mimic grasp replay audit](phase1-mimic-grasp-replay-audit.md).
 
 | Gate | Status | Evidence |
 |---|---|---|

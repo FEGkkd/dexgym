@@ -51,6 +51,8 @@ try:
                         state.theta_rad, state.spin_velocity_rad_s, state.axial_m,
                         env.thread.view.theta_at_reset.clone(),
                         env.thread.drive.breakaway_seen.clone()]
+            tensors += [getattr(env.thread.drive, name).clone() for name in
+                        ("stiffness", "damping", "max_force", "target")]
         else:
             tensors += [env.thread.theta.clone()]
             tensors += [getattr(env.thread, name).clone() for name in
@@ -89,7 +91,8 @@ try:
                 raise AssertionError("Selected bottle/cap collision exclusion was not restored")
         other = torch.arange(args.num_envs, device=env.device) != chosen
         for field_index, (old, new) in enumerate(zip(before, after)):
-            delta = (old[other].float() - new[other].float()).abs().max().item()
+            mask = other.to(old.device)
+            delta = (old[mask].float() - new[mask].float()).abs().max().item()
             max_error = max(max_error, delta)
             if delta != 0:
                 raise AssertionError(f"Selective reset changed peer env at iteration {iteration} "
