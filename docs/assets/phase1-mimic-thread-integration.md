@@ -226,8 +226,60 @@ scripts/run_isaaclab.sh scripts/environments/validate_bimanual_mimic_scene.py \
   --reset-repetitions 100 --random-reset-ids --headless
 ```
 
+## Implicit breakaway and running drive probe (2026-11-01)
+
+`assets/bottle/mimic_drive.py` now changes the PhysX spin joint's implicit
+drive from a capped stick spring to a lower-force running damper when the
+measured angular deflection and velocity exceed the configured slip criteria.
+The body remains free, the cap receives no scripted pose writes, and the
+hard-pitch mimic joint continues to enforce axial travel. The resistance
+numbers are engineering examples, **not measured closure parameters**.
+
+The installed Isaac Sim 6.0.1 tensor backend requires CPU indices for
+`set_dof_stiffnesses`, `set_dof_dampings` and `set_dof_max_forces`, but CUDA
+indices for `set_dof_position_targets`. Its runtime angular gain tensors use
+radian units even though USD angular drive attributes use degrees. An initial
+run mistakenly converted the runtime gains a second time: 0.005 N m then
+produced 1.569 rad of slip in 0.4 s. After removing that extra conversion,
+the same low-torque probe ended at 0.0233 rad without sliding. The failed
+measurement is recorded here; the current JSON result is from corrected code.
+
+| Isolated PhysX test | Measured result |
+|---|---|
+| Zero torque, 0.4 s | Spin approximately 0; no slide |
+| +0.005 N m, 0.4 s | 0.0233 rad; no slide; pitch error 0.112 µm |
+| +0.025 N m, 0.06 s | 5.45 rad; slide observed; pitch error 0.084 µm |
+| −0.025 N m, 0.04 s | −3.27 rad, −1.56 mm local axial travel; slide observed |
+| 0.5 rad initial angle, zero torque, selective Reset | 0.5 rad final; immediate peer change 0 |
+| 1024 isolated articulations, 20 steps | 129,637 environment physics steps/s; no assertion failures |
+
+The 0.025 N m isolated torque accelerates the ungrasped light cap to about
+105 rad/s within 0.06 s; 0.05 N m reached the three-turn joint stop. These
+are **not** realistic hand-controlled opening trajectories. The fixture
+applies a constant external diagnostic torque and has no grasping hand.
+For RL, wrist command speed and real finger contact must be tested with this
+drive before its motion or success metrics are accepted.
+
+The full two-hand scene also ran with the drive updated every physics step:
+16 environments and 100 random selective Resets visited all 16 with zero
+immediate peer change; 1024 environments completed 20 steps with maximum
+physical pitch error 0.069 µm; and a right-hand contact probe measured
+0.273 N on the cap sidewall at +0.065 mm first separation. These are scene
+integration checks, not PPO or grasp success. Raw JSON and logs are in the
+ignored `artifacts/phase1/mimic_running_*.json` and
+`artifacts/phase1/mimic_scene_drive_*.json` files.
+
+```bash
+scripts/run_isaaclab.sh scripts/environments/probe_thread_mimic.py \
+  --real-geometry --no-self-collision --implicit-running-drive \
+  --num-envs 2 --steps 200 --torque 0.005 --axial-force 0.5 \
+  --assert-physics --max-abs-angle 0.05 --headless
+scripts/run_isaaclab.sh scripts/environments/validate_bimanual_mimic_scene.py \
+  --num-envs 1024 --steps 20 --implicit-running-drive --headless
+```
+
 The DirectRLEnv still uses the legacy D6 plus explicit `BatchedThreadCoupler`.
-The hard-pitch backend has no validated breakaway-to-running-resistance
-transition, no topology-qualified stable bank, and no full episode Reset or
-PPO replay. The previous strict CapTurn success rates therefore remain the
-current training evidence; this fixture does not upgrade them.
+The hard-pitch backend still lacks a topology-qualified stable bank, full
+episode Reset and PPO replay. The previous strict CapTurn success rates
+remain the current training evidence; these physical probes do not upgrade
+them.

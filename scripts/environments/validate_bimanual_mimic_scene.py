@@ -25,6 +25,8 @@ parser.add_argument("--initial-angle-rad", type=float, default=0.0)
 parser.add_argument("--reset-repetitions", type=int, default=0)
 parser.add_argument("--random-reset-ids", action="store_true")
 parser.add_argument("--contact-audit", action="store_true")
+parser.add_argument("--implicit-running-drive", action="store_true",
+                    help="Update the bounded PhysX breakaway/running spin drive every substep")
 parser.add_argument("--right-pregrasp-contact", action="store_true",
                     help="Diagnostic scripted right wrist approach from the geometric bank")
 parser.add_argument("--approach-speed", type=float, default=0.05,
@@ -44,6 +46,7 @@ from dexteroushands_lab.assets.bottle import BottleConfig
 from dexteroushands_lab.assets.bottle.generate_usd import build_bottle_usd
 from dexteroushands_lab.assets.bottle.mimic_thread import author_mimic_thread
 from dexteroushands_lab.assets.bottle.mimic_thread_view import MimicThreadView
+from dexteroushands_lab.assets.bottle.mimic_drive import BatchedMimicDrive
 from dexteroushands_lab.assets.bottle.batched_thread import _rotate
 from dexteroushands_lab.assets.wuji_hand2_beta import load_hand2_spec
 from dexteroushands_lab.scenes.batched_contacts import BatchedContactMonitor
@@ -119,6 +122,12 @@ def main():
     slide_id, spin_id, cap_id = names.index("SlideJoint"), names.index("SpinJoint"), links.index("Cap")
     thread_view = MimicThreadView(physics_view, art, cfg, device=args.device,
                                   num_envs=args.num_envs)
+    drive = (BatchedMimicDrive(art, cfg, device=args.device, num_envs=args.num_envs)
+             if args.implicit_running_drive else None)
+    if drive is not None:
+        initial_drive_state = thread_view.read()
+        drive.reset(torch.arange(args.num_envs, device=args.device),
+                    initial_drive_state.theta_rad)
     if len(left.joint_names) != 20 or len(right.joint_names) != 20:
         raise AssertionError("Official hand active finger joints changed")
     if pregrasp is not None:
@@ -137,6 +146,8 @@ def main():
         thread_view.reset(first_id, root_pose_w=initial.root_pose_w[0:1],
                           root_velocity_w=torch.zeros(1, 6, device=args.device),
                           theta_rad=torch.zeros(1, device=args.device))
+        if drive is not None:
+            drive.reset(first_id, torch.zeros(1, device=args.device))
     if pregrasp is None:
         before = thread_view.read()
         moved_bottle = before.root_pose_w[0:1].clone()
@@ -144,6 +155,8 @@ def main():
         thread_view.reset(first_id, root_pose_w=moved_bottle,
                           root_velocity_w=torch.zeros(1, 6, device=args.device),
                           theta_rad=torch.tensor([args.initial_angle_rad], device=args.device))
+        if drive is not None:
+            drive.reset(first_id, torch.tensor([args.initial_angle_rad], device=args.device))
         after = thread_view.read()
         if not torch.allclose(after.root_pose_w[0], moved_bottle[0], atol=1e-5):
             raise AssertionError("Selective root Reset did not restore Bottle pose")
@@ -183,6 +196,8 @@ def main():
             thread_view.reset(reset_id, root_pose_w=target_root,
                               root_velocity_w=torch.zeros(1, 6, device=args.device),
                               theta_rad=torch.tensor([angle], device=args.device))
+            if drive is not None:
+                drive.reset(reset_id, torch.tensor([angle], device=args.device))
             current = thread_view.read()
             if abs(float(current.opening_rad[chosen])) > 1e-5:
                 raise AssertionError("Opening progress was not zeroed by selective Reset")
@@ -202,6 +217,8 @@ def main():
                           root_velocity_w=initial_state.root_velocity_w,
                           theta_rad=initial_state.theta_rad,
                           spin_velocity_rad_s=initial_state.spin_velocity_rad_s)
+        if drive is not None:
+            drive.reset(all_envs, initial_state.theta_rad)
         restored = thread_view.read()
         if (not torch.allclose(restored.root_pose_w, initial_state.root_pose_w, atol=1e-5)
                 or not torch.allclose(restored.theta_rad, initial_state.theta_rad, atol=1e-5)
@@ -215,6 +232,8 @@ def main():
             thread_view.reset(first_id, root_pose_w=moved_bottle,
                               root_velocity_w=torch.zeros(1, 6, device=args.device),
                               theta_rad=torch.tensor([angle], device=args.device))
+            if drive is not None:
+                drive.reset(first_id, torch.tensor([angle], device=args.device))
         if torch.cuda.is_available():
             torch.cuda.synchronize()
         mean_reset_ms = 1000 * (time.perf_counter() - start_reset) / args.reset_repetitions
@@ -230,6 +249,8 @@ def main():
                           root_velocity_w=initial_state.root_velocity_w,
                           theta_rad=initial_state.theta_rad,
                           spin_velocity_rad_s=initial_state.spin_velocity_rad_s)
+        if drive is not None:
+            drive.reset(all_envs, initial_state.theta_rad)
     force = torch.zeros((args.num_envs, 3, 3), device=args.device)
     if pregrasp is None:
         force[0, cap_id, 0] = 0.5 * math.sin(tilt)
@@ -240,6 +261,10 @@ def main():
     approach_offset = 0.0
     first_contact_points = []
     for step in range(args.steps):
+        if drive is not None:
+            q = wp.to_torch(art.get_dof_positions()).reshape(args.num_envs, 2)
+            qd = wp.to_torch(art.get_dof_velocities()).reshape(args.num_envs, 2)
+            drive.step(q[:, spin_id], qd[:, spin_id], q[:, slide_id])
         if pregrasp is not None:
             # This is a measured positive-contact probe, never a policy or
             # grasp validation. The bounded wrist follows the falling cap
@@ -346,6 +371,9 @@ def main():
             ):
                 raise AssertionError("Right pregrasp contact was not on the cap sidewall")
     result = {"num_envs": args.num_envs, "steps": args.steps,
+              "implicit_running_drive_enabled": drive is not None,
+              "drive_sliding_count": (int(drive.sliding.sum()) if drive is not None else None),
+              "drive_breakaway_seen_count": (int(drive.breakaway_seen.sum()) if drive is not None else None),
               "dof_names": names, "link_names": links,
               "bottle_pose_w": bp.detach().cpu().tolist(),
               "cap_pose_w": cp.detach().cpu().tolist(),
@@ -366,6 +394,8 @@ def main():
               "diagnostic_right_pregrasp_contact": pregrasp is not None}
     print("BIMANUAL_MIMIC_SCENE", json.dumps({
         "num_envs": result["num_envs"], "steps": result["steps"],
+        "implicit_running_drive_enabled": result["implicit_running_drive_enabled"],
+        "drive_sliding_count": result["drive_sliding_count"],
         "spin_rad_first": result["spin_rad"][0],
         "max_pitch_error_m": result["max_pitch_error_m"],
         "max_physical_pitch_error_m": result["max_physical_pitch_error_m"],

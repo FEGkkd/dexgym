@@ -51,6 +51,8 @@ parser.add_argument("--resistance", action="store_true",
                     help="Apply the existing engineering-example breakaway/running law to the spin DOF")
 parser.add_argument("--implicit-drive", action="store_true",
                     help="Use PhysX implicit angular drive for bounded breakaway comparison")
+parser.add_argument("--implicit-running-drive", action="store_true",
+                    help="Switch a bounded PhysX spin drive from breakaway to running resistance")
 parser.add_argument("--resistance-damping", type=float,
                     help="Diagnostic override for explicit breakaway damping (Nm s/rad)")
 parser.add_argument("--max-abs-angle", type=float,
@@ -72,8 +74,8 @@ if args.contact_proxy and not args.real_geometry:
     parser.error("contact-proxy requires real-geometry")
 if args.skip_contact_audit and not args.no_self_collision:
     parser.error("skip-contact-audit requires no-self-collision")
-if args.implicit_drive and args.resistance:
-    parser.error("implicit-drive and resistance are separate controlled experiments")
+if sum((args.implicit_drive, args.implicit_running_drive, args.resistance)) > 1:
+    parser.error("choose only one spin resistance experiment")
 if not math.isfinite(args.initial_angle_rad) or abs(args.initial_angle_rad) > 6 * math.pi:
     parser.error("initial-angle-rad must be finite and within three turns")
 if args.resistance_damping is not None and (not math.isfinite(args.resistance_damping)
@@ -89,6 +91,7 @@ from pxr import Gf, PhysxSchema, Sdf, UsdGeom, UsdPhysics
 from dexteroushands_lab.assets.bottle import BottleConfig
 from dexteroushands_lab.assets.bottle.generate_usd import build_bottle_usd
 from dexteroushands_lab.assets.bottle.mimic_resistance import BatchedMimicResistance
+from dexteroushands_lab.assets.bottle.mimic_drive import BatchedMimicDrive
 
 
 BOTTLE_CONFIG = BottleConfig()
@@ -178,7 +181,7 @@ def _assembly(stage, env: int, geometry_paths=None):
     spin.CreateLocalPos1Attr(Gf.Vec3f(0, 0, 0))
     spin.CreateLowerLimitAttr(-1080.0)
     spin.CreateUpperLimitAttr(1080.0)
-    if args.implicit_drive:
+    if args.implicit_drive or args.implicit_running_drive:
         # PhysX solves this spring/damper implicitly inside the joint solver.
         # UsdPhysics angular drive displacement and speed are in degrees;
         # BottleConfig gains are Nm/rad and Nm/(rad/s).
@@ -242,7 +245,7 @@ def main():
         init_q[0, slide_id] = PITCH_M * args.initial_angle_rad / (2 * math.pi)
         reset_id = wp.from_torch(torch.tensor([0], dtype=torch.int32, device=args.device))
         view.set_dof_positions(wp.from_torch(init_q), reset_id)
-        if args.implicit_drive:
+        if args.implicit_drive or args.implicit_running_drive:
             init_targets = wp.to_torch(view.get_dof_position_targets()).reshape(args.num_envs, -1).clone()
             init_targets[0, spin_id] = args.initial_angle_rad
             view.set_dof_position_targets(wp.from_torch(init_targets), reset_id)
@@ -292,6 +295,11 @@ def main():
                          if args.resistance_damping is not None else BOTTLE_CONFIG)
     resistance = (BatchedMimicResistance(resistance_config, args.num_envs, device=args.device)
                   if args.resistance else None)
+    drive = (BatchedMimicDrive(view, BOTTLE_CONFIG, device=args.device, num_envs=args.num_envs)
+             if args.implicit_running_drive else None)
+    if drive is not None:
+        drive.reset(torch.arange(args.num_envs, device=args.device),
+                    initial_dof_positions[:, spin_id])
     actuation = torch.zeros((args.num_envs, len(names)), device=args.device)
     max_resistance_torque = 0.0
     ever_sliding = torch.zeros((), device=args.device, dtype=torch.bool)
@@ -319,6 +327,12 @@ def main():
             ever_sliding |= resistance_terms.sliding.any()
             actuation[:, spin_id] = resistance_terms.torque_nm
             view.set_dof_actuation_forces(wp.from_torch(actuation), ids)
+        if drive is not None:
+            q_now = wp.to_torch(view.get_dof_positions()).reshape(args.num_envs, -1)
+            qd_now = wp.to_torch(view.get_dof_velocities()).reshape(args.num_envs, -1)
+            drive_terms = drive.step(q_now[:, spin_id], qd_now[:, spin_id],
+                                     q_now[:, slide_id])
+            ever_sliding |= drive_terms.sliding.any()
         view.apply_forces_and_torques_at_position(
             wp.from_torch(forces), wp.from_torch(torques), None, ids, True)
         if proxy_body_view is not None:
@@ -350,6 +364,8 @@ def main():
             if resistance is not None:
                 resistance.reset(torch.tensor([0], device=args.device),
                                  q_data[:1, spin_id])
+            if drive is not None:
+                drive.reset(torch.tensor([0], device=args.device), q_data[:1, spin_id])
             new_root = wp.to_torch(view.get_root_transforms()).reshape(args.num_envs, 7)
             new_root_vel = wp.to_torch(view.get_root_velocities()).reshape(args.num_envs, 6)
             new_q = wp.to_torch(view.get_dof_positions()).reshape(args.num_envs, -1)
@@ -391,7 +407,7 @@ def main():
                         first_contact = {"step": step + 1, "env": env,
                                          "count": count, "force_n": force,
                                          "min_separation_m": separation}
-        if step == 0 or (args.resistance and step < 20) or step % 10 == 9 or step == args.steps - 1:
+        if step == 0 or ((args.resistance or args.implicit_running_drive) and step < 20) or step % 10 == 9 or step == args.steps - 1:
             if resistance_terms is not None:
                 max_resistance_torque = max(max_resistance_torque,
                                             float(resistance_terms.torque_nm.abs().max()))
@@ -432,6 +448,10 @@ def main():
                                                     if resistance_terms is not None else None),
                            "resistance_sliding": (resistance_terms.sliding.detach().cpu().tolist()
                                                   if resistance_terms is not None else None),
+                           "implicit_drive_sliding": (drive_terms.sliding.detach().cpu().tolist()
+                                                      if drive is not None else None),
+                           "implicit_drive_limit_nm": (drive_terms.active_force_limit_nm.detach().cpu().tolist()
+                                                       if drive is not None else None),
                            "cap_position_w_m": (wp.to_torch(view.get_link_transforms())
                                                   .reshape(args.num_envs, len(links), 7)[:, cap_id, :3]
                                                   .detach().cpu().tolist()
@@ -455,6 +475,7 @@ def main():
               "contact_proxy_enabled": args.contact_proxy,
               "resistance_enabled": args.resistance,
               "implicit_drive_enabled": args.implicit_drive,
+              "implicit_running_drive_enabled": args.implicit_running_drive,
               "resistance_damping_nm_s_rad": (resistance.config.breakaway_damping
                                               if resistance is not None else None),
               "num_envs": args.num_envs, "steps": args.steps, "physics_dt_s": DT_S,
