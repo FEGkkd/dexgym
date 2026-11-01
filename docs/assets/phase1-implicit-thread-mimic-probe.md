@@ -98,6 +98,27 @@ fixture has no hand contact, and no actual bottle torque calibration exists.
 The model and two CPU state tests are in `mimic_resistance.py` and
 `test_mimic_resistance.py`; their presence does not qualify it for PPO.
 
+A second controlled arm, `--implicit-drive`, uses `UsdPhysics.DriveAPI` on
+the articulation spin joint with the *original* 0.003 N m s/rad damping,
+0.2 N m/rad spring and 0.02 N m force limit. The [USD Physics schema](https://docs.omniverse.nvidia.com/kit/docs/omni_physics/107.3/dev_guide/schemas/usdphysics.html)
+states angular drive targets and gains use **degrees**. The fixture converts
+the engineering-example radian gains by `pi/180` when authoring USD; without
+this, the low-torque spring is about 57 times too stiff. On the corrected
+fixture, zero load stayed within 2e-13 rad over 100 steps. At 0.005 N m,
+the 0.4 s final angle was 0.02235 rad, with env 1 within 1.5e-11 rad. At
+0.04 N m it reached 14.72 rad and 7.03 mm signed axial travel in 0.4 s.
+The physical screw relation stayed within the earlier micrometre-scale
+limits. This proves a **numerically stable bounded spring comparator**; it
+does not prove calibrated running friction, finger contact, or RL success.
+
+The installed PhysX tensor interface accepts a nonzero 0.5 rad initial spin
+with a matching 0.239 mm follower displacement and matching drive target.
+Across 16 tilted environments, Reset of env 0 at step 50 restored its root,
+both DOFs, velocity and drive target while immediate peer state change was
+exactly zero. The final angle remained 0.5 rad; maximum physical pitch
+error was 0.16 µm. The Reset code refreshes articulation link kinematics
+after indexed tensor writes and before contact is read.
+
 ```bash
 scripts/run_isaaclab.sh scripts/environments/probe_thread_mimic.py \
   --real-geometry --no-self-collision --resistance --resistance-damping 0.0001 \
@@ -107,14 +128,20 @@ scripts/run_isaaclab.sh scripts/environments/probe_thread_mimic.py \
   --real-geometry --no-self-collision --resistance --resistance-damping 0.0001 \
   --num-envs 2 --steps 200 --tilt-deg 30 --torque 0.04 --axial-force 0 \
   --assert-physics --min-abs-angle 0.5236 --expect-slide --headless
+scripts/run_isaaclab.sh scripts/environments/probe_thread_mimic.py \
+  --real-geometry --no-self-collision --implicit-drive --num-envs 16 \
+  --selective-reset --steps 100 --tilt-deg 30 --torque 0 --axial-force 0 \
+  --initial-angle-rad 0.5 --assert-physics --max-angle-drift 0.01 --headless
 ```
 
 The fixture still has no fingered hands or 1024-env training test. The next
-physical decision is whether to move the breakaway spring/damper into an
-implicit PhysX joint drive, which exposes batched stiffness, damping,
-force limit and target APIs in the installed tensor backend. It must pass
-the same low/high torque and contact tests without using a numerically
-unstable explicit damping value. Repair the internal collider overlap or
+physical task is to make the implicit-drive breakaway law transition to the
+configured lower running resistance during slip. Holding the 0.02 N m
+force-limited spring throughout a full turn is not the configured 0.006 N m
+running regime. Batched stiffness, damping, force-limit and target APIs are
+available in the installed tensor backend, but their per-environment dynamic
+switching and contact behavior have not yet been validated. Repair the
+internal collider overlap or
 retain a documented internal collision exclusion, then integrate the
 articulation with the existing contact monitor, Reset banks and RL
 observation/reward path. Only then should prior policies be reevaluated or

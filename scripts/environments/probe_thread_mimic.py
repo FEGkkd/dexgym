@@ -44,12 +44,18 @@ parser.add_argument("--assert-physics", action="store_true",
                     help="Exit nonzero unless local-axis pitch, collision and isolation checks pass")
 parser.add_argument("--resistance", action="store_true",
                     help="Apply the existing engineering-example breakaway/running law to the spin DOF")
+parser.add_argument("--implicit-drive", action="store_true",
+                    help="Use PhysX implicit angular drive for bounded breakaway comparison")
 parser.add_argument("--resistance-damping", type=float,
                     help="Diagnostic override for explicit breakaway damping (Nm s/rad)")
 parser.add_argument("--max-abs-angle", type=float,
                     help="With --assert-physics, require env 0 final |spin| below this many rad")
 parser.add_argument("--min-abs-angle", type=float,
                     help="With --assert-physics, require env 0 final |spin| above this many rad")
+parser.add_argument("--initial-angle-rad", type=float, default=0.0,
+                    help="Initialize env 0 with an already-engaged nonzero spin and pitch-consistent slide")
+parser.add_argument("--max-angle-drift", type=float,
+                    help="With --assert-physics, limit |final spin - initial spin| in env 0")
 parser.add_argument("--expect-slide", action="store_true",
                     help="With --assert-physics, require a sliding episode")
 parser.add_argument("--output", type=Path)
@@ -59,6 +65,8 @@ if args.num_envs < 1 or args.steps < 1:
     parser.error("num-envs and steps must be positive")
 if args.contact_proxy and not args.real_geometry:
     parser.error("contact-proxy requires real-geometry")
+if args.implicit_drive and args.resistance:
+    parser.error("implicit-drive and resistance are separate controlled experiments")
 app = AppLauncher(args).app
 
 import torch
@@ -155,6 +163,17 @@ def _assembly(stage, env: int, geometry_paths=None):
     spin.CreateLocalPos1Attr(Gf.Vec3f(0, 0, 0))
     spin.CreateLowerLimitAttr(-1080.0)
     spin.CreateUpperLimitAttr(1080.0)
+    if args.implicit_drive:
+        # PhysX solves this spring/damper implicitly inside the joint solver.
+        # UsdPhysics angular drive displacement and speed are in degrees;
+        # BottleConfig gains are Nm/rad and Nm/(rad/s).
+        drive = UsdPhysics.DriveAPI.Apply(spin.GetPrim(), UsdPhysics.Tokens.angular)
+        drive.CreateTypeAttr(UsdPhysics.Tokens.force)
+        drive.CreateStiffnessAttr(BOTTLE_CONFIG.breakaway_stiffness * math.pi / 180)
+        drive.CreateDampingAttr(BOTTLE_CONFIG.breakaway_damping * math.pi / 180)
+        drive.CreateMaxForceAttr(BOTTLE_CONFIG.breakaway_torque)
+        drive.CreateTargetPositionAttr(0.0)
+        drive.CreateTargetVelocityAttr(0.0)
     if not args.no_mimic:
         # USD rotational positions are degrees; one turn advances one pitch.
         # The supported instance token is rotX even on a prismatic follower.
@@ -189,6 +208,22 @@ def main():
     if view.shared_metatype.fixed_base:
         raise RuntimeError("Bottle is unexpectedly world-fixed")
     print("MIMIC_STAGE topology", names, links, flush=True)
+    slide_id, spin_id, cap_id = names.index("SlideJoint"), names.index("SpinJoint"), links.index("Cap")
+    if args.initial_angle_rad:
+        init_q = wp.to_torch(view.get_dof_positions()).reshape(args.num_envs, -1).clone()
+        init_q[0, spin_id] = args.initial_angle_rad
+        init_q[0, slide_id] = PITCH_M * args.initial_angle_rad / (2 * math.pi)
+        reset_id = wp.from_torch(torch.tensor([0], dtype=torch.int32, device=args.device))
+        view.set_dof_positions(wp.from_torch(init_q), reset_id)
+        if args.implicit_drive:
+            init_targets = wp.to_torch(view.get_dof_position_targets()).reshape(args.num_envs, -1).clone()
+            init_targets[0, spin_id] = args.initial_angle_rad
+            view.set_dof_position_targets(wp.from_torch(init_targets), reset_id)
+        physics_view.update_articulations_kinematic()
+    initial_dof_positions = (wp.to_torch(view.get_dof_positions())
+                             .reshape(args.num_envs, -1).clone())
+    initial_dof_targets = (wp.to_torch(view.get_dof_position_targets())
+                           .reshape(args.num_envs, -1).clone())
     initial_link_positions = (wp.to_torch(view.get_link_transforms())
                               .reshape(args.num_envs, len(links), 7)[:, :, :3]
                               .detach().cpu().tolist())
@@ -216,7 +251,6 @@ def main():
         proxy_force[0] = torch.tensor((-math.cos(math.radians(args.tilt_deg)),
                                        0.0, math.sin(math.radians(args.tilt_deg))),
                                       device=args.device) * 0.2
-    slide_id, spin_id, cap_id = names.index("SlideJoint"), names.index("SpinJoint"), links.index("Cap")
     forces = torch.zeros((args.num_envs, len(links), 3), device=args.device)
     torques = torch.zeros_like(forces)
     tilt = Gf.Rotation(Gf.Vec3d(0, 1, 0), args.tilt_deg)
@@ -274,11 +308,14 @@ def main():
             root_data, root_vel_data = old_root.clone(), old_root_vel.clone()
             q_data, qd_data = old_q.clone(), old_qd.clone()
             root_data[0], root_vel_data[0] = initial_root, 0
-            q_data[0], qd_data[0] = 0, 0
+            q_data[0], qd_data[0] = initial_dof_positions[0], 0
             view.set_root_transforms(wp.from_torch(root_data), reset_id)
             view.set_dof_positions(wp.from_torch(q_data), reset_id)
             view.set_root_velocities(wp.from_torch(root_vel_data), reset_id)
             view.set_dof_velocities(wp.from_torch(qd_data), reset_id)
+            targets = wp.to_torch(view.get_dof_position_targets()).reshape(args.num_envs, -1).clone()
+            targets[0] = initial_dof_targets[0]
+            view.set_dof_position_targets(wp.from_torch(targets), reset_id)
             physics_view.update_articulations_kinematic()
             if resistance is not None:
                 resistance.reset(torch.tensor([0], device=args.device),
@@ -294,7 +331,7 @@ def main():
             selective_reset_result = {
                 "step": step + 1,
                 "max_immediate_peer_state_change": peer_error,
-                "env0_dof_error": float(new_q[0].abs().max()),
+                "env0_dof_error": float((new_q[0] - initial_dof_positions[0]).abs().max()),
                 "env0_root_pose_error": float((new_root[0] - initial_root).abs().max()),
                 "env0_root_velocity_error": float(new_root_vel[0].abs().max()),
                 "env0_dof_velocity_error": float(new_qd[0].abs().max()),
@@ -382,6 +419,7 @@ def main():
               "self_collision_enabled": not args.no_self_collision,
               "contact_proxy_enabled": args.contact_proxy,
               "resistance_enabled": args.resistance,
+              "implicit_drive_enabled": args.implicit_drive,
               "resistance_damping_nm_s_rad": (resistance.config.breakaway_damping
                                               if resistance is not None else None),
               "num_envs": args.num_envs, "steps": args.steps, "physics_dt_s": DT_S,
@@ -389,6 +427,7 @@ def main():
               "bottle_local_axis_w": axis,
               "slide_anchor_sign": args.slide_anchor_sign,
               "slide_anchor_body": args.slide_anchor_body,
+              "initial_angle_rad": args.initial_angle_rad,
               "test_torque_nm": args.torque, "test_axial_force_n": args.axial_force,
               "dof_names": names, "link_names": links,
               "initial_link_positions_w_m": initial_link_positions,
@@ -433,6 +472,9 @@ def main():
             failures.append(f"final angle {final_abs_angle:.6g} rad exceeds {args.max_abs_angle}")
         if args.min_abs_angle is not None and final_abs_angle < args.min_abs_angle:
             failures.append(f"final angle {final_abs_angle:.6g} rad below {args.min_abs_angle}")
+        if (args.max_angle_drift is not None and
+                abs(float(traces[-1]["theta_rad"][0]) - args.initial_angle_rad) > args.max_angle_drift):
+            failures.append("nonzero initial-angle drive drift exceeded limit")
         if args.expect_slide and not bool(ever_sliding):
             failures.append("sliding transition was not observed")
         result["physics_assertions"] = {"passed": not failures, "failures": failures}
