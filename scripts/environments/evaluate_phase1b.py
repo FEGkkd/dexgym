@@ -13,6 +13,7 @@ parser.add_argument("--checkpoint", type=Path)
 parser.add_argument("--policy", choices=("learned", "zero", "random", "no_right", "no_left", "no_hands", "freeze_left", "freeze_right", "reverse"), default="zero")
 parser.add_argument("--level", choices=("A", "B", "D"), default="A")
 parser.add_argument("--reward-profile", choices=("baseline", "contact_coverage"), default="baseline")
+parser.add_argument("--action-distribution", choices=("gaussian", "tanh"), default="gaussian")
 parser.add_argument("--episodes", type=int, default=200)
 parser.add_argument("--num-envs", type=int, default=64)
 parser.add_argument("--seed", type=int, default=9117)
@@ -34,7 +35,8 @@ from rsl_rl.runners import OnPolicyRunner
 from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.env import PregraspCapTurn30DirectEnv
 from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.env_cfg import PregraspCapTurn30DirectEnvCfg
 from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.agents.rsl_rl_ppo_cfg import UnifiedPPORunnerCfg
-from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.action_math import mutable_inference_action
+from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.action_math import base_evaluation_action
+from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.pose_spin import relative_pose_yaw, wrapped_delta
 from dexteroushands_lab.assets.bottle.batched_thread import _rotate
 
 
@@ -60,6 +62,10 @@ def main():
     gaussian_std_groups = None
     if args.checkpoint:
         agent_cfg = handle_deprecated_rsl_rl_cfg(UnifiedPPORunnerCfg(), metadata.version("rsl-rl-lib"))
+        if args.action_distribution == "tanh":
+            agent_cfg.actor.distribution_cfg.class_name = (
+                "dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.agents."
+                "tanh_distribution:TanhGaussianDistribution")
         runner = OnPolicyRunner(env, agent_cfg.to_dict(), log_dir=None, device=args.device)
         runner.load(str(args.checkpoint))
         policy = runner.get_inference_policy(device=args.device)
@@ -75,14 +81,26 @@ def main():
         import warp as wp
         original_apply_action = raw._apply_action
         previous_theta = None
+        previous_pose_wrapped = None
+        pose_opening = 0.0
 
         def trace_apply_action():
-            nonlocal previous_theta
+            nonlocal previous_theta, previous_pose_wrapped, pose_opening
             original_apply_action()
             theta = float(raw.thread.theta_unwrapped[0])
-            pose_spin = (None if previous_theta is None else
-                         (theta - previous_theta) / cfg.sim.dt)
+            joint_spin = (None if previous_theta is None else
+                          (theta - previous_theta) / cfg.sim.dt)
             previous_theta = theta
+            bottle_pose = raw.bottle.data.root_pose_w.torch[0]
+            cap_pose = raw.cap.data.root_pose_w.torch[0]
+            pose_wrapped = relative_pose_yaw(
+                bottle_pose[3:].unsqueeze(0), cap_pose[3:].unsqueeze(0))[0]
+            pose_spin = None
+            if previous_pose_wrapped is not None:
+                delta = float(wrapped_delta(pose_wrapped, previous_pose_wrapped))
+                pose_opening += delta
+                pose_spin = delta / cfg.sim.dt
+            previous_pose_wrapped = pose_wrapped
             view = raw.contacts.cap_right_manifold_view
             if view is None:
                 raise RuntimeError("PGS cap/right manifold contact view is required for trace")
@@ -113,8 +131,14 @@ def main():
                 "substep": len(physics_trace), "time_s": len(physics_trace) * cfg.sim.dt,
                 "reset_sample_index": int(raw._reset_sample_index[0]),
                 "theta_unwrapped_rad": theta,
-                "bottle_pose_world_xyzw": raw.bottle.data.root_pose_w.torch[0].detach().cpu().tolist(),
-                "cap_pose_world_xyzw": raw.cap.data.root_pose_w.torch[0].detach().cpu().tolist(),
+                "bottle_pose_world_xyzw": bottle_pose.detach().cpu().tolist(),
+                "cap_pose_world_xyzw": cap_pose.detach().cpu().tolist(),
+                "left_wrist_pose_world_xyzw": raw.wrists[0].current_pose[0].detach().cpu().tolist(),
+                "right_wrist_pose_world_xyzw": raw.wrists[1].current_pose[0].detach().cpu().tolist(),
+                "left_actor_action_26d": raw._last_action[0, :26].detach().cpu().tolist(),
+                "right_actor_action_26d": raw._last_action[0, 26:].detach().cpu().tolist(),
+                "joint_differenced_spin_rad_s": joint_spin,
+                "pose_relative_opening_rad": pose_opening,
                 "pose_differenced_spin_rad_s": pose_spin,
                 "physx_screw_spin_rad_s": float(raw.thread.state.spin_velocity_rad_s[0]),
                 "axial_m": float(raw._latest_thread.axial[0]),
@@ -140,22 +164,15 @@ def main():
     try:
         while len(rows) < args.episodes:
             steps += 1
+            action = base_evaluation_action(args.policy, policy, obs)
             if args.policy == "reverse":
-                if policy is None:
-                    action = torch.zeros(args.num_envs, 52, device=args.device)
-                else:
-                    action = mutable_inference_action(policy, obs)
                 bottle_q = raw.bottle.data.root_pose_w.torch[:, 3:]
                 wrist_q = raw.right.data.root_pose_w.torch[:, 3:]
                 world_axis = _rotate(bottle_q, torch.tensor(
                     [0., 0., 1.], device=args.device).expand(args.num_envs, 3))
                 wrist_inverse = torch.cat((-wrist_q[:, :3], wrist_q[:, 3:]), dim=-1)
                 action[:, 29:32] = .5 * _rotate(wrist_inverse, -world_axis)
-            elif policy is None:
-                action = (torch.randn(args.num_envs, 52, device=args.device)
-                          if args.policy == "random" else torch.zeros(args.num_envs, 52, device=args.device))
             else:
-                action = mutable_inference_action(policy, obs)
                 if args.policy in ("no_right", "freeze_right"):
                     action[:, 26:] = 0
                 elif args.policy in ("no_left", "freeze_left"):
@@ -189,6 +206,7 @@ def main():
             "task": "DexterousHands-WujiHand2-Bimanual-PregraspCapTurn30-Direct-v0",
             "level": args.level, "held_out": True, "policy": args.policy,
             "reward_profile": args.reward_profile,
+            "action_distribution": args.action_distribution,
             "checkpoint": str(args.checkpoint) if args.checkpoint else None,
             "seed": args.seed, "episodes": len(rows), "num_envs": args.num_envs,
             "steps": steps, "elapsed_s": time.monotonic() - start,

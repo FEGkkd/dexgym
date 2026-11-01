@@ -49,7 +49,8 @@ class BimanualDiagnosticPPO(PPO):
                 values = self.critic(batch.observations, masks=batch.masks,
                                      hidden_state=batch.hidden_states[1])
                 std = self.actor.output_std.detach().reshape(-1)
-                mean_action = current_params[0]
+                mean_action = self.actor.output_mean
+                latent_mean = current_params[0]
                 diagnostics = {
                     "approx_kl": kl,
                     "ppo_clip_fraction": clip_fraction(log_ratio, self.clip_param),
@@ -58,6 +59,8 @@ class BimanualDiagnosticPPO(PPO):
                     "raw_action_element_outside_fraction": (batch.actions.abs() > 1).float().mean(),
                     "policy_action_abs_mean": mean_action.abs().mean(),
                     "policy_mean_element_outside_fraction": (mean_action.abs() > 1).float().mean(),
+                    "latent_policy_mean_abs_mean": latent_mean.abs().mean(),
+                    "latent_policy_mean_outside_fraction": (latent_mean.abs() > 1).float().mean(),
                     "policy_entropy": self.actor.output_entropy.mean(),
                     "left_wrist_translation_std": std[0:3].mean(),
                     "left_wrist_rotation_std": std[3:6].mean(),

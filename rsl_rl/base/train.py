@@ -59,6 +59,8 @@ def _parser() -> argparse.ArgumentParser:
                         help="Controlled bimanual wrist translation increment in m/action")
     parser.add_argument("--init_action_std", type=float,
                         help="Initial normalized Gaussian action std for a controlled PPO ablation")
+    parser.add_argument("--action_distribution", choices=("gaussian", "tanh"),
+                        help="Controlled Phase 1B actor distribution; tanh uses exact transformed PPO density")
     parser.add_argument("--unified_reward_profile", choices=("baseline", "contact_coverage"),
                         help="Unified Phase 1B reward profile; same task and actor")
     parser.add_argument("--reset_loaded_action_std", action="store_true",
@@ -105,6 +107,9 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit("--wrist_translation_scale must be positive")
     if args.init_action_std is not None and not 0.01 <= args.init_action_std <= 2.0:
         raise SystemExit("--init_action_std must be in [0.01, 2.0]")
+    if args.action_distribution is not None and args.task != (
+            "DexterousHands-WujiHand2-Bimanual-PregraspCapTurn30-Direct-v0"):
+        raise SystemExit("--action_distribution is for the unified Phase 1B task only")
     if args.init_checkpoint is not None and (args.resume or not args.init_checkpoint.is_file()):
         raise SystemExit("--init_checkpoint must exist and cannot be combined with --resume")
     if args.reset_loaded_action_std and (
@@ -159,6 +164,10 @@ def main(argv: list[str] | None = None) -> None:
         agent_cfg = cli_args.parse_rsl_rl_cfg(args.task, args)
         if args.init_action_std is not None:
             agent_cfg.actor.distribution_cfg.init_std = args.init_action_std
+        if args.action_distribution == "tanh":
+            agent_cfg.actor.distribution_cfg.class_name = (
+                "dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.agents."
+                "tanh_distribution:TanhGaussianDistribution")
         if args.unified_reward_profile is not None:
             if not hasattr(env_cfg, "unified_reward_profile"):
                 raise SystemExit("--unified_reward_profile requires the Phase 1B task")

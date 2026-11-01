@@ -1,8 +1,9 @@
 # Phase 1B: unified pregrasp to CapTurn30
 
 Status: **PARTIAL — the two-seed near-contact PPO target passed with a
-single-policy warm-start; physical velocity consistency, action saturation
-and distant natural pregrasps remain unresolved.** This report records actual
+single-policy warm-start; a bounded-action ablation removed action overflow
+on A/B, while physical velocity consistency and distant natural pregrasps
+remain unresolved.** This report records actual
 outcomes only. Training checkpoints, TensorBoard events and
 raw contact traces remain in ignored `logs/` and `artifacts/phase1b/`.
 
@@ -10,7 +11,7 @@ raw contact traces remain in ignored `logs/` and `artifacts/phase1b/`.
 
 Registered ID:
 `DexterousHands-WujiHand2-Bimanual-PregraspCapTurn30-Direct-v0`.
-One 52D Gaussian Actor commands both 20-joint official WujiHand2 Beta 1
+One 52D Actor (Gaussian baseline or tanh-Gaussian ablation) commands both 20-joint official WujiHand2 Beta 1
 hands and both ideal pose-command wrists at 50 Hz. PhysX runs at 500 Hz.
 The cap and bottle are dynamic under gravity. The task uses the PGS Mimic
 screw at 3 mm pitch. Neither object receives a per-step pose write or
@@ -76,11 +77,16 @@ Neither issue is treated as solved by the new Reset bank.
 277D actor and 421D critic observations. The 1024-env 20-step physics probe
 reached ~8,001 transitions/s and the 2048-env probe reached ~11,168
 transitions/s, measured without PPO updates. At the final zero-action step
-the 2048-env left/right contact rates were 96.0% / 0%. All 17 focused
+the 2048-env left/right contact rates were 96.0% / 0%. All 24 focused
 Phase 1B numerical and registration tests passed on the final candidate.
-The broader suite yielded 196 passed, 1 skipped and 2 failures
+The broader suite yielded 203 passed, 1 skipped and 2 failures
 in preexisting Allegro temporary-asset and MANO keypoint-order tests; these
 belong to separate user work and have not been modified here.
+Final counterfactual verification found and fixed an evaluator dispatch bug:
+when a checkpoint was supplied, the labels `zero` and `random` previously
+used Actor inference. The repaired dispatcher has a numerical regression
+test and its final-checkpoint baselines were rerun; earlier no-checkpoint
+zero/random baselines were unaffected.
 
 On the eight frozen A evaluation rows, all with 200 episodes:
 
@@ -107,6 +113,14 @@ On the eight frozen A evaluation rows, all with 200 episodes:
 | Same seed-2202 checkpoint, held-out B | 200/200 | 31.1% raw action overflow. |
 | Warm-start PPO, seed 2202, 201 new updates (`model_600.pt`) | 200/200 A, 200/200 B | No success gain; action overflow 44.0% A / 44.5% B. |
 | Selected seed-2202 `model_500.pt`, held-out original distant D | 0/200 | 100% failure; 22.5% ground contact; 60.3% raw action overflow. |
+| Tanh direct transfer before new PPO, held-out A | 9/200 | Same 4.5% as Gaussian direct transfer; action overflow 0. |
+| Tanh PPO, seed 2202, 2048 env, 51 new updates (`model_450.pt`) | 200/200 A, 200/200 B | B improves over matched Gaussian 148/200; action overflow 0. |
+| Same tanh checkpoint, original distant D | 0/200 | All eight local rows represented; 32.5% ground contact. |
+| Tanh PPO, seed 2202, 2048 env, 101 new updates (`model_500.pt`) | 200/200 A, 200/200 B | Action overflow 0; B finger-target clipping 4.5%. |
+| Tanh PPO, seed 2202, 2048 env, 201 new updates (`model_600.pt`) | 200/200 A, 200/200 B | Action overflow and finger-target clipping both 0 on A/B. |
+| Same tanh checkpoint, original distant D | 0/200 | 43.5% ground contact; no D learning claim. |
+| Tanh PPO, seed 2202, 2048 env, 300 new updates (`model_699.pt`) | 200/200 A, 200/200 B | Zero raw action overflow, joint-target clipping and angle faults on both held-out sets. |
+| Same final tanh checkpoint, original distant D | 0/200 | 45.5% ground contact; no D learning claim. |
 
 The 9 direct-transfer successes ended in 14–30 policy steps. All had
 continuous five-step bilateral support, correct objects in contact, 0.71–1.44
@@ -163,6 +177,27 @@ Freezing the **right** hand likewise scored 0/200, with only 0.7% right
 cap contact and 0.4% stable bilateral support. These controls show that
 both hands' active policy commands are necessary in this evaluated family;
 simple presence of the left hand at Reset cannot explain success.
+For the earlier bounded `model_500.pt`, freezing the left hand again
+scores 0/200 A. Freezing the right hand while leaving it at its initial
+pregrasp pose scores **7/200**, not zero: in those rare cases the moving
+left hand and passive right-hand contact can produce a physically valid
+relative turn. The formal no-right-contact control moves that hand away
+and remains 0/200 for the bounded checkpoint; moving the left hand away
+also scores 0/200. This residual passive-right mechanism is reported
+rather than filtered out; the full bounded Actor's 200/200 versus 7/200
+under frozen right commands shows a large active-control contribution.
+The final selected bounded `model_699.pt` was tested again on the same
+200 held-out A episodes. Zero action, random action, no right contact, no
+left contact and no hands each scored **0/200**. The mixed reverse control,
+which keeps the learned policy except for the right-wrist rotation command,
+scored 3/200 and is not a pure reverse-only control. With the left or right
+26D command frozen at zero but its pregrasp pose retained, each control
+scored **1/200**. Both are genuine rare successes from passive contact,
+and neither is removed from the denominator. The frozen-left success took
+41 steps and reached 1.33 rad, more overshoot than a normal full-policy
+success. Thus both active hands strongly improve performance, while the
+task's success definition does not require each hand to move on every
+individual successful trajectory.
 
 A 500-Hz trace of one successful held-out A trajectory records 1,298
 right-hand/cap manifold points, no contact-buffer overflow, maximum screw
@@ -175,6 +210,25 @@ PhysX velocity yielded 0.771 rad versus the 0.832-rad true pose delta.
 The 20-ms window discrepancy peaked at 0.0213 rad. These discrepancies,
 and the signed contact separation, remain physical-model concerns; signed
 separation alone is not a verified geometric penetration depth.
+The trace evaluator now computes angular speed directly from adjacent
+actual cap/bottle poses, separately from finite differences of the PhysX
+joint position. In the earlier 160-substep trace, the true pose delta was
+0.83205766 rad and the joint-position delta 0.83205789 rad; their
+instantaneous speed difference was at most 0.000234 rad/s. A second
+130-substep successful trajectory gives 0.80842926 rad true pose delta,
+0.80842977 rad joint-position delta and only 0.78372807 rad when the
+reported PhysX joint velocity is integrated. The joint-velocity versus
+true-pose speed error has a 5.75-rad/s maximum and 1.28-rad/s mean on
+that second trajectory; its minimum signed separation was −1.028 mm.
+The cap pose and joint position agree closely; the reported joint
+velocity is the inconsistent signal. A unit test verifies that the
+pose-based diagnostic ignores whole-bottle world rotation and unwraps
+through ±π correctly.
+The unified CapTurn Success gate uses the measured angle, axial travel,
+correct bilateral contact, bottle pose/velocity stability and constraint
+error; it does not use the inconsistent PhysX spin-velocity field. The
+spin-velocity field remains relevant to the old GraspHold-only stability
+metric and to physical-model health monitoring.
 The cap collision is a twelve-segment cube shell plus a top cylinder; its
 visible shell is a separate mesh. Transforming the 1,298 reported contact
 points into the cap frame gives radial positions 15.44–17.69 mm around a
@@ -229,16 +283,118 @@ It was stopped by the explicit success-plateau/action-saturation rule at
 selected second-seed checkpoint. Both seeds fail the original distant D
 evaluation (0/200), so no distant-pregrasp generalization is claimed.
 
-The four valid PPO experiments added 26,443,776 transitions in this round:
+The first four valid PPO experiments added 26,443,776 transitions in this round:
 3,342,336 in each from-scratch controlled run, 6,586,368
 in the first warm-start run and 13,172,736 in the second. This is an
-accounting figure, **not a transition cap**. The two failed reward-profile
-launches performed zero PPO updates and are excluded. The second 2048-env
+accounting figure, **not a transition cap**. The fifth run added 19,660,800,
+bringing this round to **46,104,576 new PPO transitions**. Per the user's
+latest instruction, there is no transition-count upper limit; the separate
+GPU-time budget and evidence-based stopping rules still apply. The two failed
+reward-profile launches performed zero PPO updates and are excluded. The second 2048-env
 run's mean episode reward reached about 35.6, stable bilateral-support rate
 about 96%, approximate KL about 0.018 and explained variance about 0.991
 near update 185; the raw sampled-action out-of-range fraction was already
 54.4%. These health metrics explain the early stop and the preference for
 the earlier selected checkpoint.
+
+A fifth, controlled 2048-env experiment isolated action
+parameterization. It keeps seed 2202, frozen A training rows, baseline
+reward, 52D action mapping, old single-Actor source checkpoint and
+learnable latent Gaussian std 1.0, but transforms the Gaussian sample
+through tanh. PPO log-probability includes the inverse transform and
+Jacobian; KL is exact in latent space, and entropy uses a reparameterized
+Monte Carlo estimate. Numerical tests verify action bounds, exact
+log-probability, ratio cancellation and KL; a two-env native PPO update
+completed with finite losses and zero raw action overflow. Before any new
+PPO, direct transfer under this distribution scored 9/200 A, the same
+4.5% as the unsquashed direct-transfer Actor, with zero action overflow.
+That untrained transfer produced 177 angle-fault episodes and a 5.25-rad
+maximum opening, all rejected unless the strict five-step physical Success
+window was met. The 51- and 201-update bounded A evaluations have zero
+angle-fault episodes and 200/200 Success.
+At 51 new updates the bounded Actor scored 200/200 on both A and B, with
+all eight held-out local rows represented and zero raw action overflow.
+At the same seed and iteration, the Gaussian Actor scored 200/200 A and
+148/200 B, with 27.6% deterministic action overflow on B. This is a
+controlled early-checkpoint improvement in weak-contact success, beyond
+the trivial action-bound effect. On B, finger-target clipping falls from
+41.3% for Gaussian to 19.4% for tanh, and observed stable bilateral
+support rises from 15.1% to 58.5%. Both methods retain zero wrist-workspace
+clipping. The original distant D remains 0/200,
+so the bounded distribution does not solve reachability at that distance.
+At 201 new updates A/B remain 200/200 with zero raw-action overflow and
+**zero finger-target clipping**. Observed bilateral support rises to 99.1%
+on A and 82.1% on B. A's maximum opening falls from 1.016 to 0.903 rad;
+B's mean maximum opening is 0.801 rad and worst episode 1.179 rad. The
+original distant D still scores 0/200, with 43.5% ground contact.
+The run finished normally after 300 new PPO updates (global iteration 699)
+in 37 minutes of trainer wall time, at roughly 10,000 transitions/s during
+most later iterations; observed peak GPU memory was 19.9 GiB of 32.6 GiB.
+The final update had finite value loss 0.0902, approximate KL 0.0136,
+clip fraction 0.2055, explained variance 0.9953 and no nonfinite action.
+On held-out A/B, `model_699.pt` remains 200/200 with zero raw-action
+overflow, zero finger-target clipping, zero wrist-workspace clipping,
+zero angle faults, no ground contacts and 99.0%/82.0% observed bilateral
+support. Its worst A/B opening is 0.943/0.999 rad; the 30-degree threshold
+is 0.524 rad. D is still 0/200 with 45.5% ground contact. We select this
+checkpoint over `model_600.pt` because success and target clipping are
+equal while the worst B overshoot falls from 1.179 to 0.999 rad.
+Across the final 200 A and 200 B successes, all eight held-out local rows
+in each split are represented. Completion takes 10–16 A or 11–18 B policy
+steps; true opening spans 0.647–0.943 rad on A and 0.701–0.999 rad on B,
+with 0.313–0.450 mm and 0.339–0.478 mm axial travel respectively. Maximum
+absolute screw constraint error is 13.4 μm on A and 9.1 μm on B, and
+maximum bottle displacement from Reset is 10.7/11.8 mm. These are
+successful but still moderately overshot 30-degree turns.
+At 101 new updates, both Gaussian and tanh reach 200/200 on A/B, but
+tanh has zero action overflow versus roughly 31% for Gaussian. Tanh
+reduces A/B finger-target clipping from 5.0%/9.3% to 1.9%/4.5% and lowers
+the observed maximum opening from 1.092/1.211 rad to 1.016/1.072 rad.
+The B stable-support rate is similar (Gaussian 79.2%, tanh 77.5%). The
+latent Gaussian std remains learnable; at the tanh checkpoint its six
+group means range from 0.786 to 0.968, compared with 0.931 to 1.001 for
+Gaussian. The comparison therefore isolates the full distribution change
+and its learned consequences, not a manually fixed smaller std.
+All 200 bounded B successes came from non-stable Reset rows and retained
+correct left-bottle and right-cap contact through the successful five-step
+window. They finished in 14–21 policy steps with 0.716–1.232 rad actual
+opening, 0.347–0.592 mm axial travel, at most 7.75 μm screw constraint
+error, 8.4–15.2 mm bottle displacement and no ground contact. The opening
+range shows overshoot beyond 30° despite the progress reward cap; this
+remains a control-quality issue rather than a false Success under the
+current at-least-30° contract.
+A 500-Hz trace of one bounded B success (`model_450.pt`) records 1,158
+cap/right-hand contact points across 140 substeps with no buffer overflow,
+maximum screw constraint error 3.78 μm, peak left/right normal force
+28.9/19.6 N and minimum signed separation −1.845 mm. True pose opening
+is 0.801052 rad versus 0.801052 rad from joint-position differences;
+integrated PhysX joint velocity yields only 0.707974 rad. The previously
+identified Mimic velocity and signed-distance concerns persist under
+bounded actions.
+A separate successful bounded B `model_500.pt` trace includes actual wrist
+poses and all Actor commands at 500 Hz. Over 130 substeps the cap rotates
+0.797 rad in world coordinates while the bottle rotates only 0.066 rad;
+the real relative opening is 0.770 rad. The right wrist translates 3.33
+mm and rotates 0.258 rad; its wrist-rotation action has mean absolute
+normalized magnitude 0.808 and its finger actions 0.477. The left wrist
+also adjusts (6.84 mm, 0.256 rad). There are 765 right-cap contact points,
+with maximum point force 5.60 N and screw constraint error 6.40 μm.
+Together with the right-action ablation, this supports active right-hand
+contact driving the cap in the full policy; it does not imply every
+successful initial condition excludes a passive-right route.
+The selected final `model_699.pt` has its own successful held-out B trace
+(`artifacts/phase1b/eval_tanh_model699_B_500hz_trace.json`). Across 120
+PhysX substeps it records 962 right-cap manifold points and no buffer
+overflow. The cap rotates 0.724 rad in world yaw while the bottle rotates
+−0.014 rad; measured relative opening is 0.738309 rad and the Mimic joint
+position changes by 0.738309 rad. Axial travel is 0.357 mm, consistent
+with the 3-mm pitch to within roughly 5 μm. Maximum screw constraint
+error is 6.30 μm and peak left/right total normal forces are 23.2/18.5 N.
+The minimum signed separation is −1.539 mm and the PhysX joint-velocity
+versus pose-differenced speed bias still reaches 7.46 rad/s (mean absolute
+1.58 rad/s); integrating PhysX joint velocity gives only 0.684 rad.
+Thus the selected checkpoint does not resolve either physical-model
+diagnostic.
 
 The seed-1101 warm-start training curve shows mean episode reward rising
 from approximately 10 at the first new update to 34 by roughly 100 new updates, while
@@ -261,8 +417,8 @@ deterministic policy's 28–40% overflow is separate evidence that the
 actor has learned to rely on action clipping. Because the controller
 accumulates clipped wrist and finger targets, many distinct raw Gaussian
 actions produce the same command. A bounded distribution with a correct
-PPO log-probability and ratio is the most valuable next controlled action
-experiment; changing std alone would not test this mechanism.
+PPO log-probability and ratio was tested in the fifth controlled run;
+changing std alone would not have tested this mechanism.
 
 The selected seed-2202 `model_500.pt` remained 200/200 in a repeat A
 evaluation after the final telemetry edit. Measured over the full 20-ms
@@ -275,8 +431,8 @@ PhysX substep and falsely read 0 m/s linear wrist motion; the corrected
 full-window computation has a numerical regression test and a native
 simulation smoke. This telemetry change did not alter actions or rewards.
 
-The committed diagnostic figures show all four PPO runs. The warm-start
-x-axis uses the source runner's global iteration 400–600, whereas the
+The diagnostic figures show all five completed PPO runs. The warm-start
+x-axis uses the source runner's global iteration 400–699, whereas the
 from-scratch x-axis begins at zero. Short throughput dips during the
 warm-start runs coincide with concurrent independent evaluations.
 
@@ -316,6 +472,15 @@ scripts/run_isaaclab.sh scripts/rsl_rl/train.py \
   --unified_reward_profile baseline --source_bank_snapshot docs/assets/phase1b_pregrasp_bank.json \
   --source_bank_snapshot docs/assets/phase1_mimic_pgs_grasp_init_bank.json \
   --viz none --device cuda:0
+scripts/run_isaaclab.sh scripts/rsl_rl/train.py \
+  --task DexterousHands-WujiHand2-Bimanual-PregraspCapTurn30-Direct-v0 \
+  --num_envs 2048 --seed 2202 --max_iterations 300 \
+  --run_name phase1b_seed2202_A_tanh_2048 \
+  --init_checkpoint "$OLD" --reset_loaded_action_std --init_action_std 1.0 \
+  --action_distribution tanh --unified_reward_profile baseline \
+  --source_bank_snapshot docs/assets/phase1b_pregrasp_bank.json \
+  --source_bank_snapshot docs/assets/phase1_mimic_pgs_grasp_init_bank.json \
+  --viz none --device cuda:0
 ```
 
 For a fixed held-out evaluation, use the selected model path in
@@ -327,16 +492,21 @@ that hand's policy action.
 
 ```bash
 scripts/run_isaaclab.sh scripts/environments/evaluate_phase1b.py \
-  --checkpoint logs/rsl_rl/dexteroushands_pregrasp_capturn30_phase1b/2026-11-01_23-20-26_phase1b_seed1101_A_legacy_actor_warmstart_1024/model_500.pt \
-  --policy learned --level A --episodes 200 --num-envs 64 --seed 9117 \
-  --output artifacts/phase1b/eval_warmstart_model500_A.json \
-  --rows-output artifacts/phase1b/eval_warmstart_model500_A_rows.json
+  --checkpoint logs/rsl_rl/dexteroushands_pregrasp_capturn30_phase1b/2026-11-02_00-42-31_phase1b_seed2202_A_tanh_2048/model_699.pt \
+  --action-distribution tanh --policy learned --level A \
+  --episodes 200 --num-envs 64 --seed 9117 \
+  --output artifacts/phase1b/eval_tanh_model699_A.json \
+  --rows-output artifacts/phase1b/eval_tanh_model699_A_rows.json
 ```
 
 Raw PPO consoles, TensorBoard events and checkpoints are under
 `logs/rsl_rl/dexteroushands_pregrasp_capturn30_phase1b/` and
 `artifacts/phase1b/`. In particular, the selected first-seed checkpoint
 is `2026-11-01_23-20-26_phase1b_seed1101_A_legacy_actor_warmstart_1024/model_500.pt`.
+The selected bounded-action checkpoint is
+`2026-11-02_00-42-31_phase1b_seed2202_A_tanh_2048/model_699.pt`.
+Its SHA-256 is `9cd2c2d9a1b4716272935f466d0fa2262894454ec2ff2a01695aebd0c4f5a0d5`.
+Its trainer console is `artifacts/phase1b/train_seed2202_A_tanh_2048_console.log`.
 The 500-Hz successful trace is
 `artifacts/phase1b/eval_warmstart_model450_A_500hz_trace_with_pose.json`.
 The direct-transfer, from-scratch, reward-ablation, selected-checkpoint
@@ -352,8 +522,8 @@ bank and experiment report are committed.
 | A — task | Pass | Registration, 52D action, 1/2/16/1024/2048 Reset/Step, real PPO updates and deterministic replay. |
 | B — physical | Partial | Dynamic contacts, gravity, screw Reset and counterfactuals validated; PhysX screw-speed bias and deep signed contact distance remain unresolved. |
 | C — learnable pregrasp | Pass, one family | A/B 51 active-reachable candidates; zero-action probes cannot establish bilateral support; B policy succeeds. Wider family coverage remains future work. |
-| D — 1024+ PPO | Pass | Actual 1024-env and 2048-env 201-update PPO runs, checkpoints and deterministic replay. |
-| E — held-out learning | Pass, warm-start | 9/200 before new PPO versus 200/200 A/B after 101 new updates, controls 0/200. From-scratch PPO failed. |
+| D — 1024+ PPO | Pass | Actual 1024-env 201-update, 2048-env 201-update and 2048-env 300-update PPO runs, checkpoints and deterministic replay. |
+| E — held-out learning | Pass, warm-start | 9/200 before new PPO versus 200/200 A/B after 101 new updates; zero/random and no-contact controls 0/200. From-scratch PPO failed. |
 | F — two-seed >=20% | Pass, warm-start | Independent seeds 1101 and 2202 each reached 200/200 A and 200/200 B after 101 new updates on frozen held-out cases. Both fail D at 0/200. |
-| G — health | Fail to certify | No NaN/Inf or PPO explosion in valid runs, but deterministic action overflow rises to 39–44% at late checkpoints and PGS screw-speed bias remains. |
+| G — health | Partial | No NaN/Inf or PPO explosion; the bounded 300-update run has zero deterministic action overflow and zero target clipping on A/B. The Gaussian comparator reaches 39–44% late overflow, and PGS screw-speed bias remains unresolved. |
 | H — regressions | Partial | Old stable CapTurn 200/200 and Phase 1B tests pass; complete suite has two unrelated, preexisting Allegro/MANO failures. |

@@ -10,6 +10,18 @@ def mutable_inference_action(policy, observation: torch.Tensor) -> torch.Tensor:
     return output.clone()
 
 
+def base_evaluation_action(policy_name: str, policy, observation: torch.Tensor) -> torch.Tensor:
+    """Select a replay action; baseline labels never call a loaded Actor."""
+    shape = (observation.shape[0], 52)
+    if policy_name == "random":
+        return torch.randn(shape, device=observation.device, dtype=observation.dtype)
+    if policy_name in ("zero", "no_hands") or (policy_name == "reverse" and policy is None):
+        return torch.zeros(shape, device=observation.device, dtype=observation.dtype)
+    if policy is None:
+        raise ValueError(f"{policy_name} requires a loaded Actor")
+    return mutable_inference_action(policy, observation)
+
+
 def policy_wrist_speed(start_pos: torch.Tensor, end_pos: torch.Tensor,
                        start_quat_xyzw: torch.Tensor, end_quat_xyzw: torch.Tensor,
                        policy_dt: float) -> tuple[torch.Tensor, torch.Tensor]:

@@ -19,7 +19,7 @@ args = parser.parse_args()
 fig, axes = plt.subplots(3, 2, figsize=(14, 11), constrained_layout=True)
 std_fig, std_axes = plt.subplots(3, 2, figsize=(14, 11), constrained_layout=True)
 reward_fig, reward_axes = plt.subplots(5, 2, figsize=(14, 18), constrained_layout=True)
-health_fig, health_axes = plt.subplots(4, 2, figsize=(14, 14), constrained_layout=True)
+health_fig, health_axes = plt.subplots(5, 2, figsize=(14, 17), constrained_layout=True)
 panels = (
     ("Train/mean_reward", "Episode reward"),
     ("phase1b/right_contact_rate", "Right cap contact rate"),
@@ -40,10 +40,13 @@ health_panels = (
     ("Loss/value", "Critic value loss"),
     ("Loss/explained_variance", "Explained variance"),
     ("Perf/total_fps", "Environment transitions / second"),
+    ("Loss/latent_policy_mean_outside_fraction", "Latent mean outside [-1, 1]"),
+    ("phase1b/invalid_action_fraction", "Invalid action fraction"),
 )
 for log_dir in args.log_dirs:
     run_name = log_dir.name
-    label = ("scratch, 1024" if "seed1101_A_1024" in run_name else
+    label = ("tanh seed 2202, 2048" if "tanh_2048" in run_name else
+             "scratch, 1024" if "seed1101_A_1024" in run_name else
              "contact coverage, 1024" if "contact_coverage" in run_name else
              "warm seed 1101, 1024" if "seed1101" in run_name else
              "warm seed 2202, 2048" if "seed2202" in run_name else run_name)
