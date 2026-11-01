@@ -101,7 +101,7 @@ def audit(runs_root: Path, budget: int) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--runs-root", type=Path, default=DEFAULT_RUNS_ROOT)
-    parser.add_argument("--budget", type=int, default=25_000_000)
+    parser.add_argument("--budget", type=int, default=100_000_000)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     result = audit(args.runs_root, args.budget)

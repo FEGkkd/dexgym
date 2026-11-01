@@ -35,7 +35,7 @@ from .reward_terms import (
     digit_contact_score, physically_supported_turn_reward,
     suspended_bottle, terminal_failure_penalty, thread_opening_progress,
     physically_valid_grasp, thread_error_penalty, cap_turn_physics_valid,
-    cylinder_surface_proximity, bottle_hold_stability,
+    cylinder_surface_proximity, bottle_hold_stability, grasp_contact_stability_bonus,
 )
 from .reset_sampler import split_bank_indices, split_pregrasp_indices
 from .contact_math import (
@@ -151,7 +151,8 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         self._metrics = None
         self._reward_sums = {name: torch.zeros(self.num_envs, device=self.device)
                              for name in ("contact", "approach", "holding", "progress",
-                                          "action", "drift", "constraint", "success", "failure")}
+                                          "action", "drift", "stability", "constraint",
+                                          "success", "failure")}
 
     def _setup_scene(self):
         if self._mimic_backend:
@@ -640,6 +641,13 @@ class BimanualBottleDirectEnv(DirectRLEnv):
                 dt=self.step_dt, task_kind="grasp_hold")
             progress_reward = zero
             constraint_penalty = thread_error_penalty(self._latest_thread.constraint_error)
+            stability_bonus = grasp_contact_stability_bonus(
+                m["left_contact_score"], m["right_contact_score"],
+                self.bottle.data.root_vel_w.torch, m["cap_spin_velocity"],
+                dt=self.step_dt,
+                linear_speed_scale_m_s=self.cfg.hold_max_linear_speed_m_s,
+                angular_speed_scale_rad_s=self.cfg.hold_max_angular_speed_rad_s,
+                cap_spin_scale_rad_s=self.cfg.hold_max_cap_spin_rad_s)
             success_bonus = GRASP_SUCCESS_BONUS * (self._stable_steps == 25).float()
         else:
             contact_reward, holding_reward = time_integrated_contact_reward(
@@ -651,12 +659,14 @@ class BimanualBottleDirectEnv(DirectRLEnv):
                 m["turn_support"] & (m["axial_travel"] > 0),
                 axial_tolerance_m=self.cfg.cap_pitch_tolerance_m)
             constraint_penalty = -10.0 * self._latest_thread.constraint_error.abs().clamp(max=0.01)
+            stability_bonus = zero
             success_bonus = CAP_TURN_SUCCESS_BONUS * (self._success_steps == 5).float()
         failure_penalty = terminal_failure_penalty(self.extras["phase1_episode"]["failure"])
         terms = {"contact": contact_reward, "approach": 0.3 * approach,
                  "holding": holding_reward, "progress": progress_reward,
                  "action": -0.05 * movement, "drift": -drift_penalty,
-                 "constraint": constraint_penalty, "success": success_bonus,
+                 "stability": stability_bonus, "constraint": constraint_penalty,
+                 "success": success_bonus,
                  "failure": failure_penalty}
         reward = sum(terms.values())
         self._previous_open = m["opening"].clone()
@@ -670,6 +680,10 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             "right_body_tripod_rate": m["right_body_tripod"].float().mean(),
             "right_manifold_invalid_rate": m["right_manifold_invalid"].float().mean(),
             "bottle_stable_rate": m["bottle_stable"].float().mean(),
+            "bottle_linear_speed_mean_m_s": torch.linalg.vector_norm(
+                self.bottle.data.root_vel_w.torch[:, :3], dim=-1).mean(),
+            "bottle_angular_speed_mean_rad_s": torch.linalg.vector_norm(
+                self.bottle.data.root_vel_w.torch[:, 3:], dim=-1).mean(),
             "cap_spin_abs_mean_rad_s": m["cap_spin_velocity"].abs().mean(),
             "right_site_tripod_rate": m["right_site_tripod"].float().mean(),
             "right_index_site_valid_rate": m["right_index_site_valid"].float().mean(),

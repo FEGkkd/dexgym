@@ -23,6 +23,60 @@ def time_integrated_contact_reward(left_score: torch.Tensor, right_score: torch.
     return dt * 0.2 * (left_score + right_score), dt * 0.5 * holding
 
 
+def grasp_hold_motion_penalty(
+    bottle_velocity_w: torch.Tensor, cap_spin_velocity_rad_s: torch.Tensor,
+    *, dt: float, linear_speed_scale_m_s: float = 0.05,
+    angular_speed_scale_rad_s: float = 0.5,
+    cap_spin_scale_rad_s: float = 0.2,
+) -> torch.Tensor:
+    """Rejected ablation: dense cost for bottle motion and cap spin.
+
+    Kept for numerical reproduction of the 107-update experiment only;
+    the task environment does not call it. It rewarded releasing the cap.
+    """
+    if (bottle_velocity_w.ndim != 2 or bottle_velocity_w.shape[1] != 6
+            or cap_spin_velocity_rad_s.shape != (bottle_velocity_w.shape[0],)
+            or min(dt, linear_speed_scale_m_s, angular_speed_scale_rad_s,
+                   cap_spin_scale_rad_s) <= 0):
+        raise ValueError("Motion penalty needs matching state and positive scales")
+    linear_ratio = (torch.linalg.vector_norm(bottle_velocity_w[:, :3], dim=-1)
+                    / linear_speed_scale_m_s).clamp(max=20.0)
+    angular_ratio = (torch.linalg.vector_norm(bottle_velocity_w[:, 3:], dim=-1)
+                     / angular_speed_scale_rad_s).clamp(max=20.0)
+    cap_ratio = (cap_spin_velocity_rad_s.abs() / cap_spin_scale_rad_s).clamp(max=50.0)
+    return -dt * (0.4 * torch.log1p(linear_ratio)
+                  + 0.4 * torch.log1p(angular_ratio)
+                  + 0.8 * torch.log1p(cap_ratio))
+
+
+def grasp_contact_stability_bonus(
+    left_score: torch.Tensor, right_score: torch.Tensor,
+    bottle_velocity_w: torch.Tensor, cap_spin_velocity_rad_s: torch.Tensor,
+    *, dt: float, linear_speed_scale_m_s: float = 0.05,
+    angular_speed_scale_rad_s: float = 0.5,
+    cap_spin_scale_rad_s: float = 0.2,
+) -> torch.Tensor:
+    """Reward quiet bilateral contact without rewarding cap release.
+
+    Its maximum is 2*dt. Together with the original contact and hold terms,
+    five seconds of maximal dense reward is 24, below the success bonus 25.
+    """
+    n = bottle_velocity_w.shape[0]
+    if (bottle_velocity_w.shape != (n, 6)
+            or left_score.shape != (n,) or right_score.shape != (n,)
+            or cap_spin_velocity_rad_s.shape != (n,)
+            or min(dt, linear_speed_scale_m_s, angular_speed_scale_rad_s,
+                   cap_spin_scale_rad_s) <= 0):
+        raise ValueError("Stability bonus needs matching state and positive scales")
+    linear = (torch.linalg.vector_norm(bottle_velocity_w[:, :3], dim=-1)
+              / linear_speed_scale_m_s).clamp(max=20.0)
+    angular = (torch.linalg.vector_norm(bottle_velocity_w[:, 3:], dim=-1)
+               / angular_speed_scale_rad_s).clamp(max=20.0)
+    spin = (cap_spin_velocity_rad_s.abs() / cap_spin_scale_rad_s).clamp(max=50.0)
+    balanced_contact = torch.sqrt(left_score.clamp(0, 1) * right_score.clamp(0, 1))
+    return 2.0 * dt * balanced_contact / (1.0 + linear + angular + spin)
+
+
 def digit_contact_score(forces: torch.Tensor, body_names: tuple[str, ...],
                         digits: tuple[str, ...], scale_n: float = 1.0,
                         aggregation: str = "mean", balanced_weight: float = 0.8) -> torch.Tensor:

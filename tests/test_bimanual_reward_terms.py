@@ -10,6 +10,8 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.reward_terms import (
     physically_valid_grasp, thread_error_penalty, cap_turn_physics_valid,
     cylinder_surface_proximity,
     bottle_hold_stability,
+    grasp_hold_motion_penalty,
+    grasp_contact_stability_bonus,
 )
 
 
@@ -22,6 +24,45 @@ def test_success_outscores_five_seconds_of_maximal_dense_contact():
         contact, hold = time_integrated_contact_reward(
             one, one, one, dt=0.02, task_kind=task)
         assert float((contact + hold) * horizon_steps) < bonus
+
+
+def test_grasp_hold_motion_penalty_is_bounded_and_tracks_real_motion():
+    velocity = torch.tensor([
+        [0., 0., 0., 0., 0., 0.],
+        [0.05, 0., 0., 0., 0., 0.5],
+        [0.1, 0., 0., 0., 0., 1.0],
+    ])
+    cap_spin = torch.tensor([0., 0.2, 0.4])
+    penalty = grasp_hold_motion_penalty(velocity, cap_spin, dt=0.02)
+    assert penalty.shape == (3,)
+    assert torch.isfinite(penalty).all()
+    assert penalty[0] == 0
+    assert penalty[2] < penalty[1] < penalty[0]
+    extreme = grasp_hold_motion_penalty(
+        torch.full((1, 6), 1.0e6), torch.tensor([1.0e6]), dt=0.02)
+    assert torch.isfinite(extreme).all()
+    assert extreme.item() > -0.25
+
+
+def test_stability_bonus_requires_bilateral_contact_and_favors_quiet_hold():
+    left = torch.tensor([1., 1., 1., 0.])
+    right = torch.tensor([1., 1., 1., 1.])
+    velocity = torch.tensor([
+        [0., 0., 0., 0., 0., 0.],
+        [0.05, 0., 0., 0., 0., 0.5],
+        [0.1, 0., 0., 0., 0., 1.0],
+        [0., 0., 0., 0., 0., 0.],
+    ])
+    spin = torch.tensor([0., 0.2, 0.4, 0.])
+    bonus = grasp_contact_stability_bonus(left, right, velocity, spin, dt=0.02)
+    assert torch.isfinite(bonus).all()
+    assert bonus[0] > bonus[1] > bonus[2] > 0
+    assert bonus[3] == 0
+    assert bonus.max() <= 0.04
+    contact, hold = time_integrated_contact_reward(
+        torch.ones(1), torch.ones(1), torch.ones(1), dt=0.02,
+        task_kind="grasp_hold")
+    assert float((contact + hold + bonus[:1]) * 250) < GRASP_SUCCESS_BONUS
 
 
 def test_contact_score_is_saturated_and_requires_correct_object_view():

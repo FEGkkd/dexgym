@@ -8,6 +8,7 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.task_contract import (
 from dexteroushands_lab.tasks.direct.bimanual_bottle import register_tasks
 from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env import BimanualBottleDirectEnv
 from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env_cfg import CapTurn30DirectEnvCfg
+from dexteroushands_lab.tasks.direct.bimanual_bottle.agents.rsl_rl_ppo_cfg import BimanualBottlePPORunnerCfg
 from isaaclab.envs import DirectRLEnv
 
 
@@ -38,3 +39,8 @@ def test_thread_stiffness_ablation_keeps_original_task_default():
     assert cfg.thread_axial_stiffness == 500.0
     cfg.thread_axial_stiffness = 800.0
     assert cfg.thread_axial_stiffness == 800.0
+
+
+def test_phase1_gaussian_action_std_starts_at_one():
+    cfg = BimanualBottlePPORunnerCfg()
+    assert cfg.actor.distribution_cfg.init_std == 1.0

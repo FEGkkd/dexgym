@@ -13,6 +13,8 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--task", choices=("grasp_hold", "cap_turn_30"), default="grasp_hold")
 parser.add_argument("--policy", choices=("learned", "zero", "random", "left_only", "right_only", "reverse"),
                     default="zero")
+parser.add_argument("--random-action-std", type=float, default=1.0,
+                    help="Normalized Gaussian std for the random-action counterfactual")
 parser.add_argument("--checkpoint", type=Path)
 parser.add_argument("--num-envs", type=int, default=64)
 parser.add_argument("--episodes", type=int, default=200)
@@ -53,6 +55,8 @@ parser.add_argument("--contact-point-output", type=Path,
                     help="Optional one-environment cap/right-hand PhysX contact point trace")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
+if args.random_action_std <= 0:
+    parser.error("--random-action-std must be positive")
 if args.policy == "learned" and (args.checkpoint is None or not args.checkpoint.is_file()):
     parser.error("--policy learned requires an existing --checkpoint")
 if args.stable_eval_bank and (not args.held_out or args.source != "stable"):
@@ -283,6 +287,7 @@ sum_action_saturation = 0.0
 action_samples = 0
 counterfactual_right_contact_steps = 0
 step_metric_sums = {}
+max_stable_streak_seen = 0
 start = time.monotonic()
 obs = env.get_observations()
 print("EVAL_STAGE observations_ready", flush=True)
@@ -303,7 +308,7 @@ try:
         elif args.policy == "zero":
             action = torch.zeros(args.num_envs, 52, device=args.device)
         else:
-            action = torch.randn(args.num_envs, 52, device=args.device) * 0.25
+            action = torch.randn(args.num_envs, 52, device=args.device) * args.random_action_std
             if args.policy == "left_only":
                 action[:, 26:] = 0
             elif args.policy == "right_only":
@@ -317,10 +322,25 @@ try:
                 wrist_inverse = torch.cat((-wrist_q[:, :3], wrist_q[:, 3:]), dim=-1)
                 local_reverse = _rotate(wrist_inverse, -world_axis)
                 action[:, 29:32] = 0.5 * local_reverse
+        if args.no_right_cap_contact:
+            # The right hand was moved away at Reset. Keep its pose target
+            # there, so learned right-wrist actions cannot bring it back.
+            action[:, 26:] = 0
         sum_action_abs += float(action.abs().mean())
         sum_action_saturation += float((action.abs() > 1).float().mean())
         action_samples += 1
         obs, reward, dones, info = env.step(action)
+        if args.task == "grasp_hold":
+            episode_before_reset = info["phase1_episode"]
+            max_stable_streak_seen = max(
+                max_stable_streak_seen,
+                25 if bool(episode_before_reset["success"].any())
+                else int(raw_env._stable_steps.max()))
+            spin_ok = (episode_before_reset["cap_spin_velocity_rad_s"].abs()
+                       < cfg.hold_max_cap_spin_rad_s)
+            step_metric_sums["cap_spin_below_hold_limit_rate"] = (
+                step_metric_sums.get("cap_spin_below_hold_limit_rate", 0.0)
+                + float(spin_ok.float().mean()))
         # DirectRLEnv auto-resets terminated rows before step() returns. Their
         # post-reset cap pose cannot reframe the previous episode's manifold.
         if args.contact_point_output and not bool(dones[0]):
@@ -375,6 +395,7 @@ try:
                     break
     elapsed = time.monotonic() - start
     summary = {"task": args.task, "policy": args.policy,
+               "random_action_std": args.random_action_std if args.policy == "random" else None,
                "thread_backend": args.thread_backend,
                "right_cap_contact_gate": args.right_cap_contact_gate,
                "right_contact_balance_weight": args.right_contact_balance_weight,
@@ -394,6 +415,7 @@ try:
                "num_envs": args.num_envs, "episodes": total,
                "elapsed_s": elapsed, "maximum_opening_angle_rad": max_opening,
                "mean_abs_raw_action": sum_action_abs / action_samples,
+               "max_stable_consecutive_steps_observed": max_stable_streak_seen,
                "raw_action_saturation_fraction": sum_action_saturation / action_samples,
                "mean_step_metrics": {name: value / action_samples
                                      for name, value in step_metric_sums.items()},

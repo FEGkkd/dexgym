@@ -3,12 +3,31 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 from datetime import datetime
 from importlib import metadata
 from pathlib import Path
 
 from rsl_rl import cli_args
+
+
+def reset_loaded_gaussian_std(runner, std: float) -> None:
+    """Start a new task at std=1 after transferring learned policy weights.
+
+    RSL-RL loads the source checkpoint's distribution parameter and Adam
+    moments. Reset only that parameter and its optimizer moments; the actor
+    mean, critic and observation normalizers remain transferred.
+    """
+    import torch
+
+    distribution = runner.alg.actor.distribution
+    if (distribution is None or getattr(distribution, "std_type", None) != "scalar"
+            or not hasattr(distribution, "std_param") or not 0.01 <= std <= 2.0):
+        raise ValueError("Std transfer requires scalar Gaussian distribution and std in [0.01, 2.0]")
+    with torch.no_grad():
+        distribution.std_param.fill_(std)
+    runner.alg.optimizer.state.pop(distribution.std_param, None)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -40,6 +59,8 @@ def _parser() -> argparse.ArgumentParser:
                         help="Controlled bimanual wrist translation increment in m/action")
     parser.add_argument("--init_action_std", type=float,
                         help="Initial normalized Gaussian action std for a controlled PPO ablation")
+    parser.add_argument("--reset_loaded_action_std", action="store_true",
+                        help="On task transfer, restore the loaded Gaussian std to --init_action_std")
     parser.add_argument("--solve_articulation_contact_last", action="store_true",
                         help="PhysX contact-last articulation solve order for a controlled experiment")
     parser.add_argument("--source_bank_snapshot", type=Path, action="append",
@@ -62,6 +83,7 @@ def main(argv: list[str] | None = None) -> None:
             args.source_bank_snapshot or args.finger_increment_scale is not None or
             args.wrist_translation_scale is not None or
             args.init_action_std is not None or
+            args.reset_loaded_action_std or
             args.thread_backend is not None or
             args.solver_type is not None or
             args.right_cap_contact_gate is not None or
@@ -77,8 +99,10 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit("--finger_increment_scale must be positive")
     if args.wrist_translation_scale is not None and args.wrist_translation_scale <= 0:
         raise SystemExit("--wrist_translation_scale must be positive")
-    if args.init_action_std is not None and not 0.01 <= args.init_action_std <= 0.65:
-        raise SystemExit("--init_action_std must be in [0.01, 0.65]")
+    if args.init_action_std is not None and not 0.01 <= args.init_action_std <= 2.0:
+        raise SystemExit("--init_action_std must be in [0.01, 2.0]")
+    if args.reset_loaded_action_std and (not args.resume or args.init_action_std is None):
+        raise SystemExit("--reset_loaded_action_std requires --resume and --init_action_std")
     if args.right_contact_balance_weight is not None and not 0 <= args.right_contact_balance_weight <= 1:
         raise SystemExit("--right_contact_balance_weight must be in [0, 1]")
     if args.thread_backend == "mimic" and args.stable_reset_probability != 0 and (
@@ -156,6 +180,18 @@ def main(argv: list[str] | None = None) -> None:
 
             resume_path = get_checkpoint_path(str(log_root), agent_cfg.load_run, agent_cfg.load_checkpoint)
             runner.load(resume_path)
+            if args.reset_loaded_action_std:
+                loaded_std = float(runner.alg.actor.distribution.std_param.detach().mean())
+                reset_loaded_gaussian_std(runner, args.init_action_std)
+                (log_dir / "phase1_std_transfer.json").write_text(json.dumps({
+                    "source_checkpoint": str(resume_path),
+                    "source_mean_std": loaded_std,
+                    "reset_mean_std": args.init_action_std,
+                    "std_type": "scalar",
+                    "optimizer_std_moments_cleared": True,
+                }, indent=2) + "\n")
+                print("PHASE1_TRANSFER_ACTION_STD", loaded_std,
+                      args.init_action_std, flush=True)
         env.seed(agent_cfg.seed)
         dump_yaml(str(log_dir / "params" / "env.yaml"), env_cfg)
         dump_yaml(str(log_dir / "params" / "agent.yaml"), agent_cfg)

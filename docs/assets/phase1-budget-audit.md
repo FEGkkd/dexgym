@@ -1,5 +1,10 @@
 # Phase 1 environment-transition budget audit — 2026-11-01
 
+Historical snapshot: the user subsequently raised the cumulative limit to
+100,000,000 transitions. The current accounting and 2048-environment results
+are in [the PGS Mimic large-batch audit](phase1-pgs-mimic-large-batch-audit.md).
+The 25-million figures below describe the earlier decision boundary only.
+
 The Phase 1 research limit is **25,000,000 environment transitions** or
 approximately **12 GPU hours**, whichever is reached first. This audit
 reconstructs logged PPO interactions from all 24 local TensorBoard run
@@ -20,6 +25,7 @@ counts. The run-level JSON output remains in ignored
 ```bash
 /home/ubuntu/miniconda3/envs/allo_track/bin/python \
   scripts/environments/audit_phase1_budget.py \
+  --budget 25000000 \
   --output artifacts/phase1/phase1_budget_audit.json
 ```
 
