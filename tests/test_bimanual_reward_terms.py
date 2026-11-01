@@ -7,6 +7,7 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.reward_terms import (
     grasp_contact_reward, physically_supported_turn_reward,
     physically_valid_grasp, thread_error_penalty, cap_turn_physics_valid,
     cylinder_surface_proximity,
+    bottle_hold_stability,
 )
 
 
@@ -63,6 +64,47 @@ def test_sidewall_proximity_prefers_interior_tripod_sites_over_bottom_rim():
     rim_score = cylinder_surface_proximity(bottom_rim, **kwargs)
     assert sidewall_score.item() > 0.99
     assert rim_score.item() < sidewall_score.item() - 0.1
+
+
+def test_hold_stability_rejects_captured_spinning_drifting_false_success():
+    anchor = torch.tensor([[0., 0., .5, 0., 0., 0., 1.]])
+    captured = torch.tensor([[-.021675, .015589, .488844,
+                              .040830, .091233, -.076073, .992080]])
+    velocity = torch.tensor([[-.022099, .059330, -.041539,
+                              1.305736, -1.662306, 1.560694]])
+    assert not bottle_hold_stability(
+        captured, velocity, anchor, cap_spin_velocity_rad_s=torch.tensor([4.25077]))[0]
+    nearly_still = anchor.clone()
+    nearly_still[0, 0] = .005
+    assert bottle_hold_stability(
+        nearly_still, torch.zeros_like(velocity), anchor,
+        cap_spin_velocity_rad_s=torch.zeros(1))[0]
+    # Cap turning is permitted only when the bottle itself remains stable.
+    assert bottle_hold_stability(
+        nearly_still, torch.zeros_like(velocity), anchor,
+        cap_spin_velocity_rad_s=None)[0]
+
+
+def test_hold_stability_checks_each_motion_limit_independently():
+    anchor = torch.tensor([[0., 0., .5, 0., 0., 0., 1.]])
+    rest = torch.zeros(1, 6)
+    spin = torch.zeros(1)
+    assert bottle_hold_stability(anchor, rest, anchor, spin).item()
+    drifted = anchor.clone()
+    drifted[0, 0] = .021
+    assert not bottle_hold_stability(drifted, rest, anchor, spin).item()
+    tilted = anchor.clone()
+    tilted[0, 5] = .1
+    tilted[0, 6] = (1 - .1 ** 2) ** .5
+    assert not bottle_hold_stability(tilted, rest, anchor, spin).item()
+    linear = rest.clone()
+    linear[0, 0] = .051
+    assert not bottle_hold_stability(anchor, linear, anchor, spin).item()
+    angular = rest.clone()
+    angular[0, 5] = .51
+    assert not bottle_hold_stability(anchor, angular, anchor, spin).item()
+    assert not bottle_hold_stability(anchor, rest, anchor, torch.tensor([.21])).item()
+    assert bottle_hold_stability(anchor, rest, anchor, cap_spin_velocity_rad_s=None).item()
 
 
 def test_grasp_success_rejects_large_thread_constraint_error():

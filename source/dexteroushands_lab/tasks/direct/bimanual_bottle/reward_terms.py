@@ -98,6 +98,39 @@ def suspended_bottle(position: torch.Tensor, quaternion_xyzw: torch.Tensor,
             & (planar < 0.30) & (reset_planar < 0.30) & (tilt < 0.35))
 
 
+def bottle_hold_stability(
+    bottle_pose_w: torch.Tensor, bottle_velocity_w: torch.Tensor,
+    hold_anchor_pose_w: torch.Tensor,
+    cap_spin_velocity_rad_s: torch.Tensor | None = None,
+    *, max_drift_m: float = 0.02, max_tilt_rad: float = math.radians(10),
+    max_linear_speed_m_s: float = 0.05,
+    max_angular_speed_rad_s: float = 0.5,
+    max_cap_spin_rad_s: float = 0.2,
+) -> torch.Tensor:
+    """Bounded motion during a hold window; cap spin is optional for turning."""
+    n = bottle_pose_w.shape[0]
+    if (bottle_pose_w.shape != (n, 7) or bottle_velocity_w.shape != (n, 6)
+            or hold_anchor_pose_w.shape != (n, 7)
+            or (cap_spin_velocity_rad_s is not None
+                and cap_spin_velocity_rad_s.shape != (n,))
+            or min(max_drift_m, max_tilt_rad, max_linear_speed_m_s,
+                   max_angular_speed_rad_s, max_cap_spin_rad_s) <= 0):
+        raise ValueError("Hold stability state or positive limits are invalid")
+    dot = (bottle_pose_w[:, 3:] * hold_anchor_pose_w[:, 3:]).sum(dim=-1).abs().clamp(max=1)
+    tilt = 2.0 * torch.acos(dot)
+    valid = (torch.linalg.vector_norm(
+        bottle_pose_w[:, :3] - hold_anchor_pose_w[:, :3], dim=-1) < max_drift_m)
+    valid &= tilt < max_tilt_rad
+    valid &= torch.linalg.vector_norm(bottle_velocity_w[:, :3], dim=-1) < max_linear_speed_m_s
+    valid &= torch.linalg.vector_norm(bottle_velocity_w[:, 3:], dim=-1) < max_angular_speed_rad_s
+    valid &= torch.isfinite(bottle_pose_w).all(dim=-1)
+    valid &= torch.isfinite(bottle_velocity_w).all(dim=-1)
+    if cap_spin_velocity_rad_s is not None:
+        valid &= cap_spin_velocity_rad_s.abs() < max_cap_spin_rad_s
+        valid &= torch.isfinite(cap_spin_velocity_rad_s)
+    return valid
+
+
 def grasp_contact_reward(left_score: torch.Tensor, right_score: torch.Tensor) -> torch.Tensor:
     """Reward each correct contact and give a larger bonus to balanced use."""
     return (0.5 * (left_score + right_score)

@@ -34,7 +34,7 @@ from .reward_terms import (
     digit_contact_score, grasp_contact_reward, physically_supported_turn_reward,
     suspended_bottle, terminal_failure_penalty, thread_opening_progress,
     physically_valid_grasp, thread_error_penalty, cap_turn_physics_valid,
-    cylinder_surface_proximity,
+    cylinder_surface_proximity, bottle_hold_stability,
 )
 from .reset_sampler import split_bank_indices, split_pregrasp_indices
 from .contact_math import (
@@ -131,6 +131,7 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         self._action_clip_count = torch.zeros(self.num_envs, device=self.device, dtype=torch.long)
         self._joint_clip_count = torch.zeros(self.num_envs, device=self.device, dtype=torch.long)
         self._stable_steps = torch.zeros(self.num_envs, device=self.device, dtype=torch.long)
+        self._hold_motion_steps = torch.zeros(self.num_envs, device=self.device, dtype=torch.long)
         self._success_steps = torch.zeros(self.num_envs, device=self.device, dtype=torch.long)
         self._breakaway_seen = torch.zeros(self.num_envs, device=self.device, dtype=torch.bool)
         self._maximum_opening = torch.zeros(self.num_envs, device=self.device)
@@ -139,6 +140,7 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         self._theta_at_reset = torch.zeros(self.num_envs, device=self.device)
         self._axial_at_reset = torch.zeros(self.num_envs, device=self.device)
         self._bottle_at_reset = torch.zeros(self.num_envs, 7, device=self.device)
+        self._hold_anchor_pose = torch.zeros(self.num_envs, 7, device=self.device)
         self._previous_open = torch.zeros(self.num_envs, device=self.device)
         self._previous_proximity = torch.zeros(self.num_envs, 2, device=self.device)
         self._proximity_fresh = torch.zeros(self.num_envs, device=self.device, dtype=torch.bool)
@@ -320,10 +322,12 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         self.contacts.reset(ids)
         self._theta_at_reset[ids] = self.thread.theta_unwrapped[ids]
         self._bottle_at_reset[ids] = bottle_pose
+        self._hold_anchor_pose[ids] = bottle_pose
         self._previous_open[ids] = 0
         self._previous_proximity[ids] = 0
         self._proximity_fresh[ids] = False
         self._stable_steps[ids] = 0
+        self._hold_motion_steps[ids] = 0
         self._success_steps[ids] = 0
         self._breakaway_seen[ids] = False
         self._maximum_opening[ids] = 0
@@ -480,11 +484,32 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         grasp_ok = physically_valid_grasp(
             left_contact, right_contact, suspended, low_speed,
             self._latest_thread.constraint_error)
-        # Rotation is credited only while the actual bilateral grasp gate is
-        # met. The looser partial-contact gate admitted left-only bottle
-        # rotation and right-only cap contact in measured counterfactuals.
-        turn_support = grasp_ok
-        self._stable_steps = torch.where(grasp_ok, self._stable_steps + 1,
+        self._hold_anchor_pose = torch.where(
+            (self._hold_motion_steps == 0)[:, None], bp, self._hold_anchor_pose)
+        if self._mimic_backend:
+            cap_spin = self.thread.state.spin_velocity_rad_s
+        else:
+            axis = _rotate(bp[:, 3:], torch.tensor(
+                (0., 0., 1.), device=self.device).expand(self.num_envs, 3))
+            cap_spin = ((self.cap.data.root_vel_w.torch[:, 3:] - bv[:, 3:]) * axis).sum(-1)
+        hold_limits = dict(
+            max_drift_m=self.cfg.hold_max_drift_m,
+            max_tilt_rad=self.cfg.hold_max_tilt_rad,
+            max_linear_speed_m_s=self.cfg.hold_max_linear_speed_m_s,
+            max_angular_speed_rad_s=self.cfg.hold_max_angular_speed_rad_s,
+            max_cap_spin_rad_s=self.cfg.hold_max_cap_spin_rad_s,
+        )
+        bottle_stable = bottle_hold_stability(
+            bp, bv, self._hold_anchor_pose, **hold_limits)
+        turn_support = grasp_ok & bottle_stable
+        self._hold_motion_steps = torch.where(
+            turn_support, self._hold_motion_steps + 1,
+            torch.zeros_like(self._hold_motion_steps))
+        stable_hold = grasp_ok & bottle_hold_stability(
+            bp, bv, self._hold_anchor_pose, cap_spin, **hold_limits)
+        # GraspHold requires low cap spin. CapTurn permits genuine cap rotation
+        # while the bottle itself remains stable and both hands touch correctly.
+        self._stable_steps = torch.where(stable_hold, self._stable_steps + 1,
                                          torch.zeros_like(self._stable_steps))
         sign = self.bottle_cfg.thread_sign
         opening, axial_travel, axial_goal = thread_opening_progress(
@@ -511,7 +536,12 @@ class BimanualBottleDirectEnv(DirectRLEnv):
                          "right_body_score": right_body_score,
                          "left_contact_score": left_score, "right_contact_score": right_score,
                          "left_proximity": left_proximity, "right_proximity": right_proximity,
-                         "grasp_ok": grasp_ok, "opening": opening,
+                         "grasp_ok": stable_hold if self.cfg.task_kind == "grasp_hold" else turn_support,
+                         "bottle_stable": bottle_stable,
+                         "cap_spin_velocity": cap_spin,
+                         "hold_anchor_drift": torch.linalg.vector_norm(
+                             bp[:, :3] - self._hold_anchor_pose[:, :3], dim=-1),
+                         "opening": opening,
                          "axial_travel": axial_travel, "axial_goal": axial_goal,
                          "turn_support": turn_support,
                          "suspended": suspended, "cap_ok": cap_ok,
@@ -545,6 +575,14 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             "breakaway_seen": self._breakaway_seen.clone(),
             "ground_contact": ground.clone(),
             "constraint_failure": constraint_failure.clone(),
+            "bottle_displacement_from_reset_m": self._metrics["bottle_displacement"].clone(),
+            "bottle_linear_speed_m_s": torch.linalg.vector_norm(
+                self.bottle.data.root_vel_w.torch[:, :3], dim=-1).clone(),
+            "bottle_angular_speed_rad_s": torch.linalg.vector_norm(
+                self.bottle.data.root_vel_w.torch[:, 3:], dim=-1).clone(),
+            "hold_anchor_drift_m": self._metrics["hold_anchor_drift"].clone(),
+            "cap_spin_velocity_rad_s": self._metrics["cap_spin_velocity"].clone(),
+            "bottle_stable": self._metrics["bottle_stable"].clone(),
             "source_stable": self._source_stable.clone(),
             "reset_sample_index": self._reset_sample_index.clone(),
             "left_contact": self._metrics["left_contact"].clone(),
@@ -599,6 +637,8 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             "right_middle_rate": m["right_middle"].float().mean(),
             "right_body_tripod_rate": m["right_body_tripod"].float().mean(),
             "right_manifold_invalid_rate": m["right_manifold_invalid"].float().mean(),
+            "bottle_stable_rate": m["bottle_stable"].float().mean(),
+            "cap_spin_abs_mean_rad_s": m["cap_spin_velocity"].abs().mean(),
             "right_site_tripod_rate": m["right_site_tripod"].float().mean(),
             "right_index_site_valid_rate": m["right_index_site_valid"].float().mean(),
             "grasp_rate": holding.mean(), "opening_mean_rad": m["opening"].mean(),

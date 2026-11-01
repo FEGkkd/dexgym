@@ -59,9 +59,10 @@ try:
             tensors += [wrist.initial_pos.clone(), wrist.current_velocity.clone(),
                         wrist.workspace_clip_count.clone()]
         tensors += [getattr(env, name).clone() for name in
-                    ("_stable_steps", "_success_steps", "_breakaway_seen",
+                    ("_stable_steps", "_hold_motion_steps", "_success_steps", "_breakaway_seen",
                      "_maximum_opening", "_source_stable", "_reset_sample_index",
                      "_theta_at_reset", "_axial_at_reset", "_bottle_at_reset",
+                     "_hold_anchor_pose",
                      "_previous_open", "_previous_proximity", "_proximity_fresh",
                      "_last_action", "_last_raw_action", "_action_clip_count",
                      "_joint_clip_count")]
@@ -95,6 +96,9 @@ try:
                                      f"field {field_index}: {delta}")
         if int(env.contacts.steps[chosen]) != 0:
             raise AssertionError("Selected contact history was not cleared")
+        if not torch.allclose(env._hold_anchor_pose[chosen],
+                              env.bottle.data.root_pose_w.torch[chosen], atol=1e-6):
+            raise AssertionError("Selected hold anchor did not restore to the bottle Reset pose")
         if not torch.isfinite(torch.cat([env.bottle.data.root_pose_w.torch,
                                          env.cap.data.root_pose_w.torch], dim=-1)).all():
             raise AssertionError("Nonfinite reset body state")

@@ -1,5 +1,13 @@
 # Phase 1 cap-sidewall contact and controlled PPO rounds — 2026-11-01
 
+> **Correction after live-state capture:** The one training-family episode
+> previously reported as a GraspHold success was a false *stable hold* under
+> the old motion criterion. Its bottle had moved 28.9 mm and was rotating at
+> about 2.63 rad/s; the cap spin was 4.25 rad/s. It had correct contact
+> topology, but the object was not settled. With motion-qualified hold
+> acceptance, the same checkpoint scored **0/200**. See
+> [the strict-hold audit](phase1-strict-hold-audit.md).
+
 Branch: `codex/bimanual-bottlecap-rl-v0`; user-selected baseline: `8987c9c`.
 The pre-round code was `104b2fe`. These are engineering-bottle experiments
 with WujiHand2 Beta 1 candidate USD, Isaac Sim 6.0.1, Isaac Lab 3.0 and an
@@ -64,21 +72,19 @@ not directly comparable.
 |---|---:|---:|---:|---:|
 | Site proxy gate, original balanced contact reward | 25 / 819,200 | 0.11% / 0.03% | 0/200 | 0/200 |
 | Partial correct-site contact reward made denser (`balanced_weight=0.2`) | 50 / 1,638,400 | 1.60% / 1.02% | 0/200 | 0/200 |
-| Also target only tripod sites near the interior cap sidewall | 50 / 1,638,400 | 2.13% / 1.63% | 0/200 | 1/200 under site proxy |
+| Also target only tripod sites near the interior cap sidewall | 50 / 1,638,400 | 2.13% / 1.63% | 0/200 | 1/200 under the old motion gate; later invalidated |
 | Replace site proxy with actual PhysX sidewall points | 50 / 1,638,400 | 2.10% / 1.37% | **0/200** | **0/200** |
 
-The third round's **one** training-family success also survived re-evaluation
-of the *same checkpoint* with the exact manifold gate, twice at the same seed:
-1/200 on both replays. It came from pregrasp bank index 5. At success it had
-56 policy steps, no ground contact or constraint failure, both exact-contact
-grasp flags true, cap local axial travel 0.224 mm, and thread constraint
-error −0.16 µm. It reached the GraspHold consecutive-contact criterion;
-its cap opening angle at termination was 0.469 rad. The episode is a useful
-same-family lead, but no terminal state was captured into a stable bank and
-there is no independent Reset replay or held-out success. Its transient
-maximum opening of 0.550 rad is **not** a CapTurn30 success claim: this was
-a GraspHold policy, with no CapTurn30 success evaluation. The exact-contact
-trained checkpoint did not reproduce that isolated success.
+The third round's **one** training-family episode also passed the *old*
+GraspHold gate when re-evaluated with exact manifold contact, twice at the
+same seed. It came from pregrasp bank index 5 and had real thumb/index/middle
+sidewall contact, but the subsequent pre-Reset state capture revealed that
+the bottle and cap were moving rapidly. The old criterion only checked
+contact, a broad workspace and bottle linear speed below 0.2 m/s. It was
+therefore a **false stable-hold success**, not a validated grasp or bank
+entry. Its transient cap angle is not a CapTurn30 result either. The new
+motion-qualified gate scores this checkpoint 0/200; no stable Mimic bank was
+created.
 
 The final exact-contact PPO run logged KL 0.0157, clip fraction 0.2349,
 explained variance 0.8323, grouped action standard deviations
@@ -125,13 +131,15 @@ scripts/run_isaaclab.sh scripts/environments/evaluate_bimanual_rl.py \
   --checkpoint logs/rsl_rl/dexteroushands_bimanual_bottle_phase1/2026-11-01_13-33-31_mimic_manifold_tripod_seed41_50iter/model_49.pt
 ```
 
-The final checkpoint is at the path above. The earlier isolated-success
-checkpoint is
+The final checkpoint is at the path above. The earlier loose-gate
+false-positive checkpoint is
 `logs/rsl_rl/dexteroushands_bimanual_bottle_phase1/2026-11-01_13-13-50_mimic_sidewall_tripod_approach_seed41_50iter/model_49.pt`.
 Large checkpoints, training stdout, per-episode JSON and contact traces are
 ignored under `logs/` and `artifacts/phase1/`; the source code and this
 summary are the Git deliverable. The exact success replay rows are in
-`artifacts/phase1/mimic_site_checkpoint_exactgate_trainfamily_replay_200_rows.json`.
+`artifacts/phase1/mimic_site_checkpoint_exactgate_trainfamily_replay_200_rows.json`
+and its pre-Reset physical state is in
+`artifacts/phase1/mimic_row5_success_pre_reset_candidate.json`.
 
 Focused contact/reward tests passed 19/19; all offline bimanual tests passed
 84/84 after the exact-manifold addition. The full repository test run after
@@ -155,11 +163,10 @@ completion markers and tracebacks rather than using shell exit alone.
 | 4096-environment target | Not Tested | Existing quadratic filter allocation is the measured scaling blocker. |
 | Old Wuji single-hand tasks and repository suite | Partial | Old-task tests passed within the full run; two unrelated user-area tests failed as listed above. |
 
-The next physical experiment is to reproduce bank row 5's rare success,
-capture its **actual** hands, objects, thread angle and controller state,
-then independently Reset and replay a gravity-on hold. In parallel, a
-contact-feedback closing fixture should keep right index and middle on the
-interior sidewall throughout cap springback. Only physically replayed states
-may enter a Mimic stable bank and justify CapTurn PPO. No right `_start`
+The next physical experiment is a contact-feedback closing fixture that
+keeps right index and middle on the interior sidewall while reducing cap
+spin and bottle drift. Capture an actually settled state, then independently
+Reset and replay a gravity-on hold. Only physically replayed states may
+enter a Mimic stable bank and justify CapTurn PPO. No right `_start`
 curriculum, new RL algorithm, scripted cap torque or direct object-pose
 writing was added in this round.

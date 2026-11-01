@@ -1,6 +1,7 @@
 """Deterministic 200+ episode policy and counterfactual evaluation."""
 
 import argparse
+from dataclasses import asdict
 import json
 import math
 from pathlib import Path
@@ -43,6 +44,8 @@ parser.add_argument("--solve-articulation-contact-last", action="store_true",
 parser.add_argument("--output", type=Path)
 parser.add_argument("--episode-rows-output", type=Path,
                     help="Optional per-episode physical outcomes for independent review")
+parser.add_argument("--capture-success-state-output", type=Path,
+                    help="Diagnostic pre-Reset state of the first successful GraspHold episode")
 parser.add_argument("--contact-point-output", type=Path,
                     help="Optional one-environment cap/right-hand PhysX contact point trace")
 AppLauncher.add_app_launcher_args(parser)
@@ -55,6 +58,8 @@ if args.thread_trace_output and (args.num_envs != 1 or args.thread_trace_substep
     parser.error("--thread-trace-output requires --num-envs 1 and positive --thread-trace-substeps")
 if args.contact_point_output and args.num_envs != 1:
     parser.error("--contact-point-output requires --num-envs 1")
+if args.capture_success_state_output and (args.task != "grasp_hold" or args.thread_backend != "mimic"):
+    parser.error("--capture-success-state-output requires GraspHold with the mimic backend")
 if args.thread_backend == "mimic" and (args.source != "pregrasp" or args.stable_eval_bank):
     parser.error("mimic evaluation currently requires --source pregrasp and no legacy stable bank")
 if args.thread_backend == "mimic" and args.thread_trace_output:
@@ -106,6 +111,93 @@ raw_env = BimanualBottleDirectEnv(cfg)
 env = RslRlVecEnvWrapper(raw_env)
 torch.manual_seed(args.seed)
 print("EVAL_STAGE environment_ready", flush=True)
+
+captured_success_state = None
+if args.capture_success_state_output:
+    original_get_dones = raw_env._get_dones
+
+    def capture_before_auto_reset():
+        global captured_success_state
+        terminated, timeout = original_get_dones()
+        if captured_success_state is not None:
+            return terminated, timeout
+        winners = raw_env.extras["phase1_episode"]["success"].nonzero(as_tuple=False).flatten()
+        if winners.numel() == 0:
+            return terminated, timeout
+        env_id = int(winners[0])
+        origin = raw_env.scene.env_origins[env_id]
+
+        def values(tensor):
+            return tensor[env_id].detach().cpu().tolist()
+
+        def local_pose(pose):
+            row = pose[env_id].detach().clone()
+            row[:3] -= origin
+            return row.cpu().tolist()
+
+        hands = {}
+        for side, hand, wrist, target in (
+            ("left", raw_env.left, raw_env.wrists[0], raw_env._finger_targets[0]),
+            ("right", raw_env.right, raw_env.wrists[1], raw_env._finger_targets[1]),
+        ):
+            hands[side] = {
+                "joint_names_isaac_order": list(hand.joint_names),
+                "root_pose_env0_xyzw": local_pose(hand.data.root_pose_w.torch),
+                "root_velocity_w": values(hand.data.root_vel_w.torch),
+                "joint_position": values(hand.data.joint_pos.torch),
+                "joint_velocity": values(hand.data.joint_vel.torch),
+                "joint_target": values(target),
+                "wrist_current_pose_env0_xyzw": local_pose(wrist.current_pose),
+                "wrist_target_pose_env0_xyzw": local_pose(wrist.target_pose),
+                "wrist_current_velocity_w": values(wrist.current_velocity),
+                "wrist_initial_position_env0_m": values(wrist.initial_pos - raw_env.scene.env_origins),
+            }
+        exact_forces, invalid = raw_env.contacts.cap_right_sidewall_forces(
+            raw_env.thread.state.cap_pose_w, dt=cfg.sim.dt,
+            radius_m=raw_env.bottle_cfg.cap_outer_radius,
+            half_height_m=raw_env.bottle_cfg.cap_height / 2)
+        captured_success_state = {
+            "status": "DIAGNOSTIC_CAPTURE_REQUIRES_INDEPENDENT_RESET_REPLAY",
+            "source": "deterministic_grasp_hold_success_before_auto_reset",
+            "checkpoint": str(args.checkpoint),
+            "evaluation_seed": args.seed,
+            "environment_id": env_id,
+            "reset_sample_index": int(raw_env._reset_sample_index[env_id]),
+            "coordinate_frame": "env0 world Z-up; quaternion xyzw; velocities world; metres and radians",
+            "official_asset_commit": raw_env.specs[0].source_commit,
+            "left_usd_sha256": raw_env.specs[0].usd_sha256,
+            "right_usd_sha256": raw_env.specs[1].usd_sha256,
+            "bottle_parameters": asdict(raw_env.bottle_cfg),
+            "hands": hands,
+            "bottle": {
+                "root_pose_env0_xyzw": local_pose(raw_env.thread.state.root_pose_w),
+                "root_velocity_w": values(raw_env.thread.state.root_velocity_w),
+            },
+            "cap": {
+                "root_pose_env0_xyzw": local_pose(raw_env.thread.state.cap_pose_w),
+                "root_velocity_w": values(raw_env.cap.data.root_vel_w.torch),
+            },
+            "thread": {
+                "theta_unwrapped_rad": float(raw_env.thread.state.theta_rad[env_id]),
+                "spin_velocity_rad_s": float(raw_env.thread.state.spin_velocity_rad_s[env_id]),
+                "axial_m": float(raw_env.thread.state.axial_m[env_id]),
+                "stick_reference_rad": float(raw_env.thread.drive.stick_reference[env_id]),
+                "sliding": bool(raw_env.thread.drive.sliding[env_id]),
+                "breakaway_seen": bool(raw_env.thread.drive.breakaway_seen[env_id]),
+                "initial_theta_rad": float(raw_env._theta_at_reset[env_id]),
+            },
+            "exact_right_sidewall_normal_force_n_thumb_index_middle": values(exact_forces),
+            "exact_right_contact_buffer_invalid": bool(invalid[env_id]),
+            "episode": {name: values(tensor)
+                        for name, tensor in raw_env.extras["phase1_episode"].items()},
+            "stable_consecutive_policy_steps": int(raw_env._stable_steps[env_id]),
+            "bottle_displacement_from_reset_m": float(raw_env._metrics["bottle_displacement"][env_id]),
+        }
+        print("EVAL_STAGE success_state_captured", env_id,
+              captured_success_state["reset_sample_index"], flush=True)
+        return terminated, timeout
+
+    raw_env._get_dones = capture_before_auto_reset
 
 thread_trace_fields = (
     "theta_rad", "axial_m", "desired_axial_m", "constraint_error_m",
@@ -333,6 +425,11 @@ try:
             "thread_sign": raw_env.bottle_cfg.thread_sign,
             "rows_by_source": results,
         }, indent=2, sort_keys=True) + "\n")
+    if args.capture_success_state_output:
+        args.capture_success_state_output.parent.mkdir(parents=True, exist_ok=True)
+        args.capture_success_state_output.write_text(json.dumps(
+            captured_success_state or {"status": "NO_SUCCESS_STATE_CAPTURED"},
+            indent=2, sort_keys=True) + "\n")
     if args.contact_point_output:
         args.contact_point_output.parent.mkdir(parents=True, exist_ok=True)
         region_summary = {}

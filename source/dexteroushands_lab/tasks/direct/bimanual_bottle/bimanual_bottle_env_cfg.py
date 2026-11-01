@@ -43,6 +43,13 @@ class BimanualBottleDirectEnvCfg(DirectRLEnvCfg):
     # simulation criterion, not a measured tolerance of the user's bottle.
     cap_pitch_tolerance_m = 0.00005
     cap_constraint_tolerance_m = 0.001
+    # Engineering hold acceptance over a 0.5 s contact window, not measured
+    # limits of a particular bottle or a requirement on pregrasp Reset poses.
+    hold_max_drift_m = 0.02
+    hold_max_tilt_rad = 0.17453292519943295
+    hold_max_linear_speed_m_s = 0.05
+    hold_max_angular_speed_rad_s = 0.5
+    hold_max_cap_spin_rad_s = 0.2
     thread_axial_stiffness = 500.0
     sim = SimulationCfg(
         dt=0.002, render_interval=decimation,
