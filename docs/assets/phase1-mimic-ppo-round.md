@@ -38,10 +38,12 @@ export ISAACLAB_PYTHON=/home/ubuntu/miniconda3/envs/allo_track/bin/python
 scripts/run_isaaclab.sh scripts/rsl_rl/train.py \
   --task DexterousHands-WujiHand2-Bimanual-GraspHold-Direct-v0 \
   --num_envs 1024 --max_iterations 25 --stable_reset_probability 0 \
-  --thread_backend mimic --seed 41 --run_name mimic_pregrasp_seed41_25iter --headless
+  --thread_backend mimic --right_cap_contact_gate body_only \
+  --seed 41 --run_name mimic_pregrasp_seed41_25iter --headless
 scripts/run_isaaclab.sh scripts/environments/evaluate_bimanual_rl.py \
   --task grasp_hold --policy learned --source pregrasp \
-  --thread-backend mimic --held-out --num-envs 64 --episodes 200 \
+  --thread-backend mimic --right-cap-contact-gate body_only \
+  --held-out --num-envs 64 --episodes 200 \
   --seed 1001 --headless --checkpoint \
   logs/rsl_rl/dexteroushands_bimanual_bottle_phase1/2026-11-01_11-43-08_mimic_pregrasp_seed41_25iter/model_24.pt
 ```

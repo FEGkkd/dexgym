@@ -24,6 +24,9 @@ parser.add_argument("--maintain-contact", action="store_true",
 parser.add_argument("--contact-target-n", type=float, default=0.5)
 parser.add_argument("--contact-points", action="store_true",
                     help="Inspect cap-sidewall manifold points; expensive and may overflow PhysX point buffer")
+parser.add_argument("--right-cap-contact-gate",
+                    choices=("site_sidewall_proxy", "manifold_sidewall"),
+                    default="site_sidewall_proxy")
 parser.add_argument("--right-wrist-down-steps", type=int, default=0,
                     help="Diagnostic bounded right wrist descent during initial free fall")
 parser.add_argument("--right-index-mcp-flex", action="store_true",
@@ -51,6 +54,18 @@ parser.add_argument("--candidate-hold-steps", type=int, default=50)
 parser.add_argument("--candidate-offset-xyz", type=float, nargs=3,
                     default=(0.0, 0.0, 0.0),
                     help="Small world-frame approach offset from offline candidate for PhysX calibration")
+parser.add_argument("--post-close-local-rotvec", type=float, nargs=3,
+                    default=(0.0, 0.0, 0.0),
+                    help="One bounded right wrist-local rotation after closing, keeping finger targets")
+parser.add_argument("--post-close-world-translation", type=float, nargs=3,
+                    default=(0.0, 0.0, 0.0),
+                    help="One bounded right world translation after closing, keeping finger targets")
+parser.add_argument("--post-close-index-dip-delta", type=float, default=0.0,
+                    help="One bounded right index DIP target adjustment after closing")
+parser.add_argument("--post-close-index-mcp-delta", type=float, default=0.0,
+                    help="One bounded right index MCP flex target adjustment after closing")
+parser.add_argument("--post-close-index-pip-delta", type=float, default=0.0,
+                    help="One bounded right index PIP target adjustment after closing")
 parser.add_argument("--output", type=Path)
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
@@ -68,6 +83,14 @@ if args.candidate_transition_steps < 1 or args.candidate_hold_steps < 1:
     parser.error("candidate transition and hold steps must be positive")
 if any(abs(value) > 0.005 for value in args.candidate_offset_xyz):
     parser.error("candidate offset components must stay within 5 mm")
+if sum(value * value for value in args.post_close_local_rotvec) ** 0.5 > 0.10:
+    parser.error("post-close wrist rotation must be at most 0.10 rad")
+if sum(value * value for value in args.post_close_world_translation) ** 0.5 > 0.005:
+    parser.error("post-close wrist translation must be at most 5 mm")
+if any(abs(value) > 0.15 for value in (
+        args.post_close_index_dip_delta, args.post_close_index_mcp_delta,
+        args.post_close_index_pip_delta)):
+    parser.error("post-close right index adjustments must be at most 0.15 rad")
 app = AppLauncher(args).app
 
 import torch
@@ -150,6 +173,7 @@ def main():
     cfg.scene.num_envs = 1
     cfg.sim.device = args.device
     cfg.thread_backend = "mimic"
+    cfg.right_cap_contact_gate = args.right_cap_contact_gate
     cfg.stable_reset_probability = 0.0
     cfg.evaluation_mode = args.sample_index >= 24
     env = BimanualBottleDirectEnv(cfg)
@@ -193,10 +217,33 @@ def main():
         initial_cap = env.cap.data.root_pose_w.torch[0, :3].clone()
         initial_right_wrist = env.right.data.root_pose_w.torch[0, :3].clone()
         rows = []
+        post_close_command = (any(args.post_close_local_rotvec)
+                              or any(args.post_close_world_translation)
+                              or any((args.post_close_index_dip_delta,
+                                      args.post_close_index_mcp_delta,
+                                      args.post_close_index_pip_delta)))
+        if post_close_command and candidate is not None:
+            raise ValueError("Choose a candidate or a post-close wrist command, not both")
         total_steps = args.steps + (
             args.candidate_transition_steps + args.candidate_hold_steps
-            if candidate is not None else 0)
+            if candidate is not None or post_close_command else 0)
         for step in range(total_steps):
+            if post_close_command and step == args.steps:
+                increment = torch.tensor(
+                    [*args.post_close_world_translation,
+                     *args.post_close_local_rotvec], device=env.device)[None]
+                env.wrists[1].command(increment)
+                for name, delta in (
+                    ("r_index_finger_dip", args.post_close_index_dip_delta),
+                    ("r_index_finger_mcp_flex", args.post_close_index_mcp_delta),
+                    ("r_index_finger_pip", args.post_close_index_pip_delta),
+                ):
+                    index = env.right.joint_names.index(name)
+                    target = env._finger_targets[1][0, index] + delta
+                    limit = env._joint_limits[1][index]
+                    if not bool(limit[0] <= target <= limit[1]):
+                        raise ValueError(f"Post-close {name} target exceeds official limits")
+                    env._finger_targets[1][0, index] = target
             if candidate is not None and step == args.steps:
                 proposed_pos = torch.tensor(
                     [value + offset for value, offset in zip(
@@ -353,6 +400,14 @@ def main():
                              env.right.data.root_pose_w.torch[0].detach().cpu().tolist()),
                          "contact_force_n": forces,
                          "cross_object_force_n": cross_forces,
+                         "right_body_tripod": bool(env._metrics["right_body_tripod"][0]),
+                         "right_site_proxy_tripod": bool(env._metrics["right_site_tripod"][0]),
+                         "right_gate_tripod": bool(env._metrics["right_contact"][0]),
+                         "right_gate_digit_contact": {
+                             digit: bool(env._metrics[f"right_{digit}"][0])
+                             for digit in ("thumb", "index", "middle")},
+                         "right_manifold_invalid": bool(env._metrics["right_manifold_invalid"][0]),
+                         "right_index_site_valid": bool(env._metrics["right_index_site_valid"][0]),
                          "right_cap_contact_points": cap_contact_points,
                          "right_cap_sidewall_force_n": sidewall_forces,
                          "right_tip_radial_gap_m": (radial - config.cap_outer_radius).detach().cpu().tolist(),
@@ -380,6 +435,11 @@ def main():
                   "right_wrist_track_cap": args.right_wrist_track_cap,
                   "candidate_json": str(args.candidate_json) if args.candidate_json else None,
                   "candidate_offset_xyz_m": list(args.candidate_offset_xyz),
+                  "post_close_local_rotvec_rad": list(args.post_close_local_rotvec),
+                  "post_close_world_translation_m": list(args.post_close_world_translation),
+                  "post_close_index_dip_delta_rad": args.post_close_index_dip_delta,
+                  "post_close_index_mcp_delta_rad": args.post_close_index_mcp_delta,
+                  "post_close_index_pip_delta_rad": args.post_close_index_pip_delta,
                   "contact_points_enabled": args.contact_points,
                   "final_right_joint_position": dict(zip(
                       env.right.joint_names,

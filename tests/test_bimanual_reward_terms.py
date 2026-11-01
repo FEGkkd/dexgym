@@ -6,6 +6,7 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.reward_terms import (
     suspended_bottle,
     grasp_contact_reward, physically_supported_turn_reward,
     physically_valid_grasp, thread_error_penalty, cap_turn_physics_valid,
+    cylinder_surface_proximity,
 )
 
 
@@ -28,6 +29,40 @@ def test_balanced_tripod_contact_requires_thumb_without_losing_partial_signal():
         forces, names, ("thumb", "index_finger", "middle_finger"),
         aggregation="balanced")
     assert 0.0 < score[0] < score[1]
+
+
+def test_balanced_contact_weight_makes_partial_site_contact_denser_without_changing_full_contact():
+    names = ("r_thumb_distal", "r_index_finger_distal", "r_middle_finger_distal")
+    partial = torch.tensor([[2.0, 0.0, 0.0]])
+    full = torch.tensor([[2.0, 2.0, 2.0]])
+    old_partial = digit_contact_score(
+        partial, names, ("thumb", "index_finger", "middle_finger"),
+        aggregation="balanced", balanced_weight=0.8)
+    dense_partial = digit_contact_score(
+        partial, names, ("thumb", "index_finger", "middle_finger"),
+        aggregation="balanced", balanced_weight=0.2)
+    old_full = digit_contact_score(
+        full, names, ("thumb", "index_finger", "middle_finger"),
+        aggregation="balanced", balanced_weight=0.8)
+    dense_full = digit_contact_score(
+        full, names, ("thumb", "index_finger", "middle_finger"),
+        aggregation="balanced", balanced_weight=0.2)
+    assert dense_partial.item() > old_partial.item() > 0
+    assert torch.allclose(old_full, dense_full)
+
+
+def test_sidewall_proximity_prefers_interior_tripod_sites_over_bottom_rim():
+    # The diagnosed index collides at z=-12.47 mm on a 25 mm cap.
+    near_sidewall = torch.tensor([[[0.019, 0., 0.], [0.019, 0., -0.002],
+                                   [0.019, 0., 0.003], [0.5, 0., 0.], [0.5, 0., 0.]]])
+    bottom_rim = near_sidewall.clone()
+    bottom_rim[0, 1, 2] = -0.01247
+    kwargs = dict(radius_m=0.019, half_height_m=0.0125, radial_scale_m=0.010,
+                  axial_scale_m=0.005, axial_inset_m=0.005, digit_count=3)
+    sidewall_score = cylinder_surface_proximity(near_sidewall, **kwargs)
+    rim_score = cylinder_surface_proximity(bottom_rim, **kwargs)
+    assert sidewall_score.item() > 0.99
+    assert rim_score.item() < sidewall_score.item() - 0.1
 
 
 def test_grasp_success_rejects_large_thread_constraint_error():

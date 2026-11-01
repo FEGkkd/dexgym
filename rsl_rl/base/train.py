@@ -24,6 +24,14 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--stable_reset_probability", type=float)
     parser.add_argument("--thread_backend", choices=("legacy_d6", "mimic"),
                         help="Bimanual bottle thread solver; mimic requires pregrasp-only Reset")
+    parser.add_argument("--right_cap_contact_gate",
+                        choices=("site_sidewall_proxy", "body_only", "manifold_sidewall"),
+                        help="Bimanual right-cap reward gate; body_only reproduces older rounds")
+    parser.add_argument("--right_contact_balance_weight", type=float,
+                        help="Weight on all-three geometric contact term; default 0.8")
+    parser.add_argument("--right_cap_proximity_mode",
+                        choices=("full_five", "sidewall_tripod"),
+                        help="Controlled cap approach reward topology; full_five reproduces older rounds")
     parser.add_argument("--finger_increment_scale", type=float,
                         help="Controlled bimanual finger target increment in rad/action")
     parser.add_argument("--solve_articulation_contact_last", action="store_true",
@@ -47,14 +55,19 @@ def main(argv: list[str] | None = None) -> None:
             args.stable_reset_probability is not None or
             args.source_bank_snapshot or args.finger_increment_scale is not None or
             args.thread_backend is not None or
+            args.right_cap_contact_gate is not None or
+            args.right_contact_balance_weight is not None or
+            args.right_cap_proximity_mode is not None or
             args.solve_articulation_contact_last) and not args.task.startswith(
                 "DexterousHands-WujiHand2-Bimanual-"):
-        raise SystemExit("Stable-bank overrides are for the bimanual tasks only")
+        raise SystemExit("Bimanual overrides are for the bimanual tasks only")
     if (args.stable_reset_probability is not None and
             not 0 <= args.stable_reset_probability <= 1):
         raise SystemExit("--stable_reset_probability must be in [0, 1]")
     if args.finger_increment_scale is not None and args.finger_increment_scale <= 0:
         raise SystemExit("--finger_increment_scale must be positive")
+    if args.right_contact_balance_weight is not None and not 0 <= args.right_contact_balance_weight <= 1:
+        raise SystemExit("--right_contact_balance_weight must be in [0, 1]")
     if args.thread_backend == "mimic" and (
             args.stable_reset_probability != 0 or args.stable_train_bank is not None):
         raise SystemExit("Mimic training requires --stable_reset_probability 0 and no legacy stable bank")
@@ -85,6 +98,12 @@ def main(argv: list[str] | None = None) -> None:
             env_cfg.stable_reset_probability = args.stable_reset_probability
         if args.thread_backend is not None:
             env_cfg.thread_backend = args.thread_backend
+        if args.right_cap_contact_gate is not None:
+            env_cfg.right_cap_contact_gate = args.right_cap_contact_gate
+        if args.right_contact_balance_weight is not None:
+            env_cfg.right_contact_balance_weight = args.right_contact_balance_weight
+        if args.right_cap_proximity_mode is not None:
+            env_cfg.right_cap_proximity_mode = args.right_cap_proximity_mode
         if args.finger_increment_scale is not None:
             env_cfg.finger_increment_scale = args.finger_increment_scale
         if args.solve_articulation_contact_last:

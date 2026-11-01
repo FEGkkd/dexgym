@@ -25,7 +25,8 @@ class BatchedContactMonitor:
     """Left/right finger contact against both free objects, preserving body IDs."""
 
     def __init__(self, sim_view, num_envs: int, left_spec, right_spec, *, device: str,
-                 force_floor_n: float = 0.01):
+                 force_floor_n: float = 0.01,
+                 enable_cap_right_manifold: bool = False):
         if force_floor_n < 0:
             raise ValueError("Contact force floor must be nonnegative")
         self.num_envs = num_envs
@@ -35,6 +36,8 @@ class BatchedContactMonitor:
                            "right": tuple(right_spec.body_names)}
         self.views = {}
         self.ground_views = {}
+        self.cap_right_manifold_view = None
+        self.cap_right_manifold_bodies = ()
         for obj in ("Bottle", "Cap"):
             for side, hand in (("left", "LeftHand"), ("right", "RightHand")):
                 filters = [f"/World/envs/env_{env}/{hand}/{body}"
@@ -56,6 +59,21 @@ class BatchedContactMonitor:
                     or any(list(row) != [ground] for row in ground_view.filter_paths)):
                 raise RuntimeError(f"PhysX ground filter order mismatch for {obj}")
             self.ground_views[obj] = ground_view
+        if enable_cap_right_manifold:
+            digits = ("thumb", "index_finger", "middle_finger")
+            bodies = tuple(body for body in self.body_names["right"]
+                           if any(digit in body for digit in digits))
+            filters = [f"/World/envs/env_{env}/RightHand/{body}"
+                       for env in range(num_envs) for body in bodies]
+            view = sim_view.create_rigid_contact_view(
+                "/World/envs/env_*/Cap", filter_patterns=filters,
+                max_contact_data_count=64 * num_envs)
+            expected_sources = [f"/World/envs/env_{env}/Cap" for env in range(num_envs)]
+            if (view is None or list(view.sensor_paths) != expected_sources
+                    or any(list(row) != filters for row in view.filter_paths)):
+                raise RuntimeError("PhysX cap/right-hand manifold filter order mismatch")
+            self.cap_right_manifold_view = view
+            self.cap_right_manifold_bodies = bodies
         self.steps = torch.zeros(num_envs, device=device, dtype=torch.long)
         self.active_steps = {key: torch.zeros(num_envs, device=device, dtype=torch.long)
                              for key in self.views}
@@ -99,3 +117,22 @@ class BatchedContactMonitor:
     def ground_contact(self, obj: str) -> torch.Tensor:
         return (torch.linalg.vector_norm(self.latest_ground_force[obj], dim=-1)
                 >= self.force_floor_n)
+
+    def cap_right_sidewall_forces(self, cap_pose_w: torch.Tensor, *, dt: float,
+                                  radius_m: float, half_height_m: float
+                                  ) -> tuple[torch.Tensor, torch.Tensor]:
+        """Return true cap-local manifold force per tripod digit and overflow flag."""
+        if self.cap_right_manifold_view is None:
+            raise RuntimeError("Cap/right-hand manifold view was not enabled")
+        import warp as wp
+        from dexteroushands_lab.tasks.direct.bimanual_bottle.contact_math import (
+            cap_sidewall_manifold_forces,
+        )
+
+        buffers = tuple(map(wp.to_torch, self.cap_right_manifold_view.get_contact_data(dt=dt)))
+        return cap_sidewall_manifold_forces(
+            *buffers[:2], buffers[4], buffers[5], cap_pose_w,
+            self.cap_right_manifold_bodies,
+            digits=("thumb", "index_finger", "middle_finger"),
+            radius_m=radius_m, half_height_m=half_height_m,
+            axial_inset_m=0.001, radial_tolerance_m=0.004)

@@ -34,9 +34,12 @@ from .reward_terms import (
     digit_contact_score, grasp_contact_reward, physically_supported_turn_reward,
     suspended_bottle, terminal_failure_penalty, thread_opening_progress,
     physically_valid_grasp, thread_error_penalty, cap_turn_physics_valid,
+    cylinder_surface_proximity,
 )
 from .reset_sampler import split_bank_indices, split_pregrasp_indices
-from .contact_math import surface_slip_speed
+from .contact_math import (
+    cap_sidewall_site_mask, gate_digit_forces_by_site, surface_slip_speed,
+)
 
 
 def _relative_pose(parent: torch.Tensor, child: torch.Tensor) -> torch.Tensor:
@@ -58,6 +61,12 @@ class BimanualBottleDirectEnv(DirectRLEnv):
 
         if cfg.thread_backend not in ("legacy_d6", "mimic"):
             raise ValueError("Unknown bottle thread backend")
+        if cfg.right_cap_contact_gate not in ("body_only", "site_sidewall_proxy", "manifold_sidewall"):
+            raise ValueError("Unknown right cap contact gate")
+        if not 0 <= cfg.right_contact_balance_weight <= 1:
+            raise ValueError("right_contact_balance_weight must be in [0, 1]")
+        if cfg.right_cap_proximity_mode not in ("full_five", "sidewall_tripod"):
+            raise ValueError("Unknown right cap proximity mode")
         if cfg.thread_backend == "mimic" and cfg.stable_reset_probability != 0:
             raise ValueError("Legacy stable grasp bank violates hard-pitch mimic geometry; use pregrasp resets")
         self._mimic_backend = cfg.thread_backend == "mimic"
@@ -113,6 +122,7 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         self.contacts = BatchedContactMonitor(
             PhysxManager.get_physics_sim_view(), self.num_envs, *self.specs,
             device=self.device,
+            enable_cap_right_manifold=cfg.right_cap_contact_gate == "manifold_sidewall",
         )
         self._load_banks()
         self._finger_targets = [torch.zeros(self.num_envs, 20, device=self.device) for _ in range(2)]
@@ -391,36 +401,64 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         cp = self.cap.data.root_pose_w.torch
         bv = self.bottle.data.root_vel_w.torch
         left_forces = self.contacts.force_magnitudes("Bottle", "left")
-        right_forces = self.contacts.force_magnitudes("Cap", "right")
+        raw_right_forces = self.contacts.force_magnitudes("Cap", "right")
+        raw_right_names = self.contacts.body_names["right"]
+        right_digits = ("thumb", "index_finger", "middle_finger")
+        right_tip_sites = self.right.data.body_link_pose_w.torch[:, self._tip_ids[1][:3], :3]
+        right_site_mask = cap_sidewall_site_mask(
+            right_tip_sites, cp,
+            radius_m=self.bottle_cfg.cap_outer_radius,
+            half_height_m=self.bottle_cfg.cap_height / 2,
+            axial_inset_m=self.cfg.right_cap_site_axial_inset_m,
+            radial_tolerance_m=self.cfg.right_cap_site_radial_tolerance_m)
+        manifold_invalid = torch.zeros(self.num_envs, device=self.device, dtype=torch.bool)
+        if self.cfg.right_cap_contact_gate == "manifold_sidewall":
+            exact_forces, manifold_invalid = self.contacts.cap_right_sidewall_forces(
+                cp, dt=self.physics_dt, radius_m=self.bottle_cfg.cap_outer_radius,
+                half_height_m=self.bottle_cfg.cap_height / 2)
+            right_forces = torch.where(manifold_invalid[:, None],
+                                       torch.zeros_like(exact_forces), exact_forces)
+            right_names = right_digits
+        elif self.cfg.right_cap_contact_gate == "site_sidewall_proxy":
+            right_forces = gate_digit_forces_by_site(
+                raw_right_forces, raw_right_names, right_site_mask, digits=right_digits)
+            right_names = raw_right_names
+        else:
+            right_forces = raw_right_forces
+            right_names = raw_right_names
         left_score = digit_contact_score(
             left_forces, self.contacts.body_names["left"],
             ("thumb", "index_finger", "middle_finger", "ring_finger", "pinky"))
         right_score = digit_contact_score(
-            right_forces, self.contacts.body_names["right"],
-            ("thumb", "index_finger", "middle_finger"), aggregation="balanced")
+            right_forces, right_names, right_digits, aggregation="balanced",
+            balanced_weight=self.cfg.right_contact_balance_weight)
+        right_body_score = digit_contact_score(
+            raw_right_forces, raw_right_names, right_digits, aggregation="balanced")
 
-        def proximity(hand, tip_ids, obj_pose, radius, half_height):
+        def proximity(hand, tip_ids, obj_pose, radius, half_height, *, sidewall_tripod=False):
             tips = hand.data.body_link_pose_w.torch[:, tip_ids, :3]
             q = obj_pose[:, 3:]
             inverse = torch.cat((-q[:, :3], q[:, 3:]), dim=-1)
             local = _rotate(inverse[:, None, :].expand(-1, 5, -1).reshape(-1, 4),
                             (tips - obj_pose[:, None, :3]).reshape(-1, 3)).reshape(self.num_envs, 5, 3)
-            radial = torch.linalg.vector_norm(local[:, :, :2], dim=-1)
-            radial_score = torch.exp(-torch.abs(radial - radius) / 0.025)
-            axial_score = torch.exp(-torch.relu(local[:, :, 2].abs() - half_height) / 0.025)
-            return (radial_score * axial_score).mean(dim=-1)
+            return cylinder_surface_proximity(
+                local, radius_m=radius, half_height_m=half_height,
+                radial_scale_m=0.010 if sidewall_tripod else 0.025,
+                axial_scale_m=0.005 if sidewall_tripod else 0.025,
+                axial_inset_m=0.005 if sidewall_tripod else 0.0,
+                digit_count=3 if sidewall_tripod else 5)
 
         left_proximity = proximity(self.left, self._tip_ids[0], bp,
                                    self.bottle_cfg.bottle_radius, self.bottle_cfg.bottle_height * 0.35)
         right_proximity = proximity(self.right, self._tip_ids[1], cp,
-                                    self.bottle_cfg.cap_outer_radius, self.bottle_cfg.cap_height * 0.5)
+                                    self.bottle_cfg.cap_outer_radius, self.bottle_cfg.cap_height * 0.5,
+                                    sidewall_tripod=self.cfg.right_cap_proximity_mode == "sidewall_tripod")
 
         def finger_active(forces, names, digit):
             mask = torch.tensor([digit in name for name in names], device=self.device)
             return (forces[:, mask].amax(dim=-1) > self.contacts.force_floor_n)
 
         left_names = self.contacts.body_names["left"]
-        right_names = self.contacts.body_names["right"]
         left_thumb = finger_active(left_forces, left_names, "thumb")
         left_other = sum(finger_active(left_forces, left_names, finger).long()
                          for finger in ("index_finger", "middle_finger", "ring_finger", "pinky"))
@@ -428,6 +466,9 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         right_index = finger_active(right_forces, right_names, "index_finger")
         right_middle = finger_active(right_forces, right_names, "middle_finger")
         right_tripod = right_thumb & right_index & right_middle
+        right_body_tripod = (finger_active(raw_right_forces, raw_right_names, "thumb")
+                             & finger_active(raw_right_forces, raw_right_names, "index_finger")
+                             & finger_active(raw_right_forces, raw_right_names, "middle_finger"))
         left_contact = left_thumb & (left_other >= 2)
         right_contact = right_tripod
         # Both object bodies are free; the hold metric is evaluated in world space.
@@ -463,6 +504,11 @@ class BimanualBottleDirectEnv(DirectRLEnv):
                          "left_thumb": left_thumb, "left_other_count": left_other,
                          "right_thumb": right_thumb, "right_index": right_index,
                          "right_middle": right_middle,
+                         "right_body_tripod": right_body_tripod,
+                         "right_manifold_invalid": manifold_invalid,
+                         "right_site_tripod": right_site_mask.all(dim=-1),
+                         "right_index_site_valid": right_site_mask[:, 1],
+                         "right_body_score": right_body_score,
                          "left_contact_score": left_score, "right_contact_score": right_score,
                          "left_proximity": left_proximity, "right_proximity": right_proximity,
                          "grasp_ok": grasp_ok, "opening": opening,
@@ -500,6 +546,7 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             "ground_contact": ground.clone(),
             "constraint_failure": constraint_failure.clone(),
             "source_stable": self._source_stable.clone(),
+            "reset_sample_index": self._reset_sample_index.clone(),
             "left_contact": self._metrics["left_contact"].clone(),
             "right_contact": self._metrics["right_contact"].clone(),
         }
@@ -550,11 +597,16 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             "right_thumb_rate": m["right_thumb"].float().mean(),
             "right_index_rate": m["right_index"].float().mean(),
             "right_middle_rate": m["right_middle"].float().mean(),
+            "right_body_tripod_rate": m["right_body_tripod"].float().mean(),
+            "right_manifold_invalid_rate": m["right_manifold_invalid"].float().mean(),
+            "right_site_tripod_rate": m["right_site_tripod"].float().mean(),
+            "right_index_site_valid_rate": m["right_index_site_valid"].float().mean(),
             "grasp_rate": holding.mean(), "opening_mean_rad": m["opening"].mean(),
             "turn_support_rate": m["turn_support"].float().mean(),
             "opening_max_rad": m["opening"].max(),
             "left_contact_score": m["left_contact_score"].mean(),
             "right_contact_score": m["right_contact_score"].mean(),
+            "right_body_contact_score": m["right_body_score"].mean(),
             "approach_reward": approach.mean(),
             "progress_reward": progress_reward.mean(),
             "positive_progress_reward": progress_reward.clamp_min(0).mean(),

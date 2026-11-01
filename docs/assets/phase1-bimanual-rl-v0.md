@@ -361,6 +361,7 @@ scripts/run_isaaclab.sh scripts/environments/validate_composite_grasp.py --help
 scripts/run_isaaclab.sh scripts/environments/curate_composite_grasp_bank.py --help
 scripts/run_isaaclab.sh scripts/environments/evaluate_bimanual_rl.py \
   --task grasp_hold --policy learned \
+  --right-cap-contact-gate body_only \
   --checkpoint logs/rsl_rl/dexteroushands_bimanual_bottle_phase1/2026-11-01_07-00-23_phase1_grasp_composite_balanced_seed7/model_49.pt \
   --num-envs 64 --episodes 200 --seed 1002 --held-out --source stable \
   --stable-eval-bank artifacts/phase1/composite_power_tripod_local_bank.json \
@@ -492,7 +493,13 @@ scripts/run_isaaclab.sh scripts/environments/evaluate_bimanual_rl.py \
   --finger-increment-scale 0.025 --headless
 scripts/run_isaaclab.sh scripts/environments/evaluate_bimanual_rl.py \
   --task grasp_hold --policy zero --num-envs 64 --episodes 200 --seed 1002 \
+  --right-cap-contact-gate body_only \
   --held-out --source stable \
   --stable-eval-bank artifacts/phase1/composite_power_tripod_local_bank.json \
   --finger-increment-scale 0.025 --headless
 ```
+
+The subsequent [true cap-sidewall contact and PPO report](phase1-sidewall-manifold-round.md)
+supersedes body-only cap-contact claims. Its exact-manifold mode is now the
+default for new bimanual task runs; the flags above preserve this historical
+round's measurement behavior.

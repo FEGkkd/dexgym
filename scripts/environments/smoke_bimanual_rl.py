@@ -11,6 +11,9 @@ parser.add_argument("--num-envs", type=int, default=1)
 parser.add_argument("--steps", type=int, default=10)
 parser.add_argument("--task", choices=("grasp_hold", "cap_turn_30"), default="grasp_hold")
 parser.add_argument("--thread-backend", choices=("legacy_d6", "mimic"), default="legacy_d6")
+parser.add_argument("--right-cap-contact-gate",
+                    choices=("body_only", "site_sidewall_proxy", "manifold_sidewall"),
+                    default="manifold_sidewall")
 parser.add_argument("--debug-state", action="store_true")
 parser.add_argument("--solve-articulation-contact-last", action="store_true")
 AppLauncher.add_app_launcher_args(parser)
@@ -27,6 +30,7 @@ cfg = GraspHoldDirectEnvCfg() if args.task == "grasp_hold" else CapTurn30DirectE
 cfg.scene.num_envs = args.num_envs
 cfg.sim.device = args.device
 cfg.thread_backend = args.thread_backend
+cfg.right_cap_contact_gate = args.right_cap_contact_gate
 if args.thread_backend == "mimic":
     cfg.stable_reset_probability = 0.0
 if args.solve_articulation_contact_last:
@@ -70,6 +74,10 @@ try:
                             "elapsed_s": elapsed,
                             "environment_steps_per_second": args.num_envs * args.steps / elapsed,
                             "gpu_memory_allocated_mib": torch.cuda.memory_allocated() / 2**20}, flush=True)
+except BaseException:
+    import traceback
+    traceback.print_exc()
+    raise
 finally:
     env.close()
     app.close()

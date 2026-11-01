@@ -6,7 +6,7 @@ import math
 
 def digit_contact_score(forces: torch.Tensor, body_names: tuple[str, ...],
                         digits: tuple[str, ...], scale_n: float = 1.0,
-                        aggregation: str = "mean") -> torch.Tensor:
+                        aggregation: str = "mean", balanced_weight: float = 0.8) -> torch.Tensor:
     """Bounded correct-object contact; balanced mode favors all requested digits."""
     if forces.ndim != 2 or forces.shape[1] != len(body_names) or scale_n <= 0:
         raise ValueError("Contact forces/body order mismatch")
@@ -22,9 +22,29 @@ def digit_contact_score(forces: torch.Tensor, body_names: tuple[str, ...],
     if aggregation == "mean":
         return mean
     if aggregation == "balanced":
+        if not 0 <= balanced_weight <= 1:
+            raise ValueError("balanced_weight must be in [0, 1]")
         geometric = per_digit.prod(dim=-1).clamp_min(0).pow(1.0 / len(digits))
-        return 0.2 * mean + 0.8 * geometric
+        return (1.0 - balanced_weight) * mean + balanced_weight * geometric
     raise ValueError(f"Unknown contact aggregation: {aggregation}")
+
+
+def cylinder_surface_proximity(local_sites: torch.Tensor, *, radius_m: float,
+                               half_height_m: float, radial_scale_m: float,
+                               axial_scale_m: float, axial_inset_m: float = 0.0,
+                               digit_count: int = 5) -> torch.Tensor:
+    """Bounded fingertip proximity to a cylinder's interior sidewall band."""
+    if (local_sites.ndim != 3 or local_sites.shape[-1] != 3 or
+            not 1 <= digit_count <= local_sites.shape[1] or
+            radius_m <= 0 or half_height_m <= axial_inset_m or
+            radial_scale_m <= 0 or axial_scale_m <= 0 or axial_inset_m < 0):
+        raise ValueError("Invalid cylinder proximity shape or geometry")
+    sites = local_sites[:, :digit_count]
+    radial = torch.linalg.vector_norm(sites[..., :2], dim=-1)
+    radial_score = torch.exp(-(radial - radius_m).abs() / radial_scale_m)
+    axial_excess = torch.relu(sites[..., 2].abs() - (half_height_m - axial_inset_m))
+    axial_score = torch.exp(-axial_excess / axial_scale_m)
+    return (radial_score * axial_score).mean(dim=-1)
 
 
 def signed_progress_reward(current_open: torch.Tensor,

@@ -21,6 +21,13 @@ parser.add_argument("--stable-eval-bank", type=Path,
                     help="Separate physically validated stable bank for evaluation only")
 parser.add_argument("--source", choices=("mixed", "stable", "pregrasp"), default="mixed")
 parser.add_argument("--thread-backend", choices=("legacy_d6", "mimic"), default="legacy_d6")
+parser.add_argument("--right-cap-contact-gate",
+                    choices=("site_sidewall_proxy", "body_only", "manifold_sidewall"),
+                    default="manifold_sidewall")
+parser.add_argument("--right-contact-balance-weight", type=float, default=0.8,
+                    help="Match training right tripod reward weight for reported step metrics")
+parser.add_argument("--right-cap-proximity-mode", choices=("full_five", "sidewall_tripod"),
+                    default="full_five")
 parser.add_argument("--no-right-cap-contact", action="store_true")
 parser.add_argument("--thread-axial-stiffness", type=float,
                     help="Controlled thread stiffness ablation in N/m; default uses task config")
@@ -70,6 +77,11 @@ cfg.scene.num_envs = args.num_envs
 cfg.sim.device = args.device
 cfg.seed = args.seed
 cfg.thread_backend = args.thread_backend
+cfg.right_cap_contact_gate = args.right_cap_contact_gate
+if not 0 <= args.right_contact_balance_weight <= 1:
+    parser.error("--right-contact-balance-weight must be in [0, 1]")
+cfg.right_contact_balance_weight = args.right_contact_balance_weight
+cfg.right_cap_proximity_mode = args.right_cap_proximity_mode
 cfg.evaluation_mode = args.held_out
 cfg.stable_eval_bank_path = str(args.stable_eval_bank) if args.stable_eval_bank else None
 cfg.no_right_cap_contact_counterfactual = args.no_right_cap_contact
@@ -263,6 +275,9 @@ try:
     elapsed = time.monotonic() - start
     summary = {"task": args.task, "policy": args.policy,
                "thread_backend": args.thread_backend,
+               "right_cap_contact_gate": args.right_cap_contact_gate,
+               "right_contact_balance_weight": args.right_contact_balance_weight,
+               "right_cap_proximity_mode": args.right_cap_proximity_mode,
                "checkpoint": str(args.checkpoint) if args.checkpoint else None,
                "held_out": args.held_out, "seed": args.seed,
                "source": args.source,

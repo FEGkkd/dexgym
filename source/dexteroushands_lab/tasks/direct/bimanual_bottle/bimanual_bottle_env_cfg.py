@@ -21,6 +21,14 @@ class BimanualBottleDirectEnvCfg(DirectRLEnvCfg):
     # The hard-pitch mimic backend is experimental and requires geometric
     # pregrasp resets. Legacy stable states violate its axial constraint.
     thread_backend = "legacy_d6"
+    # Only real PhysX contact points on the cap sidewall count as a right
+    # grip. body_only and site_sidewall_proxy retain old ablation results.
+    right_cap_contact_gate = "manifold_sidewall"
+    right_cap_site_axial_inset_m = 0.002
+    right_cap_site_radial_tolerance_m = 0.010
+    # Reward aggregation only; success still requires all three right digits.
+    right_contact_balance_weight = 0.8
+    right_cap_proximity_mode = "full_five"
     evaluation_mode = False
     stable_eval_bank_path = None
     stable_train_bank_path = None
