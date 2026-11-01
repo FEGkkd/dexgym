@@ -6,7 +6,10 @@
 loose-gate GraspHold and CapTurn30 success percentages in this historical
 record. The final Mimic strict-hold checkpoint scored 0/200 on held-out
 pregrasp and 0/200 on the training-family evaluation; no stable Mimic bank
-or learned CapTurn30 result exists. The
+or learned CapTurn30 result exists. A new scripted contact candidate replays
+with 50/50 right sidewall tripod steps, but fails strict hold because its
+contact-rich screw velocity conflicts with measured angle progress; see the
+[replay audit](phase1-mimic-grasp-replay-audit.md). The
 [budget audit](phase1-budget-audit.md) records 24,124,160 logged PPO
 transitions, with other environment interactions uncounted.
 

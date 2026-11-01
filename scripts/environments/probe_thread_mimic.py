@@ -25,6 +25,8 @@ from isaaclab.app import AppLauncher
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--num-envs", type=int, default=1)
 parser.add_argument("--steps", type=int, default=500)
+parser.add_argument("--external-forces-every-iteration", action="store_true",
+                    help="Apply external forces at every TGS position iteration")
 parser.add_argument("--torque", type=float, default=1e-5, help="Cap torque in Nm, env 0 only")
 parser.add_argument("--axial-force", type=float, default=0.5, help="Cap local-axis force in N, env 0 only")
 parser.add_argument("--tilt-deg", type=float, default=0.0)
@@ -87,6 +89,7 @@ import torch
 import warp as wp
 import isaaclab.sim as sim_utils
 from isaaclab_physx.physics import PhysxManager
+from isaaclab_physx.physics import PhysxCfg
 from pxr import Gf, PhysxSchema, Sdf, UsdGeom, UsdPhysics
 from dexteroushands_lab.assets.bottle import BottleConfig
 from dexteroushands_lab.assets.bottle.generate_usd import build_bottle_usd
@@ -208,7 +211,10 @@ def main():
     if args.real_geometry:
         asset_dir = Path(tempfile.mkdtemp(prefix="dexgym-mimic-geometry-"))
         geometry_paths = build_bottle_usd(BOTTLE_CONFIG, asset_dir)
-    sim = sim_utils.SimulationContext(sim_utils.SimulationCfg(dt=DT_S, device=args.device))
+    sim = sim_utils.SimulationContext(sim_utils.SimulationCfg(
+        dt=DT_S, device=args.device,
+        physics=PhysxCfg(enable_external_forces_every_iteration=
+                         args.external_forces_every_iteration)))
     stage = sim.stage
     UsdGeom.Xform.Define(stage, "/World/envs")
     for env in range(args.num_envs):
@@ -476,6 +482,7 @@ def main():
               "resistance_enabled": args.resistance,
               "implicit_drive_enabled": args.implicit_drive,
               "implicit_running_drive_enabled": args.implicit_running_drive,
+              "enable_external_forces_every_iteration": args.external_forces_every_iteration,
               "resistance_damping_nm_s_rad": (resistance.config.breakaway_damping
                                               if resistance is not None else None),
               "num_envs": args.num_envs, "steps": args.steps, "physics_dt_s": DT_S,

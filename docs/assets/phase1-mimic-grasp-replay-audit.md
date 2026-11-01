@@ -84,10 +84,91 @@ It did not restore a grasp: right thumb/middle had interior sidewall contact
 for 50/50 steps, while the index had **0/50**. A single follow-up bounded
 world-wrist translation of approximately 2 mm toward the measured index
 cap-local radial gap also left the index at **0/50**, with bottle angular
-speed 1.15 rad/s. No candidate from these TGS runs was replayed or added
+speed 1.15 rad/s. At that stage, no TGS candidate was replayed or added
 to a stable bank. The TGS flag is available only in the diagnostic probe
 and replay CLI; the RL environment default was not changed by this failed
 ablation. These results rule out the solver warning as a sufficient fix.
+
+## Exact-target tripod replay and screw-velocity inconsistency
+
+The TGS probe's right index was already on the real cap sidewall at closing
+step 50. The earlier diagnostic then reduced its MCP target from 0.557 to
+0.507 rad at step 51, and the index contact disappeared immediately. An
+intermediate 0.537 rad target reduced the distal gap but still lost contact.
+Holding the **exact** closing targets retained thumb/index/middle sidewall
+contact for **50/50** subsequent policy steps. Final index contact was on
+the distal body at cap-local z approximately -8.8 mm, with about 2.4 N
+normal force and -0.029 mm separation. This was scripted candidate
+generation, not policy learning.
+
+Fresh-process, gravity-on Reset replay of that captured state produced
+**50/50 left-bottle** and **50/50 right-cap-sidewall tripod** contact steps.
+Maximum bottle drift was 0.400 mm, rotation 0.00372 rad, initial minimum
+contact separation -0.084 mm, peak left/right body forces 11.20/2.33 N,
+and maximum thread error 0.239 micrometres. There was no ground contact or
+task failure. Captured root poses, 40 joint positions, screw angle/spin,
+stick reference and slip state were restored within the reported numerical
+tolerances. This establishes a reproducible **contact topology**, but the
+state does **not** pass strict GraspHold or qualify for the validated bank.
+
+The blocker is the screw's contact-rich velocity state. Over 500 physics
+substeps at 0.002 s, PhysX reported a mean SpinJoint speed of **+3.532
+rad/s**. Independently read cap-versus-bottle link angular velocity agreed
+within 2.15e-6 rad/s. Yet the SpinJoint angle changed only **-0.00854
+rad** over the same second, an average finite difference of **-0.00856
+rad/s**. RMS speed-versus-angle-difference error was **3.558 rad/s**. The
+joint stayed in stick mode throughout. The strict hold limit is 0.2 rad/s
+cap spin, so the gate correctly remains false. Replacing the velocity with
+an angle-difference filter before resolving the solver discrepancy could
+hide a physical inconsistency.
+
+Two controlled replay ablations did not fix it. Setting only the Reset spin
+velocity to zero yielded 3.795 rad/s mean reported speed, with the same
+50/50 tripod and no strict success. Scaling the entire engineering-example
+stick/slip torque and drive-gain family by 10 yielded 4.665 rad/s, again no
+strict success. This stronger resistance is an uncalibrated diagnostic, not
+a new bottle specification. An isolated no-hand screw with the same TGS
+setting had maximum speed below 5e-10 rad/s; a separate 1.19 N cap-contact
+proxy reached at most 0.0084 rad/s. The flag alone or a simple single
+contact does not reproduce the multi-hand contact discrepancy. Its exact
+cause within the contact-rich articulation solver remains unresolved.
+
+A further selective ablation moved only the right hand away at Reset while
+leaving the captured left-bottle contact, bottle/cap dynamics and initial
+3.60 rad/s screw velocity intact. Right-cap contact fell to 0/50, while
+left-bottle contact stayed 50/50. The screw's mean reported speed fell to
+-0.063 rad/s over the full second and averaged about -0.031 rad/s over the
+last 100 physics substeps; its angle changed -0.0434 rad. The full-run
+speed-versus-angle-difference RMS error fell from 3.558 to 0.185 rad/s.
+Thus the persistent multi-rad/s inconsistency requires the active right
+hand/cap contact path in this candidate. The result does not identify which
+finger pair or solver constraint is responsible. This ablation is invalid
+as a grasp, and the replay tool cannot mark it as a passing bank sample.
+
+```bash
+scripts/run_isaaclab.sh scripts/environments/probe_pregrasp_contact_jacobian.py \
+  --sample-index 9 --steps 50 --maintain-contact --contact-points \
+  --right-cap-contact-gate manifold_sidewall --right-index-mcp-flex \
+  --right-index-abd-target-min=-0.2 --right-middle-mcp-abd \
+  --right-middle-abd-target-min=-0.2 --right-middle-pip-target-max 1.6 \
+  --hold-after-close --candidate-transition-steps 10 --candidate-hold-steps 50 \
+  --capture-candidate --external-forces-every-iteration --headless \
+  --output artifacts/phase1/row9_tgs_exact_target_hold_probe.json
+scripts/run_isaaclab.sh scripts/environments/replay_mimic_grasp_candidate.py \
+  --candidate-result artifacts/phase1/row9_tgs_exact_target_hold_probe.json \
+  --steps 50 --external-forces-every-iteration --trace-thread-substeps --headless \
+  --output artifacts/phase1/row9_tgs_exact_target_hold_replay_summary.json
+```
+
+The optional `--spin-reset-override 0`, `--resistance-scale 10`, and
+`--ablate-right-cap-contact` replay flags are diagnostic and cannot produce
+a passing bank candidate. The
+isolated no-hand and contact-proxy fixtures use `probe_thread_mimic.py`
+with zero torque and axial force, real geometry, the implicit running drive,
+and `--external-forces-every-iteration`; the contact comparison additionally
+uses `--contact-proxy`. Raw traces remain ignored under
+`artifacts/phase1/`. No new PPO ran and the candidate stays
+`validated=false`.
 
 ## Code, reproduction and status
 

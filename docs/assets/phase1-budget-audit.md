@@ -48,9 +48,10 @@ accounting change.
 
 The latest Mimic strict-hold checkpoint still achieved **0/200** strict
 GraspHold successes on the held-out pregrasp set and **0/200** on the
-training-family evaluation. The one scripted candidate with 50/50 right
-sidewall-tripod steps had high instantaneous object velocities and failed
-fresh-process Reset replay at **0/50** tripod steps. It is not a stable bank
+training-family evaluation. A later scripted exact-target candidate achieved
+**50/50** right-sidewall tripod steps in fresh-process Reset replay, but
+failed strict hold because its reported screw speed remained above
+3 rad/s while actual angle changed very little. It is not a validated bank
 sample. CapTurn30 was not trained from a Mimic-compatible stable grasp
 start. These observations are detailed in the
 [strict-hold audit](phase1-strict-hold-audit.md) and
@@ -58,7 +59,7 @@ start. These observations are detailed in the
 
 Accordingly, Phase 1 remains **partial**: the DirectRLEnv, batched physics,
 PPO run path, checkpoints, and independent evaluation exist, while learned
-grasp and cap-turn success are unproven. A new training extension needs a
-replayable bilateral contact state or a measured correction to the contact
-distribution, followed by a deliberately bounded experiment. Raw reward or
-checkpoint creation alone does not satisfy the learning gates.
+grasp and cap-turn success are unproven. A new training extension first
+needs a physically consistent screw speed under bilateral contact, then a
+strictly validated Reset state and a deliberately bounded experiment. Raw
+reward or checkpoint creation alone does not satisfy the learning gates.

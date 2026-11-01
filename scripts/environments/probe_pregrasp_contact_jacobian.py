@@ -51,6 +51,8 @@ parser.add_argument("--candidate-json", type=Path,
                     help="After scripted closing, command an offline MJCF candidate through bounded wrist and finger drives")
 parser.add_argument("--candidate-transition-steps", type=int, default=10)
 parser.add_argument("--candidate-hold-steps", type=int, default=50)
+parser.add_argument("--hold-after-close", action="store_true",
+                    help="Hold the exact final closing targets for transition plus hold steps")
 parser.add_argument("--candidate-offset-xyz", type=float, nargs=3,
                     default=(0.0, 0.0, 0.0),
                     help="Small world-frame approach offset from offline candidate for PhysX calibration")
@@ -240,9 +242,11 @@ def main():
                                       args.post_close_index_pip_delta)))
         if post_close_command and candidate is not None:
             raise ValueError("Choose a candidate or a post-close wrist command, not both")
+        if args.hold_after_close and (post_close_command or candidate is not None):
+            raise ValueError("Hold-after-close cannot include a post-close target change")
         total_steps = args.steps + (
             args.candidate_transition_steps + args.candidate_hold_steps
-            if candidate is not None or post_close_command else 0)
+            if candidate is not None or post_close_command or args.hold_after_close else 0)
         for step in range(total_steps):
             if post_close_command and step == args.steps:
                 increment = torch.tensor(
@@ -405,6 +409,7 @@ def main():
                 "r_middle_finger_mcp_abd", "r_middle_finger_pip")
             joint_ids = [env.right.joint_names.index(name) for name in right_joint_names]
             phase = ("closing" if step < args.steps else
+                     "target_hold" if args.hold_after_close else
                      "candidate_transition" if step < args.steps + args.candidate_transition_steps else
                      "candidate_hold")
             rows.append({"step": step + 1, "time_s": (step + 1) * env.step_dt,
@@ -463,6 +468,7 @@ def main():
                   "right_index_dip_extra_rad": args.right_index_dip_extra_rad,
                   "right_wrist_track_cap": args.right_wrist_track_cap,
                   "candidate_json": str(args.candidate_json) if args.candidate_json else None,
+                  "hold_after_close": args.hold_after_close,
                   "candidate_offset_xyz_m": list(args.candidate_offset_xyz),
                   "post_close_local_rotvec_rad": list(args.post_close_local_rotvec),
                   "post_close_world_translation_m": list(args.post_close_world_translation),

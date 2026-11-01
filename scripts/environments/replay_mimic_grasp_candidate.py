@@ -9,6 +9,7 @@ under gravity with zero actions and normal contact physics.
 from __future__ import annotations
 
 import argparse
+from dataclasses import replace
 import json
 import math
 from pathlib import Path
@@ -19,17 +20,30 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--candidate-result", type=Path, required=True)
 parser.add_argument("--steps", type=int, default=50)
 parser.add_argument("--external-forces-every-iteration", action="store_true")
+parser.add_argument("--trace-thread-substeps", action="store_true",
+                    help="Record screw DOF position, velocity and drive mode each physics substep")
+parser.add_argument("--spin-reset-override", type=float,
+                    help="Diagnostic only: replace captured screw speed at Reset, e.g. 0")
+parser.add_argument("--resistance-scale", type=float, default=1.0,
+                    help="Diagnostic only: scale all stick/slip torque and drive gains together")
+parser.add_argument("--ablate-right-cap-contact", action="store_true",
+                    help="Diagnostic only: move the right wrist away at Reset")
 parser.add_argument("--output", type=Path, required=True)
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
 if args.steps < 50:
     parser.error("At least 50 policy steps are required for a one-second replay")
+if args.spin_reset_override is not None and not math.isfinite(args.spin_reset_override):
+    parser.error("--spin-reset-override must be finite")
+if not math.isfinite(args.resistance_scale) or not 0 < args.resistance_scale <= 20:
+    parser.error("--resistance-scale must be in (0, 20]")
 app = AppLauncher(args).app
 
 import torch
 import warp as wp
 from isaaclab_physx.physics import PhysxManager
 
+from dexteroushands_lab.assets.bottle.batched_thread import _rotate
 from dexteroushands_lab.scenes.grasp_init import grasp_sample_from_dict
 from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env import BimanualBottleDirectEnv
 from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env_cfg import GraspHoldDirectEnvCfg
@@ -57,6 +71,7 @@ def main():
     cfg.sim.device = args.device
     cfg.thread_backend = "mimic"
     cfg.right_cap_contact_gate = "manifold_sidewall"
+    cfg.no_right_cap_contact_counterfactual = args.ablate_right_cap_contact
     cfg.sim.physics.enable_external_forces_every_iteration = args.external_forces_every_iteration
     cfg.stable_reset_probability = 0.0
     env = BimanualBottleDirectEnv(cfg)
@@ -66,6 +81,16 @@ def main():
                 raise ValueError(f"Candidate {side} official USD hash mismatch")
         if sample.metadata.get("bottle_parameters") != vars(env.bottle_cfg):
             raise ValueError("Candidate bottle configuration differs from live scene")
+        if args.resistance_scale != 1.0:
+            original = env.thread.config
+            scaled = replace(original, **{
+                name: getattr(original, name) * args.resistance_scale
+                for name in ("breakaway_torque", "loose_breakaway_torque",
+                             "breakaway_stiffness", "breakaway_damping",
+                             "running_resistance_torque", "loose_running_resistance_torque")
+            })
+            env.thread.config = scaled
+            env.thread.drive.config = scaled
         env.reset()
 
         # Replace only this diagnostic process's pregrasp rows. The actual
@@ -82,7 +107,9 @@ def main():
                 env._bank[f"{name}_{field}"][first:] = torch.tensor(
                     getattr(state, field), device=env.device)
         env._bank["thread_angle"][first:] = sample.thread_initial_angle_rad
-        env._bank["thread_spin_velocity"][first:] = sample.metadata["mimic_spin_velocity_rad_s"]
+        reset_spin = (sample.metadata["mimic_spin_velocity_rad_s"]
+                      if args.spin_reset_override is None else args.spin_reset_override)
+        env._bank["thread_spin_velocity"][first:] = reset_spin
         drive_state = sample.metadata["mimic_drive_state"]
         env._bank["thread_stick_reference"][first:] = drive_state["stick_reference_rad"]
         env._bank["thread_sliding"][first:] = drive_state["sliding"]
@@ -98,7 +125,7 @@ def main():
                 sample.cap.root_pose, device=env.device)).abs().max()),
             "theta_abs_rad": float((state.theta_rad[0] - sample.thread_initial_angle_rad).abs()),
             "spin_abs_rad_s": float((state.spin_velocity_rad_s[0]
-                                   - sample.metadata["mimic_spin_velocity_rad_s"]).abs()),
+                                   - reset_spin).abs()),
             "stick_reference_abs_rad": float((env.thread.drive.stick_reference[0]
                                               - drive_state["stick_reference_rad"]).abs()),
             "sliding_mismatch": float(bool(env.thread.drive.sliding[0]) != drive_state["sliding"]),
@@ -111,6 +138,36 @@ def main():
                                   for name in canonical])
             target = torch.tensor(getattr(sample, side).joint_position, device=env.device)
             reset_error[f"{side}_joint_max_abs_rad"] = float((actual - target).abs().max())
+
+        thread_substeps = []
+        if args.trace_thread_substeps:
+            original_thread_step = env.thread.step
+
+            def traced_thread_step():
+                dof_pos = wp.to_torch(env.thread.art.get_dof_positions()).reshape(1, 2)
+                dof_vel = wp.to_torch(env.thread.art.get_dof_velocities()).reshape(1, 2)
+                root_pose = wp.to_torch(env.thread.art.get_root_transforms()).reshape(1, 7)
+                root_velocity = wp.to_torch(env.thread.art.get_root_velocities()).reshape(1, 6)
+                link_velocity = wp.to_torch(env.thread.art.get_link_velocities()).reshape(1, 3, 6)
+                axis_w = _rotate(root_pose[:, 3:], torch.tensor(
+                    [[0., 0., 1.]], device=env.device))
+                cap_angular = link_velocity[:, env.thread.view.cap_id, 3:]
+                relative_spin = ((cap_angular - root_velocity[:, 3:]) * axis_w).sum(-1)
+                spin_id = env.thread.view.spin_id
+                slide_id = env.thread.view.slide_id
+                thread_substeps.append({
+                    "substep": len(thread_substeps),
+                    "theta_rad": float(dof_pos[0, spin_id]),
+                    "spin_velocity_rad_s": float(dof_vel[0, spin_id]),
+                    "axial_m": float(dof_pos[0, slide_id]),
+                    "axial_velocity_m_s": float(dof_vel[0, slide_id]),
+                    "physical_relative_spin_rad_s": float(relative_spin[0]),
+                    "stick_reference_rad": float(env.thread.drive.stick_reference[0]),
+                    "sliding_before_update": bool(env.thread.drive.sliding[0]),
+                })
+                return original_thread_step()
+
+            env.thread.step = traced_thread_step
 
         # DirectRLEnv auto-resets on success. Keep this diagnostic episode
         # running for a full second while still computing the real done gate.
@@ -180,6 +237,9 @@ def main():
             "source_result": str(args.candidate_result),
             "source_sample_index": probe["sample_index"],
             "enable_external_forces_every_iteration": args.external_forces_every_iteration,
+            "spin_reset_override_rad_s": args.spin_reset_override,
+            "resistance_scale": args.resistance_scale,
+            "right_cap_contact_ablated": args.ablate_right_cap_contact,
             "candidate_validated": False,
             "reset_error": reset_error,
             "duration_s": args.steps * env.step_dt,
@@ -197,13 +257,36 @@ def main():
             "strict_success_reached": any(row["strict_success"] for row in rows),
             "rows": rows,
         }
+        if args.trace_thread_substeps:
+            result["thread_substeps"] = thread_substeps
+            reported = [row["spin_velocity_rad_s"] for row in thread_substeps]
+            physical = [row["physical_relative_spin_rad_s"] for row in thread_substeps]
+            actual = [(thread_substeps[i + 1]["theta_rad"]
+                       - thread_substeps[i]["theta_rad"]) / cfg.sim.dt
+                      for i in range(len(thread_substeps) - 1)]
+            residual = [reported[i + 1] - actual[i]
+                        for i in range(len(actual))]
+            result["thread_velocity_consistency"] = {
+                "reported_mean_rad_s": sum(reported) / len(reported),
+                "actual_angle_difference_mean_rad_s": sum(actual) / len(actual),
+                "reported_vs_angle_difference_rms_rad_s": math.sqrt(
+                    sum(value * value for value in residual) / len(residual)),
+                "reported_vs_angle_difference_max_abs_rad_s": max(
+                    abs(value) for value in residual),
+                "reported_vs_link_velocity_max_abs_rad_s": max(
+                    abs(a - b) for a, b in zip(reported, physical)),
+                "angle_change_rad": (thread_substeps[-1]["theta_rad"]
+                                     - thread_substeps[0]["theta_rad"]),
+            }
         result["diagnostic_pass"] = (
-            max(reset_error.values()) < 1e-3 and result["strict_success_reached"]
+            args.spin_reset_override is None and args.resistance_scale == 1.0
+            and not args.ablate_right_cap_contact
+            and max(reset_error.values()) < 1e-3 and result["strict_success_reached"]
             and left_ratio > 0.8 and right_ratio > 0.8
             and result["maximum_bottle_drift_m"] < 0.02
             and result["maximum_bottle_rotation_rad"] < math.radians(10)
             and max(max_left_force, max_right_force) < 100
-            and min_separation >= -0.002
+            and min_separation is not None and min_separation >= -0.002
             and result["maximum_thread_error_m"] < 0.001
             and not result["ground_contact_any"] and not result["failure_any"])
         args.output.parent.mkdir(parents=True, exist_ok=True)
