@@ -4,6 +4,25 @@ import torch
 import math
 
 
+GRASP_SUCCESS_BONUS = 25.0
+CAP_TURN_SUCCESS_BONUS = 25.0
+
+
+def time_integrated_contact_reward(left_score: torch.Tensor, right_score: torch.Tensor,
+                                   holding: torch.Tensor, *, dt: float,
+                                   task_kind: str) -> tuple[torch.Tensor, torch.Tensor]:
+    """Integrate bounded dense contact rewards over physical policy time.
+
+    With a five-second horizon, their maximum return is 14 for GraspHold
+    and 4.5 for CapTurn30, below the one-time success bonus of 25.
+    """
+    if dt <= 0 or task_kind not in ("grasp_hold", "cap_turn_30"):
+        raise ValueError("Positive policy dt and a known task are required")
+    if task_kind == "grasp_hold":
+        return dt * grasp_contact_reward(left_score, right_score), dt * holding
+    return dt * 0.2 * (left_score + right_score), dt * 0.5 * holding
+
+
 def digit_contact_score(forces: torch.Tensor, body_names: tuple[str, ...],
                         digits: tuple[str, ...], scale_n: float = 1.0,
                         aggregation: str = "mean", balanced_weight: float = 0.8) -> torch.Tensor:

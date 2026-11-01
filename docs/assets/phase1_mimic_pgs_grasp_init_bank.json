@@ -1,0 +1,809 @@
+[
+  {
+    "mode": "stable_pregrasp",
+    "seed": 732,
+    "source": "physx_pgs_mimic_grasp_fresh_replay_validated",
+    "left": {
+      "root_pose": [
+        -0.08538086712360382,
+        -0.0020756125450134277,
+        0.49815189838409424,
+        0.22127366065979004,
+        -0.7684782147407532,
+        0.1743839830160141,
+        0.5745169520378113
+      ],
+      "root_velocity": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "joint_position": [
+        0.6787232756614685,
+        -0.43507450819015503,
+        -0.29919981956481934,
+        0.6464892625808716,
+        0.1523764580488205,
+        0.02430463768541813,
+        0.9135125279426575,
+        0.9997437596321106,
+        0.3398483693599701,
+        -0.07980818301439285,
+        1.1854422092437744,
+        0.8135802149772644,
+        0.5829150080680847,
+        0.05037551373243332,
+        1.162967324256897,
+        0.6795094013214111,
+        0.6474301815032959,
+        -0.014018312096595764,
+        0.9338774681091309,
+        0.9186398386955261
+      ],
+      "joint_velocity": [
+        0.25051409006118774,
+        0.30285248160362244,
+        0.562914252281189,
+        -0.00011774615268222988,
+        0.1847562938928604,
+        -0.0010486907558515668,
+        1.318124532699585,
+        -0.00010195949289482087,
+        0.23934069275856018,
+        0.007628614082932472,
+        0.5618124008178711,
+        -5.5184900702442974e-05,
+        0.12455254793167114,
+        -0.0020124465227127075,
+        0.43097296357154846,
+        -3.514554919092916e-05,
+        0.20591825246810913,
+        0.001978761050850153,
+        0.6359879970550537,
+        -4.64370459667407e-05
+      ],
+      "wrist_target_pose": [
+        -0.08538085967302322,
+        -0.002075606258586049,
+        0.49815189838409424,
+        0.22127366065979004,
+        -0.7684780955314636,
+        0.1743839681148529,
+        0.5745168924331665
+      ],
+      "joint_target": [
+        0.7149288058280945,
+        -0.399192750453949,
+        -0.23534728586673737,
+        0.6465021967887878,
+        0.1712559312582016,
+        0.02410172112286091,
+        1.0060166120529175,
+        0.9997653365135193,
+        0.3535670340061188,
+        -0.0794224888086319,
+        1.2241876125335693,
+        0.8135914206504822,
+        0.5893738865852356,
+        0.05025070905685425,
+        1.1876546144485474,
+        0.6795142889022827,
+        0.6612818241119385,
+        -0.013906680047512054,
+        0.975862443447113,
+        0.918646514415741
+      ]
+    },
+    "right": {
+      "root_pose": [
+        0.09475475549697876,
+        0.0013809592928737402,
+        0.6440414786338806,
+        -0.45386043190956116,
+        0.7331194877624512,
+        -0.23814277350902557,
+        0.4470286965370178
+      ],
+      "root_velocity": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "joint_position": [
+        -0.29992273449897766,
+        0.3031795024871826,
+        1.2061372995376587,
+        1.197259545326233,
+        0.5567814707756042,
+        -0.2201610952615738,
+        1.8594509363174438,
+        0.7432428598403931,
+        0.6473518013954163,
+        -0.2180248349905014,
+        1.6184931993484497,
+        1.4041128158569336,
+        0.5702099204063416,
+        -0.10209068655967712,
+        0.8126227855682373,
+        0.7119000554084778,
+        0.7162078619003296,
+        -0.2351694405078888,
+        0.9994233846664429,
+        1.495008111000061
+      ],
+      "joint_velocity": [
+        0.026000143960118294,
+        0.02806139923632145,
+        0.11217290163040161,
+        4.505277047428535e-06,
+        0.01478673703968525,
+        0.0008537030662409961,
+        0.2054312527179718,
+        2.3321786102314945e-06,
+        0.03992728143930435,
+        0.0025602553505450487,
+        0.19713689386844635,
+        -1.5180656191660091e-05,
+        -0.0019620091188699007,
+        -5.661044269800186e-05,
+        -0.0027413414791226387,
+        5.656757480210217e-07,
+        0.0002995892718899995,
+        1.851062370405998e-05,
+        5.704494469682686e-05,
+        -8.362932931049727e-06
+      ],
+      "wrist_target_pose": [
+        0.09475475549697876,
+        0.0013809590600430965,
+        0.6440414786338806,
+        -0.4538603723049164,
+        0.7331194877624512,
+        -0.23814275860786438,
+        0.44702866673469543
+      ],
+      "joint_target": [
+        -0.2972230613231659,
+        0.3051808178424835,
+        1.2130478620529175,
+        1.197261095046997,
+        0.5573539733886719,
+        -0.2201252579689026,
+        1.8703198432922363,
+        0.7432454824447632,
+        0.6487806439399719,
+        -0.21793332695960999,
+        1.6296336650848389,
+        1.4041149616241455,
+        0.5700982213020325,
+        -0.10209117084741592,
+        0.8124793171882629,
+        0.7119000554084778,
+        0.7162125706672668,
+        -0.23516762256622314,
+        0.9994251132011414,
+        1.495008111000061
+      ]
+    },
+    "bottle": {
+      "root_pose": [
+        -0.017023243010044098,
+        -0.012412391602993011,
+        0.49691393971443176,
+        -0.1008799746632576,
+        0.14098414778709412,
+        -0.12831901013851166,
+        0.9764634370803833
+      ],
+      "root_velocity": [
+        -0.010396904312074184,
+        0.0028710297774523497,
+        -0.00810189452022314,
+        -0.0821424052119255,
+        0.1289232075214386,
+        0.07522430270910263
+      ]
+    },
+    "cap": {
+      "root_pose": [
+        0.02680654637515545,
+        0.010989385657012463,
+        0.6336749196052551,
+        -0.09999984502792358,
+        0.1416098028421402,
+        -0.1222342774271965,
+        0.9772437810897827
+      ],
+      "root_velocity": [
+        0.0053911469876766205,
+        0.017311030998826027,
+        -0.01549622230231762,
+        -0.060588859021663666,
+        0.14043115079402924,
+        0.14247725903987885
+      ]
+    },
+    "thread_initial_engagement_m": 0.008993088166775123,
+    "thread_initial_angle_rad": 0.01245773583650589,
+    "metadata": {
+      "asset_source_commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+      "asset_variant": "beta1",
+      "beta1_tip_marker_mass_override_kg": 0.001,
+      "bottle_parameters": {
+        "allow_detachment": false,
+        "axial_damping": 3.5,
+        "axial_stiffness": 500.0,
+        "body_angular_damping": 1.0,
+        "bottle_height": 0.2,
+        "bottle_mass": 0.03,
+        "bottle_radius": 0.035,
+        "breakaway_damping": 0.003,
+        "breakaway_stiffness": 0.2,
+        "breakaway_torque": 0.02,
+        "cap_height": 0.025,
+        "cap_mass": 0.006,
+        "cap_outer_radius": 0.017,
+        "cap_top_clearance": 0.002,
+        "detachment_angle_margin": 0.06,
+        "detachment_max_constraint_error": 0.0005,
+        "detachment_overlap_fraction": 0.05,
+        "dynamic_friction": 0.4,
+        "end_stop_damping": 0.02,
+        "end_stop_stiffness": 0.5,
+        "engagement_resistance_exponent": 1.5,
+        "friction_velocity_scale": 20.0,
+        "initial_engagement": 0.009,
+        "lateral_damping": 0.1,
+        "lateral_stiffness": 10.0,
+        "loose_breakaway_torque": 0.004,
+        "loose_running_resistance_torque": 0.001,
+        "max_body_angular_velocity_deg": 1080.0,
+        "max_body_linear_velocity": 5.0,
+        "max_constraint_force": 8.0,
+        "max_constraint_torque": 0.08,
+        "neck_height": 0.04,
+        "neck_outer_radius": 0.012,
+        "restick_speed": 0.05,
+        "running_resistance_torque": 0.006,
+        "slip_angle_ratio": 1.5,
+        "slip_speed": 0.1,
+        "source_profile": "engineering_example",
+        "static_friction": 0.6,
+        "thread_clearance": 0.0005,
+        "thread_handedness": "right",
+        "thread_height": 0.001,
+        "thread_pitch": 0.003,
+        "thread_turns": 3.0,
+        "tilt_damping": 0.0001,
+        "tilt_stiffness": 0.001,
+        "visual_radial_segments": 64
+      },
+      "bottle_profile": "engineering_example",
+      "coordinates": "env0_world_z_up_xyzw; wrists in bottle/cap local frames",
+      "geometry_evidence": {
+        "native_physx": {
+          "backend": "official_native_USD_PhysX_one_step_contact",
+          "contacts": [
+            {
+              "category": "right_cap",
+              "normal_force_n": 0.0,
+              "normal_w": [
+                -0.4999999403953552,
+                0.8660253882408142,
+                -6.463210411311593e-09
+              ],
+              "pair_friction_force_vector_w_n": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "partner_body": "r_middle_finger_distal",
+              "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_distal",
+              "point_w_m": [
+                -0.01251230575144291,
+                0.012475397437810898,
+                0.6486363410949707
+              ],
+              "separation_m": 6.016157567501068e-05,
+              "signed_normal_force_scalar_n": -0.0,
+              "source_body": "Cap",
+              "source_path": "/World/envs/env_0/Cap"
+            },
+            {
+              "category": "right_cap",
+              "normal_force_n": 0.0,
+              "normal_w": [
+                -0.6720001101493835,
+                0.7382653951644897,
+                -0.058136019855737686
+              ],
+              "pair_friction_force_vector_w_n": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "partner_body": "r_middle_finger_distal",
+              "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_distal",
+              "point_w_m": [
+                -0.01251230575144291,
+                0.012475397437810898,
+                0.6486363410949707
+              ],
+              "separation_m": 7.745892798993737e-05,
+              "signed_normal_force_scalar_n": -0.0,
+              "source_body": "Cap",
+              "source_path": "/World/envs/env_0/Cap"
+            },
+            {
+              "category": "right_cap",
+              "normal_force_n": 0.0,
+              "normal_w": [
+                -0.4999999403953552,
+                0.8660253882408142,
+                -6.463210411311593e-09
+              ],
+              "pair_friction_force_vector_w_n": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "partner_body": "r_middle_finger_distal",
+              "partner_path": "/World/envs/env_0/RightHand/r_middle_finger_distal",
+              "point_w_m": [
+                -0.012530991807579994,
+                0.01246446929872036,
+                0.6486495733261108
+              ],
+              "separation_m": 6.0041435062885284e-05,
+              "signed_normal_force_scalar_n": -0.0,
+              "source_body": "Cap",
+              "source_path": "/World/envs/env_0/Cap"
+            }
+          ],
+          "minimum_reported_separation_m": 6.0041435062885284e-05,
+          "no_one_second_hold_required_or_performed": true,
+          "peak_normal_force_n": 0.0,
+          "physics_dt_s": 0.002,
+          "qualified": true,
+          "root_translation_after_one_step_m": {
+            "bottle_body": 3.9249658584594727e-05,
+            "bottle_cap": 3.92155647277459e-05,
+            "left_hand": 1.4864625695339515e-08,
+            "right_hand": 1.5001406289519875e-08
+          },
+          "same_hand_contacts": []
+        },
+        "official_mjcf": {
+          "backend": "official_beta1_MJCF_mesh_and_engineering_cylinder_proxy",
+          "left_four_finger_half_arc_rad": 0.8309865790140366,
+          "left_thumb_opposition_rad": 2.997602840974308,
+          "minimum_cross_digit_self_gap_m": {
+            "l": 0.002335175971684368,
+            "r": 0.002335706436187835
+          },
+          "minimum_hand_hand_gap_m": 0.04963929893796343,
+          "per_digit": {
+            "l": {
+              "index_finger": {
+                "azimuth_rad": 2.262902448852527,
+                "body": "l_index_finger_proximal",
+                "gap_m": 0.0070097999897162045,
+                "object_point_w_m": [
+                  -0.022335603762109576,
+                  0.02694662881544181,
+                  0.550676585931768
+                ]
+              },
+              "middle_finger": {
+                "azimuth_rad": 0.7099960009750664,
+                "body": "l_middle_finger_distal",
+                "gap_m": 0.005980575908245804,
+                "object_point_w_m": [
+                  0.026542756865466383,
+                  0.022814075816317482,
+                  0.5376016151573799
+                ]
+              },
+              "pinky": {
+                "azimuth_rad": 2.157082857969379,
+                "body": "l_pinky_proximal",
+                "gap_m": 0.0018055423655947342,
+                "object_point_w_m": [
+                  -0.0193645032464328,
+                  0.029155034087781185,
+                  0.4710737783410212
+                ]
+              },
+              "ring_finger": {
+                "azimuth_rad": 0.6020489651225623,
+                "body": "l_ring_finger_distal",
+                "gap_m": 0.005697886114304754,
+                "object_point_w_m": [
+                  0.028846193241958314,
+                  0.019821632962014203,
+                  0.5066367335027664
+                ]
+              },
+              "thumb": {
+                "azimuth_rad": -1.8525469220686794,
+                "body": "l_thumb_distal",
+                "gap_m": 0.0021122713661297487,
+                "object_point_w_m": [
+                  -0.00973131751591234,
+                  -0.03361995626140816,
+                  0.572140416677466
+                ]
+              }
+            },
+            "r": {
+              "index_finger": {
+                "azimuth_rad": -2.897796853299097,
+                "body": "r_index_finger_distal",
+                "gap_m": 0.0022286237493820034,
+                "object_point_w_m": [
+                  -0.01649728802163732,
+                  -0.004103594469495728,
+                  0.655803683072026
+                ],
+                "sidewall_body": "r_index_finger_distal",
+                "sidewall_gap_m": 0.0022286237493820034,
+                "sidewall_point_w_m": [
+                  -0.01649728802163732,
+                  -0.004103594469495728,
+                  0.655803683072026
+                ]
+              },
+              "middle_finger": {
+                "azimuth_rad": 2.328434570629576,
+                "body": "r_middle_finger_distal",
+                "gap_m": 0.0005006211166317245,
+                "object_point_w_m": [
+                  -0.011682529765132935,
+                  0.012349837775887225,
+                  0.6507766346853286
+                ],
+                "sidewall_body": "r_middle_finger_distal",
+                "sidewall_gap_m": 0.0005006211166317245,
+                "sidewall_point_w_m": [
+                  -0.011682529765132935,
+                  0.012349837775887225,
+                  0.6507766346853286
+                ]
+              },
+              "pinky": {
+                "azimuth_rad": 1.559431728688241,
+                "body": "r_pinky_distal",
+                "gap_m": 0.02005965211233009,
+                "object_point_w_m": [
+                  0.000193194009111033,
+                  0.016998902201459616,
+                  0.6580000000001234
+                ]
+              },
+              "ring_finger": {
+                "azimuth_rad": 2.1422640374055066,
+                "body": "r_ring_finger_middle",
+                "gap_m": 0.017767875274374317,
+                "object_point_w_m": [
+                  -0.009194741278915388,
+                  0.01429883676435489,
+                  0.6579999999999941
+                ]
+              },
+              "thumb": {
+                "azimuth_rad": -1.4242094470057767,
+                "body": "r_thumb_distal",
+                "gap_m": 0.008888241663582236,
+                "object_point_w_m": [
+                  0.002483062056846648,
+                  -0.016817681242496323,
+                  0.6472241514172952
+                ],
+                "sidewall_body": "r_thumb_distal",
+                "sidewall_gap_m": 0.008888241663582236,
+                "sidewall_point_w_m": [
+                  0.002483062056846648,
+                  -0.016817681242496323,
+                  0.6472241514172952
+                ]
+              }
+            }
+          },
+          "per_object": {
+            "l_proxy_bottle": {
+              "minimum_gap_m": 0.0018055423655947342,
+              "nearest_body": "l_pinky_proximal"
+            },
+            "l_proxy_cap": {
+              "minimum_gap_m": 0.054490080636498614,
+              "nearest_body": "l_thumb_distal"
+            },
+            "l_proxy_neck": {
+              "minimum_gap_m": 0.032577083725718464,
+              "nearest_body": "l_thumb_distal"
+            },
+            "r_proxy_bottle": {
+              "minimum_gap_m": 0.036181027303518194,
+              "nearest_body": "r_thumb_distal"
+            },
+            "r_proxy_cap": {
+              "minimum_gap_m": 0.0005006211166317245,
+              "nearest_body": "r_middle_finger_distal"
+            },
+            "r_proxy_neck": {
+              "minimum_gap_m": 0.007517674249057362,
+              "nearest_body": "r_middle_finger_distal"
+            }
+          },
+          "qualified": true,
+          "right_fingertip_sites": {
+            "index_finger": {
+              "axial_rel_cap_m": 0.0020034765543384125,
+              "azimuth_rad": -3.098991548251456,
+              "position_w_m": [
+                -0.022360837652491274,
+                -0.000953173093454841,
+                0.6475034765543384
+              ],
+              "radial_gap_to_cap_sidewall_m": 0.0053811438373278335
+            },
+            "middle_finger": {
+              "axial_rel_cap_m": 0.0013930437458551381,
+              "azimuth_rad": 2.0411230854316798,
+              "position_w_m": [
+                -0.00949114331534429,
+                0.018669496491566233,
+                0.6468930437458551
+              ],
+              "radial_gap_to_cap_sidewall_m": 0.003943540786624608
+            },
+            "pinky": {
+              "axial_rel_cap_m": 0.001563513181496612,
+              "azimuth_rad": 1.2003660646970755,
+              "position_w_m": [
+                0.017697345064874484,
+                0.045569640375622195,
+                0.6470635131814966
+              ],
+              "radial_gap_to_cap_sidewall_m": 0.031885459456864815
+            },
+            "ring_finger": {
+              "axial_rel_cap_m": 0.002058947112370091,
+              "azimuth_rad": 2.128084877970738,
+              "position_w_m": [
+                -0.025816204790874295,
+                0.04142664759513212,
+                0.64755894711237
+              ],
+              "radial_gap_to_cap_sidewall_m": 0.03181233000764896
+            },
+            "thumb": {
+              "axial_rel_cap_m": 0.0009829514090052838,
+              "azimuth_rad": -1.4406570286671114,
+              "position_w_m": [
+                0.003335306134986402,
+                -0.025483890802819632,
+                0.6464829514090052
+              ],
+              "radial_gap_to_cap_sidewall_m": 0.00870122482420075
+            }
+          },
+          "right_index_middle_site_separation_rad": 1.1430706734964506,
+          "right_thumb_tripod_opposition_rad": 2.0020643479187776,
+          "right_thumb_tripod_site_opposition_rad": 2.2298698563325705
+        }
+      },
+      "geometry_qualified": true,
+      "hardware_candidate_unverified": true,
+      "hold_validated": false,
+      "left_asset_tree_sha256": "6f0d85a3b7b80c2418a97c147f005fefbe957984d3a3e0e97ec51e957c2ce2b9",
+      "left_joint_order": [
+        "l_thumb_cmc_flex",
+        "l_thumb_cmc_abd",
+        "l_thumb_mcp",
+        "l_thumb_ip",
+        "l_index_finger_mcp_flex",
+        "l_index_finger_mcp_abd",
+        "l_index_finger_pip",
+        "l_index_finger_dip",
+        "l_middle_finger_mcp_flex",
+        "l_middle_finger_mcp_abd",
+        "l_middle_finger_pip",
+        "l_middle_finger_dip",
+        "l_ring_finger_mcp_flex",
+        "l_ring_finger_mcp_abd",
+        "l_ring_finger_pip",
+        "l_ring_finger_dip",
+        "l_pinky_mcp_flex",
+        "l_pinky_mcp_abd",
+        "l_pinky_pip",
+        "l_pinky_dip"
+      ],
+      "left_usd_sha256": "8d1b83a6130b64fd759ea3c0720d6b255da8c1e76abe5a4226788183058dbfda",
+      "pregrasp_template_ids": [
+        "left_cylindrical_pregrasp",
+        "right_cap_tripod_pregrasp"
+      ],
+      "random_draw": {
+        "left": {
+          "joint_position_rad": [
+            0.7149288004958481,
+            -0.5491927920055415,
+            -0.23534728268773172,
+            0.6465022082413338,
+            -0.07874407092037279,
+            0.024101721190598405,
+            1.0060166068308298,
+            0.999765313115321,
+            0.10356702168214404,
+            -0.0794224909096977,
+            1.2241875892674525,
+            0.8135914136971689,
+            0.13937382203641543,
+            0.05025070899124322,
+            1.1876546525388256,
+            0.6795142691551163,
+            -0.03871826449743742,
+            -0.013906680017495135,
+            0.9758624654862624,
+            0.9186465095139323
+          ],
+          "wrist_rotation_local_rad": [
+            0.015996071280690874,
+            -0.03007381432705993,
+            0.06854254689784116
+          ],
+          "wrist_translation_local_m": [
+            0.0012980886173703304,
+            0.002852669321650258,
+            0.0011950694107924426
+          ]
+        },
+        "right": {
+          "joint_position_rad": [
+            -0.29722305951785494,
+            0.30518081558192106,
+            0.6630480121110547,
+            1.1972611069239383,
+            0.15735389548529896,
+            -0.020125261869964304,
+            1.4703201803025863,
+            0.7432455078656784,
+            0.6487806524782874,
+            -0.0679333375686876,
+            0.9996342911796321,
+            1.4041149275515383,
+            0.5700982296735188,
+            -0.10209116907516777,
+            0.8124793170940547,
+            0.7119000678183554,
+            0.7162125560819872,
+            -0.23516762756698237,
+            0.999425094140742,
+            1.4950081447098453
+          ],
+          "wrist_rotation_local_rad": [
+            -0.001322252725755986,
+            -0.007989675580158541,
+            -0.0054822919404139
+          ],
+          "wrist_translation_local_m": [
+            0.00090424315814417,
+            -0.00013920969937860576,
+            0.0020014315852256285
+          ]
+        }
+      },
+      "right_asset_tree_sha256": "9f934ba533996b5a30976226ef8f76ed96b35cd6a8e34b4b50deeb567cf0a707",
+      "right_joint_order": [
+        "r_thumb_cmc_flex",
+        "r_thumb_cmc_abd",
+        "r_thumb_mcp",
+        "r_thumb_ip",
+        "r_index_finger_mcp_flex",
+        "r_index_finger_mcp_abd",
+        "r_index_finger_pip",
+        "r_index_finger_dip",
+        "r_middle_finger_mcp_flex",
+        "r_middle_finger_mcp_abd",
+        "r_middle_finger_pip",
+        "r_middle_finger_dip",
+        "r_ring_finger_mcp_flex",
+        "r_ring_finger_mcp_abd",
+        "r_ring_finger_pip",
+        "r_ring_finger_dip",
+        "r_pinky_mcp_flex",
+        "r_pinky_mcp_abd",
+        "r_pinky_pip",
+        "r_pinky_dip"
+      ],
+      "right_usd_sha256": "22600d3f0aeb185552bb6eeb454b5b7199966a60fc844d4a4b5e4791ec77f0ed",
+      "schema": "dexgym-bimanual-pregrasp-reset-v1",
+      "template_ranges": {
+        "left_cylindrical_pregrasp": {
+          "joint_halfwidth_rad": 0.08,
+          "wrist_rotation_halfwidth_rad": [
+            0.06,
+            0.06,
+            0.08
+          ],
+          "wrist_translation_halfwidth_m": [
+            0.004,
+            0.004,
+            0.004
+          ]
+        },
+        "right_cap_tripod_pregrasp": {
+          "joint_halfwidth_rad": 0.04,
+          "wrist_rotation_halfwidth_rad": [
+            0.04,
+            0.04,
+            0.05
+          ],
+          "wrist_translation_halfwidth_m": [
+            0.0025,
+            0.0025,
+            0.0025
+          ]
+        }
+      },
+      "units": "m,rad,s,N",
+      "wrist_control_mode": "pose_command_wrist",
+      "mimic_spin_velocity_rad_s": 0.07155381143093109,
+      "mimic_drive_state": {
+        "stick_reference_rad": 0.0,
+        "sliding": false,
+        "breakaway_seen": false
+      },
+      "mimic_candidate_unverified": false,
+      "enable_external_forces_every_iteration": false,
+      "source_probe": "artifacts/phase1/row9_tgs_exact_target_hold_probe.json",
+      "solver_type": "pgs",
+      "source_replay": "artifacts/phase1/row9_pgs_middle_pip_003.json",
+      "cross_solver_seed": false,
+      "validation_family": "row9_pgs_same_relative_grasp_family"
+    },
+    "validated": true,
+    "validation": {
+      "passed": true,
+      "fixture": "gravity_on_no_support",
+      "scope": "bimanual",
+      "contact_evidence_version": "mimic_force_opposition_v1",
+      "duration_s": 1.0,
+      "hold_displacement_m": 6.656072218902409e-05,
+      "hold_rotation_rad": 0.0013810679083690047,
+      "left_only_displacement_m": 0.00019209702441003174,
+      "left_contact_ratio": 1.0,
+      "right_contact_ratio": 1.0,
+      "left_only_contact_ratio": 1.0,
+      "ground_contact_ratio": 0.0,
+      "opposing_contact_coverage_ratio": 1.0,
+      "right_sidewall_tripod_ratio": 1.0,
+      "cross_contact_ratios": {
+        "left_cap": 0.0,
+        "right_bottle": 0.0,
+        "hand_hand": 0.0
+      },
+      "hand_hand_monitored": true,
+      "initial_min_separation_m": -0.00037326596793718636,
+      "minimum_separation_m": -0.00038343743653967977,
+      "max_initial_penetration_guard_m": 0.002,
+      "max_contact_peak_n": 9.053997993469238,
+      "max_peak_force_guard_n": 100.0,
+      "max_thread_pitch_error_m": 5.293122740113176e-07,
+      "support_released": true,
+      "reset_replay_passed": true,
+      "fresh_process_replay_passed": true,
+      "source_result_sha256": "0ce3e9670269547534d067044ec87f27100afc9e1cd8e790bdf42cf2352b239f",
+      "fresh_replay_result_sha256": "0aafd4f6382eefa93d5f2d020f4f9c5c9023037ede8f14776093e66acd682b87",
+      "left_only_source_sha256": "685b058c03b472ed9bd75805f06a462ae55fa195ff1445905d56ef6235a02f2b",
+      "wrist_control_mode": "pose_command_wrist"
+    }
+  }
+]

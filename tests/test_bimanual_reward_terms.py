@@ -1,6 +1,8 @@
 import torch
 
 from dexteroushands_lab.tasks.direct.bimanual_bottle.reward_terms import (
+    GRASP_SUCCESS_BONUS, CAP_TURN_SUCCESS_BONUS,
+    time_integrated_contact_reward,
     digit_contact_score, signed_progress_reward, thread_opening_progress,
     terminal_failure_penalty,
     suspended_bottle,
@@ -9,6 +11,17 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.reward_terms import (
     cylinder_surface_proximity,
     bottle_hold_stability,
 )
+
+
+def test_success_outscores_five_seconds_of_maximal_dense_contact():
+    """A policy cannot improve return merely by avoiding early success."""
+    one = torch.ones(1)
+    horizon_steps = 250  # 5 s at the configured 50 Hz policy rate
+    for task, bonus in (("grasp_hold", GRASP_SUCCESS_BONUS),
+                        ("cap_turn_30", CAP_TURN_SUCCESS_BONUS)):
+        contact, hold = time_integrated_contact_reward(
+            one, one, one, dt=0.02, task_kind=task)
+        assert float((contact + hold) * horizon_steps) < bonus
 
 
 def test_contact_score_is_saturated_and_requires_correct_object_view():

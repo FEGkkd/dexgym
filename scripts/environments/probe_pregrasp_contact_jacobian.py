@@ -75,6 +75,8 @@ parser.add_argument("--solver-position-iterations", type=int,
                     help="Controlled PhysX position solver iteration ablation")
 parser.add_argument("--external-forces-every-iteration", action="store_true",
                     help="Apply external forces at every TGS position iteration to test velocity noise")
+parser.add_argument("--solver-type", choices=("tgs", "pgs"), default="tgs",
+                    help="Use PGS only as a controlled physical diagnostic")
 parser.add_argument("--left-force-relief-target-n", type=float,
                     help="Diagnostic left-finger target relief above this measured contact force")
 AppLauncher.add_app_launcher_args(parser)
@@ -105,6 +107,8 @@ if args.solver_position_iterations is not None and not 1 <= args.solver_position
     parser.error("--solver-position-iterations must be in [1, 255]")
 if args.left_force_relief_target_n is not None and not 0.5 <= args.left_force_relief_target_n <= 50:
     parser.error("--left-force-relief-target-n must be in [0.5, 50] N")
+if args.solver_type == "pgs" and args.external_forces_every_iteration:
+    parser.error("PGS does not support --external-forces-every-iteration")
 app = AppLauncher(args).app
 
 import torch
@@ -114,7 +118,8 @@ from isaaclab_physx.physics import PhysxManager
 from dexteroushands_lab.assets.bottle import BottleConfig
 from dexteroushands_lab.assets.bottle.batched_thread import _rotate
 from dexteroushands_lab.assets.wuji_hand2_beta import load_hand2_spec
-from dexteroushands_lab.scenes.grasp_init import BodyInit, HandInit, grasp_sample_from_dict
+from dexteroushands_lab.scenes.grasp_init import grasp_sample_from_dict
+from dexteroushands_lab.scenes.mimic_grasp_capture import capture_mimic_grasp_sample
 from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env import BimanualBottleDirectEnv
 from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env_cfg import GraspHoldDirectEnvCfg
 
@@ -186,6 +191,7 @@ def main():
     cfg = GraspHoldDirectEnvCfg()
     cfg.scene.num_envs = 1
     cfg.sim.device = args.device
+    cfg.sim.physics.solver_type = 1 if args.solver_type == "tgs" else 0
     cfg.thread_backend = "mimic"
     cfg.right_cap_contact_gate = args.right_cap_contact_gate
     if args.solver_position_iterations is not None:
@@ -478,6 +484,7 @@ def main():
                   "contact_points_enabled": args.contact_points,
                   "solver_position_iterations": cfg.sim.physics.max_position_iteration_count,
                   "enable_external_forces_every_iteration": args.external_forces_every_iteration,
+                  "solver_type": args.solver_type,
                   "left_force_relief_target_n": args.left_force_relief_target_n,
                   "final_right_joint_position": dict(zip(
                       env.right.joint_names,
@@ -493,44 +500,14 @@ def main():
                   "unsafe_motion": rows[-1]["bottle_displacement_m"] > args.max_bottle_displacement_m,
                   "terminated": rows[-1]["terminated"] if rows else None}
         if args.capture_candidate and rows:
-            state = env.thread.view.read()
-
-            def body_from_runtime(pose, velocity):
-                return BodyInit(tuple(float(x) for x in pose[0].detach().cpu()),
-                                tuple(float(x) for x in velocity[0].detach().cpu()))
-
-            def hand_from_runtime(hand, spec, wrist, target):
-                root_state = body_from_runtime(hand.data.root_pose_w.torch,
-                                               hand.data.root_vel_w.torch)
-                order = [hand.joint_names.index(name) for name in spec.joint_names]
-                target_pose = torch.cat((wrist.target_pos[0], wrist.target_quat[0]))
-                return HandInit(
-                    root_state.root_pose, root_state.root_velocity,
-                    tuple(float(hand.data.joint_pos.torch[0, i]) for i in order),
-                    tuple(float(hand.data.joint_vel.torch[0, i]) for i in order),
-                    tuple(float(x) for x in target_pose.detach().cpu()),
-                    tuple(float(target[0, i]) for i in order))
-
-            candidate_sample = replace(
-                sample, mode="stable_pregrasp", validated=False, validation=None,
+            candidate_sample = capture_mimic_grasp_sample(
+                env, sample,
                 source="scripted_physx_contact_candidate_requires_fresh_reset_replay",
-                left=hand_from_runtime(env.left, specs[0], env.wrists[0], env._finger_targets[0]),
-                right=hand_from_runtime(env.right, specs[1], env.wrists[1], env._finger_targets[1]),
-                bottle=body_from_runtime(state.root_pose_w, state.root_velocity_w),
-                cap=body_from_runtime(state.cap_pose_w, env.cap.data.root_vel_w.torch),
-                thread_initial_angle_rad=float(state.theta_rad[0]),
-                thread_initial_engagement_m=config.initial_engagement - float(state.axial_m[0]),
-                metadata={**sample.metadata,
-                          "wrist_control_mode": "pose_command_wrist",
-                          "mimic_spin_velocity_rad_s": float(state.spin_velocity_rad_s[0]),
-                          "mimic_drive_state": {
-                              "stick_reference_rad": float(env.thread.drive.stick_reference[0]),
-                              "sliding": bool(env.thread.drive.sliding[0]),
-                              "breakaway_seen": bool(env.thread.drive.breakaway_seen[0]),
-                          },
-                          "mimic_candidate_unverified": True,
-                          "enable_external_forces_every_iteration": args.external_forces_every_iteration,
-                          "source_probe": str(args.output) if args.output else None})
+                metadata_extra={
+                    "enable_external_forces_every_iteration": args.external_forces_every_iteration,
+                    "solver_type": args.solver_type,
+                    "source_probe": str(args.output) if args.output else None,
+                })
             result["diagnostic_candidate"] = asdict(candidate_sample)
         self_contacts = []
         for body, filters, view in right_index_self_views:

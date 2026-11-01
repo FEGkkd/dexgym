@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 from dataclasses import replace
+from dataclasses import asdict
 import json
 import math
 from pathlib import Path
@@ -31,6 +32,18 @@ parser.add_argument("--ablate-right-cap-contact", action="store_true",
 parser.add_argument("--ablate-right-digit",
                     choices=("thumb", "index_finger", "middle_finger"),
                     help="Diagnostic only: restore one right digit to its screened pregrasp pose")
+parser.add_argument("--mimic-natural-frequency", type=float,
+                    help="Diagnostic only: author a compliant screw Mimic joint (rad/s)")
+parser.add_argument("--mimic-damping-ratio", type=float, default=1.2,
+                    help="Damping ratio for diagnostic compliant Mimic joint")
+parser.add_argument("--solver-type", choices=("tgs", "pgs"), default="tgs",
+                    help="Diagnostic solver comparison; captured candidate used TGS")
+parser.add_argument("--cross-solver-ablation", action="store_true",
+                    help="Diagnostic only: permit a solver mismatch with the captured state")
+parser.add_argument("--capture-final-candidate", action="store_true",
+                    help="Save the live end state for an independent, same-solver Reset replay")
+parser.add_argument("--right-middle-pip-target-offset", type=float, default=0.0,
+                    help="Diagnostic only: close the right middle PIP through its normal joint drive")
 parser.add_argument("--output", type=Path, required=True)
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
@@ -42,14 +55,27 @@ if not math.isfinite(args.resistance_scale) or not 0 < args.resistance_scale <= 
     parser.error("--resistance-scale must be in (0, 20]")
 if args.ablate_right_cap_contact and args.ablate_right_digit:
     parser.error("Choose a right-wrist or one right-digit ablation")
+if args.mimic_natural_frequency is not None and (
+        not math.isfinite(args.mimic_natural_frequency)
+        or args.mimic_natural_frequency <= 0):
+    parser.error("--mimic-natural-frequency must be positive and finite")
+if not math.isfinite(args.mimic_damping_ratio) or args.mimic_damping_ratio <= 0:
+    parser.error("--mimic-damping-ratio must be positive and finite")
+if args.solver_type == "pgs" and args.external_forces_every_iteration:
+    parser.error("PGS does not support --external-forces-every-iteration")
+if not math.isfinite(args.right_middle_pip_target_offset) or not 0 <= args.right_middle_pip_target_offset <= 0.2:
+    parser.error("--right-middle-pip-target-offset must be in [0, 0.2] rad")
 app = AppLauncher(args).app
 
 import torch
 import warp as wp
 from isaaclab_physx.physics import PhysxManager
+from pxr import PhysxSchema, UsdPhysics
 
 from dexteroushands_lab.assets.bottle.batched_thread import _rotate
 from dexteroushands_lab.scenes.grasp_init import grasp_sample_from_dict
+from dexteroushands_lab.scenes.mimic_grasp_capture import capture_mimic_grasp_sample
+from dexteroushands_lab.tasks.direct.bimanual_bottle import bimanual_bottle_env as env_module
 from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env import BimanualBottleDirectEnv
 from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env_cfg import GraspHoldDirectEnvCfg
 
@@ -60,26 +86,49 @@ def _angle(q0: torch.Tensor, q1: torch.Tensor) -> float:
 
 
 def main():
+    print("MIMIC_REPLAY_PHASE start", flush=True)
     probe = json.loads(args.candidate_result.read_text())
     if "diagnostic_candidate" not in probe:
         raise ValueError("Probe has no captured live PhysX candidate")
     sample = grasp_sample_from_dict(probe["diagnostic_candidate"])
+    accepted_sources = {
+        "scripted_physx_contact_candidate_requires_fresh_reset_replay",
+        "pgs_physx_settled_candidate_requires_fresh_reset_replay",
+    }
     if (sample.validated or not sample.metadata.get("mimic_candidate_unverified")
-            or sample.source != "scripted_physx_contact_candidate_requires_fresh_reset_replay"):
-        raise ValueError("Only unvalidated scripted Mimic candidates may be replayed")
-    if (sample.metadata.get("enable_external_forces_every_iteration", False)
-            != args.external_forces_every_iteration):
-        raise ValueError("Replay TGS force-iteration setting differs from candidate generation")
+            or sample.source not in accepted_sources):
+        raise ValueError("Only unvalidated live PhysX Mimic candidates may be replayed")
+    physics_match = (
+        sample.metadata.get("solver_type", "tgs") == args.solver_type
+        and sample.metadata.get("enable_external_forces_every_iteration", False)
+        == args.external_forces_every_iteration)
+    if not physics_match and not args.cross_solver_ablation:
+        raise ValueError("Replay solver settings differ from candidate generation")
 
     cfg = GraspHoldDirectEnvCfg()
     cfg.scene.num_envs = 1
     cfg.sim.device = args.device
+    cfg.sim.physics.solver_type = 1 if args.solver_type == "tgs" else 0
     cfg.thread_backend = "mimic"
     cfg.right_cap_contact_gate = "manifold_sidewall"
     cfg.no_right_cap_contact_counterfactual = args.ablate_right_cap_contact
     cfg.sim.physics.enable_external_forces_every_iteration = args.external_forces_every_iteration
     cfg.stable_reset_probability = 0.0
+    if args.mimic_natural_frequency is not None:
+        ordinary_author = env_module.author_mimic_thread
+
+        def author_compliant_diagnostic(stage, env_path, config, *, cap_local_pose_xyzw):
+            slide, spin = ordinary_author(
+                stage, env_path, config, cap_local_pose_xyzw=cap_local_pose_xyzw)
+            mimic = PhysxSchema.PhysxMimicJointAPI.Apply(
+                slide.GetPrim(), UsdPhysics.Tokens.rotX)
+            mimic.GetNaturalFrequencyAttr().Set(args.mimic_natural_frequency)
+            mimic.GetDampingRatioAttr().Set(args.mimic_damping_ratio)
+            return slide, spin
+
+        env_module.author_mimic_thread = author_compliant_diagnostic
     env = BimanualBottleDirectEnv(cfg)
+    print("MIMIC_REPLAY_PHASE scene_created", flush=True)
     try:
         for side, spec in zip(("left", "right"), env.specs):
             if sample.metadata.get(f"{side}_usd_sha256") != spec.usd_sha256:
@@ -97,6 +146,7 @@ def main():
             env.thread.config = scaled
             env.thread.drive.config = scaled
         env.reset()
+        print("MIMIC_REPLAY_PHASE default_reset", flush=True)
 
         # Replace only this diagnostic process's pregrasp rows. The actual
         # episode-boundary _reset_idx path restores every selected state.
@@ -119,10 +169,13 @@ def main():
         env._bank["thread_stick_reference"][first:] = drive_state["stick_reference_rad"]
         env._bank["thread_sliding"][first:] = drive_state["sliding"]
         env._bank["thread_breakaway_seen"][first:] = drive_state["breakaway_seen"]
+        if args.right_middle_pip_target_offset:
+            joint = sample.metadata["right_joint_order"].index("r_middle_finger_pip")
+            env._bank["right_joint_target"][first:, joint] += args.right_middle_pip_target_offset
         if args.ablate_right_digit:
             pregrasp_rows = json.loads((Path(__file__).resolve().parents[2]
                                         / "docs/assets/phase0_pregrasp_reset_bank.json").read_text())
-            pregrasp = grasp_sample_from_dict(pregrasp_rows[probe["sample_index"]])
+            pregrasp = grasp_sample_from_dict(pregrasp_rows[probe.get("sample_index", probe.get("source_sample_index"))])
             canonical = sample.metadata["right_joint_order"]
             if pregrasp.metadata["right_joint_order"] != canonical:
                 raise ValueError("Digit ablation joint order differs from captured candidate")
@@ -136,6 +189,7 @@ def main():
                     device=env.device)
             env._bank["right_joint_velocity"][first:, digit_ids] = 0
         env._reset_idx(torch.tensor([0], device=env.device))
+        print("MIMIC_REPLAY_PHASE candidate_reset", flush=True)
         origin = env.scene.env_origins[0]
         expected = torch.tensor(sample.bottle.root_pose, device=env.device)
         expected[:3] += origin
@@ -203,6 +257,12 @@ def main():
         rows = []
         max_left_force = max_right_force = 0.0
         min_separation = math.inf
+        minimum_separation = math.inf
+        left_names = env.contacts.body_names["left"]
+        thumb_ids = [i for i, name in enumerate(left_names) if name.startswith("l_thumb_")]
+        other_ids = [i for i, name in enumerate(left_names)
+                     if any(name.startswith(f"l_{digit}_") for digit in (
+                         "index_finger", "middle_finger", "ring_finger", "pinky"))]
         view = PhysxManager.get_physics_sim_view()
         contact_views = []
         for obj, side, hand_name in (("Bottle", "left", "LeftHand"),
@@ -212,7 +272,15 @@ def main():
                 filter_patterns=[f"/World/envs/env_0/{hand_name}/{body}"
                                  for body in env.contacts.body_names[side]],
                 max_contact_data_count=256))
+        hand_hand_views = [view.create_rigid_contact_view(
+            f"/World/envs/env_0/LeftHand/{body}",
+            filter_patterns=[f"/World/envs/env_0/RightHand/{partner}"
+                             for partner in env.contacts.body_names["right"]],
+            max_contact_data_count=64)
+            for body in env.contacts.body_names["left"]]
         for step in range(args.steps):
+            if step == 0:
+                print("MIMIC_REPLAY_PHASE first_step", flush=True)
             _, reward, _, _, extras = env.step(torch.zeros(1, 52, device=env.device))
             screw = env.thread.view.read()
             bottle = screw.root_pose_w[0]
@@ -220,6 +288,16 @@ def main():
             tilt = _angle(bottle[3:], initial_bottle[3:])
             left = env.contacts.force_magnitudes("Bottle", "left")[0]
             right = env.contacts.force_magnitudes("Cap", "right")[0]
+            left_vectors = env.contacts.latest_forces[("Bottle", "left")][0]
+            thumb_vector = left_vectors[thumb_ids].sum(dim=0)
+            other_vector = left_vectors[other_ids].sum(dim=0)
+            thumb_norm = torch.linalg.vector_norm(thumb_vector)
+            other_norm = torch.linalg.vector_norm(other_vector)
+            left_opposition = bool(
+                (thumb_norm > env.contacts.force_floor_n)
+                & (other_norm > env.contacts.force_floor_n)
+                & (torch.dot(thumb_vector, other_vector)
+                   < -0.5 * thumb_norm * other_norm))
             right_digit_force = {
                 digit: float(right[[i for i, name in enumerate(env.contacts.body_names["right"])
                                     if name.startswith(f"r_{digit}_")]].max())
@@ -227,18 +305,22 @@ def main():
             }
             max_left_force = max(max_left_force, float(left.max()))
             max_right_force = max(max_right_force, float(right.max()))
-            if step == 0:
-                for contact_view in contact_views:
-                    data = contact_view.get_contact_data(dt=cfg.sim.dt)
-                    distances = wp.to_torch(data[3]).reshape(-1)
-                    counts = wp.to_torch(data[4]).reshape(-1).to(torch.int64)
-                    starts = wp.to_torch(data[5]).reshape(-1).to(torch.int64)
-                    if int(counts.sum()) > len(distances):
-                        raise RuntimeError("Initial contact view overflowed")
-                    for count, start in zip(counts.tolist(), starts.tolist()):
-                        if count:
-                            min_separation = min(min_separation,
-                                                 float(distances[start:start + count].min()))
+            hand_hand_force = max(float(wp.to_torch(contact_view.get_contact_force_matrix(
+                dt=cfg.sim.dt)).norm(dim=-1).max())
+                for contact_view in hand_hand_views)
+            for contact_view in (*contact_views, *hand_hand_views):
+                data = contact_view.get_contact_data(dt=cfg.sim.dt)
+                distances = wp.to_torch(data[3]).reshape(-1)
+                counts = wp.to_torch(data[4]).reshape(-1).to(torch.int64)
+                starts = wp.to_torch(data[5]).reshape(-1).to(torch.int64)
+                if int(counts.sum()) > len(distances):
+                    raise RuntimeError("Contact view overflowed")
+                for count, start in zip(counts.tolist(), starts.tolist()):
+                    if count:
+                        observed = float(distances[start:start + count].min())
+                        minimum_separation = min(minimum_separation, observed)
+                        if step == 0:
+                            min_separation = min(min_separation, observed)
             episode = extras["phase1_episode"]
             rows.append({
                 "step": step + 1, "time_s": (step + 1) * env.step_dt,
@@ -249,6 +331,17 @@ def main():
                 "cap_spin_rad_s": float(screw.spin_velocity_rad_s[0]),
                 "thread_error_m": float(episode["constraint_error_m"][0]),
                 "left_contact": bool(episode["left_contact"][0]),
+                "left_thumb_force_n": float(left[thumb_ids].max()),
+                "left_other_force_n": float(left[other_ids].max()),
+                "left_force_opposition": left_opposition,
+                "left_cap_cross_contact": bool(
+                    (env.contacts.force_magnitudes("Cap", "left")[0]
+                     >= env.contacts.force_floor_n).any()),
+                "right_bottle_cross_contact": bool(
+                    (env.contacts.force_magnitudes("Bottle", "right")[0]
+                     >= env.contacts.force_floor_n).any()),
+                "hand_hand_contact": hand_hand_force >= env.contacts.force_floor_n,
+                "hand_hand_force_n": hand_hand_force,
                 "right_sidewall_tripod": bool(episode["right_contact"][0]),
                 "right_cap_digit_force_n": right_digit_force,
                 "bottle_stable": bool(episode["bottle_stable"][0]),
@@ -262,16 +355,29 @@ def main():
         result = {
             "status": "FRESH_PROCESS_PHYSX_RESET_REPLAY_DIAGNOSTIC",
             "source_result": str(args.candidate_result),
-            "source_sample_index": probe["sample_index"],
+            "source_sample_index": probe.get("sample_index", probe.get("source_sample_index")),
             "enable_external_forces_every_iteration": args.external_forces_every_iteration,
             "spin_reset_override_rad_s": args.spin_reset_override,
             "resistance_scale": args.resistance_scale,
             "right_cap_contact_ablated": args.ablate_right_cap_contact,
             "right_digit_ablated": args.ablate_right_digit,
+            "right_middle_pip_target_offset_rad": args.right_middle_pip_target_offset,
+            "mimic_natural_frequency_rad_s": args.mimic_natural_frequency,
+            "mimic_damping_ratio": (args.mimic_damping_ratio
+                                    if args.mimic_natural_frequency is not None else None),
+            "solver_type": args.solver_type,
+            "source_physics_settings_match": physics_match,
             "candidate_validated": False,
             "reset_error": reset_error,
             "duration_s": args.steps * env.step_dt,
             "left_contact_ratio": left_ratio,
+            "left_force_opposition_ratio": (sum(row["left_force_opposition"] for row in rows)
+                                            / len(rows)),
+            "cross_contact_ratios": {
+                name: sum(row[field] for row in rows) / len(rows)
+                for name, field in (("left_cap", "left_cap_cross_contact"),
+                                    ("right_bottle", "right_bottle_cross_contact"),
+                                    ("hand_hand", "hand_hand_contact"))},
             "right_sidewall_tripod_ratio": right_ratio,
             "maximum_bottle_drift_m": max(row["bottle_drift_from_replay_m"] for row in rows),
             "maximum_bottle_rotation_rad": max(row["bottle_rotation_from_replay_rad"] for row in rows),
@@ -279,6 +385,8 @@ def main():
             "maximum_right_net_body_force_n": max_right_force,
             "initial_min_contact_separation_m": (min_separation if math.isfinite(min_separation)
                                                  else None),
+            "minimum_contact_separation_m": (minimum_separation
+                                              if math.isfinite(minimum_separation) else None),
             "maximum_thread_error_m": max(abs(row["thread_error_m"]) for row in rows),
             "ground_contact_any": any(row["ground_contact"] for row in rows),
             "failure_any": any(row["failure"] for row in rows),
@@ -309,14 +417,28 @@ def main():
         result["diagnostic_pass"] = (
             args.spin_reset_override is None and args.resistance_scale == 1.0
             and not args.ablate_right_cap_contact and args.ablate_right_digit is None
+            and args.mimic_natural_frequency is None and physics_match
+            and args.right_middle_pip_target_offset == 0.0
             and max(reset_error.values()) < 1e-3 and result["strict_success_reached"]
             and left_ratio > 0.8 and right_ratio > 0.8
             and result["maximum_bottle_drift_m"] < 0.02
             and result["maximum_bottle_rotation_rad"] < math.radians(10)
             and max(max_left_force, max_right_force) < 100
             and min_separation is not None and min_separation >= -0.002
+            and minimum_separation >= -0.002
             and result["maximum_thread_error_m"] < 0.001
             and not result["ground_contact_any"] and not result["failure_any"])
+        if args.capture_final_candidate:
+            result["diagnostic_candidate"] = asdict(capture_mimic_grasp_sample(
+                env, sample,
+                source="pgs_physx_settled_candidate_requires_fresh_reset_replay"
+                if args.solver_type == "pgs" else sample.source,
+                metadata_extra={
+                    "solver_type": args.solver_type,
+                    "enable_external_forces_every_iteration": args.external_forces_every_iteration,
+                    "source_replay": str(args.output),
+                    "cross_solver_seed": not physics_match,
+                }))
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(result, indent=2) + "\n")
         print("MIMIC_GRASP_REPLAY", json.dumps({
@@ -326,9 +448,15 @@ def main():
                 "maximum_bottle_rotation_rad", "initial_min_contact_separation_m",
                 "maximum_left_net_body_force_n", "maximum_right_net_body_force_n")
         }), flush=True)
+    except BaseException as exc:
+        print(f"MIMIC_REPLAY_EXCEPTION {type(exc).__name__}: {exc!r}", flush=True)
+        raise
     finally:
+        print("MIMIC_REPLAY_PHASE cleanup", flush=True)
         env.close()
         app.close()
+        if args.mimic_natural_frequency is not None:
+            env_module.author_mimic_thread = ordinary_author
 
 
 if __name__ == "__main__":

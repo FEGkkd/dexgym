@@ -23,7 +23,9 @@ def _parser() -> argparse.ArgumentParser:
                         help="Validated stable bank for a controlled bimanual training round")
     parser.add_argument("--stable_reset_probability", type=float)
     parser.add_argument("--thread_backend", choices=("legacy_d6", "mimic"),
-                        help="Bimanual bottle thread solver; mimic requires pregrasp-only Reset")
+                        help="Bimanual bottle thread solver")
+    parser.add_argument("--solver_type", choices=("tgs", "pgs"),
+                        help="PhysX solver; validated Mimic stable bank currently requires PGS")
     parser.add_argument("--right_cap_contact_gate",
                         choices=("site_sidewall_proxy", "body_only", "manifold_sidewall"),
                         help="Bimanual right-cap reward gate; body_only reproduces older rounds")
@@ -34,6 +36,10 @@ def _parser() -> argparse.ArgumentParser:
                         help="Controlled cap approach reward topology; full_five reproduces older rounds")
     parser.add_argument("--finger_increment_scale", type=float,
                         help="Controlled bimanual finger target increment in rad/action")
+    parser.add_argument("--wrist_translation_scale", type=float,
+                        help="Controlled bimanual wrist translation increment in m/action")
+    parser.add_argument("--init_action_std", type=float,
+                        help="Initial normalized Gaussian action std for a controlled PPO ablation")
     parser.add_argument("--solve_articulation_contact_last", action="store_true",
                         help="PhysX contact-last articulation solve order for a controlled experiment")
     parser.add_argument("--source_bank_snapshot", type=Path, action="append",
@@ -54,7 +60,10 @@ def main(argv: list[str] | None = None) -> None:
     if (args.stable_train_bank is not None or
             args.stable_reset_probability is not None or
             args.source_bank_snapshot or args.finger_increment_scale is not None or
+            args.wrist_translation_scale is not None or
+            args.init_action_std is not None or
             args.thread_backend is not None or
+            args.solver_type is not None or
             args.right_cap_contact_gate is not None or
             args.right_contact_balance_weight is not None or
             args.right_cap_proximity_mode is not None or
@@ -66,11 +75,15 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit("--stable_reset_probability must be in [0, 1]")
     if args.finger_increment_scale is not None and args.finger_increment_scale <= 0:
         raise SystemExit("--finger_increment_scale must be positive")
+    if args.wrist_translation_scale is not None and args.wrist_translation_scale <= 0:
+        raise SystemExit("--wrist_translation_scale must be positive")
+    if args.init_action_std is not None and not 0.01 <= args.init_action_std <= 0.65:
+        raise SystemExit("--init_action_std must be in [0.01, 0.65]")
     if args.right_contact_balance_weight is not None and not 0 <= args.right_contact_balance_weight <= 1:
         raise SystemExit("--right_contact_balance_weight must be in [0, 1]")
-    if args.thread_backend == "mimic" and (
-            args.stable_reset_probability != 0 or args.stable_train_bank is not None):
-        raise SystemExit("Mimic training requires --stable_reset_probability 0 and no legacy stable bank")
+    if args.thread_backend == "mimic" and args.stable_reset_probability != 0 and (
+            args.solver_type != "pgs" or args.stable_train_bank is None):
+        raise SystemExit("Mimic stable resets require --solver_type pgs and a validated --stable_train_bank")
     if args.video:
         args.enable_cameras = True
     from isaaclab.app import AppLauncher
@@ -98,6 +111,8 @@ def main(argv: list[str] | None = None) -> None:
             env_cfg.stable_reset_probability = args.stable_reset_probability
         if args.thread_backend is not None:
             env_cfg.thread_backend = args.thread_backend
+        if args.solver_type is not None:
+            env_cfg.sim.physics.solver_type = 1 if args.solver_type == "tgs" else 0
         if args.right_cap_contact_gate is not None:
             env_cfg.right_cap_contact_gate = args.right_cap_contact_gate
         if args.right_contact_balance_weight is not None:
@@ -106,9 +121,13 @@ def main(argv: list[str] | None = None) -> None:
             env_cfg.right_cap_proximity_mode = args.right_cap_proximity_mode
         if args.finger_increment_scale is not None:
             env_cfg.finger_increment_scale = args.finger_increment_scale
+        if args.wrist_translation_scale is not None:
+            env_cfg.wrist_translation_scale = args.wrist_translation_scale
         if args.solve_articulation_contact_last:
             env_cfg.sim.physics.solve_articulation_contact_last = True
         agent_cfg = cli_args.parse_rsl_rl_cfg(args.task, args)
+        if args.init_action_std is not None:
+            agent_cfg.actor.distribution_cfg.init_std = args.init_action_std
         if args.max_iterations is not None:
             agent_cfg.max_iterations = args.max_iterations
         agent_cfg = handle_deprecated_rsl_rl_cfg(agent_cfg, metadata.version("rsl-rl-lib"))

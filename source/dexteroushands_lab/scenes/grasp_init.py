@@ -234,6 +234,31 @@ class GraspInitSample:
                     raise ValueError("Bimanual bank requires hand-hand contact monitoring")
                 if metrics.get("fresh_process_replay_passed") is not True:
                     raise ValueError("Bimanual bank requires fresh-process Reset replay")
+            elif metrics.get("contact_evidence_version") == "mimic_force_opposition_v1":
+                if (self.metadata.get("solver_type") != "pgs"
+                        or self.metadata.get("wrist_control_mode") != "pose_command_wrist"):
+                    raise ValueError("Mimic grasp bank requires PGS and pose-command wrists")
+                for key in ("opposing_contact_coverage_ratio", "right_sidewall_tripod_ratio"):
+                    ratio = metrics.get(key)
+                    if not isinstance(ratio, (int, float)) or not math.isfinite(ratio) or not .8 < ratio <= 1.:
+                        raise ValueError(f"Mimic grasp lacks sustained contact topology: {key}")
+                worst = metrics.get("minimum_separation_m")
+                if not isinstance(worst, (int, float)) or not math.isfinite(worst) or worst < -depth_guard:
+                    raise ValueError("Mimic grasp exceeded the penetration guard")
+                cross = metrics.get("cross_contact_ratios")
+                if not isinstance(cross, dict) or any(
+                    not isinstance(cross.get(key), (int, float))
+                    or not math.isfinite(cross[key]) or not 0 <= cross[key] <= .1
+                    for key in ("left_cap", "right_bottle", "hand_hand")
+                ):
+                    raise ValueError("Mimic grasp has invalid cross-contact")
+                if metrics.get("hand_hand_monitored") is not True:
+                    raise ValueError("Mimic grasp requires measured hand-hand contact")
+                if metrics.get("fresh_process_replay_passed") is not True:
+                    raise ValueError("Mimic grasp requires a fresh-process Reset replay")
+                pitch = metrics.get("max_thread_pitch_error_m")
+                if not isinstance(pitch, (int, float)) or not math.isfinite(pitch) or pitch > 5e-5:
+                    raise ValueError("Mimic screw pitch error exceeded the 0.05 mm guard")
             else:
                 coverage = metrics.get("opposing_contact_coverage_ratio")
                 if (not isinstance(coverage, (int, float)) or not math.isfinite(coverage)

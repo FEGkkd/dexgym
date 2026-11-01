@@ -22,6 +22,7 @@ parser.add_argument("--stable-eval-bank", type=Path,
                     help="Separate physically validated stable bank for evaluation only")
 parser.add_argument("--source", choices=("mixed", "stable", "pregrasp"), default="mixed")
 parser.add_argument("--thread-backend", choices=("legacy_d6", "mimic"), default="legacy_d6")
+parser.add_argument("--solver-type", choices=("tgs", "pgs"), default="tgs")
 parser.add_argument("--right-cap-contact-gate",
                     choices=("site_sidewall_proxy", "body_only", "manifold_sidewall"),
                     default="manifold_sidewall")
@@ -34,6 +35,8 @@ parser.add_argument("--thread-axial-stiffness", type=float,
                     help="Controlled thread stiffness ablation in N/m; default uses task config")
 parser.add_argument("--finger-increment-scale", type=float,
                     help="Controlled finger target-increment ablation in rad/action")
+parser.add_argument("--wrist-translation-scale", type=float,
+                    help="Controlled wrist translation increment ablation in m/action")
 parser.add_argument("--thread-trace-output", type=Path,
                     help="Optional one-environment 500 Hz thread load trace JSON")
 parser.add_argument("--thread-trace-substeps", type=int, default=500)
@@ -60,8 +63,9 @@ if args.contact_point_output and args.num_envs != 1:
     parser.error("--contact-point-output requires --num-envs 1")
 if args.capture_success_state_output and (args.task != "grasp_hold" or args.thread_backend != "mimic"):
     parser.error("--capture-success-state-output requires GraspHold with the mimic backend")
-if args.thread_backend == "mimic" and (args.source != "pregrasp" or args.stable_eval_bank):
-    parser.error("mimic evaluation currently requires --source pregrasp and no legacy stable bank")
+if args.thread_backend == "mimic" and args.source != "pregrasp" and (
+        args.source != "stable" or not args.stable_eval_bank or args.solver_type != "pgs"):
+    parser.error("mimic stable evaluation requires --source stable, a validated bank and PGS")
 if args.thread_backend == "mimic" and args.thread_trace_output:
     parser.error("legacy explicit-wrench thread trace is unavailable for the mimic backend")
 app = AppLauncher(args).app
@@ -82,6 +86,7 @@ cfg.scene.num_envs = args.num_envs
 cfg.sim.device = args.device
 cfg.seed = args.seed
 cfg.thread_backend = args.thread_backend
+cfg.sim.physics.solver_type = 1 if args.solver_type == "tgs" else 0
 cfg.right_cap_contact_gate = args.right_cap_contact_gate
 if not 0 <= args.right_contact_balance_weight <= 1:
     parser.error("--right-contact-balance-weight must be in [0, 1]")
@@ -96,6 +101,10 @@ if args.finger_increment_scale is not None:
     if args.finger_increment_scale <= 0:
         parser.error("--finger-increment-scale must be positive")
     cfg.finger_increment_scale = args.finger_increment_scale
+if args.wrist_translation_scale is not None:
+    if args.wrist_translation_scale <= 0:
+        parser.error("--wrist-translation-scale must be positive")
+    cfg.wrist_translation_scale = args.wrist_translation_scale
 if args.solver_position_iterations is not None:
     if not 1 <= args.solver_position_iterations <= 255:
         parser.error("--solver-position-iterations must be in [1, 255]")
@@ -376,6 +385,8 @@ try:
                "stable_eval_bank_path": str(args.stable_eval_bank) if args.stable_eval_bank else None,
                "thread_axial_stiffness_n_per_m": cfg.thread_axial_stiffness,
                "finger_increment_scale_rad": cfg.finger_increment_scale,
+               "wrist_translation_scale_m": cfg.wrist_translation_scale,
+               "solver_type": args.solver_type,
                "solver_position_iterations": cfg.sim.physics.max_position_iteration_count,
                "solve_articulation_contact_last": cfg.sim.physics.solve_articulation_contact_last,
                "no_right_cap_contact_counterfactual": args.no_right_cap_contact,
@@ -387,7 +398,10 @@ try:
                "mean_step_metrics": {name: value / action_samples
                                      for name, value in step_metric_sums.items()},
                "same_family_stable_evaluation": (
-                   None if args.stable_eval_bank or args.thread_backend == "mimic" else True),
+                   True if args.stable_eval_bank and len({
+                       row["metadata"].get("validation_family", "unspecified")
+                       for row in json.loads(args.stable_eval_bank.read_text())}) <= 1
+                   else None if args.stable_eval_bank or args.thread_backend == "mimic" else True),
                "groups": {}}
     for name, rows in results.items():
         summary["groups"][name] = {

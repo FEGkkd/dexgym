@@ -31,7 +31,8 @@ from dexteroushands_lab.scenes.grasp_init import grasp_sample_from_dict
 
 from .task_contract import ACTOR_FIELDS, CRITIC_FIELDS
 from .reward_terms import (
-    digit_contact_score, grasp_contact_reward, physically_supported_turn_reward,
+    GRASP_SUCCESS_BONUS, CAP_TURN_SUCCESS_BONUS, time_integrated_contact_reward,
+    digit_contact_score, physically_supported_turn_reward,
     suspended_bottle, terminal_failure_penalty, thread_opening_progress,
     physically_valid_grasp, thread_error_penalty, cap_turn_physics_valid,
     cylinder_surface_proximity, bottle_hold_stability,
@@ -68,7 +69,9 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         if cfg.right_cap_proximity_mode not in ("full_five", "sidewall_tripod"):
             raise ValueError("Unknown right cap proximity mode")
         if cfg.thread_backend == "mimic" and cfg.stable_reset_probability != 0:
-            raise ValueError("Legacy stable grasp bank violates hard-pitch mimic geometry; use pregrasp resets")
+            if (cfg.sim.physics.solver_type != 0 or not (
+                    cfg.stable_train_bank_path or cfg.stable_eval_bank_path)):
+                raise ValueError("Mimic stable resets require PGS and an external validated Mimic bank")
         self._mimic_backend = cfg.thread_backend == "mimic"
 
         self.bottle_cfg = BottleConfig(
@@ -199,7 +202,12 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         stable = [stable[i] for i in stable_ids]
         pre = [pre[i] for i in pre_ids]
         if self._mimic_backend:
-            for sample in pre:
+            if self.cfg.stable_reset_probability:
+                if any(s.metadata.get("solver_type") != "pgs"
+                       or s.validation.get("contact_evidence_version") != "mimic_force_opposition_v1"
+                       for s in stable):
+                    raise RuntimeError("External stable bank lacks validated PGS Mimic evidence")
+            for sample in pre + (stable if self.cfg.stable_reset_probability else []):
                 geometry = mimic_reset_geometry(sample.bottle.root_pose,
                                                  sample.cap.root_pose,
                                                  sample.thread_initial_angle_rad,
@@ -207,7 +215,7 @@ class BimanualBottleDirectEnv(DirectRLEnv):
                 if (abs(geometry["pitch_error_m"]) > 5e-5
                         or geometry["lateral_m"] > 1e-4
                         or abs(geometry["twist_error_rad"]) > 0.01):
-                    raise RuntimeError("Pregrasp Reset bank is incompatible with the mimic screw")
+                    raise RuntimeError("Reset bank is incompatible with the Mimic screw")
         self._stable_count = len(stable)
         samples = stable + pre
         for sample in samples:
@@ -624,22 +632,26 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         drift_penalty = (m["bottle_displacement"] - 0.02).clamp_min(0).clamp(max=0.1) * 20
         zero = torch.zeros_like(holding)
         if self.cfg.task_kind == "grasp_hold":
-            contact_reward = grasp_contact_reward(m["left_contact_score"],
-                                                   m["right_contact_score"])
+            # The 5 s horizon has up to 250 policy steps. Integrate dense
+            # contact reward in seconds so an episode that avoids the 0.5 s
+            # success gate cannot outscore a successful early termination.
+            contact_reward, holding_reward = time_integrated_contact_reward(
+                m["left_contact_score"], m["right_contact_score"], holding,
+                dt=self.step_dt, task_kind="grasp_hold")
             progress_reward = zero
             constraint_penalty = thread_error_penalty(self._latest_thread.constraint_error)
-            holding_reward = holding
-            success_bonus = 5.0 * (self._stable_steps == 25).float()
+            success_bonus = GRASP_SUCCESS_BONUS * (self._stable_steps == 25).float()
         else:
-            contact_reward = 0.2 * m["left_contact_score"] + 0.2 * m["right_contact_score"]
+            contact_reward, holding_reward = time_integrated_contact_reward(
+                m["left_contact_score"], m["right_contact_score"], holding,
+                dt=self.step_dt, task_kind="cap_turn_30")
             progress_reward = physically_supported_turn_reward(
                 m["opening"], self._previous_open,
                 m["axial_travel"] - m["axial_goal"],
                 m["turn_support"] & (m["axial_travel"] > 0),
                 axial_tolerance_m=self.cfg.cap_pitch_tolerance_m)
             constraint_penalty = -10.0 * self._latest_thread.constraint_error.abs().clamp(max=0.01)
-            holding_reward = 0.5 * holding
-            success_bonus = 25.0 * (self._success_steps == 5).float()
+            success_bonus = CAP_TURN_SUCCESS_BONUS * (self._success_steps == 5).float()
         failure_penalty = terminal_failure_penalty(self.extras["phase1_episode"]["failure"])
         terms = {"contact": contact_reward, "approach": 0.3 * approach,
                  "holding": holding_reward, "progress": progress_reward,

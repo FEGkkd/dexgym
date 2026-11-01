@@ -3,6 +3,7 @@
 import argparse
 import json
 import time
+from pathlib import Path
 
 from isaaclab.app import AppLauncher
 
@@ -11,6 +12,8 @@ parser.add_argument("--num-envs", type=int, default=1)
 parser.add_argument("--steps", type=int, default=10)
 parser.add_argument("--task", choices=("grasp_hold", "cap_turn_30"), default="grasp_hold")
 parser.add_argument("--thread-backend", choices=("legacy_d6", "mimic"), default="legacy_d6")
+parser.add_argument("--solver-type", choices=("tgs", "pgs"), default="tgs")
+parser.add_argument("--stable-train-bank", type=Path)
 parser.add_argument("--right-cap-contact-gate",
                     choices=("body_only", "site_sidewall_proxy", "manifold_sidewall"),
                     default="manifold_sidewall")
@@ -30,8 +33,12 @@ cfg = GraspHoldDirectEnvCfg() if args.task == "grasp_hold" else CapTurn30DirectE
 cfg.scene.num_envs = args.num_envs
 cfg.sim.device = args.device
 cfg.thread_backend = args.thread_backend
+cfg.sim.physics.solver_type = 1 if args.solver_type == "tgs" else 0
 cfg.right_cap_contact_gate = args.right_cap_contact_gate
-if args.thread_backend == "mimic":
+if args.stable_train_bank:
+    cfg.stable_train_bank_path = str(args.stable_train_bank)
+    cfg.stable_reset_probability = 1.0
+elif args.thread_backend == "mimic":
     cfg.stable_reset_probability = 0.0
 if args.solve_articulation_contact_last:
     cfg.sim.physics.solve_articulation_contact_last = True
