@@ -310,9 +310,10 @@ Measured on this workstation with Isaac Sim 6.0.1 / Isaac Lab 3.0:
 These checks establish a running vectorized environment, **not** a learned
 grasp or contact-driven cap turn. The natural pregrasp source has no
 demonstrated stable hold in the hard-pitch backend. Independent policy
-evaluation, contact topology, PPO learning and cross-family generalization
-were subsequently probed in the [first hard-pitch PPO round](phase1-mimic-ppo-round.md).
-That round did not meet the learning target. The previous strict CapTurn success rates refer to the legacy
+evaluation, contact topology and PPO learning were subsequently probed in the
+[first hard-pitch PPO round](phase1-mimic-ppo-round.md). Cross-family
+generalization remains untested. That round did not meet the learning target.
+The previous strict CapTurn success rates refer to the legacy
 D6 backend only and are not transferred to Mimic.
 
 ```bash
