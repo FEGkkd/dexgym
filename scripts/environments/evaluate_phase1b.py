@@ -14,6 +14,8 @@ parser.add_argument("--policy", choices=("learned", "zero", "random", "no_right"
 parser.add_argument("--level", choices=("A", "B", "D"), default="A")
 parser.add_argument("--reward-profile", choices=("baseline", "contact_coverage"), default="baseline")
 parser.add_argument("--action-distribution", choices=("gaussian", "tanh"), default="gaussian")
+parser.add_argument("--pgs-position-iterations", type=int, choices=(8, 16, 32), default=8,
+                    help="Controlled PGS solver ablation; the trained task uses eight iterations")
 parser.add_argument("--episodes", type=int, default=200)
 parser.add_argument("--num-envs", type=int, default=64)
 parser.add_argument("--seed", type=int, default=9117)
@@ -44,6 +46,8 @@ def main():
     cfg = PregraspCapTurn30DirectEnvCfg()
     cfg.scene.num_envs = args.num_envs
     cfg.sim.device = args.device
+    cfg.sim.physics.min_position_iteration_count = args.pgs_position_iterations
+    cfg.sim.physics.max_position_iteration_count = args.pgs_position_iterations
     cfg.seed = args.seed
     cfg.unified_reward_profile = args.reward_profile
     if args.level == "D":
@@ -207,6 +211,7 @@ def main():
             "level": args.level, "held_out": True, "policy": args.policy,
             "reward_profile": args.reward_profile,
             "action_distribution": args.action_distribution,
+            "pgs_position_iterations": args.pgs_position_iterations,
             "checkpoint": str(args.checkpoint) if args.checkpoint else None,
             "seed": args.seed, "episodes": len(rows), "num_envs": args.num_envs,
             "steps": steps, "elapsed_s": time.monotonic() - start,
@@ -237,6 +242,7 @@ def main():
                 "policy": args.policy, "checkpoint": summary["checkpoint"],
                 "episode_success": rows[0]["success"],
                 "policy_hz": 50, "physx_hz": 500,
+                "pgs_position_iterations": args.pgs_position_iterations,
                 "cap_outer_radius_m": raw.bottle_cfg.cap_outer_radius,
                 "cap_height_m": raw.bottle_cfg.cap_height,
                 "rows": physics_trace,

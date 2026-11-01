@@ -467,6 +467,33 @@ articulation trajectory rather than a universal unit conversion or fixed
 sample timing offset. Its trace is
 `artifacts/phase1b/eval_tanh_model699_B_nohands_500hz_trace.json`.
 
+### Controlled PGS position-iteration probe
+
+The independent evaluator now accepts `--pgs-position-iterations {8,16,32}`.
+It sets both `PhysxCfg` position-iteration bounds to the selected value;
+the task and its trained checkpoint retain eight as the default. The
+installed Isaac Lab `PhysxCfg` documentation states that these bounds
+clamp each physics actor's requested solver count. This is a configuration
+and trajectory comparison; it does not independently read back the
+effective iteration count inside PhysX. The same held-out level-B local
+Reset row (index 1), checkpoint `model_699.pt`, evaluation seed 9117,
+50-Hz policy and 500-Hz simulation were used for one episode per setting.
+
+| Configured position iterations | Success | Substeps | Pose opening (rad) | Integrated PhysX screw velocity (rad) | Velocity MAE vs pose difference (rad/s) | Maximum velocity bias (rad/s) | Right-cap manifold points | Minimum signed separation (mm) | Maximum constraint error (μm) |
+| ---: | :---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 8 | Yes | 120 | 0.738309 | 0.684361 | 1.577223 | 7.460209 | 962 | −1.539 | 6.300 |
+| 16 | Yes | 110 | 0.690272 | 0.706008 | 1.650264 | 6.098259 | 870 | −1.201 | 6.854 |
+| 32 | Yes | 120 | 0.788967 | 0.633545 | 1.319192 | 7.884022 | 940 | −1.543 | 9.567 |
+
+Increasing the configured position iterations did not consistently remove
+the loaded velocity disagreement or signed-separation concern in this
+single-trajectory probe. It also changes the contact trajectory and
+episode length, so the table is not a per-substep paired comparison.
+No solver setting was adopted from this result. The ignored raw traces are
+`artifacts/phase1b/eval_tanh_model699_B_500hz_trace.json`,
+`artifacts/phase1b/eval_tanh_model699_B_pgs16_500hz_trace.json` and
+`artifacts/phase1b/eval_tanh_model699_B_pgs32_500hz_trace.json`.
+
 The seed-1101 warm-start training curve shows mean episode reward rising
 from approximately 10 at the first new update to 34 by roughly 100 new updates, while
 the measured bilateral stable-support rate rises to roughly 59% at that
