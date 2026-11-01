@@ -92,8 +92,10 @@ with finite observations and rewards, zero cap-cache reset error and
 7,416 environment steps/s in the measured stepping interval. This short
 zero-action run checks throughput and state consistency, not grasp success.
 
-The cumulative recorded PPO count is **23,990,272** transitions out of the
-25-million limit; evaluation and short probes add further interactions.
+The cumulative logged PPO count is **24,124,160** transitions out of the
+25-million limit, as corrected by the [full event-log budget audit](phase1-budget-audit.md).
+Evaluation, short probes, and interrupted unlogged rollouts add further
+interactions; the remaining total budget is therefore less than 875,840.
 Additional identical PPO updates have no evidence-based justification.
 The immediate blocker is the lack of a Mimic-compatible dynamically stable
 grasp Reset family: the existing legacy stable bank violates the hard-pitch

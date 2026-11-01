@@ -95,9 +95,11 @@ held-out set, true right tripod and bilateral grasp occurred in 0% of policy
 steps; 100% of episodes failed. These measurements support a contact-topology
 and reset-distribution bottleneck, not a PPO optimizer failure.
 
-The recorded cumulative **PPO** interaction after this round is
-23,171,072 environment transitions out of the 25-million research budget.
-Evaluation and short physical probes add smaller amounts. Further identical
+The corrected cumulative **logged PPO** interaction after this round is
+23,304,960 environment transitions out of the 25-million research budget,
+as reconstructed in the [full event-log budget audit](phase1-budget-audit.md).
+Evaluation, physical probes, and interrupted unlogged rollouts add an
+uncounted amount. Further identical
 PPO extension is paused so the remaining budget can be used only after a
 Mimic-compatible, dynamically replayable stable grasp state exists.
 
