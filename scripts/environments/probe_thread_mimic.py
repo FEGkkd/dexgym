@@ -18,6 +18,7 @@ import json
 import math
 from pathlib import Path
 import tempfile
+import time
 
 from isaaclab.app import AppLauncher
 
@@ -36,6 +37,10 @@ parser.add_argument("--real-geometry", action="store_true",
                     help="Use generated bottle/cap native USD instead of plain diagnostic cylinders")
 parser.add_argument("--no-self-collision", action="store_true",
                     help="Disable bottle-cap collision within the mimic articulation")
+parser.add_argument("--skip-contact-audit", action="store_true",
+                    help="Skip per-env contact views for large-batch articulation throughput checks")
+parser.add_argument("--probe-rigid-views", action="store_true",
+                    help="Check whether tensor rigid views can read Bottle/Cap articulation links")
 parser.add_argument("--contact-proxy", action="store_true",
                     help="Push a separate dynamic sphere into cap 0 to verify external contact")
 parser.add_argument("--selective-reset", action="store_true",
@@ -65,8 +70,15 @@ if args.num_envs < 1 or args.steps < 1:
     parser.error("num-envs and steps must be positive")
 if args.contact_proxy and not args.real_geometry:
     parser.error("contact-proxy requires real-geometry")
+if args.skip_contact_audit and not args.no_self_collision:
+    parser.error("skip-contact-audit requires no-self-collision")
 if args.implicit_drive and args.resistance:
     parser.error("implicit-drive and resistance are separate controlled experiments")
+if not math.isfinite(args.initial_angle_rad) or abs(args.initial_angle_rad) > 6 * math.pi:
+    parser.error("initial-angle-rad must be finite and within three turns")
+if args.resistance_damping is not None and (not math.isfinite(args.resistance_damping)
+                                            or args.resistance_damping <= 0):
+    parser.error("resistance-damping must be finite and positive")
 app = AppLauncher(args).app
 
 import torch
@@ -112,7 +124,10 @@ def _assembly(stage, env: int, geometry_paths=None):
     q = Gf.Quatf(tilt.GetQuat())
     if env == 0:
         print("MIMIC_AUTHORED_QUAT_WXYZ", q.GetReal(), tuple(q.GetImaginary()), flush=True)
-    b = Gf.Vec3f(env * 1.0, 0.0, 0.5)
+    # A square grid keeps world coordinates small at 1024+ environments;
+    # a kilometre-long row would lose micrometres in float32 link differences.
+    grid_width = math.ceil(math.sqrt(args.num_envs))
+    b = Gf.Vec3f(float(env % grid_width), float(env // grid_width), 0.5)
     offset = tilt.TransformDir(Gf.Vec3d(0, 0, CAP_OFFSET_M))
     c = Gf.Vec3f(b[0] + offset[0], b[1] + offset[1], b[2] + offset[2])
     if geometry_paths is None:
@@ -208,6 +223,18 @@ def main():
     if view.shared_metatype.fixed_base:
         raise RuntimeError("Bottle is unexpectedly world-fixed")
     print("MIMIC_STAGE topology", names, links, flush=True)
+    rigid_view_result = None
+    if args.probe_rigid_views:
+        rigid_view_result = {}
+        for body in ("Bottle", "Cap"):
+            rigid_view = physics_view.create_rigid_body_view(f"/World/envs/env_*/{body}")
+            if rigid_view is None:
+                rigid_view_result[body] = {"created": False}
+            else:
+                rigid_view_result[body] = {
+                    "created": True, "count": rigid_view.count,
+                    "first_transform_xyzw": wp.to_torch(rigid_view.get_transforms())[0].cpu().tolist(),
+                }
     slide_id, spin_id, cap_id = names.index("SlideJoint"), names.index("SpinJoint"), links.index("Cap")
     if args.initial_angle_rad:
         init_q = wp.to_torch(view.get_dof_positions()).reshape(args.num_envs, -1).clone()
@@ -231,7 +258,7 @@ def main():
                                .reshape(args.num_envs, len(links), 7)
                                .detach().cpu().tolist())
     contact_views = []
-    if args.real_geometry:
+    if args.real_geometry and not args.skip_contact_audit:
         sim_view = PhysxManager.get_physics_sim_view()
         for env in range(args.num_envs):
             root = f"/World/envs/env_{env}"
@@ -279,6 +306,9 @@ def main():
     first_proxy_contact = None
     selective_reset_result = None
     traces = []
+    if args.device.startswith("cuda"):
+        torch.cuda.synchronize()
+    step_start = time.perf_counter()
     for step in range(args.steps):
         resistance_terms = None
         if resistance is not None:
@@ -413,9 +443,14 @@ def main():
                            "proxy_position_w_m": (wp.to_torch(proxy_body_view.get_transforms())
                                                     [:, :3].detach().cpu().tolist()
                                                     if args.contact_proxy else None)})
+    if args.device.startswith("cuda"):
+        torch.cuda.synchronize()
+    step_wall_s = time.perf_counter() - step_start
+    gpu_used_bytes = (lambda free, total: total - free)(*torch.cuda.mem_get_info()) if args.device.startswith("cuda") else None
     result = {"backend": "Isaac Sim 6.0.1 PhysX GPU floating articulation mimic probe",
               "mimic_enabled": not args.no_mimic,
               "real_geometry": args.real_geometry,
+              "contact_audit_enabled": args.real_geometry and not args.skip_contact_audit,
               "self_collision_enabled": not args.no_self_collision,
               "contact_proxy_enabled": args.contact_proxy,
               "resistance_enabled": args.resistance,
@@ -423,6 +458,9 @@ def main():
               "resistance_damping_nm_s_rad": (resistance.config.breakaway_damping
                                               if resistance is not None else None),
               "num_envs": args.num_envs, "steps": args.steps, "physics_dt_s": DT_S,
+              "step_wall_s": step_wall_s,
+              "env_physics_steps_per_s": args.num_envs * args.steps / step_wall_s,
+              "gpu_used_bytes_end": gpu_used_bytes,
               "pitch_m": PITCH_M, "tilt_deg": args.tilt_deg,
               "bottle_local_axis_w": axis,
               "slide_anchor_sign": args.slide_anchor_sign,
@@ -430,6 +468,7 @@ def main():
               "initial_angle_rad": args.initial_angle_rad,
               "test_torque_nm": args.torque, "test_axial_force_n": args.axial_force,
               "dof_names": names, "link_names": links,
+              "rigid_view_probe": rigid_view_result,
               "initial_link_positions_w_m": initial_link_positions,
               "initial_link_transforms_xyzw": initial_link_transforms,
               "max_abs_pitch_error_m": max_error,
@@ -480,6 +519,7 @@ def main():
         result["physics_assertions"] = {"passed": not failures, "failures": failures}
     print("MIMIC_PROBE", json.dumps({key: result[key] for key in (
         "num_envs", "steps", "real_geometry", "mimic_enabled", "self_collision_enabled",
+        "env_physics_steps_per_s", "gpu_used_bytes_end",
         "max_abs_pitch_error_m", "max_abs_physical_pitch_error_m",
         "max_lateral_offset_m", "max_peer_joint_motion",
         "max_internal_contact_force_n", "max_proxy_contact_force_n",

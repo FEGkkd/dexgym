@@ -119,6 +119,19 @@ exactly zero. The final angle remained 0.5 rad; maximum physical pitch
 error was 0.16 µm. The Reset code refreshes articulation link kinematics
 after indexed tensor writes and before contact is read.
 
+The same complete USD articulation also loaded and stepped in **1024
+environments** on the GPU. A 200-step zero-load run, with per-env contact
+views omitted for this throughput measurement, took 0.357 s inside the
+physics loop: about 574,000 environment physics steps/s. GPU memory used
+at the end of that process was about 5.0 GB, including Isaac Sim. This is
+an isolated three-link bottle fixture, **not** a 1024-env bimanual RL
+throughput or contact benchmark. A separate 1024-env, 30-degree tilt test
+restored one 0.5 rad engaged bottle at step 50: immediate peer state change
+zero, max physical pitch error 0.48 µm and lateral error 0.93 µm. The
+fixture uses a 32×32 origin grid; a preliminary one-kilometre row produced
+5.8 µm float32 world-coordinate subtraction error and was discarded for
+physical accuracy claims.
+
 ```bash
 scripts/run_isaaclab.sh scripts/environments/probe_thread_mimic.py \
   --real-geometry --no-self-collision --resistance --resistance-damping 0.0001 \
@@ -132,17 +145,46 @@ scripts/run_isaaclab.sh scripts/environments/probe_thread_mimic.py \
   --real-geometry --no-self-collision --implicit-drive --num-envs 16 \
   --selective-reset --steps 100 --tilt-deg 30 --torque 0 --axial-force 0 \
   --initial-angle-rad 0.5 --assert-physics --max-angle-drift 0.01 --headless
+scripts/run_isaaclab.sh scripts/environments/probe_thread_mimic.py \
+  --real-geometry --no-self-collision --skip-contact-audit --implicit-drive \
+  --num-envs 1024 --selective-reset --steps 100 --tilt-deg 30 \
+  --torque 0 --axial-force 0 --initial-angle-rad 0.5 \
+  --assert-physics --max-angle-drift 0.01 --headless
 ```
 
-The fixture still has no fingered hands or 1024-env training test. The next
+### Reset-bank compatibility
+
+`audit_mimic_bank.py` checks each cap's bottle-local axial offset against
+its continuous thread angle before admission to a hard-pitch articulation.
+It also reports lateral offset and cap twist. With a 50 µm pitch tolerance,
+**0/4** committed `phase0e_bimanual_grasp_init_bank.json` stable states
+qualify: their pitch errors are -1.203, -1.232, -1.256 and -1.203 mm. The
+single ignored local composite stable state used by prior PPO also fails
+at -0.457 mm. Their measured cap twist agrees with the stored angle, so
+the primary mismatch is axial. In contrast, **32/32** committed geometric
+`phase0_pregrasp_reset_bank.json` states pass. This says nothing about
+their ability to grasp or hold the bottle. The audit is read-only, and raw
+results are in ignored `artifacts/phase1/`.
+
+```bash
+scripts/run_isaaclab.sh scripts/environments/audit_mimic_bank.py \
+  docs/assets/phase0e_bimanual_grasp_init_bank.json \
+  --output artifacts/phase1/mimic_bank_audit_phase0e.json
+scripts/run_isaaclab.sh scripts/environments/audit_mimic_bank.py \
+  docs/assets/phase0_pregrasp_reset_bank.json --strict \
+  --output artifacts/phase1/mimic_bank_audit_pregrasp.json
+```
+
+The fixture still has no fingered hands or 1024-env **training** test. The next
 physical task is to make the implicit-drive breakaway law transition to the
 configured lower running resistance during slip. Holding the 0.02 N m
 force-limited spring throughout a full turn is not the configured 0.006 N m
 running regime. Batched stiffness, damping, force-limit and target APIs are
 available in the installed tensor backend, but their per-environment dynamic
 switching and contact behavior have not yet been validated. Repair the
-internal collider overlap or
-retain a documented internal collision exclusion, then integrate the
-articulation with the existing contact monitor, Reset banks and RL
-observation/reward path. Only then should prior policies be reevaluated or
-new PPO training begin.
+internal collider overlap or retain a documented internal collision
+exclusion, then integrate the articulation with the existing contact monitor,
+Reset banks and RL observation/reward path. The four legacy stable states
+require physical resynthesis and validation under the hard-pitch constraint;
+their `validated=true` flag refers only to the former soft-coupler scene.
+Only then should prior policies be reevaluated or new PPO training begin.
