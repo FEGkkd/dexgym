@@ -11,7 +11,9 @@ import argparse
 import json
 import math
 from pathlib import Path
+import random
 import tempfile
+import time
 
 from isaaclab.app import AppLauncher
 
@@ -20,6 +22,8 @@ parser.add_argument("--num-envs", type=int, default=1)
 parser.add_argument("--steps", type=int, default=50)
 parser.add_argument("--tilt-deg", type=float, default=0.0)
 parser.add_argument("--initial-angle-rad", type=float, default=0.0)
+parser.add_argument("--reset-repetitions", type=int, default=0)
+parser.add_argument("--random-reset-ids", action="store_true")
 parser.add_argument("--contact-audit", action="store_true")
 parser.add_argument("--right-pregrasp-contact", action="store_true",
                     help="Diagnostic scripted right wrist approach from the geometric bank")
@@ -39,6 +43,7 @@ from isaaclab_physx.physics import PhysxManager
 from dexteroushands_lab.assets.bottle import BottleConfig
 from dexteroushands_lab.assets.bottle.generate_usd import build_bottle_usd
 from dexteroushands_lab.assets.bottle.mimic_thread import author_mimic_thread
+from dexteroushands_lab.assets.bottle.mimic_thread_view import MimicThreadView
 from dexteroushands_lab.assets.bottle.batched_thread import _rotate
 from dexteroushands_lab.assets.wuji_hand2_beta import load_hand2_spec
 from dexteroushands_lab.scenes.batched_contacts import BatchedContactMonitor
@@ -49,6 +54,12 @@ def main():
     cfg = BottleConfig()
     if args.right_pregrasp_contact and args.num_envs != 1:
         raise ValueError("right-pregrasp-contact is a one-environment diagnostic")
+    if args.reset_repetitions < 0 or args.reset_repetitions > 1000:
+        raise ValueError("reset-repetitions must be in [0, 1000]")
+    if args.right_pregrasp_contact and args.reset_repetitions:
+        raise ValueError("Contact probe and repeated Reset are separate diagnostics")
+    if args.random_reset_ids and (args.num_envs < 2 or not args.reset_repetitions):
+        raise ValueError("random-reset-ids requires at least 2 envs and reset repetitions")
     if not math.isfinite(args.approach_speed) or not 0 < args.approach_speed <= 0.1:
         raise ValueError("approach-speed must be in (0, 0.1] m/s")
     pregrasp = None
@@ -106,6 +117,8 @@ def main():
     if set(names) != {"SlideJoint", "SpinJoint"} or set(links) != {"Bottle", "Carriage", "Cap"}:
         raise AssertionError(f"Wrong screw topology: {names}, {links}")
     slide_id, spin_id, cap_id = names.index("SlideJoint"), names.index("SpinJoint"), links.index("Cap")
+    thread_view = MimicThreadView(physics_view, art, cfg, device=args.device,
+                                  num_envs=args.num_envs)
     if len(left.joint_names) != 20 or len(right.joint_names) != 20:
         raise AssertionError("Official hand active finger joints changed")
     if pregrasp is not None:
@@ -116,44 +129,107 @@ def main():
         right.write_joint_position_to_sim_index(position=finger)
         right.write_joint_velocity_to_sim_index(velocity=torch.zeros_like(finger))
         right.set_joint_position_target_index(target=finger)
-    # The Bottle is the articulation root, so it can be translated through
-    # the RigidObject write API. The Cap is a non-root articulation link:
-    # PhysX rejects direct link transform writes. It must follow from the
-    # root transform and two screw DOFs during Reset.
+    # Selective Reset must write the floating articulation root and both
+    # screw DOFs together. A direct Cap RigidObject transform write is invalid.
     first_id = torch.tensor([0], dtype=torch.long, device=args.device)
-    initial_bottle = bottle.data.root_pose_w.torch.clone()
-    initial_cap = cap.data.root_pose_w.torch.clone()
+    if pregrasp is not None:
+        initial = thread_view.read()
+        thread_view.reset(first_id, root_pose_w=initial.root_pose_w[0:1],
+                          root_velocity_w=torch.zeros(1, 6, device=args.device),
+                          theta_rad=torch.zeros(1, device=args.device))
     if pregrasp is None:
-        moved_bottle = initial_bottle[0:1].clone()
+        before = thread_view.read()
+        moved_bottle = before.root_pose_w[0:1].clone()
         moved_bottle[:, 0] += 0.02
-        bottle.write_root_pose_to_sim_index(root_pose=moved_bottle, env_ids=first_id)
-        physics_view.update_articulations_kinematic()
-        bottle_after_write = bottle.data.root_pose_w.torch
-        physical_link_x = wp.to_torch(art.get_link_transforms()).reshape(
-            args.num_envs, len(links), 7)[:, :, 0]
-        if not torch.allclose(bottle_after_write[0, 0], moved_bottle[0, 0], atol=1e-4):
-            raise AssertionError("Bottle RigidObject write cannot move articulation root")
-        if not torch.allclose(physical_link_x[0, cap_id], initial_cap[0, 0] + 0.02, atol=1e-4):
-            raise AssertionError("PhysX Cap link did not follow the translated Bottle root")
-        if args.num_envs > 1 and (not torch.allclose(bottle_after_write[1:], initial_bottle[1:], atol=1e-5)
-                                 or not torch.allclose(physical_link_x[1:, cap_id],
-                                                       initial_cap[1:, 0], atol=1e-5)):
-            raise AssertionError("Selective root write altered a peer environment")
-    if args.initial_angle_rad:
-        q = wp.to_torch(art.get_dof_positions()).reshape(args.num_envs, -1).clone()
-        q[0, spin_id] = args.initial_angle_rad
-        q[0, slide_id] = cfg.thread_sign * cfg.thread_pitch * args.initial_angle_rad / (2 * math.pi)
-        art.set_dof_positions(wp.from_torch(q), wp.from_torch(first_id.to(dtype=torch.int32)))
-        target = wp.to_torch(art.get_dof_position_targets()).reshape(args.num_envs, -1).clone()
-        target[0, spin_id] = args.initial_angle_rad
-        art.set_dof_position_targets(wp.from_torch(target),
-                                     wp.from_torch(first_id.to(dtype=torch.int32)))
-        physics_view.update_articulations_kinematic()
-        measured = wp.to_torch(art.get_dof_positions()).reshape(args.num_envs, -1)
-        if not torch.allclose(measured[0], q[0], atol=1e-5):
-            raise AssertionError("Selective screw DOF Reset did not restore angle and travel")
-        if args.num_envs > 1 and float(measured[1:].abs().max()) > 1e-5:
-            raise AssertionError("Selective screw DOF Reset altered peer environments")
+        thread_view.reset(first_id, root_pose_w=moved_bottle,
+                          root_velocity_w=torch.zeros(1, 6, device=args.device),
+                          theta_rad=torch.tensor([args.initial_angle_rad], device=args.device))
+        after = thread_view.read()
+        if not torch.allclose(after.root_pose_w[0], moved_bottle[0], atol=1e-5):
+            raise AssertionError("Selective root Reset did not restore Bottle pose")
+        local_axis = _rotate(moved_bottle[:, 3:], torch.tensor(
+            [[0.0, 0.0, 1.0]], device=args.device))[0]
+        expected_cap_pos = before.cap_pose_w[0, :3] + torch.tensor(
+            [0.02, 0.0, 0.0], device=args.device)
+        expected_cap_pos += (cfg.thread_sign * cfg.thread_pitch
+                             * args.initial_angle_rad / (2 * math.pi)) * local_axis
+        if not torch.allclose(after.cap_pose_w[0, :3], expected_cap_pos, atol=1e-4):
+            raise AssertionError("Cap link did not follow reset root and local screw travel")
+        if abs(float(after.theta_rad[0]) - args.initial_angle_rad) > 1e-5:
+            raise AssertionError("Selective screw Reset did not restore angle")
+        if args.num_envs > 1 and (
+            not torch.equal(after.root_pose_w[1:], before.root_pose_w[1:])
+            or not torch.equal(after.theta_rad[1:], before.theta_rad[1:])
+            or not torch.equal(after.cap_pose_w[1:], before.cap_pose_w[1:])
+        ):
+            raise AssertionError("Selective screw Reset altered peer environments")
+    max_peer_reset_change = 0.0
+    reset_unique_envs = 0
+    mean_reset_ms = None
+    mean_read_ms = None
+    if args.reset_repetitions:
+        initial_state = thread_view.read()
+        generator = random.Random(2026)
+        selected_envs = set()
+        for repetition in range(args.reset_repetitions):
+            chosen = (generator.randrange(args.num_envs) if args.random_reset_ids else 0)
+            selected_envs.add(chosen)
+            reset_id = torch.tensor([chosen], dtype=torch.long, device=args.device)
+            before_repetition = thread_view.read()
+            target_root = before_repetition.root_pose_w[chosen:chosen + 1].clone()
+            if args.random_reset_ids:
+                target_root[:, 0] += 0.001 if repetition % 2 else -0.001
+            angle = args.initial_angle_rad + (0.1 if repetition % 2 else -0.1)
+            thread_view.reset(reset_id, root_pose_w=target_root,
+                              root_velocity_w=torch.zeros(1, 6, device=args.device),
+                              theta_rad=torch.tensor([angle], device=args.device))
+            current = thread_view.read()
+            if abs(float(current.opening_rad[chosen])) > 1e-5:
+                raise AssertionError("Opening progress was not zeroed by selective Reset")
+            if args.num_envs > 1:
+                peer_mask = torch.ones(args.num_envs, device=args.device, dtype=torch.bool)
+                peer_mask[chosen] = False
+                for field in ("root_pose_w", "root_velocity_w", "cap_pose_w",
+                              "theta_rad", "axial_m", "opening_rad"):
+                    difference = (getattr(current, field)[peer_mask]
+                                  - getattr(before_repetition, field)[peer_mask]).abs().max()
+                    max_peer_reset_change = max(max_peer_reset_change, float(difference))
+                    if float(difference) > 1e-6:
+                        raise AssertionError(f"Selective Reset changed peer {field}")
+        reset_unique_envs = len(selected_envs)
+        all_envs = torch.arange(args.num_envs, device=args.device, dtype=torch.long)
+        thread_view.reset(all_envs, root_pose_w=initial_state.root_pose_w,
+                          root_velocity_w=initial_state.root_velocity_w,
+                          theta_rad=initial_state.theta_rad,
+                          spin_velocity_rad_s=initial_state.spin_velocity_rad_s)
+        restored = thread_view.read()
+        if (not torch.allclose(restored.root_pose_w, initial_state.root_pose_w, atol=1e-5)
+                or not torch.allclose(restored.theta_rad, initial_state.theta_rad, atol=1e-5)
+                or not torch.allclose(restored.cap_pose_w, initial_state.cap_pose_w, atol=1e-5)):
+            raise AssertionError("Full restoration after randomized selective Resets failed")
+        if torch.cuda.is_available():
+            torch.cuda.synchronize()
+        start_reset = time.perf_counter()
+        for repetition in range(args.reset_repetitions):
+            angle = args.initial_angle_rad + (0.1 if repetition % 2 else -0.1)
+            thread_view.reset(first_id, root_pose_w=moved_bottle,
+                              root_velocity_w=torch.zeros(1, 6, device=args.device),
+                              theta_rad=torch.tensor([angle], device=args.device))
+        if torch.cuda.is_available():
+            torch.cuda.synchronize()
+        mean_reset_ms = 1000 * (time.perf_counter() - start_reset) / args.reset_repetitions
+        if torch.cuda.is_available():
+            torch.cuda.synchronize()
+        start_read = time.perf_counter()
+        for _ in range(args.reset_repetitions):
+            _ = thread_view.read()
+        if torch.cuda.is_available():
+            torch.cuda.synchronize()
+        mean_read_ms = 1000 * (time.perf_counter() - start_read) / args.reset_repetitions
+        thread_view.reset(all_envs, root_pose_w=initial_state.root_pose_w,
+                          root_velocity_w=initial_state.root_velocity_w,
+                          theta_rad=initial_state.theta_rad,
+                          spin_velocity_rad_s=initial_state.spin_velocity_rad_s)
     force = torch.zeros((args.num_envs, 3, 3), device=args.device)
     if pregrasp is None:
         force[0, cap_id, 0] = 0.5 * math.sin(tilt)
@@ -278,6 +354,11 @@ def main():
               "max_pitch_error_m": float(pitch_error.abs().max()),
               "max_physical_pitch_error_m": float(physical_pitch_error.abs().max()),
               "tilt_deg": args.tilt_deg, "initial_angle_rad": args.initial_angle_rad,
+              "reset_repetitions": args.reset_repetitions,
+              "reset_unique_envs": reset_unique_envs,
+              "max_peer_reset_change": max_peer_reset_change,
+              "mean_single_env_reset_ms": mean_reset_ms,
+              "mean_batched_read_ms": mean_read_ms,
               "max_unexpected_hand_force_n": max_unexpected_hand_force,
               "peak_right_cap_force_n": peak_right_cap_force,
               "first_contact_points": first_contact_points,
@@ -290,6 +371,11 @@ def main():
         "max_physical_pitch_error_m": result["max_physical_pitch_error_m"],
         "tilt_deg": result["tilt_deg"],
         "initial_angle_rad": result["initial_angle_rad"],
+        "reset_repetitions": result["reset_repetitions"],
+        "reset_unique_envs": result["reset_unique_envs"],
+        "max_peer_reset_change": result["max_peer_reset_change"],
+        "mean_single_env_reset_ms": result["mean_single_env_reset_ms"],
+        "mean_batched_read_ms": result["mean_batched_read_ms"],
         "max_unexpected_hand_force_n": result["max_unexpected_hand_force_n"],
         "peak_right_cap_force_n": result["peak_right_cap_force_n"],
         "first_contact_min_separation_m": min(

@@ -46,6 +46,7 @@ from dexteroushands_lab.assets.bottle import BottleConfig
 from dexteroushands_lab.assets.bottle.generate_usd import build_bottle_usd
 from dexteroushands_lab.assets.bottle.mimic_contract import mimic_reset_geometry
 from dexteroushands_lab.assets.bottle.mimic_thread import author_mimic_thread
+from dexteroushands_lab.assets.bottle.mimic_thread_view import MimicThreadView
 from dexteroushands_lab.assets.bottle.batched_thread import _rotate
 from dexteroushands_lab.assets.wuji_hand2_beta import load_hand2_spec
 from dexteroushands_lab.scenes.batched_contacts import BatchedContactMonitor
@@ -102,20 +103,15 @@ def main():
     articulation = physics_view.create_articulation_view("/World/envs/env_*/Bottle")
     names = list(articulation.shared_metatype.dof_names)
     spin_id, slide_id = names.index("SpinJoint"), names.index("SlideJoint")
-    ids = wp.from_torch(torch.tensor([0], dtype=torch.int32, device=args.device))
-    dofs = wp.to_torch(articulation.get_dof_positions()).reshape(1, -1).clone()
+    thread_view = MimicThreadView(physics_view, articulation, cfg,
+                                  device=args.device, num_envs=1)
     theta = row["thread_initial_angle_rad"]
-    dofs[0, spin_id] = theta
-    dofs[0, slide_id] = cfg.thread_sign * cfg.thread_pitch * theta / (2 * math.pi)
-    articulation.set_dof_positions(wp.from_torch(dofs), ids)
-    articulation.set_dof_velocities(wp.from_torch(torch.zeros_like(dofs)), ids)
-    targets = wp.to_torch(articulation.get_dof_position_targets()).reshape(1, -1).clone()
-    targets[0, spin_id] = theta
-    articulation.set_dof_position_targets(wp.from_torch(targets), ids)
     bottle_pose = torch.tensor(row["bottle"]["root_pose"], device=args.device,
                                dtype=torch.float32)[None]
-    bottle.write_root_pose_to_sim_index(root_pose=bottle_pose)
-    bottle.write_root_velocity_to_sim_index(root_velocity=torch.zeros(1, 6, device=args.device))
+    thread_view.reset(torch.tensor([0], device=args.device),
+                      root_pose_w=bottle_pose,
+                      root_velocity_w=torch.zeros(1, 6, device=args.device),
+                      theta_rad=torch.tensor([theta], device=args.device))
     base_targets = {}
     final_targets = {}
     for hand, side, pose in ((left, "left", left_pose), (right, "right", right_pose)):

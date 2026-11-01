@@ -52,9 +52,11 @@ already moved. That probe's claimed direct Cap write compatibility was wrong
 and was withdrawn. The corrected script writes only Bottle root plus screw
 DOFs and compares `articulation_view.get_link_transforms()` at the no-step
 Reset boundary. It passed 2, 16 and 1024 environment reruns without the
-non-root-write warning. **A formal RL Reset adapter has not been implemented**.
-It must restore the floating articulation root, both screw DOFs, targets and
-velocities atomically, then audit contacts and peer state. Writing an arbitrary
+non-root-write warning. The reusable low-level `MimicThreadView` now restores
+the floating articulation root, both screw DOFs, targets and velocities for
+selected environments. **It is not yet connected to the DirectRLEnv's full
+episode Reset**, which must also restore both hands, contacts and curriculum
+state. Writing an arbitrary
 legacy Bottle pose and Cap pose independently would conflict with the hard
 pitch constraint.
 
@@ -177,3 +179,55 @@ wrist/index abduction geometry would be blind search. The next experiment
 should start from the existing geometrically qualified tripod pregrasp family
 or explicitly optimize the right wrist/index abduction around the cap while
 retaining thumb and middle contact. No new bank row was marked validated.
+
+## Batched screw state and selective Reset (later 2026-11-01)
+
+`assets/bottle/mimic_thread_view.py` binds the PhysX articulation tensor view
+and reads Bottle root, Cap link, continuous spin, axial travel, local-axis
+physical pitch error and reset-relative opening directly on GPU. Its
+`reset(env_ids, root_pose_w, root_velocity_w, theta_rad, spin_velocity_rad_s)`
+sets the root pose/velocity, coupled slide/spin position/velocity and implicit
+spin drive target for selected environments. It does not call `sim.step()` or
+write the Cap link independently. The installed backend requires full-size
+input tensors even for selected IDs; the adapter retains peer rows from the
+current PhysX state before each indexed write.
+The Cap link velocity is determined by the root and joint velocities. An
+arbitrary legacy saved Cap velocity cannot be restored independently; a full
+episode migration must project it onto this constrained state and record the
+projection error.
+
+The full two-hand integration script called this adapter 100 times without
+advancing physics. At 16 environments, deterministic random selection visited
+all 16; at 1024 environments, it visited 93 distinct IDs. After every write,
+the maximum immediate change in all unselected root poses, velocities, Cap
+link poses, screw angles, axial positions and opening references was **0**.
+The final full restore matched its starting state. Two 1024-env probe runs
+measured 0.74–0.97 ms per single-env Reset averaged over 100 calls, including
+Python validation, full-size PhysX buffer reads/writes and GPU work. A later
+run measured 0.249 ms per batched `read()` over 100 calls. These are
+diagnostic microbenchmarks, not sustained RL throughput. The 16-env tilted 45° and
+0.5-rad reset still had maximum physical local-axis pitch error 0.060 µm after
+100 physics steps. A right pregrasp contact probe after this Reset measured
+0.273 N on the cap sidewall with +0.065 mm first contact separation.
+
+The one-family unassisted-hold fixture now uses `MimicThreadView.reset`
+instead of manually setting articulation tensors. Row 0 again held 1 s with
+both correct object contacts at 100%, bottle displacement 0.063 mm, maximum
+screw error 14 nm and -0.016 mm initial minimum separation. Its target
+contact topology remained **false**: the right index had zero contact, so
+this is not a new validated training bank.
+
+```bash
+scripts/run_isaaclab.sh scripts/environments/validate_bimanual_mimic_scene.py \
+  --num-envs 1024 --steps 20 --reset-repetitions 100 \
+  --random-reset-ids --headless
+scripts/run_isaaclab.sh scripts/environments/validate_bimanual_mimic_scene.py \
+  --num-envs 16 --steps 100 --tilt-deg 45 --initial-angle-rad 0.5 \
+  --reset-repetitions 100 --random-reset-ids --headless
+```
+
+The DirectRLEnv still uses the legacy D6 plus explicit `BatchedThreadCoupler`.
+The hard-pitch backend has no validated breakaway-to-running-resistance
+transition, no topology-qualified stable bank, and no full episode Reset or
+PPO replay. The previous strict CapTurn success rates therefore remain the
+current training evidence; this fixture does not upgrade them.
