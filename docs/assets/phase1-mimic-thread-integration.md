@@ -21,7 +21,8 @@ enabled, but this probe does not yet establish contact-mediated cap turning.
 
 The integration script creates the normal left and right hand `InteractiveScene`
 with 20 active finger joints each. It verifies the existing `RigidObject`
-Bottle/Cap link pose readers, selective 2 cm link pose writes on env 0, a
+Bottle/Cap link pose readers, a selective 2 cm **Bottle root** translation on
+env 0, a
 nonzero screw-DOF Reset with consistent axial travel, a 0.5 N cap axial load
 on env 0, screw pitch, finite poses, and no measured peer movement. The load
 is a diagnostic external force, **not** a policy action. The diagnostic is
@@ -37,12 +38,22 @@ intentionally not registered as a Gym task.
 | 16 env, bottle tilt 45°, 100 steps | Pass; maximum physical local-axis pitch error 5.97e-8 m. |
 | 16 env, 45° tilt, env 0 Reset to 0.5 rad, 100 steps | Pass; final spin 0.46637 rad; maximum physical local-axis pitch error 1.60e-7 m; peer DOFs stayed at zero within 1e-5. |
 | 2 env, 50 steps, exact contact audit | Pass; the production `BatchedContactMonitor` created Bottle/Cap link filter views and measured zero force against the deliberately distant hands, with no false positive. This does not test positive hand contact. |
+| 1 env, 30 steps, natural right pregrasp contact probe | Pass; a scripted wrist approach at ≤0.05 m/s stopped after 0.2 mm and measured 0.237 N on `r_middle_finger_distal` against the cap sidewall. First manifold point had +0.065 mm separation, cap-local radial position 17.71 mm and axial position 1.54 mm. The cap followed the screw with maximum physical pitch error 6.77e-8 m. This is one-digit positive contact, not a stable three-digit grip or a learned turn. |
 
 The script uses `articulation_view.set_dof_positions` and matching spin drive
-targets for nonzero screw-angle Reset. The Bottle/Cap `RigidObject` wrappers
-can read their articulation links and accepted the tested selective common
-translation, but **a formal RL Reset adapter has not been implemented**. It
-must restore the floating articulation root, both screw DOFs, targets and
+targets for nonzero screw-angle Reset. The Bottle `RigidObject` root write
+moves the PhysX articulation; the Cap `RigidObject` wrapper can **read** its
+link pose after a physics update but cannot directly set that non-root link's
+transform. An early probe version tried to write both root and cap. PhysX
+logged `RigidBodyView contains non-root articulation links whose transforms
+cannot be set directly`; the wrapper's cached Cap pose also remained stale
+immediately after the root write even though the articulation link tensor had
+already moved. That probe's claimed direct Cap write compatibility was wrong
+and was withdrawn. The corrected script writes only Bottle root plus screw
+DOFs and compares `articulation_view.get_link_transforms()` at the no-step
+Reset boundary. It passed 2, 16 and 1024 environment reruns without the
+non-root-write warning. **A formal RL Reset adapter has not been implemented**.
+It must restore the floating articulation root, both screw DOFs, targets and
 velocities atomically, then audit contacts and peer state. Writing an arbitrary
 legacy Bottle pose and Cap pose independently would conflict with the hard
 pitch constraint.
@@ -67,9 +78,10 @@ low and high diagnostic torques. It does not yet implement the example
 breakaway-to-running-resistance transition, and its current max-force value
 is not a measured real-bottle torque. The isolated probe's explicit viscous
 resistance at the original damping was numerically unstable; that path must
-not be installed as the production backend. External hand contact under the
-new articulation, manifold penetration, full Reset, sustained 1024-env
-training throughput, and learned 30° opening remain **not tested**. A new
+not be installed as the production backend. One gentle right-middle-finger
+sidewall contact was measured in the full scene, but bilateral grasp,
+contact-driven 30° rotation, full Reset, sustained 1024-env training
+throughput, and learned opening remain **not tested**. A new
 stable grasp bank compatible with the constrained cap pose is required
 before meaningful stable-start CapTurn PPO can resume.
 
@@ -82,6 +94,9 @@ scripts/run_isaaclab.sh scripts/environments/validate_bimanual_mimic_scene.py \
   --num-envs 16 --steps 100 --tilt-deg 45 \
   --initial-angle-rad 0.5 --headless \
   --output artifacts/phase1/mimic_scene_tilt45_reset05.json
+scripts/run_isaaclab.sh scripts/environments/validate_bimanual_mimic_scene.py \
+  --num-envs 1 --steps 30 --right-pregrasp-contact --headless \
+  --output artifacts/phase1/mimic_right_pregrasp_contact.json
 ```
 
 The local runner currently returns shell status 0 even when the Python script
