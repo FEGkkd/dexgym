@@ -81,13 +81,41 @@ scripts/run_isaaclab.sh scripts/environments/probe_thread_mimic.py \
 
 ## Open work before RL integration
 
-The fixture has **no breakaway or running thread resistance**. Its low
-cap/bottle mass and ideal screw constraint let 0.5 N drive several radians
-quickly; that is a deliberately strong diagnostic load, not calibrated
-bottle behavior. It also has no fingered hands or 1024-env training test.
-The next controlled implementation must add bounded, bidirectional
-resistance to the articulation spin DOF, verify low/high torque and contact
-reaction, repair the internal collider overlap or retain a documented
-internal collision exclusion, and integrate the articulation with the
-existing contact monitor, Reset banks and RL observation/reward path.
-Only then should prior policies be reevaluated or new PPO training begin.
+An optional `--resistance` probe applies a GPU-batched version of the
+existing engineering-example stick/slip and running torque law to the
+revolute DOF. **It is not a validated production parameter set.** The
+original example's explicit damping of 0.003 N m s/rad is unstable with
+this 6 g cap, reduced-coordinate joint and 2 ms step: with *zero external
+load* a microscopic spin velocity flips sign and grows by about 4.5 times
+per step, reaching 26.8 rad/s at step 15. This is a discrete explicit
+feedback instability, not evidence of spontaneous bottle torque. A
+controlled one-parameter ablation to 0.0001 N m s/rad removed the zero-load
+drift for 100 steps (final spin angle about 7e-12 rad). With that diagnostic
+override, 0.005 N m over 0.4 s stayed in the sticking state (1.33° elastic
+rotation), whereas 0.04 N m entered sliding at step 3 and reached the
+three-turn joint stop by step 80. The latter is very fast because this
+fixture has no hand contact, and no actual bottle torque calibration exists.
+The model and two CPU state tests are in `mimic_resistance.py` and
+`test_mimic_resistance.py`; their presence does not qualify it for PPO.
+
+```bash
+scripts/run_isaaclab.sh scripts/environments/probe_thread_mimic.py \
+  --real-geometry --no-self-collision --resistance --resistance-damping 0.0001 \
+  --num-envs 2 --steps 200 --tilt-deg 30 --torque 0.005 --axial-force 0 \
+  --assert-physics --max-abs-angle 0.05 --headless
+scripts/run_isaaclab.sh scripts/environments/probe_thread_mimic.py \
+  --real-geometry --no-self-collision --resistance --resistance-damping 0.0001 \
+  --num-envs 2 --steps 200 --tilt-deg 30 --torque 0.04 --axial-force 0 \
+  --assert-physics --min-abs-angle 0.5236 --expect-slide --headless
+```
+
+The fixture still has no fingered hands or 1024-env training test. The next
+physical decision is whether to move the breakaway spring/damper into an
+implicit PhysX joint drive, which exposes batched stiffness, damping,
+force limit and target APIs in the installed tensor backend. It must pass
+the same low/high torque and contact tests without using a numerically
+unstable explicit damping value. Repair the internal collider overlap or
+retain a documented internal collision exclusion, then integrate the
+articulation with the existing contact monitor, Reset banks and RL
+observation/reward path. Only then should prior policies be reevaluated or
+new PPO training begin.

@@ -13,6 +13,7 @@ https://docs.omniverse.nvidia.com/kit/docs/omni_physics/107.2/dev_guide/schemas/
 from __future__ import annotations
 
 import argparse
+from dataclasses import replace
 import json
 import math
 from pathlib import Path
@@ -41,6 +42,16 @@ parser.add_argument("--selective-reset", action="store_true",
                     help="Reset env 0 at half time without advancing or changing peer environments")
 parser.add_argument("--assert-physics", action="store_true",
                     help="Exit nonzero unless local-axis pitch, collision and isolation checks pass")
+parser.add_argument("--resistance", action="store_true",
+                    help="Apply the existing engineering-example breakaway/running law to the spin DOF")
+parser.add_argument("--resistance-damping", type=float,
+                    help="Diagnostic override for explicit breakaway damping (Nm s/rad)")
+parser.add_argument("--max-abs-angle", type=float,
+                    help="With --assert-physics, require env 0 final |spin| below this many rad")
+parser.add_argument("--min-abs-angle", type=float,
+                    help="With --assert-physics, require env 0 final |spin| above this many rad")
+parser.add_argument("--expect-slide", action="store_true",
+                    help="With --assert-physics, require a sliding episode")
 parser.add_argument("--output", type=Path)
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
@@ -57,6 +68,7 @@ from isaaclab_physx.physics import PhysxManager
 from pxr import Gf, PhysxSchema, Sdf, UsdGeom, UsdPhysics
 from dexteroushands_lab.assets.bottle import BottleConfig
 from dexteroushands_lab.assets.bottle.generate_usd import build_bottle_usd
+from dexteroushands_lab.assets.bottle.mimic_resistance import BatchedMimicResistance
 
 
 BOTTLE_CONFIG = BottleConfig()
@@ -215,6 +227,13 @@ def main():
     forces[0, cap_id] = torch.tensor(axis, device=args.device) * args.axial_force
     torques[0, cap_id] = torch.tensor(axis, device=args.device) * args.torque
     ids = wp.from_torch(torch.arange(args.num_envs, dtype=torch.int32, device=args.device))
+    resistance_config = (replace(BOTTLE_CONFIG, breakaway_damping=args.resistance_damping)
+                         if args.resistance_damping is not None else BOTTLE_CONFIG)
+    resistance = (BatchedMimicResistance(resistance_config, args.num_envs, device=args.device)
+                  if args.resistance else None)
+    actuation = torch.zeros((args.num_envs, len(names)), device=args.device)
+    max_resistance_torque = 0.0
+    ever_sliding = torch.zeros((), device=args.device, dtype=torch.bool)
     max_error = 0.0
     max_peer_motion = 0.0
     max_physical_pitch_error = 0.0
@@ -227,6 +246,15 @@ def main():
     selective_reset_result = None
     traces = []
     for step in range(args.steps):
+        resistance_terms = None
+        if resistance is not None:
+            q_now = wp.to_torch(view.get_dof_positions()).reshape(args.num_envs, -1)
+            qd_now = wp.to_torch(view.get_dof_velocities()).reshape(args.num_envs, -1)
+            resistance_terms = resistance.step(q_now[:, spin_id], qd_now[:, spin_id],
+                                               q_now[:, slide_id])
+            ever_sliding |= resistance_terms.sliding.any()
+            actuation[:, spin_id] = resistance_terms.torque_nm
+            view.set_dof_actuation_forces(wp.from_torch(actuation), ids)
         view.apply_forces_and_torques_at_position(
             wp.from_torch(forces), wp.from_torch(torques), None, ids, True)
         if proxy_body_view is not None:
@@ -252,6 +280,9 @@ def main():
             view.set_root_velocities(wp.from_torch(root_vel_data), reset_id)
             view.set_dof_velocities(wp.from_torch(qd_data), reset_id)
             physics_view.update_articulations_kinematic()
+            if resistance is not None:
+                resistance.reset(torch.tensor([0], device=args.device),
+                                 q_data[:1, spin_id])
             new_root = wp.to_torch(view.get_root_transforms()).reshape(args.num_envs, 7)
             new_root_vel = wp.to_torch(view.get_root_velocities()).reshape(args.num_envs, 6)
             new_q = wp.to_torch(view.get_dof_positions()).reshape(args.num_envs, -1)
@@ -293,8 +324,12 @@ def main():
                         first_contact = {"step": step + 1, "env": env,
                                          "count": count, "force_n": force,
                                          "min_separation_m": separation}
-        if step == 0 or step % 10 == 9 or step == args.steps - 1:
+        if step == 0 or (args.resistance and step < 20) or step % 10 == 9 or step == args.steps - 1:
+            if resistance_terms is not None:
+                max_resistance_torque = max(max_resistance_torque,
+                                            float(resistance_terms.torque_nm.abs().max()))
             positions = wp.to_torch(view.get_dof_positions()).reshape(args.num_envs, -1)
+            velocities = wp.to_torch(view.get_dof_velocities()).reshape(args.num_envs, -1)
             root_vel = wp.to_torch(view.get_root_velocities()).reshape(args.num_envs, 6)
             link_transforms = wp.to_torch(view.get_link_transforms()).reshape(
                 args.num_envs, len(links), 7)
@@ -319,12 +354,17 @@ def main():
                 max_peer_motion = max(max_peer_motion,
                                       float(positions[1:].abs().max()))
             traces.append({"step": step + 1, "theta_rad": theta.detach().cpu().tolist(),
+                           "spin_velocity_rad_s": velocities[:, spin_id].detach().cpu().tolist(),
                            "axial_m": axial.detach().cpu().tolist(),
                            "pitch_error_m": error.detach().cpu().tolist(),
                            "physical_axial_m": physical_axial.detach().cpu().tolist(),
                            "physical_pitch_error_m": physical_pitch_error.detach().cpu().tolist(),
                            "lateral_offset_m": lateral.detach().cpu().tolist(),
                            "root_angular_velocity_rad_s": root_vel[:, 3:].detach().cpu().tolist(),
+                           "resistance_torque_nm": (resistance_terms.torque_nm.detach().cpu().tolist()
+                                                    if resistance_terms is not None else None),
+                           "resistance_sliding": (resistance_terms.sliding.detach().cpu().tolist()
+                                                  if resistance_terms is not None else None),
                            "cap_position_w_m": (wp.to_torch(view.get_link_transforms())
                                                   .reshape(args.num_envs, len(links), 7)[:, cap_id, :3]
                                                   .detach().cpu().tolist()
@@ -341,6 +381,9 @@ def main():
               "real_geometry": args.real_geometry,
               "self_collision_enabled": not args.no_self_collision,
               "contact_proxy_enabled": args.contact_proxy,
+              "resistance_enabled": args.resistance,
+              "resistance_damping_nm_s_rad": (resistance.config.breakaway_damping
+                                              if resistance is not None else None),
               "num_envs": args.num_envs, "steps": args.steps, "physics_dt_s": DT_S,
               "pitch_m": PITCH_M, "tilt_deg": args.tilt_deg,
               "bottle_local_axis_w": axis,
@@ -358,6 +401,8 @@ def main():
               "min_internal_separation_m": min_internal_separation,
               "first_internal_contact": first_contact,
               "max_proxy_contact_force_n": max_proxy_contact_force,
+              "max_resistance_torque_nm": max_resistance_torque,
+              "ever_sliding": bool(ever_sliding),
               "first_proxy_contact": first_proxy_contact,
               "selective_reset": selective_reset_result,
               "last": traces[-1], "trace": traces}
@@ -383,6 +428,13 @@ def main():
                                      selective_reset_result["env0_root_pose_error"] > 1e-6 or
                                      selective_reset_result["env0_dof_error"] > 1e-6):
             failures.append("selective reset state or peer isolation failed")
+        final_abs_angle = abs(float(traces[-1]["theta_rad"][0]))
+        if args.max_abs_angle is not None and final_abs_angle > args.max_abs_angle:
+            failures.append(f"final angle {final_abs_angle:.6g} rad exceeds {args.max_abs_angle}")
+        if args.min_abs_angle is not None and final_abs_angle < args.min_abs_angle:
+            failures.append(f"final angle {final_abs_angle:.6g} rad below {args.min_abs_angle}")
+        if args.expect_slide and not bool(ever_sliding):
+            failures.append("sliding transition was not observed")
         result["physics_assertions"] = {"passed": not failures, "failures": failures}
     print("MIMIC_PROBE", json.dumps({key: result[key] for key in (
         "num_envs", "steps", "real_geometry", "mimic_enabled", "self_collision_enabled",
