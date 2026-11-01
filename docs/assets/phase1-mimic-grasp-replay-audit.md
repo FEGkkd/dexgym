@@ -145,6 +145,20 @@ hand/cap contact path in this candidate. The result does not identify which
 finger pair or solver constraint is responsible. This ablation is invalid
 as a grasp, and the replay tool cannot mark it as a passing bank sample.
 
+Digit ablations used the same captured thumb/middle-contact state but
+restored one digit at a time to its collision-screened pregrasp joint pose.
+With only the **middle** contacting the cap (mean/peak body force
+1.03/1.26 N), reported screw speed averaged **0.860 rad/s** while actual
+angle-difference speed averaged -0.0246 rad/s. With only the **thumb**
+contacting (1.61/1.67 N), these values were **2.055** and **-0.0178
+rad/s**. With both contacting, reported speed averaged **3.292 rad/s**
+while angle-difference speed averaged -0.00814 rad/s. Both single-contact
+finger states still show a discrepancy, unlike the separate low-force
+proxy. No single digit alone explains the failure. The contact-load and
+solver-coupling hypothesis is stronger, but exact internal PhysX cause
+remains unverified. These one-digit states are diagnostic Reset ablations,
+not valid grasp starts.
+
 ```bash
 scripts/run_isaaclab.sh scripts/environments/probe_pregrasp_contact_jacobian.py \
   --sample-index 9 --steps 50 --maintain-contact --contact-points \
@@ -160,9 +174,10 @@ scripts/run_isaaclab.sh scripts/environments/replay_mimic_grasp_candidate.py \
   --output artifacts/phase1/row9_tgs_exact_target_hold_replay_summary.json
 ```
 
-The optional `--spin-reset-override 0`, `--resistance-scale 10`, and
-`--ablate-right-cap-contact` replay flags are diagnostic and cannot produce
-a passing bank candidate. The
+The optional `--spin-reset-override 0`, `--resistance-scale 10`,
+`--ablate-right-cap-contact`, and `--ablate-right-digit thumb` (or
+`middle_finger`) replay flags are diagnostic and cannot produce a passing
+bank candidate. The
 isolated no-hand and contact-proxy fixtures use `probe_thread_mimic.py`
 with zero torque and axial force, real geometry, the implicit running drive,
 and `--external-forces-every-iteration`; the contact comparison additionally

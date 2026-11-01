@@ -28,6 +28,9 @@ parser.add_argument("--resistance-scale", type=float, default=1.0,
                     help="Diagnostic only: scale all stick/slip torque and drive gains together")
 parser.add_argument("--ablate-right-cap-contact", action="store_true",
                     help="Diagnostic only: move the right wrist away at Reset")
+parser.add_argument("--ablate-right-digit",
+                    choices=("thumb", "index_finger", "middle_finger"),
+                    help="Diagnostic only: restore one right digit to its screened pregrasp pose")
 parser.add_argument("--output", type=Path, required=True)
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
@@ -37,6 +40,8 @@ if args.spin_reset_override is not None and not math.isfinite(args.spin_reset_ov
     parser.error("--spin-reset-override must be finite")
 if not math.isfinite(args.resistance_scale) or not 0 < args.resistance_scale <= 20:
     parser.error("--resistance-scale must be in (0, 20]")
+if args.ablate_right_cap_contact and args.ablate_right_digit:
+    parser.error("Choose a right-wrist or one right-digit ablation")
 app = AppLauncher(args).app
 
 import torch
@@ -114,6 +119,22 @@ def main():
         env._bank["thread_stick_reference"][first:] = drive_state["stick_reference_rad"]
         env._bank["thread_sliding"][first:] = drive_state["sliding"]
         env._bank["thread_breakaway_seen"][first:] = drive_state["breakaway_seen"]
+        if args.ablate_right_digit:
+            pregrasp_rows = json.loads((Path(__file__).resolve().parents[2]
+                                        / "docs/assets/phase0_pregrasp_reset_bank.json").read_text())
+            pregrasp = grasp_sample_from_dict(pregrasp_rows[probe["sample_index"]])
+            canonical = sample.metadata["right_joint_order"]
+            if pregrasp.metadata["right_joint_order"] != canonical:
+                raise ValueError("Digit ablation joint order differs from captured candidate")
+            digit_ids = [i for i, name in enumerate(canonical)
+                         if name.startswith(f"r_{args.ablate_right_digit}_")]
+            if not digit_ids:
+                raise ValueError("Digit ablation found no official joints")
+            for field in ("joint_position", "joint_target"):
+                env._bank[f"right_{field}"][first:, digit_ids] = torch.tensor(
+                    [getattr(pregrasp.right, field)[i] for i in digit_ids],
+                    device=env.device)
+            env._bank["right_joint_velocity"][first:, digit_ids] = 0
         env._reset_idx(torch.tensor([0], device=env.device))
         origin = env.scene.env_origins[0]
         expected = torch.tensor(sample.bottle.root_pose, device=env.device)
@@ -199,6 +220,11 @@ def main():
             tilt = _angle(bottle[3:], initial_bottle[3:])
             left = env.contacts.force_magnitudes("Bottle", "left")[0]
             right = env.contacts.force_magnitudes("Cap", "right")[0]
+            right_digit_force = {
+                digit: float(right[[i for i, name in enumerate(env.contacts.body_names["right"])
+                                    if name.startswith(f"r_{digit}_")]].max())
+                for digit in ("thumb", "index_finger", "middle_finger")
+            }
             max_left_force = max(max_left_force, float(left.max()))
             max_right_force = max(max_right_force, float(right.max()))
             if step == 0:
@@ -224,6 +250,7 @@ def main():
                 "thread_error_m": float(episode["constraint_error_m"][0]),
                 "left_contact": bool(episode["left_contact"][0]),
                 "right_sidewall_tripod": bool(episode["right_contact"][0]),
+                "right_cap_digit_force_n": right_digit_force,
                 "bottle_stable": bool(episode["bottle_stable"][0]),
                 "strict_success": bool(episode["success"][0]),
                 "failure": bool(episode["failure"][0]),
@@ -240,6 +267,7 @@ def main():
             "spin_reset_override_rad_s": args.spin_reset_override,
             "resistance_scale": args.resistance_scale,
             "right_cap_contact_ablated": args.ablate_right_cap_contact,
+            "right_digit_ablated": args.ablate_right_digit,
             "candidate_validated": False,
             "reset_error": reset_error,
             "duration_s": args.steps * env.step_dt,
@@ -280,7 +308,7 @@ def main():
             }
         result["diagnostic_pass"] = (
             args.spin_reset_override is None and args.resistance_scale == 1.0
-            and not args.ablate_right_cap_contact
+            and not args.ablate_right_cap_contact and args.ablate_right_digit is None
             and max(reset_error.values()) < 1e-3 and result["strict_success_reached"]
             and left_ratio > 0.8 and right_ratio > 0.8
             and result["maximum_bottle_drift_m"] < 0.02
