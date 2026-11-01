@@ -105,6 +105,13 @@ def main():
                 pose_opening += delta
                 pose_spin = delta / cfg.sim.dt
             previous_pose_wrapped = pose_wrapped
+            bottle_angular_velocity_w = raw.bottle.data.root_ang_vel_w.torch[0]
+            cap_angular_velocity_w = raw.cap.data.root_ang_vel_w.torch[0]
+            bottle_axis_w = _rotate(
+                bottle_pose[3:].unsqueeze(0),
+                torch.tensor([[0.0, 0.0, 1.0]], device=args.device))[0]
+            relative_body_spin = torch.dot(
+                cap_angular_velocity_w - bottle_angular_velocity_w, bottle_axis_w)
             view = raw.contacts.cap_right_manifold_view
             if view is None:
                 raise RuntimeError("PGS cap/right manifold contact view is required for trace")
@@ -145,6 +152,9 @@ def main():
                 "pose_relative_opening_rad": pose_opening,
                 "pose_differenced_spin_rad_s": pose_spin,
                 "physx_screw_spin_rad_s": float(raw.thread.state.spin_velocity_rad_s[0]),
+                "bottle_angular_velocity_world_rad_s": bottle_angular_velocity_w.detach().cpu().tolist(),
+                "cap_angular_velocity_world_rad_s": cap_angular_velocity_w.detach().cpu().tolist(),
+                "relative_body_spin_projected_rad_s": float(relative_body_spin),
                 "axial_m": float(raw._latest_thread.axial[0]),
                 "constraint_error_m": float(raw._latest_thread.constraint_error[0]),
                 "left_bottle_normal_force_n": float(raw.contacts.force_magnitudes(

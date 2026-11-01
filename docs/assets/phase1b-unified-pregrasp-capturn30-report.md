@@ -494,6 +494,33 @@ No solver setting was adopted from this result. The ignored raw traces are
 `artifacts/phase1b/eval_tanh_model699_B_pgs16_500hz_trace.json` and
 `artifacts/phase1b/eval_tanh_model699_B_pgs32_500hz_trace.json`.
 
+### Velocity-state localization
+
+A repeat of the same 120-substep successful B episode additionally logged
+the bottle and cap world angular velocities and their difference projected
+onto the bottle screw axis. This measured rigid-body relative speed matches
+the PhysX Mimic screw speed to **0.00000066 rad/s mean absolute error** and
+0.00000286 rad/s maximum error. Independently, the Mimic joint-position
+difference matches the true relative-pose angle difference to 0.000098
+rad/s mean absolute error. Thus both ways of reading velocity agree with
+each other, and both ways of reading position agree with each other; the
+disagreement is between reported instantaneous velocity and actual
+per-step position change in the contact-loaded trajectory. The speed versus
+position-difference error remains 1.577 rad/s MAE and integrates to a
+0.05395-rad shortfall over this episode. Using previous-step velocity,
+next-step velocity or trapezoidal endpoint integration increases MAE to
+1.863, 1.999 or 1.649 rad/s, respectively. A one-substep sampling offset
+therefore does not explain
+the observed discrepancy. These measurements do not by themselves
+identify which PhysX solver operation causes the difference. The no-hands
+control above remains the unloaded comparison.
+
+The raw trace and reproducible audit are
+`artifacts/phase1b/eval_tanh_model699_B_500hz_velocity_layers_trace.json`
+and `scripts/environments/audit_phase1b_velocity_layers.py`. The audit's
+JSON summary is
+`artifacts/phase1b/eval_tanh_model699_B_velocity_layers_audit.json`.
+
 The seed-1101 warm-start training curve shows mean episode reward rising
 from approximately 10 at the first new update to 34 by roughly 100 new updates, while
 the measured bilateral stable-support rate rises to roughly 59% at that
@@ -598,6 +625,15 @@ scripts/run_isaaclab.sh scripts/environments/evaluate_phase1b.py \
 scripts/run_isaaclab.sh scripts/environments/audit_phase1b_cap_contact_geometry.py \
   --trace artifacts/phase1b/eval_tanh_model699_B_500hz_trace.json \
   --output artifacts/phase1b/eval_tanh_model699_B_cap_geometry_audit.json
+scripts/run_isaaclab.sh scripts/environments/evaluate_phase1b.py \
+  --checkpoint logs/rsl_rl/dexteroushands_pregrasp_capturn30_phase1b/2026-11-02_00-42-31_phase1b_seed2202_A_tanh_2048/model_699.pt \
+  --action-distribution tanh --policy learned --level B \
+  --episodes 1 --num-envs 1 --seed 9117 --viz none \
+  --physics-trace-output artifacts/phase1b/eval_tanh_model699_B_500hz_velocity_layers_trace.json \
+  --output artifacts/phase1b/eval_tanh_model699_B_velocity_layers.json
+python scripts/environments/audit_phase1b_velocity_layers.py \
+  --trace artifacts/phase1b/eval_tanh_model699_B_500hz_velocity_layers_trace.json \
+  --output artifacts/phase1b/eval_tanh_model699_B_velocity_layers_audit.json
 scripts/run_isaaclab.sh scripts/environments/propose_phase1b_natural_left_hybrids.py \
   --output artifacts/phase1b/natural_left_hybrid_base_candidates.json \
   --report artifacts/phase1b/natural_left_hybrid_base_proposal_report.json
