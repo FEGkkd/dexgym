@@ -71,15 +71,55 @@ reported −2.22 mm signed separation; that number is a PhysX contact
 distance and has **not** been proven equal to exact geometry penetration.
 Neither issue is treated as solved by the new Reset bank.
 
+### Distinct natural-left family reachability audit
+
+After A/B PPO saturated, an additional geometry proposal search tried to
+expand the Reset distribution while preserving the frozen A/B split and the
+single-task physical rules. Five official left finger flexion joints and one
+radial wrist offset were fitted per original natural source in MJCF to
+approximately 1-mm local bottle gaps; the right hand came only from the
+existing **training-partition** tripod rows. Six natural-left sources passed
+the opposed-thumb, four-finger, self-collision and gap screen. The baseline
+search produced 11 full bimanual proposals (SHA-256
+`1a708a5299d4b88963944fe0e9cfb724e6f253ee5c1833c78f051630a5e44ad4`).
+A controlled second search shifted the left wrist an additional 0.75,
+1.5 or 2.25 mm inward and produced 16 safe MJCF proposals (SHA-256
+`b7a87e0b6c1c44b40bcc7f8649137ba653026e0337472219a4691a68cb06d609`).
+These are **proposals, not validated Reset rows**.
+
+Native 50/500-Hz PGS Mimic tests then applied ordinary bounded wrist and
+finger target commands for 15 policy steps (0.3 s), with a separate
+zero-action replay. The baseline had 9/11 solver-compatible candidates,
+the closer group 12/16, but **neither group established valid bilateral
+contact in any candidate**; no row was admitted to the bank and no PPO
+training consumed these proposals. In the closer group, the left thumb
+touched the bottle in only 3/16 candidates, no right index finger touched
+the cap, and the required thumb-plus-two-long-finger left contact never formed. The initial
+left-thumb *link-origin radial offset* from the bottle proxy surface was
+13.6–28.5 mm despite MJCF minimum collider gaps near 1 mm. Those are
+different geometric quantities: a proximal segment may approach the bottle
+while the thumb tip remains unable to oppose in the available freefall
+window. The current original natural D challenge remains physically
+unqualified and 0/200 in policy evaluation. After these two controlled
+Reset changes failed the same native contact gate, further A-only PPO was
+not justified; the next useful work is a native-USD, fingertip-aware
+left/right geometry fit and verified support window, not a longer replay
+of the already saturated A/B distribution.
+An optional thumb-tip-aware offline fit generated eight additional MJCF
+proposals (SHA-256
+`5f7597400a9c9cb7a9548913219bda685c4322615f2cfc4afe65f8fc4a5d819e`);
+they have **not** passed native PGS admission and are excluded from every
+training and success claim in this report.
+
 ## Tests and baselines
 
 1/2/16/1024/2048-environment Reset/Step smoke probes passed with finite
 277D actor and 421D critic observations. The 1024-env 20-step physics probe
 reached ~8,001 transitions/s and the 2048-env probe reached ~11,168
 transitions/s, measured without PPO updates. At the final zero-action step
-the 2048-env left/right contact rates were 96.0% / 0%. All 24 focused
+the 2048-env left/right contact rates were 96.0% / 0%. All 27 focused
 Phase 1B numerical and registration tests passed on the final candidate.
-The broader suite yielded 203 passed, 1 skipped and 2 failures
+The broader suite yielded 206 passed, 1 skipped and 2 failures
 in preexisting Allegro temporary-asset and MANO keypoint-order tests; these
 belong to separate user work and have not been modified here.
 Final counterfactual verification found and fixed an evaluator dispatch bug:
@@ -395,6 +435,28 @@ versus pose-differenced speed bias still reaches 7.46 rad/s (mean absolute
 1.58 rad/s); integrating PhysX joint velocity gives only 0.684 rad.
 Thus the selected checkpoint does not resolve either physical-model
 diagnostic.
+An independent shape-level audit of those 962 points uses the actual
+`cap.usda` collision prims: twelve scaled cube walls and one top cylinder.
+None authors a contact or rest offset. The contact-point signed distance
+to the union of these external collision shapes ranges from −1.429 to
++0.237 mm, versus −1.539 to +0.421 mm for PhysX's reported pairwise
+separation; their Pearson correlation is 0.784. The point with the most
+negative PhysX separation lies 1.390 mm inside the cap collision proxy.
+This is evidence of substantial proxy overlap at that point, but the
+manifold point alone does not give the hand surface location, the effective
+runtime contact offset, or exact material penetration. The reproducible
+auditor is `scripts/environments/audit_phase1b_cap_contact_geometry.py`;
+its raw JSON is
+`artifacts/phase1b/eval_tanh_model699_B_cap_geometry_audit.json`.
+The same selected Reset and PGS Mimic backend were also replayed after
+moving both hands out of contact. Across its 140-step 500-Hz trace it had
+zero right-cap manifold points and no Success; the reported joint velocity
+matched adjacent true-pose differences to mean absolute 0.000036 rad/s
+and maximum 0.000164 rad/s. The loaded successful trace differs by four
+orders of magnitude. This localizes the inconsistency to the contact-loaded
+articulation trajectory rather than a universal unit conversion or fixed
+sample timing offset. Its trace is
+`artifacts/phase1b/eval_tanh_model699_B_nohands_500hz_trace.json`.
 
 The seed-1101 warm-start training curve shows mean episode reward rising
 from approximately 10 at the first new update to 34 by roughly 100 new updates, while
@@ -497,6 +559,20 @@ scripts/run_isaaclab.sh scripts/environments/evaluate_phase1b.py \
   --episodes 200 --num-envs 64 --seed 9117 \
   --output artifacts/phase1b/eval_tanh_model699_A.json \
   --rows-output artifacts/phase1b/eval_tanh_model699_A_rows.json
+scripts/run_isaaclab.sh scripts/environments/audit_phase1b_cap_contact_geometry.py \
+  --trace artifacts/phase1b/eval_tanh_model699_B_500hz_trace.json \
+  --output artifacts/phase1b/eval_tanh_model699_B_cap_geometry_audit.json
+scripts/run_isaaclab.sh scripts/environments/propose_phase1b_natural_left_hybrids.py \
+  --output artifacts/phase1b/natural_left_hybrid_base_candidates.json \
+  --report artifacts/phase1b/natural_left_hybrid_base_proposal_report.json
+scripts/run_isaaclab.sh scripts/environments/propose_phase1b_natural_left_hybrids.py \
+  --additional-left-inward-m 0.00075 0.0015 0.00225 \
+  --output artifacts/phase1b/natural_left_hybrid_closer_candidates.json \
+  --report artifacts/phase1b/natural_left_hybrid_closer_proposal_report.json
+scripts/run_isaaclab.sh scripts/environments/validate_phase1b_pregrasp_pgs.py \
+  --native-bank artifacts/phase1b/natural_left_hybrid_closer_candidates.json \
+  --output artifacts/phase1b/natural_left_hybrid_closer_pgs_probe.json \
+  --count 16 --steps 15 --probe-fingers fit_approach --probe-order active_first
 ```
 
 Raw PPO consoles, TensorBoard events and checkpoints are under

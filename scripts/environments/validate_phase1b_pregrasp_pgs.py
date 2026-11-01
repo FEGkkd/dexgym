@@ -18,7 +18,7 @@ parser.add_argument("--output", type=Path, required=True)
 parser.add_argument("--admitted-bank", type=Path)
 parser.add_argument("--count", type=int, default=16)
 parser.add_argument("--steps", type=int, default=15)
-parser.add_argument("--probe-fingers", choices=("stable", "none", "fit"), default="fit")
+parser.add_argument("--probe-fingers", choices=("stable", "none", "fit", "fit_approach"), default="fit")
 parser.add_argument("--probe-order", choices=("active_first", "zero_first"),
                     default="active_first")
 AppLauncher.add_app_launcher_args(parser)
@@ -42,6 +42,10 @@ def run_probe(env, *, approach: bool, steps: int, probe_fingers: str = "stable")
     first_bilateral = first_left.clone()
     first_right_digits = {digit: first_left.clone() for digit in
                           ("thumb", "index_finger", "middle_finger")}
+    first_left_digits = {digit: first_left.clone() for digit in
+                         ("thumb", "index_finger", "middle_finger", "ring_finger", "pinky")}
+    max_left_digit_force = {digit: torch.zeros(n, device=env.device)
+                            for digit in first_left_digits}
     first_failure = first_left.clone()
     min_z = torch.full((n,), float("inf"), device=env.device)
     max_constraint = torch.zeros(n, device=env.device)
@@ -63,6 +67,16 @@ def run_probe(env, *, approach: bool, steps: int, probe_fingers: str = "stable")
         return (torch.linalg.vector_norm(local[:, :, :2], dim=-1)
                 - env.bottle_cfg.cap_outer_radius), local[:, :, 2]
     initial_site_gap, initial_site_axial = right_site_geometry()
+    def left_site_geometry():
+        bottle = env.bottle.data.root_pose_w.torch
+        tip = env.left.data.body_link_pose_w.torch[:, env._tip_ids[0], :3]
+        inverse = torch.cat((-bottle[:, 3:6], bottle[:, 6:7]), dim=-1)
+        local = _rotate(inverse[:, None, :].expand(-1, tip.shape[1], -1).reshape(-1, 4),
+                        (tip - bottle[:, None, :3]).reshape(-1, 3)).reshape(n, -1, 3)
+        return (torch.linalg.vector_norm(local[:, :, :2], dim=-1)
+                - env.bottle_cfg.bottle_radius), local[:, :, 2]
+    initial_left_site_gap, initial_left_site_axial = left_site_geometry()
+    minimum_left_site_gap = initial_left_site_gap.clone()
     first_step_separation = {"Bottle/left": [None] * n, "Cap/right": [None] * n}
     previous_theta = env.thread.theta_unwrapped.clone()
     left_stable = torch.tensor(env._validation_stable["left"]["joint_position"],
@@ -71,7 +85,7 @@ def run_probe(env, *, approach: bool, steps: int, probe_fingers: str = "stable")
                                 device=env.device)[env._joint_reorder[1]]
     for step in range(1, steps + 1):
         action = torch.zeros(n, 52, device=env.device)
-        if approach and probe_fingers != "fit":
+        if approach and probe_fingers in ("stable", "none", "fit_approach"):
             for side, obj, start, target in ((0, env.bottle, 0, left_stable),
                                              (1, env.cap, 26, right_stable)):
                 wrist = (env.left if side == 0 else env.right).data.root_pose_w.torch
@@ -86,8 +100,9 @@ def run_probe(env, *, approach: bool, steps: int, probe_fingers: str = "stable")
                 if probe_fingers == "stable":
                     action[:, start+6:start+26] = torch.sign(
                         target[None, :] - env._finger_targets[side])
-        elif approach and probe_fingers == "fit":
-            action[:, 6:26] = torch.sign(left_stable[None, :] - env._finger_targets[0])
+        if approach and probe_fingers in ("fit", "fit_approach"):
+            left_target = getattr(env, "_validation_probe_left_q", left_stable[None, :])
+            action[:, 6:26] = torch.sign(left_target - env._finger_targets[0])
             action[:, 32:52] = torch.sign(
                 env._validation_probe_right_q - env._finger_targets[1])
         _, _, terminated, truncated, info = env.step(action)
@@ -118,6 +133,7 @@ def run_probe(env, *, approach: bool, steps: int, probe_fingers: str = "stable")
         first_bilateral = torch.where((first_bilateral < 0) & bilateral,
                                       step, first_bilateral)
         right_forces = env.contacts.force_magnitudes("Cap", "right")
+        left_forces = env.contacts.force_magnitudes("Bottle", "left")
         cross_force = torch.maximum(
             env.contacts.force_magnitudes("Cap", "left").amax(-1),
             env.contacts.force_magnitudes("Bottle", "right").amax(-1))
@@ -133,6 +149,19 @@ def run_probe(env, *, approach: bool, steps: int, probe_fingers: str = "stable")
                        if digit in name]
             touching = (right_forces[:, columns].amax(-1) >= env.contacts.force_floor_n) & alive
             first_right_digits[digit] = torch.where((previous < 0) & touching, step, previous)
+        for digit, previous in first_left_digits.items():
+            columns = [i for i, name in enumerate(env.contacts.body_names["left"])
+                       if digit in name]
+            peak = left_forces[:, columns].amax(-1)
+            touching = (peak >= env.contacts.force_floor_n) & alive
+            first_left_digits[digit] = torch.where((previous < 0) & touching, step, previous)
+            max_left_digit_force[digit] = torch.where(
+                alive, torch.maximum(max_left_digit_force[digit], peak),
+                max_left_digit_force[digit])
+        current_left_gap, _ = left_site_geometry()
+        minimum_left_site_gap = torch.where(
+            alive[:, None], torch.minimum(minimum_left_site_gap, current_left_gap),
+            minimum_left_site_gap)
         if env._metrics is not None:
             max_right_score = torch.where(alive, torch.maximum(
                 max_right_score, env._metrics["right_contact_score"]), max_right_score)
@@ -178,6 +207,15 @@ def run_probe(env, *, approach: bool, steps: int, probe_fingers: str = "stable")
     result["initial_right_site_axial_m"] = initial_site_axial
     result["final_right_site_radial_gap_m"] = final_site_gap
     result["final_right_site_axial_m"] = final_site_axial
+    final_left_site_gap, final_left_site_axial = left_site_geometry()
+    result["initial_left_site_radial_gap_m"] = initial_left_site_gap
+    result["initial_left_site_axial_m"] = initial_left_site_axial
+    result["minimum_left_site_radial_gap_m"] = minimum_left_site_gap
+    result["final_left_site_radial_gap_m"] = final_left_site_gap
+    result["final_left_site_axial_m"] = final_left_site_axial
+    for digit, value in first_left_digits.items():
+        result[f"first_left_{digit}_body_contact_step"] = value
+        result[f"maximum_left_{digit}_contact_force_n"] = max_left_digit_force[digit]
     for digit, value in first_right_digits.items():
         result[f"first_right_{digit}_body_contact_step"] = value
     report = {key: value.detach().cpu().tolist() for key, value in result.items()}
@@ -199,7 +237,7 @@ def main():
     env = PregraspCapTurn30DirectEnv(cfg)
     env._validation_stable = json.loads((Path(__file__).resolve().parents[2] /
         "docs/assets/phase1_mimic_pgs_grasp_init_bank.json").read_text())[0]
-    if args.probe_fingers == "fit":
+    if args.probe_fingers in ("fit", "fit_approach"):
         if any("right_probe_joint_target" not in row["metadata"]
                for row in source[:args.count]):
             raise ValueError("Fitted probe requires per-sample right target metadata")
@@ -207,6 +245,16 @@ def main():
             [row["metadata"]["right_probe_joint_target"]
              for row in source[:args.count]], device=env.device,
             dtype=torch.float32)[:, env._joint_reorder[1]]
+        left_targets = [row["metadata"].get("left_probe_joint_target")
+                        for row in source[:args.count]]
+        if any(value is not None for value in left_targets):
+            if any(value is None or len(value) != 20 for value in left_targets):
+                raise ValueError("Fitted left probe targets must cover every candidate")
+            env._validation_probe_left_q = torch.tensor(
+                left_targets, device=env.device,
+                dtype=torch.float32)[:, env._joint_reorder[0]]
+            if not bool(torch.isfinite(env._validation_probe_left_q).all()):
+                raise ValueError("Fitted left probe targets must be finite")
     try:
         print("PHASE1B_PGS_ENV_READY", flush=True)
         if args.probe_order == "active_first":
@@ -274,6 +322,7 @@ def main():
                     "probe_kind": "ordinary_finger_target_only_feasibility",
                 }
                 row["metadata"].pop("right_probe_joint_target", None)
+                row["metadata"].pop("left_probe_joint_target", None)
                 admitted.append(row)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps({"solver": "pgs_mimic", "policy_hz": 50,

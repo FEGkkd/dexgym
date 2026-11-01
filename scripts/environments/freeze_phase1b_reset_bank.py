@@ -34,6 +34,7 @@ def main():
         physx = meta["geometry_evidence"]["native_physx"]
         if (row["validated"] or meta.get("geometry_qualified") is not True
                 or meta.get("right_probe_joint_target") is not None
+                or meta.get("left_probe_joint_target") is not None
                 or evidence["seed"] != row["seed"]
                 or not evidence["pgs_compatible"]
                 or not evidence["active_contact_reachable"]
