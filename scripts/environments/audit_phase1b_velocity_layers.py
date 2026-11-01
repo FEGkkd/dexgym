@@ -38,7 +38,7 @@ def audit(trace):
     body = finite_series(rows, "relative_body_spin_projected_rad_s")
     pose = finite_series(rows, "pose_differenced_spin_rad_s", 1)
     joint = finite_series(rows, "joint_differenced_spin_rad_s", 1)
-    return {
+    result = {
         "episode_success": bool(trace["episode_success"]),
         "reset_sample_index": next(iter(reset_rows)),
         "substeps": len(rows),
@@ -54,6 +54,20 @@ def audit(trace):
         "trapezoid_screw_vs_pose_difference": errors(
             [(screw[i - 1] + screw[i]) / 2 for i in range(1, len(rows))], pose, dt),
     }
+    if all("drive_sliding" in row for row in rows):
+        result["by_drive_mode"] = {}
+        for label, sliding in (("sticking", False), ("sliding", True)):
+            selected = [row for row in rows[1:] if row["drive_sliding"] is sliding]
+            if selected:
+                result["by_drive_mode"][label] = {
+                    "substeps": len(selected),
+                    "screw_vs_pose_difference": errors(
+                        [row["physx_screw_spin_rad_s"] for row in selected],
+                        [row["pose_differenced_spin_rad_s"] for row in selected], dt),
+                    "mean_right_cap_force_n": sum(
+                        row["right_cap_normal_force_n"] for row in selected) / len(selected),
+                }
+    return result
 
 
 def main():

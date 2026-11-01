@@ -115,6 +115,9 @@ def main():
                 torch.tensor([[0.0, 0.0, 1.0]], device=args.device))[0]
             relative_body_spin = torch.dot(
                 cap_angular_velocity_w - bottle_angular_velocity_w, bottle_axis_w)
+            drive_state = raw.thread.drive.last_state
+            if drive_state is None:
+                raise RuntimeError("Mimic resistance drive state missing from substep trace")
             view = raw.contacts.cap_right_manifold_view
             if view is None:
                 raise RuntimeError("PGS cap/right manifold contact view is required for trace")
@@ -158,6 +161,9 @@ def main():
                 "bottle_angular_velocity_world_rad_s": bottle_angular_velocity_w.detach().cpu().tolist(),
                 "cap_angular_velocity_world_rad_s": cap_angular_velocity_w.detach().cpu().tolist(),
                 "relative_body_spin_projected_rad_s": float(relative_body_spin),
+                "drive_sliding": bool(drive_state.sliding[0]),
+                "drive_breakaway_seen": bool(drive_state.breakaway_seen[0]),
+                "drive_active_force_limit_nm": float(drive_state.active_force_limit_nm[0]),
                 "axial_m": float(raw._latest_thread.axial[0]),
                 "constraint_error_m": float(raw._latest_thread.constraint_error[0]),
                 "left_bottle_normal_force_n": float(raw.contacts.force_magnitudes(

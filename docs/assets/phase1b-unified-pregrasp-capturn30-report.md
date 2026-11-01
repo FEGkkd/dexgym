@@ -521,6 +521,21 @@ and `scripts/environments/audit_phase1b_velocity_layers.py`. The audit's
 JSON summary is
 `artifacts/phase1b/eval_tanh_model699_B_velocity_layers_audit.json`.
 
+A further replay of the identical default-physics success also recorded the
+implicit Mimic resistance drive's stick/slip state. Of the 119 comparable
+500-Hz intervals, 50 were in the sticking mode and 69 in sliding. Screw
+velocity versus true pose-difference MAE was 0.858 rad/s while sticking
+and 2.098 rad/s while sliding. The corresponding mean right-cap forces
+were 8.34 and 9.43 N. Since appreciable disagreement exists before
+sliding and contact load also changes, this stratification does not
+establish the drive mode as the cause. The drive's active force limit
+ranged from 0.00572 to 0.0200 N·m. The raw trace is
+`artifacts/phase1b/eval_tanh_model699_B_drive_state_500hz_trace.json`,
+and `artifacts/phase1b/eval_tanh_model699_B_drive_state_velocity_audit.json`
+contains its reproducible summary. Two numerical audit tests verify
+non-null velocity metrics, stick/slip stratification and rejection of
+nonfinite screw speed.
+
 ### Contact-order counterexample
 
 The evaluator also accepts `--solve-articulation-contact-last` for a
@@ -652,6 +667,15 @@ scripts/run_isaaclab.sh scripts/environments/evaluate_phase1b.py \
 python scripts/environments/audit_phase1b_velocity_layers.py \
   --trace artifacts/phase1b/eval_tanh_model699_B_500hz_velocity_layers_trace.json \
   --output artifacts/phase1b/eval_tanh_model699_B_velocity_layers_audit.json
+scripts/run_isaaclab.sh scripts/environments/evaluate_phase1b.py \
+  --checkpoint logs/rsl_rl/dexteroushands_pregrasp_capturn30_phase1b/2026-11-02_00-42-31_phase1b_seed2202_A_tanh_2048/model_699.pt \
+  --action-distribution tanh --policy learned --level B \
+  --episodes 1 --num-envs 1 --seed 9117 --viz none \
+  --physics-trace-output artifacts/phase1b/eval_tanh_model699_B_drive_state_500hz_trace.json \
+  --output artifacts/phase1b/eval_tanh_model699_B_drive_state.json
+python scripts/environments/audit_phase1b_velocity_layers.py \
+  --trace artifacts/phase1b/eval_tanh_model699_B_drive_state_500hz_trace.json \
+  --output artifacts/phase1b/eval_tanh_model699_B_drive_state_velocity_audit.json
 scripts/run_isaaclab.sh scripts/environments/evaluate_phase1b.py \
   --checkpoint logs/rsl_rl/dexteroushands_pregrasp_capturn30_phase1b/2026-11-02_00-42-31_phase1b_seed2202_A_tanh_2048/model_699.pt \
   --action-distribution tanh --policy learned --level B \
