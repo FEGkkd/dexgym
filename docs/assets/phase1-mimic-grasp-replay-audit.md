@@ -75,6 +75,20 @@ contact geometry; relieving the left hand alone does not yield a replayable
 bilateral state. These are two controlled diagnostic changes, not a broad
 parameter search or evidence of RL learning.
 
+The installed Isaac Lab 3.0 PhysX configuration explicitly says that TGS
+with `enable_external_forces_every_iteration=False` can yield noisy
+velocities. Holding the original 8 solver iterations and scripted targets
+fixed, enabling this flag reduced the final bottle angular speed from
+6.54 to **1.21 rad/s** and the left contact peak from 63.2 to **10.5 N**.
+It did not restore a grasp: right thumb/middle had interior sidewall contact
+for 50/50 steps, while the index had **0/50**. A single follow-up bounded
+world-wrist translation of approximately 2 mm toward the measured index
+cap-local radial gap also left the index at **0/50**, with bottle angular
+speed 1.15 rad/s. No candidate from these TGS runs was replayed or added
+to a stable bank. The TGS flag is available only in the diagnostic probe
+and replay CLI; the RL environment default was not changed by this failed
+ablation. These results rule out the solver warning as a sufficient fix.
+
 ## Code, reproduction and status
 
 The probe adds optional live-state capture, force-relief and solver-iteration
@@ -116,6 +130,14 @@ scripts/run_isaaclab.sh scripts/environments/replay_mimic_grasp_candidate.py \
 scripts/run_isaaclab.sh scripts/environments/validate_bimanual_rl_reset.py \
   --thread-backend mimic --num-envs 16 --resets 100 --headless
 ```
+
+The TGS velocity ablation reruns the first probe command with
+`--external-forces-every-iteration` and output
+`artifacts/phase1/row9_mcp_relax_tgs_forces_each_iter.json`. The one
+geometric correction adds `--post-close-world-translation 0.0016 0.0010
+-0.0007` and writes `artifacts/phase1/row9_tgs_forces_inward2mm.json`.
+If a candidate generated with that flag is replayed, the replay command
+must receive the same flag; the tool rejects mismatched solver settings.
 
 **Status:** the requested >=60% natural-pregrasp GraspHold and CapTurn30
 learning targets remain unmet. No Mimic stable bank, 30-degree learned turn

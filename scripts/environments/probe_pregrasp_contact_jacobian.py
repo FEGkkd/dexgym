@@ -71,6 +71,8 @@ parser.add_argument("--capture-candidate", action="store_true",
                     help="Save the final live PhysX state as an unvalidated Mimic Reset candidate")
 parser.add_argument("--solver-position-iterations", type=int,
                     help="Controlled PhysX position solver iteration ablation")
+parser.add_argument("--external-forces-every-iteration", action="store_true",
+                    help="Apply external forces at every TGS position iteration to test velocity noise")
 parser.add_argument("--left-force-relief-target-n", type=float,
                     help="Diagnostic left-finger target relief above this measured contact force")
 AppLauncher.add_app_launcher_args(parser)
@@ -187,6 +189,7 @@ def main():
     if args.solver_position_iterations is not None:
         cfg.sim.physics.min_position_iteration_count = args.solver_position_iterations
         cfg.sim.physics.max_position_iteration_count = args.solver_position_iterations
+    cfg.sim.physics.enable_external_forces_every_iteration = args.external_forces_every_iteration
     cfg.stable_reset_probability = 0.0
     cfg.evaluation_mode = args.sample_index >= 24
     env = BimanualBottleDirectEnv(cfg)
@@ -468,6 +471,7 @@ def main():
                   "post_close_index_pip_delta_rad": args.post_close_index_pip_delta,
                   "contact_points_enabled": args.contact_points,
                   "solver_position_iterations": cfg.sim.physics.max_position_iteration_count,
+                  "enable_external_forces_every_iteration": args.external_forces_every_iteration,
                   "left_force_relief_target_n": args.left_force_relief_target_n,
                   "final_right_joint_position": dict(zip(
                       env.right.joint_names,
@@ -519,6 +523,7 @@ def main():
                               "breakaway_seen": bool(env.thread.drive.breakaway_seen[0]),
                           },
                           "mimic_candidate_unverified": True,
+                          "enable_external_forces_every_iteration": args.external_forces_every_iteration,
                           "source_probe": str(args.output) if args.output else None})
             result["diagnostic_candidate"] = asdict(candidate_sample)
         self_contacts = []

@@ -18,6 +18,7 @@ from isaaclab.app import AppLauncher
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--candidate-result", type=Path, required=True)
 parser.add_argument("--steps", type=int, default=50)
+parser.add_argument("--external-forces-every-iteration", action="store_true")
 parser.add_argument("--output", type=Path, required=True)
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
@@ -47,12 +48,16 @@ def main():
     if (sample.validated or not sample.metadata.get("mimic_candidate_unverified")
             or sample.source != "scripted_physx_contact_candidate_requires_fresh_reset_replay"):
         raise ValueError("Only unvalidated scripted Mimic candidates may be replayed")
+    if (sample.metadata.get("enable_external_forces_every_iteration", False)
+            != args.external_forces_every_iteration):
+        raise ValueError("Replay TGS force-iteration setting differs from candidate generation")
 
     cfg = GraspHoldDirectEnvCfg()
     cfg.scene.num_envs = 1
     cfg.sim.device = args.device
     cfg.thread_backend = "mimic"
     cfg.right_cap_contact_gate = "manifold_sidewall"
+    cfg.sim.physics.enable_external_forces_every_iteration = args.external_forces_every_iteration
     cfg.stable_reset_probability = 0.0
     env = BimanualBottleDirectEnv(cfg)
     try:
@@ -174,6 +179,7 @@ def main():
             "status": "FRESH_PROCESS_PHYSX_RESET_REPLAY_DIAGNOSTIC",
             "source_result": str(args.candidate_result),
             "source_sample_index": probe["sample_index"],
+            "enable_external_forces_every_iteration": args.external_forces_every_iteration,
             "candidate_validated": False,
             "reset_error": reset_error,
             "duration_s": args.steps * env.step_dt,
