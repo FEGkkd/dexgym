@@ -393,7 +393,24 @@ scripts/run_isaaclab.sh scripts/environments/evaluate_bimanual_rl.py \
   --right-cap-contact-gate manifold_sidewall --num-envs 64 --episodes 200 \
   --seed 1001 --finger-increment-scale 0.01 --wrist-translation-scale 0.0005 \
   --headless --output artifacts/phase1/reproduced_capturn_seed42_model400.json
+
+# Local desktop GUI; omit --steps to keep playing until the window is closed.
+scripts/run_isaaclab.sh scripts/rsl_rl/play.py \
+  --task DexterousHands-WujiHand2-Bimanual-CapTurn30-Direct-v0 \
+  --num_envs 1 --seed 1001 \
+  --load_run 2026-11-01_19-04-52_capturn_pgs_from_grasp_2048_std1_seed42_300iter \
+  --checkpoint model_400.pt --thread_backend mimic \
+  --stable_bank docs/assets/phase1_mimic_pgs_grasp_init_bank.json \
+  --solver_type pgs --right_cap_contact_gate manifold_sidewall \
+  --finger_increment_scale 0.01 --wrist_translation_scale 0.0005 \
+  --realtime --print_status_every 25 --viz kit
 ```
+
+Isaac Lab 3.0 defaults to headless when `--viz` is omitted. The generic
+play entrypoint now applies inference mode to the actor output, which is
+required before Isaac Lab converts the CUDA action tensor for PhysX.
+It accepts the validated stable bank and matching PGS/action configuration
+without changing the original single-hand play defaults.
 
 ## Regression and scope
 
