@@ -16,6 +16,8 @@ parser.add_argument("--reward-profile", choices=("baseline", "contact_coverage")
 parser.add_argument("--action-distribution", choices=("gaussian", "tanh"), default="gaussian")
 parser.add_argument("--pgs-position-iterations", type=int, choices=(8, 16, 32), default=8,
                     help="Controlled PGS solver ablation; the trained task uses eight iterations")
+parser.add_argument("--solve-articulation-contact-last", action="store_true",
+                    help="Controlled PGS solver-order probe; the trained task uses the default ordering")
 parser.add_argument("--episodes", type=int, default=200)
 parser.add_argument("--num-envs", type=int, default=64)
 parser.add_argument("--seed", type=int, default=9117)
@@ -48,6 +50,7 @@ def main():
     cfg.sim.device = args.device
     cfg.sim.physics.min_position_iteration_count = args.pgs_position_iterations
     cfg.sim.physics.max_position_iteration_count = args.pgs_position_iterations
+    cfg.sim.physics.solve_articulation_contact_last = args.solve_articulation_contact_last
     cfg.seed = args.seed
     cfg.unified_reward_profile = args.reward_profile
     if args.level == "D":
@@ -222,6 +225,7 @@ def main():
             "reward_profile": args.reward_profile,
             "action_distribution": args.action_distribution,
             "pgs_position_iterations": args.pgs_position_iterations,
+            "solve_articulation_contact_last": args.solve_articulation_contact_last,
             "checkpoint": str(args.checkpoint) if args.checkpoint else None,
             "seed": args.seed, "episodes": len(rows), "num_envs": args.num_envs,
             "steps": steps, "elapsed_s": time.monotonic() - start,
@@ -253,6 +257,7 @@ def main():
                 "episode_success": rows[0]["success"],
                 "policy_hz": 50, "physx_hz": 500,
                 "pgs_position_iterations": args.pgs_position_iterations,
+                "solve_articulation_contact_last": args.solve_articulation_contact_last,
                 "cap_outer_radius_m": raw.bottle_cfg.cap_outer_radius,
                 "cap_height_m": raw.bottle_cfg.cap_height,
                 "rows": physics_trace,

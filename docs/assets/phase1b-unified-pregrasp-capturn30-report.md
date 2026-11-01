@@ -521,6 +521,24 @@ and `scripts/environments/audit_phase1b_velocity_layers.py`. The audit's
 JSON summary is
 `artifacts/phase1b/eval_tanh_model699_B_velocity_layers_audit.json`.
 
+### Contact-order counterexample
+
+The evaluator also accepts `--solve-articulation-contact-last` for a
+one-factor PGS solver-order probe. With the same checkpoint, level-B Reset
+row 1, seed 9117, eight position iterations and 50/500-Hz rates, enabling
+this setting changed the default successful 120-substep episode into a
+420-substep failure. Its maximum screw constraint error rose from 6.30 μm
+to **1,483 μm**; 337 of 420 substeps exceeded 100 μm. The alternative's
+velocity-versus-pose MAE was 1.165 rad/s, but its integrated velocity bias
+was +0.156 rad, versus −0.054 rad at the default ordering. Its minimum
+contact signed separation was −1.878 mm, versus −1.539 mm at default.
+This single controlled rollout rules out adopting the setting as an
+unvalidated fix for this sample; it is not a population estimate of the
+setting's success rate. Training and all formal 200-episode evaluations
+retain the default ordering. The ignored raw trace and audit are
+`artifacts/phase1b/eval_tanh_model699_B_contact_last_500hz_trace.json`
+and `artifacts/phase1b/eval_tanh_model699_B_contact_last_velocity_audit.json`.
+
 The seed-1101 warm-start training curve shows mean episode reward rising
 from approximately 10 at the first new update to 34 by roughly 100 new updates, while
 the measured bilateral stable-support rate rises to roughly 59% at that
@@ -634,6 +652,16 @@ scripts/run_isaaclab.sh scripts/environments/evaluate_phase1b.py \
 python scripts/environments/audit_phase1b_velocity_layers.py \
   --trace artifacts/phase1b/eval_tanh_model699_B_500hz_velocity_layers_trace.json \
   --output artifacts/phase1b/eval_tanh_model699_B_velocity_layers_audit.json
+scripts/run_isaaclab.sh scripts/environments/evaluate_phase1b.py \
+  --checkpoint logs/rsl_rl/dexteroushands_pregrasp_capturn30_phase1b/2026-11-02_00-42-31_phase1b_seed2202_A_tanh_2048/model_699.pt \
+  --action-distribution tanh --policy learned --level B \
+  --episodes 1 --num-envs 1 --seed 9117 --viz none \
+  --solve-articulation-contact-last \
+  --physics-trace-output artifacts/phase1b/eval_tanh_model699_B_contact_last_500hz_trace.json \
+  --output artifacts/phase1b/eval_tanh_model699_B_contact_last.json
+python scripts/environments/audit_phase1b_velocity_layers.py \
+  --trace artifacts/phase1b/eval_tanh_model699_B_contact_last_500hz_trace.json \
+  --output artifacts/phase1b/eval_tanh_model699_B_contact_last_velocity_audit.json
 scripts/run_isaaclab.sh scripts/environments/propose_phase1b_natural_left_hybrids.py \
   --output artifacts/phase1b/natural_left_hybrid_base_candidates.json \
   --report artifacts/phase1b/natural_left_hybrid_base_proposal_report.json
