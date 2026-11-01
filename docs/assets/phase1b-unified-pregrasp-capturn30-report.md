@@ -107,9 +107,18 @@ left/right geometry fit and verified support window, not a longer replay
 of the already saturated A/B distribution.
 An optional thumb-tip-aware offline fit generated eight additional MJCF
 proposals (SHA-256
-`5f7597400a9c9cb7a9548913219bda685c4322615f2cfc4afe65f8fc4a5d819e`);
-they have **not** passed native PGS admission and are excluded from every
-training and success claim in this report.
+`5f7597400a9c9cb7a9548913219bda685c4322615f2cfc4afe65f8fc4a5d819e`).
+It reduced the initial left-thumb link-origin radial offset to about 2 mm.
+All eight were solver-compatible in the native PGS probe, yet **0/8**
+established valid bilateral contact by 0.3 s; only one obtained any left
+thumb/bottle contact, and none obtained right-index/cap contact. All eight
+failed by policy step 14. Even a 2-mm wrist-only approach takes at least
+four 0.5-mm commands (0.08 s), during which an unsupported bottle falls
+about 31 mm in free fall; finger dynamics can change that window but did
+not rescue these measured candidates. They are excluded from every PPO
+training and success claim. This third negative probe strengthens the
+decision to redesign the native contact geometry and support window before
+spending more PPO transitions on distant families.
 
 ## Tests and baselines
 
@@ -573,6 +582,14 @@ scripts/run_isaaclab.sh scripts/environments/validate_phase1b_pregrasp_pgs.py \
   --native-bank artifacts/phase1b/natural_left_hybrid_closer_candidates.json \
   --output artifacts/phase1b/natural_left_hybrid_closer_pgs_probe.json \
   --count 16 --steps 15 --probe-fingers fit_approach --probe-order active_first
+scripts/run_isaaclab.sh scripts/environments/propose_phase1b_natural_left_hybrids.py \
+  --thumb-tip-target-m 0.002 \
+  --output artifacts/phase1b/natural_left_thumb_tip_candidates.json \
+  --report artifacts/phase1b/natural_left_thumb_tip_proposal_report.json
+scripts/run_isaaclab.sh scripts/environments/validate_phase1b_pregrasp_pgs.py \
+  --native-bank artifacts/phase1b/natural_left_thumb_tip_candidates.json \
+  --output artifacts/phase1b/natural_left_thumb_tip_pgs_probe.json \
+  --count 8 --steps 15 --probe-fingers fit_approach --probe-order active_first
 ```
 
 Raw PPO consoles, TensorBoard events and checkpoints are under
