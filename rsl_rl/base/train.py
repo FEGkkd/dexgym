@@ -38,6 +38,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--num_envs", type=int, default=None)
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--max_iterations", type=int, default=None)
+    parser.add_argument("--hand_variant", choices=("beta1", "beta2"),
+                        help="Bimanual WujiHand2 asset; beta1 replays historical checkpoints")
     parser.add_argument("--stable_train_bank", type=Path,
                         help="Validated stable bank for a controlled bimanual training round")
     parser.add_argument("--stable_reset_probability", type=float)
@@ -84,7 +86,7 @@ def main(argv: list[str] | None = None) -> None:
     args = _parser().parse_args(argv)
     if args.task is None:
         raise SystemExit("--task is required")
-    if (args.stable_train_bank is not None or
+    if (args.hand_variant is not None or args.stable_train_bank is not None or
             args.stable_reset_probability is not None or
             args.source_bank_snapshot or args.finger_increment_scale is not None or
             args.wrist_translation_scale is not None or
@@ -141,6 +143,11 @@ def main(argv: list[str] | None = None) -> None:
             args.task, device=args.device, num_envs=args.num_envs, use_fabric=not args.disable_fabric
         )
         cli_args.apply_env_cfg_overrides(env_cfg, args)
+        if args.hand_variant is not None:
+            from dexteroushands_lab.tasks.direct.bimanual_bottle.variant_config import (
+                configure_bimanual_hand_variant,
+            )
+            configure_bimanual_hand_variant(env_cfg, args.hand_variant)
         if args.stable_train_bank is not None:
             env_cfg.stable_train_bank_path = str(args.stable_train_bank)
         if args.stable_reset_probability is not None:

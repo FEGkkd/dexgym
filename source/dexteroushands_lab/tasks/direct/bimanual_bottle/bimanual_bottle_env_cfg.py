@@ -12,6 +12,7 @@ from .task_contract import ACTION_DIM, actor_dim, critic_dim
 @configclass
 class BimanualBottleDirectEnvCfg(DirectRLEnvCfg):
     seed = 0
+    hand_variant = "beta2"
     episode_length_s = 5.0
     decimation = 10
     action_space = ACTION_DIM
@@ -68,10 +69,12 @@ class BimanualBottleDirectEnvCfg(DirectRLEnvCfg):
 @configclass
 class GraspHoldDirectEnvCfg(BimanualBottleDirectEnvCfg):
     task_kind = "grasp_hold"
-    stable_reset_probability = 0.65
+    # Beta 1 stable poses did not pass unsupported Beta 2 replay. Keep the
+    # task usable with physically qualified Beta 2 pregrasp resets.
+    stable_reset_probability = 0.0
 
 
 @configclass
 class CapTurn30DirectEnvCfg(BimanualBottleDirectEnvCfg):
     task_kind = "cap_turn_30"
-    stable_reset_probability = 1.0
+    stable_reset_probability = 0.0

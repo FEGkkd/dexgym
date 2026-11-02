@@ -21,6 +21,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--video", action="store_true", default=False)
     parser.add_argument("--video_length", type=int, default=300)
     parser.add_argument("--steps", type=int, default=0)
+    parser.add_argument("--hand_variant", choices=("beta1", "beta2"),
+                        help="Bimanual WujiHand2 asset; use beta1 for historical checkpoints")
     parser.add_argument("--thread_backend", choices=("legacy_d6", "mimic"),
                         help="Bimanual bottle thread solver used by the checkpoint")
     parser.add_argument("--stable_bank", type=Path,
@@ -89,6 +91,13 @@ def main(argv: list[str] | None = None) -> None:
         env_cfg = parse_env_cfg(
             args.task, device=args.device, num_envs=args.num_envs, use_fabric=not args.disable_fabric
         )
+        if args.hand_variant is not None:
+            if not args.task.startswith("DexterousHands-WujiHand2-Bimanual-"):
+                raise SystemExit("--hand_variant applies only to WujiHand2 bimanual tasks")
+            from dexteroushands_lab.tasks.direct.bimanual_bottle.variant_config import (
+                configure_bimanual_hand_variant,
+            )
+            configure_bimanual_hand_variant(env_cfg, args.hand_variant)
         if args.thread_backend is not None:
             if not args.task.startswith("DexterousHands-WujiHand2-Bimanual-"):
                 raise SystemExit("--thread_backend applies only to bimanual bottle tasks")

@@ -1,0 +1,60 @@
+{
+  "asset_variant": "beta2",
+  "bank_sha256": "6811aa8bd8f58454ddd4f1f1ae780c10a4cdf1532b03fdb353a830041a2a9d63",
+  "count": 12,
+  "cross_family_generalization_claim_allowed": false,
+  "evaluation_group_values_global": [
+    9103120,
+    9103176,
+    9103231
+  ],
+  "one_relative_template_family_only": true,
+  "physx_hz": 500,
+  "policy_hz": 50,
+  "schema": "dexgym-beta2-local-pregrasp-split-v1",
+  "solver": "pgs_mimic",
+  "source_evidence": [
+    {
+      "admitted": 1,
+      "admitted_sha256": "9b4c457c6fcd807e2df0f6381604e17206d77728277b7e432aa5716921d1c60e",
+      "attempted": 51,
+      "candidate_sha256": "876841ed43722f25b6808446ff0e8ef94628122d0e59b89f1d53e3814bd1dff7",
+      "report_sha256": "00428626776bf0f57cf08d7278a433d6187f556d213a3c177c40a5dd2f60390d"
+    },
+    {
+      "admitted": 1,
+      "admitted_sha256": "e53e3e0e7ef6ba1e7b8aa5679a3e8cdca96aed923ecbcab1a4992da4dc0d2a00",
+      "attempted": 32,
+      "candidate_sha256": "4ac45378c3a4ada481f71d1d4632f003109d26314c3d80e0e51d05e040fa54a6",
+      "report_sha256": "ad8335a09a1cd48990b30ee162d5c633fc5fec5f931ebc0c479a06f355d16f2a"
+    },
+    {
+      "admitted": 2,
+      "admitted_sha256": "349b704c6aaf345d82f533cbb8766dab94576622252cb674830db99786149acd",
+      "attempted": 128,
+      "candidate_sha256": "344cc8a108a94025cee790ed237a9f44a941f21bb2c05628b754747e96c7e702",
+      "report_sha256": "1fe872354c238905adc29b40ca1af192e36be3012a844014e166e6a707bba369"
+    },
+    {
+      "admitted": 8,
+      "admitted_sha256": "270a52ee4a81f6f4277e4d343b5d2daa80f3b548c6dbf8df9d45a518a4caf0eb",
+      "attempted": 256,
+      "candidate_sha256": "80b20e6fa54fc832ac4269ea83bfd73aada8216e7613496c547500dfbbc382b0",
+      "report_sha256": "8a7ab05fd3042cfffcc7a9ae12d350b2c352fb9b76a12569914b99de550be138"
+    }
+  ],
+  "split_key": "local_shape_seed",
+  "split_seed": 9104,
+  "train_local_shape_seeds": [
+    66003,
+    9101024,
+    9102007,
+    9102103,
+    9103096,
+    9103100,
+    9103109,
+    9103136,
+    9103191
+  ],
+  "world_pose_augmentation_is_not_a_new_local_family": true
+}

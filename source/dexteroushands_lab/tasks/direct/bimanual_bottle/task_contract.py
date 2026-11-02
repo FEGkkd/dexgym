@@ -42,6 +42,15 @@ CRITIC_FIELDS = {
 }
 
 
+def critic_force_body_indices(body_names: tuple[str, ...]) -> tuple[int, ...]:
+    """Keep the 21 physical link-force slots across Beta 1 and Beta 2 USDs."""
+    indices = tuple(i for i, name in enumerate(body_names)
+                    if not name.endswith("_tip_sensor_frame"))
+    if len(indices) != 21:
+        raise ValueError("Expected 21 hand contact bodies after excluding Beta 2 sensor frames")
+    return indices
+
+
 def actor_dim() -> int:
     return sum(ACTOR_FIELDS.values())
 

@@ -11,6 +11,7 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--num-envs", type=int, default=1)
 parser.add_argument("--steps", type=int, default=10)
 parser.add_argument("--task", choices=("grasp_hold", "cap_turn_30"), default="grasp_hold")
+parser.add_argument("--hand-variant", choices=("beta1", "beta2"), default="beta2")
 parser.add_argument("--thread-backend", choices=("legacy_d6", "mimic"), default="legacy_d6")
 parser.add_argument("--solver-type", choices=("tgs", "pgs"), default="tgs")
 parser.add_argument("--stable-train-bank", type=Path)
@@ -28,8 +29,10 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env import 
 from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env_cfg import (
     GraspHoldDirectEnvCfg, CapTurn30DirectEnvCfg,
 )
+from dexteroushands_lab.tasks.direct.bimanual_bottle.variant_config import configure_bimanual_hand_variant
 
 cfg = GraspHoldDirectEnvCfg() if args.task == "grasp_hold" else CapTurn30DirectEnvCfg()
+configure_bimanual_hand_variant(cfg, args.hand_variant)
 cfg.scene.num_envs = args.num_envs
 cfg.sim.device = args.device
 cfg.thread_backend = args.thread_backend

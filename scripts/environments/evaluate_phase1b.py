@@ -10,6 +10,7 @@ from isaaclab.app import AppLauncher
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--checkpoint", type=Path)
+parser.add_argument("--hand-variant", choices=("beta1", "beta2"), default="beta2")
 parser.add_argument("--policy", choices=("learned", "zero", "random", "no_right", "no_left", "no_hands", "freeze_left", "freeze_right", "reverse"), default="zero")
 parser.add_argument("--level", choices=("A", "B", "D"), default="A")
 parser.add_argument("--reward-profile", choices=("baseline", "contact_coverage"), default="baseline")
@@ -31,6 +32,8 @@ if args.policy in ("learned", "no_right", "no_left", "freeze_left", "freeze_righ
     parser.error("Learned and ablation policies require --checkpoint")
 if args.physics_trace_output and args.num_envs != 1:
     parser.error("--physics-trace-output requires --num-envs 1")
+if args.level in ("B", "D") and args.hand_variant == "beta2":
+    parser.error("Beta 2 weak-contact and original-distance pregrasps have not been physically qualified")
 app = AppLauncher(args).app
 
 import torch
@@ -38,6 +41,7 @@ from isaaclab_rl.rsl_rl import RslRlVecEnvWrapper, handle_deprecated_rsl_rl_cfg
 from rsl_rl.runners import OnPolicyRunner
 from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.env import PregraspCapTurn30DirectEnv
 from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.env_cfg import PregraspCapTurn30DirectEnvCfg
+from dexteroushands_lab.tasks.direct.bimanual_bottle.variant_config import configure_bimanual_hand_variant
 from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.agents.rsl_rl_ppo_cfg import UnifiedPPORunnerCfg
 from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.action_math import base_evaluation_action
 from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.pose_spin import relative_pose_yaw, wrapped_delta
@@ -46,6 +50,7 @@ from dexteroushands_lab.assets.bottle.batched_thread import _rotate
 
 def main():
     cfg = PregraspCapTurn30DirectEnvCfg()
+    configure_bimanual_hand_variant(cfg, args.hand_variant)
     cfg.scene.num_envs = args.num_envs
     cfg.sim.device = args.device
     cfg.sim.physics.min_position_iteration_count = args.pgs_position_iterations
@@ -227,6 +232,7 @@ def main():
                 print("PHASE1B_EVAL_PROGRESS", steps, len(rows), flush=True)
         summary = {
             "task": "DexterousHands-WujiHand2-Bimanual-PregraspCapTurn30-Direct-v0",
+            "hand_variant": args.hand_variant,
             "level": args.level, "held_out": True, "policy": args.policy,
             "reward_profile": args.reward_profile,
             "action_distribution": args.action_distribution,

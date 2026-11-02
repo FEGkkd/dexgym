@@ -30,7 +30,7 @@ from dexteroushands_lab.scenes.batched_contacts import BatchedContactMonitor
 from dexteroushands_lab.scenes.bimanual_bottle import make_bimanual_bottle_scene_cfg
 from dexteroushands_lab.scenes.grasp_init import grasp_sample_from_dict
 
-from .task_contract import ACTOR_FIELDS, CRITIC_FIELDS
+from .task_contract import ACTOR_FIELDS, CRITIC_FIELDS, critic_force_body_indices
 from .reward_terms import (
     GRASP_SUCCESS_BONUS, CAP_TURN_SUCCESS_BONUS, time_integrated_contact_reward,
     digit_contact_score, physically_supported_turn_reward,
@@ -72,6 +72,8 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             raise ValueError("right_contact_balance_weight must be in [0, 1]")
         if cfg.right_cap_proximity_mode not in ("full_five", "sidewall_tripod"):
             raise ValueError("Unknown right cap proximity mode")
+        if cfg.hand_variant not in ("beta1", "beta2"):
+            raise ValueError("Unknown WujiHand2 asset variant")
         if cfg.thread_backend == "mimic" and cfg.stable_reset_probability != 0:
             if (cfg.sim.physics.solver_type != 0 or not (
                     cfg.stable_train_bank_path or cfg.stable_eval_bank_path)):
@@ -88,6 +90,7 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             num_envs=cfg.scene.num_envs, asset_dir=self._asset_dir,
             bottle=self.bottle_cfg, wrist_control_mode="pose_command_wrist",
             contact_debug=False, bottle_center_z=0.5,
+            variant=cfg.hand_variant,
         )
         # The shared standalone scene's broad hand sensors also match visual
         # child prims at scale. The exact object/body batch views below supply
@@ -100,8 +103,8 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         self._physics_handles_decimation = False
         self.left, self.right = self.scene["left_hand"], self.scene["right_hand"]
         self.bottle, self.cap = self.scene["bottle_body"], self.scene["bottle_cap"]
-        self.specs = (load_hand2_spec(variant="beta1", side="left"),
-                      load_hand2_spec(variant="beta1", side="right"))
+        self.specs = (load_hand2_spec(variant=cfg.hand_variant, side="left"),
+                      load_hand2_spec(variant=cfg.hand_variant, side="right"))
         self._all_ids = torch.arange(self.num_envs, device=self.device, dtype=torch.long)
         self._joint_reorder = []
         self._joint_limits = []
@@ -109,7 +112,7 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         for hand, spec, prefix in ((self.left, self.specs[0], "l"),
                                    (self.right, self.specs[1], "r")):
             if len(hand.joint_names) != 20 or set(hand.joint_names) != set(spec.joint_names):
-                raise RuntimeError("Official Beta 1 hand joint mapping changed")
+                raise RuntimeError(f"Official {cfg.hand_variant} hand joint mapping changed")
             order = [spec.joint_names.index(name) for name in hand.joint_names]
             self._joint_reorder.append(order)
             self._joint_limits.append(torch.tensor(
@@ -131,6 +134,9 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             device=self.device,
             enable_cap_right_manifold=cfg.right_cap_contact_gate == "manifold_sidewall",
         )
+        self._critic_force_body_indices = {
+            side: critic_force_body_indices(self.contacts.body_names[side])
+            for side in ("left", "right")}
         self._load_banks()
         self._finger_targets = [torch.zeros(self.num_envs, 20, device=self.device) for _ in range(2)]
         self._last_action = torch.zeros(self.num_envs, 52, device=self.device)
@@ -175,7 +181,10 @@ class BimanualBottleDirectEnv(DirectRLEnv):
 
     def _load_banks(self):
         root = Path(__file__).resolve().parents[5]
-        stable_path = root / "docs/assets/phase0e_bimanual_grasp_init_bank.json"
+        variant = self.cfg.hand_variant
+        stable_path = root / ("docs/assets/phase0e_bimanual_grasp_init_bank.json"
+                              if variant == "beta1" else
+                              "docs/assets/beta2_bimanual_stable_bank.json")
         external_stable = self.cfg.stable_eval_bank_path
         external_train = self.cfg.stable_train_bank_path
         if external_stable is not None and external_train is not None:
@@ -192,11 +201,20 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             stable_path = Path(external_stable)
             if not stable_path.is_absolute():
                 stable_path = root / stable_path
-        pre_path = root / (self.cfg.pregrasp_bank_path or "docs/assets/phase0_pregrasp_reset_bank.json")
-        stable = [grasp_sample_from_dict(row) for row in json.loads(stable_path.read_text())]
+        default_pre = ("docs/assets/phase0_pregrasp_reset_bank.json" if variant == "beta1"
+                       else "docs/assets/beta2_phase1b_pregrasp_bank.json")
+        pre_path = Path(self.cfg.pregrasp_bank_path or default_pre)
+        if not pre_path.is_absolute():
+            pre_path = root / pre_path
+        needs_stable = bool(self.cfg.stable_reset_probability or external_stable or external_train)
+        if needs_stable and variant == "beta2" and not stable_path.is_file():
+            raise RuntimeError("No physically validated Beta 2 stable grasp bank is available; "
+                               "use pregrasp-only resets or supply an external validated bank")
+        stable = ([grasp_sample_from_dict(row) for row in json.loads(stable_path.read_text())]
+                  if needs_stable or variant == "beta1" else [])
         pre = [grasp_sample_from_dict(row) for row in json.loads(pre_path.read_text())]
-        if not stable or not pre or any(not x.validated for x in stable):
-            raise RuntimeError("Stable and geometric pregrasp banks are required")
+        if (needs_stable and not stable) or not pre or any(not x.validated for x in stable):
+            raise RuntimeError("Validated stable and geometric pregrasp banks are required")
         if any(x.validated or (not self.cfg.pregrasp_candidate_validation_mode and
                                not x.metadata.get("geometry_qualified")) for x in pre):
             raise RuntimeError("Pregrasp bank contains invalid training candidates")
@@ -207,6 +225,9 @@ class BimanualBottleDirectEnv(DirectRLEnv):
                 raise RuntimeError("Selected pregrasp level has fewer than two candidates")
         if self.cfg.pregrasp_candidate_validation_mode:
             stable_ids, pre_ids = tuple(range(len(stable))), tuple(range(len(pre)))
+        elif not stable:
+            stable_ids = ()
+            pre_ids = split_pregrasp_indices(len(pre), evaluation=self.cfg.evaluation_mode)
         elif external_stable is None and external_train is None:
             stable_ids, pre_ids = split_bank_indices(
                 len(stable), len(pre), evaluation=self.cfg.evaluation_mode)
@@ -222,7 +243,9 @@ class BimanualBottleDirectEnv(DirectRLEnv):
                 manifest = json.loads(manifest_path.read_text())
                 if manifest.get("bank_sha256") != hashlib.sha256(pre_path.read_bytes()).hexdigest():
                     raise RuntimeError("Frozen pregrasp split does not match the Reset bank SHA")
-                evaluation_groups = set(manifest["evaluation_natural_source_seeds_global"])
+                evaluation_groups = set(manifest.get(
+                    "evaluation_group_values_global",
+                    manifest.get("evaluation_natural_source_seeds_global", [])))
             pre_ids = split_group_indices(
                 pre, key=self.cfg.pregrasp_split_key,
                 evaluation=self.cfg.evaluation_mode,
@@ -247,7 +270,7 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         self._stable_count = len(stable)
         samples = stable + pre
         for sample in samples:
-            if (sample.metadata.get("asset_variant") != "beta1"
+            if (sample.metadata.get("asset_variant") != variant
                     or sample.metadata.get("left_usd_sha256") != self.specs[0].usd_sha256
                     or sample.metadata.get("right_usd_sha256") != self.specs[1].usd_sha256):
                 raise RuntimeError("Reset bank asset version differs from loaded official USD")
@@ -294,12 +317,11 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             return
         n = len(ids)
         stable = torch.rand(n, device=self.device) < self.cfg.stable_reset_probability
-        indices = torch.where(
-            stable,
-            torch.randint(self._stable_count, (n,), device=self.device),
-            self._stable_count + torch.randint(len(self._bank["thread_angle"]) - self._stable_count,
-                                               (n,), device=self.device),
-        )
+        pre_indices = self._stable_count + torch.randint(
+            len(self._bank["thread_angle"]) - self._stable_count,
+            (n,), device=self.device)
+        indices = (torch.where(stable, torch.randint(self._stable_count, (n,), device=self.device),
+                               pre_indices) if self._stable_count else pre_indices)
         if self.cfg.pregrasp_candidate_validation_mode:
             indices = self._stable_count + ids.remainder(
                 len(self._bank["thread_angle"]) - self._stable_count)
@@ -827,7 +849,8 @@ class BimanualBottleDirectEnv(DirectRLEnv):
                                ("right_cap_forces", "Cap", "right"),
                                ("left_cap_forces", "Cap", "left"),
                                ("right_bottle_forces", "Bottle", "right")):
-            critic[key] = self.contacts.force_magnitudes(obj, side).clamp(max=100) / 10
+            critic[key] = self.contacts.force_magnitudes(obj, side)[
+                :, self._critic_force_body_indices[side]].clamp(max=100) / 10
         critic["finger_applied_torque"] = torch.cat(
             (self.left.data.applied_torque.torch, self.right.data.applied_torque.torch), dim=-1) / 2
         critic["thread_internal_state"] = torch.stack(

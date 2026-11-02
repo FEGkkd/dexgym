@@ -14,10 +14,12 @@ class PregraspCapTurn30DirectEnvCfg(BimanualBottleDirectEnvCfg):
     no_left_bottle_contact_counterfactual = False
     thread_backend = "mimic"
     stable_reset_probability = 0.0
-    pregrasp_bank_path = "docs/assets/phase1b_pregrasp_bank.json"
+    pregrasp_bank_path = None
     pregrasp_reset_levels = ("A",)
-    pregrasp_split_key = "right_natural_source_seed"
-    pregrasp_split_manifest_path = "docs/assets/phase1b_pregrasp_split.json"
+    # Beta 2 bank is one relative template with distinct local hand-shape
+    # perturbations. Its frozen split does not imply cross-family transfer.
+    pregrasp_split_key = "local_shape_seed"
+    pregrasp_split_manifest_path = "docs/assets/beta2_phase1b_pregrasp_split.json"
     right_cap_contact_gate = "manifold_sidewall"
     right_cap_proximity_mode = "sidewall_tripod"
     right_contact_balance_weight = 0.2

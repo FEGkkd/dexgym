@@ -34,3 +34,19 @@ def test_tracker_requires_tip_frames_and_reads_live_pose_buffer():
     assert second["thumb"]["radial_distance_to_bottle_axis_m"] == pytest.approx(0.06)
     with pytest.raises(RuntimeError, match="Missing live"):
         FingertipSiteTracker(SimpleNamespace(body_names=names[:4]), spec)
+
+
+def test_beta2_tracker_uses_tip_frames_alongside_sensor_frames():
+    names = [f"r_{d}_tip" for d in
+             ("thumb", "index_finger", "middle_finger", "ring_finger", "pinky")]
+    body_names = [name for tip in names for name in (tip, tip + "_sensor_frame")]
+    poses = torch.zeros((1, len(body_names), 7))
+    poses[0, ::2, 0] = 0.04
+    hand = SimpleNamespace(body_names=body_names,
+                           data=SimpleNamespace(body_link_pose_w=SimpleNamespace(torch=poses)))
+    spec = SimpleNamespace(variant="beta2", side="right",
+                           fingertip_bodies=tuple(x.replace("_tip", "_distal") for x in names))
+    tracker = FingertipSiteTracker(hand, spec)
+    assert tracker.names == tuple(names)
+    assert tracker.observe(0, (0, 0, 0.5, 0, 0, 0, 1), 0.035)["thumb"][
+        "radial_distance_to_bottle_axis_m"] == pytest.approx(0.04)

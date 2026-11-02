@@ -1,6 +1,6 @@
-"""Live Beta 1 fingertip marker poses and bottle-axis contact diagnostics.
+"""Live WujiHand2 fingertip marker poses and bottle-axis contact diagnostics.
 
-The official Beta 1 USD has five fixed ``*_tip`` rigid-body frames. Their
+The official Beta 1 and Beta 2 USDs have five fixed ``*_tip`` rigid-body frames. Their
 ``body_link_pose_w`` values come from the current PhysX articulation update;
 distal body origins and stale USD stage transforms are never substituted.
 """
@@ -33,8 +33,8 @@ class FingertipSiteTracker:
     """Resolve all five official tip-frame indices once and require live data."""
 
     def __init__(self, hand, spec):
-        if spec.variant != "beta1":
-            raise ValueError("This tip-frame tracker is validated only for Beta 1")
+        if spec.variant not in ("beta1", "beta2"):
+            raise ValueError("Unsupported WujiHand2 fingertip variant")
         prefix = "l" if spec.side == "left" else "r"
         self.hand = hand
         self.spec = spec

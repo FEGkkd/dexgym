@@ -11,6 +11,7 @@ from isaaclab.app import AppLauncher
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--task", choices=("grasp_hold", "cap_turn_30"), default="grasp_hold")
+parser.add_argument("--hand-variant", choices=("beta1", "beta2"), default="beta2")
 parser.add_argument("--policy", choices=("learned", "zero", "random", "left_only", "right_only", "reverse"),
                     default="zero")
 parser.add_argument("--random-action-std", type=float, default=1.0,
@@ -84,8 +85,10 @@ from dexteroushands_lab.assets.bottle.batched_thread import _rotate
 from dexteroushands_lab.tasks.direct.bimanual_bottle.bimanual_bottle_env_cfg import (
     GraspHoldDirectEnvCfg, CapTurn30DirectEnvCfg,
 )
+from dexteroushands_lab.tasks.direct.bimanual_bottle.variant_config import configure_bimanual_hand_variant
 
 cfg = GraspHoldDirectEnvCfg() if args.task == "grasp_hold" else CapTurn30DirectEnvCfg()
+configure_bimanual_hand_variant(cfg, args.hand_variant)
 cfg.scene.num_envs = args.num_envs
 cfg.sim.device = args.device
 cfg.seed = args.seed
@@ -395,6 +398,7 @@ try:
                     break
     elapsed = time.monotonic() - start
     summary = {"task": args.task, "policy": args.policy,
+               "hand_variant": args.hand_variant,
                "random_action_std": args.random_action_std if args.policy == "random" else None,
                "thread_backend": args.thread_backend,
                "right_cap_contact_gate": args.right_cap_contact_gate,
@@ -456,6 +460,7 @@ try:
         args.episode_rows_output.parent.mkdir(parents=True, exist_ok=True)
         args.episode_rows_output.write_text(json.dumps({
             "checkpoint": summary["checkpoint"], "seed": args.seed,
+            "hand_variant": args.hand_variant,
             "thread_backend": args.thread_backend,
             "thread_pitch_m": raw_env.bottle_cfg.thread_pitch,
             "thread_sign": raw_env.bottle_cfg.thread_sign,
