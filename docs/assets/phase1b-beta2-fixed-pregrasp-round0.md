@@ -64,3 +64,61 @@ The fixed-state result can demonstrate acquisition from this initial pose;
 only the latter tests within-template generalization. Beta 2 Level B and
 original-distance natural pregrasps remain unqualified and cannot inherit a
 near-contact score.
+
+## Seed 1101 results and stop decision
+
+The 1024-environment scratch run completed 209 PPO updates (6,848,512
+transitions) before an intentional SIGINT stop. The requested 1000 updates
+were not completed. The latest saved checkpoint is `model_200.pt`; `model_100.pt`
+has the same independent Success rate with less action saturation. Raw log,
+checkpoints, TensorBoard events, and curve PNGs are under the ignored paths
+`logs/phase1b_beta2_fixed66003/` and
+`logs/rsl_rl/dexteroushands_pregrasp_capturn30_phase1b/2026-11-03_19-23-11_beta2_fixed66003_gaussian_std1_seed1101_1024_1000iter/`.
+
+| PPO update | Fixed train seed, 200 episodes | Three frozen local eval seeds, 200 episodes | Eval bilateral support | Deterministic raw action outside `[-1,1]` |
+| ---: | ---: | ---: | ---: | ---: |
+| 25 | 0/200 | Not tested | 0% fixed | Not recorded here |
+| 100 | 200/200 | 200/200 | 89.7% | 11.1% |
+| 150 | Not tested | 200/200 | 90.7% | 13.2% |
+| 200 | 200/200 | 200/200 | 96.0% | 18.5% |
+
+All 200-update evaluation episodes on the three frozen local seeds had no
+failure or constraint-failure termination. Their mean final pitch error was
+1.96 µm. The three rows are variations of **one** relative grasp template;
+this is within-template evidence only. The deterministic action overflow at
+update 200 includes left wrist rotation 72.5%, right wrist rotation 55.8%,
+left fingers 10.0%, and right fingers 18.1% of their respective elements.
+The stochastic sampled-action overflow in training rose from about 31.7% at
+initialization to 41.3% at update 209. The wrist-rotation Gaussian stds
+fell during this period (left roughly 1.00 to 0.81; right roughly 1.00 to
+0.92), so the rising overflow is not explained by increasing std alone.
+Fixed-state independent Success was
+already saturated at update 100, so extending this distribution solely for
+reward would increase action saturation without measurable deterministic
+Success gain. The next controlled experiment uses an independent PPO seed and
+2048 environments.
+
+`model_100.pt` counterfactuals, each 200 episodes on the fixed state, were
+0/200 with no right-hand drive/contact, 0/200 with no left-hand drive/contact,
+and 0/200 with reversed wrist turning. A separate no-hands/no-drive control
+was also 0/200, with zero positive opening. These controls use the same
+Success predicate as the learned policy.
+
+The one-environment 500 Hz successful trace for `model_100.pt` opened 0.78435
+rad by actual relative rigid-body pose, with a matching Mimic joint angle and
+0.374509 mm axial travel (pitch prediction 0.374500 mm). About 93.6% of its
+positive angular progress occurred while right-cap contact force was present.
+The maximum constraint error was 5.98 µm. This does **not** clear the full
+physics gate: PhysX screw velocity differed from adjacent-pose angular speed
+by 1.624 rad/s MAE with -0.0436 rad integrated bias. The deepest reported
+PhysX signed separation was -2.395 mm; a cap collision-proxy point SDF reached
+-1.741 mm. These are distinct geometric quantities and neither alone is an
+exact penetration depth. Raising PGS position iterations from 8 to 16 on a
+controlled one-environment replay did not remove the discrepancy (velocity
+MAE 1.685 rad/s; signed separation minimum -2.584 mm), so solver iteration
+count alone is not a demonstrated remedy.
+
+The 2048-environment seed 2202 replication uses the same fixed Reset,
+physics, reward, and Gaussian std 1.0. Its raw log is
+`logs/phase1b_beta2_fixed66003/train_seed2202_2048_400.log` and its requested
+run name is `beta2_fixed66003_gaussian_std1_seed2202_2048_400iter`.
