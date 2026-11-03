@@ -45,7 +45,8 @@ health_panels = (
 )
 for log_dir in args.log_dirs:
     run_name = log_dir.name
-    label = ("Beta 2 fixed seed 1101, 1024" if "beta2_fixed66003" in run_name and "seed1101" in run_name else
+    label = ("Beta 2 fixed contact coverage seed 2202, 2048" if "beta2_fixed66003_contact_coverage" in run_name else
+             "Beta 2 fixed seed 1101, 1024" if "beta2_fixed66003" in run_name and "seed1101" in run_name else
              "Beta 2 fixed seed 2202, 2048" if "beta2_fixed66003" in run_name and "seed2202" in run_name else
              "tanh seed 2202, 2048" if "tanh_2048" in run_name else
              "scratch, 1024" if "seed1101_A_1024" in run_name else
