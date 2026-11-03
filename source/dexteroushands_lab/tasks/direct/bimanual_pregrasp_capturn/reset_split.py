@@ -1,6 +1,20 @@
 """Frozen local-shape source split for Phase 1B evaluation."""
 
 
+def fixed_training_pregrasp_index(rows, seed: int, manifest: dict) -> int:
+    """Select one near-contact row only if the frozen split assigned it to training."""
+    if manifest.get("split_key") != "local_shape_seed":
+        raise ValueError("Fixed training Reset requires a local-shape split manifest")
+    matches = [i for i, row in enumerate(rows) if row.seed == seed]
+    if len(matches) != 1:
+        raise ValueError("Fixed pregrasp seed is absent or duplicated in the Reset bank")
+    if seed in manifest.get("evaluation_group_values_global", []):
+        raise ValueError("Fixed pregrasp seed is reserved for evaluation")
+    if seed not in manifest.get("train_local_shape_seeds", []):
+        raise ValueError("Fixed pregrasp seed is not frozen for training")
+    return matches[0]
+
+
 def split_group_indices(rows, *, key: str, evaluation: bool,
                         evaluation_groups: set | frozenset | None = None) -> tuple[int, ...]:
     """Split by source preshape before selecting local perturbation rows."""

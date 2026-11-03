@@ -40,6 +40,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--max_iterations", type=int, default=None)
     parser.add_argument("--hand_variant", choices=("beta1", "beta2"),
                         help="Bimanual WujiHand2 asset; beta1 replays historical checkpoints")
+    parser.add_argument("--fixed_pregrasp_seed", type=int,
+                        help="Beta 2 unified-task diagnostic: use one frozen training pregrasp row")
     parser.add_argument("--stable_train_bank", type=Path,
                         help="Validated stable bank for a controlled bimanual training round")
     parser.add_argument("--stable_reset_probability", type=float)
@@ -86,7 +88,8 @@ def main(argv: list[str] | None = None) -> None:
     args = _parser().parse_args(argv)
     if args.task is None:
         raise SystemExit("--task is required")
-    if (args.hand_variant is not None or args.stable_train_bank is not None or
+    if (args.hand_variant is not None or args.fixed_pregrasp_seed is not None or
+            args.stable_train_bank is not None or
             args.stable_reset_probability is not None or
             args.source_bank_snapshot or args.finger_increment_scale is not None or
             args.wrist_translation_scale is not None or
@@ -112,6 +115,9 @@ def main(argv: list[str] | None = None) -> None:
     if args.action_distribution is not None and args.task != (
             "DexterousHands-WujiHand2-Bimanual-PregraspCapTurn30-Direct-v0"):
         raise SystemExit("--action_distribution is for the unified Phase 1B task only")
+    if args.fixed_pregrasp_seed is not None and args.task != (
+            "DexterousHands-WujiHand2-Bimanual-PregraspCapTurn30-Direct-v0"):
+        raise SystemExit("--fixed_pregrasp_seed is for the unified Phase 1B task only")
     if args.init_checkpoint is not None and (args.resume or not args.init_checkpoint.is_file()):
         raise SystemExit("--init_checkpoint must exist and cannot be combined with --resume")
     if args.reset_loaded_action_std and (
@@ -148,6 +154,8 @@ def main(argv: list[str] | None = None) -> None:
                 configure_bimanual_hand_variant,
             )
             configure_bimanual_hand_variant(env_cfg, args.hand_variant)
+        if args.fixed_pregrasp_seed is not None:
+            env_cfg.fixed_pregrasp_seed = args.fixed_pregrasp_seed
         if args.stable_train_bank is not None:
             env_cfg.stable_train_bank_path = str(args.stable_train_bank)
         if args.stable_reset_probability is not None:

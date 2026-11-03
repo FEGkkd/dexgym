@@ -11,6 +11,7 @@ parser.add_argument("--num-envs", type=int, default=16)
 parser.add_argument("--steps", type=int, default=10)
 parser.add_argument("--level", choices=("A", "B"), default="A")
 parser.add_argument("--hand-variant", choices=("beta1", "beta2"), default="beta2")
+parser.add_argument("--fixed-reset-seed", type=int)
 parser.add_argument("--evaluation", action="store_true")
 AppLauncher.add_app_launcher_args(parser)
 args = parser.parse_args()
@@ -28,6 +29,7 @@ from dexteroushands_lab.tasks.direct.bimanual_bottle.task_contract import actor_
 def main():
     cfg = PregraspCapTurn30DirectEnvCfg()
     configure_bimanual_hand_variant(cfg, args.hand_variant)
+    cfg.fixed_pregrasp_seed = args.fixed_reset_seed
     cfg.scene.num_envs = args.num_envs
     cfg.sim.device = args.device
     cfg.seed = 1001
@@ -48,6 +50,7 @@ def main():
             rewards.append(float(reward.mean()))
         elapsed = time.monotonic() - start
         print(json.dumps({"num_envs": args.num_envs, "steps": args.steps,
+                          "fixed_pregrasp_seed": args.fixed_reset_seed,
                           "actor_dim": actor_dim(), "critic_dim": critic_dim(),
                           "reward_mean": sum(rewards)/len(rewards),
                           "transitions_per_second": args.num_envs*args.steps/elapsed,

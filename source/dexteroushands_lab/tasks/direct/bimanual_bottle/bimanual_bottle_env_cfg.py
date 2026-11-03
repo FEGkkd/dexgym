@@ -38,6 +38,7 @@ class BimanualBottleDirectEnvCfg(DirectRLEnvCfg):
     pregrasp_candidate_validation_mode = False
     pregrasp_split_key = None
     pregrasp_split_manifest_path = None
+    fixed_pregrasp_seed = None
     no_right_cap_contact_counterfactual = False
     stable_reset_probability = 0.65
     wrist_translation_scale = 0.002

@@ -221,9 +221,23 @@ class BimanualBottleDirectEnv(DirectRLEnv):
         if self.cfg.pregrasp_reset_levels:
             pre = [s for s in pre if s.metadata.get("phase1b_reset_level") in
                    self.cfg.pregrasp_reset_levels]
-            if len(pre) < 2:
+            if len(pre) < (1 if self.cfg.fixed_pregrasp_seed is not None else 2):
                 raise RuntimeError("Selected pregrasp level has fewer than two candidates")
-        if self.cfg.pregrasp_candidate_validation_mode:
+        if self.cfg.fixed_pregrasp_seed is not None:
+            if (variant != "beta2" or self.cfg.task_kind != "pregrasp_cap_turn_30"
+                    or self.cfg.evaluation_mode or self.cfg.pregrasp_candidate_validation_mode
+                    or self.cfg.stable_reset_probability or not self.cfg.pregrasp_split_manifest_path):
+                raise ValueError("Fixed Reset is only for Beta 2 unified-task training diagnostics")
+            from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.reset_split import (
+                fixed_training_pregrasp_index,
+            )
+            manifest = json.loads((root / self.cfg.pregrasp_split_manifest_path).read_text())
+            if manifest.get("bank_sha256") != hashlib.sha256(pre_path.read_bytes()).hexdigest():
+                raise RuntimeError("Frozen pregrasp split does not match the Reset bank SHA")
+            stable_ids = ()
+            pre_ids = (fixed_training_pregrasp_index(
+                pre, self.cfg.fixed_pregrasp_seed, manifest),)
+        elif self.cfg.pregrasp_candidate_validation_mode:
             stable_ids, pre_ids = tuple(range(len(stable))), tuple(range(len(pre)))
         elif not stable:
             stable_ids = ()
@@ -235,7 +249,8 @@ class BimanualBottleDirectEnv(DirectRLEnv):
             stable_ids = tuple(range(len(stable)))
             pre_ids = split_pregrasp_indices(
                 len(pre), evaluation=external_stable is not None)
-        if self.cfg.pregrasp_split_key and not self.cfg.pregrasp_candidate_validation_mode:
+        if (self.cfg.pregrasp_split_key and not self.cfg.pregrasp_candidate_validation_mode
+                and self.cfg.fixed_pregrasp_seed is None):
             from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.reset_split import split_group_indices
             evaluation_groups = None
             if self.cfg.pregrasp_split_manifest_path:

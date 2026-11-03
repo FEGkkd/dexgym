@@ -3,12 +3,28 @@ import hashlib
 import json
 from pathlib import Path
 
-from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.reset_split import split_group_indices
+from dexteroushands_lab.tasks.direct.bimanual_pregrasp_capturn.reset_split import (
+    fixed_training_pregrasp_index, split_group_indices,
+)
 
 
 @dataclass
 class Row:
     metadata: dict
+    seed: int = 0
+
+
+def test_fixed_beta2_reset_selects_only_frozen_training_seed():
+    rows = [Row({"local_shape_seed": seed}, seed) for seed in (10, 11, 12)]
+    manifest = {"split_key": "local_shape_seed",
+                "train_local_shape_seeds": [10, 11],
+                "evaluation_group_values_global": [12]}
+    assert fixed_training_pregrasp_index(rows, 11, manifest) == 1
+    import pytest
+    with pytest.raises(ValueError, match="reserved for evaluation"):
+        fixed_training_pregrasp_index(rows, 12, manifest)
+    with pytest.raises(ValueError, match="absent"):
+        fixed_training_pregrasp_index(rows, 13, manifest)
 
 
 def test_split_keeps_all_local_variants_of_one_source_in_one_partition():

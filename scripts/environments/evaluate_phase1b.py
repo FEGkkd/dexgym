@@ -11,6 +11,8 @@ from isaaclab.app import AppLauncher
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("--checkpoint", type=Path)
 parser.add_argument("--hand-variant", choices=("beta1", "beta2"), default="beta2")
+parser.add_argument("--fixed-reset-seed", type=int,
+                    help="Diagnostic on one frozen training row; results are not held-out")
 parser.add_argument("--policy", choices=("learned", "zero", "random", "no_right", "no_left", "no_hands", "freeze_left", "freeze_right", "reverse"), default="zero")
 parser.add_argument("--level", choices=("A", "B", "D"), default="A")
 parser.add_argument("--reward-profile", choices=("baseline", "contact_coverage"), default="baseline")
@@ -34,6 +36,8 @@ if args.physics_trace_output and args.num_envs != 1:
     parser.error("--physics-trace-output requires --num-envs 1")
 if args.level in ("B", "D") and args.hand_variant == "beta2":
     parser.error("Beta 2 weak-contact and original-distance pregrasps have not been physically qualified")
+if args.fixed_reset_seed is not None and (args.hand_variant != "beta2" or args.level != "A"):
+    parser.error("Fixed Reset diagnostic requires Beta 2 Level A")
 app = AppLauncher(args).app
 
 import torch
@@ -51,6 +55,7 @@ from dexteroushands_lab.assets.bottle.batched_thread import _rotate
 def main():
     cfg = PregraspCapTurn30DirectEnvCfg()
     configure_bimanual_hand_variant(cfg, args.hand_variant)
+    cfg.fixed_pregrasp_seed = args.fixed_reset_seed
     cfg.scene.num_envs = args.num_envs
     cfg.sim.device = args.device
     cfg.sim.physics.min_position_iteration_count = args.pgs_position_iterations
@@ -64,7 +69,7 @@ def main():
         cfg.pregrasp_split_key = None
     else:
         cfg.pregrasp_reset_levels = (args.level,)
-    cfg.evaluation_mode = True
+    cfg.evaluation_mode = args.fixed_reset_seed is None
     cfg.no_right_cap_contact_counterfactual = args.policy in ("no_right", "no_hands")
     cfg.no_left_bottle_contact_counterfactual = args.policy in ("no_left", "no_hands")
     raw = PregraspCapTurn30DirectEnv(cfg)
@@ -233,7 +238,9 @@ def main():
         summary = {
             "task": "DexterousHands-WujiHand2-Bimanual-PregraspCapTurn30-Direct-v0",
             "hand_variant": args.hand_variant,
-            "level": args.level, "held_out": True, "policy": args.policy,
+            "level": args.level, "held_out": args.fixed_reset_seed is None,
+            "fixed_pregrasp_seed": args.fixed_reset_seed,
+            "policy": args.policy,
             "reward_profile": args.reward_profile,
             "action_distribution": args.action_distribution,
             "pgs_position_iterations": args.pgs_position_iterations,
