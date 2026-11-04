@@ -53,6 +53,8 @@ uv run ruff check source/dexgym tests/newton scripts/smoke_newton.py
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 uv run pytest -q
 uv run python scripts/smoke_newton.py --task DexGym-Joint-Tracking-Direct-v0 --steps 400
 uv run python scripts/smoke_newton.py --task DexGym-Joint-Tracking-Manager-v0 --steps 400
+uv run python scripts/smoke_newton.py --task DexGym-Joint-Tracking-Direct-v0 \
+  --steps 400 --policy logs/rsl_rl/dexgym_joint_tracking/<run>/exported/policy.pt
 ```
 
 The smoke script asserts 16-environment observation/action shapes, finite
@@ -72,6 +74,9 @@ materials are retained. Only Cartpole is in the Newton runtime. The old
 PhysX-specific Python asset adapters are preserved but not imported by this
 package. Historic tests and validation scripts are in `archive/isaaclab2/` and
 excluded from the current runtime and test suite. No real robot connection is part of this platform.
+
+The older reports under `docs/assets/` and `docs/superpowers/` are historical
+Isaac Lab 2.x research records; their commands do not describe the current CLI.
 
 A future `tasks/direct/arm_s0_ee_tracking/` may add Marvin dual arms and
 WujiHand2, six-dimensional TCP goals, joint-increment actions, wrist rotation,

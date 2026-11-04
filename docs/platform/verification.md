@@ -1,5 +1,49 @@
 # DexGym 2.0 host verification — 2026-11-04
 
+## Final cleanup rerun — 2026-11-04
+
+This section records the rerun after removing obsolete Isaac Lab 2.x launchers
+and the duplicate `source/pyproject.toml`. The detailed Gate B baseline and
+earlier checkpoints below are **historical results from the first refactor
+commit**; they were not rerun during this cleanup.
+
+- `uv lock --check`: passed, 193 packages resolved.
+- `uv run --locked ruff check source/dexgym tests/newton scripts/smoke_newton.py`:
+  passed. `uv run --locked ruff format --check` on the same paths: 18 files
+  already formatted.
+- `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 uv run --locked pytest -q tests/newton`:
+  3 passed, including local asset manifest SHA256 verification.
+- `uv run --locked isaaclab list_envs --keyword DexGym`: exactly the Direct and
+  Manager task IDs listed in the README.
+- `env PYTHONPATH= LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6
+  timeout 300s uv run --locked python scripts/smoke_newton.py --task <ID>
+  --steps 400 --num-envs 16`: passed for both IDs. Each reported observations
+  `(16, 4)`, actions `(16, 1)`, and 16 timeouts; the script asserts finite
+  observations, rewards, joint positions and velocities, and changed goals.
+- `env PYTHONPATH= LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6
+  timeout 600s uv run --locked isaaclab train --rl_library rsl_rl --task <ID>
+  --num_envs 16 --max_iterations 10 --viz none physics=newton_mjwarp`: passed
+  for both IDs, each with 10 iterations and 2,560 steps. New checkpoints are
+  `logs/rsl_rl/dexgym_joint_tracking/2026-11-04_18-48-07/model_9.pt`
+  (Direct) and `2026-11-04_18-48-16/model_9.pt` (Manager). Both checkpoint
+  actor/critic tensors are finite and have `iter=9`; their L1 parameter change
+  from `model_0.pt` is 59.7252 and 48.4363 respectively.
+- Official `isaaclab play` with `--checkpoint <new model_9.pt>` and
+  `physics=newton_mjwarp`: both tasks loaded their checkpoints and entered
+  policy playback. Each headless loop exited 0 after a bounded 35-second
+  SIGINT. Both exported TorchScript and ONNX policies.
+- `uv run --locked python scripts/smoke_newton.py --task <ID> --steps 400
+  --num-envs 16 --policy <new run>/exported/policy.pt`: passed for each task
+  with 400 finite policy-action steps, `(16, 4)` observations, `(16, 1)`
+  actions, finite rewards and states, and 16 timeouts. A preliminary 256-step
+  replay reached no episode timeout and therefore failed the smoke script's
+  timeout assertion; rerunning with 400 steps passed.
+
+The earlier Gate B official Isaac Cartpole baseline remains valid evidence for
+this unchanged Isaac Lab 3.0/Newton environment, but it was not executed again
+after the shell-script-only cleanup. The earlier source-protection row below
+describes the initial refactor stage, before local main replacement.
+
 These are observed results from the isolated refactor worktree, not claims of
 policy quality. Commands use `uv` for the temporary uv 0.13.7 executable used
 on this host. All training and checkpoint paths below are relative to the
