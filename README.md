@@ -1,228 +1,83 @@
-# DexGym
+# DexGym 2.0
 
-Phase 1 已增加双手瓶子 `DirectRLEnv` 研究版，包含 GraspHold 和 CapTurn30 两个
-Task ID、52 维动作、批量物理、PPO 训练与独立评估工具。
-[Phase 1 实测报告](docs/assets/phase1-bimanual-rl-v0.md)记录了 checkpoint、
-测试命令和当前 **0% 的 held-out 成功率**；这些任务可运行，但策略尚未达到验收目标。
+DexGym is a small downstream [Isaac Lab 3.0](https://github.com/isaac-sim/IsaacLab/releases/tag/v3.0.0)
+reinforcement learning package. It registers two joint target tracking tasks
+against Newton `newton_mjwarp`. DirectRLEnv owns the step logic; the
+ManagerBasedRLEnv variant composes actions, observations, rewards, commands,
+reset events, and terminations through Isaac Lab managers. Both use the
+official Cartpole asset and a shared RSL-RL PPO configuration.
 
-WujiHand2 Beta 双手自由腕与螺纹瓶的独立 Isaac Lab 基础场景见
-[资产、控制和物理验证说明](docs/assets/wujihand2-beta-bimanual-bottle.md)。此场景不注册 RL task；
-[Phase 0 双手抓握初态、接触监测与 Reset 验证](docs/assets/phase0-bimanual-grasp-reset.md)
-记录了早期接触与 Reset 基线；
-[Phase 0B 抓握失败诊断与逐步合拢实验](docs/assets/phase0b-grasp-synthesis.md)
-记录了原始穿透、腕部控制及 PhysX 释放测试的实测结果。
-[Phase 0C 理想腕部控制](docs/assets/phase0c-ideal-wrist-grasp.md)与
-[Phase 0D 左手悬空抓握及初态库](docs/assets/phase0d-left-only-grasp-reset.md)
-记录了固定腕左手的四组 1 秒无支撑抓握；
-[Phase 0E 理想腕双手初态库](docs/assets/phase0e-pose-command-bimanual-grasp-bank.md)
-记录了经无支撑保持、Reset 和新进程重放验证的四条双手状态。
-这些状态属于同一相对抓握族，尚未验证更广的抓握范围或持续拧盖。
-[Phase 0F 指定的左手圆柱抓瓶姿态](docs/assets/phase0f-left-cylindrical-power-grasp.md)
-提供了四指一侧、拇指另一侧的新候选和 GUI 预览；五指持续受力门槛尚未通过，
-因此该候选未进入 validated 初态库，旧初态库也不代表此姿态。
-[Phase 0G 对照 `left.png` 的左手照片式候选](docs/assets/phase0g-left-image-power-grasp.md)
-提供了可复用的 PhysX 捕获初态预设、瓶体轮廓 GUI 与独立 Reset 重放数据；
-该预设仍未通过严格五指接触验收。
-原有单手训练与导出接口继续使用第一代 Wuji Hand 资产。
+| Gym ID | Architecture | Observation | Action |
+| --- | --- | --- | --- |
+| `DexGym-Joint-Tracking-Direct-v0` | DirectRLEnv | cart position, velocity, goal, error (4) | cart position target (1) |
+| `DexGym-Joint-Tracking-Manager-v0` | ManagerBasedRLEnv | same (4) | cart position target (1) |
 
-DexGym is a focused Isaac Lab reinforcement-learning workspace for
-dexterous-hand research. It contains the migrated task extension, DirectTask
-and Manager-Based task boundaries, RSL-RL train/play entry points, contract
-tests, and WUJI official-USD contact validation tools.
+## Install
 
-> The repository does not redistribute Isaac Sim, Isaac Lab, or the official
-> WUJI description assets. Those dependencies are installed or checked out
-> separately and are selected through environment variables.
-
-## 项目定位 / Project scope
-
-这是一个面向灵巧手强化学习的 Isaac Lab 工程。当前优先保证单手固定基座
-任务的定义、训练、checkpoint、playback、策略导出和接触摩擦验证链路完整。
-DirectTask 是迁移旧 DexterousHands 任务的核心形式，Manager-Based 保留为
-可组合 MDP 和后续机械臂加灵巧手任务的组织形式。
-
-This is an Isaac Lab project for dexterous-hand reinforcement learning. The
-current release prioritizes a complete fixed-base single-hand path: task
-registration, reset/step, PPO training, checkpoint loading, policy export, and
-contact/friction validation. DirectTask is the authoritative form for migrating
-legacy DexterousHands tasks. Manager-Based provides the composable MDP boundary
-for future arm-hand work.
-
-## 当前可运行任务 / Runnable tasks
-
-| Task ID | Workflow | Status |
-| --- | --- | --- |
-| `DexterousHands-Shadow-Hand-Pose-Direct-v0` | DirectTask | architecture baseline |
-| `DexterousHands-Shadow-Hand-Reorientation-Direct-v0` | DirectTask | migration baseline |
-| `DexterousHands-Wuji-Hand-Reorientation-Direct-v0` | DirectTask | official native WUJI USD, 20-DOF, 207/413 PPO chain and contact/friction gates validated |
-| `DexterousHands-WujiHand2-Bimanual-GraspHold-Direct-v0` | DirectTask | Phase 1 experimental; trained, held-out success 0% |
-| `DexterousHands-WujiHand2-Bimanual-CapTurn30-Direct-v0` | DirectTask | Phase 1 experimental; trained, held-out success 0% |
-| `DexterousHands-Allegro-Repose-ManagerBased-v0` | Manager-Based | Isaac Lab manager baseline |
-
-WUJI uses the official native USD at
-`hand/body/usd/right/wujihand.usd`, resolved from
-`WUJI_DESCRIPTION_ROOT`.
-
-WUJI 运行时只支持这个官方原生 USD。仓库不包含模型转换逻辑、转换后资产或旧资产回退路径。
-
-The WUJI runtime supports only this official native USD; no converted asset or
-legacy asset fallback is included.
-
-The WUJI arm-hand directory is an unregistered scaffold; arm plus hand training
-is not claimed by this release. Sim-to-sim is also deferred.
-
-## 环境要求 / Requirements
-
-- Linux x86_64 with an NVIDIA RTX-class GPU. Isaac Sim's current practical
-  floor is RTX 4080 with 16 GB VRAM; this workspace was verified on an RTX 4090.
-- Isaac Sim `6.0.1` or a compatible `6.0.x` runtime.
-- Isaac Lab on the Isaac Sim 6.0.x compatibility line. The local verification
-  used Isaac Lab commit `ffff603eafc6b74264a5261cc0183d6a65390d78`.
-- Python 3.12 in the Isaac Sim runtime. The verified runtime used Python 3.12.3,
-  Torch `2.10.0+cu128`, Gymnasium `1.2.1`, and RSL-RL `5.0.1`.
-- Conda or Miniconda for the project wrapper environment. Conda does not
-  replace the Isaac Sim Python runtime.
-- The external `wuji-description` checkout for the WUJI task, containing
-  `hand/body/usd/right/wujihand.usd`.
-
-Isaac Sim and Isaac Lab are external dependencies because their binaries and
-licenses are not part of this repository. Install them using the upstream
-instructions before starting a GPU task.
-
-## 安装 / Installation
-
-### 1. Clone and create the project environment
+Use Python 3.12, an NVIDIA GPU/driver supported by the
+[Isaac Lab 3.0 installation guide](https://docs.nvidia.com/isaaclab/3.0/isaac-lab/installation),
+and [uv](https://docs.astral.sh/uv/). The lockfile resolves
+`isaaclab[rsl-rl]==3.0.0` from NVIDIA's index, PyTorch 2.11.0,
+and CUDA toolkit 13.0 dependencies selected by Isaac Lab v3.0.0. No Isaac Sim or Kit installation is required for
+Newton headless runs. On the verified Conda-based host, prepend
+`LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6` to runtime commands
+to avoid Conda's older C++ runtime. The full evidence is in
+[host verification](docs/platform/verification.md).
 
 ```bash
-git clone https://github.com/FEGkkd/dexgym.git
-cd dexgym
-./scripts/setup_conda.sh
+uv sync --locked --group dev
+uv run isaaclab list_envs --keyword DexGym
 ```
 
-### 2. Select Isaac Lab, Isaac Sim, and WUJI assets
+## Train and play
+
+Check `uv run isaaclab train --help` and `uv run isaaclab play --help` on your
+installation before changing the commands. These bounded runs are workflow
+checks; ten iterations do not imply a trained controller.
 
 ```bash
-export ISAACLAB_ROOT=/path/to/IsaacLab
-export ISAACLAB_PYTHON=/path/to/isaacsim-or-isaaclab/python
-export WUJI_DESCRIPTION_ROOT=/path/to/wuji-description
-source scripts/activate_dexgym.sh
-test -f "$WUJI_DESCRIPTION_ROOT/hand/body/usd/right/wujihand.usd"
-./scripts/install.sh
+uv run isaaclab train --rl_library rsl_rl --task Isaac-Cartpole-Direct \
+  --num_envs 16 --max_iterations 5 physics=newton_mjwarp
+uv run isaaclab train --rl_library rsl_rl --task DexGym-Joint-Tracking-Direct-v0 \
+  --num_envs 16 --max_iterations 10 physics=newton_mjwarp
+uv run isaaclab train --rl_library rsl_rl --task DexGym-Joint-Tracking-Manager-v0 \
+  --num_envs 16 --max_iterations 10 physics=newton_mjwarp
+uv run isaaclab play --rl_library rsl_rl --task DexGym-Joint-Tracking-Direct-v0 \
+  --num_envs 1 --checkpoint /path/to/model.pt physics=newton_mjwarp
 ```
 
-`ISAACLAB_PYTHON` must be the Python executable from the Isaac Sim runtime,
-not the ordinary system Python and not only the Conda wrapper. The launcher
-also auto-detects a sibling `../IsaacLab`, `../.venv-isaacsim`, or
-`$HOME/IsaacLab` layout when those variables are omitted.
-
-### 3. Check registration and run a smoke test
+## Test
 
 ```bash
-./scripts/list_envs.sh
-./scripts/smoke.sh \
-  --task DexterousHands-Wuji-Hand-Reorientation-Direct-v0 \
-  --num_envs 2 --steps 3
+uv run ruff check source/dexgym tests/newton scripts/smoke_newton.py
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 uv run pytest -q
+uv run python scripts/smoke_newton.py --task DexGym-Joint-Tracking-Direct-v0 --steps 400
+uv run python scripts/smoke_newton.py --task DexGym-Joint-Tracking-Manager-v0 --steps 400
 ```
 
-### 4. Start training
+The smoke script asserts 16-environment observation/action shapes, finite
+rewards, observations and joint states, randomized goals, and episode timeouts.
+Official `isaaclab play` also exports JIT and ONNX policies into the selected
+run's `exported/` directory. The active code reads Isaac Lab 3.0
+`ProxyArray` values through `.torch` and uses indexed simulation writes.
+MuJoCo WXYZ quaternions must pass through `dexgym.utils.quaternion`; Isaac Lab
+3.0 data is XYZW.
 
-Headless training:
+## Assets and limits
 
-```bash
-./scripts/train.sh \
-  --task DexterousHands-Wuji-Hand-Reorientation-Direct-v0 \
-  --viz none --num_envs 256 --max_iterations 5000
-```
+See [asset inventory](docs/platform/assets.md) and the packaged
+`source/dexgym/assets/manifest.json`. Original Shadow, Allegro, Wuji,
+WujiHand2 Beta, Wrist 6DoF, bottle, source hashes, and PhysX validation
+materials are retained. Only Cartpole is in the Newton runtime. The old
+PhysX-specific Python asset adapters are preserved but not imported by this
+package. Historic tests and validation scripts are in `archive/isaaclab2/` and
+excluded from the current runtime and test suite. No real robot connection is part of this platform.
 
-GUI training, with an Isaac Sim window:
+A future `tasks/direct/arm_s0_ee_tracking/` may add Marvin dual arms and
+WujiHand2, six-dimensional TCP goals, joint-increment actions, wrist rotation,
+full workspace sampling, PPO/imitation evaluation, policy export, and ROS 2
+integration. No S0 module or asset is loaded in this release.
 
-```bash
-./scripts/train.sh \
-  --task DexterousHands-Wuji-Hand-Reorientation-Direct-v0 \
-  --viz kit --num_envs 1 --max_iterations 100 --run_name gui
-```
-
-Runs are written to `logs/rsl_rl/<experiment>/<timestamp>`. The training
-script saves environment and agent configuration, data-contract metadata, and
-RSL-RL checkpoints.
-
-### 5. Play and export a checkpoint
-
-```bash
-./scripts/play.sh \
-  --task DexterousHands-Wuji-Hand-Reorientation-Direct-v0 \
-  --num_envs 1 \
-  --load_run 2026-08-29_15-45-20_official_usd_short \
-  --checkpoint model_1.pt
-```
-
-Playback exports `policy.pt`, `policy.onnx`, `policy_metadata.yaml`,
-`observation_schema.yaml`, `action_schema.yaml`, and `normalization.yaml` in
-the run's `exported` directory. The exact `--load_run` value is the directory
-name under the experiment log directory.
-
-### 6. Run tests and contact validation
-
-```bash
-./scripts/test.sh
-./scripts/check_structure.sh
-./scripts/run_isaaclab.sh scripts/environments/wuji_contact_friction_validation.py \
-  --finger index \
-  --output artifacts/wuji_contact_friction_validation/index
-```
-
-The contact validation measures contact force direction, the configured
-Coulomb coefficient, bounded subcritical displacement, and supercritical
-sliding. It is separate from grasp success and does not claim that the current
-open-loop pose or short PPO run has learned a stable grasp.
-
-## 仓库架构 / Repository architecture
-
-```text
-source/dexteroushands_lab/
-  assets/                 USD, joint/body maps, asset adapters
-  tasks/direct/            explicit DirectRLEnv task definitions
-  tasks/manager_based/     ManagerBasedRLEnv task boundaries and local mdp/
-  utils/                  data contracts and policy metadata
-scripts/
-  rsl_rl/                 train, play, CLI parsing
-  environments/            registration, smoke, USD and contact probes
-  tools/                   structure and export checks
-tests/                    simulator-independent contract tests
-docs/                     installation, architecture, migration, validation
-logs/                     ignored runtime outputs
-artifacts/                small tracked validation summaries and local results
-```
-
-The runtime data path is:
-
-```text
-policy action [-1, 1]
-  -> DirectTask action processing or Manager-Based action manager
-  -> Isaac Lab articulation targets
-  -> Isaac Sim / PhysX
-  -> policy observations, privileged critic, reward, termination, extras
-  -> RSL-RL PPO update and metadata/checkpoint export
-```
-
-Read [docs/INSTALL.md](docs/INSTALL.md) for the complete bilingual setup
-reference, [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for ownership and data
-flow, and [docs/wuji-contact-friction-validation.md](docs/wuji-contact-friction-validation.md)
-for the official-USD physics evidence.
-
-## 已知边界 / Known boundaries
-
-- The current WUJI task is a fixed-base single-hand DirectTask. Arm plus hand
-  is not registered.
-- The short PPO run proves numerical training-chain connectivity, not
-  reorientation success or a production checkpoint.
-- The WUJI runtime accepts only the official native USD selected by
-  `WUJI_DESCRIPTION_ROOT`; converted robot assets are not supported.
-- Cross-simulator comparison and real-robot deployment are deferred.
-
-## License and attribution
-
-The migrated extension is released under Apache-2.0. It builds on the
-DexterousHands project by PKU-MARL and the Isaac Lab / Isaac Sim ecosystem.
-WUJI assets remain under the license and terms of their separate official
-repository; do not redistribute them through this repository.
+Version, command, checkpoint and gate outcomes from the host run belong in
+`docs/platform/verification.md`; check that report before claiming a specific
+installation has passed the training loop.

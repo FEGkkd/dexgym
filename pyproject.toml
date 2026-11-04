@@ -1,20 +1,43 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=70", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "dexgym"
-version = "0.1.0"
-description = "Isaac Lab reinforcement-learning tasks for dexterous hands"
-requires-python = ">=3.10"
-dependencies = []
+version = "2.0.0"
+description = "Minimal Isaac Lab 3.0 Newton reinforcement learning tasks"
+requires-python = "==3.12.*"
+dependencies = ["isaaclab[rsl-rl]==3.0.0"]
+
+[project.entry-points."isaaclab.tasks"]
+dexgym = "dexgym.tasks"
 
 [tool.setuptools]
 package-dir = {"" = "source"}
 
 [tool.setuptools.packages.find]
 where = ["source"]
-include = ["dexteroushands_lab*"]
+include = ["dexgym*"]
+
+[tool.uv]
+index-strategy = "unsafe-best-match"
+
+[[tool.uv.index]]
+name = "nvidia"
+url = "https://pypi.nvidia.com"
+explicit = true
+
+[tool.uv.sources]
+isaaclab = { index = "nvidia" }
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.9"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
 
 [tool.setuptools.package-data]
-"dexteroushands_lab.scenes" = ["presets/*.json"]
+"dexgym.assets" = ["manifest.json"]

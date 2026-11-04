@@ -1,1 +1,0 @@
-"""Wuji Hand agent configurations."""

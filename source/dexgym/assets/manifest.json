@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "local_files": [
+    {
+      "path": "archive/isaaclab2/source/dexteroushands_lab/assets/bottle/generated/bottle.usda",
+      "sha256": "e95d97af620fa53b796431357f44f154eb979fd320a5414f9cf6d4af8550b73f",
+      "newton": "unverified"
+    },
+    {
+      "path": "archive/isaaclab2/source/dexteroushands_lab/assets/bottle/generated/cap.usda",
+      "sha256": "dfd5f1a75916f97a12374b13bcbb837594d78eda56f8198b903dabf9ad83be54",
+      "newton": "unverified"
+    },
+    {
+      "path": "archive/isaaclab2/source/dexteroushands_lab/assets/bottle/generated/parameters.json",
+      "sha256": "4fd639a1fe518d588d1bded325a789bbeb6f66e3d822dc13094bfc0749b37d60",
+      "newton": "unverified"
+    },
+    {
+      "path": "archive/isaaclab2/source/dexteroushands_lab/assets/bottle/generated/pco1881_reference/bottle.usda",
+      "sha256": "60d1aeecf499f76cc219b3221e2480139f72fe2392d3dd6195aad5f2c9fec820",
+      "newton": "unverified"
+    },
+    {
+      "path": "archive/isaaclab2/source/dexteroushands_lab/assets/bottle/generated/pco1881_reference/cap.usda",
+      "sha256": "91a733b81ecd0397c2e8cb66de8276034f33e7b50bc7ab530f9b9f230f92e9ce",
+      "newton": "unverified"
+    }
+  ],
+  "external": [
+    {
+      "name": "Isaac Lab Cartpole",
+      "source": "isaaclab_assets v3.0.0 wheel / NVIDIA Nucleus",
+      "path": "Robots/Classic/Cartpole/cartpole.usd",
+      "newton": "used_by_active_tasks"
+    },
+    {
+      "name": "Shadow Hand",
+      "source": "isaaclab_assets v3.0.0 wheel / NVIDIA Nucleus",
+      "path": "Robots_Multiphysics/ShadowRobot/ShadowHandMultiPhysics_v0/right_hand/right_hand.usda",
+      "newton": "official Newton variant exists; not validated by DexGym"
+    },
+    {
+      "name": "Allegro Fly",
+      "source": "external Allegro description checkout",
+      "env": "ALLEGRO_DESCRIPTION_ROOT",
+      "path": "urdf/allegro_hand_description_right_fly.urdf",
+      "newton": "unverified",
+      "version": "not pinned by preserved adapter"
+    },
+    {
+      "name": "Wuji Hand",
+      "source": "external wuji-description checkout",
+      "version": "not pinned by preserved adapter",
+      "env": "WUJI_DESCRIPTION_ROOT",
+      "path": "hand/body/usd/right/wujihand.usd",
+      "newton": "unverified"
+    },
+    {
+      "name": "WujiHand2 Beta 1/2",
+      "source": "external wuji-description checkout",
+      "tag": "v2026.9.11",
+      "commit": "c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95",
+      "env": "WUJI_DESCRIPTION_ROOT",
+      "path": "hand/body/usd/<side>",
+      "newton": "unverified"
+    }
+  ]
+}
