@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "task_id": "DexGym-Marvin-Bimanual-SE3-Direct-v0",
+  "quaternion_order": "xyzw",
+  "joint_order": "Joint1_L..Joint7_L, Joint1_R..Joint7_R",
+  "fields": [
+    {"name": "arm_joint_position_normalized", "size": 14},
+    {"name": "arm_joint_velocity_normalized", "size": 14},
+    {"name": "tcp_position_error_world_m", "size": 6},
+    {"name": "tcp_so3_log_error_world_rad", "size": 6},
+    {"name": "previous_policy_action", "size": 14},
+    {"name": "previous_arm_joint_target_normalized", "size": 14},
+    {"name": "active_arm_mask", "size": 2},
+    {"name": "mode_one_hot_left_right_both", "size": 3}
+  ],
+  "excluded": ["q_goal", "absolute_target_joint_angles", "critic_privileged_state"]
+}

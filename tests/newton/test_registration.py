@@ -3,7 +3,7 @@ from dexgym.tasks import TASK_IDS
 
 
 def test_task_registration():
-    assert len(TASK_IDS) == 2
+    assert len(TASK_IDS) == 3
     for task_id in TASK_IDS:
         spec = gym.spec(task_id)
         assert spec.kwargs["rsl_rl_cfg_entry_point"]

@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "task_id": "DexGym-Marvin-Bimanual-SE3-Direct-v0",
+  "action_size": 14,
+  "joint_order": "Joint1_L..Joint7_L, Joint1_R..Joint7_R",
+  "action_range": [-1.0, 1.0],
+  "meaning": "desired signed arm joint velocity; integrated into guarded position targets",
+  "policy_period_s": 0.01,
+  "physics_period_s": 0.002,
+  "command_velocity_limit_rad_s": 0.8,
+  "command_acceleration_limit_rad_s2": 4.0,
+  "command_tracking_lag_limit_rad": 0.05,
+  "joint_limit_margin_rad": 0.03,
+  "inactive_arm_action": "masked to zero",
+  "hand_target": "packaged Home position, all 40 finger joints",
+  "real_robot_safety_certified": false
+}
