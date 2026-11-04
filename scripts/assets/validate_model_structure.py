@@ -110,6 +110,19 @@ def inspect(mjcf: Path, usd: Path) -> dict:
         ]
         if not np.allclose(imported_drive, source_drive, rtol=1e-5, atol=1e-5):
             parameter_errors.append(f"{name}: drive")
+        source_dof = int(model.jnt_dofadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name)])
+        imported_joint_dynamics = [
+            float(prim.GetAttribute("newton:armature").Get() or 0.0),
+            float(prim.GetAttribute("newton:damping").Get() or 0.0),
+            float(prim.GetAttribute("newton:friction").Get() or 0.0),
+        ]
+        expected_joint_dynamics = [
+            model.dof_armature[source_dof],
+            model.dof_damping[source_dof] * np.pi / 180.0,
+            model.dof_frictionloss[source_dof],
+        ]
+        if not np.allclose(imported_joint_dynamics, expected_joint_dynamics, rtol=1e-5, atol=1e-6):
+            parameter_errors.append(f"{name}: Newton armature/damping/friction")
         source_lower, source_upper = contract.limits_by_name[name]
         if not np.allclose(
             [joint.GetLowerLimitAttr().Get(), joint.GetUpperLimitAttr().Get()],

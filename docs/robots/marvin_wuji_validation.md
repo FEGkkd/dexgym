@@ -98,13 +98,21 @@ are not assumed equivalent to MuJoCo's.
 
 The structure validator found no nonpositive dynamic mass, invalid principal
 inertia, missing/invalid drive, joint-limit discrepancy or imported
-mass/inertia/Kp/Kv/force-limit mismatch against the XML. Three fixed, massless
+mass/inertia/Kp/Kv/force-limit mismatch against the XML. All 54 imported
+`newton:armature` and `newton:friction` values match the source values;
+`newton:damping` matches source damping multiplied by π/180, the official
+converter's per-radian to per-degree authoring conversion. This was checked
+against the installed converter implementation, not inferred from similar
+numeric values. Three fixed, massless
 frame markers (`center_mount` and the two `TCP_Link` bodies) have no authored
 mass/inertia, matching their source role; these are not driven links. MuJoCo
 source ranges:
 dynamic masses up to 35.09 kg; joint damping 0–3, armature 0.0002–0.08,
 friction loss 0–0.1, position Kp 0.18–440, Kv 0.0082–45, positive force
 limits 0.2–108. The committed XML arm Kp vector is 400/400/440/340/200/120/85;
+for example J6 has source damping 0.6, armature 0.015 and friction loss 0.1,
+while the USD authors `newton:damping=0.010471975`, armature 0.015 and friction
+0.1. This damping conversion does not establish equivalent solver response.
 `build_mjcf.py` contains a different 800/800/500/400/220/140/100 vector.
 The source time step is 0.002 s with gravity (0, 0, -9.81) m/s². Dynamic
 comparison also uses 0.002 s; source XML gains are retained without blindly

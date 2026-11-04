@@ -570,5 +570,17 @@
     "payloads/instances.usda": "1f2bc0718673a0bb55e10fd9d99048c37d1ab09cc157df86ed5bac6dee11a627",
     "payloads/materials.usda": "250ae2fa66007d00e1017fc8e1a744c8a2ba5ce4700803dae57a2b9db2075129",
     "payloads/robot.usda": "4c0d0e91716feb57d983c21899d4d27d12a71991b3670a70f9fb5ac27ac19f0a"
+  },
+  "parameter_audit": {
+    "joints_checked": 54,
+    "source_usd_mass_inertia_drive_limit_equal": true,
+    "newton_armature_friction_equal_source": true,
+    "newton_damping_per_degree_conversion": "source_damping_rad_times_pi_over_180",
+    "fixed_massless_frame_markers": [
+      "center_mount",
+      "TCP_Link_L",
+      "TCP_Link_R"
+    ],
+    "parameter_errors": []
   }
 }
