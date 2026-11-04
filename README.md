@@ -72,9 +72,14 @@ See [asset inventory](docs/platform/assets.md) and the packaged
 WujiHand2 Beta, Wrist 6DoF, bottle, source hashes, and PhysX validation
 materials are retained. Only Cartpole is registered as a Newton RL task. A
 separate **54 DoF Marvin M6 + WujiHand2 Beta 2 asset** now loads in Newton MJWarp
-for offline structural, kinematic, control and dynamics validation. Its source
-MJCF, meshes and generated USD remain external/local because their publication
-rights are unresolved. Obtain an authorized source checkout, set
+for offline structural, kinematic, control and dynamics validation. The pinned
+converted USD is packaged; its source MJCF and meshes remain in the external
+repository. `make_robot_cfg()` now defaults to the **no-hand-contact** USD:
+all 54 hand collision meshes are disabled while hand mass, inertia, mounting,
+and 40 joint controls remain. Pass `hand_contacts=True` to load the preserved
+full-contact model. The [collision validation](docs/robots/marvin_wuji_no_hand_contacts.md)
+includes actual Newton contact and inertial checks. To reproduce the original
+source conversion, obtain an authorized source checkout, set
 `DEXGYM_MARVIN_MJCF` to its `dual_arm_marvin.xml`, then run:
 
 ```bash

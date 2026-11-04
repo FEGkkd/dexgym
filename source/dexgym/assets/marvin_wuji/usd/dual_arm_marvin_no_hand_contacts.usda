@@ -1,0 +1,779 @@
+#usda 1.0
+(
+    defaultPrim = "marvin_m6_dual_arm_wujihand2_beta2"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    subLayers = [
+        @dual_arm_marvin.usda@
+    ]
+    upAxis = "Z"
+)
+
+over "marvin_m6_dual_arm_wujihand2_beta2"
+{
+    over "Geometry"
+    {
+        over "pedestal"
+        {
+            over "center_mount"
+            {
+                over "Base_L"
+                {
+                    over "Link1_L"
+                    {
+                        over "Link2_L"
+                        {
+                            over "Link3_L"
+                            {
+                                over "Link4_L"
+                                {
+                                    over "Link5_L"
+                                    {
+                                        over "Link6_L"
+                                        {
+                                            over "Link7_L"
+                                            {
+                                                over "TCP_Link_L"
+                                                {
+                                                    over "l_mount"
+                                                    {
+                                                        over "l_wrist"
+                                                        {
+                                                            over "l_thumb_proximal"
+                                                            {
+                                                                over "l_thumb_proximal_abd"
+                                                                {
+                                                                    over "l_thumb_middle"
+                                                                    {
+                                                                        over "l_thumb_distal"
+                                                                        {
+                                                                            over "l_thumb_tip_sensor_frame"
+                                                                            {
+                                                                                over "l_thumb_tip_sensor_frame_1" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "l_thumb_tip_sensor_frame_1"
+                                                                                    {
+                                                                                        bool physics:collisionEnabled = 0
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "l_thumb_distal_1" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "l_thumb_distal_1"
+                                                                                {
+                                                                                    bool physics:collisionEnabled = 0
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        over "l_thumb_middle_1" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "l_thumb_middle_1"
+                                                                            {
+                                                                                bool physics:collisionEnabled = 0
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    over "l_thumb_proximal_abd_1" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "l_thumb_proximal_abd_1"
+                                                                        {
+                                                                            bool physics:collisionEnabled = 0
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                over "l_thumb_proximal_1" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "l_thumb_proximal_1"
+                                                                    {
+                                                                        bool physics:collisionEnabled = 0
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "l_index_finger_proximal"
+                                                            {
+                                                                over "l_index_finger_proximal_abd"
+                                                                {
+                                                                    over "l_index_finger_middle"
+                                                                    {
+                                                                        over "l_index_finger_distal"
+                                                                        {
+                                                                            over "l_index_finger_tip_sensor_frame"
+                                                                            {
+                                                                                over "l_index_finger_tip_sensor_frame_1" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "l_index_finger_tip_sensor_frame_1"
+                                                                                    {
+                                                                                        bool physics:collisionEnabled = 0
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "l_index_finger_distal_1" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "l_index_finger_distal_1"
+                                                                                {
+                                                                                    bool physics:collisionEnabled = 0
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        over "l_index_finger_middle_1" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "l_index_finger_middle_1"
+                                                                            {
+                                                                                bool physics:collisionEnabled = 0
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    over "l_index_finger_proximal_abd_1" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "l_index_finger_proximal_abd_1"
+                                                                        {
+                                                                            bool physics:collisionEnabled = 0
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                over "l_index_finger_proximal_1" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "l_index_finger_proximal_1"
+                                                                    {
+                                                                        bool physics:collisionEnabled = 0
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "l_middle_finger_proximal"
+                                                            {
+                                                                over "l_middle_finger_proximal_abd"
+                                                                {
+                                                                    over "l_middle_finger_middle"
+                                                                    {
+                                                                        over "l_middle_finger_distal"
+                                                                        {
+                                                                            over "l_middle_finger_tip_sensor_frame"
+                                                                            {
+                                                                                over "l_middle_finger_tip_sensor_frame_1" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "l_index_finger_tip_sensor_frame_1"
+                                                                                    {
+                                                                                        bool physics:collisionEnabled = 0
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "l_middle_finger_distal_1" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "l_index_finger_distal_1"
+                                                                                {
+                                                                                    bool physics:collisionEnabled = 0
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        over "l_middle_finger_middle_1" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "l_index_finger_middle_1"
+                                                                            {
+                                                                                bool physics:collisionEnabled = 0
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    over "l_middle_finger_proximal_abd_1" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "l_index_finger_proximal_abd_1"
+                                                                        {
+                                                                            bool physics:collisionEnabled = 0
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                over "l_middle_finger_proximal_1" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "l_index_finger_proximal_1"
+                                                                    {
+                                                                        bool physics:collisionEnabled = 0
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "l_ring_finger_proximal"
+                                                            {
+                                                                over "l_ring_finger_proximal_abd"
+                                                                {
+                                                                    over "l_ring_finger_middle"
+                                                                    {
+                                                                        over "l_ring_finger_distal"
+                                                                        {
+                                                                            over "l_ring_finger_tip_sensor_frame"
+                                                                            {
+                                                                                over "l_ring_finger_tip_sensor_frame_1" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "l_index_finger_tip_sensor_frame_1"
+                                                                                    {
+                                                                                        bool physics:collisionEnabled = 0
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "l_ring_finger_distal_1" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "l_index_finger_distal_1"
+                                                                                {
+                                                                                    bool physics:collisionEnabled = 0
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        over "l_ring_finger_middle_1" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "l_index_finger_middle_1"
+                                                                            {
+                                                                                bool physics:collisionEnabled = 0
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    over "l_ring_finger_proximal_abd_1" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "l_index_finger_proximal_abd_1"
+                                                                        {
+                                                                            bool physics:collisionEnabled = 0
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                over "l_ring_finger_proximal_1" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "l_ring_finger_proximal_1"
+                                                                    {
+                                                                        bool physics:collisionEnabled = 0
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "l_pinky_proximal"
+                                                            {
+                                                                over "l_pinky_proximal_abd"
+                                                                {
+                                                                    over "l_pinky_middle"
+                                                                    {
+                                                                        over "l_pinky_distal"
+                                                                        {
+                                                                            over "l_pinky_tip_sensor_frame"
+                                                                            {
+                                                                                over "l_pinky_tip_sensor_frame_1" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "l_pinky_tip_sensor_frame_1"
+                                                                                    {
+                                                                                        bool physics:collisionEnabled = 0
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "l_pinky_distal_1" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "l_pinky_distal_1"
+                                                                                {
+                                                                                    bool physics:collisionEnabled = 0
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        over "l_pinky_middle_1" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "l_pinky_middle_1"
+                                                                            {
+                                                                                bool physics:collisionEnabled = 0
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    over "l_pinky_proximal_abd_1" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "l_pinky_proximal_abd_1"
+                                                                        {
+                                                                            bool physics:collisionEnabled = 0
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                over "l_pinky_proximal_1" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "l_pinky_proximal_1"
+                                                                    {
+                                                                        bool physics:collisionEnabled = 0
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "l_wrist_1" (
+                                                                instanceable = false
+                                                            )
+                                                            {
+                                                                over "l_wrist_1"
+                                                                {
+                                                                    bool physics:collisionEnabled = 0
+                                                                }
+                                                            }
+                                                        }
+
+                                                        over "l_mount_1" (
+                                                            instanceable = false
+                                                        )
+                                                        {
+                                                            over "l_mount_1"
+                                                            {
+                                                                bool physics:collisionEnabled = 0
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                over "Base_R"
+                {
+                    over "Link1_R"
+                    {
+                        over "Link2_R"
+                        {
+                            over "Link3_R"
+                            {
+                                over "Link4_R"
+                                {
+                                    over "Link5_R"
+                                    {
+                                        over "Link6_R"
+                                        {
+                                            over "Link7_R"
+                                            {
+                                                over "TCP_Link_R"
+                                                {
+                                                    over "r_mount"
+                                                    {
+                                                        over "r_wrist"
+                                                        {
+                                                            over "r_thumb_proximal"
+                                                            {
+                                                                over "r_thumb_proximal_abd"
+                                                                {
+                                                                    over "r_thumb_middle"
+                                                                    {
+                                                                        over "r_thumb_distal"
+                                                                        {
+                                                                            over "r_thumb_tip_sensor_frame"
+                                                                            {
+                                                                                over "r_thumb_tip_sensor_frame_1" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "r_thumb_tip_sensor_frame_1"
+                                                                                    {
+                                                                                        bool physics:collisionEnabled = 0
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "r_thumb_distal_1" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "r_thumb_distal_1"
+                                                                                {
+                                                                                    bool physics:collisionEnabled = 0
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        over "r_thumb_middle_1" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "r_thumb_middle_1"
+                                                                            {
+                                                                                bool physics:collisionEnabled = 0
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    over "r_thumb_proximal_abd_1" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "r_thumb_proximal_abd_1"
+                                                                        {
+                                                                            bool physics:collisionEnabled = 0
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                over "r_thumb_proximal_1" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "r_thumb_proximal_1"
+                                                                    {
+                                                                        bool physics:collisionEnabled = 0
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "r_index_finger_proximal"
+                                                            {
+                                                                over "r_index_finger_proximal_abd"
+                                                                {
+                                                                    over "r_index_finger_middle"
+                                                                    {
+                                                                        over "r_index_finger_distal"
+                                                                        {
+                                                                            over "r_index_finger_tip_sensor_frame"
+                                                                            {
+                                                                                over "r_index_finger_tip_sensor_frame_1" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "r_index_finger_tip_sensor_frame_1"
+                                                                                    {
+                                                                                        bool physics:collisionEnabled = 0
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "r_index_finger_distal_1" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "r_index_finger_distal_1"
+                                                                                {
+                                                                                    bool physics:collisionEnabled = 0
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        over "r_index_finger_middle_1" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "r_index_finger_middle_1"
+                                                                            {
+                                                                                bool physics:collisionEnabled = 0
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    over "r_index_finger_proximal_abd_1" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "r_index_finger_proximal_abd_1"
+                                                                        {
+                                                                            bool physics:collisionEnabled = 0
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                over "r_index_finger_proximal_1" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "r_index_finger_proximal_1"
+                                                                    {
+                                                                        bool physics:collisionEnabled = 0
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "r_middle_finger_proximal"
+                                                            {
+                                                                over "r_middle_finger_proximal_abd"
+                                                                {
+                                                                    over "r_middle_finger_middle"
+                                                                    {
+                                                                        over "r_middle_finger_distal"
+                                                                        {
+                                                                            over "r_middle_finger_tip_sensor_frame"
+                                                                            {
+                                                                                over "r_middle_finger_tip_sensor_frame_1" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "r_index_finger_tip_sensor_frame_1"
+                                                                                    {
+                                                                                        bool physics:collisionEnabled = 0
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "r_middle_finger_distal_1" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "r_index_finger_distal_1"
+                                                                                {
+                                                                                    bool physics:collisionEnabled = 0
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        over "r_middle_finger_middle_1" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "r_index_finger_middle_1"
+                                                                            {
+                                                                                bool physics:collisionEnabled = 0
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    over "r_middle_finger_proximal_abd_1" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "r_index_finger_proximal_abd_1"
+                                                                        {
+                                                                            bool physics:collisionEnabled = 0
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                over "r_middle_finger_proximal_1" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "r_index_finger_proximal_1"
+                                                                    {
+                                                                        bool physics:collisionEnabled = 0
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "r_ring_finger_proximal"
+                                                            {
+                                                                over "r_ring_finger_proximal_abd"
+                                                                {
+                                                                    over "r_ring_finger_middle"
+                                                                    {
+                                                                        over "r_ring_finger_distal"
+                                                                        {
+                                                                            over "r_ring_finger_tip_sensor_frame"
+                                                                            {
+                                                                                over "r_ring_finger_tip_sensor_frame_1" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "r_index_finger_tip_sensor_frame_1"
+                                                                                    {
+                                                                                        bool physics:collisionEnabled = 0
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "r_ring_finger_distal_1" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "r_index_finger_distal_1"
+                                                                                {
+                                                                                    bool physics:collisionEnabled = 0
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        over "r_ring_finger_middle_1" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "r_index_finger_middle_1"
+                                                                            {
+                                                                                bool physics:collisionEnabled = 0
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    over "r_ring_finger_proximal_abd_1" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "r_index_finger_proximal_abd_1"
+                                                                        {
+                                                                            bool physics:collisionEnabled = 0
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                over "r_ring_finger_proximal_1" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "r_index_finger_proximal_1"
+                                                                    {
+                                                                        bool physics:collisionEnabled = 0
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "r_pinky_proximal"
+                                                            {
+                                                                over "r_pinky_proximal_abd"
+                                                                {
+                                                                    over "r_pinky_middle"
+                                                                    {
+                                                                        over "r_pinky_distal"
+                                                                        {
+                                                                            over "r_pinky_tip_sensor_frame"
+                                                                            {
+                                                                                over "r_pinky_tip_sensor_frame_1" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "r_pinky_tip_sensor_frame_1"
+                                                                                    {
+                                                                                        bool physics:collisionEnabled = 0
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "r_pinky_distal_1" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "r_pinky_distal_1"
+                                                                                {
+                                                                                    bool physics:collisionEnabled = 0
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        over "r_pinky_middle_1" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "r_pinky_middle_1"
+                                                                            {
+                                                                                bool physics:collisionEnabled = 0
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    over "r_pinky_proximal_abd_1" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "r_pinky_proximal_abd_1"
+                                                                        {
+                                                                            bool physics:collisionEnabled = 0
+                                                                        }
+                                                                    }
+                                                                }
+
+                                                                over "r_pinky_proximal_1" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "r_pinky_proximal_1"
+                                                                    {
+                                                                        bool physics:collisionEnabled = 0
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "r_wrist_1" (
+                                                                instanceable = false
+                                                            )
+                                                            {
+                                                                over "r_wrist_1"
+                                                                {
+                                                                    bool physics:collisionEnabled = 0
+                                                                }
+                                                            }
+                                                        }
+
+                                                        over "r_mount_1" (
+                                                            instanceable = false
+                                                        )
+                                                        {
+                                                            over "r_mount_1"
+                                                            {
+                                                                bool physics:collisionEnabled = 0
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

@@ -1,0 +1,169 @@
+{
+  "date": "2026-11-04",
+  "scope": "Newton MJWarp hand contact disabled; 54 DoF robot dynamics and fixed mounts retained",
+  "versions": {
+    "python": "3.12.3",
+    "isaaclab": "3.0.0",
+    "newton": "1.6.1",
+    "warp-lang": "1.17.0",
+    "torch": "2.11.0",
+    "mujoco": "3.12.0"
+  },
+  "source_mjcf_sha256": "6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce",
+  "full_contact_usd_sha256": "4643b25b3ddc1412f83ef2f089bfc4fe6dd90ad2f36ef76efd9d48112ecd1ceb",
+  "no_hand_contact_usd_sha256": "8ed2cb9a14a813022149aaa8a101159af86dab676aec7dfdde4a00a8d9698fa6",
+  "default_runtime_usd": "source/dexgym/assets/marvin_wuji/usd/dual_arm_marvin_no_hand_contacts.usda",
+  "original_full_contact_usd": "source/dexgym/assets/marvin_wuji/usd/dual_arm_marvin.usda",
+  "structure": {
+    "full_usd_sha256": "4643b25b3ddc1412f83ef2f089bfc4fe6dd90ad2f36ef76efd9d48112ecd1ceb",
+    "no_hand_usd_sha256": "8ed2cb9a14a813022149aaa8a101159af86dab676aec7dfdde4a00a8d9698fa6",
+    "rigid_bodies": 74,
+    "revolute_joints": 54,
+    "fixed_joints": 20,
+    "hand_collision_shapes_disabled": 54,
+    "arm_collision_shapes_enabled": 33,
+    "rigid_mass_inertia_and_joint_properties_identical": true,
+    "pass": true
+  },
+  "newton_runtime_mass_inertia_and_joint_properties": {
+    "joints": 54,
+    "bodies": 74,
+    "max_absolute_differences": {
+      "body_mass": 0.0,
+      "body_inertia": 0.0,
+      "joint_stiffness": 0.0,
+      "joint_damping": 0.0,
+      "joint_armature": 0.0,
+      "joint_friction_coeff": 0.0,
+      "joint_effort_limits": 0.0,
+      "joint_pos_limits_lower": 0.0,
+      "joint_pos_limits_upper": 0.0
+    },
+    "pass": true
+  },
+  "newton_contacts": {
+    "source_hand_pose_search_samples": 68,
+    "source_arm_pose_search_samples": 36,
+    "joints": 54,
+    "bodies": 74,
+    "poses": [
+      {
+        "pose": "home",
+        "source_contacts": 0,
+        "source_hand_contacts": 0,
+        "source_arm_contacts": 0,
+        "newton_contacts": 0,
+        "newton_hand_contacts": 0,
+        "newton_arm_contacts": 0,
+        "pass": true
+      },
+      {
+        "pose": "hand_support",
+        "source_contacts": 83,
+        "source_hand_contacts": 83,
+        "source_arm_contacts": 0,
+        "newton_contacts": 0,
+        "newton_hand_contacts": 0,
+        "newton_arm_contacts": 0,
+        "pass": true
+      },
+      {
+        "pose": "arms_cross",
+        "source_contacts": 103,
+        "source_hand_contacts": 103,
+        "source_arm_contacts": 0,
+        "newton_contacts": 0,
+        "newton_hand_contacts": 0,
+        "newton_arm_contacts": 0,
+        "pass": true
+      },
+      {
+        "pose": "arm_links_cross",
+        "source_contacts": 61,
+        "source_hand_contacts": 33,
+        "source_arm_contacts": 6,
+        "newton_contacts": 20,
+        "newton_hand_contacts": 0,
+        "newton_arm_contacts": 4,
+        "pass": true
+      }
+    ],
+    "pass": true
+  },
+  "fk": {
+    "samples": 1000,
+    "parallel_environments": 16,
+    "body_count": 74,
+    "rejected_samples": 0,
+    "tcp_position_error_mm": {
+      "max": 0.0009498176426355481,
+      "mean": 0.00027380104009396087,
+      "p95": 0.0005966927803917535
+    },
+    "tcp_orientation_error_deg": {
+      "max": 3.674203751958424e-05,
+      "mean": 1.2693608529253423e-05,
+      "p95": 2.220139370404291e-05
+    },
+    "failed_tcp_comparisons": 0,
+    "pass": true
+  },
+  "default_controller_smoke16": {
+    "num_envs": 16,
+    "joints_per_env": 54,
+    "resets": 3,
+    "steps_per_reset": 200,
+    "max_joint_jump_rad_per_step": 0.014459844678640366,
+    "finite": true,
+    "pass": true
+  },
+  "tuned_controller_smoke16": {
+    "num_envs": 16,
+    "joints_per_env": 54,
+    "resets": 3,
+    "steps_per_reset": 200,
+    "max_joint_jump_rad_per_step": 0.01891978085041046,
+    "finite": true,
+    "pass": true
+  },
+  "all_joint_channels": {
+    "num_envs": 16,
+    "joint_count": 54,
+    "steps_per_batch": 150,
+    "min_opposed_response_rad": 0.05701446533203125,
+    "max_joint_jump_rad_per_step": 0.014152497053146362,
+    "failed_joints": [],
+    "pass": true
+  },
+  "tuned_wrist": [
+    {
+      "side": "L",
+      "final_execution": {
+        "newton_execution_position_error_mm": 0.557515094842653,
+        "mujoco_execution_position_error_mm": 0.598448509294672,
+        "newton_execution_orientation_error_deg": 0.0648917866545894,
+        "mujoco_execution_orientation_error_deg": 0.09022742351030655,
+        "backend_tcp_position_difference_mm": 0.04270636189685908,
+        "backend_tcp_orientation_difference_deg": 0.02619504035160814
+      },
+      "max_joint_jump_rad_per_step": 0.010002762079238892,
+      "max_joint_limit_violation_rad": 0.0,
+      "arm_drive_clipped_sample_fraction": 0.0
+    },
+    {
+      "side": "R",
+      "final_execution": {
+        "newton_execution_position_error_mm": 0.565714898858821,
+        "mujoco_execution_position_error_mm": 0.5934505111792127,
+        "newton_execution_orientation_error_deg": 0.06720894708959173,
+        "mujoco_execution_orientation_error_deg": 0.08961911257144155,
+        "backend_tcp_position_difference_mm": 0.03082997279723492,
+        "backend_tcp_orientation_difference_deg": 0.023321660515917338
+      },
+      "max_joint_jump_rad_per_step": 0.009817448444664478,
+      "max_joint_limit_violation_rad": 0.0,
+      "arm_drive_clipped_sample_fraction": 0.0
+    }
+  ],
+  "pass": true
+}

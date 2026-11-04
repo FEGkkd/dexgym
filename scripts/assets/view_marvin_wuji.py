@@ -15,8 +15,8 @@ import torch
 from dexgym.assets.marvin_wuji.joint_mapping import inspect_joint_contract, qpos_to_newton
 from dexgym.assets.marvin_wuji.robot_cfg import (
     JOINT_ORDER,
+    NO_HAND_CONTACT_USD,
     PACKAGED_KEYFRAMES,
-    PACKAGED_USD,
     SOURCE_SHA256,
     make_robot_cfg,
     resolve_source_mjcf,
@@ -31,7 +31,9 @@ from isaaclab_newton.physics import MJWarpSolverCfg, NewtonCfg
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mjcf", help="Pinned source MJCF; defaults to DEXGYM_MARVIN_MJCF")
-    parser.add_argument("--usd", type=Path, default=PACKAGED_USD, help="Converted dual_arm_marvin.usda")
+    parser.add_argument(
+        "--usd", type=Path, default=NO_HAND_CONTACT_USD, help="Converted USD; defaults to no hand contacts"
+    )
     parser.add_argument("--pose", choices=("hardware_zero", "home", "measured_j5_zero", "forward_pose"), default="home")
     parser.add_argument("--viz", choices=("none", "newton_gl"), default="newton_gl")
     parser.add_argument("--steps", type=int, default=1000)

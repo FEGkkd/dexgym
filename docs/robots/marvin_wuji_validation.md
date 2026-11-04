@@ -15,6 +15,10 @@ about 0.56 mm on each side, while preserving source assets and force limits.
 See [the controller tuning report](marvin_wuji_controller_tuning.md). The
 measurements below remain the original imported-controller baseline.
 
+**Collision follow-up:** `make_robot_cfg()` now selects a no-hand-contact USD
+override by default. The original full-contact packaged USD and the results
+below remain unchanged. See [the hand collision report](marvin_wuji_no_hand_contacts.md).
+
 The machine-readable results are in [validation_summary.json](validation_summary.json).
 Local CSV, full JSON logs, converted USD and source meshes remain under ignored
 `artifacts/marvin_wuji/` or the external source checkout.
@@ -57,8 +61,10 @@ Local CSV, full JSON logs, converted USD and source meshes remain under ignored
   regenerate the checked-in USD and verify all hashes from that checkout.
 
 To load the packaged articulation, call
-`dexgym.assets.marvin_wuji.robot_cfg.make_robot_cfg()`; its default path is
-`source/dexgym/assets/marvin_wuji/usd/dual_arm_marvin.usda`. To reproduce the
+`dexgym.assets.marvin_wuji.robot_cfg.make_robot_cfg(hand_contacts=True)`;
+the original full-contact path is
+`source/dexgym/assets/marvin_wuji/usd/dual_arm_marvin.usda`. Plain
+`make_robot_cfg()` selects the no-hand-contact override. To reproduce the
 conversion and all validation gates from the pinned source model, run from the
 DexGym root with the XML and meshes present:
 
