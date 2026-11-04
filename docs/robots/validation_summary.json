@@ -6,7 +6,7 @@
     "mjcf_relative_path": "src/whole_body_mujoco_driver/model/dual_arm_marvin.xml",
     "mjcf_sha256": "6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce",
     "mesh_count": 70,
-    "publication": "external only; raw and derived assets withheld pending rights review",
+    "publication": "original model remains in pinned whole-body-teleop source commit; byte-verified layered USD and payloads included in DexGym branch",
     "mesh_sha256": {
       "assets/left/Base_L.STL": "c69fe56485ec9fbbe59b6de581abc0001d2ebbd8a9e6d31951ea1de6ba45571e",
       "assets/left/Link1_L.STL": "86854ac8c4f17dac5116b6e9a4d036bca1ccf5d4b9ed04cb8285a7d006cfde28",
@@ -593,7 +593,8 @@
     "mujoco_keyframes_not_imported": 4,
     "procedural_checker_textures_not_imported": 1,
     "named_sites_retained": 24,
-    "note": "MJCF importer warnings; tests use MuJoCo keyframes directly. Isaac Lab sensor implementations are needed for live equivalent outputs."
+    "note": "MJCF importer warnings; tests use MuJoCo keyframes directly. Isaac Lab sensor implementations are needed for live equivalent outputs.",
+    "source_keyframes_preserved_as_json": 4
   },
   "calibration_status": "source XML drive/dynamics values imported; physical motor and collision parameters uncalibrated",
   "final_rechecks": {
@@ -604,6 +605,16 @@
     "gpu_smoke_2_env_10_step_pass": true,
     "newton_gl_5_step_pass": true,
     "conversion_regenerated_usd_and_manifest": true,
-    "logs": "local ignored artifacts/marvin_wuji/*recheck* and viewer_*.log"
-  }
+    "logs": "local ignored artifacts/marvin_wuji/*recheck* and viewer_*.log",
+    "packaged_usd_gpu_load_pass": true,
+    "standalone_home_view_without_source_pass": true,
+    "packaged_16_env_20_step_smoke_pass": true,
+    "packaged_16_env_max_joint_jump_rad_per_step": 0.01225421205163002,
+    "packaged_fk_1000_pass": true,
+    "clean_wheel_usd_layers": 9,
+    "clean_wheel_excludes_local_source_model": true
+  },
+  "packaged_usd": "source/dexgym/assets/marvin_wuji/usd/dual_arm_marvin.usda",
+  "packaged_keyframes": "source/dexgym/assets/marvin_wuji/source_keyframes.json",
+  "packaged_keyframes_sha256": "3539c12d23ef6084a4fdfdd1a4f06f96cf14306b9c8a1fd1278370faa84bc351"
 }

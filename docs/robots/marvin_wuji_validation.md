@@ -38,14 +38,23 @@ Local CSV, full JSON logs, converted USD and source meshes remain under ignored
   The final root `dual_arm_marvin.usda` SHA256 is
   `4643b25b3ddc1412f83ef2f089bfc4fe6dd90ad2f36ef76efd9d48112ecd1ceb`;
   all 70 source mesh and 9 generated USD/payload hashes are in the machine
-  summary. A future conversion also records the exact importer wheel versions. Some generated paths may vary with importer versions or checkout
-  location, so structural and physical checks remain necessary after conversion.
-- The external repository may include private or third-party content. Raw
-  MJCF/URDF/STL and derived USD are **not** in DexGym's Git history; publication
-  rights have not been established. The committed code, hashes and results
-  allow authorized users to reproduce conversion from their own source copy.
+  summary. The conversion script also records exact importer wheel versions.
+  Some generated paths may vary with importer versions or checkout location,
+  so structural and physical checks remain necessary after conversion.
+- The byte-verified layered USD (one root and eight payload files) is packaged in
+  `source/dexgym/assets/marvin_wuji/usd/`, so a DexGym checkout can load the
+  asset directly with `make_robot_cfg()`. Four source keyframes are packaged
+  separately as `source_keyframes.json`; a regenerated file has the same
+  SHA256 `3539c12d23ef6084a4fdfdd1a4f06f96cf14306b9c8a1fd1278370faa84bc351`.
+  The raw MJCF/URDF/STL dependencies remain in the pinned
+  `whole-body-teleop` source commit; the script can
+  regenerate the checked-in USD and verify all hashes from that checkout.
 
-From the DexGym root, with the pinned external XML and meshes present:
+To load the packaged articulation, call
+`dexgym.assets.marvin_wuji.robot_cfg.make_robot_cfg()`; its default path is
+`source/dexgym/assets/marvin_wuji/usd/dual_arm_marvin.usda`. To reproduce the
+conversion and all validation gates from the pinned source model, run from the
+DexGym root with the XML and meshes present:
 
 ```bash
 uv sync --locked --group dev
@@ -63,12 +72,14 @@ uv run --no-sync python scripts/assets/validate_contacts.py --usd "$USD" --outpu
 uv run --no-sync python scripts/assets/view_marvin_wuji.py --usd "$USD" --pose home --viz newton_gl --steps 1000
 ```
 
-The independent viewer also accepts `--viz none` for a headless GPU load
-check. On the final host `--viz newton_gl --steps 5` completed with all 54
+The independent viewer defaults to the packaged USD and keyframes, without
+requiring the source checkout. It also accepts `--viz none` for a headless GPU
+load check. On the final host `--viz newton_gl --steps 5` completed with all 54
 joints, 74 bodies and finite state; the visualizer was opened on `DISPLAY=:0`.
-The original joint-order change was rechecked with 1,000 FK poses and a
-2-environment, 10-step GPU smoke; the FK maxima stayed at 0.000950 mm and
-0.0000367°. Reproduction logs are in the local ignored
+The packaged path was rechecked with 1,000 FK poses and a 16-environment,
+20-step GPU smoke; the FK maxima stayed at 0.000950 mm and 0.0000367°. A
+clean wheel build contained exactly nine USD layers and excluded the local
+raw-model directory. Reproduction logs are in the local ignored
 `artifacts/marvin_wuji/` directory.
 
 On the verified host the installed package's Python was used with
@@ -88,7 +99,8 @@ unique limited hinges and one actuator transmission per joint. The generated
 USD has 54 revolute joints, 20 fixed joints and 74 rigid bodies, matching the
 74 non-world MuJoCo bodies. Its articulation root is the fixed pedestal at
 `/marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal`. It is Z-up in meters.
-The Isaac Lab `ArticulationCfg` uses all 54 imported USD position drives and explicitly exposes the original MuJoCo `qpos` joint order.
+The Isaac Lab `ArticulationCfg` uses all 54 imported USD position drives and
+explicitly exposes the original MuJoCo `qpos` joint order.
 
 The TCP frames are the named bodies `TCP_Link_L` and `TCP_Link_R`; the hand
 mounts are part of the same named-body FK comparison. MuJoCo quaternions are
@@ -103,8 +115,10 @@ tactile force/torque streams and need explicit Isaac Lab sensor implementations
 when those signals are required. It also skips six source cameras, two lights,
 four keyframes and the procedural checker texture. The FK and dynamics scripts
 read the source keyframes directly from MuJoCo; they are not USD presets.
-Newton collision and contact behavior is separately checked below. These
-conversion losses are recorded in `validation_summary.json`.
+The four keyframes are preserved separately in a checked-in JSON file for
+standalone viewer use; they remain absent as USD timeline presets. Newton
+collision and contact behavior is separately checked below. These conversion
+losses are recorded in `validation_summary.json`.
 
 The source has 87 collision-enabled geometries and 38 excluded pairs; the USD
 has 87 collision geometries (54 via mesh instances) and 38 filtered pairs.

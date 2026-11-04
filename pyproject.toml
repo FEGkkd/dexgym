@@ -14,10 +14,12 @@ dexgym = "dexgym.tasks"
 
 [tool.setuptools]
 package-dir = {"" = "source"}
+include-package-data = false
 
 [tool.setuptools.packages.find]
 where = ["source"]
 include = ["dexgym*"]
+exclude = ["dexgym.assets.marvin_wuji.source_model*"]
 
 [tool.uv]
 index-strategy = "unsafe-best-match"
@@ -41,4 +43,4 @@ select = ["E", "F", "I"]
 
 [tool.setuptools.package-data]
 "dexgym.assets" = ["manifest.json"]
-"dexgym.assets.marvin_wuji" = ["calibration_status.json"]
+"dexgym.assets.marvin_wuji" = ["calibration_status.json", "source_keyframes.json", "usd/*.usda", "usd/payloads/*.usda", "usd/payloads/*.usd", "usd/payloads/Physics/*.usda"]

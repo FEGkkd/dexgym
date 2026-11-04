@@ -10,6 +10,8 @@ from isaaclab.sim import UsdFileCfg
 SOURCE_SHA256 = "6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce"
 SOURCE_COMMIT = "5d4c345842f197bffeae7d7e08c4c3718230f9e0"
 SOURCE_RELATIVE_PATH = "src/whole_body_mujoco_driver/model/dual_arm_marvin.xml"
+PACKAGED_USD = Path(__file__).parent / "usd" / "dual_arm_marvin.usda"
+PACKAGED_KEYFRAMES = Path(__file__).parent / "source_keyframes.json"
 
 
 def _hand_joint_order(side: str) -> tuple[str, ...]:
@@ -46,14 +48,14 @@ def resolve_source_mjcf(path: str | Path | None = None) -> Path:
     return result
 
 
-def make_robot_cfg(usd_path: str | Path, prim_path: str = "{ENV_REGEX_NS}/Robot") -> ArticulationCfg:
+def make_robot_cfg(usd_path: str | Path | None = None, prim_path: str = "{ENV_REGEX_NS}/Robot") -> ArticulationCfg:
     """Retain imported per-joint USD position-drive gains and effort limits.
 
     Isaac Lab 3.0 resolves ``None`` stiffness/damping from the imported USD;
     every named joint is covered by one implicit actuator group for MJWarp.
     Source: https://isaac-sim.github.io/IsaacLab/v3.0.0/source/how-to/import_new_asset.html
     """
-    usd = Path(usd_path).expanduser().resolve()
+    usd = Path(usd_path or PACKAGED_USD).expanduser().resolve()
     if not usd.is_file():
         raise FileNotFoundError(usd)
     return ArticulationCfg(

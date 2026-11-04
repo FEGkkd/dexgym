@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 from xml.etree import ElementTree
 
+import mujoco
 from dexgym.assets.marvin_wuji.robot_cfg import SOURCE_COMMIT, SOURCE_SHA256, resolve_source_mjcf
 from isaaclab.sim.converters import MjcfConverter, MjcfConverterCfg
 
@@ -54,11 +55,31 @@ def main() -> None:
     )
     usd = Path(MjcfConverter(cfg).usd_path)
     output_files = [p for p in usd.parent.rglob("*") if p.is_file()]
+    source_model = mujoco.MjModel.from_xml_path(str(mjcf))
+    keyframes = {
+        mujoco.mj_id2name(source_model, mujoco.mjtObj.mjOBJ_KEY, i): list(map(float, source_model.key_qpos[i]))
+        for i in range(source_model.nkey)
+    }
+    keyframe_file = output_dir / "source_keyframes.json"
+    keyframe_file.write_text(
+        json.dumps(
+            {
+                "source_sha256": observed_hash,
+                "joint_order": [
+                    mujoco.mj_id2name(source_model, mujoco.mjtObj.mjOBJ_JOINT, i) for i in range(source_model.njnt)
+                ],
+                "keyframes": keyframes,
+            },
+            indent=2,
+        )
+        + "\n"
+    )
     manifest = {
         "source_repository": "FEGkkd/whole-body-teleop",
         "source_commit": SOURCE_COMMIT,
         "source_mjcf_sha256": observed_hash,
         "source_mesh_count": len(meshes),
+        "source_keyframes_sha256": sha256(keyframe_file),
         "source_mesh_sha256": {str(path.relative_to(mjcf.parent)): sha256(path) for path in meshes},
         "isaaclab_version": importlib.metadata.version("isaaclab"),
         "importer_versions": {

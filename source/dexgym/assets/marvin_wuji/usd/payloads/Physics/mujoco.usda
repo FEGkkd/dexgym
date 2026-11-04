@@ -1,0 +1,1891 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "MuJoCo USD Converter v0.6.1"
+    }
+    defaultPrim = "marvin_m6_dual_arm_wujihand2_beta2"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    subLayers = [
+        @./physics.usda@
+    ]
+    upAxis = "Z"
+)
+
+over "marvin_m6_dual_arm_wujihand2_beta2"
+{
+    over "Geometry"
+    {
+        over "floor" (
+            prepend apiSchemas = ["MjcCollisionAPI"]
+        )
+        {
+            uniform int mjc:condim = 4
+            uniform double[] mjc:solref = [0.02, 1]
+        }
+
+        over "pedestal"
+        {
+            over "outrigger_1" (
+                prepend apiSchemas = ["MjcCollisionAPI"]
+            )
+            {
+                uniform int mjc:condim = 4
+                uniform double[] mjc:solref = [0.02, 1]
+            }
+
+            over "foot_1" (
+                prepend apiSchemas = ["MjcCollisionAPI"]
+            )
+            {
+                uniform int mjc:condim = 4
+                uniform double[] mjc:solref = [0.02, 1]
+            }
+
+            over "outrigger_2" (
+                prepend apiSchemas = ["MjcCollisionAPI"]
+            )
+            {
+                uniform int mjc:condim = 4
+                uniform double[] mjc:solref = [0.02, 1]
+            }
+
+            over "foot_2" (
+                prepend apiSchemas = ["MjcCollisionAPI"]
+            )
+            {
+                uniform int mjc:condim = 4
+                uniform double[] mjc:solref = [0.02, 1]
+            }
+
+            over "outrigger_3" (
+                prepend apiSchemas = ["MjcCollisionAPI"]
+            )
+            {
+                uniform int mjc:condim = 4
+                uniform double[] mjc:solref = [0.02, 1]
+            }
+
+            over "foot_3" (
+                prepend apiSchemas = ["MjcCollisionAPI"]
+            )
+            {
+                uniform int mjc:condim = 4
+                uniform double[] mjc:solref = [0.02, 1]
+            }
+
+            over "outrigger_4" (
+                prepend apiSchemas = ["MjcCollisionAPI"]
+            )
+            {
+                uniform int mjc:condim = 4
+                uniform double[] mjc:solref = [0.02, 1]
+            }
+
+            over "foot_4" (
+                prepend apiSchemas = ["MjcCollisionAPI"]
+            )
+            {
+                uniform int mjc:condim = 4
+                uniform double[] mjc:solref = [0.02, 1]
+            }
+
+            over "base_plate" (
+                prepend apiSchemas = ["MjcCollisionAPI"]
+            )
+            {
+                uniform int mjc:condim = 4
+                uniform double[] mjc:solref = [0.02, 1]
+            }
+
+            over "column" (
+                prepend apiSchemas = ["MjcCollisionAPI"]
+            )
+            {
+                uniform int mjc:condim = 4
+                uniform double[] mjc:solref = [0.02, 1]
+            }
+
+            over "Box" (
+                prepend apiSchemas = ["MjcImageableAPI"]
+            )
+            {
+            }
+
+            over "Box_1" (
+                prepend apiSchemas = ["MjcImageableAPI"]
+            )
+            {
+            }
+
+            over "Box_2" (
+                prepend apiSchemas = ["MjcImageableAPI"]
+            )
+            {
+            }
+
+            over "Box_3" (
+                prepend apiSchemas = ["MjcImageableAPI"]
+            )
+            {
+            }
+
+            over "top_housing" (
+                prepend apiSchemas = ["MjcCollisionAPI"]
+            )
+            {
+                uniform int mjc:condim = 4
+                uniform double[] mjc:solref = [0.02, 1]
+            }
+
+            over "center_mount"
+            {
+                over "cross_mount" (
+                    prepend apiSchemas = ["MjcCollisionAPI"]
+                )
+                {
+                    uniform int mjc:condim = 4
+                    uniform double[] mjc:solref = [0.02, 1]
+                }
+
+                over "left_black_ring" (
+                    prepend apiSchemas = ["MjcCollisionAPI"]
+                )
+                {
+                    uniform int mjc:condim = 4
+                    uniform double[] mjc:solref = [0.02, 1]
+                }
+
+                over "right_black_ring" (
+                    prepend apiSchemas = ["MjcCollisionAPI"]
+                )
+                {
+                    uniform int mjc:condim = 4
+                    uniform double[] mjc:solref = [0.02, 1]
+                }
+
+                over "left_flange" (
+                    prepend apiSchemas = ["MjcCollisionAPI"]
+                )
+                {
+                    uniform int mjc:condim = 4
+                    uniform double[] mjc:solref = [0.02, 1]
+                }
+
+                over "right_flange" (
+                    prepend apiSchemas = ["MjcCollisionAPI"]
+                )
+                {
+                    uniform int mjc:condim = 4
+                    uniform double[] mjc:solref = [0.02, 1]
+                }
+
+                over "Base_L"
+                {
+                    over "Base_L_collision" (
+                        prepend apiSchemas = ["MjcCollisionAPI"]
+                    )
+                    {
+                        uniform int mjc:condim = 4
+                        uniform int mjc:group = 3
+                        uniform double[] mjc:solref = [0.02, 1]
+                    }
+
+                    over "Link1_L"
+                    {
+                        over "Link1_L_collision" (
+                            prepend apiSchemas = ["MjcCollisionAPI"]
+                        )
+                        {
+                            uniform int mjc:condim = 4
+                            uniform int mjc:group = 3
+                            uniform double[] mjc:solref = [0.02, 1]
+                        }
+
+                        over "Link2_L"
+                        {
+                            over "Link2_L_collision" (
+                                prepend apiSchemas = ["MjcCollisionAPI"]
+                            )
+                            {
+                                uniform int mjc:condim = 4
+                                uniform int mjc:group = 3
+                                uniform double[] mjc:solref = [0.02, 1]
+                            }
+
+                            over "Link3_L"
+                            {
+                                over "Link3_L_collision" (
+                                    prepend apiSchemas = ["MjcCollisionAPI"]
+                                )
+                                {
+                                    uniform int mjc:condim = 4
+                                    uniform int mjc:group = 3
+                                    uniform double[] mjc:solref = [0.02, 1]
+                                }
+
+                                over "Link4_L"
+                                {
+                                    over "Link4_L_collision" (
+                                        prepend apiSchemas = ["MjcCollisionAPI"]
+                                    )
+                                    {
+                                        uniform int mjc:condim = 4
+                                        uniform int mjc:group = 3
+                                        uniform double[] mjc:solref = [0.02, 1]
+                                    }
+
+                                    over "Link5_L"
+                                    {
+                                        over "Link5_L_collision" (
+                                            prepend apiSchemas = ["MjcCollisionAPI"]
+                                        )
+                                        {
+                                            uniform int mjc:condim = 4
+                                            uniform int mjc:group = 3
+                                            uniform double[] mjc:solref = [0.02, 1]
+                                        }
+
+                                        over "Link6_L"
+                                        {
+                                            over "Link6_L_collision" (
+                                                prepend apiSchemas = ["MjcCollisionAPI"]
+                                            )
+                                            {
+                                                uniform int mjc:condim = 4
+                                                uniform int mjc:group = 3
+                                                uniform double[] mjc:solref = [0.02, 1]
+                                            }
+
+                                            over "Link7_L"
+                                            {
+                                                over "Link7_L_collision" (
+                                                    prepend apiSchemas = ["MjcCollisionAPI"]
+                                                )
+                                                {
+                                                    uniform int mjc:condim = 4
+                                                    uniform int mjc:group = 3
+                                                    uniform double[] mjc:solref = [0.02, 1]
+                                                }
+
+                                                over "TCP_Link_L"
+                                                {
+                                                    over "tcp_L" (
+                                                        prepend apiSchemas = ["MjcSiteAPI"]
+                                                    )
+                                                    {
+                                                        uniform int mjc:group = 4
+                                                    }
+
+                                                    over "tcp_axis_L" (
+                                                        prepend apiSchemas = ["MjcSiteAPI"]
+                                                    )
+                                                    {
+                                                        uniform int mjc:group = 4
+                                                    }
+
+                                                    over "l_mount"
+                                                    {
+                                                        over "l_wrist"
+                                                        {
+                                                            over "l_thumb_proximal"
+                                                            {
+                                                                over "l_thumb_proximal_abd"
+                                                                {
+                                                                    over "l_thumb_middle"
+                                                                    {
+                                                                        over "l_thumb_distal"
+                                                                        {
+                                                                            over "l_thumb_tip" (
+                                                                                prepend apiSchemas = ["MjcSiteAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int mjc:group = 3
+                                                                            }
+
+                                                                            over "l_thumb_tip_sensor_frame"
+                                                                            {
+                                                                                over "l_thumb_tip_sensor_frame_wrench_site" (
+                                                                                    prepend apiSchemas = ["MjcSiteAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int mjc:group = 4
+                                                                                }
+                                                                            }
+
+                                                                            over "l_thumb_ip" (
+                                                                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                                prepend apiSchemas = ["MjcJointAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                                uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                            }
+                                                                        }
+
+                                                                        over "l_thumb_mcp" (
+                                                                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                            prepend apiSchemas = ["MjcJointAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                            uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                        }
+                                                                    }
+
+                                                                    over "l_thumb_cmc_abd" (
+                                                                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                        prepend apiSchemas = ["MjcJointAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform double mjc:actuatorfrcrange:max = 0.6
+                                                                        uniform double mjc:actuatorfrcrange:min = -0.6
+                                                                    }
+                                                                }
+
+                                                                over "l_thumb_cmc_flex" (
+                                                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                    prepend apiSchemas = ["MjcJointAPI"]
+                                                                )
+                                                                {
+                                                                    uniform double mjc:actuatorfrcrange:max = 0.6
+                                                                    uniform double mjc:actuatorfrcrange:min = -0.6
+                                                                }
+                                                            }
+
+                                                            over "l_index_finger_proximal"
+                                                            {
+                                                                over "l_index_finger_proximal_abd"
+                                                                {
+                                                                    over "l_index_finger_middle"
+                                                                    {
+                                                                        over "l_index_finger_distal"
+                                                                        {
+                                                                            over "l_index_finger_tip" (
+                                                                                prepend apiSchemas = ["MjcSiteAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int mjc:group = 3
+                                                                            }
+
+                                                                            over "l_index_finger_tip_sensor_frame"
+                                                                            {
+                                                                                over "l_index_finger_tip_sensor_frame_wrench_site" (
+                                                                                    prepend apiSchemas = ["MjcSiteAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int mjc:group = 4
+                                                                                }
+                                                                            }
+
+                                                                            over "l_index_finger_dip" (
+                                                                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                                prepend apiSchemas = ["MjcJointAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                                uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                            }
+                                                                        }
+
+                                                                        over "l_index_finger_pip" (
+                                                                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                            prepend apiSchemas = ["MjcJointAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                            uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                        }
+                                                                    }
+
+                                                                    over "l_index_finger_mcp_abd" (
+                                                                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                        prepend apiSchemas = ["MjcJointAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform double mjc:actuatorfrcrange:max = 0.2
+                                                                        uniform double mjc:actuatorfrcrange:min = -0.2
+                                                                    }
+                                                                }
+
+                                                                over "l_index_finger_mcp_flex" (
+                                                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                    prepend apiSchemas = ["MjcJointAPI"]
+                                                                )
+                                                                {
+                                                                    uniform double mjc:actuatorfrcrange:max = 2
+                                                                    uniform double mjc:actuatorfrcrange:min = -2
+                                                                }
+                                                            }
+
+                                                            over "l_middle_finger_proximal"
+                                                            {
+                                                                over "l_middle_finger_proximal_abd"
+                                                                {
+                                                                    over "l_middle_finger_middle"
+                                                                    {
+                                                                        over "l_middle_finger_distal"
+                                                                        {
+                                                                            over "l_middle_finger_tip" (
+                                                                                prepend apiSchemas = ["MjcSiteAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int mjc:group = 3
+                                                                            }
+
+                                                                            over "l_middle_finger_tip_sensor_frame"
+                                                                            {
+                                                                                over "l_middle_finger_tip_sensor_frame_wrench_site" (
+                                                                                    prepend apiSchemas = ["MjcSiteAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int mjc:group = 4
+                                                                                }
+                                                                            }
+
+                                                                            over "l_middle_finger_dip" (
+                                                                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                                prepend apiSchemas = ["MjcJointAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                                uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                            }
+                                                                        }
+
+                                                                        over "l_middle_finger_pip" (
+                                                                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                            prepend apiSchemas = ["MjcJointAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                            uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                        }
+                                                                    }
+
+                                                                    over "l_middle_finger_mcp_abd" (
+                                                                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                        prepend apiSchemas = ["MjcJointAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform double mjc:actuatorfrcrange:max = 0.2
+                                                                        uniform double mjc:actuatorfrcrange:min = -0.2
+                                                                    }
+                                                                }
+
+                                                                over "l_middle_finger_mcp_flex" (
+                                                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                    prepend apiSchemas = ["MjcJointAPI"]
+                                                                )
+                                                                {
+                                                                    uniform double mjc:actuatorfrcrange:max = 2
+                                                                    uniform double mjc:actuatorfrcrange:min = -2
+                                                                }
+                                                            }
+
+                                                            over "l_ring_finger_proximal"
+                                                            {
+                                                                over "l_ring_finger_proximal_abd"
+                                                                {
+                                                                    over "l_ring_finger_middle"
+                                                                    {
+                                                                        over "l_ring_finger_distal"
+                                                                        {
+                                                                            over "l_ring_finger_tip" (
+                                                                                prepend apiSchemas = ["MjcSiteAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int mjc:group = 3
+                                                                            }
+
+                                                                            over "l_ring_finger_tip_sensor_frame"
+                                                                            {
+                                                                                over "l_ring_finger_tip_sensor_frame_wrench_site" (
+                                                                                    prepend apiSchemas = ["MjcSiteAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int mjc:group = 4
+                                                                                }
+                                                                            }
+
+                                                                            over "l_ring_finger_dip" (
+                                                                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                                prepend apiSchemas = ["MjcJointAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                                uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                            }
+                                                                        }
+
+                                                                        over "l_ring_finger_pip" (
+                                                                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                            prepend apiSchemas = ["MjcJointAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                            uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                        }
+                                                                    }
+
+                                                                    over "l_ring_finger_mcp_abd" (
+                                                                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                        prepend apiSchemas = ["MjcJointAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform double mjc:actuatorfrcrange:max = 0.2
+                                                                        uniform double mjc:actuatorfrcrange:min = -0.2
+                                                                    }
+                                                                }
+
+                                                                over "l_ring_finger_mcp_flex" (
+                                                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                    prepend apiSchemas = ["MjcJointAPI"]
+                                                                )
+                                                                {
+                                                                    uniform double mjc:actuatorfrcrange:max = 2
+                                                                    uniform double mjc:actuatorfrcrange:min = -2
+                                                                }
+                                                            }
+
+                                                            over "l_pinky_proximal"
+                                                            {
+                                                                over "l_pinky_proximal_abd"
+                                                                {
+                                                                    over "l_pinky_middle"
+                                                                    {
+                                                                        over "l_pinky_distal"
+                                                                        {
+                                                                            over "l_pinky_tip" (
+                                                                                prepend apiSchemas = ["MjcSiteAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int mjc:group = 3
+                                                                            }
+
+                                                                            over "l_pinky_tip_sensor_frame"
+                                                                            {
+                                                                                over "l_pinky_tip_sensor_frame_wrench_site" (
+                                                                                    prepend apiSchemas = ["MjcSiteAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int mjc:group = 4
+                                                                                }
+                                                                            }
+
+                                                                            over "l_pinky_dip" (
+                                                                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                                prepend apiSchemas = ["MjcJointAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                                uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                            }
+                                                                        }
+
+                                                                        over "l_pinky_pip" (
+                                                                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                            prepend apiSchemas = ["MjcJointAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                            uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                        }
+                                                                    }
+
+                                                                    over "l_pinky_mcp_abd" (
+                                                                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                        prepend apiSchemas = ["MjcJointAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform double mjc:actuatorfrcrange:max = 0.2
+                                                                        uniform double mjc:actuatorfrcrange:min = -0.2
+                                                                    }
+                                                                }
+
+                                                                over "l_pinky_mcp_flex" (
+                                                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                    prepend apiSchemas = ["MjcJointAPI"]
+                                                                )
+                                                                {
+                                                                    uniform double mjc:actuatorfrcrange:max = 2
+                                                                    uniform double mjc:actuatorfrcrange:min = -2
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                over "Joint7_L" (
+                                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                    prepend apiSchemas = ["MjcJointAPI"]
+                                                )
+                                                {
+                                                    uniform double mjc:damping = 0.4
+                                                }
+                                            }
+
+                                            over "Joint6_L" (
+                                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                prepend apiSchemas = ["MjcJointAPI"]
+                                            )
+                                            {
+                                                uniform double mjc:damping = 0.6
+                                            }
+                                        }
+
+                                        over "Joint5_L" (
+                                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                            prepend apiSchemas = ["MjcJointAPI"]
+                                        )
+                                        {
+                                            uniform double mjc:damping = 1
+                                        }
+                                    }
+
+                                    over "Joint4_L" (
+                                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                        prepend apiSchemas = ["MjcJointAPI"]
+                                    )
+                                    {
+                                        uniform double mjc:damping = 1.6
+                                    }
+                                }
+
+                                over "Joint3_L" (
+                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                    prepend apiSchemas = ["MjcJointAPI"]
+                                )
+                                {
+                                    uniform double mjc:damping = 2
+                                }
+                            }
+
+                            over "Joint2_L" (
+                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                prepend apiSchemas = ["MjcJointAPI"]
+                            )
+                            {
+                                uniform double mjc:damping = 3
+                            }
+                        }
+
+                        over "Joint1_L" (
+                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                            prepend apiSchemas = ["MjcJointAPI"]
+                        )
+                        {
+                            uniform double mjc:damping = 3
+                        }
+                    }
+                }
+
+                over "Base_R"
+                {
+                    over "Base_R_collision" (
+                        prepend apiSchemas = ["MjcCollisionAPI"]
+                    )
+                    {
+                        uniform int mjc:condim = 4
+                        uniform int mjc:group = 3
+                        uniform double[] mjc:solref = [0.02, 1]
+                    }
+
+                    over "Link1_R"
+                    {
+                        over "Link1_R_collision" (
+                            prepend apiSchemas = ["MjcCollisionAPI"]
+                        )
+                        {
+                            uniform int mjc:condim = 4
+                            uniform int mjc:group = 3
+                            uniform double[] mjc:solref = [0.02, 1]
+                        }
+
+                        over "Link2_R"
+                        {
+                            over "Link2_R_collision" (
+                                prepend apiSchemas = ["MjcCollisionAPI"]
+                            )
+                            {
+                                uniform int mjc:condim = 4
+                                uniform int mjc:group = 3
+                                uniform double[] mjc:solref = [0.02, 1]
+                            }
+
+                            over "Link3_R"
+                            {
+                                over "Link3_R_collision" (
+                                    prepend apiSchemas = ["MjcCollisionAPI"]
+                                )
+                                {
+                                    uniform int mjc:condim = 4
+                                    uniform int mjc:group = 3
+                                    uniform double[] mjc:solref = [0.02, 1]
+                                }
+
+                                over "Link4_R"
+                                {
+                                    over "Link4_R_collision" (
+                                        prepend apiSchemas = ["MjcCollisionAPI"]
+                                    )
+                                    {
+                                        uniform int mjc:condim = 4
+                                        uniform int mjc:group = 3
+                                        uniform double[] mjc:solref = [0.02, 1]
+                                    }
+
+                                    over "Link5_R"
+                                    {
+                                        over "Link5_R_collision" (
+                                            prepend apiSchemas = ["MjcCollisionAPI"]
+                                        )
+                                        {
+                                            uniform int mjc:condim = 4
+                                            uniform int mjc:group = 3
+                                            uniform double[] mjc:solref = [0.02, 1]
+                                        }
+
+                                        over "Link6_R"
+                                        {
+                                            over "Link6_R_collision" (
+                                                prepend apiSchemas = ["MjcCollisionAPI"]
+                                            )
+                                            {
+                                                uniform int mjc:condim = 4
+                                                uniform int mjc:group = 3
+                                                uniform double[] mjc:solref = [0.02, 1]
+                                            }
+
+                                            over "Link7_R"
+                                            {
+                                                over "Link7_R_collision" (
+                                                    prepend apiSchemas = ["MjcCollisionAPI"]
+                                                )
+                                                {
+                                                    uniform int mjc:condim = 4
+                                                    uniform int mjc:group = 3
+                                                    uniform double[] mjc:solref = [0.02, 1]
+                                                }
+
+                                                over "TCP_Link_R"
+                                                {
+                                                    over "tcp_R" (
+                                                        prepend apiSchemas = ["MjcSiteAPI"]
+                                                    )
+                                                    {
+                                                        uniform int mjc:group = 4
+                                                    }
+
+                                                    over "tcp_axis_R" (
+                                                        prepend apiSchemas = ["MjcSiteAPI"]
+                                                    )
+                                                    {
+                                                        uniform int mjc:group = 4
+                                                    }
+
+                                                    over "r_mount"
+                                                    {
+                                                        over "r_wrist"
+                                                        {
+                                                            over "r_thumb_proximal"
+                                                            {
+                                                                over "r_thumb_proximal_abd"
+                                                                {
+                                                                    over "r_thumb_middle"
+                                                                    {
+                                                                        over "r_thumb_distal"
+                                                                        {
+                                                                            over "r_thumb_tip" (
+                                                                                prepend apiSchemas = ["MjcSiteAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int mjc:group = 3
+                                                                            }
+
+                                                                            over "r_thumb_tip_sensor_frame"
+                                                                            {
+                                                                                over "r_thumb_tip_sensor_frame_wrench_site" (
+                                                                                    prepend apiSchemas = ["MjcSiteAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int mjc:group = 4
+                                                                                }
+                                                                            }
+
+                                                                            over "r_thumb_ip" (
+                                                                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                                prepend apiSchemas = ["MjcJointAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                                uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                            }
+                                                                        }
+
+                                                                        over "r_thumb_mcp" (
+                                                                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                            prepend apiSchemas = ["MjcJointAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                            uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                        }
+                                                                    }
+
+                                                                    over "r_thumb_cmc_abd" (
+                                                                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                        prepend apiSchemas = ["MjcJointAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform double mjc:actuatorfrcrange:max = 0.6
+                                                                        uniform double mjc:actuatorfrcrange:min = -0.6
+                                                                    }
+                                                                }
+
+                                                                over "r_thumb_cmc_flex" (
+                                                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                    prepend apiSchemas = ["MjcJointAPI"]
+                                                                )
+                                                                {
+                                                                    uniform double mjc:actuatorfrcrange:max = 0.6
+                                                                    uniform double mjc:actuatorfrcrange:min = -0.6
+                                                                }
+                                                            }
+
+                                                            over "r_index_finger_proximal"
+                                                            {
+                                                                over "r_index_finger_proximal_abd"
+                                                                {
+                                                                    over "r_index_finger_middle"
+                                                                    {
+                                                                        over "r_index_finger_distal"
+                                                                        {
+                                                                            over "r_index_finger_tip" (
+                                                                                prepend apiSchemas = ["MjcSiteAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int mjc:group = 3
+                                                                            }
+
+                                                                            over "r_index_finger_tip_sensor_frame"
+                                                                            {
+                                                                                over "r_index_finger_tip_sensor_frame_wrench_site" (
+                                                                                    prepend apiSchemas = ["MjcSiteAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int mjc:group = 4
+                                                                                }
+                                                                            }
+
+                                                                            over "r_index_finger_dip" (
+                                                                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                                prepend apiSchemas = ["MjcJointAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                                uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                            }
+                                                                        }
+
+                                                                        over "r_index_finger_pip" (
+                                                                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                            prepend apiSchemas = ["MjcJointAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                            uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                        }
+                                                                    }
+
+                                                                    over "r_index_finger_mcp_abd" (
+                                                                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                        prepend apiSchemas = ["MjcJointAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform double mjc:actuatorfrcrange:max = 0.2
+                                                                        uniform double mjc:actuatorfrcrange:min = -0.2
+                                                                    }
+                                                                }
+
+                                                                over "r_index_finger_mcp_flex" (
+                                                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                    prepend apiSchemas = ["MjcJointAPI"]
+                                                                )
+                                                                {
+                                                                    uniform double mjc:actuatorfrcrange:max = 2
+                                                                    uniform double mjc:actuatorfrcrange:min = -2
+                                                                }
+                                                            }
+
+                                                            over "r_middle_finger_proximal"
+                                                            {
+                                                                over "r_middle_finger_proximal_abd"
+                                                                {
+                                                                    over "r_middle_finger_middle"
+                                                                    {
+                                                                        over "r_middle_finger_distal"
+                                                                        {
+                                                                            over "r_middle_finger_tip" (
+                                                                                prepend apiSchemas = ["MjcSiteAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int mjc:group = 3
+                                                                            }
+
+                                                                            over "r_middle_finger_tip_sensor_frame"
+                                                                            {
+                                                                                over "r_middle_finger_tip_sensor_frame_wrench_site" (
+                                                                                    prepend apiSchemas = ["MjcSiteAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int mjc:group = 4
+                                                                                }
+                                                                            }
+
+                                                                            over "r_middle_finger_dip" (
+                                                                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                                prepend apiSchemas = ["MjcJointAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                                uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                            }
+                                                                        }
+
+                                                                        over "r_middle_finger_pip" (
+                                                                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                            prepend apiSchemas = ["MjcJointAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                            uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                        }
+                                                                    }
+
+                                                                    over "r_middle_finger_mcp_abd" (
+                                                                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                        prepend apiSchemas = ["MjcJointAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform double mjc:actuatorfrcrange:max = 0.2
+                                                                        uniform double mjc:actuatorfrcrange:min = -0.2
+                                                                    }
+                                                                }
+
+                                                                over "r_middle_finger_mcp_flex" (
+                                                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                    prepend apiSchemas = ["MjcJointAPI"]
+                                                                )
+                                                                {
+                                                                    uniform double mjc:actuatorfrcrange:max = 2
+                                                                    uniform double mjc:actuatorfrcrange:min = -2
+                                                                }
+                                                            }
+
+                                                            over "r_ring_finger_proximal"
+                                                            {
+                                                                over "r_ring_finger_proximal_abd"
+                                                                {
+                                                                    over "r_ring_finger_middle"
+                                                                    {
+                                                                        over "r_ring_finger_distal"
+                                                                        {
+                                                                            over "r_ring_finger_tip" (
+                                                                                prepend apiSchemas = ["MjcSiteAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int mjc:group = 3
+                                                                            }
+
+                                                                            over "r_ring_finger_tip_sensor_frame"
+                                                                            {
+                                                                                over "r_ring_finger_tip_sensor_frame_wrench_site" (
+                                                                                    prepend apiSchemas = ["MjcSiteAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int mjc:group = 4
+                                                                                }
+                                                                            }
+
+                                                                            over "r_ring_finger_dip" (
+                                                                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                                prepend apiSchemas = ["MjcJointAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                                uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                            }
+                                                                        }
+
+                                                                        over "r_ring_finger_pip" (
+                                                                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                            prepend apiSchemas = ["MjcJointAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                            uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                        }
+                                                                    }
+
+                                                                    over "r_ring_finger_mcp_abd" (
+                                                                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                        prepend apiSchemas = ["MjcJointAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform double mjc:actuatorfrcrange:max = 0.2
+                                                                        uniform double mjc:actuatorfrcrange:min = -0.2
+                                                                    }
+                                                                }
+
+                                                                over "r_ring_finger_mcp_flex" (
+                                                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                    prepend apiSchemas = ["MjcJointAPI"]
+                                                                )
+                                                                {
+                                                                    uniform double mjc:actuatorfrcrange:max = 2
+                                                                    uniform double mjc:actuatorfrcrange:min = -2
+                                                                }
+                                                            }
+
+                                                            over "r_pinky_proximal"
+                                                            {
+                                                                over "r_pinky_proximal_abd"
+                                                                {
+                                                                    over "r_pinky_middle"
+                                                                    {
+                                                                        over "r_pinky_distal"
+                                                                        {
+                                                                            over "r_pinky_tip" (
+                                                                                prepend apiSchemas = ["MjcSiteAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int mjc:group = 3
+                                                                            }
+
+                                                                            over "r_pinky_tip_sensor_frame"
+                                                                            {
+                                                                                over "r_pinky_tip_sensor_frame_wrench_site" (
+                                                                                    prepend apiSchemas = ["MjcSiteAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int mjc:group = 4
+                                                                                }
+                                                                            }
+
+                                                                            over "r_pinky_dip" (
+                                                                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                                prepend apiSchemas = ["MjcJointAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                                uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                            }
+                                                                        }
+
+                                                                        over "r_pinky_pip" (
+                                                                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                            prepend apiSchemas = ["MjcJointAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform double mjc:actuatorfrcrange:max = 0.3
+                                                                            uniform double mjc:actuatorfrcrange:min = -0.3
+                                                                        }
+                                                                    }
+
+                                                                    over "r_pinky_mcp_abd" (
+                                                                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                        prepend apiSchemas = ["MjcJointAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform double mjc:actuatorfrcrange:max = 0.2
+                                                                        uniform double mjc:actuatorfrcrange:min = -0.2
+                                                                    }
+                                                                }
+
+                                                                over "r_pinky_mcp_flex" (
+                                                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                                    prepend apiSchemas = ["MjcJointAPI"]
+                                                                )
+                                                                {
+                                                                    uniform double mjc:actuatorfrcrange:max = 2
+                                                                    uniform double mjc:actuatorfrcrange:min = -2
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                over "Joint7_R" (
+                                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                    prepend apiSchemas = ["MjcJointAPI"]
+                                                )
+                                                {
+                                                    uniform double mjc:damping = 0.4
+                                                }
+                                            }
+
+                                            over "Joint6_R" (
+                                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                                prepend apiSchemas = ["MjcJointAPI"]
+                                            )
+                                            {
+                                                uniform double mjc:damping = 0.6
+                                            }
+                                        }
+
+                                        over "Joint5_R" (
+                                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                            prepend apiSchemas = ["MjcJointAPI"]
+                                        )
+                                        {
+                                            uniform double mjc:damping = 1
+                                        }
+                                    }
+
+                                    over "Joint4_R" (
+                                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                        prepend apiSchemas = ["MjcJointAPI"]
+                                    )
+                                    {
+                                        uniform double mjc:damping = 1.6
+                                    }
+                                }
+
+                                over "Joint3_R" (
+                                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                    prepend apiSchemas = ["MjcJointAPI"]
+                                )
+                                {
+                                    uniform double mjc:damping = 2
+                                }
+                            }
+
+                            over "Joint2_R" (
+                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                prepend apiSchemas = ["MjcJointAPI"]
+                            )
+                            {
+                                uniform double mjc:damping = 3
+                            }
+                        }
+
+                        over "Joint1_R" (
+                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                            prepend apiSchemas = ["MjcJointAPI"]
+                        )
+                        {
+                            uniform double mjc:damping = 3
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    over "Physics"
+    {
+        def MjcActuator "Joint1_L_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -400, -45, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 3.1067
+            uniform double mjc:ctrlRange:min = -3.1067
+            uniform double mjc:forceRange:max = 108
+            uniform double mjc:forceRange:min = -108
+            uniform double[] mjc:gainPrm = [400, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Joint1_L>
+        }
+
+        def MjcActuator "Joint2_L_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -400, -45, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.0944
+            uniform double mjc:ctrlRange:min = -2.0944
+            uniform double mjc:forceRange:max = 108
+            uniform double mjc:forceRange:min = -108
+            uniform double[] mjc:gainPrm = [400, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Joint2_L>
+        }
+
+        def MjcActuator "Joint3_L_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -440, -40, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 3.1067
+            uniform double mjc:ctrlRange:min = -3.1067
+            uniform double mjc:forceRange:max = 66
+            uniform double mjc:forceRange:min = -66
+            uniform double[] mjc:gainPrm = [440, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Joint3_L>
+        }
+
+        def MjcActuator "Joint4_L_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -340, -34, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.0472
+            uniform double mjc:ctrlRange:min = -2.5307
+            uniform double mjc:forceRange:max = 66
+            uniform double mjc:forceRange:min = -66
+            uniform double[] mjc:gainPrm = [340, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Joint4_L>
+        }
+
+        def MjcActuator "Joint5_L_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -200, -23, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 3.1067
+            uniform double mjc:ctrlRange:min = -3.1067
+            uniform double mjc:forceRange:max = 18
+            uniform double mjc:forceRange:min = -18
+            uniform double[] mjc:gainPrm = [200, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Joint5_L>
+        }
+
+        def MjcActuator "Joint6_L_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -120, -16, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.0472
+            uniform double mjc:ctrlRange:min = -1.0472
+            uniform double mjc:forceRange:max = 18
+            uniform double mjc:forceRange:min = -18
+            uniform double[] mjc:gainPrm = [120, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Joint6_L>
+        }
+
+        def MjcActuator "Joint7_L_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -85, -12, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.5708
+            uniform double mjc:ctrlRange:min = -1.5708
+            uniform double mjc:forceRange:max = 18
+            uniform double mjc:forceRange:min = -18
+            uniform double[] mjc:gainPrm = [85, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/Joint7_L>
+        }
+
+        def MjcActuator "Joint1_R_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -400, -45, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 3.1067
+            uniform double mjc:ctrlRange:min = -3.1067
+            uniform double mjc:forceRange:max = 108
+            uniform double mjc:forceRange:min = -108
+            uniform double[] mjc:gainPrm = [400, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Joint1_R>
+        }
+
+        def MjcActuator "Joint2_R_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -400, -45, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.0944
+            uniform double mjc:ctrlRange:min = -2.0944
+            uniform double mjc:forceRange:max = 108
+            uniform double mjc:forceRange:min = -108
+            uniform double[] mjc:gainPrm = [400, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Joint2_R>
+        }
+
+        def MjcActuator "Joint3_R_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -440, -40, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 3.1067
+            uniform double mjc:ctrlRange:min = -3.1067
+            uniform double mjc:forceRange:max = 66
+            uniform double mjc:forceRange:min = -66
+            uniform double[] mjc:gainPrm = [440, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Joint3_R>
+        }
+
+        def MjcActuator "Joint4_R_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -340, -34, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.0472
+            uniform double mjc:ctrlRange:min = -2.5307
+            uniform double mjc:forceRange:max = 66
+            uniform double mjc:forceRange:min = -66
+            uniform double[] mjc:gainPrm = [340, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Joint4_R>
+        }
+
+        def MjcActuator "Joint5_R_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -200, -23, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 3.1067
+            uniform double mjc:ctrlRange:min = -3.1067
+            uniform double mjc:forceRange:max = 18
+            uniform double mjc:forceRange:min = -18
+            uniform double[] mjc:gainPrm = [200, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Joint5_R>
+        }
+
+        def MjcActuator "Joint6_R_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -120, -16, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.0472
+            uniform double mjc:ctrlRange:min = -1.0472
+            uniform double mjc:forceRange:max = 18
+            uniform double mjc:forceRange:min = -18
+            uniform double[] mjc:gainPrm = [120, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Joint6_R>
+        }
+
+        def MjcActuator "Joint7_R_position"
+        {
+            uniform double[] mjc:biasPrm = [0, -85, -12, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.5708
+            uniform double mjc:ctrlRange:min = -1.5708
+            uniform double mjc:forceRange:max = 18
+            uniform double mjc:forceRange:min = -18
+            uniform double[] mjc:gainPrm = [85, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/Joint7_R>
+        }
+
+        def MjcActuator "l_THJ0"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.40844710645048043, -0.020882010257063675, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.291
+            uniform double mjc:ctrlRange:min = -1.187
+            uniform double mjc:forceRange:max = 0.6
+            uniform double mjc:forceRange:min = -0.6
+            uniform double[] mjc:gainPrm = [0.40844710645048043, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_thumb_proximal/l_thumb_cmc_flex>
+        }
+
+        def MjcActuator "l_THJ1"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.6858601063643346, -0.030610939996373314, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -1.484
+            uniform double mjc:forceRange:max = 0.6
+            uniform double mjc:forceRange:min = -0.6
+            uniform double[] mjc:gainPrm = [0.6858601063643346, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_thumb_proximal/l_thumb_proximal_abd/l_thumb_cmc_abd>
+        }
+
+        def MjcActuator "l_THJ2"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.2391112196099482, -0.010181475050560962, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.2391112196099482, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_thumb_proximal/l_thumb_proximal_abd/l_thumb_middle/l_thumb_mcp>
+        }
+
+        def MjcActuator "l_THJ3"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.20736128319711747, -0.00909698844675045, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.20736128319711747, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_thumb_proximal/l_thumb_proximal_abd/l_thumb_middle/l_thumb_distal/l_thumb_ip>
+        }
+
+        def MjcActuator "l_FFJ0"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.37352218155860073, -0.01882274330029718, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 2
+            uniform double mjc:forceRange:min = -2
+            uniform double[] mjc:gainPrm = [0.37352218155860073, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_index_finger_proximal/l_index_finger_mcp_flex>
+        }
+
+        def MjcActuator "l_FFJ1"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.45592448909027794, -0.019798167597016643, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -0.698
+            uniform double mjc:forceRange:max = 0.2
+            uniform double mjc:forceRange:min = -0.2
+            uniform double[] mjc:gainPrm = [0.45592448909027794, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_index_finger_proximal/l_index_finger_proximal_abd/l_index_finger_mcp_abd>
+        }
+
+        def MjcActuator "l_FFJ2"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.24368366649522863, -0.010477031953162727, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.094
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.24368366649522863, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_index_finger_proximal/l_index_finger_proximal_abd/l_index_finger_middle/l_index_finger_pip>
+        }
+
+        def MjcActuator "l_FFJ3"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.18026971340925335, -0.008240212147903584, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.18026971340925335, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_index_finger_proximal/l_index_finger_proximal_abd/l_index_finger_middle/l_index_finger_distal/l_index_finger_dip>
+        }
+
+        def MjcActuator "l_MFJ0"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.3687093483646485, -0.01848622487024593, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 2
+            uniform double mjc:forceRange:min = -2
+            uniform double[] mjc:gainPrm = [0.3687093483646485, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_middle_finger_proximal/l_middle_finger_mcp_flex>
+        }
+
+        def MjcActuator "l_MFJ1"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.4164253443634641, -0.018032947229953678, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -0.698
+            uniform double mjc:forceRange:max = 0.2
+            uniform double mjc:forceRange:min = -0.2
+            uniform double[] mjc:gainPrm = [0.4164253443634641, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_middle_finger_proximal/l_middle_finger_proximal_abd/l_middle_finger_mcp_abd>
+        }
+
+        def MjcActuator "l_MFJ2"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.22218607502059182, -0.009592200014076666, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.094
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.22218607502059182, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_middle_finger_proximal/l_middle_finger_proximal_abd/l_middle_finger_middle/l_middle_finger_pip>
+        }
+
+        def MjcActuator "l_MFJ3"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.19427606072023446, -0.009152994605972402, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.19427606072023446, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_middle_finger_proximal/l_middle_finger_proximal_abd/l_middle_finger_middle/l_middle_finger_distal/l_middle_finger_dip>
+        }
+
+        def MjcActuator "l_RFJ0"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.35718151495111794, -0.018376606800780005, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 2
+            uniform double mjc:forceRange:min = -2
+            uniform double[] mjc:gainPrm = [0.35718151495111794, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_ring_finger_proximal/l_ring_finger_mcp_flex>
+        }
+
+        def MjcActuator "l_RFJ1"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.42977315313086895, -0.01867700966212433, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -0.698
+            uniform double mjc:forceRange:max = 0.2
+            uniform double mjc:forceRange:min = -0.2
+            uniform double[] mjc:gainPrm = [0.42977315313086895, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_ring_finger_proximal/l_ring_finger_proximal_abd/l_ring_finger_mcp_abd>
+        }
+
+        def MjcActuator "l_RFJ2"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.24930151196247122, -0.01059512121009555, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.094
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.24930151196247122, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_ring_finger_proximal/l_ring_finger_proximal_abd/l_ring_finger_middle/l_ring_finger_pip>
+        }
+
+        def MjcActuator "l_RFJ3"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.2285032688178066, -0.009917602877441107, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.2285032688178066, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_ring_finger_proximal/l_ring_finger_proximal_abd/l_ring_finger_middle/l_ring_finger_distal/l_ring_finger_dip>
+        }
+
+        def MjcActuator "l_LFJ0"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.3655325975433942, -0.018616960278988272, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 2
+            uniform double mjc:forceRange:min = -2
+            uniform double[] mjc:gainPrm = [0.3655325975433942, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_pinky_proximal/l_pinky_mcp_flex>
+        }
+
+        def MjcActuator "l_LFJ1"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.41393113081120425, -0.018732177029667153, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -0.698
+            uniform double mjc:forceRange:max = 0.2
+            uniform double mjc:forceRange:min = -0.2
+            uniform double[] mjc:gainPrm = [0.41393113081120425, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_pinky_proximal/l_pinky_proximal_abd/l_pinky_mcp_abd>
+        }
+
+        def MjcActuator "l_LFJ2"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.22729367621965954, -0.00951005441616486, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.094
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.22729367621965954, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_pinky_proximal/l_pinky_proximal_abd/l_pinky_middle/l_pinky_pip>
+        }
+
+        def MjcActuator "l_LFJ3"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.1964723550341816, -0.009017295241756363, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.1964723550341816, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_L/Link1_L/Link2_L/Link3_L/Link4_L/Link5_L/Link6_L/Link7_L/TCP_Link_L/l_mount/l_wrist/l_pinky_proximal/l_pinky_proximal_abd/l_pinky_middle/l_pinky_distal/l_pinky_dip>
+        }
+
+        def MjcActuator "r_THJ0"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.40844710645048043, -0.020882010257063675, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.291
+            uniform double mjc:ctrlRange:min = -1.187
+            uniform double mjc:forceRange:max = 0.6
+            uniform double mjc:forceRange:min = -0.6
+            uniform double[] mjc:gainPrm = [0.40844710645048043, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_thumb_proximal/r_thumb_cmc_flex>
+        }
+
+        def MjcActuator "r_THJ1"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.6858601063643346, -0.030610939996373314, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -1.484
+            uniform double mjc:forceRange:max = 0.6
+            uniform double mjc:forceRange:min = -0.6
+            uniform double[] mjc:gainPrm = [0.6858601063643346, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_thumb_proximal/r_thumb_proximal_abd/r_thumb_cmc_abd>
+        }
+
+        def MjcActuator "r_THJ2"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.2391112196099482, -0.010181475050560962, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.2391112196099482, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_thumb_proximal/r_thumb_proximal_abd/r_thumb_middle/r_thumb_mcp>
+        }
+
+        def MjcActuator "r_THJ3"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.20736128319711747, -0.00909698844675045, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.20736128319711747, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_thumb_proximal/r_thumb_proximal_abd/r_thumb_middle/r_thumb_distal/r_thumb_ip>
+        }
+
+        def MjcActuator "r_FFJ0"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.37352218155860073, -0.01882274330029718, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 2
+            uniform double mjc:forceRange:min = -2
+            uniform double[] mjc:gainPrm = [0.37352218155860073, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_index_finger_proximal/r_index_finger_mcp_flex>
+        }
+
+        def MjcActuator "r_FFJ1"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.45592448909027794, -0.019798167597016643, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -0.698
+            uniform double mjc:forceRange:max = 0.2
+            uniform double mjc:forceRange:min = -0.2
+            uniform double[] mjc:gainPrm = [0.45592448909027794, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_index_finger_proximal/r_index_finger_proximal_abd/r_index_finger_mcp_abd>
+        }
+
+        def MjcActuator "r_FFJ2"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.24368366649522863, -0.010477031953162727, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.094
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.24368366649522863, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_index_finger_proximal/r_index_finger_proximal_abd/r_index_finger_middle/r_index_finger_pip>
+        }
+
+        def MjcActuator "r_FFJ3"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.18026971340925335, -0.008240212147903584, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.18026971340925335, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_index_finger_proximal/r_index_finger_proximal_abd/r_index_finger_middle/r_index_finger_distal/r_index_finger_dip>
+        }
+
+        def MjcActuator "r_MFJ0"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.3687093483646485, -0.01848622487024593, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 2
+            uniform double mjc:forceRange:min = -2
+            uniform double[] mjc:gainPrm = [0.3687093483646485, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_middle_finger_proximal/r_middle_finger_mcp_flex>
+        }
+
+        def MjcActuator "r_MFJ1"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.4164253443634641, -0.018032947229953678, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -0.698
+            uniform double mjc:forceRange:max = 0.2
+            uniform double mjc:forceRange:min = -0.2
+            uniform double[] mjc:gainPrm = [0.4164253443634641, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_middle_finger_proximal/r_middle_finger_proximal_abd/r_middle_finger_mcp_abd>
+        }
+
+        def MjcActuator "r_MFJ2"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.22218607502059182, -0.009592200014076666, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.094
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.22218607502059182, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_middle_finger_proximal/r_middle_finger_proximal_abd/r_middle_finger_middle/r_middle_finger_pip>
+        }
+
+        def MjcActuator "r_MFJ3"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.19427606072023446, -0.009152994605972402, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.19427606072023446, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_middle_finger_proximal/r_middle_finger_proximal_abd/r_middle_finger_middle/r_middle_finger_distal/r_middle_finger_dip>
+        }
+
+        def MjcActuator "r_RFJ0"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.35718151495111794, -0.018376606800780005, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 2
+            uniform double mjc:forceRange:min = -2
+            uniform double[] mjc:gainPrm = [0.35718151495111794, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_ring_finger_proximal/r_ring_finger_mcp_flex>
+        }
+
+        def MjcActuator "r_RFJ1"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.42977315313086895, -0.01867700966212433, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -0.698
+            uniform double mjc:forceRange:max = 0.2
+            uniform double mjc:forceRange:min = -0.2
+            uniform double[] mjc:gainPrm = [0.42977315313086895, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_ring_finger_proximal/r_ring_finger_proximal_abd/r_ring_finger_mcp_abd>
+        }
+
+        def MjcActuator "r_RFJ2"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.24930151196247122, -0.01059512121009555, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.094
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.24930151196247122, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_ring_finger_proximal/r_ring_finger_proximal_abd/r_ring_finger_middle/r_ring_finger_pip>
+        }
+
+        def MjcActuator "r_RFJ3"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.2285032688178066, -0.009917602877441107, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.2285032688178066, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_ring_finger_proximal/r_ring_finger_proximal_abd/r_ring_finger_middle/r_ring_finger_distal/r_ring_finger_dip>
+        }
+
+        def MjcActuator "r_LFJ0"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.3655325975433942, -0.018616960278988272, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 2
+            uniform double mjc:forceRange:min = -2
+            uniform double[] mjc:gainPrm = [0.3655325975433942, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_pinky_proximal/r_pinky_mcp_flex>
+        }
+
+        def MjcActuator "r_LFJ1"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.41393113081120425, -0.018732177029667153, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -0.698
+            uniform double mjc:forceRange:max = 0.2
+            uniform double mjc:forceRange:min = -0.2
+            uniform double[] mjc:gainPrm = [0.41393113081120425, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_pinky_proximal/r_pinky_proximal_abd/r_pinky_mcp_abd>
+        }
+
+        def MjcActuator "r_LFJ2"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.22729367621965954, -0.00951005441616486, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.094
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.22729367621965954, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_pinky_proximal/r_pinky_proximal_abd/r_pinky_middle/r_pinky_pip>
+        }
+
+        def MjcActuator "r_LFJ3"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.1964723550341816, -0.009017295241756363, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.1964723550341816, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal/center_mount/Base_R/Link1_R/Link2_R/Link3_R/Link4_R/Link5_R/Link6_R/Link7_R/TCP_Link_R/r_mount/r_wrist/r_pinky_proximal/r_pinky_proximal_abd/r_pinky_middle/r_pinky_distal/r_pinky_dip>
+        }
+    }
+}
+

@@ -5,13 +5,22 @@ asset-load check. The script never connects to the physical robot.
 """
 
 import argparse
+import json
+import os
 from pathlib import Path
 
 import mujoco
 import numpy as np
 import torch
 from dexgym.assets.marvin_wuji.joint_mapping import inspect_joint_contract, qpos_to_newton
-from dexgym.assets.marvin_wuji.robot_cfg import make_robot_cfg, resolve_source_mjcf
+from dexgym.assets.marvin_wuji.robot_cfg import (
+    JOINT_ORDER,
+    PACKAGED_KEYFRAMES,
+    PACKAGED_USD,
+    SOURCE_SHA256,
+    make_robot_cfg,
+    resolve_source_mjcf,
+)
 from isaaclab.app import launch_simulation
 from isaaclab.scene import InteractiveScene, InteractiveSceneCfg
 from isaaclab.sim import SimulationCfg, SimulationContext
@@ -22,18 +31,28 @@ from isaaclab_newton.physics import MJWarpSolverCfg, NewtonCfg
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mjcf", help="Pinned source MJCF; defaults to DEXGYM_MARVIN_MJCF")
-    parser.add_argument("--usd", type=Path, required=True, help="Converted dual_arm_marvin.usda")
+    parser.add_argument("--usd", type=Path, default=PACKAGED_USD, help="Converted dual_arm_marvin.usda")
     parser.add_argument("--pose", choices=("hardware_zero", "home", "measured_j5_zero", "forward_pose"), default="home")
     parser.add_argument("--viz", choices=("none", "newton_gl"), default="newton_gl")
     parser.add_argument("--steps", type=int, default=1000)
     args = parser.parse_args()
     if args.steps < 0:
         parser.error("--steps must be nonnegative")
-    model = mujoco.MjModel.from_xml_path(str(resolve_source_mjcf(args.mjcf)))
-    contract = inspect_joint_contract(model)
-    key_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, args.pose)
-    if key_id < 0:
-        parser.error(f"Source keyframe missing: {args.pose}")
+    source = args.mjcf or os.environ.get("DEXGYM_MARVIN_MJCF")
+    if source:
+        model = mujoco.MjModel.from_xml_path(str(resolve_source_mjcf(source)))
+        contract = inspect_joint_contract(model)
+        if contract.names != JOINT_ORDER:
+            raise ValueError("Source MJCF joint order differs from the packaged contract")
+        key_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, args.pose)
+        if key_id < 0:
+            parser.error(f"Source keyframe missing: {args.pose}")
+        pose = qpos_to_newton(model.key_qpos[key_id], contract, JOINT_ORDER)
+    else:
+        keyframes = json.loads(PACKAGED_KEYFRAMES.read_text())
+        if keyframes["source_sha256"] != SOURCE_SHA256 or tuple(keyframes["joint_order"]) != JOINT_ORDER:
+            raise ValueError("Packaged keyframes do not match the pinned source model")
+        pose = np.asarray(keyframes["keyframes"][args.pose], dtype=np.float64)
 
     @configclass
     class SceneCfg(InteractiveSceneCfg):
@@ -48,9 +67,8 @@ def main() -> None:
         scene = InteractiveScene(SceneCfg(num_envs=1, env_spacing=3.0))
         sim.reset()
         robot = scene["robot"]
-        if robot.num_joints != 54 or tuple(robot.joint_names) != contract.names:
+        if robot.num_joints != 54 or tuple(robot.joint_names) != JOINT_ORDER:
             raise ValueError("Loaded Newton joint order differs from source MJCF")
-        pose = qpos_to_newton(model.key_qpos[key_id], contract, robot.joint_names)
         position = torch.as_tensor(pose[None, :], dtype=torch.float32, device=robot.device)
         robot.write_joint_state_to_sim_index(position=position, velocity=torch.zeros_like(position))
         sim.forward()

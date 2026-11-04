@@ -1,0 +1,1478 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "MuJoCo USD Converter v0.6.1"
+    }
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Scope "Instances"
+{
+    def Xform "Base_L_visual" (
+        prepend references = @./geometries.usd@</Geometries/Base_L_visual>
+    )
+    {
+        over "Base_L_visual" (
+            apiSchemas = ["MaterialBindingAPI", "MjcImageableAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/Base_L_visual/VisualMaterials/arm_silver>
+            int mjc:group = 1
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "arm_silver" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/arm_silver>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "Link1_L_visual" (
+        prepend references = @./geometries.usd@</Geometries/Link1_L_visual>
+    )
+    {
+        over "Link1_L_visual" (
+            apiSchemas = ["MaterialBindingAPI", "MjcImageableAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/Link1_L_visual/VisualMaterials/arm_white>
+            int mjc:group = 1
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "arm_white" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/arm_white>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "Link2_L_visual" (
+        prepend references = @./geometries.usd@</Geometries/Link2_L_visual>
+    )
+    {
+        over "Link2_L_visual" (
+            apiSchemas = ["MaterialBindingAPI", "MjcImageableAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/Link2_L_visual/VisualMaterials/arm_white>
+            int mjc:group = 1
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "arm_white" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/arm_white>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "Link3_L_visual" (
+        prepend references = @./geometries.usd@</Geometries/Link3_L_visual>
+    )
+    {
+        over "Link3_L_visual" (
+            apiSchemas = ["MaterialBindingAPI", "MjcImageableAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/Link3_L_visual/VisualMaterials/arm_white>
+            int mjc:group = 1
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "arm_white" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/arm_white>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "Link4_L_visual" (
+        prepend references = @./geometries.usd@</Geometries/Link4_L_visual>
+    )
+    {
+        over "Link4_L_visual" (
+            apiSchemas = ["MaterialBindingAPI", "MjcImageableAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/Link4_L_visual/VisualMaterials/arm_white>
+            int mjc:group = 1
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "arm_white" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/arm_white>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "Link5_L_visual" (
+        prepend references = @./geometries.usd@</Geometries/Link5_L_visual>
+    )
+    {
+        over "Link5_L_visual" (
+            apiSchemas = ["MaterialBindingAPI", "MjcImageableAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/Link5_L_visual/VisualMaterials/arm_white>
+            int mjc:group = 1
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "arm_white" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/arm_white>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "Link6_L_visual" (
+        prepend references = @./geometries.usd@</Geometries/Link6_L_visual>
+    )
+    {
+        over "Link6_L_visual" (
+            apiSchemas = ["MaterialBindingAPI", "MjcImageableAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/Link6_L_visual/VisualMaterials/arm_white>
+            int mjc:group = 1
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "arm_white" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/arm_white>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "Link7_L_visual" (
+        prepend references = @./geometries.usd@</Geometries/Link7_L_visual>
+    )
+    {
+        over "Link7_L_visual" (
+            apiSchemas = ["MaterialBindingAPI", "MjcImageableAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/Link7_L_visual/VisualMaterials/arm_white>
+            int mjc:group = 1
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "arm_white" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/arm_white>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "l_mount" (
+        prepend references = @./geometries.usd@</Geometries/l_mount>
+    )
+    {
+        over "l_mount" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_mount_1" (
+        prepend references = @./geometries.usd@</Geometries/l_mount_1>
+    )
+    {
+        over "l_mount_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_wrist" (
+        prepend references = @./geometries.usd@</Geometries/l_wrist>
+    )
+    {
+        over "l_wrist" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_wrist_1" (
+        prepend references = @./geometries.usd@</Geometries/l_wrist_1>
+    )
+    {
+        over "l_wrist_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_thumb_proximal" (
+        prepend references = @./geometries.usd@</Geometries/l_thumb_proximal>
+    )
+    {
+        over "l_thumb_proximal" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_thumb_proximal_1" (
+        prepend references = @./geometries.usd@</Geometries/l_thumb_proximal_1>
+    )
+    {
+        over "l_thumb_proximal_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_thumb_proximal_abd" (
+        prepend references = @./geometries.usd@</Geometries/l_thumb_proximal_abd>
+    )
+    {
+        over "l_thumb_proximal_abd" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_thumb_proximal_abd_1" (
+        prepend references = @./geometries.usd@</Geometries/l_thumb_proximal_abd_1>
+    )
+    {
+        over "l_thumb_proximal_abd_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_thumb_middle" (
+        prepend references = @./geometries.usd@</Geometries/l_thumb_middle>
+    )
+    {
+        over "l_thumb_middle" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_thumb_middle_1" (
+        prepend references = @./geometries.usd@</Geometries/l_thumb_middle_1>
+    )
+    {
+        over "l_thumb_middle_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_thumb_distal" (
+        prepend references = @./geometries.usd@</Geometries/l_thumb_distal>
+    )
+    {
+        over "l_thumb_distal" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_thumb_distal_1" (
+        prepend references = @./geometries.usd@</Geometries/l_thumb_distal_1>
+    )
+    {
+        over "l_thumb_distal_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_thumb_tip_sensor_frame" (
+        prepend references = @./geometries.usd@</Geometries/l_thumb_tip_sensor_frame>
+    )
+    {
+        over "l_thumb_tip_sensor_frame" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_thumb_tip_sensor_frame_1" (
+        prepend references = @./geometries.usd@</Geometries/l_thumb_tip_sensor_frame_1>
+    )
+    {
+        over "l_thumb_tip_sensor_frame_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_index_finger_proximal" (
+        prepend references = @./geometries.usd@</Geometries/l_index_finger_proximal>
+    )
+    {
+        over "l_index_finger_proximal" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_index_finger_proximal_1" (
+        prepend references = @./geometries.usd@</Geometries/l_index_finger_proximal_1>
+    )
+    {
+        over "l_index_finger_proximal_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_index_finger_proximal_abd" (
+        prepend references = @./geometries.usd@</Geometries/l_index_finger_proximal_abd>
+    )
+    {
+        over "l_index_finger_proximal_abd" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_index_finger_proximal_abd_1" (
+        prepend references = @./geometries.usd@</Geometries/l_index_finger_proximal_abd_1>
+    )
+    {
+        over "l_index_finger_proximal_abd_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_index_finger_middle" (
+        prepend references = @./geometries.usd@</Geometries/l_index_finger_middle>
+    )
+    {
+        over "l_index_finger_middle" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_index_finger_middle_1" (
+        prepend references = @./geometries.usd@</Geometries/l_index_finger_middle_1>
+    )
+    {
+        over "l_index_finger_middle_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_index_finger_distal" (
+        prepend references = @./geometries.usd@</Geometries/l_index_finger_distal>
+    )
+    {
+        over "l_index_finger_distal" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_index_finger_distal_1" (
+        prepend references = @./geometries.usd@</Geometries/l_index_finger_distal_1>
+    )
+    {
+        over "l_index_finger_distal_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_index_finger_tip_sensor_frame" (
+        prepend references = @./geometries.usd@</Geometries/l_index_finger_tip_sensor_frame>
+    )
+    {
+        over "l_index_finger_tip_sensor_frame" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_index_finger_tip_sensor_frame_1" (
+        prepend references = @./geometries.usd@</Geometries/l_index_finger_tip_sensor_frame_1>
+    )
+    {
+        over "l_index_finger_tip_sensor_frame_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_ring_finger_proximal" (
+        prepend references = @./geometries.usd@</Geometries/l_ring_finger_proximal>
+    )
+    {
+        over "l_ring_finger_proximal" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_ring_finger_proximal_1" (
+        prepend references = @./geometries.usd@</Geometries/l_ring_finger_proximal_1>
+    )
+    {
+        over "l_ring_finger_proximal_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_pinky_proximal" (
+        prepend references = @./geometries.usd@</Geometries/l_pinky_proximal>
+    )
+    {
+        over "l_pinky_proximal" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_pinky_proximal_1" (
+        prepend references = @./geometries.usd@</Geometries/l_pinky_proximal_1>
+    )
+    {
+        over "l_pinky_proximal_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_pinky_proximal_abd" (
+        prepend references = @./geometries.usd@</Geometries/l_pinky_proximal_abd>
+    )
+    {
+        over "l_pinky_proximal_abd" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_pinky_proximal_abd_1" (
+        prepend references = @./geometries.usd@</Geometries/l_pinky_proximal_abd_1>
+    )
+    {
+        over "l_pinky_proximal_abd_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_pinky_middle" (
+        prepend references = @./geometries.usd@</Geometries/l_pinky_middle>
+    )
+    {
+        over "l_pinky_middle" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_pinky_middle_1" (
+        prepend references = @./geometries.usd@</Geometries/l_pinky_middle_1>
+    )
+    {
+        over "l_pinky_middle_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_pinky_distal" (
+        prepend references = @./geometries.usd@</Geometries/l_pinky_distal>
+    )
+    {
+        over "l_pinky_distal" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_pinky_distal_1" (
+        prepend references = @./geometries.usd@</Geometries/l_pinky_distal_1>
+    )
+    {
+        over "l_pinky_distal_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "l_pinky_tip_sensor_frame" (
+        prepend references = @./geometries.usd@</Geometries/l_pinky_tip_sensor_frame>
+    )
+    {
+        over "l_pinky_tip_sensor_frame" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "l_pinky_tip_sensor_frame_1" (
+        prepend references = @./geometries.usd@</Geometries/l_pinky_tip_sensor_frame_1>
+    )
+    {
+        over "l_pinky_tip_sensor_frame_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "Link5_R_visual" (
+        prepend references = @./geometries.usd@</Geometries/Link5_R_visual>
+    )
+    {
+        over "Link5_R_visual" (
+            apiSchemas = ["MaterialBindingAPI", "MjcImageableAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/Link5_R_visual/VisualMaterials/arm_white>
+            int mjc:group = 1
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "arm_white" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/arm_white>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "Link7_R_visual" (
+        prepend references = @./geometries.usd@</Geometries/Link7_R_visual>
+    )
+    {
+        over "Link7_R_visual" (
+            apiSchemas = ["MaterialBindingAPI", "MjcImageableAPI"]
+        )
+        {
+            custom rel material:binding
+            prepend rel material:binding = </Instances/Link7_R_visual/VisualMaterials/arm_white>
+            int mjc:group = 1
+        }
+
+        def Scope "VisualMaterials"
+        {
+            def Material "arm_white" (
+                instanceable = true
+                prepend references = @./materials.usda@</Materials/arm_white>
+            )
+            {
+            }
+        }
+    }
+
+    def Xform "r_mount" (
+        prepend references = @./geometries.usd@</Geometries/r_mount>
+    )
+    {
+        over "r_mount" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_mount_1" (
+        prepend references = @./geometries.usd@</Geometries/r_mount_1>
+    )
+    {
+        over "r_mount_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_wrist" (
+        prepend references = @./geometries.usd@</Geometries/r_wrist>
+    )
+    {
+        over "r_wrist" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_wrist_1" (
+        prepend references = @./geometries.usd@</Geometries/r_wrist_1>
+    )
+    {
+        over "r_wrist_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_thumb_proximal" (
+        prepend references = @./geometries.usd@</Geometries/r_thumb_proximal>
+    )
+    {
+        over "r_thumb_proximal" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_thumb_proximal_1" (
+        prepend references = @./geometries.usd@</Geometries/r_thumb_proximal_1>
+    )
+    {
+        over "r_thumb_proximal_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_thumb_proximal_abd" (
+        prepend references = @./geometries.usd@</Geometries/r_thumb_proximal_abd>
+    )
+    {
+        over "r_thumb_proximal_abd" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_thumb_proximal_abd_1" (
+        prepend references = @./geometries.usd@</Geometries/r_thumb_proximal_abd_1>
+    )
+    {
+        over "r_thumb_proximal_abd_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_thumb_middle" (
+        prepend references = @./geometries.usd@</Geometries/r_thumb_middle>
+    )
+    {
+        over "r_thumb_middle" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_thumb_middle_1" (
+        prepend references = @./geometries.usd@</Geometries/r_thumb_middle_1>
+    )
+    {
+        over "r_thumb_middle_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_thumb_distal" (
+        prepend references = @./geometries.usd@</Geometries/r_thumb_distal>
+    )
+    {
+        over "r_thumb_distal" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_thumb_distal_1" (
+        prepend references = @./geometries.usd@</Geometries/r_thumb_distal_1>
+    )
+    {
+        over "r_thumb_distal_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_thumb_tip_sensor_frame" (
+        prepend references = @./geometries.usd@</Geometries/r_thumb_tip_sensor_frame>
+    )
+    {
+        over "r_thumb_tip_sensor_frame" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_thumb_tip_sensor_frame_1" (
+        prepend references = @./geometries.usd@</Geometries/r_thumb_tip_sensor_frame_1>
+    )
+    {
+        over "r_thumb_tip_sensor_frame_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_index_finger_proximal" (
+        prepend references = @./geometries.usd@</Geometries/r_index_finger_proximal>
+    )
+    {
+        over "r_index_finger_proximal" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_index_finger_proximal_1" (
+        prepend references = @./geometries.usd@</Geometries/r_index_finger_proximal_1>
+    )
+    {
+        over "r_index_finger_proximal_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_index_finger_proximal_abd" (
+        prepend references = @./geometries.usd@</Geometries/r_index_finger_proximal_abd>
+    )
+    {
+        over "r_index_finger_proximal_abd" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_index_finger_proximal_abd_1" (
+        prepend references = @./geometries.usd@</Geometries/r_index_finger_proximal_abd_1>
+    )
+    {
+        over "r_index_finger_proximal_abd_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_index_finger_middle" (
+        prepend references = @./geometries.usd@</Geometries/r_index_finger_middle>
+    )
+    {
+        over "r_index_finger_middle" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_index_finger_middle_1" (
+        prepend references = @./geometries.usd@</Geometries/r_index_finger_middle_1>
+    )
+    {
+        over "r_index_finger_middle_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_index_finger_distal" (
+        prepend references = @./geometries.usd@</Geometries/r_index_finger_distal>
+    )
+    {
+        over "r_index_finger_distal" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_index_finger_distal_1" (
+        prepend references = @./geometries.usd@</Geometries/r_index_finger_distal_1>
+    )
+    {
+        over "r_index_finger_distal_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_index_finger_tip_sensor_frame" (
+        prepend references = @./geometries.usd@</Geometries/r_index_finger_tip_sensor_frame>
+    )
+    {
+        over "r_index_finger_tip_sensor_frame" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_index_finger_tip_sensor_frame_1" (
+        prepend references = @./geometries.usd@</Geometries/r_index_finger_tip_sensor_frame_1>
+    )
+    {
+        over "r_index_finger_tip_sensor_frame_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_pinky_proximal" (
+        prepend references = @./geometries.usd@</Geometries/r_pinky_proximal>
+    )
+    {
+        over "r_pinky_proximal" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_pinky_proximal_1" (
+        prepend references = @./geometries.usd@</Geometries/r_pinky_proximal_1>
+    )
+    {
+        over "r_pinky_proximal_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_pinky_proximal_abd" (
+        prepend references = @./geometries.usd@</Geometries/r_pinky_proximal_abd>
+    )
+    {
+        over "r_pinky_proximal_abd" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_pinky_proximal_abd_1" (
+        prepend references = @./geometries.usd@</Geometries/r_pinky_proximal_abd_1>
+    )
+    {
+        over "r_pinky_proximal_abd_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_pinky_middle" (
+        prepend references = @./geometries.usd@</Geometries/r_pinky_middle>
+    )
+    {
+        over "r_pinky_middle" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_pinky_middle_1" (
+        prepend references = @./geometries.usd@</Geometries/r_pinky_middle_1>
+    )
+    {
+        over "r_pinky_middle_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_pinky_distal" (
+        prepend references = @./geometries.usd@</Geometries/r_pinky_distal>
+    )
+    {
+        over "r_pinky_distal" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_pinky_distal_1" (
+        prepend references = @./geometries.usd@</Geometries/r_pinky_distal_1>
+    )
+    {
+        over "r_pinky_distal_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+
+    def Xform "r_pinky_tip_sensor_frame" (
+        prepend references = @./geometries.usd@</Geometries/r_pinky_tip_sensor_frame>
+    )
+    {
+        over "r_pinky_tip_sensor_frame" (
+            apiSchemas = ["MjcImageableAPI"]
+        )
+        {
+            int mjc:group = 1
+        }
+    }
+
+    def Xform "r_pinky_tip_sensor_frame_1" (
+        prepend references = @./geometries.usd@</Geometries/r_pinky_tip_sensor_frame_1>
+    )
+    {
+        over "r_pinky_tip_sensor_frame_1" (
+            apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "PhysicsMeshCollisionAPI", "NewtonMeshCollisionAPI", "PhysicsMassAPI", "MaterialBindingAPI"]
+        )
+        {
+            custom rel material:binding:physics = None
+            int mjc:group = 2
+            double[] mjc:solref = [0.02, 1]
+            float newton:contactGap = 0 (
+                limits = {
+                    dictionary hard = {
+                        double minimum = 0
+                    }
+                }
+            )
+            token physics:approximation = "convexHull"
+            float physics:density = 1000
+        }
+    }
+}
+

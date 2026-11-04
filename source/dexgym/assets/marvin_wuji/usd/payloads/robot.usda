@@ -1,0 +1,836 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "MuJoCo USD Converter v0.6.1"
+    }
+    defaultPrim = "marvin_m6_dual_arm_wujihand2_beta2"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+over "marvin_m6_dual_arm_wujihand2_beta2" (
+    prepend apiSchemas = ["IsaacRobotAPI"]
+)
+{
+    custom rel isaac:physics:robotJoints
+    custom rel isaac:physics:robotLinks
+
+    over "Geometry"
+    {
+        over "pedestal" (
+            prepend apiSchemas = ["IsaacLinkAPI"]
+        )
+        {
+            over "center_mount" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+                over "PhysicsFixedJoint" (
+                    prepend apiSchemas = ["IsaacJointAPI"]
+                )
+                {
+                }
+
+                over "Base_L" (
+                    prepend apiSchemas = ["IsaacLinkAPI"]
+                )
+                {
+                    over "PhysicsFixedJoint" (
+                        prepend apiSchemas = ["IsaacJointAPI"]
+                    )
+                    {
+                    }
+
+                    over "Link1_L" (
+                        prepend apiSchemas = ["IsaacLinkAPI"]
+                    )
+                    {
+                        over "Joint1_L" (
+                            prepend apiSchemas = ["IsaacJointAPI"]
+                        )
+                        {
+                        }
+
+                        over "Link2_L" (
+                            prepend apiSchemas = ["IsaacLinkAPI"]
+                        )
+                        {
+                            over "Joint2_L" (
+                                prepend apiSchemas = ["IsaacJointAPI"]
+                            )
+                            {
+                            }
+
+                            over "Link3_L" (
+                                prepend apiSchemas = ["IsaacLinkAPI"]
+                            )
+                            {
+                                over "Joint3_L" (
+                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                )
+                                {
+                                }
+
+                                over "Link4_L" (
+                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                )
+                                {
+                                    over "Joint4_L" (
+                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                    )
+                                    {
+                                    }
+
+                                    over "Link5_L" (
+                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                    )
+                                    {
+                                        over "Joint5_L" (
+                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                        )
+                                        {
+                                        }
+
+                                        over "Link6_L" (
+                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                        )
+                                        {
+                                            over "Joint6_L" (
+                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                            )
+                                            {
+                                            }
+
+                                            over "Link7_L" (
+                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                            )
+                                            {
+                                                over "Joint7_L" (
+                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                )
+                                                {
+                                                }
+
+                                                over "TCP_Link_L" (
+                                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                                )
+                                                {
+                                                    over "PhysicsFixedJoint" (
+                                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                                    )
+                                                    {
+                                                    }
+
+                                                    over "l_mount" (
+                                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                                    )
+                                                    {
+                                                        over "PhysicsFixedJoint" (
+                                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                                        )
+                                                        {
+                                                        }
+
+                                                        over "l_wrist" (
+                                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                                        )
+                                                        {
+                                                            over "PhysicsFixedJoint" (
+                                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                                            )
+                                                            {
+                                                            }
+
+                                                            over "l_thumb_proximal" (
+                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                            )
+                                                            {
+                                                                over "l_thumb_cmc_flex" (
+                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "l_thumb_proximal_abd" (
+                                                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                )
+                                                                {
+                                                                    over "l_thumb_cmc_abd" (
+                                                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "l_thumb_middle" (
+                                                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                    )
+                                                                    {
+                                                                        over "l_thumb_mcp" (
+                                                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "l_thumb_distal" (
+                                                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                        )
+                                                                        {
+                                                                            over "l_thumb_ip" (
+                                                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "l_thumb_tip_sensor_frame" (
+                                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                            )
+                                                                            {
+                                                                                over "PhysicsFixedJoint" (
+                                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                                )
+                                                                                {
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "l_index_finger_proximal" (
+                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                            )
+                                                            {
+                                                                over "l_index_finger_mcp_flex" (
+                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "l_index_finger_proximal_abd" (
+                                                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                )
+                                                                {
+                                                                    over "l_index_finger_mcp_abd" (
+                                                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "l_index_finger_middle" (
+                                                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                    )
+                                                                    {
+                                                                        over "l_index_finger_pip" (
+                                                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "l_index_finger_distal" (
+                                                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                        )
+                                                                        {
+                                                                            over "l_index_finger_dip" (
+                                                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "l_index_finger_tip_sensor_frame" (
+                                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                            )
+                                                                            {
+                                                                                over "PhysicsFixedJoint" (
+                                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                                )
+                                                                                {
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "l_middle_finger_proximal" (
+                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                            )
+                                                            {
+                                                                over "l_middle_finger_mcp_flex" (
+                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "l_middle_finger_proximal_abd" (
+                                                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                )
+                                                                {
+                                                                    over "l_middle_finger_mcp_abd" (
+                                                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "l_middle_finger_middle" (
+                                                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                    )
+                                                                    {
+                                                                        over "l_middle_finger_pip" (
+                                                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "l_middle_finger_distal" (
+                                                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                        )
+                                                                        {
+                                                                            over "l_middle_finger_dip" (
+                                                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "l_middle_finger_tip_sensor_frame" (
+                                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                            )
+                                                                            {
+                                                                                over "PhysicsFixedJoint" (
+                                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                                )
+                                                                                {
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "l_ring_finger_proximal" (
+                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                            )
+                                                            {
+                                                                over "l_ring_finger_mcp_flex" (
+                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "l_ring_finger_proximal_abd" (
+                                                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                )
+                                                                {
+                                                                    over "l_ring_finger_mcp_abd" (
+                                                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "l_ring_finger_middle" (
+                                                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                    )
+                                                                    {
+                                                                        over "l_ring_finger_pip" (
+                                                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "l_ring_finger_distal" (
+                                                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                        )
+                                                                        {
+                                                                            over "l_ring_finger_dip" (
+                                                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "l_ring_finger_tip_sensor_frame" (
+                                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                            )
+                                                                            {
+                                                                                over "PhysicsFixedJoint" (
+                                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                                )
+                                                                                {
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "l_pinky_proximal" (
+                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                            )
+                                                            {
+                                                                over "l_pinky_mcp_flex" (
+                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "l_pinky_proximal_abd" (
+                                                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                )
+                                                                {
+                                                                    over "l_pinky_mcp_abd" (
+                                                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "l_pinky_middle" (
+                                                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                    )
+                                                                    {
+                                                                        over "l_pinky_pip" (
+                                                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "l_pinky_distal" (
+                                                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                        )
+                                                                        {
+                                                                            over "l_pinky_dip" (
+                                                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "l_pinky_tip_sensor_frame" (
+                                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                            )
+                                                                            {
+                                                                                over "PhysicsFixedJoint" (
+                                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                                )
+                                                                                {
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                over "Base_R" (
+                    prepend apiSchemas = ["IsaacLinkAPI"]
+                )
+                {
+                    over "PhysicsFixedJoint" (
+                        prepend apiSchemas = ["IsaacJointAPI"]
+                    )
+                    {
+                    }
+
+                    over "Link1_R" (
+                        prepend apiSchemas = ["IsaacLinkAPI"]
+                    )
+                    {
+                        over "Joint1_R" (
+                            prepend apiSchemas = ["IsaacJointAPI"]
+                        )
+                        {
+                        }
+
+                        over "Link2_R" (
+                            prepend apiSchemas = ["IsaacLinkAPI"]
+                        )
+                        {
+                            over "Joint2_R" (
+                                prepend apiSchemas = ["IsaacJointAPI"]
+                            )
+                            {
+                            }
+
+                            over "Link3_R" (
+                                prepend apiSchemas = ["IsaacLinkAPI"]
+                            )
+                            {
+                                over "Joint3_R" (
+                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                )
+                                {
+                                }
+
+                                over "Link4_R" (
+                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                )
+                                {
+                                    over "Joint4_R" (
+                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                    )
+                                    {
+                                    }
+
+                                    over "Link5_R" (
+                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                    )
+                                    {
+                                        over "Joint5_R" (
+                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                        )
+                                        {
+                                        }
+
+                                        over "Link6_R" (
+                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                        )
+                                        {
+                                            over "Joint6_R" (
+                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                            )
+                                            {
+                                            }
+
+                                            over "Link7_R" (
+                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                            )
+                                            {
+                                                over "Joint7_R" (
+                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                )
+                                                {
+                                                }
+
+                                                over "TCP_Link_R" (
+                                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                                )
+                                                {
+                                                    over "PhysicsFixedJoint" (
+                                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                                    )
+                                                    {
+                                                    }
+
+                                                    over "r_mount" (
+                                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                                    )
+                                                    {
+                                                        over "PhysicsFixedJoint" (
+                                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                                        )
+                                                        {
+                                                        }
+
+                                                        over "r_wrist" (
+                                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                                        )
+                                                        {
+                                                            over "PhysicsFixedJoint" (
+                                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                                            )
+                                                            {
+                                                            }
+
+                                                            over "r_thumb_proximal" (
+                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                            )
+                                                            {
+                                                                over "r_thumb_cmc_flex" (
+                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "r_thumb_proximal_abd" (
+                                                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                )
+                                                                {
+                                                                    over "r_thumb_cmc_abd" (
+                                                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "r_thumb_middle" (
+                                                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                    )
+                                                                    {
+                                                                        over "r_thumb_mcp" (
+                                                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "r_thumb_distal" (
+                                                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                        )
+                                                                        {
+                                                                            over "r_thumb_ip" (
+                                                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "r_thumb_tip_sensor_frame" (
+                                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                            )
+                                                                            {
+                                                                                over "PhysicsFixedJoint" (
+                                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                                )
+                                                                                {
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "r_index_finger_proximal" (
+                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                            )
+                                                            {
+                                                                over "r_index_finger_mcp_flex" (
+                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "r_index_finger_proximal_abd" (
+                                                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                )
+                                                                {
+                                                                    over "r_index_finger_mcp_abd" (
+                                                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "r_index_finger_middle" (
+                                                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                    )
+                                                                    {
+                                                                        over "r_index_finger_pip" (
+                                                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "r_index_finger_distal" (
+                                                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                        )
+                                                                        {
+                                                                            over "r_index_finger_dip" (
+                                                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "r_index_finger_tip_sensor_frame" (
+                                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                            )
+                                                                            {
+                                                                                over "PhysicsFixedJoint" (
+                                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                                )
+                                                                                {
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "r_middle_finger_proximal" (
+                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                            )
+                                                            {
+                                                                over "r_middle_finger_mcp_flex" (
+                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "r_middle_finger_proximal_abd" (
+                                                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                )
+                                                                {
+                                                                    over "r_middle_finger_mcp_abd" (
+                                                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "r_middle_finger_middle" (
+                                                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                    )
+                                                                    {
+                                                                        over "r_middle_finger_pip" (
+                                                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "r_middle_finger_distal" (
+                                                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                        )
+                                                                        {
+                                                                            over "r_middle_finger_dip" (
+                                                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "r_middle_finger_tip_sensor_frame" (
+                                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                            )
+                                                                            {
+                                                                                over "PhysicsFixedJoint" (
+                                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                                )
+                                                                                {
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "r_ring_finger_proximal" (
+                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                            )
+                                                            {
+                                                                over "r_ring_finger_mcp_flex" (
+                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "r_ring_finger_proximal_abd" (
+                                                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                )
+                                                                {
+                                                                    over "r_ring_finger_mcp_abd" (
+                                                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "r_ring_finger_middle" (
+                                                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                    )
+                                                                    {
+                                                                        over "r_ring_finger_pip" (
+                                                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "r_ring_finger_distal" (
+                                                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                        )
+                                                                        {
+                                                                            over "r_ring_finger_dip" (
+                                                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "r_ring_finger_tip_sensor_frame" (
+                                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                            )
+                                                                            {
+                                                                                over "PhysicsFixedJoint" (
+                                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                                )
+                                                                                {
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "r_pinky_proximal" (
+                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                            )
+                                                            {
+                                                                over "r_pinky_mcp_flex" (
+                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "r_pinky_proximal_abd" (
+                                                                    prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                )
+                                                                {
+                                                                    over "r_pinky_mcp_abd" (
+                                                                        prepend apiSchemas = ["IsaacJointAPI"]
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "r_pinky_middle" (
+                                                                        prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                    )
+                                                                    {
+                                                                        over "r_pinky_pip" (
+                                                                            prepend apiSchemas = ["IsaacJointAPI"]
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "r_pinky_distal" (
+                                                                            prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                        )
+                                                                        {
+                                                                            over "r_pinky_dip" (
+                                                                                prepend apiSchemas = ["IsaacJointAPI"]
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "r_pinky_tip_sensor_frame" (
+                                                                                prepend apiSchemas = ["IsaacLinkAPI"]
+                                                                            )
+                                                                            {
+                                                                                over "PhysicsFixedJoint" (
+                                                                                    prepend apiSchemas = ["IsaacJointAPI"]
+                                                                                )
+                                                                                {
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            over "PhysicsFixedJoint" (
+                prepend apiSchemas = ["IsaacJointAPI"]
+            )
+            {
+            }
+        }
+    }
+}
+
