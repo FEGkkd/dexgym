@@ -12,6 +12,29 @@ SOURCE_COMMIT = "5d4c345842f197bffeae7d7e08c4c3718230f9e0"
 SOURCE_RELATIVE_PATH = "src/whole_body_mujoco_driver/model/dual_arm_marvin.xml"
 
 
+def _hand_joint_order(side: str) -> tuple[str, ...]:
+    """The source MJCF orders each hand thumb, index, middle, ring, pinky."""
+    return (
+        f"{side}_thumb_cmc_flex",
+        f"{side}_thumb_cmc_abd",
+        f"{side}_thumb_mcp",
+        f"{side}_thumb_ip",
+        *(
+            f"{side}_{finger}_{axis}"
+            for finger in ("index_finger", "middle_finger", "ring_finger", "pinky")
+            for axis in ("mcp_flex", "mcp_abd", "pip", "dip")
+        ),
+    )
+
+
+JOINT_ORDER = (
+    *(f"Joint{i}_L" for i in range(1, 8)),
+    *_hand_joint_order("l"),
+    *(f"Joint{i}_R" for i in range(1, 8)),
+    *_hand_joint_order("r"),
+)
+
+
 def resolve_source_mjcf(path: str | Path | None = None) -> Path:
     """Resolve the external model without assuming a user-specific checkout path."""
     candidate = path or os.environ.get("DEXGYM_MARVIN_MJCF")
@@ -35,6 +58,7 @@ def make_robot_cfg(usd_path: str | Path, prim_path: str = "{ENV_REGEX_NS}/Robot"
         raise FileNotFoundError(usd)
     return ArticulationCfg(
         prim_path=prim_path,
-        spawn=UsdFileCfg(usd_path=str(usd)),
+        spawn=UsdFileCfg(usd_path=str(usd), variants={"Physics": "physics"}),
+        joint_ordering=JOINT_ORDER,
         actuators={"all": ImplicitActuatorCfg(joint_names_expr=[".*"], stiffness=None, damping=None)},
     )

@@ -1,0 +1,989 @@
+{
+  "status": "uncalibrated_against_physical_robot",
+  "note": "Immutable parameter snapshot from the pinned MJCF, not measured motor gains; Newton uses imported USD values.",
+  "source_sha256": "6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce",
+  "joint_order": [
+    "Joint1_L",
+    "Joint2_L",
+    "Joint3_L",
+    "Joint4_L",
+    "Joint5_L",
+    "Joint6_L",
+    "Joint7_L",
+    "l_thumb_cmc_flex",
+    "l_thumb_cmc_abd",
+    "l_thumb_mcp",
+    "l_thumb_ip",
+    "l_index_finger_mcp_flex",
+    "l_index_finger_mcp_abd",
+    "l_index_finger_pip",
+    "l_index_finger_dip",
+    "l_middle_finger_mcp_flex",
+    "l_middle_finger_mcp_abd",
+    "l_middle_finger_pip",
+    "l_middle_finger_dip",
+    "l_ring_finger_mcp_flex",
+    "l_ring_finger_mcp_abd",
+    "l_ring_finger_pip",
+    "l_ring_finger_dip",
+    "l_pinky_mcp_flex",
+    "l_pinky_mcp_abd",
+    "l_pinky_pip",
+    "l_pinky_dip",
+    "Joint1_R",
+    "Joint2_R",
+    "Joint3_R",
+    "Joint4_R",
+    "Joint5_R",
+    "Joint6_R",
+    "Joint7_R",
+    "r_thumb_cmc_flex",
+    "r_thumb_cmc_abd",
+    "r_thumb_mcp",
+    "r_thumb_ip",
+    "r_index_finger_mcp_flex",
+    "r_index_finger_mcp_abd",
+    "r_index_finger_pip",
+    "r_index_finger_dip",
+    "r_middle_finger_mcp_flex",
+    "r_middle_finger_mcp_abd",
+    "r_middle_finger_pip",
+    "r_middle_finger_dip",
+    "r_ring_finger_mcp_flex",
+    "r_ring_finger_mcp_abd",
+    "r_ring_finger_pip",
+    "r_ring_finger_dip",
+    "r_pinky_mcp_flex",
+    "r_pinky_mcp_abd",
+    "r_pinky_pip",
+    "r_pinky_dip"
+  ],
+  "joints": {
+    "Joint1_L": {
+      "joint_damping_nms_per_rad": 3.0,
+      "joint_armature_kg_m2": 0.08,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 400.0,
+      "position_drive_kd_xml": 45.0,
+      "actuator_force_range_xml": [
+        -108.0,
+        108.0
+      ],
+      "body_mass_kg": 1.9705,
+      "body_inertia_principal_kg_m2": [
+        0.005297541109544287,
+        0.004922845079285933,
+        0.0018487438111697808
+      ]
+    },
+    "Joint2_L": {
+      "joint_damping_nms_per_rad": 3.0,
+      "joint_armature_kg_m2": 0.08,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 400.0,
+      "position_drive_kd_xml": 45.0,
+      "actuator_force_range_xml": [
+        -108.0,
+        108.0
+      ],
+      "body_mass_kg": 2.24398,
+      "body_inertia_principal_kg_m2": [
+        0.011949331540742817,
+        0.01121562986395704,
+        0.003383738595300138
+      ]
+    },
+    "Joint3_L": {
+      "joint_damping_nms_per_rad": 2.0,
+      "joint_armature_kg_m2": 0.05,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 440.0,
+      "position_drive_kd_xml": 40.0,
+      "actuator_force_range_xml": [
+        -66.0,
+        66.0
+      ],
+      "body_mass_kg": 1.9242,
+      "body_inertia_principal_kg_m2": [
+        0.007652147359944719,
+        0.007307891790255566,
+        0.001633800849799724
+      ]
+    },
+    "Joint4_L": {
+      "joint_damping_nms_per_rad": 1.6,
+      "joint_armature_kg_m2": 0.04,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 340.0,
+      "position_drive_kd_xml": 34.0,
+      "actuator_force_range_xml": [
+        -66.0,
+        66.0
+      ],
+      "body_mass_kg": 1.6085,
+      "body_inertia_principal_kg_m2": [
+        0.006032437935644003,
+        0.005358753732762518,
+        0.0019822783315934793
+      ]
+    },
+    "Joint5_L": {
+      "joint_damping_nms_per_rad": 1.0,
+      "joint_armature_kg_m2": 0.02,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 200.0,
+      "position_drive_kd_xml": 23.0,
+      "actuator_force_range_xml": [
+        -18.0,
+        18.0
+      ],
+      "body_mass_kg": 2.0883,
+      "body_inertia_principal_kg_m2": [
+        0.006269237980431967,
+        0.005642622467535628,
+        0.0024343595520323986
+      ]
+    },
+    "Joint6_L": {
+      "joint_damping_nms_per_rad": 0.6,
+      "joint_armature_kg_m2": 0.015,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 120.0,
+      "position_drive_kd_xml": 16.0,
+      "actuator_force_range_xml": [
+        -18.0,
+        18.0
+      ],
+      "body_mass_kg": 0.72496,
+      "body_inertia_principal_kg_m2": [
+        0.0005173506066157966,
+        0.0004603623684989685,
+        0.0004250570248852346
+      ]
+    },
+    "Joint7_L": {
+      "joint_damping_nms_per_rad": 0.4,
+      "joint_armature_kg_m2": 0.01,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 85.0,
+      "position_drive_kd_xml": 12.0,
+      "actuator_force_range_xml": [
+        -18.0,
+        18.0
+      ],
+      "body_mass_kg": 0.68606,
+      "body_inertia_principal_kg_m2": [
+        0.0017369091376821643,
+        0.0015391075320381857,
+        0.0007452633302796526
+      ]
+    },
+    "l_thumb_cmc_flex": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0005,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.40844710645048043,
+      "position_drive_kd_xml": 0.020882010257063675,
+      "actuator_force_range_xml": [
+        -0.6,
+        0.6
+      ],
+      "body_mass_kg": 0.011,
+      "body_inertia_principal_kg_m2": [
+        8.62864e-07,
+        8.21693e-07,
+        6.54356e-07
+      ]
+    },
+    "l_thumb_cmc_abd": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0005,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.6858601063643346,
+      "position_drive_kd_xml": 0.030610939996373314,
+      "actuator_force_range_xml": [
+        -0.6,
+        0.6
+      ],
+      "body_mass_kg": 0.0336,
+      "body_inertia_principal_kg_m2": [
+        4.38854e-06,
+        4.24746e-06,
+        1.23727e-06
+      ]
+    },
+    "l_thumb_mcp": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.2391112196099482,
+      "position_drive_kd_xml": 0.010181475050560962,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.0358,
+      "body_inertia_principal_kg_m2": [
+        4.92859e-06,
+        4.8196e-06,
+        1.32688e-06
+      ]
+    },
+    "l_thumb_ip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.20736128319711747,
+      "position_drive_kd_xml": 0.00909698844675045,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.0109,
+      "body_inertia_principal_kg_m2": [
+        1.1828867e-06,
+        1.14897141e-06,
+        2.76400873e-07
+      ]
+    },
+    "l_index_finger_mcp_flex": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0005,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.37352218155860073,
+      "position_drive_kd_xml": 0.01882274330029718,
+      "actuator_force_range_xml": [
+        -2.0,
+        2.0
+      ],
+      "body_mass_kg": 0.0116,
+      "body_inertia_principal_kg_m2": [
+        9.19684e-07,
+        9.08608e-07,
+        7.88412e-07
+      ]
+    },
+    "l_index_finger_mcp_abd": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.45592448909027794,
+      "position_drive_kd_xml": 0.019798167597016643,
+      "actuator_force_range_xml": [
+        -0.2,
+        0.2
+      ],
+      "body_mass_kg": 0.0339,
+      "body_inertia_principal_kg_m2": [
+        7.01589e-06,
+        7.01555e-06,
+        9.1448e-07
+      ]
+    },
+    "l_index_finger_pip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.24368366649522863,
+      "position_drive_kd_xml": 0.010477031953162727,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.0212,
+      "body_inertia_principal_kg_m2": [
+        2.47797e-06,
+        2.40525e-06,
+        6.52478e-07
+      ]
+    },
+    "l_index_finger_dip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.18026971340925335,
+      "position_drive_kd_xml": 0.008240212147903584,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.005,
+      "body_inertia_principal_kg_m2": [
+        4.83270355e-07,
+        3.88592738e-07,
+        1.78664842e-07
+      ]
+    },
+    "l_middle_finger_mcp_flex": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0005,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.3687093483646485,
+      "position_drive_kd_xml": 0.01848622487024593,
+      "actuator_force_range_xml": [
+        -2.0,
+        2.0
+      ],
+      "body_mass_kg": 0.0116,
+      "body_inertia_principal_kg_m2": [
+        9.19684e-07,
+        9.08608e-07,
+        7.88412e-07
+      ]
+    },
+    "l_middle_finger_mcp_abd": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.4164253443634641,
+      "position_drive_kd_xml": 0.018032947229953678,
+      "actuator_force_range_xml": [
+        -0.2,
+        0.2
+      ],
+      "body_mass_kg": 0.0339,
+      "body_inertia_principal_kg_m2": [
+        7.01589e-06,
+        7.01555e-06,
+        9.1448e-07
+      ]
+    },
+    "l_middle_finger_pip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.22218607502059182,
+      "position_drive_kd_xml": 0.009592200014076666,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.0212,
+      "body_inertia_principal_kg_m2": [
+        2.47797e-06,
+        2.40525e-06,
+        6.52478e-07
+      ]
+    },
+    "l_middle_finger_dip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.19427606072023446,
+      "position_drive_kd_xml": 0.009152994605972402,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.005,
+      "body_inertia_principal_kg_m2": [
+        4.83270355e-07,
+        3.88592738e-07,
+        1.78664842e-07
+      ]
+    },
+    "l_ring_finger_mcp_flex": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0005,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.35718151495111794,
+      "position_drive_kd_xml": 0.018376606800780005,
+      "actuator_force_range_xml": [
+        -2.0,
+        2.0
+      ],
+      "body_mass_kg": 0.0116,
+      "body_inertia_principal_kg_m2": [
+        9.19684e-07,
+        9.08608e-07,
+        7.88412e-07
+      ]
+    },
+    "l_ring_finger_mcp_abd": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.42977315313086895,
+      "position_drive_kd_xml": 0.01867700966212433,
+      "actuator_force_range_xml": [
+        -0.2,
+        0.2
+      ],
+      "body_mass_kg": 0.0339,
+      "body_inertia_principal_kg_m2": [
+        7.01589e-06,
+        7.01555e-06,
+        9.1448e-07
+      ]
+    },
+    "l_ring_finger_pip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.24930151196247122,
+      "position_drive_kd_xml": 0.01059512121009555,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.0212,
+      "body_inertia_principal_kg_m2": [
+        2.47797e-06,
+        2.40525e-06,
+        6.52478e-07
+      ]
+    },
+    "l_ring_finger_dip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.2285032688178066,
+      "position_drive_kd_xml": 0.009917602877441107,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.005,
+      "body_inertia_principal_kg_m2": [
+        4.83270355e-07,
+        3.88592738e-07,
+        1.78664842e-07
+      ]
+    },
+    "l_pinky_mcp_flex": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0005,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.3655325975433942,
+      "position_drive_kd_xml": 0.018616960278988272,
+      "actuator_force_range_xml": [
+        -2.0,
+        2.0
+      ],
+      "body_mass_kg": 0.0116,
+      "body_inertia_principal_kg_m2": [
+        9.19664e-07,
+        9.08603e-07,
+        7.88413e-07
+      ]
+    },
+    "l_pinky_mcp_abd": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.41393113081120425,
+      "position_drive_kd_xml": 0.018732177029667153,
+      "actuator_force_range_xml": [
+        -0.2,
+        0.2
+      ],
+      "body_mass_kg": 0.0304,
+      "body_inertia_principal_kg_m2": [
+        5.38014e-06,
+        5.37944e-06,
+        8.1771e-07
+      ]
+    },
+    "l_pinky_pip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.22729367621965954,
+      "position_drive_kd_xml": 0.00951005441616486,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.0188,
+      "body_inertia_principal_kg_m2": [
+        2.05957e-06,
+        1.98647e-06,
+        5.84911e-07
+      ]
+    },
+    "l_pinky_dip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.1964723550341816,
+      "position_drive_kd_xml": 0.009017295241756363,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.005,
+      "body_inertia_principal_kg_m2": [
+        4.8327035e-07,
+        3.88592731e-07,
+        1.78664843e-07
+      ]
+    },
+    "Joint1_R": {
+      "joint_damping_nms_per_rad": 3.0,
+      "joint_armature_kg_m2": 0.08,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 400.0,
+      "position_drive_kd_xml": 45.0,
+      "actuator_force_range_xml": [
+        -108.0,
+        108.0
+      ],
+      "body_mass_kg": 1.9705,
+      "body_inertia_principal_kg_m2": [
+        0.005297541109544287,
+        0.004922845079285933,
+        0.0018487438111697808
+      ]
+    },
+    "Joint2_R": {
+      "joint_damping_nms_per_rad": 3.0,
+      "joint_armature_kg_m2": 0.08,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 400.0,
+      "position_drive_kd_xml": 45.0,
+      "actuator_force_range_xml": [
+        -108.0,
+        108.0
+      ],
+      "body_mass_kg": 2.24398,
+      "body_inertia_principal_kg_m2": [
+        0.011949331540742817,
+        0.01121562986395704,
+        0.003383738595300138
+      ]
+    },
+    "Joint3_R": {
+      "joint_damping_nms_per_rad": 2.0,
+      "joint_armature_kg_m2": 0.05,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 440.0,
+      "position_drive_kd_xml": 40.0,
+      "actuator_force_range_xml": [
+        -66.0,
+        66.0
+      ],
+      "body_mass_kg": 1.9242,
+      "body_inertia_principal_kg_m2": [
+        0.007652147359944719,
+        0.007307891790255566,
+        0.001633800849799724
+      ]
+    },
+    "Joint4_R": {
+      "joint_damping_nms_per_rad": 1.6,
+      "joint_armature_kg_m2": 0.04,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 340.0,
+      "position_drive_kd_xml": 34.0,
+      "actuator_force_range_xml": [
+        -66.0,
+        66.0
+      ],
+      "body_mass_kg": 1.6085,
+      "body_inertia_principal_kg_m2": [
+        0.006032437935644003,
+        0.005358753732762518,
+        0.0019822783315934793
+      ]
+    },
+    "Joint5_R": {
+      "joint_damping_nms_per_rad": 1.0,
+      "joint_armature_kg_m2": 0.02,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 200.0,
+      "position_drive_kd_xml": 23.0,
+      "actuator_force_range_xml": [
+        -18.0,
+        18.0
+      ],
+      "body_mass_kg": 2.0883,
+      "body_inertia_principal_kg_m2": [
+        0.006269237980431967,
+        0.005642622467535628,
+        0.0024343595520323986
+      ]
+    },
+    "Joint6_R": {
+      "joint_damping_nms_per_rad": 0.6,
+      "joint_armature_kg_m2": 0.015,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 120.0,
+      "position_drive_kd_xml": 16.0,
+      "actuator_force_range_xml": [
+        -18.0,
+        18.0
+      ],
+      "body_mass_kg": 0.72496,
+      "body_inertia_principal_kg_m2": [
+        0.0005173506066157966,
+        0.0004603623684989685,
+        0.0004250570248852346
+      ]
+    },
+    "Joint7_R": {
+      "joint_damping_nms_per_rad": 0.4,
+      "joint_armature_kg_m2": 0.01,
+      "joint_frictionloss_nm": 0.1,
+      "position_drive_kp_xml": 85.0,
+      "position_drive_kd_xml": 12.0,
+      "actuator_force_range_xml": [
+        -18.0,
+        18.0
+      ],
+      "body_mass_kg": 0.68606,
+      "body_inertia_principal_kg_m2": [
+        0.0017369091376821643,
+        0.0015391075320381857,
+        0.0007452633302796526
+      ]
+    },
+    "r_thumb_cmc_flex": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0005,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.40844710645048043,
+      "position_drive_kd_xml": 0.020882010257063675,
+      "actuator_force_range_xml": [
+        -0.6,
+        0.6
+      ],
+      "body_mass_kg": 0.011,
+      "body_inertia_principal_kg_m2": [
+        8.38654e-07,
+        7.81045e-07,
+        6.3308e-07
+      ]
+    },
+    "r_thumb_cmc_abd": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0005,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.6858601063643346,
+      "position_drive_kd_xml": 0.030610939996373314,
+      "actuator_force_range_xml": [
+        -0.6,
+        0.6
+      ],
+      "body_mass_kg": 0.0336,
+      "body_inertia_principal_kg_m2": [
+        4.2288e-06,
+        4.08475e-06,
+        1.2356e-06
+      ]
+    },
+    "r_thumb_mcp": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.2391112196099482,
+      "position_drive_kd_xml": 0.010181475050560962,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.0358,
+      "body_inertia_principal_kg_m2": [
+        4.92859e-06,
+        4.8196e-06,
+        1.32688e-06
+      ]
+    },
+    "r_thumb_ip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.20736128319711747,
+      "position_drive_kd_xml": 0.00909698844675045,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.0109,
+      "body_inertia_principal_kg_m2": [
+        1.20448248e-06,
+        1.17392357e-06,
+        2.83759818e-07
+      ]
+    },
+    "r_index_finger_mcp_flex": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0005,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.37352218155860073,
+      "position_drive_kd_xml": 0.01882274330029718,
+      "actuator_force_range_xml": [
+        -2.0,
+        2.0
+      ],
+      "body_mass_kg": 0.0116,
+      "body_inertia_principal_kg_m2": [
+        9.19684e-07,
+        9.08608e-07,
+        7.88412e-07
+      ]
+    },
+    "r_index_finger_mcp_abd": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.45592448909027794,
+      "position_drive_kd_xml": 0.019798167597016643,
+      "actuator_force_range_xml": [
+        -0.2,
+        0.2
+      ],
+      "body_mass_kg": 0.0339,
+      "body_inertia_principal_kg_m2": [
+        7.01589e-06,
+        7.01555e-06,
+        9.1448e-07
+      ]
+    },
+    "r_index_finger_pip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.24368366649522863,
+      "position_drive_kd_xml": 0.010477031953162727,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.0212,
+      "body_inertia_principal_kg_m2": [
+        2.47797e-06,
+        2.40525e-06,
+        6.52478e-07
+      ]
+    },
+    "r_index_finger_dip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.18026971340925335,
+      "position_drive_kd_xml": 0.008240212147903584,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.005,
+      "body_inertia_principal_kg_m2": [
+        4.83270355e-07,
+        3.88592737e-07,
+        1.78664842e-07
+      ]
+    },
+    "r_middle_finger_mcp_flex": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0005,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.3687093483646485,
+      "position_drive_kd_xml": 0.01848622487024593,
+      "actuator_force_range_xml": [
+        -2.0,
+        2.0
+      ],
+      "body_mass_kg": 0.0116,
+      "body_inertia_principal_kg_m2": [
+        9.19684e-07,
+        9.08608e-07,
+        7.88412e-07
+      ]
+    },
+    "r_middle_finger_mcp_abd": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.4164253443634641,
+      "position_drive_kd_xml": 0.018032947229953678,
+      "actuator_force_range_xml": [
+        -0.2,
+        0.2
+      ],
+      "body_mass_kg": 0.0339,
+      "body_inertia_principal_kg_m2": [
+        7.01589e-06,
+        7.01555e-06,
+        9.1448e-07
+      ]
+    },
+    "r_middle_finger_pip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.22218607502059182,
+      "position_drive_kd_xml": 0.009592200014076666,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.0212,
+      "body_inertia_principal_kg_m2": [
+        2.47797e-06,
+        2.40525e-06,
+        6.52478e-07
+      ]
+    },
+    "r_middle_finger_dip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.19427606072023446,
+      "position_drive_kd_xml": 0.009152994605972402,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.005,
+      "body_inertia_principal_kg_m2": [
+        4.83270355e-07,
+        3.88592737e-07,
+        1.78664842e-07
+      ]
+    },
+    "r_ring_finger_mcp_flex": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0005,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.35718151495111794,
+      "position_drive_kd_xml": 0.018376606800780005,
+      "actuator_force_range_xml": [
+        -2.0,
+        2.0
+      ],
+      "body_mass_kg": 0.0116,
+      "body_inertia_principal_kg_m2": [
+        9.19684e-07,
+        9.08608e-07,
+        7.88412e-07
+      ]
+    },
+    "r_ring_finger_mcp_abd": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.42977315313086895,
+      "position_drive_kd_xml": 0.01867700966212433,
+      "actuator_force_range_xml": [
+        -0.2,
+        0.2
+      ],
+      "body_mass_kg": 0.0339,
+      "body_inertia_principal_kg_m2": [
+        7.01589e-06,
+        7.01555e-06,
+        9.1448e-07
+      ]
+    },
+    "r_ring_finger_pip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.24930151196247122,
+      "position_drive_kd_xml": 0.01059512121009555,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.0212,
+      "body_inertia_principal_kg_m2": [
+        2.47797e-06,
+        2.40525e-06,
+        6.52478e-07
+      ]
+    },
+    "r_ring_finger_dip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.2285032688178066,
+      "position_drive_kd_xml": 0.009917602877441107,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.005,
+      "body_inertia_principal_kg_m2": [
+        4.83270355e-07,
+        3.88592737e-07,
+        1.78664842e-07
+      ]
+    },
+    "r_pinky_mcp_flex": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0005,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.3655325975433942,
+      "position_drive_kd_xml": 0.018616960278988272,
+      "actuator_force_range_xml": [
+        -2.0,
+        2.0
+      ],
+      "body_mass_kg": 0.0116,
+      "body_inertia_principal_kg_m2": [
+        9.19664e-07,
+        9.08603e-07,
+        7.88413e-07
+      ]
+    },
+    "r_pinky_mcp_abd": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.41393113081120425,
+      "position_drive_kd_xml": 0.018732177029667153,
+      "actuator_force_range_xml": [
+        -0.2,
+        0.2
+      ],
+      "body_mass_kg": 0.0304,
+      "body_inertia_principal_kg_m2": [
+        5.38014e-06,
+        5.37944e-06,
+        8.1771e-07
+      ]
+    },
+    "r_pinky_pip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.22729367621965954,
+      "position_drive_kd_xml": 0.00951005441616486,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.0188,
+      "body_inertia_principal_kg_m2": [
+        2.05957e-06,
+        1.98647e-06,
+        5.84911e-07
+      ]
+    },
+    "r_pinky_dip": {
+      "joint_damping_nms_per_rad": 0.0,
+      "joint_armature_kg_m2": 0.0002,
+      "joint_frictionloss_nm": 0.0,
+      "position_drive_kp_xml": 0.1964723550341816,
+      "position_drive_kd_xml": 0.009017295241756363,
+      "actuator_force_range_xml": [
+        -0.3,
+        0.3
+      ],
+      "body_mass_kg": 0.005,
+      "body_inertia_principal_kg_m2": [
+        4.83270356e-07,
+        3.88592738e-07,
+        1.78664842e-07
+      ]
+    }
+  },
+  "other_uncalibrated": [
+    "physical motor position-loop gain",
+    "controller delay",
+    "motor friction",
+    "loaded inertia",
+    "hand adapter thickness and roll",
+    "collision proxy fidelity"
+  ]
+}

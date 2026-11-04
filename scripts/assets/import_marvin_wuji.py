@@ -61,6 +61,10 @@ def main() -> None:
         "source_mesh_count": len(meshes),
         "source_mesh_sha256": {str(path.relative_to(mjcf.parent)): sha256(path) for path in meshes},
         "isaaclab_version": importlib.metadata.version("isaaclab"),
+        "importer_versions": {
+            package: importlib.metadata.version(package)
+            for package in ("isaacsim-asset-isolated", "mujoco-usd-converter", "usd-exchange", "newton")
+        },
         "converter": "isaaclab.sim.converters.MjcfConverter",
         "converter_options": {
             "fix_base": True,

@@ -38,7 +38,7 @@ Local CSV, full JSON logs, converted USD and source meshes remain under ignored
   The final root `dual_arm_marvin.usda` SHA256 is
   `4643b25b3ddc1412f83ef2f089bfc4fe6dd90ad2f36ef76efd9d48112ecd1ceb`;
   all 70 source mesh and 9 generated USD/payload hashes are in the machine
-  summary. Some generated paths may vary with importer versions or checkout
+  summary. A future conversion also records the exact importer wheel versions. Some generated paths may vary with importer versions or checkout
   location, so structural and physical checks remain necessary after conversion.
 - The external repository may include private or third-party content. Raw
   MJCF/URDF/STL and derived USD are **not** in DexGym's Git history; publication
@@ -49,6 +49,7 @@ From the DexGym root, with the pinned external XML and meshes present:
 
 ```bash
 uv sync --locked --group dev
+bash scripts/assets/setup_mjcf_importer.sh
 export DEXGYM_MARVIN_MJCF=/path/to/whole-body-teleop/src/whole_body_mujoco_driver/model/dual_arm_marvin.xml
 uv run --no-sync python scripts/assets/import_marvin_wuji.py
 USD=artifacts/marvin_wuji/generated/6e0d569e-self-collision/dual_arm_marvin/dual_arm_marvin.usda
@@ -59,7 +60,16 @@ uv run --no-sync python scripts/assets/validate_dynamics.py --usd "$USD" --mode 
 uv run --no-sync python scripts/assets/validate_dynamics.py --usd "$USD" --mode dynamics --num-envs 1 --steps 250 --output artifacts/marvin_wuji/dynamics.json
 uv run --no-sync python scripts/assets/validate_wrist_rotation.py --usd "$USD" --output artifacts/marvin_wuji/wrist_rotation.json
 uv run --no-sync python scripts/assets/validate_contacts.py --usd "$USD" --output artifacts/marvin_wuji/contacts.json
+uv run --no-sync python scripts/assets/view_marvin_wuji.py --usd "$USD" --pose home --viz newton_gl --steps 1000
 ```
+
+The independent viewer also accepts `--viz none` for a headless GPU load
+check. On the final host `--viz newton_gl --steps 5` completed with all 54
+joints, 74 bodies and finite state; the visualizer was opened on `DISPLAY=:0`.
+The original joint-order change was rechecked with 1,000 FK poses and a
+2-environment, 10-step GPU smoke; the FK maxima stayed at 0.000950 mm and
+0.0000367°. Reproduction logs are in the local ignored
+`artifacts/marvin_wuji/` directory.
 
 On the verified host the installed package's Python was used with
 `PYTHONPATH=` and `LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6` because
@@ -78,13 +88,23 @@ unique limited hinges and one actuator transmission per joint. The generated
 USD has 54 revolute joints, 20 fixed joints and 74 rigid bodies, matching the
 74 non-world MuJoCo bodies. Its articulation root is the fixed pedestal at
 `/marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal`. It is Z-up in meters.
-The Isaac Lab `ArticulationCfg` uses all 54 imported USD position drives.
+The Isaac Lab `ArticulationCfg` uses all 54 imported USD position drives and explicitly exposes the original MuJoCo `qpos` joint order.
 
 The TCP frames are the named bodies `TCP_Link_L` and `TCP_Link_R`; the hand
 mounts are part of the same named-body FK comparison. MuJoCo quaternions are
 WXYZ and Isaac Lab 3.0 body poses are XYZW; `frames.py` converts explicitly and
 uses sign-invariant geodesic angle. No array-order assumption is used for
 joint mapping.
+
+The importer preserves all 24 named MJCF sites, including `tcp_L` and
+`tcp_R`, as USD geometry markers. It does **not** convert the source's 152
+MuJoCo sensors into Isaac Lab sensors; these include joint, TCP, fingertip and
+tactile force/torque streams and need explicit Isaac Lab sensor implementations
+when those signals are required. It also skips six source cameras, two lights,
+four keyframes and the procedural checker texture. The FK and dynamics scripts
+read the source keyframes directly from MuJoCo; they are not USD presets.
+Newton collision and contact behavior is separately checked below. These
+conversion losses are recorded in `validation_summary.json`.
 
 The source has 87 collision-enabled geometries and 38 excluded pairs; the USD
 has 87 collision geometries (54 via mesh instances) and 38 filtered pairs.
@@ -114,6 +134,20 @@ for example J6 has source damping 0.6, armature 0.015 and friction loss 0.1,
 while the USD authors `newton:damping=0.010471975`, armature 0.015 and friction
 0.1. This damping conversion does not establish equivalent solver response.
 `build_mjcf.py` contains a different 800/800/500/400/220/140/100 vector.
+The physical Marvin arms currently run the SDK's position-follow mode.
+The real driver submits bounded joint position goals; the controller's inner
+position-loop gains are not exposed by the recorded bag or active driver
+configuration. The SDK's `OnSetJointKD_A/B` is documented for **torque-mode
+joint impedance** and is not the position loop. The latest physical
+`bag_no_camera_20261103_161044` contains commanded joints plus measured
+position, velocity and SDK torque feedback, which can support response
+identification after unit and delay checks but cannot uniquely reveal an
+internal Kp/Kd. WujiHand2's real YAML instead configures per-joint Kp/Kd and
+reads them back while disabled; those device gains still are not numerically
+interchangeable with the MJCF drive gains. The active source drive and joint
+parameters are enumerated in `calibration_status.json` and all are marked
+**not calibrated against physical torque/trajectory response**.
+
 The source time step is 0.002 s with gravity (0, 0, -9.81) m/s². Dynamic
 comparison also uses 0.002 s; source XML gains are retained without blindly
 retuning. The source driver has ideal dynamics bias compensation, which was

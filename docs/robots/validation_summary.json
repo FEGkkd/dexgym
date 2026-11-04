@@ -86,7 +86,10 @@
     "newton": "1.6.1",
     "warp-lang": "1.17.0",
     "torch": "2.11.0",
-    "mujoco": "3.12.0"
+    "mujoco": "3.12.0",
+    "isaacsim-asset-isolated": "6.2.0.0",
+    "mujoco-usd-converter": "0.6.1",
+    "usd-exchange": "3.0.1"
   },
   "converter": {
     "name": "isaaclab.sim.converters.MjcfConverter",
@@ -582,5 +585,25 @@
       "TCP_Link_R"
     ],
     "parameter_errors": []
+  },
+  "conversion_losses": {
+    "mujoco_sensors_not_imported": 152,
+    "mujoco_cameras_not_imported": 6,
+    "mujoco_lights_not_imported": 2,
+    "mujoco_keyframes_not_imported": 4,
+    "procedural_checker_textures_not_imported": 1,
+    "named_sites_retained": 24,
+    "note": "MJCF importer warnings; tests use MuJoCo keyframes directly. Isaac Lab sensor implementations are needed for live equivalent outputs."
+  },
+  "calibration_status": "source XML drive/dynamics values imported; physical motor and collision parameters uncalibrated",
+  "final_rechecks": {
+    "explicit_mjcf_joint_order": true,
+    "fk_1000_samples_pass": true,
+    "fk_tcp_position_error_max_mm": 0.0009498176426355481,
+    "fk_tcp_orientation_error_max_deg": 3.674203751958424e-05,
+    "gpu_smoke_2_env_10_step_pass": true,
+    "newton_gl_5_step_pass": true,
+    "conversion_regenerated_usd_and_manifest": true,
+    "logs": "local ignored artifacts/marvin_wuji/*recheck* and viewer_*.log"
   }
 }

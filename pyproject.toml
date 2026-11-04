@@ -41,3 +41,4 @@ select = ["E", "F", "I"]
 
 [tool.setuptools.package-data]
 "dexgym.assets" = ["manifest.json"]
+"dexgym.assets.marvin_wuji" = ["calibration_status.json"]

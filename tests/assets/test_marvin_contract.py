@@ -8,7 +8,7 @@ import numpy as np
 import pytest
 from dexgym.assets.marvin_wuji.frames import angular_distance_deg, wxyz_to_xyzw
 from dexgym.assets.marvin_wuji.joint_mapping import inspect_joint_contract, qpos_to_newton
-from dexgym.assets.marvin_wuji.robot_cfg import SOURCE_SHA256
+from dexgym.assets.marvin_wuji.robot_cfg import JOINT_ORDER, SOURCE_SHA256
 
 
 def test_quaternion_convention_and_sign():
@@ -27,6 +27,7 @@ def test_external_source_joint_contract():
     assert hashlib.sha256(path.read_bytes()).hexdigest() == SOURCE_SHA256
     model = mujoco.MjModel.from_xml_path(str(path))
     contract = inspect_joint_contract(model)
+    assert contract.names == JOINT_ORDER
     assert tuple(map(len, contract.groups.values())) == (7, 7, 20, 20)
     assert [contract.ctrl_by_name[f"Joint{i}_L"] for i in range(1, 8)] == list(range(7))
     assert [contract.ctrl_by_name[f"Joint{i}_R"] for i in range(1, 8)] == list(range(7, 14))
