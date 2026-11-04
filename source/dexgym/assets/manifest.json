@@ -29,6 +29,16 @@
   ],
   "external": [
     {
+      "name": "Marvin M6 dual arms + WujiHand2 Beta 2 dual hands",
+      "source": "FEGkkd/whole-body-teleop",
+      "commit": "5d4c345842f197bffeae7d7e08c4c3718230f9e0",
+      "env": "DEXGYM_MARVIN_MJCF",
+      "path": "src/whole_body_mujoco_driver/model/dual_arm_marvin.xml",
+      "sha256": "6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce",
+      "newton": "54-DoF structure, FK and independent control validated; physical wrist tracking needs calibration",
+      "publication": "external only; do not commit raw or converted asset"
+    },
+    {
       "name": "Isaac Lab Cartpole",
       "source": "isaaclab_assets v3.0.0 wheel / NVIDIA Nucleus",
       "path": "Robots/Classic/Cartpole/cartpole.usd",

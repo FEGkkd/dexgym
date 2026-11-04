@@ -1,0 +1,574 @@
+{
+  "scope": "Offline external-asset integration; no real robot, RL task, or PPO",
+  "source": {
+    "repository": "FEGkkd/whole-body-teleop",
+    "commit": "5d4c345842f197bffeae7d7e08c4c3718230f9e0",
+    "mjcf_relative_path": "src/whole_body_mujoco_driver/model/dual_arm_marvin.xml",
+    "mjcf_sha256": "6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce",
+    "mesh_count": 70,
+    "publication": "external only; raw and derived assets withheld pending rights review",
+    "mesh_sha256": {
+      "assets/left/Base_L.STL": "c69fe56485ec9fbbe59b6de581abc0001d2ebbd8a9e6d31951ea1de6ba45571e",
+      "assets/left/Link1_L.STL": "86854ac8c4f17dac5116b6e9a4d036bca1ccf5d4b9ed04cb8285a7d006cfde28",
+      "assets/left/Link2_L.STL": "4776a6a2086ddc61b1643aff93386e545baccef2751db29d863fe027a76f325e",
+      "assets/left/Link3_L.STL": "d58f1039bd3eb2ccc1a1959b89d2de7ae714344ad8cb8b78ef97b92dcd317d26",
+      "assets/left/Link4_L.STL": "77f18566339f38acac1785fae517b05ff1e5247b95404ce26536d215bbed9cd7",
+      "assets/left/Link5_L.STL": "573f15ee62b0a9b2d62aceeb756800fd86969a685535e91416b73d51f1c57613",
+      "assets/left/Link6_L.STL": "b6b7570d8ebf1d2acb01baf8941b892f5a5f72aaa05503ab8340da8a2a7b2c13",
+      "assets/left/Link7_L.STL": "7c81b774b7ad8d0258140c31292270b894cf6c95bf0b669c01110ea3348827a4",
+      "assets/right/Base_R.STL": "c69fe56485ec9fbbe59b6de581abc0001d2ebbd8a9e6d31951ea1de6ba45571e",
+      "assets/right/Link1_R.STL": "86854ac8c4f17dac5116b6e9a4d036bca1ccf5d4b9ed04cb8285a7d006cfde28",
+      "assets/right/Link2_R.STL": "53eb9fc69c939d2ebd4f32c1df341c1c42bc3d9d0911db0c9fcee70aa2701b34",
+      "assets/right/Link3_R.STL": "122456d8fc3e81694f352fc1f29d0bc19066f7f3d7572857a1be1e7c030dec9c",
+      "assets/right/Link4_R.STL": "77f18566339f38acac1785fae517b05ff1e5247b95404ce26536d215bbed9cd7",
+      "assets/right/Link5_R.STL": "2de51a340695c89b2fd58b1171dfacc4d85aa4e6cd50879e021a2d0bde8599a8",
+      "assets/right/Link6_R.STL": "49722d14b9ac34a84a41c95f49bd0b2a8859d4a05f66b247822bf36b0a703cd5",
+      "assets/right/Link7_R.STL": "727310e0a39d0d513357e139cdb52db6a787b53549b7c49a4847095928c595f2",
+      "assets/wujihand2/left/l_index_finger_distal.STL": "3e87920820252191b66a337bffe1bdddb4392fc30309758e0369bdcd9964c996",
+      "assets/wujihand2/left/l_index_finger_middle.STL": "ad167cffae6957a062eb67576cf40584b668ad5a26ce9133269ea1028c8a4765",
+      "assets/wujihand2/left/l_index_finger_proximal.STL": "4f8635951712c36749c362c18f33253e852179c6042211afebee7a57d8db9c57",
+      "assets/wujihand2/left/l_index_finger_proximal_abd.STL": "879583b9403fbb8a408de722a77c37e42bc29b5ec4a3f28ce35d8bde758684ac",
+      "assets/wujihand2/left/l_index_finger_tip_sensor_frame.STL": "7b66999e7d8a09b0d194af807b0780c2205cc9f1b00db49444369911bd85135b",
+      "assets/wujihand2/left/l_middle_finger_distal.STL": "d52e9285937c71589da2a0cc04ef91a39019f09d4a9d6d413ffdf226e9bdc3c3",
+      "assets/wujihand2/left/l_middle_finger_middle.STL": "3fa4868a8c2431c42bad76a6e8ce7a87b71b370c05af89dbff7a9441a5e8880d",
+      "assets/wujihand2/left/l_middle_finger_proximal.STL": "60bd1719c350e60126f6eaea8a702902df748f426c4bd47eb48d9f8fa8c3803c",
+      "assets/wujihand2/left/l_middle_finger_proximal_abd.STL": "921328fed4290d6abb0ff559e7b9f6818513210d3562a64811ca9b084af8b2b1",
+      "assets/wujihand2/left/l_middle_finger_tip_sensor_frame.STL": "7b66999e7d8a09b0d194af807b0780c2205cc9f1b00db49444369911bd85135b",
+      "assets/wujihand2/left/l_mount.STL": "175491889134d13e4b468c32e80cc93e14d6eed3f287c52ed7e0cb8273920aae",
+      "assets/wujihand2/left/l_pinky_distal.STL": "630261a156db18cd88207aa5a90572d15480961c4b68fbfb6877b6349195232a",
+      "assets/wujihand2/left/l_pinky_middle.STL": "c19b3b46d170a87e08beb309307fcbcc11b89fc52061f6d8ad63a6692c0c33d5",
+      "assets/wujihand2/left/l_pinky_proximal.STL": "df5bbe36bbd592c8913ea3c6c31af5cda0011f801de184815672b2fbe4f429b1",
+      "assets/wujihand2/left/l_pinky_proximal_abd.STL": "af1e1a26483fac1b030b3bec7fe6a96b1705c8b1f1410095ecb6fb09751ad641",
+      "assets/wujihand2/left/l_pinky_tip_sensor_frame.STL": "be13adc0fdfbec3c1f70821a0ea946cc6ff9f0a1531c065a7965c9dfcf7b8514",
+      "assets/wujihand2/left/l_ring_finger_distal.STL": "7f7abd5a0b0762012296aa57895c3abaace20965557c8ceda20bd184e70009f7",
+      "assets/wujihand2/left/l_ring_finger_middle.STL": "386912dd2d79d6f274a957d4b227cd12208393b65f19da59155e190fc835d093",
+      "assets/wujihand2/left/l_ring_finger_proximal.STL": "1025331cca112596feb9e5c6e39e110297bbf7c5b9a80c73aa8f552dc97c4877",
+      "assets/wujihand2/left/l_ring_finger_proximal_abd.STL": "2a687303caa5ea25ef63640b8e3606be1493b9f26d1b95d89e687425abcb53a8",
+      "assets/wujihand2/left/l_ring_finger_tip_sensor_frame.STL": "7b66999e7d8a09b0d194af807b0780c2205cc9f1b00db49444369911bd85135b",
+      "assets/wujihand2/left/l_thumb_distal.STL": "c64baf6839b633a668cfc8b9386f44b26e1a52f9ae28e11a24aae54cd6fcd4c6",
+      "assets/wujihand2/left/l_thumb_middle.STL": "33cafea989a21445ceb51fee5bc6777b23c6ded88183ad2103946108efdbc292",
+      "assets/wujihand2/left/l_thumb_proximal.STL": "115227446584dd51e3ae77113063f97dc9e88cf4ce5db201eef2b81c17dd939c",
+      "assets/wujihand2/left/l_thumb_proximal_abd.STL": "3528478e63b18ee73b4170d03b6cf2df5bbf00f31bca2c1b03eccdfde0f5caa4",
+      "assets/wujihand2/left/l_thumb_tip_sensor_frame.STL": "1f0460fbb02d1d148ade528851099034e90652ea5440f39c26415cf281eb8232",
+      "assets/wujihand2/left/l_wrist.STL": "b37d7bbcb3c8888e7179f27e8c87e436358adad9cf30d7cb86bc46ee696a7ee8",
+      "assets/wujihand2/right/r_index_finger_distal.STL": "837f4ffdcd4a786731ded0652a57ec9015605148cba78881d2d4d71ced804976",
+      "assets/wujihand2/right/r_index_finger_middle.STL": "2e1dd153fb0725aa3caed4dd49cb918da0378e875c4b9442bd147793a111f7d7",
+      "assets/wujihand2/right/r_index_finger_proximal.STL": "46b1e8036544dcd4aeba9382d1b3fbe4adb531fb2fe56b6ab5138d0a81f6661c",
+      "assets/wujihand2/right/r_index_finger_proximal_abd.STL": "f1ff36b8d54ce2bf93f42424da9392df6568dc1b286ff588157fe6030797f1f6",
+      "assets/wujihand2/right/r_index_finger_tip_sensor_frame.STL": "4142c661bbe09bcbbee8c6188676915986bcdcc49f397720252864148665da37",
+      "assets/wujihand2/right/r_middle_finger_distal.STL": "81ed25e0a780172603b334895e2f7487478e785db0b9c1642ddbb4964b7a388a",
+      "assets/wujihand2/right/r_middle_finger_middle.STL": "8f7234c6ef133c11ecea89e3d1a94f4842dec9099c53faccd9312115d86fed4d",
+      "assets/wujihand2/right/r_middle_finger_proximal.STL": "ea4db9cd3cccfd4048b620d334a1f00b034110d667aa689e3421e56c08725ff9",
+      "assets/wujihand2/right/r_middle_finger_proximal_abd.STL": "483d9af13da2a605263cf27cbbc789f2dfcd571cb0a37b54c9322e5705c7ada9",
+      "assets/wujihand2/right/r_middle_finger_tip_sensor_frame.STL": "4142c661bbe09bcbbee8c6188676915986bcdcc49f397720252864148665da37",
+      "assets/wujihand2/right/r_mount.STL": "fd30d30dbfd254e317e957588dd5863c46405f719e255fe79104ece93a08e416",
+      "assets/wujihand2/right/r_pinky_distal.STL": "d6aef893258d6de0200e1bc4cdfeb3a7f941072aa79aa4d955162b362b9af894",
+      "assets/wujihand2/right/r_pinky_middle.STL": "12466b870cf8cc47aacdc02a535474d65bce3bf128840a8e471c4fede43d57ee",
+      "assets/wujihand2/right/r_pinky_proximal.STL": "6a5696573c69e37467e3ba3b722d92ecd0078f0e18ae8e1e2c49ad118800ea8b",
+      "assets/wujihand2/right/r_pinky_proximal_abd.STL": "321e9e615166eab4cd87ad4bc8609a7c19944fd7200f957d11bb020fa255bb72",
+      "assets/wujihand2/right/r_pinky_tip_sensor_frame.STL": "b9c9df3fee37dd4f30072c15b65bd1019c4cea1b90dbba9b082eb05b6678d561",
+      "assets/wujihand2/right/r_ring_finger_distal.STL": "32129d2a8cf862f410c64201fea9f8942108af3bdc3b6e8ddd5776c3e9da465a",
+      "assets/wujihand2/right/r_ring_finger_middle.STL": "9069d35b6f34fe23b49a7b28f8ef2dfd36ee18bebcf72de039e550f38d6a36cb",
+      "assets/wujihand2/right/r_ring_finger_proximal.STL": "7f22b426af3ce5ddae228e370d51d15c1c66e7888c4db292ab5b8127dadcef5f",
+      "assets/wujihand2/right/r_ring_finger_proximal_abd.STL": "bfc1ac8e3324942ecfd2dae448b925db3bf668a03b3aaa36a050aef1d8734d40",
+      "assets/wujihand2/right/r_ring_finger_tip_sensor_frame.STL": "4142c661bbe09bcbbee8c6188676915986bcdcc49f397720252864148665da37",
+      "assets/wujihand2/right/r_thumb_distal.STL": "133cd575b899cf7c40651d8851065d43c87addb6be61face329c170edcc389dd",
+      "assets/wujihand2/right/r_thumb_middle.STL": "a3e9851cd3aed770fb0ed2b05b2ceca86980af1bfef2fbc8e1925e9a6110f56f",
+      "assets/wujihand2/right/r_thumb_proximal.STL": "e5f4c7dbffeddf626e5d6c7883e10a6c1de0e2d8213a9122dba5ee29a488345f",
+      "assets/wujihand2/right/r_thumb_proximal_abd.STL": "d9e28b15b054ede554f23524c32f430fefa3622eb9fa10016c39fec10a2638e8",
+      "assets/wujihand2/right/r_thumb_tip_sensor_frame.STL": "7a94ebdd1c50ec5b62e73abd51848fe15589d9eb07e2fa3b1eab6567e5f08c12",
+      "assets/wujihand2/right/r_wrist.STL": "748cf6a16bc5bfedf9c7e2ee489459f726740680db1449221133be570f9ee505"
+    }
+  },
+  "versions": {
+    "python": "3.12.3",
+    "isaaclab": "3.0.0",
+    "newton": "1.6.1",
+    "warp-lang": "1.17.0",
+    "torch": "2.11.0",
+    "mujoco": "3.12.0"
+  },
+  "converter": {
+    "name": "isaaclab.sim.converters.MjcfConverter",
+    "fix_base": true,
+    "merge_mesh": false,
+    "self_collision": true,
+    "run_asset_transformer": true,
+    "run_multi_physics_conversion": true
+  },
+  "structure": {
+    "mujoco_nq": 54,
+    "mujoco_nu": 54,
+    "mujoco_bodies": 74,
+    "mujoco_meshes": 70,
+    "usd_revolute_joints": 54,
+    "usd_rigid_bodies": 74,
+    "usd_fixed_joints": 20,
+    "source_collision_geometries": 87,
+    "usd_collision_geometries": 87,
+    "source_excluded_pairs": 38,
+    "usd_filtered_pairs": 38,
+    "usd_articulation_root": "/marvin_m6_dual_arm_wujihand2_beta2/Geometry/pedestal",
+    "newton_self_collision_enabled": true,
+    "qpos_ctrl_order_equal": false,
+    "massless_fixed_markers": [
+      "center_mount",
+      "TCP_Link_L",
+      "TCP_Link_R"
+    ]
+  },
+  "gates": {
+    "A_source": "pass",
+    "B_structure": "pass",
+    "C_fk_parity": "pass",
+    "D_motion_wrist": "partial: kinematics and 54-channel motion pass; physical fixed-TCP tracking has 22-23 mm error",
+    "E_dynamics": "partial: finite and measured; 0.105 rad wrist discrepancy and untuned source drives",
+    "F_platform_regression": "pass: 5 unit tests; Direct and Manager 16-env 400-step smoke, 16 timeouts each"
+  },
+  "fk": {
+    "samples": 1000,
+    "parallel_environments": 16,
+    "body_count": 74,
+    "rejected_samples": 0,
+    "tcp_position_error_mm": {
+      "max": 0.0009498176426355481,
+      "mean": 0.00027380104009396087,
+      "p95": 0.0005966927803917535
+    },
+    "tcp_orientation_error_deg": {
+      "max": 3.674203751958424e-05,
+      "mean": 1.2693608529253423e-05,
+      "p95": 2.220139370404291e-05
+    },
+    "all_body_position_error_mm": {
+      "max": 0.0032378169236345505,
+      "mean": 0.00045166216727902605,
+      "p95": 0.001249396480277536
+    },
+    "all_body_orientation_error_deg": {
+      "max": 0.0030016418188814308,
+      "mean": 0.0003932985610397942,
+      "p95": 0.0009787479510661547
+    },
+    "failed_tcp_comparisons": 0,
+    "pass": true
+  },
+  "control": {
+    "smoke16": {
+      "num_envs": 16,
+      "resets": 3,
+      "steps_per_reset": 200,
+      "max_joint_jump_rad_per_step": 0.013348877429962158,
+      "finite": true,
+      "pass": true
+    },
+    "channels54": {
+      "num_envs": 16,
+      "joint_count": 54,
+      "steps_per_batch": 150,
+      "min_opposed_response_rad": 0.056848764419555664,
+      "max_joint_jump_rad_per_step": 0.014152497053146362,
+      "failed_joints": [],
+      "pass": true
+    }
+  },
+  "wrist": [
+    {
+      "side": "L",
+      "rotation_command_deg": 14.32394487827058,
+      "max_ik_iterations": 1,
+      "max_kinematic_position_error_mm": 0.0007120857123498047,
+      "max_kinematic_orientation_error_deg": 3.7319423952960574e-05,
+      "max_joint_jump_rad_per_step": 0.012758073396980762,
+      "final_execution": {
+        "newton_execution_position_error_mm": 20.054036769189445,
+        "mujoco_execution_position_error_mm": 33.33857869053462,
+        "newton_execution_orientation_error_deg": 4.551391367284635,
+        "mujoco_execution_orientation_error_deg": 5.065119399218053,
+        "backend_tcp_position_difference_mm": 15.668710364271469,
+        "backend_tcp_orientation_difference_deg": 2.5964441434962517
+      },
+      "max_joint_limit_violation_rad": 0.0,
+      "joint_limits_respected": true,
+      "pass_kinematic": true
+    },
+    {
+      "side": "R",
+      "rotation_command_deg": -14.32394487827058,
+      "max_ik_iterations": 1,
+      "max_kinematic_position_error_mm": 0.0007120832555405492,
+      "max_kinematic_orientation_error_deg": 3.7320879036254385e-05,
+      "max_joint_jump_rad_per_step": 0.012700214982032776,
+      "final_execution": {
+        "newton_execution_position_error_mm": 27.659241647748487,
+        "mujoco_execution_position_error_mm": 33.06870419428754,
+        "newton_execution_orientation_error_deg": 6.033675338463918,
+        "mujoco_execution_orientation_error_deg": 5.03259257670024,
+        "backend_tcp_position_difference_mm": 21.36818108088604,
+        "backend_tcp_orientation_difference_deg": 3.2553603859159743
+      },
+      "max_joint_limit_violation_rad": 0.0,
+      "joint_limits_respected": true,
+      "pass_kinematic": true
+    }
+  ],
+  "dynamics": [
+    {
+      "scenario": "static_hold",
+      "controlled_joints": [
+        "Joint1_L"
+      ],
+      "mode": "hold",
+      "newton_final_position_rad": 1.5810401439666748,
+      "mujoco_final_position_rad": 1.6040177454846156,
+      "final_position_difference_rad": 0.022977601517940816,
+      "newton_tail_tracking_error_rad": 0.010352292060852052,
+      "mujoco_tail_tracking_error_rad": 0.03321839419052206,
+      "newton_step_overshoot_rad": null,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.01340697705745697,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.14769693064930106
+    },
+    {
+      "scenario": "left_arm_step",
+      "controlled_joints": [
+        "Joint1_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 1.6773062944412231,
+      "mujoco_final_position_rad": 1.697805777031658,
+      "final_position_difference_rad": 0.02049948259043477,
+      "newton_tail_tracking_error_rad": 0.007393741607666015,
+      "mujoco_tail_tracking_error_rad": 0.026931100736188086,
+      "newton_step_overshoot_rad": 0.008854389190673828,
+      "newton_settling_time_s_at_0_02_rad": 0.18,
+      "max_joint_jump_rad_per_step": 0.013091662898659706,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.1619610905502665
+    },
+    {
+      "scenario": "right_arm_step",
+      "controlled_joints": [
+        "Joint1_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": -1.6715320348739624,
+      "mujoco_final_position_rad": -1.6973317244302284,
+      "final_position_difference_rad": 0.025799689556265992,
+      "newton_tail_tracking_error_rad": 0.000561661720275879,
+      "mujoco_tail_tracking_error_rad": 0.026457176020018673,
+      "newton_step_overshoot_rad": 0.0046302080154418945,
+      "newton_settling_time_s_at_0_02_rad": 0.214,
+      "max_joint_jump_rad_per_step": 0.013411201536655426,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.1396599389635652
+    },
+    {
+      "scenario": "both_arms_step",
+      "controlled_joints": [
+        "Joint1_L",
+        "Joint1_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 1.6778974533081055,
+      "mujoco_final_position_rad": 1.697805777031658,
+      "final_position_difference_rad": 0.019908323723552446,
+      "newton_tail_tracking_error_rad": 0.005202603340148926,
+      "mujoco_tail_tracking_error_rad": 0.026931100736188086,
+      "newton_step_overshoot_rad": 0.007129788398742676,
+      "newton_settling_time_s_at_0_02_rad": 0.194,
+      "max_joint_jump_rad_per_step": 0.012705150991678238,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.17254993803146532
+    },
+    {
+      "scenario": "left_hand_step",
+      "controlled_joints": [
+        "l_thumb_cmc_flex"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.1986885517835617,
+      "mujoco_final_position_rad": 0.2650736613090853,
+      "final_position_difference_rad": 0.06638510952552357,
+      "newton_tail_tracking_error_rad": 0.0035567116737365723,
+      "mujoco_tail_tracking_error_rad": 0.064830620575254,
+      "newton_step_overshoot_rad": 0.008707016706466675,
+      "newton_settling_time_s_at_0_02_rad": 0.154,
+      "max_joint_jump_rad_per_step": 0.012907877564430237,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.1382616297786462
+    },
+    {
+      "scenario": "right_hand_step",
+      "controlled_joints": [
+        "r_thumb_cmc_flex"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.20347222685813904,
+      "mujoco_final_position_rad": 0.2651993326856331,
+      "final_position_difference_rad": 0.06172710582749408,
+      "newton_tail_tracking_error_rad": 0.002052532434463501,
+      "mujoco_tail_tracking_error_rad": 0.06496442294048474,
+      "newton_step_overshoot_rad": 0.030919745564460754,
+      "newton_settling_time_s_at_0_02_rad": 0.342,
+      "max_joint_jump_rad_per_step": 0.012814119458198547,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.16428719336828745
+    },
+    {
+      "scenario": "left_wrist_j5",
+      "controlled_joints": [
+        "Joint5_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 1.6757134199142456,
+      "mujoco_final_position_rad": 1.717286874510037,
+      "final_position_difference_rad": 0.041573454595791315,
+      "newton_tail_tracking_error_rad": 0.048234019279479984,
+      "mujoco_tail_tracking_error_rad": 0.004219024418690287,
+      "newton_step_overshoot_rad": 0.0,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.013014160096645355,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.14271291148309492
+    },
+    {
+      "scenario": "left_wrist_j6",
+      "controlled_joints": [
+        "Joint6_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.11326546967029572,
+      "mujoco_final_position_rad": 0.14416789171656852,
+      "final_position_difference_rad": 0.030902422046272804,
+      "newton_tail_tracking_error_rad": 0.04279219299554825,
+      "mujoco_tail_tracking_error_rad": 0.006821311315284941,
+      "newton_step_overshoot_rad": 0.0,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.01282641664147377,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.1417058617912616
+    },
+    {
+      "scenario": "left_wrist_j7",
+      "controlled_joints": [
+        "Joint7_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.08005738258361816,
+      "mujoco_final_position_rad": 0.12580460648238517,
+      "final_position_difference_rad": 0.04574722389876701,
+      "newton_tail_tracking_error_rad": 0.06225305557250976,
+      "mujoco_tail_tracking_error_rad": 0.02526579313817935,
+      "newton_step_overshoot_rad": 0.0,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.013844568282365799,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.1507359151233877
+    },
+    {
+      "scenario": "right_wrist_j5",
+      "controlled_joints": [
+        "Joint5_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": -1.4840683937072754,
+      "mujoco_final_position_rad": -1.4240439489259031,
+      "final_position_difference_rad": 0.060024444781372255,
+      "newton_tail_tracking_error_rad": 0.06460063934326171,
+      "mujoco_tail_tracking_error_rad": 0.003957657090782689,
+      "newton_step_overshoot_rad": 0.0,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.012587134726345539,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.14113658751007102
+    },
+    {
+      "scenario": "right_wrist_j6",
+      "controlled_joints": [
+        "Joint6_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.038814812898635864,
+      "mujoco_final_position_rad": 0.14413044755154225,
+      "final_position_difference_rad": 0.10531563465290639,
+      "newton_tail_tracking_error_rad": 0.11971167452633381,
+      "mujoco_tail_tracking_error_rad": 0.0068577202650221105,
+      "newton_step_overshoot_rad": 0.0,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.013235367834568024,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.1386505598549785
+    },
+    {
+      "scenario": "right_wrist_j7",
+      "controlled_joints": [
+        "Joint7_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.19670270383358002,
+      "mujoco_final_position_rad": 0.15964506733767367,
+      "final_position_difference_rad": 0.03705763649590635,
+      "newton_tail_tracking_error_rad": 0.045044643878936766,
+      "mujoco_tail_tracking_error_rad": 0.008477625319935341,
+      "newton_step_overshoot_rad": 0.04903048276901245,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.012586977332830429,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.15530439741727137
+    },
+    {
+      "scenario": "left_wrist_combo",
+      "controlled_joints": [
+        "Joint5_L",
+        "Joint6_L",
+        "Joint7_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 1.574344515800476,
+      "mujoco_final_position_rad": 1.6482036459746165,
+      "final_position_difference_rad": 0.07385913017414047,
+      "newton_tail_tracking_error_rad": 0.07695430755615235,
+      "mujoco_tail_tracking_error_rad": 0.0029648349122338934,
+      "newton_step_overshoot_rad": 0.0,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.012546934187412262,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.14566408987199397
+    },
+    {
+      "scenario": "right_wrist_combo",
+      "controlled_joints": [
+        "Joint5_R",
+        "Joint6_R",
+        "Joint7_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": -1.5201842784881592,
+      "mujoco_final_position_rad": -1.4921726473061292,
+      "final_position_difference_rad": 0.028011631182029983,
+      "newton_tail_tracking_error_rad": 0.031451568603515626,
+      "mujoco_tail_tracking_error_rad": 0.0017672870993660616,
+      "newton_step_overshoot_rad": 0.0,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.01283060759305954,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.16032692245454266
+    },
+    {
+      "scenario": "left_arm_ramp",
+      "controlled_joints": [
+        "Joint2_L"
+      ],
+      "mode": "ramp",
+      "newton_final_position_rad": -1.5279170274734497,
+      "mujoco_final_position_rad": -1.4977870797420163,
+      "final_position_difference_rad": 0.030129947731433404,
+      "newton_tail_tracking_error_rad": 0.05695510864257813,
+      "mujoco_tail_tracking_error_rad": 0.02669467070234367,
+      "newton_step_overshoot_rad": null,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.01259562373161316,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.14194200787581174
+    },
+    {
+      "scenario": "right_wrist_sine",
+      "controlled_joints": [
+        "Joint6_R"
+      ],
+      "mode": "sine",
+      "newton_final_position_rad": 0.03539160639047623,
+      "mujoco_final_position_rad": -0.026611923145585026,
+      "final_position_difference_rad": 0.06200352953606125,
+      "newton_tail_tracking_error_rad": 0.09373558474704623,
+      "mujoco_tail_tracking_error_rad": 0.038731751754168764,
+      "newton_step_overshoot_rad": null,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.013935621827840805,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.16538773124082343
+    }
+  ],
+  "contacts": {
+    "random_samples_searched": 68,
+    "candidates": [
+      {
+        "pose": "home",
+        "source_contacts": 0,
+        "newton_contacts": 0,
+        "source_target_kind_contacts": 0,
+        "newton_target_kind_contacts": 0,
+        "pass": true
+      },
+      {
+        "pose": "hand_support",
+        "source_contacts": 83,
+        "newton_contacts": 32,
+        "source_target_kind_contacts": 83,
+        "newton_target_kind_contacts": 32,
+        "pass": true
+      },
+      {
+        "pose": "arms_cross",
+        "source_contacts": 103,
+        "newton_contacts": 31,
+        "source_target_kind_contacts": 74,
+        "newton_target_kind_contacts": 20,
+        "pass": true
+      }
+    ],
+    "pass": true
+  },
+  "limits": {
+    "source_joint_limits_preserved": true,
+    "newton_wrist_test_max_limit_violation_rad": 0.0,
+    "model_parameters_not_hardware_calibrated": true
+  },
+  "local_artifacts_not_committed": [
+    "artifacts/marvin_wuji/generated/",
+    "artifacts/marvin_wuji/dynamics.csv",
+    "artifacts/marvin_wuji/wrist_rotation.csv"
+  ],
+  "platform_regression": {
+    "unit_tests_passed": 5,
+    "direct_smoke": {
+      "envs": 16,
+      "steps": 400,
+      "observation_shape": [
+        16,
+        4
+      ],
+      "action_shape": [
+        16,
+        1
+      ],
+      "timeouts": 16
+    },
+    "manager_smoke": {
+      "envs": 16,
+      "steps": 400,
+      "observation_shape": [
+        16,
+        4
+      ],
+      "action_shape": [
+        16,
+        1
+      ],
+      "timeouts": 16
+    }
+  },
+  "converted_usd_sha256": {
+    "dual_arm_marvin.usda": "4643b25b3ddc1412f83ef2f089bfc4fe6dd90ad2f36ef76efd9d48112ecd1ceb",
+    "payloads/Physics/mujoco.usda": "a5847c019a905a062ee18fa4b2662f5bce2e71d1c6655c2604614ab1ad17f691",
+    "payloads/Physics/physics.usda": "e9ca23412df548ea40486975f9d31cbd7e2e92f47ddad4fbc8acaa90d11fe718",
+    "payloads/Physics/physx.usda": "c4c3c44c0829f0ff4ebb24a62359345732d8b82f11a8f5e12fc5c88eab517fd3",
+    "payloads/base.usda": "afd6bf707ad75679af7214df074124b3beb89b1200cc98ea35d4f7f4dc170bd5",
+    "payloads/geometries.usd": "171f3c6da4f2f5930152f283601ae15f0cd8a8f3ce354508f295149eea750704",
+    "payloads/instances.usda": "1f2bc0718673a0bb55e10fd9d99048c37d1ab09cc157df86ed5bac6dee11a627",
+    "payloads/materials.usda": "250ae2fa66007d00e1017fc8e1a744c8a2ba5ce4700803dae57a2b9db2075129",
+    "payloads/robot.usda": "4c0d0e91716feb57d983c21899d4d27d12a71991b3670a70f9fb5ac27ac19f0a"
+  }
+}

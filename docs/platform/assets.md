@@ -24,6 +24,7 @@ evidence in `docs/assets/` and `artifacts/` remains in the repository.
 | Allegro Fly | External description | version not pinned; `ALLEGRO_DESCRIPTION_ROOT`, optional `ALLEGRO_ASSET_PATH` | Unverified |
 | Wuji Hand | External `wuji-description` | version not pinned; `WUJI_DESCRIPTION_ROOT`, `hand/body/usd/right/wujihand.usd` | Unverified |
 | WujiHand2 Beta 1/2 | External `wuji-description` | tag `v2026.9.11`, commit `c2cd7f8d1ef8b6dc8cb907c17daa5a88b4442d95`; USD and tree hashes in `wuji_hand2_beta.py` | Unverified |
+| Marvin M6 + WujiHand2 Beta 2 whole body | External `FEGkkd/whole-body-teleop`, commit `5d4c345842f197bffeae7d7e08c4c3718230f9e0` | `DEXGYM_MARVIN_MJCF`; SHA256 and conversion in [robot validation](../robots/marvin_wuji_validation.md) | 54 DoF load, FK and control validated on Newton; physical wrist tracking needs calibration |
 | Wrist 6DoF | Repository Python controller | `archive/isaaclab2/source/dexteroushands_lab/assets/wrist_6dof.py` | PhysX only; unverified |
 | Bottle/cap and PCO1881 reference | Repository USDA and JSON | local SHA256 in manifest | Unverified |
 
