@@ -1,7 +1,7 @@
 # DexGym 2.0
 
 DexGym is a small downstream [Isaac Lab 3.0](https://github.com/isaac-sim/IsaacLab/releases/tag/v3.0.0)
-reinforcement learning package. It registers two joint target tracking tasks
+reinforcement learning package. It registers two Cartpole joint tracking tasks
 against Newton `newton_mjwarp`. DirectRLEnv owns the step logic; the
 ManagerBasedRLEnv variant composes actions, observations, rewards, commands,
 reset events, and terminations through Isaac Lab managers. Both use the
@@ -11,6 +11,7 @@ official Cartpole asset and a shared RSL-RL PPO configuration.
 | --- | --- | --- | --- |
 | `DexGym-Joint-Tracking-Direct-v0` | DirectRLEnv | cart position, velocity, goal, error (4) | cart position target (1) |
 | `DexGym-Joint-Tracking-Manager-v0` | ManagerBasedRLEnv | same (4) | cart position target (1) |
+| `DexGym-Marvin-Bimanual-SE3-Direct-v0` | DirectRLEnv | Marvin SE(3) goal and state (73) | guarded arm joint increments (14) |
 
 ## Install
 
@@ -70,7 +71,8 @@ MuJoCo WXYZ quaternions must pass through `dexgym.utils.quaternion`; Isaac Lab
 See [asset inventory](docs/platform/assets.md) and the packaged
 `source/dexgym/assets/manifest.json`. Original Shadow, Allegro, Wuji,
 WujiHand2 Beta, Wrist 6DoF, bottle, source hashes, and PhysX validation
-materials are retained. Only Cartpole is registered as a Newton RL task. A
+materials are retained. The two Cartpole tasks remain the stable Newton RL
+smokes; the Marvin S0 registration is an experimental research task. A
 separate **54 DoF Marvin M6 + WujiHand2 Beta 2 asset** now loads in Newton MJWarp
 for offline structural, kinematic, control and dynamics validation. The pinned
 converted USD is packaged; its source MJCF and meshes remain in the external
@@ -103,10 +105,13 @@ excluded from the current runtime and test suite. No real robot connection is pa
 The older reports under `docs/assets/` and `docs/superpowers/` are historical
 Isaac Lab 2.x research records; their commands do not describe the current CLI.
 
-A future `tasks/direct/arm_s0_ee_tracking/` may use this asset for
-six-dimensional TCP goals, joint-increment actions, wrist rotation,
-full workspace sampling, PPO/imitation evaluation, policy export, and ROS 2
-integration. No S0 task exists and this work did not run PPO or connect a robot.
+The experimental [Marvin Bimanual S0 v0](docs/s0/marvin_bimanual_s0_v0.md)
+uses the complete 54-DoF asset and controls only the 14 arm joints. Set
+`DEXGYM_MARVIN_MJCF` to an authorized local copy of the pinned source XML
+before starting it. The 40 finger joints hold the packaged Home targets. The
+policy uses no online IK. The S0 report lists actual trained checkpoints,
+independent evaluation results and unresolved safety and workspace limits.
+No real robot connection or ROS motor service is part of this task.
 
 Version, command, checkpoint and gate outcomes from the host run belong in
 `docs/platform/verification.md`; check that report before claiming a specific

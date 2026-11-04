@@ -1,0 +1,84 @@
+{
+  "results": [
+    {
+      "num_envs": 128,
+      "iterations": 3,
+      "steps_per_second_last": 3127,
+      "iteration_time_s_last": 0.98,
+      "gpu_memory_peak_mib": 3093,
+      "gpu_utilization_max_percent_sampled": 32,
+      "gpu_temperature_max_c": 37,
+      "cuda_graph": false,
+      "status": "passed"
+    },
+    {
+      "num_envs": 256,
+      "iterations": 3,
+      "steps_per_second_last": 5715,
+      "iteration_time_s_last": 1.07,
+      "gpu_memory_peak_mib": 3493,
+      "gpu_utilization_max_percent_sampled": 79,
+      "gpu_temperature_max_c": 37,
+      "cuda_graph": false,
+      "status": "passed"
+    },
+    {
+      "num_envs": 512,
+      "iterations": 3,
+      "steps_per_second_last": 11112,
+      "iteration_time_s_last": 1.11,
+      "gpu_memory_peak_mib": 4281,
+      "gpu_utilization_max_percent_sampled": 25,
+      "gpu_temperature_max_c": 37,
+      "cuda_graph": false,
+      "status": "passed"
+    },
+    {
+      "num_envs": 1024,
+      "iterations": 3,
+      "steps_per_second_last": 20769,
+      "iteration_time_s_last": 1.18,
+      "gpu_memory_peak_mib": 5845,
+      "gpu_utilization_max_percent_sampled": 89,
+      "gpu_temperature_max_c": 38,
+      "cuda_graph": false,
+      "status": "passed"
+    },
+    {
+      "num_envs": 2048,
+      "iterations": 3,
+      "steps_per_second_last": 38087,
+      "iteration_time_s_last": 1.29,
+      "gpu_memory_peak_mib": 8891,
+      "gpu_utilization_max_percent_sampled": 31,
+      "gpu_temperature_max_c": 38,
+      "cuda_graph": false,
+      "status": "passed"
+    },
+    {
+      "num_envs": 4096,
+      "iterations": 3,
+      "steps_per_second_last": 81277,
+      "iteration_time_s_last": 1.21,
+      "gpu_memory_peak_mib": 15029,
+      "gpu_utilization_max_percent_sampled": 63,
+      "gpu_temperature_max_c": 39,
+      "cuda_graph": false,
+      "status": "passed"
+    },
+    {
+      "num_envs": 8192,
+      "iterations": 2,
+      "steps_per_second_last": 156619,
+      "iteration_time_s_last": 1.26,
+      "gpu_memory_peak_mib": 27371,
+      "gpu_utilization_max_percent_sampled": 50,
+      "gpu_temperature_max_c": 41,
+      "cuda_graph": false,
+      "status": "passed"
+    }
+  ],
+  "recommended_num_envs_for_round1": 1024,
+  "max_throughput_num_envs": 8192,
+  "note": "8192 uses 84% VRAM; two iterations only, not yet long-run stable"
+}

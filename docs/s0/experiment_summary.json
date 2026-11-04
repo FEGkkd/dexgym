@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "task_id": "DexGym-Marvin-Bimanual-SE3-Direct-v0",
+  "source_mjcf_sha256": "6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce",
+  "newton_usd_sha256": "8ed2cb9a14a813022149aaa8a101159af86dab676aec7dfdde4a00a8d9698fa6",
+  "fixed_case_set_sha256": "62048155f4335dd3fb4cea128d98a2072a339f455114f0eaea5b681ef137d04b",
+  "runtime": {
+    "python": "3.12.3",
+    "isaaclab": "3.0.0",
+    "newton": "1.6.1",
+    "warp": "1.17.0",
+    "torch": "2.11.0+cu130",
+    "rsl_rl_lib": "5.5.1",
+    "gpu": "NVIDIA RTX 5090",
+    "driver": "595.84"
+  },
+  "robot_dof": 54,
+  "controlled_arm_dof": 14,
+  "actor_observation_size": 73,
+  "actor_action_size": 14,
+  "physical_ppo_environment_steps_total": 45473280,
+  "offline_fk_teacher_pairs_1500_update_run": 3072000,
+  "offline_fk_teacher_pairs_per_6000_update_run": 12288000,
+  "strict_success": "<=5mm and <=2deg held for >=20 consecutive 100Hz steps",
+  "fixed_evaluation_cases": 96,
+  "best_balanced_model": {
+    "filename": "bootstrap_6000_bimanual.pt",
+    "kind": "offline_fk_supervised_actor",
+    "fixed_success_rate_repeat": 0.4895833333333333,
+    "bimanual_success_rate": 0.3125,
+    "orientation_only_success_rate": 0.9375,
+    "wrist_success_rate": 0.8125,
+    "joint_boundary_success_rate": 0.0,
+    "left_position_p95_mm": 62.259830474853516,
+    "right_position_p95_mm": 68.1068115234375,
+    "sampled_non_floor_pedestal_contact_cases": 1
+  },
+  "ppo_100_iteration_candidate": {
+    "filename": "model_99.pt",
+    "fixed_success_rate": 0.53125,
+    "bimanual_success_rate": 0.3125,
+    "left_position_p95_mm": 82.3880615234375,
+    "accepted_as_best": false,
+    "reason": "left position P95 increased 32% against the FK teacher"
+  },
+  "ppo_190_iteration_candidate": {
+    "filename": "model_190.pt",
+    "fixed_success_rate": 0.5,
+    "bimanual_success_rate": 0.4375,
+    "left_position_p95_mm": 179.45155334472656,
+    "accepted_as_best": false
+  },
+  "last_ppo_model": {
+    "filename": "model_298.pt",
+    "cumulative_mixed_mode_iterations": 300,
+    "fixed_success_rate": 0.46875,
+    "bimanual_success_rate": 0.25,
+    "left_position_p95_mm": 178.4185028076172,
+    "accepted_as_best": false
+  },
+  "gates": {
+    "uv_lock_check": "passed",
+    "package_build": "passed",
+    "ruff": "passed",
+    "pytest": "24 passed",
+    "asset_structure_54_dof": "passed",
+    "fk_parity_1000_poses": "passed, 0 TCP comparison failures",
+    "s0_smoke_32_env_350_steps": "passed, 32 timeouts and 0 abnormal terminations",
+    "cartpole_direct_smoke_16_env_400_steps": "passed",
+    "cartpole_manager_smoke_16_env_400_steps": "passed",
+    "robust_full_workspace_bimanual_6d": "failed",
+    "hard_joint_velocity_limit": "failed",
+    "per_case_collision_free_execution": "not established",
+    "ik_failure_case_comparison": "blocked: no complete independently feasible cases",
+    "policy_mujoco_replay": "not run"
+  },
+  "ready_for_arm_s0_deployment": false,
+  "ready_for_next_research_iteration": true
+}
