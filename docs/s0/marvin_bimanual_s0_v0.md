@@ -183,6 +183,32 @@ metrics. `compare_eval.py` refuses changed case hashes or success definitions
 and rejects a candidate with measured safety or major category regressions.
 The comparison is a checkpoint selection aid, not a safety certification.
 
+For finite replay of the retained best Actor, point `S0_CHECKPOINT_DIR` at the
+local ignored directory containing `bootstrap_6000_bimanual.pt` and
+`fixed_eval_cases.json`:
+
+```bash
+uv run --no-sync python scripts/s0/evaluate_local.py \
+  --checkpoint "$S0_CHECKPOINT_DIR/bootstrap_6000_bimanual.pt" \
+  --dataset "$S0_CHECKPOINT_DIR/fixed_eval_cases.json" --steps 250 \
+  --output artifacts/s0/replay_best.json
+```
+
+The last PPO model is retained for investigation, **not** selected as the
+best. A bounded resume from it uses its optimizer state and the exact mixed
+mode configuration; this is a recovery command, not a recommendation for an
+unreviewed long run:
+
+```bash
+uv run --no-sync isaaclab train --rl_library rsl_rl \
+  --task DexGym-Marvin-Bimanual-SE3-Direct-v0 --num_envs 2048 \
+  --max_iterations 50 --seed 42 --run_name s0_resume_diagnostic \
+  --checkpoint "$S0_CHECKPOINT_DIR/model_298.pt" --resume_optimizer_state \
+  agent.algorithm.learning_rate=1e-5 agent.algorithm.entropy_coef=0.0 \
+  agent.algorithm.schedule=fixed env.bimanual_fraction=0.33 \
+  physics=newton_mjwarp
+```
+
 ## Open research and safety gates
 
 1. Train/evaluate with collision-checked training starts and targets, and add
