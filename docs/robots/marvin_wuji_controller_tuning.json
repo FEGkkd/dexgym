@@ -1,0 +1,640 @@
+{
+  "date": "2026-11-04",
+  "scope": "Offline Newton MJWarp simulation controller experiment; no hardware, no source XML or effort-limit edit",
+  "source_mjcf_sha256": "6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce",
+  "packaged_usd_sha256": "4643b25b3ddc1412f83ef2f089bfc4fe6dd90ad2f36ef76efd9d48112ecd1ceb",
+  "versions": {
+    "python": "3.12.3",
+    "isaaclab": "3.0.0",
+    "newton": "1.6.1",
+    "warp-lang": "1.17.0",
+    "torch": "2.11.0",
+    "mujoco": "3.12.0"
+  },
+  "profile": {
+    "name": "newton_arm_tcp_tracking",
+    "joints": "Joint1-7_L/R",
+    "imported_kp_scale_source": 57.29577951308232,
+    "tuned_kp": "unchanged from imported USD",
+    "tuned_kd_scale_source": 0.5,
+    "effort_limits": "unchanged",
+    "source_xml": "unchanged",
+    "default_asset_controller": "unchanged; profile is opt-in"
+  },
+  "wrist_baseline": [
+    {
+      "side": "L",
+      "rotation_command_deg": 14.32394487827058,
+      "max_kinematic_position_error_mm": 0.0007120857123498047,
+      "max_kinematic_orientation_error_deg": 3.7319423952960574e-05,
+      "max_joint_jump_rad_per_step": 0.01301891915500164,
+      "max_joint_limit_violation_rad": 0.0,
+      "arm_drive_clipped_sample_fraction": 0.9676190476190476,
+      "max_applied_effort_fraction_limit": 1.0,
+      "final_execution": {
+        "newton_execution_position_error_mm": 25.27443019618431,
+        "mujoco_execution_position_error_mm": 33.33857869053462,
+        "newton_execution_orientation_error_deg": 6.410886980805104,
+        "mujoco_execution_orientation_error_deg": 5.065119399218053,
+        "backend_tcp_position_difference_mm": 19.309959604834326,
+        "backend_tcp_orientation_difference_deg": 3.6990123954733556
+      }
+    },
+    {
+      "side": "R",
+      "rotation_command_deg": -14.32394487827058,
+      "max_kinematic_position_error_mm": 0.0007120832555405492,
+      "max_kinematic_orientation_error_deg": 3.7320879036254385e-05,
+      "max_joint_jump_rad_per_step": 0.013121869415044785,
+      "max_joint_limit_violation_rad": 0.0,
+      "arm_drive_clipped_sample_fraction": 0.967047619047619,
+      "max_applied_effort_fraction_limit": 1.0,
+      "final_execution": {
+        "newton_execution_position_error_mm": 23.00802993403253,
+        "mujoco_execution_position_error_mm": 33.06870419428754,
+        "newton_execution_orientation_error_deg": 5.335144234398904,
+        "mujoco_execution_orientation_error_deg": 5.03259257670024,
+        "backend_tcp_position_difference_mm": 20.98919720041785,
+        "backend_tcp_orientation_difference_deg": 2.8135287985523223
+      }
+    }
+  ],
+  "wrist_tuned_matched_mujoco": [
+    {
+      "side": "L",
+      "rotation_command_deg": 14.32394487827058,
+      "max_kinematic_position_error_mm": 0.0007120857123498047,
+      "max_kinematic_orientation_error_deg": 3.7319423952960574e-05,
+      "max_joint_jump_rad_per_step": 0.010002760216593742,
+      "max_joint_limit_violation_rad": 0.0,
+      "arm_drive_clipped_sample_fraction": 0.0,
+      "max_applied_effort_fraction_limit": 0.4367813169956207,
+      "final_execution": {
+        "newton_execution_position_error_mm": 0.5652384848741876,
+        "mujoco_execution_position_error_mm": 0.598448509294672,
+        "newton_execution_orientation_error_deg": 0.06679804940546645,
+        "mujoco_execution_orientation_error_deg": 0.09022742351030655,
+        "backend_tcp_position_difference_mm": 0.03590381707877429,
+        "backend_tcp_orientation_difference_deg": 0.02442886429148745
+      }
+    },
+    {
+      "side": "R",
+      "rotation_command_deg": -14.32394487827058,
+      "max_kinematic_position_error_mm": 0.0007120832555405492,
+      "max_kinematic_orientation_error_deg": 3.7320879036254385e-05,
+      "max_joint_jump_rad_per_step": 0.009817507117986679,
+      "max_joint_limit_violation_rad": 0.0,
+      "arm_drive_clipped_sample_fraction": 0.0,
+      "max_applied_effort_fraction_limit": 0.43548059463500977,
+      "final_execution": {
+        "newton_execution_position_error_mm": 0.5615090038664706,
+        "mujoco_execution_position_error_mm": 0.5934505111792127,
+        "newton_execution_orientation_error_deg": 0.06721708899023893,
+        "mujoco_execution_orientation_error_deg": 0.08961911257144155,
+        "backend_tcp_position_difference_mm": 0.03387908828043453,
+        "backend_tcp_orientation_difference_deg": 0.023071911272690877
+      }
+    }
+  ],
+  "sweep": [
+    {
+      "config": "imported",
+      "side": "L",
+      "kp_scale_source": null,
+      "kd_scale_source": null,
+      "tcp_position_error_mm": 20.18302539977934,
+      "tcp_orientation_error_deg": 4.312917105849221,
+      "post_target_mean_position_error_mm": 23.173624838134156,
+      "post_target_p95_position_error_mm": 26.02097303065363,
+      "max_joint_jump_rad_step": 0.013534586876630783,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "imported",
+      "side": "R",
+      "kp_scale_source": null,
+      "kd_scale_source": null,
+      "tcp_position_error_mm": 17.17881010952231,
+      "tcp_orientation_error_deg": 5.797740337904206,
+      "post_target_mean_position_error_mm": 20.125028305797986,
+      "post_target_p95_position_error_mm": 24.454924187000035,
+      "max_joint_jump_rad_step": 0.013121962547302246,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd025",
+      "side": "L",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 0.25,
+      "tcp_position_error_mm": 0.559194356613708,
+      "tcp_orientation_error_deg": 0.06994713531030426,
+      "post_target_mean_position_error_mm": 0.5995167051318229,
+      "post_target_p95_position_error_mm": 0.6409916818462433,
+      "max_joint_jump_rad_step": 0.012640412896871567,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd025",
+      "side": "R",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 0.25,
+      "tcp_position_error_mm": 0.5660176984479242,
+      "tcp_orientation_error_deg": 0.07020392297614507,
+      "post_target_mean_position_error_mm": 0.5944104294794701,
+      "post_target_p95_position_error_mm": 0.6367229454642248,
+      "max_joint_jump_rad_step": 0.013580076396465302,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd050",
+      "side": "L",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 0.5,
+      "tcp_position_error_mm": 0.5716820634451578,
+      "tcp_orientation_error_deg": 0.06900502181928721,
+      "post_target_mean_position_error_mm": 0.5989716680585943,
+      "post_target_p95_position_error_mm": 0.6394796097791774,
+      "max_joint_jump_rad_step": 0.0130421482026577,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd050",
+      "side": "R",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 0.5,
+      "tcp_position_error_mm": 0.5594769945920022,
+      "tcp_orientation_error_deg": 0.0661976381697208,
+      "post_target_mean_position_error_mm": 0.5934266687180544,
+      "post_target_p95_position_error_mm": 0.6372625300362453,
+      "max_joint_jump_rad_step": 0.013071160763502121,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd075",
+      "side": "L",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 0.75,
+      "tcp_position_error_mm": 0.589386031136446,
+      "tcp_orientation_error_deg": 0.10743721518244614,
+      "post_target_mean_position_error_mm": 0.6010747393575505,
+      "post_target_p95_position_error_mm": 0.6218587556246449,
+      "max_joint_jump_rad_step": 0.012815378606319427,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd075",
+      "side": "R",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 0.75,
+      "tcp_position_error_mm": 0.5814644488880827,
+      "tcp_orientation_error_deg": 0.09097890053985935,
+      "post_target_mean_position_error_mm": 0.5953090634004722,
+      "post_target_p95_position_error_mm": 0.6162722692345688,
+      "max_joint_jump_rad_step": 0.013783592730760574,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd100",
+      "side": "L",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 1.0,
+      "tcp_position_error_mm": 0.5998106605760898,
+      "tcp_orientation_error_deg": 0.09335127076956558,
+      "post_target_mean_position_error_mm": 0.6027601073554089,
+      "post_target_p95_position_error_mm": 0.6220269837448272,
+      "max_joint_jump_rad_step": 0.012842301279306412,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd100",
+      "side": "R",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 1.0,
+      "tcp_position_error_mm": 0.5956391301072782,
+      "tcp_orientation_error_deg": 0.0889138620502665,
+      "post_target_mean_position_error_mm": 0.5971049327482085,
+      "post_target_p95_position_error_mm": 0.6244936358972999,
+      "max_joint_jump_rad_step": 0.013678548857569695,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd125",
+      "side": "L",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 1.25,
+      "tcp_position_error_mm": 0.6586017947813053,
+      "tcp_orientation_error_deg": 0.1454656541779053,
+      "post_target_mean_position_error_mm": 0.6177815325868271,
+      "post_target_p95_position_error_mm": 0.6606539109134897,
+      "max_joint_jump_rad_step": 0.013444777578115463,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd125",
+      "side": "R",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 1.25,
+      "tcp_position_error_mm": 0.6263874169292799,
+      "tcp_orientation_error_deg": 0.13800729514581064,
+      "post_target_mean_position_error_mm": 0.6097970331637922,
+      "post_target_p95_position_error_mm": 0.644178984300825,
+      "max_joint_jump_rad_step": 0.012586080469191074,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd150",
+      "side": "L",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 1.5,
+      "tcp_position_error_mm": 0.6971674956262689,
+      "tcp_orientation_error_deg": 0.1843727162312088,
+      "post_target_mean_position_error_mm": 0.6751278693799972,
+      "post_target_p95_position_error_mm": 0.7286163191173671,
+      "max_joint_jump_rad_step": 0.013215679675340652,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd150",
+      "side": "R",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 1.5,
+      "tcp_position_error_mm": 0.7063994059989164,
+      "tcp_orientation_error_deg": 0.1758885979763677,
+      "post_target_mean_position_error_mm": 0.6563132069069559,
+      "post_target_p95_position_error_mm": 0.7105605333634402,
+      "max_joint_jump_rad_step": 0.01371864601969719,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd200",
+      "side": "L",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 2.0,
+      "tcp_position_error_mm": 0.8917691553503044,
+      "tcp_orientation_error_deg": 0.29573343956438164,
+      "post_target_mean_position_error_mm": 0.8471692902309689,
+      "post_target_p95_position_error_mm": 0.9135526602965733,
+      "max_joint_jump_rad_step": 0.01373673602938652,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd200",
+      "side": "R",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 2.0,
+      "tcp_position_error_mm": 0.8440620150095995,
+      "tcp_orientation_error_deg": 0.27191132920067407,
+      "post_target_mean_position_error_mm": 0.8475575469530398,
+      "post_target_p95_position_error_mm": 0.907193440267671,
+      "max_joint_jump_rad_step": 0.012583737261593342,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd300",
+      "side": "L",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 3.0,
+      "tcp_position_error_mm": 1.441933671886336,
+      "tcp_orientation_error_deg": 0.6233123979653813,
+      "post_target_mean_position_error_mm": 1.3535549556762991,
+      "post_target_p95_position_error_mm": 1.4541028769253013,
+      "max_joint_jump_rad_step": 0.01381807029247284,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    },
+    {
+      "config": "kd300",
+      "side": "R",
+      "kp_scale_source": 57.2958,
+      "kd_scale_source": 3.0,
+      "tcp_position_error_mm": 1.4126599244617595,
+      "tcp_orientation_error_deg": 0.6182337326525688,
+      "post_target_mean_position_error_mm": 1.346563569564205,
+      "post_target_p95_position_error_mm": 1.4512439394807681,
+      "max_joint_jump_rad_step": 0.012588069774210453,
+      "max_joint_limit_violation_rad": 0.0,
+      "finite": true
+    }
+  ],
+  "tuned_smoke16": {
+    "num_envs": 16,
+    "joints_per_env": 54,
+    "resets": 3,
+    "steps_per_reset": 200,
+    "max_joint_jump_rad_per_step": 0.018919795751571655,
+    "finite": true,
+    "pass": true
+  },
+  "tuned_channels54": {
+    "num_envs": 16,
+    "joint_count": 54,
+    "steps_per_batch": 150,
+    "min_opposed_response_rad": 0.15727341175079346,
+    "max_joint_jump_rad_per_step": 0.018364019691944122,
+    "failed_joints": [],
+    "pass": true
+  },
+  "tuned_matched_dynamics": [
+    {
+      "scenario": "static_hold",
+      "controlled_joints": [
+        "Joint1_L"
+      ],
+      "mode": "hold",
+      "newton_final_position_rad": 1.5714176893234253,
+      "mujoco_final_position_rad": 1.5714125571987372,
+      "final_position_difference_rad": 5.132124688111972e-06,
+      "newton_tail_tracking_error_rad": 0.0006145048141479492,
+      "mujoco_tail_tracking_error_rad": 0.0006162305411483349,
+      "newton_step_overshoot_rad": null,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.00919419713318348,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.05921581356562784
+    },
+    {
+      "scenario": "left_arm_step",
+      "controlled_joints": [
+        "Joint1_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 1.6843173503875732,
+      "mujoco_final_position_rad": 1.6677303631137748,
+      "final_position_difference_rad": 0.01658698727379848,
+      "newton_tail_tracking_error_rad": 0.012067251205444336,
+      "mujoco_tail_tracking_error_rad": 0.0075599449619429574,
+      "newton_step_overshoot_rad": 0.09390795230865479,
+      "newton_settling_time_s_at_0_02_rad": 0.426,
+      "max_joint_jump_rad_per_step": 0.012685343623161316,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.41798786673987554
+    },
+    {
+      "scenario": "right_arm_step",
+      "controlled_joints": [
+        "Joint1_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": -1.6841576099395752,
+      "mujoco_final_position_rad": -1.668529559991978,
+      "final_position_difference_rad": 0.015628049947597145,
+      "newton_tail_tracking_error_rad": 0.011268706321716308,
+      "mujoco_tail_tracking_error_rad": 0.00750525318540177,
+      "newton_step_overshoot_rad": 0.09353935718536377,
+      "newton_settling_time_s_at_0_02_rad": 0.43,
+      "max_joint_jump_rad_per_step": 0.012935072183609009,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.41200247781388605
+    },
+    {
+      "scenario": "both_arms_step",
+      "controlled_joints": [
+        "Joint1_L",
+        "Joint1_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 1.6835501194000244,
+      "mujoco_final_position_rad": 1.6677303631137752,
+      "final_position_difference_rad": 0.01581975628624921,
+      "newton_tail_tracking_error_rad": 0.011846408843994141,
+      "mujoco_tail_tracking_error_rad": 0.007559944961943712,
+      "newton_step_overshoot_rad": 0.09391283988952637,
+      "newton_settling_time_s_at_0_02_rad": 0.428,
+      "max_joint_jump_rad_per_step": 0.013518724590539932,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.4143127719509383
+    },
+    {
+      "scenario": "left_hand_step",
+      "controlled_joints": [
+        "l_thumb_cmc_flex"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.23701095581054688,
+      "mujoco_final_position_rad": 0.26196503886318395,
+      "final_position_difference_rad": 0.024954083052637077,
+      "newton_tail_tracking_error_rad": 0.03559814095497131,
+      "mujoco_tail_tracking_error_rad": 0.061761927957329814,
+      "newton_step_overshoot_rad": 0.037239477038383484,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.010398782789707184,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.06691317015043541
+    },
+    {
+      "scenario": "right_hand_step",
+      "controlled_joints": [
+        "r_thumb_cmc_flex"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.23675550520420074,
+      "mujoco_final_position_rad": 0.26209370545789057,
+      "final_position_difference_rad": 0.025338200253689824,
+      "newton_tail_tracking_error_rad": 0.0355231112241745,
+      "mujoco_tail_tracking_error_rad": 0.06189611377714174,
+      "newton_step_overshoot_rad": 0.036960989236831665,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.010254688560962677,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.06773817231070633
+    },
+    {
+      "scenario": "left_wrist_j5",
+      "controlled_joints": [
+        "Joint5_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 1.7207595109939575,
+      "mujoco_final_position_rad": 1.7207967064340024,
+      "final_position_difference_rad": 3.719544004487929e-05,
+      "newton_tail_tracking_error_rad": 3.419399261474609e-05,
+      "mujoco_tail_tracking_error_rad": 3.6137631404642433e-07,
+      "newton_step_overshoot_rad": 0.048459768295288086,
+      "newton_settling_time_s_at_0_02_rad": 0.084,
+      "max_joint_jump_rad_per_step": 0.020599722862243652,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.07974682918189163
+    },
+    {
+      "scenario": "left_wrist_j6",
+      "controlled_joints": [
+        "Joint6_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.15001115202903748,
+      "mujoco_final_position_rad": 0.15000851424596032,
+      "final_position_difference_rad": 2.637783077158451e-06,
+      "newton_tail_tracking_error_rad": 1.3463497161865234e-05,
+      "mujoco_tail_tracking_error_rad": 1.1410092552371909e-05,
+      "newton_step_overshoot_rad": 0.06847967207431793,
+      "newton_settling_time_s_at_0_02_rad": 0.126,
+      "max_joint_jump_rad_per_step": 0.021169498562812805,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.1285649173753463
+    },
+    {
+      "scenario": "left_wrist_j7",
+      "controlled_joints": [
+        "Joint7_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.15021641552448273,
+      "mujoco_final_position_rad": 0.14976417587622676,
+      "final_position_difference_rad": 0.00045223964825596985,
+      "newton_tail_tracking_error_rad": 0.00042949974536895754,
+      "mujoco_tail_tracking_error_rad": 0.00030577867289162007,
+      "newton_step_overshoot_rad": 0.04492351412773132,
+      "newton_settling_time_s_at_0_02_rad": 0.092,
+      "max_joint_jump_rad_per_step": 0.01895243674516678,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.20057364681131298
+    },
+    {
+      "scenario": "right_wrist_j5",
+      "controlled_joints": [
+        "Joint5_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": -1.4208515882492065,
+      "mujoco_final_position_rad": -1.4207913622671045,
+      "final_position_difference_rad": 6.022598210209118e-05,
+      "newton_tail_tracking_error_rad": 6.753921508789062e-05,
+      "mujoco_tail_tracking_error_rad": 4.918355752332459e-06,
+      "newton_step_overshoot_rad": 0.04754793643951416,
+      "newton_settling_time_s_at_0_02_rad": 0.084,
+      "max_joint_jump_rad_per_step": 0.02064204216003418,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.08486112634263057
+    },
+    {
+      "scenario": "right_wrist_j6",
+      "controlled_joints": [
+        "Joint6_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.14998652040958405,
+      "mujoco_final_position_rad": 0.15000853700087013,
+      "final_position_difference_rad": 2.2016591286089238e-05,
+      "newton_tail_tracking_error_rad": 1.0624527931213379e-05,
+      "mujoco_tail_tracking_error_rad": 1.1400382516605356e-05,
+      "newton_step_overshoot_rad": 0.06819196045398712,
+      "newton_settling_time_s_at_0_02_rad": 0.126,
+      "max_joint_jump_rad_per_step": 0.02153685688972473,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.13111012823208443
+    },
+    {
+      "scenario": "right_wrist_j7",
+      "controlled_joints": [
+        "Joint7_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.1498207002878189,
+      "mujoco_final_position_rad": 0.15033872947831203,
+      "final_position_difference_rad": 0.0005180291904931245,
+      "newton_tail_tracking_error_rad": 0.000439373254776001,
+      "mujoco_tail_tracking_error_rad": 0.0003039227410027023,
+      "newton_step_overshoot_rad": 0.06497061252593994,
+      "newton_settling_time_s_at_0_02_rad": 0.102,
+      "max_joint_jump_rad_per_step": 0.020255059003829956,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.16982448065345992
+    },
+    {
+      "scenario": "left_wrist_combo",
+      "controlled_joints": [
+        "Joint5_L",
+        "Joint6_L",
+        "Joint7_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 1.6507585048675537,
+      "mujoco_final_position_rad": 1.6507874261662625,
+      "final_position_difference_rad": 2.8921298708795007e-05,
+      "newton_tail_tracking_error_rad": 3.003120422363281e-05,
+      "mujoco_tail_tracking_error_rad": 9.313435254600933e-06,
+      "newton_step_overshoot_rad": 0.03165733814239502,
+      "newton_settling_time_s_at_0_02_rad": 0.072,
+      "max_joint_jump_rad_per_step": 0.01654636859893799,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.14940854104531634
+    },
+    {
+      "scenario": "right_wrist_combo",
+      "controlled_joints": [
+        "Joint5_R",
+        "Joint6_R",
+        "Joint7_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": -1.4907793998718262,
+      "mujoco_final_position_rad": -1.4907795264563668,
+      "final_position_difference_rad": 1.2658454062730584e-07,
+      "newton_tail_tracking_error_rad": 1.3937950134277344e-05,
+      "mujoco_tail_tracking_error_rad": 1.411743107988528e-05,
+      "newton_step_overshoot_rad": 0.03129589557647705,
+      "newton_settling_time_s_at_0_02_rad": 0.072,
+      "max_joint_jump_rad_per_step": 0.01651942729949951,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.13826377307544888
+    },
+    {
+      "scenario": "left_arm_ramp",
+      "controlled_joints": [
+        "Joint2_L"
+      ],
+      "mode": "ramp",
+      "newton_final_position_rad": -1.47072434425354,
+      "mujoco_final_position_rad": -1.4707272841579262,
+      "final_position_difference_rad": 2.9399043861566554e-06,
+      "newton_tail_tracking_error_rad": 7.427215576171875e-05,
+      "mujoco_tail_tracking_error_rad": 7.394352120629222e-05,
+      "newton_step_overshoot_rad": null,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.00935029610991478,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.06343084582467477
+    },
+    {
+      "scenario": "right_wrist_sine",
+      "controlled_joints": [
+        "Joint6_R"
+      ],
+      "mode": "sine",
+      "newton_final_position_rad": -0.003061460331082344,
+      "mujoco_final_position_rad": -0.0032064332214377916,
+      "final_position_difference_rad": 0.0001449728903554475,
+      "newton_tail_tracking_error_rad": 0.0012280807457864284,
+      "mujoco_tail_tracking_error_rad": 0.0011192949027102564,
+      "newton_step_overshoot_rad": null,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.009161271154880524,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.10443839827868384
+    }
+  ],
+  "limitations": [
+    "One Home-centered 14.324-degree fixed-TCP wrist trajectory was tuned; not full workspace or hardware validation",
+    "MuJoCo gains were changed only in memory for equal-controller comparison",
+    "Other joint trajectories retain solver/contact differences, including up to 0.418 rad transient all-joint divergence in an arm step",
+    "Imported Kp is about 57.3 times source SI numeric value at runtime; this high-gain tracking profile is not a real motor setting"
+  ],
+  "pass": true
+}

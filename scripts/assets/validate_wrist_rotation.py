@@ -8,6 +8,7 @@ from pathlib import Path
 import mujoco
 import numpy as np
 import torch
+from dexgym.assets.marvin_wuji.controller import apply_newton_arm_tracking_profile, match_mujoco_arm_gains_in_memory
 from dexgym.assets.marvin_wuji.frames import angular_distance_deg, wxyz_to_xyzw
 from dexgym.assets.marvin_wuji.joint_mapping import inspect_joint_contract, qpos_to_newton
 from dexgym.assets.marvin_wuji.robot_cfg import make_robot_cfg, resolve_source_mjcf
@@ -74,7 +75,7 @@ def build_trajectory(model, home, side, steps):
     return np.stack(command), position_goal, initial_rotation, signed_angle, max(iterations)
 
 
-def run_side(model, contract, home, side, steps, robot, scene, sim):
+def run_side(model, contract, home, side, steps, robot, scene, sim, damping_scale_source=None):
     commands, position_goal, initial_rotation, signed_angle, max_ik_iterations = build_trajectory(
         model, home, side, steps
     )
@@ -94,11 +95,21 @@ def run_side(model, contract, home, side, steps, robot, scene, sim):
     scene.reset()
     sim.forward()
     scene.update(0.0)
+    controller_profile = (
+        apply_newton_arm_tracking_profile(robot, damping_scale_source=damping_scale_source)
+        if damping_scale_source is not None
+        else {"profile": "imported_usd", "kp_unchanged": True, "effort_limits_unchanged": True}
+    )
     max_kinematic_position_mm = 0.0
     max_kinematic_orientation_deg = 0.0
     max_jump = 0.0
     max_limit_violation_rad = 0.0
     joint_limits = np.array([contract.limits_by_name[name] for name in robot.joint_names])
+    arm_ids = [robot.joint_names.index(f"Joint{joint}_{side}") for joint in range(1, 8)]
+    arm_effort_limits = robot.data.joint_effort_limits.torch[0, arm_ids].detach().cpu().numpy()
+    clipped_drive_samples = 0
+    drive_samples = 0
+    max_applied_effort_fraction_limit = 0.0
     previous_q = initial_q[0].detach().cpu().numpy().copy()
     records = []
     for step, q_command in enumerate(commands):
@@ -130,6 +141,15 @@ def run_side(model, contract, home, side, steps, robot, scene, sim):
         v_newton = robot.data.joint_vel.torch[0].detach().cpu().numpy()
         if not np.isfinite(q_newton).all() or not np.isfinite(v_newton).all():
             raise AssertionError(f"Non-finite Newton state in {side} wrist trajectory")
+        computed_effort = robot.actuators.computed_effort.torch[0, arm_ids].detach().cpu().numpy()
+        applied_effort = robot.actuators.applied_effort.torch[0, arm_ids].detach().cpu().numpy()
+        if not np.isfinite(computed_effort).all() or not np.isfinite(applied_effort).all():
+            raise AssertionError(f"Non-finite arm effort telemetry in {side} wrist trajectory")
+        clipped_drive_samples += int(np.count_nonzero(np.abs(computed_effort) > arm_effort_limits + 1e-3))
+        drive_samples += len(arm_ids)
+        max_applied_effort_fraction_limit = max(
+            max_applied_effort_fraction_limit, float(np.max(np.abs(applied_effort) / arm_effort_limits))
+        )
         max_limit_violation_rad = max(
             max_limit_violation_rad,
             float(np.max(np.maximum(joint_limits[:, 0] - q_newton, q_newton - joint_limits[:, 1]))),
@@ -173,6 +193,9 @@ def run_side(model, contract, home, side, steps, robot, scene, sim):
         "max_joint_limit_violation_rad": max_limit_violation_rad,
         "joint_limits_respected": max_limit_violation_rad <= 1e-4,
         "pass_kinematic": True,
+        "controller_profile": controller_profile,
+        "arm_drive_clipped_sample_fraction": clipped_drive_samples / drive_samples,
+        "max_applied_effort_fraction_limit": max_applied_effort_fraction_limit,
     }
     return result, records
 
@@ -184,8 +207,23 @@ def main() -> None:
     parser.add_argument("--steps", type=int, default=750)
     parser.add_argument("--output", type=Path, default=Path("artifacts/marvin_wuji/wrist_rotation.json"))
     parser.add_argument("--csv", type=Path, default=Path("artifacts/marvin_wuji/wrist_rotation.csv"))
+    parser.add_argument(
+        "--damping-scale-source", type=float, default=None, help="Opt-in Newton arm Kv scale relative to source MJCF"
+    )
+    parser.add_argument(
+        "--match-mujoco-controller",
+        action="store_true",
+        help="Also match compiled MuJoCo gains in memory; source XML stays unchanged",
+    )
     args = parser.parse_args()
+    if args.match_mujoco_controller and args.damping_scale_source is None:
+        parser.error("--match-mujoco-controller requires --damping-scale-source")
     model = mujoco.MjModel.from_xml_path(str(resolve_source_mjcf(args.mjcf)))
+    mujoco_profile = (
+        match_mujoco_arm_gains_in_memory(model, damping_scale_source=args.damping_scale_source)
+        if args.match_mujoco_controller
+        else {"profile": "source_xml"}
+    )
     contract = inspect_joint_contract(model)
     home = model.key_qpos[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "home")].copy()
 
@@ -205,7 +243,9 @@ def main() -> None:
         results = []
         rows = []
         for side in ("L", "R"):
-            result, side_rows = run_side(model, contract, home, side, args.steps, robot, scene, sim)
+            result, side_rows = run_side(
+                model, contract, home, side, args.steps, robot, scene, sim, args.damping_scale_source
+            )
             results.append(result)
             rows.extend(side_rows)
     args.csv.parent.mkdir(parents=True, exist_ok=True)
@@ -214,7 +254,9 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(rows)
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps({"sides": results, "csv": str(args.csv)}, indent=2) + "\n")
+    args.output.write_text(
+        json.dumps({"sides": results, "mujoco_controller": mujoco_profile, "csv": str(args.csv)}, indent=2) + "\n"
+    )
     print(json.dumps(results, indent=2))
 
 

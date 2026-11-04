@@ -88,7 +88,9 @@ uv run --no-sync python scripts/assets/validate_dynamics.py --usd "$USD" --mode 
 The [Marvin/Wuji validation report](docs/robots/marvin_wuji_validation.md)
 contains the complete commands and measured limits. FK parity and 54-channel
 control passed; physical fixed-TCP wrist tracking and backend dynamics still
-need calibration. The old
+need calibration. An [opt-in Newton controller profile](docs/robots/marvin_wuji_controller_tuning.md)
+reduced the tested Home-centered fixed-TCP wrist error to about 0.56 mm per
+arm; it is not a real motor calibration. The old
 PhysX-specific Python asset adapters are preserved but not imported by this
 package. Historic tests and validation scripts are in `archive/isaaclab2/` and
 excluded from the current runtime and test suite. No real robot connection is part of this platform.

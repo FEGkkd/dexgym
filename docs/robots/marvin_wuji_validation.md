@@ -9,6 +9,12 @@ and physical parameter calibration are still required before claiming accurate
 fixed-TCP physical execution or real-world fidelity. No S0 task, PPO run or
 robot connection was made.
 
+**Controller follow-up:** an opt-in Newton arm Kv profile reduced this
+Home-centered wrist trajectory's physical TCP error from roughly 20–30 mm to
+about 0.56 mm on each side, while preserving source assets and force limits.
+See [the controller tuning report](marvin_wuji_controller_tuning.md). The
+measurements below remain the original imported-controller baseline.
+
 The machine-readable results are in [validation_summary.json](validation_summary.json).
 Local CSV, full JSON logs, converted USD and source meshes remain under ignored
 `artifacts/marvin_wuji/` or the external source checkout.

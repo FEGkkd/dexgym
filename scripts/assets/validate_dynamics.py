@@ -8,6 +8,7 @@ from pathlib import Path
 import mujoco
 import numpy as np
 import torch
+from dexgym.assets.marvin_wuji.controller import apply_newton_arm_tracking_profile, match_mujoco_arm_gains_in_memory
 from dexgym.assets.marvin_wuji.joint_mapping import inspect_joint_contract, qpos_to_newton
 from dexgym.assets.marvin_wuji.robot_cfg import make_robot_cfg, resolve_source_mjcf
 from isaaclab.app import launch_simulation
@@ -52,7 +53,7 @@ def target_fraction(mode: str, step: int, steps: int) -> float:
     raise ValueError(mode)
 
 
-def reset_home(robot, scene, sim, home: np.ndarray, contract) -> torch.Tensor:
+def reset_home(robot, scene, sim, home: np.ndarray, contract, damping_scale_source=None) -> torch.Tensor:
     mapped = qpos_to_newton(home, contract, robot.joint_names)
     q = torch.as_tensor(mapped, dtype=torch.float32, device=robot.device).repeat(robot.num_instances, 1)
     robot.write_joint_position_to_sim_index(position=q)
@@ -60,16 +61,20 @@ def reset_home(robot, scene, sim, home: np.ndarray, contract) -> torch.Tensor:
     scene.reset()
     sim.forward()
     scene.update(0.0)
+    if damping_scale_source is not None:
+        apply_newton_arm_tracking_profile(robot, damping_scale_source=damping_scale_source)
     return q
 
 
-def run_dynamics(model, contract, robot, scene, sim, home, steps: int, csv_path: Path) -> list[dict]:
+def run_dynamics(
+    model, contract, robot, scene, sim, home, steps: int, csv_path: Path, damping_scale_source=None
+) -> list[dict]:
     data = mujoco.MjData(model)
     joint_index = {name: robot.joint_names.index(name) for name in contract.names}
     records: list[dict] = []
     summaries: list[dict] = []
     for label, controlled, mode, amplitude in scenarios():
-        q_home = reset_home(robot, scene, sim, home, contract)
+        q_home = reset_home(robot, scene, sim, home, contract, damping_scale_source)
         mujoco.mj_resetData(model, data)
         data.qpos[:] = home
         data.qvel[:] = 0
@@ -181,13 +186,15 @@ def run_dynamics(model, contract, robot, scene, sim, home, steps: int, csv_path:
     return summaries
 
 
-def run_smoke(model, contract, robot, scene, sim, home: np.ndarray, steps: int, resets: int) -> dict:
+def run_smoke(
+    model, contract, robot, scene, sim, home: np.ndarray, steps: int, resets: int, damping_scale_source=None
+) -> dict:
     joint_index = {name: robot.joint_names.index(name) for name in contract.names}
     probes = ["Joint1_L", "Joint1_R", "l_thumb_cmc_flex", "r_thumb_cmc_flex", "Joint6_L", "Joint6_R"]
     max_jump = 0.0
     final_motion = []
     for repeat in range(resets):
-        start = reset_home(robot, scene, sim, home, contract)
+        start = reset_home(robot, scene, sim, home, contract, damping_scale_source)
         target = start.clone()
         for env in range(robot.num_instances):
             name = probes[env % len(probes)]
@@ -227,7 +234,7 @@ def run_smoke(model, contract, robot, scene, sim, home: np.ndarray, steps: int, 
     }
 
 
-def run_all_channels(contract, robot, scene, sim, home: np.ndarray, steps: int) -> dict:
+def run_all_channels(contract, robot, scene, sim, home: np.ndarray, steps: int, damping_scale_source=None) -> dict:
     """Drive every joint with opposed commands in paired environments."""
     if robot.num_instances < 2 or robot.num_instances % 2:
         raise ValueError("All-channel test requires an even number of environments >= 2")
@@ -237,7 +244,7 @@ def run_all_channels(contract, robot, scene, sim, home: np.ndarray, steps: int) 
     max_jump = 0.0
     for start in range(0, len(names), per_batch):
         selected = names[start : start + per_batch]
-        initial = reset_home(robot, scene, sim, home, contract)
+        initial = reset_home(robot, scene, sim, home, contract, damping_scale_source)
         target = initial.clone()
         for pair, name in enumerate(selected):
             index = robot.joint_names.index(name)
@@ -286,9 +293,24 @@ def main() -> None:
     parser.add_argument("--resets", type=int, default=3)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--csv", type=Path, default=Path("artifacts/marvin_wuji/dynamics.csv"))
+    parser.add_argument(
+        "--damping-scale-source", type=float, default=None, help="Opt-in Newton arm Kv scale relative to source MJCF"
+    )
+    parser.add_argument(
+        "--match-mujoco-controller",
+        action="store_true",
+        help="Match compiled MuJoCo gains in memory without editing XML",
+    )
     args = parser.parse_args()
+    if args.match_mujoco_controller and args.damping_scale_source is None:
+        parser.error("--match-mujoco-controller requires --damping-scale-source")
     mjcf = resolve_source_mjcf(args.mjcf)
     model = mujoco.MjModel.from_xml_path(str(mjcf))
+    mujoco_profile = (
+        match_mujoco_arm_gains_in_memory(model, damping_scale_source=args.damping_scale_source)
+        if args.match_mujoco_controller
+        else {"profile": "source_xml"}
+    )
     contract = inspect_joint_contract(model)
     home_key = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "home")
     home = model.key_qpos[home_key].copy()
@@ -309,15 +331,23 @@ def main() -> None:
         if robot.num_joints != 54 or set(robot.joint_names) != set(contract.names):
             raise ValueError("Newton articulation does not match the 54 DoF source contract")
         if args.mode == "smoke":
-            result = run_smoke(model, contract, robot, scene, sim, home, args.steps, args.resets)
+            result = run_smoke(
+                model, contract, robot, scene, sim, home, args.steps, args.resets, args.damping_scale_source
+            )
         elif args.mode == "channels":
-            result = run_all_channels(contract, robot, scene, sim, home, args.steps)
+            result = run_all_channels(contract, robot, scene, sim, home, args.steps, args.damping_scale_source)
         else:
             if args.num_envs != 1:
                 parser.error("Dynamics comparison currently uses one environment")
-            result = {"scenarios": run_dynamics(model, contract, robot, scene, sim, home, args.steps, args.csv)}
+            result = {
+                "scenarios": run_dynamics(
+                    model, contract, robot, scene, sim, home, args.steps, args.csv, args.damping_scale_source
+                )
+            }
             result["pass"] = True
             result["csv"] = str(args.csv)
+        result["mujoco_controller"] = mujoco_profile
+        result["newton_damping_scale_source"] = args.damping_scale_source
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(result, indent=2) + "\n")
