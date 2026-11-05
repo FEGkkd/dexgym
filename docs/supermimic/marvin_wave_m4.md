@@ -76,6 +76,7 @@ that created the runs. The shared virtual environment and robot asset were not r
 | E6 corrective, 4096 env | 2,048,000 | 4,000 / 200 / 200, plus 1,500 auxiliary Actor updates | 0.66 / 1.26 mm | full clip; independent right TCP position P95 50.97 mm |
 | E7 prolonged, 4096 env | 2,048,000 | 4,000 / 1,000 / 1,000 | 0.60 / 0.77 mm | full clip; independent right TCP position P95 50.65 mm |
 | E8 cumulative 2000, 4096 env | 2,048,000 | 4,000 / 800 / 800 | 0.60 / 1.00 mm | in-process full clip; two independent replays terminate at steps 1329/1328 |
+| E9 corrective, 4096 env | 2,048,000 | 4,000 / 300 / 300, plus 1,500 auxiliary Actor updates | 0.95 / 0.93 mm | independent full clip at zero, ±0.03, and ±0.05 rad |
 
 The 1024-environment Actor's measured Newton errors were:
 
@@ -96,7 +97,8 @@ The 1024 Actor is a **candidate**: the right TCP P95 position 51.66 mm exceeds t
 research target, and P95 orientation 15.72° exceeds the 15° target. An earlier mean-only
 checkpoint label was corrected; the original file is preserved as
 `candidate_mean_only_legacy.pt`, and `candidate.pt`/`metrics.json` record the stricter failure.
-No checkpoint is marked validated under the stricter mean, P95, safety, and complete-clip gate.
+At that stage no checkpoint was marked validated under the stricter mean, P95, safety,
+and complete-clip gate. The later E9 result is evaluated below.
 
 The subsequent 4096-environment run used 50% of imagination starts from source frames
 450–849 (the 9–16 s interval with high physical tracking error), 10% from the first 50
@@ -205,12 +207,20 @@ a genuine closed-loop tracking failure, not a collision or a partial-video artif
 The 2000-update Actor also terminated at step 19 under ±0.03 rad initial perturbation.
 Its lower partial-clip mean error must **not** be compared as a complete-motion win.
 
-The current best **complete zero-perturbation candidate** is the cumulative 1500-update
-snapshot. No Actor has passed the small-initial-perturbation robustness test. The
-next bounded experiment therefore adds actual ±0.03 rad reset states and focuses
+The best complete zero-perturbation candidate **before E9** was the cumulative
+1500-update snapshot. No earlier Actor had passed the small-initial-perturbation
+robustness test. E9 therefore adds actual ±0.03 rad reset states and focuses
 imagination sampling on the opening and terminal phases while retaining mixed
 teacher/Actor Newton collection. Its result is reported separately from the clean
 2000-update training-length comparison above.
+
+Before the larger corrective run, a 512-environment, 102,400-transition perturbation
+pilot recorded zero contacts and terminations. A rare finger Home deviation peaked at
+0.275 rad on the left ring-finger MCP abduction joint three control steps after a
+random-phase reset. Across all sampled finger joint states, the proportion above
+0.1 rad was 0.0031%; after the first ten control steps it was 0.00039%.
+This is reported as a residual finger-servo transient rather than hidden from the
+arm-only state contract. The Newton asset still disables finger contacts.
 
 The full E4 comparison video is `e4_4096env_hard500/previews/newton_policy_vs_reference.mp4`.
 It shows reference FK beside the **recorded Newton physical policy state** with both
@@ -228,6 +238,81 @@ windows, not unseen motions. The teacher-heavy world-model dataset is still a di
 limit; a low open-loop error alone does not prove safe closed-loop policy control. The
 full Newton policy evaluations and separate safety termination enforce that distinction.
 
+## E9 validated v0 policy
+
+E9 initialized from the cumulative 1500-update Actor and E8 world model, then collected
+2,048,000 new 4096-environment Newton transitions with legal ±0.03 rad initial joint
+perturbations. There were zero collection contacts and safety terminations; maximum
+actual arm speed was 4.23 rad/s. The 4000 eight-step world-model updates produced
+held-out mean TCP errors of 1.11, 0.95, and 0.93 mm at one, eight, and thirty-two
+steps. The model's mean 32-step error on the **independent policy Newton trajectory**
+was 3.39 mm for the right TCP (P95 9.53 mm), versus 1.63/4.41 mm at eight steps.
+The 32-step constant-velocity baseline on held-out data was 80.22 mm.
+
+After 1500 auxiliary Actor updates on real off-reference states, a **separate**
+±0.03 rad Newton replay completed the clip with right TCP position/rotation P95
+25.32 mm/6.67°. This supervised initialization is not counted as the final result.
+The subsequent frozen-world-model 32-step BPTT stage completed 300 Actor and 300
+TD(λ) Critic updates. At 200 BPTT updates, an independent ±0.03 rad replay improved
+right TCP P95 to 21.11 mm/4.02°. The 300-update Actor was selected after independent
+full-motion physical validation, not solely by imagined reward.
+
+| E9 final checkpoint replay | Left TCP position mean / P95 (mm) | Left SO(3) mean / P95 (deg) | Right TCP position mean / P95 (mm) | Right SO(3) mean / P95 (deg) | Complete / contacts / illegal joints |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Zero perturbation, independent | 5.14 / 27.28 | 0.66 / 3.36 | 9.49 / 34.28 | 2.01 / 6.97 | 1356 steps / 0 / 0 |
+| ±0.03 rad, independent | 4.07 / 19.06 | 0.53 / 2.23 | 7.30 / 20.87 | 1.65 / 5.03 | 1356 steps / 0 / 0 |
+| ±0.03 rad, repeat | 4.03 / 18.64 | 0.53 / 2.15 | 7.55 / 23.68 | 1.71 / 5.48 | 1356 steps / 0 / 0 |
+| ±0.05 rad, independent | 4.22 / 19.58 | 0.55 / 2.25 | 7.68 / 23.41 | 1.68 / 5.22 | 1356 steps / 0 / 0 |
+
+The independent zero-perturbation replay had joint position/velocity RMSE
+0.0202 rad/0.1775 rad/s, maximum actual arm speed 2.01 rad/s, maximum acceleration
+48.61 rad/s², 0.0053% torque saturation, and maximum position-command jump
+0.04 rad. Under ±0.05 rad initial perturbation, maximum actual arm speed was
+2.45 rad/s, acceleration 120.06 rad/s², and torque saturation 0.200% during
+recovery. No hard limit or disallowed contact occurred in any full replay.
+The source MJCF geometry audit also counted zero contact frames.
+
+The pinned privileged direct-reference PD baseline is much more precise:
+left/right mean TCP position 0.46/0.64 mm and orientation 0.053°/0.085°.
+The learned Actor receives only ten frames of arm proprioception plus future
+six-link goals; it never receives the current reference joint command as a control
+feedforward. The performance gap is therefore reported under different information
+conditions.
+
+E9 collection had a rare finger-servo transient: maximum Home deviation 0.304 rad,
+with 0.00155% of sampled finger joint states above 0.1 rad and 0.00021% after the
+first ten control steps. The maximum occurred on a ring-finger MCP abduction joint
+shortly after a random-phase reset. During the independent ±0.05 rad complete
+replay, finger Home deviation max was 0.101 rad. Finger contacts remain disabled
+in the Newton asset, so this result does not validate hand contact or manipulation.
+
+`e9_4096env_perturb_corrective/best.pt` contains Actor, world model, Critic,
+optimizers, running normalization, configuration, progress, and the pinned reference
+hash. Its SHA256 is `b2cdaa1484e22b8fa4a6ee8be8cfce7898e5af63f1a3debebf3b03cd20f1df25`.
+Replay is omitted; resume recollects Newton transitions and rewarms the
+model. The E9 run took 312.54 s including the in-process full evaluation,
+collected 51,543 transitions/s, allocated 5.77 GB for Replay, and reached a
+6.52 GB PyTorch peak allocation. `nvidia-smi` observed 19,758/32,607 MiB GPU
+memory during this 4096-environment run. E6+E7+E8+E9 collected 8,192,000 real
+Newton transitions in the final iterative lineage, plus separate pilots and
+earlier E1–E5 experiments.
+The machine-readable `e9_4096env_perturb_corrective/final_validation.json`
+checks the pinned hashes, three independent complete Newton replays, both TCP
+mean/P95 limits, contacts, and illegal joint states before recording
+`validated_single_seen_motion`.
+
+The final `previews/newton_policy_vs_reference.mp4` is a verified 27.2 s MP4 made
+from **recorded Newton physical states** and compared with reference FK. Its frame
+at 9 s was inspected. `plots/` contains dual-TCP error curves, 1/8/32-step model
+prediction, training curves, and separate opening, peak-wave, and active-phase
+statistics. The original human and direct-PD reference videos remain in
+`/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/previews/`.
+
+**Result: Marvin Bimanual SuperMimic Wave v0 is validated for this single seen
+motion under the tested Newton settings and fixed random seed.** It is a research
+baseline, not evidence of unseen-motion generalization, finger contact safety,
+or real-robot readiness.
+
 ## Reproduction and verification
 
 Use the pinned reference and the process-local Isaac Lab/pxr Python path established for this
@@ -236,9 +321,31 @@ host. Entry points are `scripts/supermimic/preflight.py`, `train_wave.py`,
 The last script renders **recorded Newton physical states** with MuJoCo EGL for viewing;
 it does not claim a MuJoCo closed-loop policy execution.
 
+For an independent zero-perturbation checkpoint replay from this worktree:
+
+```bash
+PYTHONPATH=/tmp/dexgym-marvin-supermimic-wave-m4/source:/home/ubuntu/miniconda3/envs/manus_wuji_real/lib/python3.12/site-packages:/home/ubuntu/miniconda3/envs/teleop/lib/python3.12/site-packages:/tmp/marvin_wave_python_override \
+  /home/ubuntu/dexgym/.venv/bin/python scripts/supermimic/evaluate_wave.py \
+  /home/ubuntu/dexgym_data/marvin_supermimic_wave_m4/e9_4096env_perturb_corrective/best.pt \
+  --output /tmp/marvin_wave_reproduction
+```
+
+Add `--initial-perturb-rad 0.03` or `0.05` for the reported fixed-seed robustness
+tests. `metrics.json` in the E9 run records all training flags, optimizer settings,
+random seed, source commit, and reference hash. Continuing training uses
+`train_wave.py --resume .../best.pt` with a new output directory and fresh Newton
+collection; Replay is reconstructed rather than restored.
+
 `uv lock --check` passed. Ruff passed for the new code. The combined Marvin asset, motion,
-and SuperMimic test suite reported **32 passed, 3 skipped**. Tests include random-pose FK
+and SuperMimic test suite reported **34 passed, 3 skipped**. Tests include random-pose FK
 agreement against MuJoCo, TCP gradient finite differences, SO(3) reward gradients,
 eight-step regression, episode-safe Replay sampling, 32-step BPTT gradients, toy controllable
 dynamics, and task registration. The actual resume path was exercised in multiple Newton runs.
 The task remains single-motion research and has no unseen-motion generalization claim.
+The optional original `scripts/smoke_newton.py` Joint Tracking regression could not
+complete on this host: its Isaac Lab Cartpole asset uses a Nucleus USD and the
+shared `.venv` crashes with SIGBUS while importing `omni.client` to localize the
+ground-plane USD. Faulthandler confirmed the stack enters `isaaclab.utils.assets`
+and `omni.client`; this is outside the M4 Marvin path. The shared environment and
+original Cartpole code were not modified. The actual Marvin Newton training and
+full policy replays succeeded under the documented process-local library path.
