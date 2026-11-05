@@ -17,6 +17,23 @@ def plot(run_dir: Path, output: Path):
         time = states["time"]
         position = states["tcp_position_error_mm"][:, 0]
         rotation = states["tcp_orientation_error_deg"][:, 0]
+    phase_metrics = {}
+    for name, start, stop in (("opening", 0.0, 1.0), ("wave_peak", 8.0, 12.0), ("active", 9.0, 16.0)):
+        selected = (time >= start) & (time < stop)
+        if not selected.any():
+            continue
+        phase_metrics[name] = {"start_s": start, "stop_s": stop, "frames": int(selected.sum())}
+        for side, label in enumerate(("left", "right")):
+            for metric_name, values in (
+                ("position_mm", position[selected, side]),
+                ("orientation_deg", rotation[selected, side]),
+            ):
+                phase_metrics[name][f"{label}_{metric_name}"] = {
+                    "mean": float(values.mean()),
+                    "p95": float(np.percentile(values, 95)),
+                    "max": float(values.max()),
+                }
+    (output / "phase_metrics.json").write_text(json.dumps(phase_metrics, indent=2))
     fig, axes = plt.subplots(2, 1, figsize=(12, 6), sharex=True)
     for side, label in enumerate(("left", "right")):
         axes[0].plot(time, position[:, side], label=label)

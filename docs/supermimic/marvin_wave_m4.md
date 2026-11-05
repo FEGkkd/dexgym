@@ -73,6 +73,9 @@ that created the runs. The shared virtual environment and robot asset were not r
 | E3, 1024 env | 768,000 | 1,500 / 200 / 200 | 1.45 / 2.87 mm | full 1356-step clip, no contact or hard-limit failure |
 | E4, 4096 env | 2,048,000 | 4,000 / 500 / 500 | 0.95 / 1.59 mm | full 1356-step clip, no contact or hard-limit failure |
 | E5 mixed, 4096 env | 2,048,000 | 4,000 / 500 / 500 | 0.88 / 1.27 mm | safety termination at step 548 |
+| E6 corrective, 4096 env | 2,048,000 | 4,000 / 200 / 200, plus 1,500 auxiliary Actor updates | 0.66 / 1.26 mm | full clip; independent right TCP position P95 50.97 mm |
+| E7 prolonged, 4096 env | 2,048,000 | 4,000 / 1,000 / 1,000 | 0.60 / 0.77 mm | full clip; independent right TCP position P95 50.65 mm |
+| E8 cumulative 2000, 4096 env | 2,048,000 | 4,000 / 800 / 800 | 0.60 / 1.00 mm | in-process full clip; two independent replays terminate at steps 1329/1328 |
 
 The 1024-environment Actor's measured Newton errors were:
 
@@ -135,10 +138,79 @@ on-policy world model still had right TCP 32-step mean/P95 errors of 12.80/31.96
 E5 demonstrates that lower teacher-heavy model loss alone did not improve the actual
 policy. Its `candidate.pt`, partial Newton state trace, and failure metrics are retained.
 
-The next bounded experiment uses a wider safe command mixture, then trains a corrective
-Actor initializer on those **real off-reference Newton states** before a separate,
-small-learning-rate 32-step BPTT stage. The initializer and BPTT Actor are evaluated
-separately; the initializer by itself is never counted as a SuperMimic result.
+E6 used a wider safe command mixture, then trained a corrective Actor initializer on
+**real off-reference Newton states** before a separate, small-learning-rate 32-step
+BPTT stage. Its 4096-environment collection yielded 2,048,000 transitions in 41.18 s
+(49,732/s), with no contact or termination. The model had 0.60/0.66/1.26 mm mean
+held-out TCP position error at one/eight/thirty-two steps. The 1,500-update auxiliary
+initializer was evaluated separately: its independent full Newton replay had right
+TCP position mean/P95 12.85/47.00 mm and rotation mean/P95 2.88/11.13°. This is a
+supervised baseline, not a SuperMimic-trained result. After 200 genuine 32-step BPTT
+updates, the in-process full replay met the research thresholds: left/right position
+mean 7.80/12.99 mm, P95 35.34/47.57 mm; orientation mean 0.98/2.71°,
+P95 4.37/9.31°. The independent zero-perturbation replay completed 1356 control steps,
+with zero 500 Hz contact steps and zero illegal joint states, but right position P95
+was **50.97 mm** (mean 13.99 mm), slightly above the 50 mm target. Left position
+mean/P95 was 8.64/38.26 mm; left/right orientation mean/P95 was 1.08/4.78° and
+2.92/8.84°. Maximum actual arm speed was 2.00 rad/s, joint position RMSE 0.0295 rad,
+and torque saturation rate 0.011%. The BPTT Actor improved the right orientation tail
+over its initializer but worsened the right position tail in this independent replay.
+Thus the E6 `best.pt` is an in-process best **candidate**, not independently validated.
+Its full traces, plots, auxiliary baseline, and independent safety report are under
+`e6_4096env_corrective200/`.
+On its independent full Newton policy trajectory, the E6 world model had right TCP
+position prediction mean/P95 0.81/2.15 mm at one step, 2.28/7.50 mm at eight steps,
+and 5.70/18.41 mm at thirty-two steps. The on-policy 32-step mean is lower than E4's
+12.06 mm, but still much larger than E6's 1.26 mm teacher-heavy held-out mean.
+The E6 comparison MP4 under `previews/` is 27.2 s and shows recorded Newton physical
+states against the pinned FK reference; its frame around 9 s was visually checked.
+
+E7 extended the same 4096-environment method by 1000 further 32-step Actor/Critic
+updates after recollecting 2,048,000 real Newton transitions. Collection throughput
+was 50,503/s; the run took 897 s including full physical evaluation, with a 6.38 GB
+PyTorch peak allocation. The 500-update snapshot completed two independent full
+Newton replays with zero physics-step contacts and no illegal joint state. Its right
+TCP position mean/P95 was 13.79/49.22 mm on the first replay and 14.07/50.31 mm on
+the repeat. The 1000-update terminal Actor's in-process right position P95 was
+49.76 mm; its independent replay was **50.65 mm**, with mean 14.71 mm. Independent
+left position mean/P95 was 9.42/39.91 mm, and left/right rotation mean/P95 was
+1.18/4.88° and 3.14/10.50°. The terminal Actor completed all 1356 control steps,
+with zero contacts and illegal joint states, 2.01 rad/s maximum actual arm speed,
+and 0.0105% torque saturation. Both E7 snapshots remain candidates because the
+strict right position P95 threshold is not reproducibly met. Their complete traces
+and plots are under `e7_4096env_bptt1000/`. An on-policy model audit using the
+independent 1000-update Newton trace found right TCP 8/32-step position prediction
+mean/P95 of 2.31/7.04 mm and 5.34/17.61 mm, respectively. The model improved
+slightly over E6, while physical position P95 did not improve consistently.
+
+E8 added 800 BPTT updates and another 2,048,000 real Newton transitions, bringing
+cumulative E6+E7+E8 Actor and Critic updates to **2000**. It used the same collection,
+reward, and action configuration. Collection throughput was 51,063 transitions/s;
+the run took 722 s including evaluation. The cumulative 1500-update snapshot
+(`actor_bptt_0300.pt`) completed two independent zero-perturbation full Newton
+replays, with right TCP position mean/P95 13.48/49.93 and 11.68/46.22 mm. Both
+recorded zero physics-step contacts and no illegal joint states. It nevertheless
+terminated at control step 16 under ±0.03 rad initial joint perturbation.
+
+The cumulative 2000-update terminal Actor improved the active 8–12 s wave segment:
+independent right TCP position mean/P95 changed from the 1500-update snapshot's
+44.77/70.77 mm to 33.79/65.89 mm; right orientation mean/P95 changed from
+8.95/17.31° to 6.88/15.88°. Its in-process full replay recorded right position
+mean/P95 11.74/45.83 mm. However, two **independent** zero-perturbation replays
+terminated at control steps 1329 and 1328 during the rapid return-to-Home phase.
+In the first, left/right position max reached 159.91/93.02 mm; the second reached
+122.83/70.33 mm. Contact and joint-limit counts remained zero. The command lag
+against the time-matched reference grew rapidly across frames 1320–1328; this is
+a genuine closed-loop tracking failure, not a collision or a partial-video artifact.
+The 2000-update Actor also terminated at step 19 under ±0.03 rad initial perturbation.
+Its lower partial-clip mean error must **not** be compared as a complete-motion win.
+
+The current best **complete zero-perturbation candidate** is the cumulative 1500-update
+snapshot. No Actor has passed the small-initial-perturbation robustness test. The
+next bounded experiment therefore adds actual ±0.03 rad reset states and focuses
+imagination sampling on the opening and terminal phases while retaining mixed
+teacher/Actor Newton collection. Its result is reported separately from the clean
+2000-update training-length comparison above.
 
 The full E4 comparison video is `e4_4096env_hard500/previews/newton_policy_vs_reference.mp4`.
 It shows reference FK beside the **recorded Newton physical policy state** with both

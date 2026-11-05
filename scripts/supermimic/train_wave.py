@@ -411,6 +411,7 @@ def main():
     parser.add_argument("--teacher-fraction", type=float, default=0.6)
     parser.add_argument("--exploration-noise", type=float, default=0.18)
     parser.add_argument("--teacher-noise", type=float, default=0.0)
+    parser.add_argument("--reset-joint-perturb-rad", type=float, default=0.01)
     parser.add_argument("--actor-mix", type=float, default=1.0)
     parser.add_argument("--active-reset-fraction", type=float, default=0.0)
     parser.add_argument("--active-reset-frame-range", type=int, nargs=2, default=(450, 850))
@@ -443,6 +444,8 @@ def main():
         raise ValueError("Actor learning rate must be positive")
     if args.warmup_actor_lr is not None and args.warmup_actor_lr <= 0:
         raise ValueError("Actor warmup learning rate must be positive")
+    if not 0 <= args.reset_joint_perturb_rad <= 0.1:
+        raise ValueError("Reset joint perturbation must lie in [0, 0.1] rad")
     if not (
         0 <= args.teacher_fraction <= 1
         and 0 <= args.actor_mix <= 1
@@ -490,7 +493,7 @@ def main():
     cfg = MarvinWaveDirectCfg()
     cfg.scene.num_envs = args.num_envs
     cfg.seed = 140116
-    cfg.reset_joint_perturb_rad = 0.01
+    cfg.reset_joint_perturb_rad = args.reset_joint_perturb_rad
     cfg.active_reset_fraction = args.active_reset_fraction
     cfg.active_reset_frame_range = tuple(args.active_reset_frame_range)
     cfg.early_reset_fraction = args.early_reset_fraction
