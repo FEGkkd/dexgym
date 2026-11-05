@@ -6,6 +6,14 @@ from dexgym.motion.motion_manager import MotionManager, quaternion_xyzw_to_6d
 PATH = "/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz"
 
 
+def test_public_task_registration():
+    import dexgym.tasks
+    import gymnasium as gym
+
+    assert "DexGym-Marvin-SuperMimic-Wave-Direct-v0" in dexgym.tasks.TASK_IDS
+    assert gym.spec("DexGym-Marvin-SuperMimic-Wave-Direct-v0").entry_point.endswith("MarvinWaveDirectEnv")
+
+
 def test_future_end_holds_pose_and_zeros_held_velocities():
     manager = MotionManager(PATH, 3, "cpu")
     manager.reset(torch.tensor([0, 1, 2]), torch.tensor([0, 1355, 1356]))

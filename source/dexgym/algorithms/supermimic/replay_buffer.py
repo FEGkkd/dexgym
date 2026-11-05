@@ -49,7 +49,13 @@ class MotionReplay:
         self.episode_counter += done.long()
         self.steps += 1
 
-    def _sample_indices(self, batch: int, horizon: int, env_range: tuple[int, int] | None = None):
+    def _sample_indices(
+        self,
+        batch: int,
+        horizon: int,
+        env_range: tuple[int, int] | None = None,
+        frame_range: tuple[int, int] | None = None,
+    ):
         low = max(0, self.steps - self.capacity)
         high = self.steps - horizon
         if high < low:
@@ -57,7 +63,7 @@ class MotionReplay:
         selected_t, selected_env = [], []
         attempts = 0
         while sum(len(x) for x in selected_t) < batch and attempts < 100:
-            count = max(batch * 2, 64)
+            count = max(batch * (64 if frame_range is not None else 2), 1024 if frame_range is not None else 64)
             t = torch.randint(low, high + 1, (count,), device=self.device)
             env_low, env_high = env_range or (0, self.num_envs)
             env = torch.randint(env_low, env_high, (count,), device=self.device)
@@ -67,6 +73,9 @@ class MotionReplay:
             episodes = self.episode[slots, env[:, None]]
             valid &= (episodes == episodes[:, :1]).all(-1)
             valid &= ~self.done[slots, env[:, None]].any(-1)
+            if frame_range is not None:
+                start_frame = self.frame[slots[:, 0], env]
+                valid &= (start_frame >= frame_range[0]) & (start_frame < frame_range[1])
             selected_t.append(t[valid])
             selected_env.append(env[valid])
             attempts += 1
@@ -84,8 +93,13 @@ class MotionReplay:
             "frame": self.frame[slots, env[:, None]],
         }
 
-    def sample_starts(self, batch: int, env_range: tuple[int, int] | None = None):
-        t, env = self._sample_indices(batch, 1, env_range)
+    def sample_starts(
+        self,
+        batch: int,
+        env_range: tuple[int, int] | None = None,
+        frame_range: tuple[int, int] | None = None,
+    ):
+        t, env = self._sample_indices(batch, 1, env_range, frame_range)
         slots = t % self.capacity
         return {
             "state": self.state[slots, env],

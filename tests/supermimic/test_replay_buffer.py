@@ -16,3 +16,5 @@ def test_eight_step_windows_do_not_cross_episode_or_wrap_boundary():
     torch.testing.assert_close(batch["frame"][:, 1:] - batch["frame"][:, :-1], torch.ones(64, 7, dtype=torch.long))
     assert replay.bytes_allocated < 1_000_000
     assert replay.sample_starts(4)["history"].shape == (4, 10, 56)
+    phase = replay.sample_starts(16, frame_range=(70, 80))
+    assert torch.all((phase["frame"] >= 70) & (phase["frame"] < 80))

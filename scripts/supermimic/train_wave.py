@@ -20,6 +20,41 @@ from isaaclab.app import launch_simulation
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from preflight import REFERENCE, REFERENCE_SHA256, SOURCE, verify
 
+PD_STATES = Path(
+    "/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/physics_replays/newton_1env/newton_pd_states.npz"
+)
+
+
+def pd_actor_examples(motion, mapping, device):
+    """Verified Newton PD states supply phase-balanced actor initialization examples."""
+    source = mujoco.MjModel.from_xml_path(str(SOURCE))
+    arm_ids = [mujoco.mj_name2id(source, mujoco.mjtObj.mjOBJ_JOINT, name) for name in motion.joint_names_arm]
+    with np.load(PD_STATES, allow_pickle=False) as replay:
+        if replay["q"].shape != (motion.length, 1, 54):
+            raise ValueError("Pinned PD replay does not match motion length or 54DoF model")
+        q = torch.as_tensor(replay["q"][:, 0, arm_ids].copy(), device=device)
+        qd = torch.as_tensor(replay["qd"][:, 0, arm_ids].copy(), device=device)
+    reference = motion.data["q_arm"]
+    raw = torch.atanh(((reference - mapping.origin) / mapping.scale).clamp(-0.98, 0.98))
+    previous_action = raw.tanh().clone()
+    previous_action[0] = 0
+    frame = torch.cat(
+        (
+            (q - mapping.origin) / mapping.scale,
+            qd / 2,
+            previous_action,
+            (reference - mapping.origin) / mapping.scale,
+        ),
+        dim=-1,
+    )
+    indices = (torch.arange(motion.length, device=device)[:, None] + torch.arange(-9, 1, device=device)[None]).clamp(
+        min=0
+    )
+    history = frame[indices]
+    goal = motion.goal_at(torch.arange(motion.length, device=device))
+    target = raw[torch.arange(motion.length, device=device).add(1).clamp(max=motion.length - 1)]
+    return history, goal, target
+
 
 def state_of(native):
     q = native.robot.data.joint_pos.torch[:, native.arm_ids]
@@ -152,7 +187,7 @@ def actor_command_error(actor, replay, mapping, motion, env_range, batch=128):
     }
 
 
-def evaluate_full(actor, num_envs=1, seed=140116, output_dir: Path | None = None):
+def evaluate_full(actor, num_envs=1, seed=140116, output_dir: Path | None = None, action_fn=None):
     cfg = MarvinWaveDirectCfg()
     cfg.scene.num_envs = num_envs
     cfg.episode_length_s = 28.0
@@ -177,9 +212,13 @@ def evaluate_full(actor, num_envs=1, seed=140116, output_dir: Path | None = None
             command_jump_max = 0.0
             for control_step in range(1356):
                 with torch.no_grad():
-                    action = actor(
-                        obs["policy"][:, :560].reshape(num_envs, 10, 56),
-                        obs["policy"][:, 560:].reshape(num_envs, 10, 90),
+                    action = (
+                        action_fn(native, control_step)
+                        if action_fn is not None
+                        else actor(
+                            obs["policy"][:, :560].reshape(num_envs, 10, 56),
+                            obs["policy"][:, 560:].reshape(num_envs, 10, 90),
+                        )
                     )
                     obs, reward, terminated, _truncated, _ = env.step(action)
                     metrics = env.unwrapped.last_tracking
@@ -206,11 +245,19 @@ def evaluate_full(actor, num_envs=1, seed=140116, output_dir: Path | None = None
             qd_record = np.stack(physical_qd)
             source = mujoco.MjModel.from_xml_path(str(SOURCE))
             source_data = mujoco.MjData(source)
+            arm_source_ids = [
+                mujoco.mj_name2id(source, mujoco.mjtObj.mjOBJ_JOINT, name) for name in native.motion.joint_names_arm
+            ]
             source_contact_frames = 0
+            illegal_joint_states = 0
             for q in q_record[:, 0]:
                 source_data.qpos[:] = q
                 mujoco.mj_forward(source, source_data)
                 source_contact_frames += int(source_data.ncon > 0)
+                illegal_joint_states += int(
+                    np.any(q[arm_source_ids] < source.jnt_range[arm_source_ids, 0] - 1e-3)
+                    or np.any(q[arm_source_ids] > source.jnt_range[arm_source_ids, 1] + 1e-3)
+                )
             if output_dir:
                 output_dir.mkdir(parents=True, exist_ok=True)
                 np.savez_compressed(
@@ -222,9 +269,6 @@ def evaluate_full(actor, num_envs=1, seed=140116, output_dir: Path | None = None
                     tcp_orientation_error_deg=np.concatenate((np.zeros((1, num_envs, 2)), r), axis=0),
                 )
             ref = native.motion.data["q_arm"][: len(q_record)].detach().cpu().numpy()
-            arm_source_ids = [
-                mujoco.mj_name2id(source, mujoco.mjtObj.mjOBJ_JOINT, name) for name in native.motion.joint_names_arm
-            ]
             return {
                 "completed_control_steps": len(errors_p),
                 "wall_time_s": time.perf_counter() - start,
@@ -234,6 +278,7 @@ def evaluate_full(actor, num_envs=1, seed=140116, output_dir: Path | None = None
                 "reward_mean": float(np.mean(rewards)),
                 "newton_contact_control_steps": contact_steps,
                 "source_mjcf_contact_frames": source_contact_frames,
+                "illegal_joint_state_frames": illegal_joint_states,
                 "torque_saturation_rate": saturations / max(1, torque_samples),
                 "max_command_jump_rad": command_jump_max,
                 "max_actual_arm_speed_rad_s": float(np.max(abs(qd_record[:, :, arm_source_ids]))),
@@ -287,11 +332,29 @@ def main():
     parser.add_argument("--exploration-noise", type=float, default=0.18)
     parser.add_argument("--teacher-noise", type=float, default=0.0)
     parser.add_argument("--behavior-prior-weight", type=float, default=0.0)
+    parser.add_argument("--pd-warmup-fraction", type=float, default=0.0)
+    parser.add_argument("--reset-actor-on-resume", action="store_true")
+    parser.add_argument("--actor-init-state", type=Path)
+    parser.add_argument("--actor-lr", type=float, default=1e-4)
+    parser.add_argument("--early-bptt-fraction", type=float, default=0.0)
+    parser.add_argument("--hard-bptt-fraction", type=float, default=0.0)
+    parser.add_argument("--hard-bptt-range", type=int, nargs=2, default=(450, 850))
     parser.add_argument("--resume", type=Path)
     parser.add_argument(
         "--output", type=Path, default=Path("/home/ubuntu/dexgym_data/marvin_supermimic_wave_m4/e1_first")
     )
     args = parser.parse_args()
+    if not (
+        0 <= args.early_bptt_fraction <= 1
+        and 0 <= args.hard_bptt_fraction <= 1
+        and args.early_bptt_fraction + args.hard_bptt_fraction <= 1
+        and 0 <= args.pd_warmup_fraction <= 1
+    ):
+        raise ValueError("BPTT and PD sample fractions must lie in [0, 1] and sum to at most one")
+    if not (0 <= args.hard_bptt_range[0] < args.hard_bptt_range[1] <= 1357):
+        raise ValueError("Hard BPTT frame range must lie within the pinned motion")
+    if args.actor_lr <= 0:
+        raise ValueError("Actor learning rate must be positive")
     preflight = verify()
     args.output.mkdir(parents=True, exist_ok=True)
     torch.manual_seed(140116)
@@ -301,7 +364,7 @@ def main():
     model = DeltaWorldModel(hidden=args.world_hidden).to(device)
     critic = PrivilegedCritic().to(device)
     optim_model = torch.optim.Adam(model.parameters(), lr=3e-4)
-    optim_actor = torch.optim.Adam(actor.parameters(), lr=1e-4)
+    optim_actor = torch.optim.Adam(actor.parameters(), lr=args.actor_lr)
     optim_critic = torch.optim.Adam(critic.parameters(), lr=3e-4)
     prior_training = None
     if args.resume:
@@ -315,6 +378,12 @@ def main():
         optim_model.load_state_dict(previous["world_optimizer"])
         optim_critic.load_state_dict(previous["critic_optimizer"])
         prior_training = previous["training"]
+        if args.reset_actor_on_resume:
+            actor = GoalActor().to(device)
+            optim_actor = torch.optim.Adam(actor.parameters(), lr=args.actor_lr)
+    if args.actor_init_state:
+        actor.load_state_dict(torch.load(args.actor_init_state, map_location=device, weights_only=True))
+        optim_actor = torch.optim.Adam(actor.parameters(), lr=args.actor_lr)
     cfg = MarvinWaveDirectCfg()
     cfg.scene.num_envs = args.num_envs
     cfg.seed = 140116
@@ -360,14 +429,38 @@ def main():
             warmup_action_error = None
             final_action_error = None
             if trust_gate:
+                pd_examples = (
+                    pd_actor_examples(motion, mapping, device)
+                    if args.pd_warmup_fraction > 0 and args.actor_warmup_updates
+                    else None
+                )
                 for _ in range(args.actor_warmup_updates):
-                    start_batch = replay.sample_starts(args.imag_batch, env_range=(0, train_envs))
-                    goal = motion.goal_at(start_batch["frame"])
-                    target_q = motion.data["q_arm"][(start_batch["frame"] + 1).clamp(max=motion.length - 1)]
-                    teacher_action = torch.atanh(((target_q - mapping.origin) / mapping.scale).clamp(-0.98, 0.98))
+                    batch_size = max(args.imag_batch, 128)
+                    pd_count = round(batch_size * args.pd_warmup_fraction) if pd_examples is not None else 0
+                    replay_count = batch_size - pd_count
+                    histories, goals, targets = [], [], []
+                    if replay_count:
+                        start_batch = replay.sample_starts(replay_count, env_range=(0, train_envs))
+                        goal = motion.goal_at(start_batch["frame"])
+                        target_q = motion.data["q_arm"][(start_batch["frame"] + 1).clamp(max=motion.length - 1)]
+                        teacher_action = torch.atanh(((target_q - mapping.origin) / mapping.scale).clamp(-0.98, 0.98))
+                        histories.append(start_batch["history"])
+                        goals.append(goal)
+                        targets.append(teacher_action)
+                    if pd_count:
+                        early_count = pd_count // 4
+                        frame_ids = torch.cat(
+                            (
+                                torch.randint(0, min(50, motion.length), (early_count,), device=device),
+                                torch.randint(0, motion.length, (pd_count - early_count,), device=device),
+                            )
+                        )
+                        histories.append(pd_examples[0][frame_ids])
+                        goals.append(pd_examples[1][frame_ids])
+                        targets.append(pd_examples[2][frame_ids])
                     optim_actor.zero_grad()
-                    predicted_action = actor(start_batch["history"], goal)
-                    warmup_loss = torch.nn.functional.smooth_l1_loss(predicted_action, teacher_action)
+                    predicted_action = actor(torch.cat(histories), torch.cat(goals))
+                    warmup_loss = torch.nn.functional.mse_loss(predicted_action, torch.cat(targets))
                     warmup_loss.backward()
                     torch.nn.utils.clip_grad_norm_(actor.parameters(), 1.0)
                     optim_actor.step()
@@ -377,8 +470,30 @@ def main():
                 prior_actor = copy.deepcopy(actor).eval()
                 for parameter in prior_actor.parameters():
                     parameter.requires_grad_(False)
-                for _ in range(args.actor_updates):
-                    start_batch = replay.sample_starts(args.imag_batch, env_range=(0, train_envs))
+                for actor_update in range(args.actor_updates):
+                    early_count = round(args.imag_batch * args.early_bptt_fraction)
+                    hard_count = min(round(args.imag_batch * args.hard_bptt_fraction), args.imag_batch - early_count)
+                    batches = []
+                    if early_count:
+                        batches.append(
+                            replay.sample_starts(early_count, env_range=(0, train_envs), frame_range=(0, 50))
+                        )
+                    if hard_count:
+                        batches.append(
+                            replay.sample_starts(
+                                hard_count,
+                                env_range=(0, train_envs),
+                                frame_range=tuple(args.hard_bptt_range),
+                            )
+                        )
+                    if args.imag_batch - early_count - hard_count:
+                        batches.append(
+                            replay.sample_starts(
+                                args.imag_batch - early_count - hard_count,
+                                env_range=(0, train_envs),
+                            )
+                        )
+                    start_batch = {key: torch.cat([batch[key] for batch in batches]) for key in batches[0]}
                     for module in (model, critic):
                         for parameter in module.parameters():
                             parameter.requires_grad_(False)
@@ -399,6 +514,8 @@ def main():
                     torch.nn.utils.clip_grad_norm_(actor.parameters(), 1.0)
                     optim_actor.step()
                     actor_losses.append(float(rollout["actor_loss"].detach()))
+                    if (actor_update + 1) % 50 == 0:
+                        torch.save(actor.state_dict(), args.output / f"actor_bptt_{actor_update + 1:04d}.pt")
                     for parameter in critic.parameters():
                         parameter.requires_grad_(True)
                     optim_critic.zero_grad()
@@ -420,7 +537,9 @@ def main():
                 }
                 if prior_training
                 else None,
-                "configuration": vars(args) | {"output": str(args.output)},
+                "configuration": {
+                    key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()
+                },
                 "collection": collection,
                 "world_model_validation_env_ids": [train_envs, args.num_envs - 1],
                 "replay_bytes": replay.bytes_allocated,
@@ -455,10 +574,43 @@ def main():
         "resume_requires_recollection": True,
     }
     torch.save(checkpoint, args.output / "last.pt")
+    np.savez_compressed(
+        args.output / "learning_curves.npz",
+        world_loss=np.asarray(model_losses),
+        actor_loss=np.asarray(actor_losses),
+        critic_loss=np.asarray(critic_losses),
+        auxiliary_loss=np.asarray(warmup_losses),
+    )
     if training["actor_updates"]:
         training["evaluation"] = evaluate_full(actor, output_dir=args.output)
         checkpoint["training"] = training
-        torch.save(checkpoint, args.output / "best.pt")
+        passed = (
+            training["evaluation"]["full_motion_completed"]
+            and training["evaluation"]["newton_contact_control_steps"] == 0
+            and training["evaluation"]["source_mjcf_contact_frames"] == 0
+            and training["evaluation"]["illegal_joint_state_frames"] == 0
+            and training["evaluation"]["max_actual_arm_speed_rad_s"] <= 5
+            and all(
+                training["evaluation"][side]["mean"] <= limit
+                for side, limit in (
+                    ("left_position_mm", 25),
+                    ("right_position_mm", 25),
+                    ("left_orientation_deg", 8),
+                    ("right_orientation_deg", 8),
+                )
+            )
+            and all(
+                training["evaluation"][side]["p95"] <= limit
+                for side, limit in (
+                    ("left_position_mm", 50),
+                    ("right_position_mm", 50),
+                    ("left_orientation_deg", 15),
+                    ("right_orientation_deg", 15),
+                )
+            )
+        )
+        training["policy_validation_passed"] = passed
+        torch.save(checkpoint, args.output / ("best.pt" if passed else "candidate.pt"))
     (args.output / "metrics.json").write_text(json.dumps(training, indent=2))
     print(json.dumps(training, indent=2))
 
