@@ -129,14 +129,21 @@ class RobotRender:
         draw.ellipse((start[0] - 5, start[1] - 5, start[0] + 5, start[1] + 5), outline=(250, 250, 250), width=2)
         _txt(draw, (start[0] + 8, start[1] - 14), prefix)
 
-    def frame(self, q, target_p, target_q, title, actual_p=None, actual_q=None, target_elbow=None):
+    def frame(self, q, target_p, target_q, title, actual_p=None, actual_q=None, target_elbow=None, left_target=None):
         self.data.qpos[:] = q
         mujoco.mj_forward(self.model, self.data)
         self.renderer.update_scene(self.data, camera=self.camera)
         self._axes(target_p, target_q, alpha=0.65, length=0.15)
+        if left_target is not None:
+            self._axes(left_target[0], left_target[1], alpha=0.65, length=0.15)
         p = self.data.site_xpos[self.site]
         current = Rotation.from_matrix(self.data.site_xmat[self.site].reshape(3, 3)).as_quat()
         self._axes(p, current, alpha=1.0, length=0.11)
+        if left_target is not None:
+            left_site = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_SITE, "tcp_L")
+            left_p = self.data.site_xpos[left_site]
+            left_q = Rotation.from_matrix(self.data.site_xmat[left_site].reshape(3, 3)).as_quat()
+            self._axes(left_p, left_q, alpha=1.0, length=0.11)
         if target_elbow is not None:
             self._dot(target_elbow, [0.1, 1, 1, 0.7])
             self._dot(self.data.xpos[self.elbow], [1, 0.8, 0.1, 1])
@@ -144,6 +151,9 @@ class RobotRender:
         d = ImageDraw.Draw(image)
         self._overlay_axes(d, target_p, target_q, "T", soft=True)
         self._overlay_axes(d, p, current, "A", soft=False)
+        if left_target is not None:
+            self._overlay_axes(d, left_target[0], left_target[1], "L target", soft=True)
+            self._overlay_axes(d, left_p, left_q, "L actual", soft=False)
         if target_elbow is not None:
             for point, color in ((target_elbow, (80, 240, 240)), (self.data.xpos[self.elbow], (255, 220, 80))):
                 u, v = self._screen(point)
@@ -153,6 +163,10 @@ class RobotRender:
         err = np.linalg.norm(p - target_p) * 1000
         rot = np.rad2deg((Rotation.from_quat(current) * Rotation.from_quat(target_q).inv()).magnitude())
         _txt(d, (14, H - 22), f"TCP FK error to target: {err:5.1f} mm  {rot:5.1f} deg")
+        if left_target is not None:
+            left_err = np.linalg.norm(left_p - left_target[0]) * 1000
+            left_rot = np.rad2deg((Rotation.from_quat(left_q) * Rotation.from_quat(left_target[1]).inv()).magnitude())
+            _txt(d, (14, H - 42), f"Left TCP error: {left_err:5.1f} mm  {left_rot:5.1f} deg")
         return image
 
     def close(self):
@@ -244,6 +258,7 @@ def _curve_png(human, path):
 
 def render(reference, output, newton_states=None, mujoco_states=None):
     ref = np.load(reference, allow_pickle=False)
+    dual = bool(np.max(np.ptp(ref["q_arm"][:, :7], axis=0)) > 0.1)
     m1 = np.load(OUT.parent / "human_motion_v1/diagnostic_motions/141_16.npz", allow_pickle=False)
     human = read_human(BVH)
     _curve_png(human, output / "cmu_141_16_right_wrist_filter.png")
@@ -269,6 +284,7 @@ def render(reference, output, newton_states=None, mujoco_states=None):
             ref["mapped_target_quat_xyzw"][i, 1],
             "Marvin kinematic FK reference",
             target_elbow=ref["mapped_right_elbow_target_pos"][i],
+            left_target=(ref["mapped_target_pos"][i, 0], ref["mapped_target_quat_xyzw"][i, 0]) if dual else None,
         )
         pair = Image.new("RGB", (2 * W, H))
         pair.paste(human_frame, (0, 0))
@@ -284,8 +300,13 @@ def render(reference, output, newton_states=None, mujoco_states=None):
         for i in range(0, len(ref["time"]), 3):
             target_p = ref["tcp_pos"][i, 1]
             target_q = ref["tcp_quat_xyzw"][i, 1]
-            left = robot.frame(ref["q_full"][i], target_p, target_q, "Reference FK (kinematic)")
-            right = robot.frame(states["q"][i, 0], target_p, target_q, "Newton MJWarp physical PD state")
+            left_target = (ref["tcp_pos"][i, 0], ref["tcp_quat_xyzw"][i, 0]) if dual else None
+            left = robot.frame(
+                ref["q_full"][i], target_p, target_q, "Reference FK (kinematic)", left_target=left_target
+            )
+            right = robot.frame(
+                states["q"][i, 0], target_p, target_q, "Newton MJWarp physical PD state", left_target=left_target
+            )
             pair = Image.new("RGB", (2 * W, H))
             pair.paste(left, (0, 0))
             pair.paste(right, (W, 0))
@@ -300,8 +321,13 @@ def render(reference, output, newton_states=None, mujoco_states=None):
         for i in range(0, len(ref["time"]), 3):
             target_p = ref["tcp_pos"][i, 1]
             target_q = ref["tcp_quat_xyzw"][i, 1]
-            left = robot.frame(ref["q_full"][i], target_p, target_q, "Reference FK (kinematic)")
-            right = robot.frame(states["q"][i], target_p, target_q, "MuJoCo physical mj_step PD state")
+            left_target = (ref["tcp_pos"][i, 0], ref["tcp_quat_xyzw"][i, 0]) if dual else None
+            left = robot.frame(
+                ref["q_full"][i], target_p, target_q, "Reference FK (kinematic)", left_target=left_target
+            )
+            right = robot.frame(
+                states["q"][i], target_p, target_q, "MuJoCo physical mj_step PD state", left_target=left_target
+            )
             pair = Image.new("RGB", (2 * W, H))
             pair.paste(left, (0, 0))
             pair.paste(right, (W, 0))

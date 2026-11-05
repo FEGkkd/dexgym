@@ -53,7 +53,7 @@ def _geometry_sets(model):
     return hand_r, other
 
 
-def assess(candidate: Path, root: Path = OUT):
+def assess(candidate: Path, root: Path = OUT, *, require_bimanual: bool = False):
     r = np.load(candidate, allow_pickle=False)
     candidate_q_hash = hashlib.sha256(r["q_full"].tobytes()).hexdigest()
     source_hash = _hash(MJCF)
@@ -193,6 +193,8 @@ def assess(candidate: Path, root: Path = OUT):
     mask = r["phase"] == "human"
     right_pos = r["tcp_pos_error_mm"][mask, 1]
     right_rot = r["tcp_rot_error_deg"][mask, 1]
+    left_pos = r["tcp_pos_error_mm"][mask, 0]
+    left_rot = r["tcp_rot_error_deg"][mask, 0]
     elbow_available = "right_elbow_target_error_mm" in r.files and "right_elbow_direction_cosine" in r.files
     elbow_p95 = float(np.percentile(r["right_elbow_target_error_mm"][mask], 95)) if elbow_available else float("inf")
     elbow_direction_mean = float(np.mean(r["right_elbow_direction_cosine"][mask])) if elbow_available else float("-inf")
@@ -208,6 +210,34 @@ def assess(candidate: Path, root: Path = OUT):
             "max": float(right_rot.max()),
         },
     }
+    offline_left = {
+        "position_mm": {
+            "mean": float(left_pos.mean()),
+            "p95": float(np.percentile(left_pos, 95)),
+            "max": float(left_pos.max()),
+        },
+        "rotation_deg": {
+            "mean": float(left_rot.mean()),
+            "p95": float(np.percentile(left_rot, 95)),
+            "max": float(left_rot.max()),
+        },
+    }
+    left_motion_range = np.ptp(r["q_arm"][:, :7], axis=0)
+    left_elbow_p95 = (
+        float(np.percentile(r["left_elbow_target_error_mm"][mask], 95))
+        if "left_elbow_target_error_mm" in r.files
+        else float("inf")
+    )
+    left_gate = (
+        (
+            offline_left["position_mm"]["p95"] <= 10
+            and offline_left["rotation_deg"]["p95"] <= 5
+            and np.count_nonzero(left_motion_range > 0.1) == 7
+            and left_elbow_p95 <= 100
+        )
+        if require_bimanual
+        else left_static_max == 0
+    )
     offline_gate = (
         offline["position_mm"]["p95"] <= 10
         and offline["rotation_deg"]["p95"] <= 5
@@ -223,7 +253,7 @@ def assess(candidate: Path, root: Path = OUT):
         and speed <= 2
         and accel <= 12
         and min(right_wrist_range) > 0.25
-        and left_static_max == 0
+        and left_gate
         and hand_home_max == 0
         and elbow_p95 <= 100
         and elbow_direction_mean >= 0.95
@@ -290,6 +320,9 @@ def assess(candidate: Path, root: Path = OUT):
         "original_bvh_sha256": _hash(BVH),
         "source_mjcf_sha256": _hash(MJCF),
         "offline_right_tcp": offline,
+        "offline_left_tcp": offline_left,
+        "left_elbow_error_p95_mm": left_elbow_p95,
+        "left_joint_ranges_rad": left_motion_range.tolist(),
         "reference_max_joint_step_rad": max_step,
         "right_elbow_error_p95_mm": elbow_p95,
         "right_elbow_direction_cosine_mean": elbow_direction_mean,
