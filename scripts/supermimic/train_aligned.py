@@ -41,6 +41,7 @@ def _parse_args():
     parser.add_argument("--max-32-step-tcp-mm", type=float, default=100.0)
     parser.add_argument("--actor-lr", type=float, default=2e-5)
     parser.add_argument("--behavior-prior-weight", type=float, default=0.0)
+    parser.add_argument("--prior-checkpoint", type=Path)
     parser.add_argument("--world-lr", type=float, default=2e-4)
     parser.add_argument("--critic-lr", type=float, default=2e-4)
     parser.add_argument("--action-noise", type=float, default=0.1)
@@ -171,6 +172,11 @@ def main():
                 optim_actor = torch.optim.Adam(actor.parameters(), lr=args.actor_lr, betas=(0.9, 0.95))
             prior_actor = copy.deepcopy(actor).eval() if args.behavior_prior_weight else None
             if prior_actor is not None:
+                if args.prior_checkpoint is not None:
+                    prior_record = torch.load(args.prior_checkpoint, map_location=device, weights_only=False)
+                    if prior_record["reference_sha256"] != REFERENCE_SHA256:
+                        raise ValueError("Behavior prior uses another reference version")
+                    prior_actor.load_state_dict(prior_record["actor"])
                 for parameter in prior_actor.parameters():
                     parameter.requires_grad_(False)
             collector = AlignedNewtonCollector(env, actor, replay, action_noise_std=args.action_noise)

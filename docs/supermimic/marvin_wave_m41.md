@@ -47,6 +47,7 @@ export PYTHONPATH="$PWD/source:/home/ubuntu/miniconda3/envs/manus_wuji_real/lib/
   --no-goal-latent-tanh --reward-profile marvin_tcp_priority \
   --observation-position-noise-rad 0 --observation-velocity-noise-rad-s 0 \
   --actor-lr 1e-7 --behavior-prior-weight 100 \
+  --prior-checkpoint /home/ubuntu/dexgym_data/marvin_supermimic_wave_m4/e11_4096env_total4000/best.pt \
   --checkpoint-interval 200 --final-eval \
   --output /home/ubuntu/dexgym_data/marvin_supermimic_wave_m41/aligned_1024_1000
 ```
@@ -75,6 +76,13 @@ The same evaluator reproduced the pinned E11 baseline for all 1,356 control
 steps with zero Newton contacts and zero illegal joint states. The left/right
 TCP mean position errors were 3.20/5.87 mm and mean orientation errors were
 0.42°/1.28°.
+
+A conservative 128-environment smoke used the E11 Actor as its fixed behavior
+prior, Actor learning rate `1e-7`, and 120 alternating iterations. It made 81
+world-model and 72 Actor/Critic updates, then completed all 1,356 Newton
+control steps with zero contacts and illegal joint states. Left/right TCP mean
+position errors were 3.65/5.77 mm; mean orientation errors were 0.48°/1.14°.
+This small run establishes stability, not improvement over the E11 baseline.
 
 Longer conservative runs and their independent Newton results are recorded in
 the external M4.1 experiment directories. Training length alone does not
