@@ -11,6 +11,7 @@ from isaaclab.envs import DirectRLEnv
 
 from dexgym.algorithms.supermimic.action import ArmActionMap
 from dexgym.algorithms.supermimic.differentiable_fk import DifferentiableMarvinFK
+from dexgym.algorithms.supermimic.observation import noisy_proprio_frame
 from dexgym.algorithms.supermimic.rewards import REWARD_PROFILES, tracking_reward
 from dexgym.assets.marvin_wuji.controller import apply_newton_arm_tracking_profile
 from dexgym.motion.motion_manager import MotionManager
@@ -78,6 +79,7 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         self.previous_command = self.command.clone()
         self.previous_q = self.command.clone()
         self.last_action = torch.zeros((self.num_envs, 14), device=self.device)
+        self.previous_action = self.last_action.clone()
         self.history = torch.zeros((self.num_envs, 10, 56), device=self.device)
         self.prev_link_pos = self.motion.data["link_pos"][0][None].repeat(self.num_envs, 1, 1, 1)
         self.profile = apply_newton_arm_tracking_profile(self.robot, damping_scale_source=0.5)
@@ -104,6 +106,7 @@ class MarvinWaveDirectEnv(DirectRLEnv):
             raise ValueError("Invalid 14D policy action")
         self.previous_q = self.robot.data.joint_pos.torch[:, self.arm_ids].clone()
         self.previous_command = self.command.clone()
+        self.previous_action = self.last_action.clone()
         self.command = self.action_map(actions, self.command)
         self.last_action = actions
         self.motion.advance()
@@ -133,6 +136,12 @@ class MarvinWaveDirectEnv(DirectRLEnv):
             ),
             dim=-1,
         )
+        frame = noisy_proprio_frame(
+            frame,
+            self.action_map.scale,
+            position_rad=self.cfg.observation_position_noise_rad,
+            velocity_rad_s=self.cfg.observation_velocity_noise_rad_s,
+        )
         self.history = torch.cat((self.history[:, 1:], frame[:, None]), dim=1)
         goal = self.motion.goal()
         return {"policy": torch.cat((self.history.flatten(1), goal.flatten(1)), dim=-1)}
@@ -156,6 +165,8 @@ class MarvinWaveDirectEnv(DirectRLEnv):
             self.action_map.upper,
             weights=self.reward_weights,
             dt=self.step_dt,
+            bounded_action=self.last_action.tanh(),
+            previous_bounded_action=self.previous_action.tanh(),
         )
         return reward
 
@@ -218,6 +229,7 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         self.robot.write_joint_position_to_sim_index(position=q, env_ids=env_ids)
         self.robot.write_joint_velocity_to_sim_index(velocity=qd, env_ids=env_ids)
         self.last_action[env_ids] = 0
+        self.previous_action[env_ids] = 0
         first_observation = torch.cat(
             (
                 (arm_q - self.action_map.origin) / self.action_map.scale,
@@ -226,5 +238,11 @@ class MarvinWaveDirectEnv(DirectRLEnv):
                 (arm_q - self.action_map.origin) / self.action_map.scale,
             ),
             dim=-1,
+        )
+        first_observation = noisy_proprio_frame(
+            first_observation,
+            self.action_map.scale,
+            position_rad=self.cfg.observation_position_noise_rad,
+            velocity_rad_s=self.cfg.observation_velocity_noise_rad_s,
         )
         self.history[env_ids] = first_observation[:, None, :]

@@ -64,29 +64,24 @@ class MotionReplay:
         high = self.steps - horizon
         if high < low:
             raise ValueError("Not enough replay steps for requested horizon")
-        selected_t, selected_env = [], []
-        attempts = 0
-        while sum(len(x) for x in selected_t) < batch and attempts < 100:
-            count = max(batch * (64 if frame_range is not None else 2), 1024 if frame_range is not None else 64)
-            t = torch.randint(low, high + 1, (count,), device=self.device)
-            env_low, env_high = env_range or (0, self.num_envs)
-            env = torch.randint(env_low, env_high, (count,), device=self.device)
-            absolute = t[:, None] + torch.arange(horizon, device=self.device)
-            slots = absolute % self.capacity
-            valid = (self.timestamp[slots] == absolute).all(-1)
-            episodes = self.episode[slots, env[:, None]]
-            valid &= (episodes == episodes[:, :1]).all(-1)
-            done = self.done[slots, env[:, None]]
-            valid &= ~done[:, :-1].any(-1) if allow_terminal_at_end else ~done.any(-1)
-            if frame_range is not None:
-                start_frame = self.frame[slots[:, 0], env]
-                valid &= (start_frame >= frame_range[0]) & (start_frame < frame_range[1])
-            selected_t.append(t[valid])
-            selected_env.append(env[valid])
-            attempts += 1
-        if sum(len(x) for x in selected_t) < batch:
+        env_low, env_high = env_range or (0, self.num_envs)
+        times = torch.arange(low, high + 1, device=self.device)
+        envs = torch.arange(env_low, env_high, device=self.device)
+        start = times % self.capacity
+        end = (times + horizon - 1) % self.capacity
+        # Episode IDs advance immediately after a terminal transition, so equal
+        # endpoints prove that no reset occurs inside this contiguous window.
+        valid = self.episode[start[:, None], envs[None, :]] == self.episode[end[:, None], envs[None, :]]
+        if not allow_terminal_at_end:
+            valid &= ~self.done[end[:, None], envs[None, :]]
+        if frame_range is not None:
+            frame = self.frame[start[:, None], envs[None, :]]
+            valid &= (frame >= frame_range[0]) & (frame < frame_range[1])
+        candidate_t, candidate_env = valid.nonzero(as_tuple=True)
+        if candidate_t.numel() == 0:
             raise ValueError("Replay lacks episode-safe continuous windows")
-        return torch.cat(selected_t)[:batch], torch.cat(selected_env)[:batch]
+        selected = torch.randint(candidate_t.numel(), (batch,), device=self.device)
+        return times[candidate_t[selected]], envs[candidate_env[selected]]
 
     def sample_windows(self, batch: int, horizon: int = 8, env_range: tuple[int, int] | None = None):
         t, env = self._sample_indices(batch, horizon, env_range, allow_terminal_at_end=True)

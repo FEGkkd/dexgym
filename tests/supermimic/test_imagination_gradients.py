@@ -1,3 +1,4 @@
+import pytest
 import torch
 from dexgym.algorithms.supermimic.action import ArmActionMap
 from dexgym.algorithms.supermimic.differentiable_fk import DifferentiableMarvinFK
@@ -9,6 +10,7 @@ from dexgym.algorithms.supermimic.imagination import (
     survival_weights,
 )
 from dexgym.algorithms.supermimic.networks import DeltaWorldModel, GoalActor, PrivilegedCritic
+from dexgym.algorithms.supermimic.rewards import REWARD_PROFILES
 from dexgym.motion.motion_manager import MotionManager
 
 MJCF = "/home/ubuntu/dexgym/source/dexgym/assets/marvin_wuji/source_model/dual_arm_marvin.xml"
@@ -35,7 +37,8 @@ def test_toy_bptt_improves_known_controllable_system():
     assert float(loss().detach()) < before * 0.2
 
 
-def test_32_step_world_model_bptt_freezes_model_and_updates_actor():
+@pytest.mark.parametrize("profile", ["marvin_tcp_priority", "paper_multilink"])
+def test_32_step_world_model_bptt_freezes_model_and_updates_actor(profile):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     motion = MotionManager(NPZ, 2, device)
     fk = DifferentiableMarvinFK(MJCF, device)
@@ -56,7 +59,19 @@ def test_32_step_world_model_bptt_freezes_model_and_updates_actor():
         "history": torch.zeros(2, 10, 56, device=device),
         "frame": torch.tensor([10, 700], device=device),
     }
-    output = imagined_rollout(actor, world, critic, fk, mapping, motion, start, horizon=32)
+    output = imagined_rollout(
+        actor,
+        world,
+        critic,
+        fk,
+        mapping,
+        motion,
+        start,
+        horizon=32,
+        weights=REWARD_PROFILES[profile],
+        observation_position_noise_rad=0.01 if profile == "paper_multilink" else 0.0,
+        observation_velocity_noise_rad_s=0.5 if profile == "paper_multilink" else 0.0,
+    )
     assert output["imagined_rewards"].shape == (32, 2)
     assert output["termination_probabilities"].shape == (32, 2)
     assert torch.allclose(output["survival_weights"], survival_weights(output["termination_probabilities"]))

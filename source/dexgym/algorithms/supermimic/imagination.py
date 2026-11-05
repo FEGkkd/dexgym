@@ -6,6 +6,7 @@ from dexgym.motion.motion_manager import MotionManager
 from .action import ArmActionMap
 from .differentiable_fk import DifferentiableMarvinFK
 from .networks import DeltaWorldModel, GoalActor, PrivilegedCritic
+from .observation import noisy_proprio_frame
 from .rewards import RewardWeights, tracking_reward
 
 
@@ -59,6 +60,8 @@ def imagined_rollout(
     gamma: float = 0.99,
     prior_actor: GoalActor | None = None,
     prior_weight: float = 0.0,
+    observation_position_noise_rad: float = 0.0,
+    observation_velocity_noise_rad_s: float = 0.0,
 ):
     state = start["state"]
     history = start["history"]
@@ -95,6 +98,8 @@ def imagined_rollout(
             mapping.lower,
             mapping.upper,
             weights,
+            bounded_action=action.tanh(),
+            previous_bounded_action=history[:, -1, 28:42],
         )
         rewards.append(reward)
         next_goal = motion.goal_at(next_frame)
@@ -107,6 +112,12 @@ def imagined_rollout(
                 (next_state[:, 28:42] - mapping.origin) / mapping.scale,
             ),
             dim=-1,
+        )
+        observation = noisy_proprio_frame(
+            observation,
+            mapping.scale,
+            position_rad=observation_position_noise_rad,
+            velocity_rad_s=observation_velocity_noise_rad_s,
         )
         history = torch.cat((history[:, 1:], observation[:, None]), dim=1)
         state = next_state

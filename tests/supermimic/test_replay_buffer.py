@@ -41,3 +41,22 @@ def test_terminal_at_window_end_is_kept_for_termination_head_without_crossing_re
     assert batch["terminated"][:, -1].all()
     assert not batch["terminated"][:, :-1].any()
     assert batch["next_state"][:, -1, 0].eq(77).all()
+
+
+def test_rare_single_valid_window_is_sampled_without_rejection_failure():
+    replay = MotionReplay(200, 32, "cpu")
+    for t in range(200):
+        done = torch.ones(32, dtype=torch.bool)
+        if 100 <= t < 107:
+            done[7] = False
+        replay.append(
+            torch.zeros(32, 42),
+            torch.zeros(32, 14),
+            torch.zeros(32, 42),
+            torch.zeros(32, 10, 56),
+            torch.full((32,), t),
+            done,
+        )
+    batch = replay.sample_windows(128, 8)
+    assert batch["frame"][:, 0].eq(100).all()
+    assert batch["terminated"][:, -1].all()

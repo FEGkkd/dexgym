@@ -24,6 +24,8 @@ class MarvinWaveDirectCfg(DirectRLEnvCfg):
     early_reset_frame_range = (0, 50)
     initialize_hands_from_pd_replay = True
     reward_profile = "marvin_tcp_priority"
+    observation_position_noise_rad = 0.0
+    observation_velocity_noise_rad_s = 0.0
     audit_contacts_each_physics_step = False
     decimation = 10
     episode_length_s = 10.0

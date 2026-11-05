@@ -108,15 +108,22 @@ class DeltaWorldModel(nn.Module):
 
 
 class GoalActor(nn.Module):
-    def __init__(self, goal_latent=32):
+    def __init__(self, goal_latent=32, *, goal_latent_tanh: bool = False):
         super().__init__()
+        self.goal_latent_tanh = goal_latent_tanh
         self.goal_encoder = mlp((900, 2048, 1024, 512, 256, goal_latent))
         self.decoder = mlp((560 + goal_latent, 2048, 1024, 512, 256, 14), output_zero=True)
+
+    def encode_goal(self, goal: torch.Tensor) -> torch.Tensor:
+        if goal.shape[-2:] != (10, 90):
+            raise ValueError("Goal encoder expects 10x90 future reference")
+        latent = self.goal_encoder(goal.flatten(-2))
+        return latent.tanh() if self.goal_latent_tanh else latent
 
     def forward(self, history: torch.Tensor, goal: torch.Tensor):
         if history.shape[-2:] != (10, 56) or goal.shape[-2:] != (10, 90):
             raise ValueError("Actor expects 10x56 history and 10x90 goal")
-        latent = self.goal_encoder(goal.flatten(-2))
+        latent = self.encode_goal(goal)
         return self.decoder(torch.cat((history.flatten(-2), latent), dim=-1))
 
 

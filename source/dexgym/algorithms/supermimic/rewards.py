@@ -17,6 +17,7 @@ class RewardWeights:
     angular_velocity: float = 0.15
     action_rate: float = 0.001
     joint_limit: float = 0.1
+    paper_multilink: bool = False
 
 
 REWARD_PROFILES = {
@@ -29,6 +30,17 @@ REWARD_PROFILES = {
         angular_velocity=1.0,
     ),
     "marvin_tcp_priority": RewardWeights(),
+    "paper_multilink": RewardWeights(
+        tcp_position=0.0,
+        tcp_rotation=0.0,
+        link_position=1.0,
+        link_rotation=1.0,
+        linear_velocity=1.0,
+        angular_velocity=1.0,
+        action_rate=0.1,
+        joint_limit=2.0,
+        paper_multilink=True,
+    ),
 }
 
 
@@ -79,6 +91,9 @@ def tracking_reward(
     upper: torch.Tensor,
     weights: RewardWeights = RewardWeights(),
     dt: float = 0.02,
+    *,
+    bounded_action: torch.Tensor | None = None,
+    previous_bounded_action: torch.Tensor | None = None,
 ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
     pos, rot = fk(q)
     prior_pos, prior_rot = fk(previous_q)
@@ -88,24 +103,42 @@ def tracking_reward(
     rot_sq = so3_geodesic(rot, target["link_rotmat"]).square()
     vel_sq = (linear - target["link_linear_vel"]).square().sum(-1)
     omega_sq = (angular - target["link_angular_vel"]).square().sum(-1)
-    tcp_pos = torch.exp(-30 * pos_sq[:, :, 2]).mean(-1)
-    tcp_rot = torch.exp(-6 * rot_sq[:, :, 2]).mean(-1)
-    link_pos = torch.exp(-30 * pos_sq[:, :, :2]).mean((-1, -2))
-    link_rot = torch.exp(-6 * rot_sq[:, :, :2]).mean((-1, -2))
-    linear_term = torch.exp(-2 * vel_sq).mean((-1, -2))
-    angular_term = torch.exp(-0.05 * omega_sq).mean((-1, -2))
-    rate_penalty = ((command - previous_command) / dt).square().mean(-1)
-    limit_penalty = (torch.relu(lower + 0.05 - q).square() + torch.relu(q - upper + 0.05).square()).mean(-1)
-    reward = dt * (
-        weights.tcp_position * tcp_pos
-        + weights.tcp_rotation * tcp_rot
-        + weights.link_position * link_pos
-        + weights.link_rotation * link_rot
-        + weights.linear_velocity * linear_term
-        + weights.angular_velocity * angular_term
-        - weights.action_rate * rate_penalty
-        - weights.joint_limit * limit_penalty
-    )
+    if weights.paper_multilink:
+        if bounded_action is None or previous_bounded_action is None:
+            raise ValueError("Paper reward requires current and previous bounded policy actions")
+        body_pos = torch.exp(-pos_sq.mean((-1, -2)) / 0.3**2)
+        body_rot = torch.exp(-rot_sq.mean((-1, -2)) / 0.4**2)
+        body_linear = torch.exp(-vel_sq.mean((-1, -2)) / 1.0**2)
+        body_angular = torch.exp(-omega_sq.mean((-1, -2)) / 3.14**2)
+        action_smooth = (bounded_action - previous_bounded_action).square().sum(-1)
+        hard_limit = (torch.relu(q - upper) + torch.relu(lower - q)).sum(-1)
+        reward = dt * (
+            weights.link_position * body_pos
+            + weights.link_rotation * body_rot
+            + weights.linear_velocity * body_linear
+            + weights.angular_velocity * body_angular
+            - weights.action_rate * action_smooth
+            - weights.joint_limit * hard_limit
+        )
+    else:
+        tcp_pos = torch.exp(-30 * pos_sq[:, :, 2]).mean(-1)
+        tcp_rot = torch.exp(-6 * rot_sq[:, :, 2]).mean(-1)
+        link_pos = torch.exp(-30 * pos_sq[:, :, :2]).mean((-1, -2))
+        link_rot = torch.exp(-6 * rot_sq[:, :, :2]).mean((-1, -2))
+        linear_term = torch.exp(-2 * vel_sq).mean((-1, -2))
+        angular_term = torch.exp(-0.05 * omega_sq).mean((-1, -2))
+        rate_penalty = ((command - previous_command) / dt).square().mean(-1)
+        limit_penalty = (torch.relu(lower + 0.05 - q).square() + torch.relu(q - upper + 0.05).square()).mean(-1)
+        reward = dt * (
+            weights.tcp_position * tcp_pos
+            + weights.tcp_rotation * tcp_rot
+            + weights.link_position * link_pos
+            + weights.link_rotation * link_rot
+            + weights.linear_velocity * linear_term
+            + weights.angular_velocity * angular_term
+            - weights.action_rate * rate_penalty
+            - weights.joint_limit * limit_penalty
+        )
     diagnostics = {
         "tcp_position_error_m": pos_sq[:, :, 2].sqrt(),
         "tcp_rotation_error_rad": rot_sq[:, :, 2].sqrt(),
