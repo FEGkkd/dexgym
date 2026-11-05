@@ -98,3 +98,48 @@ Provenance correction: this process launched with source commit `b310d23`.
 The run's JSON `git_commit` field was read at shutdown, after monitoring code
 was committed during training, so it reports the later repository HEAD. The
 trainer now captures the source commit at startup for subsequent runs.
+
+## Longer training comparison
+
+All milestone policies used the same pinned reference, the same deterministic
+zero-perturbation Newton evaluation, and completed 1,356 control steps with
+zero Newton contacts and zero illegal joint states. Position values below are
+millimeters; rotation values are SO(3) geodesic degrees.
+
+| Checkpoint | Left position Mean/P95 | Right position Mean/P95 | Left rotation Mean/P95 | Right rotation Mean/P95 |
+| --- | ---: | ---: | ---: | ---: |
+| E11 | 3.20 / 13.86 | 5.87 / 18.00 | 0.42 / 1.65 | 1.28 / 3.68 |
+| 500 | 2.82 / 13.40 | 5.79 / 20.30 | 0.38 / 1.56 | 1.16 / 2.92 |
+| 1000 | 2.46 / 9.18 | 4.42 / 12.26 | 0.34 / 1.08 | 0.92 / 2.38 |
+| 1500 | 2.03 / 6.15 | 4.71 / 9.72 | 0.29 / 0.76 | 1.05 / 2.83 |
+| 2000 | 2.31 / 7.61 | 4.87 / 11.39 | 0.32 / 0.94 | 1.06 / 3.09 |
+
+For checkpoint selection, average the eight ratios formed by both arms'
+position Mean/25, position P95/50, rotation Mean/8, and rotation P95/15.
+Only full, contact-free, legal-joint evaluations are eligible. The resulting
+scores are E11 0.1960, 500 0.1887, 1000 0.1365, 1500 0.1242, and 2000
+0.1384; lower is better. The 1500-iteration checkpoint has the best combined
+score. In particular, 2000 iterations did not improve both arms uniformly.
+
+The selected policy is the independently replayed 1500-iteration checkpoint,
+copied to `/home/ubuntu/dexgym_data/marvin_supermimic_wave_m41/selected_best.pt`
+with SHA256 `fd0054a7ef707d46a30b0235713c9e00cc4d7e69d6687fc3015e52aac2cb773f`.
+The external `selection.json` records the eligibility and score of every
+candidate. With fixed-seed initial joint perturbations of ±0.03 and ±0.05 rad,
+the selected policy completed all 1,356 Newton control steps with zero contacts
+and illegal joint states. At ±0.05 rad, left/right TCP mean position errors
+were 3.78/6.85 mm and mean orientation errors were 0.49°/1.46°.
+The independent physical state record is in
+`aligned_4096_cumulative2000/eval_1500/newton_policy_states.npz`; charts are in
+`selected_visuals/`.
+
+The first 1000 iterations used 1024 Newton environments, 1,024,000 physical
+transitions, and 961/942/942 World Model/Actor/Critic updates. The next 1000
+iterations resumed that Actor in 4096 Newton environments, added 4,096,000
+physical transitions, and made 1922/1904/1904 updates. Thus the complete
+M4.1 sequence used 5,120,000 physical transitions and 2883/2846/2846
+updates. The second stage took 1781 seconds and sampled peak GPU memory was
+21.3 GB. Its held-out world-model TCP position prediction errors were
+3.26 mm at eight steps and 3.04 mm at 32 steps. The final 2000-iteration
+checkpoint passed the physical quality gates but ranked below 1500 by the
+same selection score.

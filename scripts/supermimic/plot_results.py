@@ -11,9 +11,10 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 
 
-def plot(run_dir: Path, output: Path):
+def plot(run_dir: Path, output: Path, eval_dir: Path | None = None):
     output.mkdir(parents=True, exist_ok=True)
-    with np.load(run_dir / "newton_policy_states.npz", allow_pickle=False) as states:
+    eval_dir = eval_dir or run_dir
+    with np.load(eval_dir / "newton_policy_states.npz", allow_pickle=False) as states:
         time = states["time"]
         position = states["tcp_position_error_mm"][:, 0]
         rotation = states["tcp_orientation_error_deg"][:, 0]
@@ -52,7 +53,12 @@ def plot(run_dir: Path, output: Path):
     plt.close(fig)
 
     metrics = json.loads((run_dir / "metrics.json").read_text())
-    prediction = metrics["world_prediction"]
+    prediction = metrics.get("world_prediction")
+    if prediction is None:
+        checks = [entry["prediction"] for entry in metrics["world_model_trust_history"] if "prediction" in entry]
+        if not checks:
+            raise ValueError("No held-out world-model prediction was recorded")
+        prediction = checks[-1]
     horizons = ("1", "8", "32")
     actual = [prediction[h]["tcp_position_mean_mm"] for h in horizons]
     constant = [prediction[h]["constant_velocity_tcp_mean_mm"] for h in horizons]
@@ -68,7 +74,15 @@ def plot(run_dir: Path, output: Path):
     fig.savefig(output / "world_model_prediction.png", dpi=160)
     plt.close(fig)
 
-    with np.load(run_dir / "learning_curves.npz", allow_pickle=False) as curves:
+    curves_npz = run_dir / "learning_curves.npz"
+    if curves_npz.exists():
+        with np.load(curves_npz, allow_pickle=False) as saved:
+            curves = {key: saved[key] for key in ("world_loss", "actor_loss", "critic_loss")}
+    else:
+        import torch
+
+        curves = torch.load(run_dir / "learning_curves.pt", map_location="cpu", weights_only=True)
+    if curves:
         fig, axes = plt.subplots(3, 1, figsize=(9, 7))
         for axis, key in zip(axes, ("world_loss", "actor_loss", "critic_loss")):
             values = curves[key]
@@ -87,5 +101,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-dir", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--eval-dir", type=Path)
     args = parser.parse_args()
-    print(json.dumps(plot(args.run_dir, args.output), indent=2))
+    print(json.dumps(plot(args.run_dir, args.output, args.eval_dir), indent=2))
