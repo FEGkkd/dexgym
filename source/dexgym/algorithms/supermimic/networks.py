@@ -8,18 +8,30 @@ from .action import ArmActionMap
 
 
 class RunningNorm(nn.Module):
-    def __init__(self, dimension: int, min_std: float = 1e-2):
+    def __init__(self, dimension: int, min_std: float | torch.Tensor = 1e-2, max_count: int = 200_000_000):
         super().__init__()
+        if max_count < 1:
+            raise ValueError("Normalizer maximum count must be positive")
         self.register_buffer("mean", torch.zeros(dimension))
         self.register_buffer("variance", torch.ones(dimension))
         self.register_buffer("count", torch.tensor(0.0))
-        self.min_std = min_std
+        floor = torch.as_tensor(min_std, dtype=torch.float32)
+        if floor.ndim > 1 or (floor.ndim == 1 and floor.shape != (dimension,)) or bool((floor <= 0).any()):
+            raise ValueError("Normalizer minimum std must be positive scalar or per-feature vector")
+        self.register_buffer("min_std", floor, persistent=False)
+        self.max_count = max_count
 
     @torch.no_grad()
     def update(self, values: torch.Tensor):
         values = values.detach().reshape(-1, self.mean.numel()).float()
         if len(values) == 0:
             return
+        remaining = self.max_count - int(self.count.item())
+        if remaining <= 0:
+            return
+        values = values[:remaining]
+        if not bool(torch.isfinite(values).all()):
+            raise ValueError("Normalizer data must be finite")
         batch_mean = values.mean(0)
         batch_var = values.var(0, unbiased=False)
         amount = float(len(values))
@@ -119,29 +131,55 @@ class DeltaWorldModel(nn.Module):
 
 
 class GoalActor(nn.Module):
-    def __init__(self, goal_latent=32, *, goal_latent_tanh: bool = False):
+    def __init__(self, goal_latent=32, *, goal_latent_tanh: bool = False,
+                 normalization_mode: str = "legacy"):
         super().__init__()
+        if normalization_mode not in ("legacy", "running"):
+            raise ValueError("Unknown actor normalization mode")
+        self.normalization_mode = normalization_mode
         self.goal_latent_tanh = goal_latent_tanh
+        self.observation_norm = RunningNorm(56) if normalization_mode == "running" else nn.Identity()
+        self.goal_norm = RunningNorm(90) if normalization_mode == "running" else nn.Identity()
         self.goal_encoder = mlp((900, 2048, 1024, 512, 256, goal_latent))
         self.decoder = mlp((560 + goal_latent, 2048, 1024, 512, 256, 14), output_zero=True)
+
+    @torch.no_grad()
+    def update_norms(self, history: torch.Tensor, goal: torch.Tensor):
+        if self.normalization_mode == "running":
+            self.observation_norm.update(history)
+            self.goal_norm.update(goal)
 
     def encode_goal(self, goal: torch.Tensor) -> torch.Tensor:
         if goal.shape[-2:] != (10, 90):
             raise ValueError("Goal encoder expects 10x90 future reference")
-        latent = self.goal_encoder(goal.flatten(-2))
+        latent = self.goal_encoder(self.goal_norm(goal).flatten(-2))
         return latent.tanh() if self.goal_latent_tanh else latent
 
     def forward(self, history: torch.Tensor, goal: torch.Tensor):
         if history.shape[-2:] != (10, 56) or goal.shape[-2:] != (10, 90):
             raise ValueError("Actor expects 10x56 history and 10x90 goal")
         latent = self.encode_goal(goal)
-        return self.decoder(torch.cat((history.flatten(-2), latent), dim=-1))
+        return self.decoder(torch.cat((self.observation_norm(history).flatten(-2), latent), dim=-1))
 
 
 class PrivilegedCritic(nn.Module):
-    def __init__(self):
+    def __init__(self, *, normalization_mode: str = "legacy"):
         super().__init__()
+        if normalization_mode not in ("legacy", "running"):
+            raise ValueError("Unknown critic normalization mode")
+        self.normalization_mode = normalization_mode
+        self.input_norm = RunningNorm(42 + 14 + 90) if normalization_mode == "running" else nn.Identity()
         self.network = mlp((42 + 14 + 90, 256, 128, 1))
 
+    @torch.no_grad()
+    def update_norms(self, state: torch.Tensor, reference_q: torch.Tensor, next_link_goal: torch.Tensor):
+        if self.normalization_mode == "running":
+            self.input_norm.update(torch.cat((state, reference_q, next_link_goal), dim=-1))
+
     def forward(self, state: torch.Tensor, reference_q: torch.Tensor, next_link_goal: torch.Tensor):
-        return self.network(torch.cat((state, reference_q, next_link_goal), dim=-1)).squeeze(-1)
+        return self.forward_features(torch.cat((state, reference_q, next_link_goal), dim=-1))
+
+    def forward_features(self, features: torch.Tensor):
+        if features.shape[-1] != 42 + 14 + 90:
+            raise ValueError("Critic expects 146D state/reference features")
+        return self.network(self.input_norm(features)).squeeze(-1)

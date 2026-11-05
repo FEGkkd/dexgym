@@ -11,7 +11,8 @@ from pathlib import Path
 
 import gymnasium as gym
 import torch
-from dexgym.algorithms.supermimic.imagination import critic_td_lambda_loss, imagined_rollout
+from dexgym.algorithms.supermimic.imagination import critic_td_lambda_batch, imagined_rollout
+from dexgym.algorithms.supermimic.critic_optimizer import optimize_critic
 from dexgym.algorithms.supermimic.networks import DeltaWorldModel, GoalActor, PrivilegedCritic
 from dexgym.algorithms.supermimic.replay_buffer import MotionReplay
 from dexgym.algorithms.supermimic.rewards import REWARD_PROFILES
@@ -50,6 +51,10 @@ def _parse_args():
     parser.add_argument("--reset-perturb-rad", type=float, default=0.03)
     parser.add_argument("--reward-profile", choices=tuple(REWARD_PROFILES), default="paper_multilink")
     parser.add_argument("--goal-latent-tanh", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument("--normalization-mode", choices=("legacy", "running"), default="legacy")
+    parser.add_argument("--termination-mode", choices=("learned", "analytic"), default="learned")
+    parser.add_argument("--critic-epochs", type=int, default=1)
+    parser.add_argument("--critic-minibatches", type=int, default=1)
     parser.add_argument("--observation-position-noise-rad", type=float, default=0.01)
     parser.add_argument("--observation-velocity-noise-rad-s", type=float, default=0.5)
     parser.add_argument("--aux-warmup-updates", type=int, default=0)
@@ -65,6 +70,8 @@ def _parse_args():
         raise ValueError("Aligned training needs at least two envs, one iteration, and one Replay slot")
     if args.min_world_updates < 1 or args.trust_check_interval < 1 or args.checkpoint_interval < 1:
         raise ValueError("Model trust and checkpoint intervals must be positive")
+    if args.critic_epochs < 1 or args.critic_minibatches < 1:
+        raise ValueError("Critic epochs and minibatches must be positive")
     if any(
         value <= 0
         for value in (
@@ -152,9 +159,9 @@ def main():
     torch.manual_seed(args.seed)
     torch.cuda.reset_peak_memory_stats()
     device = torch.device("cuda")
-    actor = GoalActor(goal_latent_tanh=args.goal_latent_tanh).to(device)
+    actor = GoalActor(goal_latent_tanh=args.goal_latent_tanh, normalization_mode=args.normalization_mode).to(device)
     model = DeltaWorldModel(hidden=args.world_hidden).to(device)
-    critic = PrivilegedCritic().to(device)
+    critic = PrivilegedCritic(normalization_mode=args.normalization_mode).to(device)
     optim_actor = torch.optim.Adam(actor.parameters(), lr=args.actor_lr, betas=(0.9, 0.95))
     optim_model = torch.optim.Adam(model.parameters(), lr=args.world_lr)
     optim_critic = torch.optim.Adam(critic.parameters(), lr=args.critic_lr)
@@ -200,11 +207,16 @@ def main():
             last_trust_check = -args.trust_check_interval
             latest_rollout = None
             pending_model_windows = None
+            critic_gradient_updates = 0
+            last_bootstrap_mean = None
 
             def collect():
                 result = collector.step()
                 slot = (replay.steps - 1) % replay.capacity
                 model.update_norms(replay.state[slot], replay.action[slot], replay.next_state[slot])
+                goal = motion.future_goal_at(replay.frame[slot])
+                actor.update_norms(replay.history[slot], goal)
+                critic.update_norms(replay.state[slot], motion.data["q_arm"][replay.frame[slot]], goal[:, 0])
                 curves["physical_reward"].append(result["reward_mean"])
                 curves["termination_rate"].append(result["terminations"] / args.num_envs)
 
@@ -282,6 +294,7 @@ def main():
                     prior_weight=args.behavior_prior_weight,
                     observation_position_noise_rad=args.observation_position_noise_rad,
                     observation_velocity_noise_rad_s=args.observation_velocity_noise_rad_s,
+                    termination_mode=args.termination_mode,
                 )
                 loss = latest_rollout["actor_loss"]
                 if not torch.isfinite(loss):
@@ -292,16 +305,16 @@ def main():
                 curves["actor_loss"].append(float(loss.detach()))
 
             def critic_update():
+                nonlocal critic_gradient_updates, last_bootstrap_mean
                 for parameter in critic.parameters():
                     parameter.requires_grad_(True)
-                optim_critic.zero_grad()
-                loss = critic_td_lambda_loss(critic, motion, latest_rollout)
-                if not torch.isfinite(loss):
-                    raise FloatingPointError("Nonfinite TD(lambda) Critic loss")
-                loss.backward()
-                torch.nn.utils.clip_grad_norm_(critic.parameters(), 1.0)
-                optim_critic.step()
-                curves["critic_loss"].append(float(loss.detach()))
+                features, targets, bootstrap = critic_td_lambda_batch(critic, motion, latest_rollout)
+                last_bootstrap_mean = float(bootstrap.mean())
+                metrics = optimize_critic(critic, optim_critic, features, targets,
+                                          epochs=args.critic_epochs, minibatches=args.critic_minibatches)
+                critic_gradient_updates += metrics["updates"]
+                if metrics["loss_mean"] is not None:
+                    curves["critic_loss"].append(metrics["loss_mean"])
                 for parameter in model.parameters():
                     parameter.requires_grad_(True)
 
@@ -328,6 +341,8 @@ def main():
                         "last_world_loss": curves["world_loss"][-1] if curves["world_loss"] else None,
                         "last_actor_loss": curves["actor_loss"][-1] if curves["actor_loss"] else None,
                         "last_critic_loss": curves["critic_loss"][-1] if curves["critic_loss"] else None,
+                        "critic_gradient_updates": critic_gradient_updates,
+                        "last_critic_bootstrap_mean": last_bootstrap_mean,
                         "last_world_trust_check": trust_history[-1] if trust_history else None,
                     }
                     (args.output / "progress.json").write_text(json.dumps(progress, indent=2))

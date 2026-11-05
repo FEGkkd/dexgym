@@ -9,6 +9,7 @@ from .networks import DeltaWorldModel, GoalActor, PrivilegedCritic
 from .observation import noisy_proprio_frame
 from .rewards import RewardWeights, tracking_reward
 from .transition import ReferenceTimeIndex
+from .termination import TerminationThresholds, analytic_soft_termination
 
 
 def survival_weights(termination_probabilities: torch.Tensor) -> torch.Tensor:
@@ -63,7 +64,11 @@ def imagined_rollout(
     prior_weight: float = 0.0,
     observation_position_noise_rad: float = 0.0,
     observation_velocity_noise_rad_s: float = 0.0,
+    termination_mode: str = "learned",
+    termination_thresholds: TerminationThresholds = TerminationThresholds(),
 ):
+    if termination_mode not in ("learned", "analytic"):
+        raise ValueError("Termination mode must be learned or analytic")
     state = start["state"]
     history = start["history"]
     frame = start["frame"]
@@ -105,7 +110,15 @@ def imagined_rollout(
             previous_bounded_action=history[:, -1, 28:42],
         )
         rewards.append(reward)
-        terminations.append(world_model.termination_probability(next_state, motion.reference_features_at(next_frame)))
+        if termination_mode == "learned":
+            probability = world_model.termination_probability(next_state, motion.reference_features_at(next_frame))
+        else:
+            next_tcp = fk(next_state[:, :14])[0][:, :, 2]
+            tcp_error = torch.linalg.vector_norm(next_tcp - target["link_pos"][:, :, 2], dim=-1)
+            probability = analytic_soft_termination(next_state[:, :14], next_state[:, 14:28],
+                                                    mapping.lower, mapping.upper, tcp_error,
+                                                    termination_thresholds)
+        terminations.append(probability)
         observation = torch.cat(
             (
                 (next_state[:, :14] - mapping.origin) / mapping.scale,
@@ -147,18 +160,21 @@ def imagined_rollout(
     }
 
 
-def critic_td_lambda_loss(critic: PrivilegedCritic, motion: MotionManager, rollout: dict, *, gamma=0.99, lam=0.95):
+def critic_td_lambda_batch(critic: PrivilegedCritic, motion: MotionManager, rollout: dict,
+                           *, gamma=0.99, lam=0.95):
+    """Freeze TD(lambda) targets once before any critic minibatch epoch."""
     states = rollout["states_detached"]
     frames = rollout["frames"]
     flat_state = states.reshape(-1, 42)
     flat_frame = frames.reshape(-1)
     goal = motion.goal_at(flat_frame)[:, 0]
-    prediction = critic(flat_state, motion.data["q_arm"][flat_frame], goal).reshape(frames.shape)
+    features = torch.cat((flat_state, motion.data["q_arm"][flat_frame], goal), dim=-1)
     with torch.no_grad():
+        prediction = critic.forward_features(features).reshape(frames.shape)
         terminal_frame = rollout["terminal_frame"]
         terminal_goal = motion.goal_at(terminal_frame)[:, 0]
         terminal = critic(rollout["terminal_state_detached"], motion.data["q_arm"][terminal_frame], terminal_goal)
-        values = torch.cat((prediction.detach(), terminal[None]), dim=0)
+        values = torch.cat((prediction, terminal[None]), dim=0)
         targets = lambda_returns(
             rollout["imagined_rewards"].detach(),
             values,
@@ -166,4 +182,9 @@ def critic_td_lambda_loss(critic: PrivilegedCritic, motion: MotionManager, rollo
             gamma=gamma,
             lam=lam,
         )
-    return (prediction - targets).square().mean()
+    return features.detach(), targets.reshape(-1).detach(), terminal.detach()
+
+
+def critic_td_lambda_loss(critic: PrivilegedCritic, motion: MotionManager, rollout: dict, *, gamma=0.99, lam=0.95):
+    features, targets, _ = critic_td_lambda_batch(critic, motion, rollout, gamma=gamma, lam=lam)
+    return (critic.forward_features(features) - targets).square().mean()

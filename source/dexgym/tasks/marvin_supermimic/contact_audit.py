@@ -1,6 +1,7 @@
 """Per-environment accounting for active Newton MJWarp contacts."""
 
 import torch
+from dexgym.algorithms.supermimic.termination import TerminationThresholds
 
 
 def contact_counts(world_ids: torch.Tensor, active_count: int, num_envs: int) -> torch.Tensor:
@@ -24,6 +25,7 @@ def unsafe_arm_states(
     upper: torch.Tensor,
     tcp_error: torch.Tensor,
     contacts: torch.Tensor,
+    thresholds: TerminationThresholds = TerminationThresholds(),
 ) -> torch.Tensor:
     """Return one unsafe flag per world using the existing Marvin safety thresholds."""
     if q.ndim != 2 or q.shape[1] != 14 or qd.shape != q.shape:
@@ -31,7 +33,9 @@ def unsafe_arm_states(
     if tcp_error.shape != (len(q), 2) or contacts.shape != (len(q),):
         raise ValueError("TCP errors and contact counts must match the environment count")
     bad = ~torch.isfinite(q).all(-1) | ~torch.isfinite(qd).all(-1)
-    bad |= (q < lower - 1e-3).any(-1) | (q > upper + 1e-3).any(-1)
-    bad |= (tcp_error > 0.12).any(-1)
-    bad |= (qd.abs() > 5.0).any(-1)
+    bad |= (q < lower - thresholds.joint_limit_margin_rad).any(-1) | (
+        q > upper + thresholds.joint_limit_margin_rad
+    ).any(-1)
+    bad |= (tcp_error > thresholds.tcp_error_m).any(-1)
+    bad |= (qd.abs() > thresholds.speed_rad_s).any(-1)
     return bad | contacts.gt(0)
