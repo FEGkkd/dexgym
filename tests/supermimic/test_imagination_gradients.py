@@ -1,7 +1,13 @@
 import torch
 from dexgym.algorithms.supermimic.action import ArmActionMap
 from dexgym.algorithms.supermimic.differentiable_fk import DifferentiableMarvinFK
-from dexgym.algorithms.supermimic.imagination import critic_td_lambda_loss, imagined_rollout, lambda_returns
+from dexgym.algorithms.supermimic.imagination import (
+    critic_td_lambda_loss,
+    discounted_imagined_return,
+    imagined_rollout,
+    lambda_returns,
+    survival_weights,
+)
 from dexgym.algorithms.supermimic.networks import DeltaWorldModel, GoalActor, PrivilegedCritic
 from dexgym.motion.motion_manager import MotionManager
 
@@ -52,6 +58,12 @@ def test_32_step_world_model_bptt_freezes_model_and_updates_actor():
     }
     output = imagined_rollout(actor, world, critic, fk, mapping, motion, start, horizon=32)
     assert output["imagined_rewards"].shape == (32, 2)
+    assert output["termination_probabilities"].shape == (32, 2)
+    assert torch.allclose(output["survival_weights"], survival_weights(output["termination_probabilities"]))
+    expected_objective = discounted_imagined_return(
+        output["imagined_rewards"], output["termination_probabilities"], output["critic_values"][-1]
+    )
+    assert torch.allclose(output["actor_loss"], -expected_objective.mean(), atol=1e-6)
     assert torch.isfinite(output["imagined_rewards"]).all()
     optimizer = torch.optim.Adam(actor.parameters(), lr=1e-4)
     before = actor.decoder[-1].weight.detach().clone()
@@ -67,6 +79,8 @@ def test_32_step_world_model_bptt_freezes_model_and_updates_actor():
     for parameter in critic.parameters():
         parameter.requires_grad_(True)
     critic_loss = critic_td_lambda_loss(critic, motion, output)
+    forced_terminal = {**output, "termination_probabilities": torch.ones_like(output["termination_probabilities"])}
+    assert not torch.allclose(critic_loss, critic_td_lambda_loss(critic, motion, forced_terminal))
     assert torch.isfinite(critic_loss)
     critic_loss.backward()
     assert any(parameter.grad is not None for parameter in critic.parameters())

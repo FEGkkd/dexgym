@@ -43,3 +43,23 @@ def test_eight_step_autoregressive_model_learns_action_conditioned_dynamics():
         optimizer.step()
     final_loss = float(model.autoregressive_loss(windows, mapping)[0].detach())
     assert final_loss < initial_loss * 0.5
+
+
+def test_eight_step_loss_trains_termination_head_on_real_hard_labels():
+    model = DeltaWorldModel(hidden=32)
+    mapping = ArmActionMap(torch.zeros(14), -torch.ones(14), torch.ones(14), torch.ones(14))
+    windows = {
+        "state": torch.zeros(8, 8, 42),
+        "action": torch.zeros(8, 8, 14),
+        "next_state": torch.zeros(8, 8, 42),
+        "termination_goal": torch.zeros(8, 8, 90),
+        "terminated": torch.zeros(8, 8, dtype=torch.bool),
+    }
+    windows["terminated"][:4, -1] = True
+    loss, _ = model.autoregressive_loss(windows, mapping)
+    loss.backward()
+    assert torch.isfinite(loss)
+    assert any(
+        parameter.grad is not None and parameter.grad.abs().sum() > 0
+        for parameter in model.termination_head.parameters()
+    )

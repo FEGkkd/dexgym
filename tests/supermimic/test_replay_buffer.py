@@ -18,3 +18,26 @@ def test_eight_step_windows_do_not_cross_episode_or_wrap_boundary():
     assert replay.sample_starts(4)["history"].shape == (4, 10, 56)
     phase = replay.sample_starts(16, frame_range=(70, 80))
     assert torch.all((phase["frame"] >= 70) & (phase["frame"] < 80))
+
+
+def test_terminal_at_window_end_is_kept_for_termination_head_without_crossing_reset():
+    replay = MotionReplay(40, 1, "cpu")
+    for t in range(9):
+        state = torch.full((1, 42), float(t))
+        action = torch.zeros(1, 14)
+        physical_next = torch.full((1, 42), float(t + 1 if t != 7 else 77))
+        terminated = torch.tensor([t == 7])
+        replay.append(
+            state,
+            action,
+            physical_next,
+            torch.zeros(1, 10, 56),
+            torch.tensor([t]),
+            terminated,
+            terminated=terminated,
+        )
+    batch = replay.sample_windows(8, 8)
+    assert batch["frame"][:, 0].eq(0).all()
+    assert batch["terminated"][:, -1].all()
+    assert not batch["terminated"][:, :-1].any()
+    assert batch["next_state"][:, -1, 0].eq(77).all()

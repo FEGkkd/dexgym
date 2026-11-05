@@ -17,6 +17,7 @@ class MotionReplay:
         self.frame = torch.empty((capacity_steps, num_envs), device=self.device, dtype=torch.long)
         self.episode = torch.empty_like(self.frame)
         self.done = torch.empty((capacity_steps, num_envs), device=self.device, dtype=torch.bool)
+        self.terminated = torch.empty_like(self.done)
         self.timestamp = torch.full((capacity_steps,), -1, device=self.device, dtype=torch.long)
         self.episode_counter = torch.zeros(num_envs, device=self.device, dtype=torch.long)
         self.steps = 0
@@ -31,12 +32,13 @@ class MotionReplay:
             self.frame,
             self.episode,
             self.done,
+            self.terminated,
             self.timestamp,
             self.episode_counter,
         )
         return sum(field.numel() * field.element_size() for field in fields)
 
-    def append(self, state, action, next_state, history, frame, done):
+    def append(self, state, action, next_state, history, frame, done, *, terminated=None):
         slot = self.steps % self.capacity
         self.state[slot] = state.detach()
         self.action[slot] = action.detach()
@@ -45,6 +47,7 @@ class MotionReplay:
         self.frame[slot] = frame.detach()
         self.episode[slot] = self.episode_counter
         self.done[slot] = done.detach()
+        self.terminated[slot] = (done if terminated is None else terminated).detach()
         self.timestamp[slot] = self.steps
         self.episode_counter += done.long()
         self.steps += 1
@@ -55,6 +58,7 @@ class MotionReplay:
         horizon: int,
         env_range: tuple[int, int] | None = None,
         frame_range: tuple[int, int] | None = None,
+        allow_terminal_at_end: bool = False,
     ):
         low = max(0, self.steps - self.capacity)
         high = self.steps - horizon
@@ -72,7 +76,8 @@ class MotionReplay:
             valid = (self.timestamp[slots] == absolute).all(-1)
             episodes = self.episode[slots, env[:, None]]
             valid &= (episodes == episodes[:, :1]).all(-1)
-            valid &= ~self.done[slots, env[:, None]].any(-1)
+            done = self.done[slots, env[:, None]]
+            valid &= ~done[:, :-1].any(-1) if allow_terminal_at_end else ~done.any(-1)
             if frame_range is not None:
                 start_frame = self.frame[slots[:, 0], env]
                 valid &= (start_frame >= frame_range[0]) & (start_frame < frame_range[1])
@@ -84,13 +89,14 @@ class MotionReplay:
         return torch.cat(selected_t)[:batch], torch.cat(selected_env)[:batch]
 
     def sample_windows(self, batch: int, horizon: int = 8, env_range: tuple[int, int] | None = None):
-        t, env = self._sample_indices(batch, horizon, env_range)
+        t, env = self._sample_indices(batch, horizon, env_range, allow_terminal_at_end=True)
         slots = (t[:, None] + torch.arange(horizon, device=self.device)) % self.capacity
         return {
             "state": self.state[slots, env[:, None]],
             "action": self.action[slots, env[:, None]],
             "next_state": self.next_state[slots, env[:, None]],
             "frame": self.frame[slots, env[:, None]],
+            "terminated": self.terminated[slots, env[:, None]],
         }
 
     def sample_starts(

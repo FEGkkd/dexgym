@@ -2,6 +2,7 @@
 
 import torch
 from torch import nn
+from torch.nn import functional as F
 
 from .action import ArmActionMap
 
@@ -58,6 +59,8 @@ class DeltaWorldModel(nn.Module):
         self.input_norm = RunningNorm(56)
         self.delta_norm = RunningNorm(28, min_std=0.01)
         self.network = mlp((56, hidden, hidden, hidden, 28), output_zero=True)
+        self.termination_head = mlp((42 + 90, 128, 128, 1))
+        nn.init.constant_(self.termination_head[-1].bias, -4.0)
 
     @torch.no_grad()
     def update_norms(self, state, action, next_state):
@@ -70,19 +73,38 @@ class DeltaWorldModel(nn.Module):
         command = mapping(action, state[..., 28:42])
         return torch.cat((state[..., :28] + delta, command), dim=-1)
 
+    def termination_probability(self, state: torch.Tensor, goal: torch.Tensor) -> torch.Tensor:
+        if state.shape[-1] != 42 or goal.shape[-1] != 90 or state.shape[:-1] != goal.shape[:-1]:
+            raise ValueError("Termination head expects matching [...,42] state and [...,90] goal")
+        return torch.sigmoid(self.termination_head(torch.cat((state, goal), dim=-1)).squeeze(-1))
+
     def autoregressive_loss(self, windows: dict[str, torch.Tensor], mapping: ArmActionMap):
         state, action, truth = windows["state"], windows["action"], windows["next_state"]
         if action.shape[1] != 8:
             raise ValueError("World model requires eight real continuous transitions")
         self.update_norms(state, action, truth)
         prediction = state[:, 0]
-        losses, errors = [], []
+        has_term = "terminated" in windows or "termination_goal" in windows
+        if has_term and ("terminated" not in windows or "termination_goal" not in windows):
+            raise ValueError("Termination labels require aligned next-state goals")
+        if has_term and (
+            windows["terminated"].shape != action.shape[:2]
+            or windows["termination_goal"].shape != (*action.shape[:2], 90)
+        ):
+            raise ValueError("Termination labels and goals must align with eight real transitions")
+        losses, errors, term_losses = [], [], []
         for step in range(8):
             prediction = self(prediction, action[:, step], mapping)
             delta = (prediction[..., :28] - truth[:, step, :28]) / self.delta_norm.std()
             losses.append(delta.square().mean())
             errors.append((prediction[..., :28] - truth[:, step, :28]).square().mean(-1).sqrt())
-        return torch.stack(losses).mean(), torch.stack(errors, dim=1)
+            if has_term:
+                probability = self.termination_probability(prediction, windows["termination_goal"][:, step])
+                term_losses.append(F.binary_cross_entropy(probability, windows["terminated"][:, step].float()))
+        objective = torch.stack(losses).mean()
+        if term_losses:
+            objective = objective + torch.stack(term_losses).mean()
+        return objective, torch.stack(errors, dim=1)
 
 
 class GoalActor(nn.Module):

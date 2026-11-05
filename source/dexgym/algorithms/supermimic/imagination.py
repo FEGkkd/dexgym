@@ -9,14 +9,40 @@ from .networks import DeltaWorldModel, GoalActor, PrivilegedCritic
 from .rewards import RewardWeights, tracking_reward
 
 
-def lambda_returns(rewards: torch.Tensor, values: torch.Tensor, *, gamma=0.99, lam=0.95):
+def survival_weights(termination_probabilities: torch.Tensor) -> torch.Tensor:
+    """Return c[0:H+1,B] with c[t+1] = c[t] * (1 - d[t+1])."""
+    if termination_probabilities.ndim != 2 or len(termination_probabilities) == 0:
+        raise ValueError("Termination probabilities must have shape [H,B] with H > 0")
+    first = torch.ones_like(termination_probabilities[:1])
+    return torch.cumprod(torch.cat((first, 1 - termination_probabilities), dim=0), dim=0)
+
+
+def discounted_imagined_return(rewards, termination_probabilities, terminal_value, *, gamma=0.99):
+    """Paper Eq. 2: reward on arrival, then soften the survival of later steps."""
+    if rewards.shape != termination_probabilities.shape or terminal_value.shape != rewards.shape[1:]:
+        raise ValueError("Reward, termination, and terminal value shapes must agree")
+    horizon = len(rewards)
+    survival = survival_weights(termination_probabilities)
+    discounts = gamma ** torch.arange(horizon, device=rewards.device, dtype=rewards.dtype)
+    return (discounts[:, None] * survival[:-1] * rewards).sum(0) + gamma**horizon * survival[-1] * terminal_value
+
+
+def lambda_returns(
+    rewards: torch.Tensor, values: torch.Tensor, termination_probabilities=None, *, gamma=0.99, lam=0.95
+):
     """Rewards [H,B], values [H+1,B]; bootstrap after the imagined horizon."""
-    result = torch.zeros_like(rewards)
+    if values.shape != (len(rewards) + 1, rewards.shape[1]):
+        raise ValueError("Critic values must have shape [H+1,B]")
+    if termination_probabilities is None:
+        termination_probabilities = torch.zeros_like(rewards)
+    if termination_probabilities.shape != rewards.shape:
+        raise ValueError("Termination probabilities must have shape [H,B]")
+    result = []
     running = values[-1]
     for t in range(len(rewards) - 1, -1, -1):
-        running = rewards[t] + gamma * ((1 - lam) * values[t + 1] + lam * running)
-        result[t] = running
-    return result
+        running = rewards[t] + gamma * (1 - termination_probabilities[t]) * ((1 - lam) * values[t + 1] + lam * running)
+        result.append(running)
+    return torch.stack(result[::-1])
 
 
 def imagined_rollout(
@@ -37,7 +63,7 @@ def imagined_rollout(
     state = start["state"]
     history = start["history"]
     frame = start["frame"]
-    rewards, states, frames, values, prior_costs = [], [], [], [], []
+    rewards, terminations, states, frames, values, prior_costs = [], [], [], [], [], []
     for step in range(horizon):
         current = (frame + step).clamp(max=motion.length - 1)
         goal = motion.goal_at(current)
@@ -71,6 +97,8 @@ def imagined_rollout(
             weights,
         )
         rewards.append(reward)
+        next_goal = motion.goal_at(next_frame)
+        terminations.append(world_model.termination_probability(next_state, next_goal[:, 0]))
         observation = torch.cat(
             (
                 (next_state[:, :14] - mapping.origin) / mapping.scale,
@@ -86,14 +114,18 @@ def imagined_rollout(
     terminal_goal = motion.goal_at(terminal_frame)
     values.append(critic(state, motion.data["q_arm"][terminal_frame], terminal_goal[:, 0]))
     reward_tensor = torch.stack(rewards)
+    termination_tensor = torch.stack(terminations)
     value_tensor = torch.stack(values)
-    discounts = gamma ** torch.arange(horizon, device=state.device, dtype=state.dtype)
-    objective = (discounts[:, None] * reward_tensor).sum(0) + gamma**horizon * value_tensor[-1]
+    survival = survival_weights(termination_tensor)
+    objective = discounted_imagined_return(reward_tensor, termination_tensor, value_tensor[-1], gamma=gamma)
     if prior_costs:
-        objective = objective - prior_weight * (discounts[:, None] * torch.stack(prior_costs)).sum(0)
+        discounts = gamma ** torch.arange(horizon, device=state.device, dtype=state.dtype)
+        objective = objective - prior_weight * (discounts[:, None] * survival[:-1] * torch.stack(prior_costs)).sum(0)
     return {
         "actor_loss": -objective.mean(),
         "imagined_rewards": reward_tensor,
+        "termination_probabilities": termination_tensor,
+        "survival_weights": survival,
         "critic_values": value_tensor,
         "states_detached": torch.stack(states),
         "frames": torch.stack(frames),
@@ -114,5 +146,11 @@ def critic_td_lambda_loss(critic: PrivilegedCritic, motion: MotionManager, rollo
         terminal_goal = motion.goal_at(terminal_frame)[:, 0]
         terminal = critic(rollout["terminal_state_detached"], motion.data["q_arm"][terminal_frame], terminal_goal)
         values = torch.cat((prediction.detach(), terminal[None]), dim=0)
-        targets = lambda_returns(rollout["imagined_rewards"].detach(), values, gamma=gamma, lam=lam)
+        targets = lambda_returns(
+            rollout["imagined_rewards"].detach(),
+            values,
+            rollout["termination_probabilities"].detach(),
+            gamma=gamma,
+            lam=lam,
+        )
     return (prediction - targets).square().mean()
