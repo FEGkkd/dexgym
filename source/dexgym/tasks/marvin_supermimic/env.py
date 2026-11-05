@@ -10,7 +10,7 @@ from isaaclab.envs import DirectRLEnv
 
 from dexgym.algorithms.supermimic.action import ArmActionMap
 from dexgym.algorithms.supermimic.differentiable_fk import DifferentiableMarvinFK
-from dexgym.algorithms.supermimic.rewards import tracking_reward
+from dexgym.algorithms.supermimic.rewards import REWARD_PROFILES, tracking_reward
 from dexgym.assets.marvin_wuji.controller import apply_newton_arm_tracking_profile
 from dexgym.motion.motion_manager import MotionManager
 
@@ -79,6 +79,9 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         self.history = torch.zeros((self.num_envs, 10, 56), device=self.device)
         self.prev_link_pos = self.motion.data["link_pos"][0][None].repeat(self.num_envs, 1, 1, 1)
         self.profile = apply_newton_arm_tracking_profile(self.robot, damping_scale_source=0.5)
+        if cfg.reward_profile not in REWARD_PROFILES:
+            raise ValueError(f"Unknown reward profile: {cfg.reward_profile}")
+        self.reward_weights = REWARD_PROFILES[cfg.reward_profile]
         self.fk = DifferentiableMarvinFK(MJCF, device=self.device)
         self._substep = 0
         self._contact_accum = 0
@@ -142,6 +145,7 @@ class MarvinWaveDirectEnv(DirectRLEnv):
             self.fk,
             self.action_map.lower,
             self.action_map.upper,
+            weights=self.reward_weights,
             dt=self.step_dt,
         )
         return reward

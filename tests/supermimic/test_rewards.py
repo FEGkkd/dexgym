@@ -1,10 +1,19 @@
 import torch
 from dexgym.algorithms.supermimic.differentiable_fk import DifferentiableMarvinFK
-from dexgym.algorithms.supermimic.rewards import RewardWeights, so3_geodesic, tracking_reward
+from dexgym.algorithms.supermimic.rewards import REWARD_PROFILES, RewardWeights, so3_geodesic, tracking_reward
 from dexgym.motion.motion_manager import MotionManager
 
 MJCF = "/home/ubuntu/dexgym/source/dexgym/assets/marvin_wuji/source_model/dual_arm_marvin.xml"
 NPZ = "/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz"
+
+
+def test_reward_profiles_are_distinct_and_tcp_priority_is_stronger():
+    assert set(REWARD_PROFILES) == {"openarm_style", "marvin_tcp_priority"}
+    baseline = REWARD_PROFILES["openarm_style"]
+    priority = REWARD_PROFILES["marvin_tcp_priority"]
+    assert priority.tcp_position > baseline.tcp_position
+    assert priority.tcp_rotation > baseline.tcp_rotation
+    assert priority.link_position < baseline.link_position
 
 
 def test_so3_orientation_distance_and_reward_ascend():

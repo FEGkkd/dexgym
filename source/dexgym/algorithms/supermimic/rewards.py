@@ -19,6 +19,19 @@ class RewardWeights:
     joint_limit: float = 0.1
 
 
+REWARD_PROFILES = {
+    "openarm_style": RewardWeights(
+        tcp_position=1.0,
+        tcp_rotation=1.0,
+        link_position=1.0,
+        link_rotation=1.0,
+        linear_velocity=1.0,
+        angular_velocity=1.0,
+    ),
+    "marvin_tcp_priority": RewardWeights(),
+}
+
+
 def so3_log(rotation: torch.Tensor) -> torch.Tensor:
     skew = (
         torch.stack(

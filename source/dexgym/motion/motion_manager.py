@@ -1,5 +1,6 @@
 """GPU-resident reference frames and vectorized future goal windows."""
 
+from collections.abc import Mapping
 from pathlib import Path
 
 import numpy as np
@@ -24,6 +25,19 @@ def quaternion_xyzw_to_matrix(quat: torch.Tensor) -> torch.Tensor:
 class MotionManager:
     """One motion now; `motion_id` distinguishes future library entries."""
 
+    @classmethod
+    def from_registry(
+        cls,
+        registry: Mapping[str, str | Path],
+        motion_id: str,
+        num_envs: int,
+        device: torch.device | str,
+    ):
+        """Load a named motion without changing the per-environment frame interface."""
+        if motion_id not in registry:
+            raise KeyError(f"Unknown motion_id: {motion_id}")
+        return cls(registry[motion_id], num_envs, device, motion_id=motion_id)
+
     def __init__(self, path: str | Path, num_envs: int, device: torch.device | str, motion_id: str | None = None):
         with np.load(path, allow_pickle=False) as npz:
             arrays = {
@@ -45,7 +59,10 @@ class MotionManager:
             }
             self.link_names = tuple(tuple(row) for row in npz["link_names"])
             self.joint_names_arm = tuple(npz["joint_names_arm"])
-            self.motion_id = motion_id or str(npz["motion_id"])
+            stored_motion_id = str(npz["motion_id"])
+            if motion_id is not None and motion_id != stored_motion_id:
+                raise ValueError(f"motion_id mismatch: expected {motion_id}, found {stored_motion_id}")
+            self.motion_id = stored_motion_id
         self.device = torch.device(device)
         self.length = len(arrays["time"])
         self.frame = torch.zeros(num_envs, device=self.device, dtype=torch.long)

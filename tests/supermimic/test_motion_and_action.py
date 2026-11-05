@@ -1,9 +1,20 @@
 import numpy as np
+import pytest
 import torch
 from dexgym.algorithms.supermimic.action import ArmActionMap
 from dexgym.motion.motion_manager import MotionManager, quaternion_xyzw_to_6d
 
 PATH = "/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz"
+
+
+def test_named_motion_registry_rejects_mismatched_identity():
+    motion_id = "cmu_141_16_wave_bimanual"
+    manager = MotionManager.from_registry({motion_id: PATH}, motion_id, 2, "cpu")
+    assert manager.motion_id == motion_id and manager.frame.shape == (2,)
+    with pytest.raises(KeyError):
+        MotionManager.from_registry({motion_id: PATH}, "unknown", 2, "cpu")
+    with pytest.raises(ValueError, match="motion_id mismatch"):
+        MotionManager(PATH, 2, "cpu", motion_id="different")
 
 
 def test_public_task_registration():

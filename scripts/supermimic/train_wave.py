@@ -15,6 +15,7 @@ import torch
 from dexgym.algorithms.supermimic.imagination import critic_td_lambda_loss, imagined_rollout
 from dexgym.algorithms.supermimic.networks import DeltaWorldModel, GoalActor, PrivilegedCritic
 from dexgym.algorithms.supermimic.replay_buffer import MotionReplay
+from dexgym.algorithms.supermimic.rewards import REWARD_PROFILES
 from dexgym.tasks.marvin_supermimic.env_cfg import MarvinWaveDirectCfg
 from isaaclab.app import launch_simulation
 
@@ -207,6 +208,7 @@ def evaluate_full(
     action_fn=None,
     initial_perturb_rad=0.0,
     physics_contact_audit=True,
+    reward_profile="marvin_tcp_priority",
 ):
     cfg = MarvinWaveDirectCfg()
     cfg.scene.num_envs = num_envs
@@ -214,6 +216,7 @@ def evaluate_full(
     cfg.random_reference_start = False
     cfg.reset_joint_perturb_rad = initial_perturb_rad
     cfg.audit_contacts_each_physics_step = physics_contact_audit
+    cfg.reward_profile = reward_profile
     cfg.seed = seed
     start = time.perf_counter()
     with launch_simulation(cfg):
@@ -337,6 +340,7 @@ def evaluate_full(
                 "completed_control_steps": len(errors_p),
                 "initial_perturb_rad": initial_perturb_rad,
                 "physics_contact_audit": physics_contact_audit,
+                "reward_profile": reward_profile,
                 "seed": seed,
                 "wall_time_s": time.perf_counter() - start,
                 "terminations": terminations,
@@ -413,6 +417,7 @@ def main():
     parser.add_argument("--early-reset-fraction", type=float, default=0.0)
     parser.add_argument("--early-reset-frame-range", type=int, nargs=2, default=(0, 50))
     parser.add_argument("--behavior-prior-weight", type=float, default=0.0)
+    parser.add_argument("--reward-profile", choices=tuple(REWARD_PROFILES), default="marvin_tcp_priority")
     parser.add_argument("--pd-warmup-fraction", type=float, default=0.0)
     parser.add_argument("--reset-actor-on-resume", action="store_true")
     parser.add_argument("--actor-init-state", type=Path)
@@ -490,6 +495,7 @@ def main():
     cfg.active_reset_frame_range = tuple(args.active_reset_frame_range)
     cfg.early_reset_fraction = args.early_reset_fraction
     cfg.early_reset_frame_range = tuple(args.early_reset_frame_range)
+    cfg.reward_profile = args.reward_profile
     started = time.perf_counter()
     with launch_simulation(cfg):
         env = gym.make("DexGym-Marvin-SuperMimic-Wave-Direct-v0", cfg=cfg)
@@ -617,6 +623,7 @@ def main():
                         motion,
                         start_batch,
                         horizon=32,
+                        weights=native.reward_weights,
                         prior_actor=prior_actor,
                         prior_weight=args.behavior_prior_weight,
                     )
@@ -694,7 +701,7 @@ def main():
         auxiliary_loss=np.asarray(warmup_losses),
     )
     if training["actor_updates"]:
-        training["evaluation"] = evaluate_full(actor, output_dir=args.output)
+        training["evaluation"] = evaluate_full(actor, output_dir=args.output, reward_profile=args.reward_profile)
         checkpoint["training"] = training
         passed = (
             training["evaluation"]["full_motion_completed"]
