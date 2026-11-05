@@ -72,6 +72,7 @@ that created the runs. The shared virtual environment and robot asset were not r
 | E3, 512 env | 256,000 | 1,000 / 100 / 100 | 1.51 / 3.23 mm | terminated at step 27 |
 | E3, 1024 env | 768,000 | 1,500 / 200 / 200 | 1.45 / 2.87 mm | full 1356-step clip, no contact or hard-limit failure |
 | E4, 4096 env | 2,048,000 | 4,000 / 500 / 500 | 0.95 / 1.59 mm | full 1356-step clip, no contact or hard-limit failure |
+| E5 mixed, 4096 env | 2,048,000 | 4,000 / 500 / 500 | 0.88 / 1.27 mm | safety termination at step 548 |
 
 The 1024-environment Actor's measured Newton errors were:
 
@@ -121,9 +122,28 @@ Newton physical state. `validate_policy_model.py` evaluated the learned model on
 actual policy trajectory. Its right TCP 8-step error was mean/P95 5.01/13.14 mm;
 the 32-step error was 12.06/35.03 mm. These values are substantially worse than the
 0.95/1.59 mm eight/thirty-two-step means on teacher-heavy held-out environments.
-The world model therefore has a measurable on-policy distribution gap. A bounded
-mixed teacher/Actor collection profile and active-phase resets are being tested to
-address it before the next long training run.
+The world model therefore has a measurable on-policy distribution gap. E5 tested a
+bounded mixed teacher/Actor collection profile and active-phase resets to address it.
+
+E5 used a 0.3 mixture of Actor and verified reference commands on about half of its
+2,048,000 Newton transitions, with 50% of resets directed to the active 9–16 s interval
+and 10% to the opening phase. Collection had no collision or termination and maximum
+actual arm speed 3.08 rad/s. The teacher-heavy held-out 32-step TCP mean error fell to
+1.27 mm, but the Actor terminated at step 548; its executed right-arm command differed
+from the time-matched reference by about 0.10 rad on average during 10–11 s. Its
+on-policy world model still had right TCP 32-step mean/P95 errors of 12.80/31.96 mm.
+E5 demonstrates that lower teacher-heavy model loss alone did not improve the actual
+policy. Its `candidate.pt`, partial Newton state trace, and failure metrics are retained.
+
+The next bounded experiment uses a wider safe command mixture, then trains a corrective
+Actor initializer on those **real off-reference Newton states** before a separate,
+small-learning-rate 32-step BPTT stage. The initializer and BPTT Actor are evaluated
+separately; the initializer by itself is never counted as a SuperMimic result.
+
+The full E4 comparison video is `e4_4096env_hard500/previews/newton_policy_vs_reference.mp4`.
+It shows reference FK beside the **recorded Newton physical policy state** with both
+TCP orientation axes. The full-motion reference and direct PD videos remain in
+`/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/previews/`.
 
 The earlier 4096-environment complete-loop capacity test collected 524,288 real transitions at
 48,457 transitions/s, then ran 100 eight-step world-model updates and five 32-step Actor/Critic

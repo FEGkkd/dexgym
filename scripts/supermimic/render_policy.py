@@ -28,6 +28,8 @@ def render(states_path: Path, output: Path, stride: int = 3):
         video_path = output / "newton_policy_vs_reference.mp4"
         writer = _writer(video_path, 50 / stride, 2 * W, H)
         robot = RobotRender(SOURCE)
+        robot.camera.lookat[:] = [0, -0.3, 1.18]
+        robot.camera.distance = 2.5
         try:
             for i in range(0, len(q), stride):
                 target_p = ref["tcp_pos"][i, 1]

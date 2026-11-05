@@ -400,6 +400,7 @@ def main():
     parser.add_argument("--world-updates", type=int, default=100)
     parser.add_argument("--actor-updates", type=int, default=20)
     parser.add_argument("--actor-warmup-updates", type=int, default=0)
+    parser.add_argument("--warmup-actor-lr", type=float)
     parser.add_argument("--world-batch", type=int, default=128)
     parser.add_argument("--imag-batch", type=int, default=32)
     parser.add_argument("--world-hidden", type=int, default=2048)
@@ -435,6 +436,8 @@ def main():
         raise ValueError("Hard BPTT frame range must lie within the pinned motion")
     if args.actor_lr <= 0:
         raise ValueError("Actor learning rate must be positive")
+    if args.warmup_actor_lr is not None and args.warmup_actor_lr <= 0:
+        raise ValueError("Actor warmup learning rate must be positive")
     if not (
         0 <= args.teacher_fraction <= 1
         and 0 <= args.actor_mix <= 1
@@ -529,6 +532,11 @@ def main():
             warmup_action_error = None
             final_action_error = None
             if trust_gate:
+                warmup_optimizer = (
+                    torch.optim.Adam(actor.parameters(), lr=args.warmup_actor_lr or args.actor_lr)
+                    if args.actor_warmup_updates
+                    else None
+                )
                 pd_examples = (
                     pd_actor_examples(motion, mapping, device)
                     if args.pd_warmup_fraction > 0 and args.actor_warmup_updates
@@ -558,13 +566,15 @@ def main():
                         histories.append(pd_examples[0][frame_ids])
                         goals.append(pd_examples[1][frame_ids])
                         targets.append(pd_examples[2][frame_ids])
-                    optim_actor.zero_grad()
+                    warmup_optimizer.zero_grad()
                     predicted_action = actor(torch.cat(histories), torch.cat(goals))
                     warmup_loss = torch.nn.functional.mse_loss(predicted_action, torch.cat(targets))
                     warmup_loss.backward()
                     torch.nn.utils.clip_grad_norm_(actor.parameters(), 1.0)
-                    optim_actor.step()
+                    warmup_optimizer.step()
                     warmup_losses.append(float(warmup_loss.detach()))
+                if warmup_optimizer is not None:
+                    optim_actor = torch.optim.Adam(actor.parameters(), lr=args.actor_lr)
                 warmup_action_error = actor_command_error(actor, replay, mapping, motion, (train_envs, args.num_envs))
                 torch.save(actor.state_dict(), args.output / "actor_after_auxiliary_warmup.pt")
                 prior_actor = copy.deepcopy(actor).eval()
