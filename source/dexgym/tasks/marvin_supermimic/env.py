@@ -6,6 +6,7 @@ from pathlib import Path
 import mujoco
 import numpy as np
 import torch
+import warp as wp
 from isaaclab.envs import DirectRLEnv
 
 from dexgym.algorithms.supermimic.action import ArmActionMap
@@ -14,6 +15,7 @@ from dexgym.algorithms.supermimic.rewards import REWARD_PROFILES, tracking_rewar
 from dexgym.assets.marvin_wuji.controller import apply_newton_arm_tracking_profile
 from dexgym.motion.motion_manager import MotionManager
 
+from .contact_audit import contact_counts, unsafe_arm_states
 from .env_cfg import MarvinWaveDirectCfg
 
 REFERENCE = "/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz"
@@ -84,8 +86,18 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         self.reward_weights = REWARD_PROFILES[cfg.reward_profile]
         self.fk = DifferentiableMarvinFK(MJCF, device=self.device)
         self._substep = 0
-        self._contact_accum = 0
+        if cfg.audit_contacts_each_physics_step and self._physics_handles_decimation and cfg.decimation > 1:
+            raise RuntimeError("Newton internal decimation prevents physics-step contact auditing")
+        self._contact_accum = torch.zeros(self.num_envs, device=self.device, dtype=torch.int32)
+        self.last_policy_contact_counts = self._contact_accum.clone()
         self.last_policy_contact_physics_steps = 0
+
+    def _record_contacts(self) -> None:
+        data = self.sim.physics_manager._solver.mjw_data
+        active_count = int(data.nacon.numpy()[0])
+        if active_count:
+            world_ids = wp.to_torch(data.contact.worldid)
+            self._contact_accum += contact_counts(world_ids, active_count, self.num_envs)
 
     def _pre_physics_step(self, actions: torch.Tensor) -> None:
         if actions.shape != (self.num_envs, 14) or not torch.isfinite(actions).all():
@@ -96,11 +108,11 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         self.last_action = actions
         self.motion.advance()
         self._substep = 0
-        self._contact_accum = 0
+        self._contact_accum.zero_()
 
     def _apply_action(self) -> None:
         if self.cfg.audit_contacts_each_physics_step and self._substep:
-            self._contact_accum += int(self.sim.physics_manager._solver.mjw_data.nacon.numpy()[0] > 0)
+            self._record_contacts()
         self.full_command[:] = self.home_full
         alpha = (self._substep + 1) / self.cfg.decimation
         self.full_command[:, self.arm_ids] = self.previous_command + alpha * (self.command - self.previous_command)
@@ -126,9 +138,6 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         return {"policy": torch.cat((self.history.flatten(1), goal.flatten(1)), dim=-1)}
 
     def _get_rewards(self) -> torch.Tensor:
-        if self.cfg.audit_contacts_each_physics_step:
-            self._contact_accum += int(self.sim.physics_manager._solver.mjw_data.nacon.numpy()[0] > 0)
-            self.last_policy_contact_physics_steps = self._contact_accum
         q, _ = self._arm_state()
         self.last_physical_q = self.robot.data.joint_pos.torch.detach().clone()
         self.last_physical_qd = self.robot.data.joint_vel.torch.detach().clone()
@@ -151,15 +160,17 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         return reward
 
     def _get_dones(self) -> tuple[torch.Tensor, torch.Tensor]:
+        self._record_contacts()
         q, qd = self._arm_state()
-        bad = ~torch.isfinite(q).all(-1) | ~torch.isfinite(qd).all(-1)
-        bad |= (q < self.action_map.lower - 1e-3).any(-1) | (q > self.action_map.upper + 1e-3).any(-1)
+        self.last_physical_arm_state = torch.cat((q, qd, self.command), dim=-1).detach().clone()
         tcp_pos = self.fk(q)[0][:, :, 2]
         reference_tcp = self.motion.current("link_pos")[:, :, 2]
-        bad |= (torch.linalg.vector_norm(tcp_pos - reference_tcp, dim=-1) > 0.12).any(-1)
-        bad |= (qd.abs() > 5.0).any(-1)
-        if self.cfg.audit_contacts_each_physics_step and self.last_policy_contact_physics_steps:
-            bad |= True
+        tcp_error = torch.linalg.vector_norm(tcp_pos - reference_tcp, dim=-1)
+        self.last_policy_contact_counts = self._contact_accum.clone()
+        self.last_policy_contact_physics_steps = int(self._contact_accum.sum())
+        bad = unsafe_arm_states(
+            q, qd, self.action_map.lower, self.action_map.upper, tcp_error, self.last_policy_contact_counts
+        )
         timeout = (self.episode_length_buf >= self.max_episode_length) | (self.motion.frame >= self.motion.length - 1)
         return bad, timeout
 
