@@ -3,6 +3,7 @@
 import argparse
 import copy
 import json
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -62,7 +63,7 @@ def state_of(native):
     return torch.cat((q, v, native.command), dim=-1).detach().clone()
 
 
-def collect(env, actor, replay, steps, teacher_fraction=0.6, noise=0.18, teacher_noise=0.0):
+def collect(env, actor, replay, steps, teacher_fraction=0.6, noise=0.18, teacher_noise=0.0, actor_mix=1.0):
     native = env.unwrapped
     obs, _ = env.reset()
     start = time.perf_counter()
@@ -71,6 +72,9 @@ def collect(env, actor, replay, steps, teacher_fraction=0.6, noise=0.18, teacher
     max_joint_speed = 0.0
     max_finger_drift = 0.0
     contact_steps = 0
+    active_phase_samples = 0
+    early_phase_samples = 0
+    actual_teacher_actions = 0
     max_speed_event = None
     contact_events = []
     for iteration in range(steps):
@@ -78,6 +82,8 @@ def collect(env, actor, replay, steps, teacher_fraction=0.6, noise=0.18, teacher
             state = state_of(native)
             history = obs["policy"][:, :560].reshape(native.num_envs, 10, 56).clone()
             frame = native.motion.frame.clone()
+            active_phase_samples += int(((frame >= 450) & (frame < 850)).sum())
+            early_phase_samples += int((frame < 50).sum())
             actor_action = actor(history, obs["policy"][:, 560:].reshape(native.num_envs, 10, 90))
             actor_action = actor_action + torch.randn_like(actor_action) * noise
             next_frame = (frame + 1).clamp(max=native.motion.length - 1)
@@ -85,7 +91,9 @@ def collect(env, actor, replay, steps, teacher_fraction=0.6, noise=0.18, teacher
             teacher = torch.atanh(((next_q - native.action_map.origin) / native.action_map.scale).clamp(-0.98, 0.98))
             teacher = teacher + torch.randn_like(teacher) * teacher_noise
             choose_teacher = torch.rand(native.num_envs, 1, device=native.device) < teacher_fraction
-            action = torch.where(choose_teacher, teacher, actor_action)
+            actual_teacher_actions += int(choose_teacher.sum())
+            mixed = teacher + actor_mix * (actor_action - teacher)
+            action = torch.where(choose_teacher, teacher, mixed)
             obs, reward, terminated, truncated, _ = env.step(action)
             done = terminated | truncated
             replay.append(state, action, state_of(native), history, frame, done)
@@ -128,8 +136,12 @@ def collect(env, actor, replay, steps, teacher_fraction=0.6, noise=0.18, teacher
         "mean_physical_reward": float(np.mean(rewards)),
         "terminations": terminations,
         "teacher_fraction": teacher_fraction,
+        "realized_teacher_fraction": actual_teacher_actions / (steps * native.num_envs),
+        "active_phase_fraction": active_phase_samples / (steps * native.num_envs),
+        "early_phase_fraction": early_phase_samples / (steps * native.num_envs),
         "exploration_noise_std": noise,
         "teacher_noise_std": teacher_noise,
+        "actor_mix": actor_mix,
         "max_actual_arm_speed_rad_s": max_joint_speed,
         "max_finger_home_drift_rad": max_finger_drift,
         "newton_contact_steps": contact_steps,
@@ -187,12 +199,21 @@ def actor_command_error(actor, replay, mapping, motion, env_range, batch=128):
     }
 
 
-def evaluate_full(actor, num_envs=1, seed=140116, output_dir: Path | None = None, action_fn=None):
+def evaluate_full(
+    actor,
+    num_envs=1,
+    seed=140116,
+    output_dir: Path | None = None,
+    action_fn=None,
+    initial_perturb_rad=0.0,
+    physics_contact_audit=True,
+):
     cfg = MarvinWaveDirectCfg()
     cfg.scene.num_envs = num_envs
     cfg.episode_length_s = 28.0
     cfg.random_reference_start = False
-    cfg.reset_joint_perturb_rad = 0.0
+    cfg.reset_joint_perturb_rad = initial_perturb_rad
+    cfg.audit_contacts_each_physics_step = physics_contact_audit
     cfg.seed = seed
     start = time.perf_counter()
     with launch_simulation(cfg):
@@ -204,9 +225,17 @@ def evaluate_full(actor, num_envs=1, seed=140116, output_dir: Path | None = None
             physical_q = [native.robot.data.joint_pos.torch[:, model_order].detach().cpu().numpy().copy()]
             physical_qd = [native.robot.data.joint_vel.torch[:, model_order].detach().cpu().numpy().copy()]
             errors_p, errors_r, rewards = [], [], []
+            executed_actions, executed_commands, contact_counts = [], [], []
+            link_errors = {
+                "position_mm": [],
+                "orientation_deg": [],
+                "linear_velocity_m_s": [],
+                "angular_velocity_rad_s": [],
+            }
             terminations = 0
             first_failure_step = None
             contact_steps = 0
+            contact_physics_steps = 0
             saturations = 0
             torque_samples = 0
             command_jump_max = 0.0
@@ -224,7 +253,14 @@ def evaluate_full(actor, num_envs=1, seed=140116, output_dir: Path | None = None
                     metrics = env.unwrapped.last_tracking
                     physical_q.append(native.last_physical_q[:, model_order].cpu().numpy().copy())
                     physical_qd.append(native.last_physical_qd[:, model_order].cpu().numpy().copy())
-                    contact_steps += int(native.sim.physics_manager._solver.mjw_data.nacon.numpy()[0] > 0)
+                    executed_actions.append(action.detach().cpu().numpy().copy())
+                    executed_commands.append(native.command.detach().cpu().numpy().copy())
+                    contact_counts.append(native.last_policy_contact_physics_steps if physics_contact_audit else -1)
+                    if physics_contact_audit:
+                        contact_steps += int(native.last_policy_contact_physics_steps > 0)
+                        contact_physics_steps += native.last_policy_contact_physics_steps
+                    else:
+                        contact_steps += int(native.sim.physics_manager._solver.mjw_data.nacon.numpy()[0] > 0)
                     applied = native.last_physical_torque[:, native.arm_ids].abs()
                     effort = native.robot.data.joint_effort_limits.torch[:, native.arm_ids]
                     saturations += int((applied >= effort - 1e-3).sum())
@@ -234,6 +270,13 @@ def evaluate_full(actor, num_envs=1, seed=140116, output_dir: Path | None = None
                     )
                     errors_p.append(metrics["tcp_position_error_m"].detach().cpu().numpy() * 1000)
                     errors_r.append(metrics["tcp_rotation_error_rad"].detach().cpu().numpy() * 180 / np.pi)
+                    for output_key, source_key, scale in (
+                        ("position_mm", "link_position_error_m", 1000),
+                        ("orientation_deg", "link_rotation_error_rad", 180 / np.pi),
+                        ("linear_velocity_m_s", "link_linear_velocity_error_m_s", 1),
+                        ("angular_velocity_rad_s", "link_angular_velocity_error_rad_s", 1),
+                    ):
+                        link_errors[output_key].append(metrics[source_key].detach().cpu().numpy() * scale)
                     rewards.append(float(reward.mean()))
                     terminations += int(terminated.sum())
                     if bool(terminated.any()):
@@ -243,6 +286,7 @@ def evaluate_full(actor, num_envs=1, seed=140116, output_dir: Path | None = None
             r = np.stack(errors_r)
             q_record = np.stack(physical_q)
             qd_record = np.stack(physical_qd)
+            link_errors = {key: np.stack(values) for key, values in link_errors.items()}
             source = mujoco.MjModel.from_xml_path(str(SOURCE))
             source_data = mujoco.MjData(source)
             arm_source_ids = [
@@ -265,18 +309,42 @@ def evaluate_full(actor, num_envs=1, seed=140116, output_dir: Path | None = None
                     time=np.arange(len(q_record)) * 0.02,
                     q=q_record,
                     qd=qd_record,
+                    action=np.stack(executed_actions),
+                    q_command=np.stack(executed_commands),
+                    contact_physics_steps=np.asarray(contact_counts),
                     tcp_position_error_mm=np.concatenate((np.zeros((1, num_envs, 2)), p), axis=0),
                     tcp_orientation_error_deg=np.concatenate((np.zeros((1, num_envs, 2)), r), axis=0),
+                    **{f"link_{key}": value for key, value in link_errors.items()},
                 )
             ref = native.motion.data["q_arm"][: len(q_record)].detach().cpu().numpy()
+            ref_qd = native.motion.data["qd_arm"][: len(qd_record)].detach().cpu().numpy()
+            hand_source_ids = [joint for joint in range(54) if joint not in arm_source_ids]
+            home_model = native.home_full[model_order].detach().cpu().numpy()
+            hand_drift = np.abs(q_record[:, :, hand_source_ids] - home_model[hand_source_ids])
+            tracked_links = {}
+            for side_index, side_name in enumerate(("left", "right")):
+                tracked_links[side_name] = {}
+                for link_index, link_name in enumerate(native.motion.link_names[side_index]):
+                    tracked_links[side_name][link_name] = {
+                        key: {
+                            "mean": float(values[:, 0, side_index, link_index].mean()),
+                            "p95": float(np.percentile(values[:, 0, side_index, link_index], 95)),
+                            "max": float(values[:, 0, side_index, link_index].max()),
+                        }
+                        for key, values in link_errors.items()
+                    }
             return {
                 "completed_control_steps": len(errors_p),
+                "initial_perturb_rad": initial_perturb_rad,
+                "physics_contact_audit": physics_contact_audit,
+                "seed": seed,
                 "wall_time_s": time.perf_counter() - start,
                 "terminations": terminations,
                 "first_failure_control_step": first_failure_step,
                 "full_motion_completed": first_failure_step is None and len(errors_p) == 1356,
                 "reward_mean": float(np.mean(rewards)),
                 "newton_contact_control_steps": contact_steps,
+                "newton_contact_physics_steps": contact_physics_steps if physics_contact_audit else None,
                 "source_mjcf_contact_frames": source_contact_frames,
                 "illegal_joint_state_frames": illegal_joint_states,
                 "torque_saturation_rate": saturations / max(1, torque_samples),
@@ -286,6 +354,13 @@ def evaluate_full(actor, num_envs=1, seed=140116, output_dir: Path | None = None
                     np.max(abs(np.diff(qd_record[:, :, arm_source_ids], axis=0) / 0.02))
                 ),
                 "joint_position_rmse_rad": float(np.mean(np.square(q_record[:, 0, arm_source_ids] - ref)) ** 0.5),
+                "joint_velocity_rmse_rad_s": float(np.mean(np.square(qd_record[:, 0, arm_source_ids] - ref_qd)) ** 0.5),
+                "tracked_links": tracked_links,
+                "finger_home_drift_rad": {
+                    "mean": float(hand_drift.mean()),
+                    "p95": float(np.percentile(hand_drift, 95)),
+                    "max": float(hand_drift.max()),
+                },
                 "first_position_over_50mm_control_step": int(np.argmax((p > 50).any(axis=(1, 2))) + 1)
                 if (p > 50).any()
                 else None,
@@ -331,6 +406,11 @@ def main():
     parser.add_argument("--teacher-fraction", type=float, default=0.6)
     parser.add_argument("--exploration-noise", type=float, default=0.18)
     parser.add_argument("--teacher-noise", type=float, default=0.0)
+    parser.add_argument("--actor-mix", type=float, default=1.0)
+    parser.add_argument("--active-reset-fraction", type=float, default=0.0)
+    parser.add_argument("--active-reset-frame-range", type=int, nargs=2, default=(450, 850))
+    parser.add_argument("--early-reset-fraction", type=float, default=0.0)
+    parser.add_argument("--early-reset-frame-range", type=int, nargs=2, default=(0, 50))
     parser.add_argument("--behavior-prior-weight", type=float, default=0.0)
     parser.add_argument("--pd-warmup-fraction", type=float, default=0.0)
     parser.add_argument("--reset-actor-on-resume", action="store_true")
@@ -355,7 +435,22 @@ def main():
         raise ValueError("Hard BPTT frame range must lie within the pinned motion")
     if args.actor_lr <= 0:
         raise ValueError("Actor learning rate must be positive")
+    if not (
+        0 <= args.teacher_fraction <= 1
+        and 0 <= args.actor_mix <= 1
+        and 0 <= args.active_reset_fraction <= 1
+        and 0 <= args.early_reset_fraction <= 1
+        and args.active_reset_fraction + args.early_reset_fraction <= 1
+    ):
+        raise ValueError("Collection sampling fractions and actor mix must lie in [0, 1]")
+    if not (0 <= args.active_reset_frame_range[0] < args.active_reset_frame_range[1] <= 1357):
+        raise ValueError("Active reset frame range must lie within the pinned motion")
+    if not (0 <= args.early_reset_frame_range[0] < args.early_reset_frame_range[1] <= 1357):
+        raise ValueError("Early reset frame range must lie within the pinned motion")
     preflight = verify()
+    git_commit = subprocess.check_output(
+        ["git", "-C", str(Path(__file__).resolve().parents[2]), "rev-parse", "HEAD"], text=True
+    ).strip()
     args.output.mkdir(parents=True, exist_ok=True)
     torch.manual_seed(140116)
     torch.cuda.reset_peak_memory_stats()
@@ -388,6 +483,10 @@ def main():
     cfg.scene.num_envs = args.num_envs
     cfg.seed = 140116
     cfg.reset_joint_perturb_rad = 0.01
+    cfg.active_reset_fraction = args.active_reset_fraction
+    cfg.active_reset_frame_range = tuple(args.active_reset_frame_range)
+    cfg.early_reset_fraction = args.early_reset_fraction
+    cfg.early_reset_frame_range = tuple(args.early_reset_frame_range)
     started = time.perf_counter()
     with launch_simulation(cfg):
         env = gym.make("DexGym-Marvin-SuperMimic-Wave-Direct-v0", cfg=cfg)
@@ -406,6 +505,7 @@ def main():
                 teacher_fraction=args.teacher_fraction,
                 noise=args.exploration_noise,
                 teacher_noise=args.teacher_noise,
+                actor_mix=args.actor_mix,
             )
             model_losses = []
             for _ in range(args.world_updates):
@@ -528,6 +628,7 @@ def main():
                 final_action_error = actor_command_error(actor, replay, mapping, motion, (train_envs, args.num_envs))
             training = {
                 "reference_sha256": REFERENCE_SHA256,
+                "git_commit": git_commit,
                 "reference": str(REFERENCE),
                 "preflight": preflight,
                 "resume_from": str(args.resume) if args.resume else None,
@@ -570,6 +671,7 @@ def main():
         "critic_optimizer": optim_critic.state_dict(),
         "training": training,
         "reference_sha256": REFERENCE_SHA256,
+        "git_commit": git_commit,
         "replay_saved": False,
         "resume_requires_recollection": True,
     }

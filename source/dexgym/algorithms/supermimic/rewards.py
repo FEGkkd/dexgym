@@ -38,7 +38,21 @@ def so3_log(rotation: torch.Tensor) -> torch.Tensor:
 
 
 def so3_geodesic(current: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
-    return torch.linalg.vector_norm(so3_log(current @ target.transpose(-1, -2)), dim=-1)
+    relative = current @ target.transpose(-1, -2)
+    skew = (
+        torch.stack(
+            (
+                relative[..., 2, 1] - relative[..., 1, 2],
+                relative[..., 0, 2] - relative[..., 2, 0],
+                relative[..., 1, 0] - relative[..., 0, 1],
+            ),
+            dim=-1,
+        )
+        * 0.5
+    )
+    sine = torch.linalg.vector_norm(skew, dim=-1)
+    cosine = ((relative.diagonal(dim1=-2, dim2=-1).sum(-1) - 1) * 0.5).clamp(-1, 1)
+    return torch.atan2(sine, cosine)
 
 
 def tracking_reward(
@@ -84,5 +98,7 @@ def tracking_reward(
         "tcp_rotation_error_rad": rot_sq[:, :, 2].sqrt(),
         "link_position_error_m": pos_sq.sqrt(),
         "link_rotation_error_rad": rot_sq.sqrt(),
+        "link_linear_velocity_error_m_s": vel_sq.sqrt(),
+        "link_angular_velocity_error_rad_s": omega_sq.sqrt(),
     }
     return reward, diagnostics

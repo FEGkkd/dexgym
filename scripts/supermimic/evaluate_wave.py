@@ -10,7 +10,9 @@ from preflight import REFERENCE_SHA256, verify
 from train_wave import evaluate_full
 
 
-def run(checkpoint: Path, output: Path, *, warmup_only=False):
+def run(checkpoint: Path, output: Path, *, warmup_only=False, initial_perturb_rad=0.0, physics_contact_audit=True):
+    if not 0 <= initial_perturb_rad <= 0.1:
+        raise ValueError("Evaluation joint perturbation must lie in [0, 0.1] rad")
     verify()
     actor = GoalActor().cuda().eval()
     record = torch.load(checkpoint, map_location="cuda", weights_only=False)
@@ -21,7 +23,12 @@ def run(checkpoint: Path, output: Path, *, warmup_only=False):
             raise ValueError("Checkpoint reference hash mismatch")
         actor.load_state_dict(record["actor"])
     output.mkdir(parents=True, exist_ok=True)
-    result = evaluate_full(actor, output_dir=output)
+    result = evaluate_full(
+        actor,
+        output_dir=output,
+        initial_perturb_rad=initial_perturb_rad,
+        physics_contact_audit=physics_contact_audit,
+    )
     result["checkpoint"] = str(checkpoint)
     result["reference_sha256"] = REFERENCE_SHA256
     (output / "evaluation.json").write_text(json.dumps(result, indent=2))
@@ -33,5 +40,18 @@ if __name__ == "__main__":
     parser.add_argument("checkpoint", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--warmup-only", action="store_true")
+    parser.add_argument("--initial-perturb-rad", type=float, default=0.0)
+    parser.add_argument("--no-physics-contact-audit", action="store_true")
     args = parser.parse_args()
-    print(json.dumps(run(args.checkpoint, args.output, warmup_only=args.warmup_only), indent=2))
+    print(
+        json.dumps(
+            run(
+                args.checkpoint,
+                args.output,
+                warmup_only=args.warmup_only,
+                initial_perturb_rad=args.initial_perturb_rad,
+                physics_contact_audit=not args.no_physics_contact_audit,
+            ),
+            indent=2,
+        )
+    )

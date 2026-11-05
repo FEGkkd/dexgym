@@ -40,3 +40,5 @@ def test_so3_orientation_distance_and_reward_ascend():
     assert improved.item() > reward.item()
     identity = torch.eye(3)[None]
     torch.testing.assert_close(so3_geodesic(identity, identity), torch.zeros(1))
+    half_turn = torch.diag(torch.tensor([1.0, -1.0, -1.0]))[None]
+    torch.testing.assert_close(so3_geodesic(half_turn, identity), torch.full((1,), torch.pi))

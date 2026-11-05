@@ -18,7 +18,12 @@ class MarvinWaveSceneCfg(InteractiveSceneCfg):
 class MarvinWaveDirectCfg(DirectRLEnvCfg):
     random_reference_start = True
     reset_joint_perturb_rad = 0.03
+    active_reset_fraction = 0.0
+    active_reset_frame_range = (450, 850)
+    early_reset_fraction = 0.0
+    early_reset_frame_range = (0, 50)
     initialize_hands_from_pd_replay = True
+    audit_contacts_each_physics_step = False
     decimation = 10
     episode_length_s = 10.0
     action_space = 14

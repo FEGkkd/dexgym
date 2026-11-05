@@ -81,6 +81,8 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         self.profile = apply_newton_arm_tracking_profile(self.robot, damping_scale_source=0.5)
         self.fk = DifferentiableMarvinFK(MJCF, device=self.device)
         self._substep = 0
+        self._contact_accum = 0
+        self.last_policy_contact_physics_steps = 0
 
     def _pre_physics_step(self, actions: torch.Tensor) -> None:
         if actions.shape != (self.num_envs, 14) or not torch.isfinite(actions).all():
@@ -91,8 +93,11 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         self.last_action = actions
         self.motion.advance()
         self._substep = 0
+        self._contact_accum = 0
 
     def _apply_action(self) -> None:
+        if self.cfg.audit_contacts_each_physics_step and self._substep:
+            self._contact_accum += int(self.sim.physics_manager._solver.mjw_data.nacon.numpy()[0] > 0)
         self.full_command[:] = self.home_full
         alpha = (self._substep + 1) / self.cfg.decimation
         self.full_command[:, self.arm_ids] = self.previous_command + alpha * (self.command - self.previous_command)
@@ -118,6 +123,9 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         return {"policy": torch.cat((self.history.flatten(1), goal.flatten(1)), dim=-1)}
 
     def _get_rewards(self) -> torch.Tensor:
+        if self.cfg.audit_contacts_each_physics_step:
+            self._contact_accum += int(self.sim.physics_manager._solver.mjw_data.nacon.numpy()[0] > 0)
+            self.last_policy_contact_physics_steps = self._contact_accum
         q, _ = self._arm_state()
         self.last_physical_q = self.robot.data.joint_pos.torch.detach().clone()
         self.last_physical_qd = self.robot.data.joint_vel.torch.detach().clone()
@@ -146,6 +154,8 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         reference_tcp = self.motion.current("link_pos")[:, :, 2]
         bad |= (torch.linalg.vector_norm(tcp_pos - reference_tcp, dim=-1) > 0.12).any(-1)
         bad |= (qd.abs() > 5.0).any(-1)
+        if self.cfg.audit_contacts_each_physics_step and self.last_policy_contact_physics_steps:
+            bad |= True
         timeout = (self.episode_length_buf >= self.max_episode_length) | (self.motion.frame >= self.motion.length - 1)
         return bad, timeout
 
@@ -159,6 +169,16 @@ class MarvinWaveDirectEnv(DirectRLEnv):
             if self.cfg.random_reference_start
             else torch.zeros(count, device=self.device, dtype=torch.long)
         )
+        if self.cfg.random_reference_start and (self.cfg.active_reset_fraction or self.cfg.early_reset_fraction):
+            selector = torch.rand(count, device=self.device)
+            active = selector < self.cfg.active_reset_fraction
+            early = (selector >= self.cfg.active_reset_fraction) & (
+                selector < self.cfg.active_reset_fraction + self.cfg.early_reset_fraction
+            )
+            active_start, active_end = self.cfg.active_reset_frame_range
+            early_start, early_end = self.cfg.early_reset_frame_range
+            frames = torch.where(active, torch.randint(active_start, active_end, (count,), device=self.device), frames)
+            frames = torch.where(early, torch.randint(early_start, early_end, (count,), device=self.device), frames)
         self.motion.reset(env_ids, frames)
         q = self.motion.current("q_full")[env_ids][:, self.model_to_newton].clone()
         qd = torch.zeros_like(q)

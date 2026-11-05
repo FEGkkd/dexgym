@@ -71,6 +71,7 @@ that created the runs. The shared virtual environment and robot asset were not r
 | E3 phase-balanced warmup | 40,960 | 100 / 10 / 10 | 2.86 / 4.68 mm | BPTT Actor terminated at step 3 |
 | E3, 512 env | 256,000 | 1,000 / 100 / 100 | 1.51 / 3.23 mm | terminated at step 27 |
 | E3, 1024 env | 768,000 | 1,500 / 200 / 200 | 1.45 / 2.87 mm | full 1356-step clip, no contact or hard-limit failure |
+| E4, 4096 env | 2,048,000 | 4,000 / 500 / 500 | 0.95 / 1.59 mm | full 1356-step clip, no contact or hard-limit failure |
 
 The 1024-environment Actor's measured Newton errors were:
 
@@ -93,12 +94,42 @@ checkpoint label was corrected; the original file is preserved as
 `candidate_mean_only_legacy.pt`, and `candidate.pt`/`metrics.json` record the stricter failure.
 No checkpoint is marked validated under the stricter mean, P95, safety, and complete-clip gate.
 
-The 4096-environment complete-loop capacity test collected 524,288 real transitions at
+The subsequent 4096-environment run used 50% of imagination starts from source frames
+450–849 (the 9–16 s interval with high physical tracking error), 10% from the first 50
+frames, and 40% uniformly. Its Newton evaluation completed the clip with zero contact,
+zero illegal joint states, 2.08 rad/s maximum actual arm speed, and 0.205% torque
+saturation. It achieved left/right mean position 7.18/18.86 mm and mean orientation
+0.91°/4.83°. Left position P95 was 24.66 mm; right position P95 was **52.98 mm**.
+Right orientation P95 improved to 14.00°. This is another **candidate**, since right
+position P95 still exceeds 50 mm. Its training wall time was 484 s, collection throughput
+50,659 physical transitions/s, and recorded PyTorch peak allocation 6.45 GB. During
+the formal run `nvidia-smi` showed approximately 20.0/32.6 GB in use including Newton.
+The actor and model checkpoints, learning curves, and every 50-update Actor snapshot
+are under `e4_4096env_hard500/`.
+
+Three additional isolated-process Newton replays of the same E4 Actor all completed
+the full motion without contact or illegal joints, but yielded right TCP position P95
+of 59.21, 60.79, and 57.28 mm. The two replays with 500 Hz contact audit recorded zero
+contact physics steps. This spread is material: the in-process 52.98 mm number is not
+presented as a reproducible best score. All three independent runs failed the strict
+right TCP tail criterion. The 250-update intermediate Actor was also replayed and
+terminated at control step 23 due to left TCP deviation; its partial-clip errors are
+not compared with complete-clip scores.
+
+The last independent replay records every Actor action, executed command, and 54DoF
+Newton physical state. `validate_policy_model.py` evaluated the learned model on this
+actual policy trajectory. Its right TCP 8-step error was mean/P95 5.01/13.14 mm;
+the 32-step error was 12.06/35.03 mm. These values are substantially worse than the
+0.95/1.59 mm eight/thirty-two-step means on teacher-heavy held-out environments.
+The world model therefore has a measurable on-policy distribution gap. A bounded
+mixed teacher/Actor collection profile and active-phase resets are being tested to
+address it before the next long training run.
+
+The earlier 4096-environment complete-loop capacity test collected 524,288 real transitions at
 48,457 transitions/s, then ran 100 eight-step world-model updates and five 32-step Actor/Critic
 updates. Replay used 1.74 GB; PyTorch's peak allocation was 2.43 GB, while `nvidia-smi`
 observed approximately 15.7/32.6 GB including Newton. Collection had no contact, termination,
-or abnormal speed. Its JSON report is `capacity_4096.json`. A longer 4096-environment run
-focused on the 9–16 s error-heavy portion is recorded separately after completion.
+or abnormal speed. Its JSON report is `capacity_4096.json`.
 
 The single-motion held-out model scores test unseen environment IDs and sampled state/action
 windows, not unseen motions. The teacher-heavy world-model dataset is still a distribution
