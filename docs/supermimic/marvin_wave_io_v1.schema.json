@@ -1,0 +1,35 @@
+{
+  "schema_version": "marvin-supermimic-wave-io-v1",
+  "reference_sha256": "b7af95b289e8aff898df7f5dd06b169f74dba2a506aa8fc5bf589ee3fee8106f",
+  "frames": 1357,
+  "physics_dt_s": 0.002,
+  "policy_dt_s": 0.02,
+  "controlled_joints": ["Joint1_L", "Joint2_L", "Joint3_L", "Joint4_L", "Joint5_L", "Joint6_L", "Joint7_L", "Joint1_R", "Joint2_R", "Joint3_R", "Joint4_R", "Joint5_R", "Joint6_R", "Joint7_R"],
+  "observation_history": {
+    "shape": [10, 56],
+    "frame_order": ["q_arm_normalized_14", "qd_arm_divided_by_2_14", "previous_action_tanh_14", "last_position_command_normalized_14"],
+    "joint_position_normalization": "(q - fixed_reference_frame_0_q) / (max_over_reference_abs(q - frame_0_q) + 0.15)",
+    "velocity_normalization": "qd / 2.0",
+    "history_order": "oldest to newest; reset history repeats current state"
+  },
+  "goal": {
+    "shape": [10, 90],
+    "link_order": [["Link3_L", "Link4_L", "tcp_L"], ["Link3_R", "Link4_R", "tcp_R"]],
+    "link_feature_order": ["position_xyz_3", "rotation_first_two_columns_6", "linear_velocity_xyz_3", "angular_velocity_xyz_3"],
+    "coordinate_frame": "fixed Marvin base frame; actual Newton world positions subtract environment origin",
+    "future_offsets_frames": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "after_end": "hold last position and orientation; zero linear and angular velocity"
+  },
+  "action": {
+    "shape": [14],
+    "interpretation": "deterministic raw joint target latent",
+    "bounded": "tanh(raw_action)",
+    "servo_command": "clamp(frame_0_q + scale * tanh(raw_action), joint_limits)",
+    "command_slew_limit_rad_per_policy_step": 0.04,
+    "physics_execution": "linearly interpolate previous and new command over ten 0.002-second Newton steps",
+    "reference_joint_feedforward_after_reset": false
+  },
+  "world_model_state": ["q_arm_14", "qd_arm_14", "last_executed_position_command_14"],
+  "finger_state_in_policy_model_or_replay": false,
+  "hand_command": "all 40 finger joints fixed at source MJCF Home"
+}

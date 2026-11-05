@@ -1,0 +1,42 @@
+import torch
+from dexgym.algorithms.supermimic.differentiable_fk import DifferentiableMarvinFK
+from dexgym.algorithms.supermimic.rewards import RewardWeights, so3_geodesic, tracking_reward
+from dexgym.motion.motion_manager import MotionManager
+
+MJCF = "/home/ubuntu/dexgym/source/dexgym/assets/marvin_wuji/source_model/dual_arm_marvin.xml"
+NPZ = "/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz"
+
+
+def test_so3_orientation_distance_and_reward_ascend():
+    ref = MotionManager(NPZ, 1, "cpu")
+    fk = DifferentiableMarvinFK(MJCF)
+    ref.reset(torch.tensor([0]), 200)
+    target = {key: ref.current(key) for key in ("link_pos", "link_rotmat", "link_linear_vel", "link_angular_vel")}
+    baseline = ref.current("q_arm").clone()
+    q = baseline.clone()
+    q[0, 0] += 0.08
+    q[0, 9] -= 0.08
+    q.requires_grad_()
+    weights = RewardWeights(
+        tcp_position=0,
+        tcp_rotation=1,
+        link_position=0,
+        link_rotation=0,
+        linear_velocity=0,
+        angular_velocity=0,
+        action_rate=0,
+        joint_limit=0,
+    )
+    lower = torch.full((14,), -10.0)
+    upper = -lower
+    reward, diagnostics = tracking_reward(q, q.detach(), q, q.detach(), target, fk, lower, upper, weights)
+    assert diagnostics["tcp_rotation_error_rad"].min() > 0
+    assert torch.isfinite(reward).all()
+    gradient = torch.autograd.grad(reward.sum(), q)[0]
+    assert torch.isfinite(gradient).all() and gradient.abs().sum() > 0
+    improved, _ = tracking_reward(
+        q.detach() + 0.05 * gradient, q.detach(), q.detach(), q.detach(), target, fk, lower, upper, weights
+    )
+    assert improved.item() > reward.item()
+    identity = torch.eye(3)[None]
+    torch.testing.assert_close(so3_geodesic(identity, identity), torch.zeros(1))

@@ -15,6 +15,12 @@ def quaternion_xyzw_to_6d(quat: torch.Tensor) -> torch.Tensor:
     return torch.cat((col0, col1), dim=-1)
 
 
+def quaternion_xyzw_to_matrix(quat: torch.Tensor) -> torch.Tensor:
+    six = quaternion_xyzw_to_6d(quat)
+    first, second = six[..., :3], six[..., 3:]
+    return torch.stack((first, second, torch.cross(first, second, dim=-1)), dim=-1)
+
+
 class MotionManager:
     """One motion now; `motion_id` distinguishes future library entries."""
 
@@ -46,6 +52,7 @@ class MotionManager:
         self.data = {
             key: torch.as_tensor(value.copy(), device=self.device, dtype=torch.float32) for key, value in arrays.items()
         }
+        self.data["link_rotmat"] = quaternion_xyzw_to_matrix(self.data["link_quat_xyzw"])
         if self.data["q_arm"].shape != (self.length, 14) or self.link_names != (
             ("Link3_L", "Link4_L", "tcp_L"),
             ("Link3_R", "Link4_R", "tcp_R"),
@@ -63,13 +70,19 @@ class MotionManager:
         return self.data[name][self.frame]
 
     def future(self, count: int = 10):
+        return self.future_at(self.frame, count)
+
+    def future_at(self, frame: torch.Tensor, count: int = 10):
         offsets = torch.arange(1, count + 1, device=self.device)
-        raw = self.frame[:, None] + offsets
+        raw = frame[:, None] + offsets
         index = raw.clamp(max=self.length - 1)
         return index, raw >= self.length
 
     def future_links(self, count: int = 10):
-        indices, beyond = self.future(count)
+        return self.future_links_at(self.frame, count)
+
+    def future_links_at(self, frame: torch.Tensor, count: int = 10):
+        indices, beyond = self.future_at(frame, count)
         result = {
             key: self.data[key][indices]
             for key in ("link_pos", "link_quat_xyzw", "link_linear_vel", "link_angular_vel")
@@ -79,9 +92,12 @@ class MotionManager:
         return result
 
     def goal(self, count: int = 10):
-        links = self.future_links(count)
+        return self.goal_at(self.frame, count)
+
+    def goal_at(self, frame: torch.Tensor, count: int = 10):
+        links = self.future_links_at(frame, count)
         pos = links["link_pos"]
         quat6 = quaternion_xyzw_to_6d(links["link_quat_xyzw"])
         vel = links["link_linear_vel"]
         omega = links["link_angular_vel"]
-        return torch.cat((pos, quat6, vel, omega), dim=-1).reshape(len(self.frame), count, 90)
+        return torch.cat((pos, quat6, vel, omega), dim=-1).reshape(len(frame), count, 90)
