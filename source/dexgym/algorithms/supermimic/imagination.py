@@ -8,6 +8,7 @@ from .differentiable_fk import DifferentiableMarvinFK
 from .networks import DeltaWorldModel, GoalActor, PrivilegedCritic
 from .observation import noisy_proprio_frame
 from .rewards import RewardWeights, tracking_reward
+from .transition import ReferenceTimeIndex
 
 
 def survival_weights(termination_probabilities: torch.Tensor) -> torch.Tensor:
@@ -66,6 +67,8 @@ def imagined_rollout(
     state = start["state"]
     history = start["history"]
     frame = start["frame"]
+    if not bool(ReferenceTimeIndex(frame, torch.full_like(frame, motion.length)).full_horizon_valid(horizon).all()):
+        raise ValueError("Imagination would cross the motion boundary")
     rewards, terminations, states, frames, values, prior_costs = [], [], [], [], [], []
     for step in range(horizon):
         current = (frame + step).clamp(max=motion.length - 1)
@@ -102,8 +105,7 @@ def imagined_rollout(
             previous_bounded_action=history[:, -1, 28:42],
         )
         rewards.append(reward)
-        next_goal = motion.goal_at(next_frame)
-        terminations.append(world_model.termination_probability(next_state, next_goal[:, 0]))
+        terminations.append(world_model.termination_probability(next_state, motion.reference_features_at(next_frame)))
         observation = torch.cat(
             (
                 (next_state[:, :14] - mapping.origin) / mapping.scale,

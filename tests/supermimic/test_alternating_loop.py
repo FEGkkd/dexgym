@@ -42,7 +42,7 @@ def test_warmup_and_model_trust_gate_never_skip_real_collection():
     assert events == ["Newton", "Newton", "WM8", "WM8", "Newton", "WM8", "WM8", "BPTT32", "TDlambda"]
 
 
-def test_model_update_waits_for_episode_safe_windows_after_physics_warmup():
+def test_model_update_uses_short_episode_transitions_before_long_episodes_exist():
     replay = MotionReplay(40, 2, "cpu")
     for t in range(40):
         replay.append(
@@ -53,7 +53,9 @@ def test_model_update_waits_for_episode_safe_windows_after_physics_warmup():
             torch.full((2,), t),
             torch.ones(2, dtype=torch.bool),
         )
-    assert prepare_model_windows(replay, batch=4, updates=1, env_range=(0, 2)) is None
+    short = prepare_model_windows(replay, batch=4, updates=1, env_range=(0, 2))
+    assert short is not None
+    assert (short[0]["mask"].sum(1) == 1).all()
     for t in range(8):
         replay.append(
             torch.zeros(2, 42),

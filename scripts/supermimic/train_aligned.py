@@ -61,8 +61,8 @@ def _parse_args():
         "--output", type=Path, default=Path("/home/ubuntu/dexgym_data/marvin_supermimic_wave_m41/pure_smoke")
     )
     args = parser.parse_args()
-    if args.num_envs < 2 or args.iterations < 1 or args.replay_steps < 40:
-        raise ValueError("Aligned training needs at least two envs, one iteration, and 40 Replay slots")
+    if args.num_envs < 2 or args.iterations < 1 or args.replay_steps < 1:
+        raise ValueError("Aligned training needs at least two envs, one iteration, and one Replay slot")
     if args.min_world_updates < 1 or args.trust_check_interval < 1 or args.checkpoint_interval < 1:
         raise ValueError("Model trust and checkpoint intervals must be positive")
     if any(
@@ -203,12 +203,14 @@ def main():
 
             def collect():
                 result = collector.step()
+                slot = (replay.steps - 1) % replay.capacity
+                model.update_norms(replay.state[slot], replay.action[slot], replay.next_state[slot])
                 curves["physical_reward"].append(result["reward_mean"])
                 curves["termination_rate"].append(result["terminations"] / args.num_envs)
 
             def replay_ready():
                 nonlocal pending_model_windows
-                if replay.steps < 40:
+                if replay.steps < 1:
                     return False
                 pending_model_windows = prepare_model_windows(
                     replay, args.world_batch, args.world_updates_per_iteration, (0, train_envs)
@@ -217,10 +219,13 @@ def main():
 
             def model_update():
                 window = pending_model_windows.pop()
-                next_frames = (window["frame"] + 1).reshape(-1)
-                window["termination_goal"] = motion.goal_at(next_frames)[:, 0].reshape(args.world_batch, 8, 90)
+                valid = window["mask"].bool()
+                next_frames = torch.where(valid, window["next_frame"], torch.zeros_like(window["next_frame"]))
+                window["termination_goal"] = motion.reference_features_at(next_frames.reshape(-1)).reshape(
+                    args.world_batch, 8, 90
+                )
                 optim_model.zero_grad()
-                loss, _ = model.autoregressive_loss(window, mapping)
+                loss, _ = model.autoregressive_loss(window, mapping, update_normalizers=False)
                 if not torch.isfinite(loss):
                     raise FloatingPointError("Nonfinite eight-step world-model loss")
                 loss.backward()
@@ -256,7 +261,9 @@ def main():
 
             def actor_update():
                 nonlocal latest_rollout
-                start = replay.sample_starts(args.imag_batch, env_range=(0, train_envs))
+                start = replay.sample_starts(
+                    args.imag_batch, env_range=(0, train_envs), horizon=32, clip_length=motion.length
+                )
                 for module in (model, critic):
                     for parameter in module.parameters():
                         parameter.requires_grad_(False)

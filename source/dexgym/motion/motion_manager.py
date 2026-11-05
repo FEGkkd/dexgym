@@ -86,6 +86,26 @@ class MotionManager:
     def current(self, name: str):
         return self.data[name][self.frame]
 
+    def reference_at(self, frame: torch.Tensor):
+        """Return the reference at the physical state's current time."""
+        if bool(((frame < 0) | (frame >= self.length)).any()):
+            raise ValueError("Reference frame is outside the clip")
+        return {key: value[frame] for key, value in self.data.items() if key != "time"}
+
+    def reference_features_at(self, frame: torch.Tensor):
+        """Current 90D link reference for reward and next-state termination."""
+        reference = self.reference_at(frame)
+        return torch.cat((
+            reference["link_pos"],
+            quaternion_xyzw_to_6d(reference["link_quat_xyzw"]),
+            reference["link_linear_vel"],
+            reference["link_angular_vel"],
+        ), dim=-1).reshape(len(frame), 90)
+
+    def future_goal_at(self, frame: torch.Tensor, count: int = 10):
+        """Actor goal: references at frame+1 through frame+count."""
+        return self.goal_at(frame, count)
+
     def future(self, count: int = 10):
         return self.future_at(self.frame, count)
 

@@ -42,6 +42,9 @@ class AlignedNewtonCollector:
             frame,
             done,
             terminated=terminated,
+            truncated=truncated,
+            previous_action=native.previous_action,
+            executed_command=native.last_physical_arm_state[:, 28:42],
         )
         self.steps += 1
         self.terminations += int(terminated.sum())

@@ -1,109 +1,157 @@
-"""Bounded GPU replay with episode-safe contiguous physical windows."""
+"""GPU ring replay of pre-reset physical transitions with masked windows."""
 
 import torch
 
 
 class MotionReplay:
     def __init__(self, capacity_steps: int, num_envs: int, device: str | torch.device):
-        if capacity_steps < 40 or num_envs < 1:
-            raise ValueError("Replay needs at least 40 time slots and a positive environment count")
+        if capacity_steps < 1 or num_envs < 1:
+            raise ValueError("Replay capacity and environment count must be positive")
         self.capacity = capacity_steps
         self.num_envs = num_envs
         self.device = torch.device(device)
-        self.state = torch.empty((capacity_steps, num_envs, 42), device=self.device)
-        self.action = torch.empty((capacity_steps, num_envs, 14), device=self.device)
+        shape = (capacity_steps, num_envs)
+        self.state = torch.empty((*shape, 42), device=self.device)
+        self.action = torch.empty((*shape, 14), device=self.device)
+        self.previous_action = torch.empty_like(self.action)
+        self.executed_command = torch.empty_like(self.action)
         self.next_state = torch.empty_like(self.state)
-        self.history = torch.empty((capacity_steps, num_envs, 10, 56), device=self.device)
-        self.frame = torch.empty((capacity_steps, num_envs), device=self.device, dtype=torch.long)
+        self.history = torch.empty((*shape, 10, 56), device=self.device)
+        self.frame = torch.empty(shape, device=self.device, dtype=torch.long)
+        self.next_frame = torch.empty_like(self.frame)
+        self.motion_id = torch.empty_like(self.frame)
         self.episode = torch.empty_like(self.frame)
-        self.done = torch.empty((capacity_steps, num_envs), device=self.device, dtype=torch.bool)
+        self.done = torch.empty(shape, device=self.device, dtype=torch.bool)
         self.terminated = torch.empty_like(self.done)
+        self.truncated = torch.empty_like(self.done)
         self.timestamp = torch.full((capacity_steps,), -1, device=self.device, dtype=torch.long)
         self.episode_counter = torch.zeros(num_envs, device=self.device, dtype=torch.long)
         self.steps = 0
 
     @property
     def bytes_allocated(self):
-        fields = (
-            self.state,
-            self.action,
-            self.next_state,
-            self.history,
-            self.frame,
-            self.episode,
-            self.done,
-            self.terminated,
-            self.timestamp,
-            self.episode_counter,
-        )
+        fields = (self.state, self.action, self.previous_action, self.executed_command,
+                  self.next_state, self.history, self.frame, self.next_frame,
+                  self.motion_id, self.episode, self.done, self.terminated,
+                  self.truncated, self.timestamp, self.episode_counter)
         return sum(field.numel() * field.element_size() for field in fields)
 
-    def append(self, state, action, next_state, history, frame, done, *, terminated=None):
+    def append(self, state, action, next_state, history, frame, done, *, terminated=None,
+               truncated=None, motion_id=None, previous_action=None, executed_command=None):
+        if terminated is None:
+            terminated = done
+        if truncated is None:
+            truncated = done & ~terminated
+        if not torch.equal(done, terminated | truncated):
+            raise ValueError("done must equal terminated OR truncated")
+        if state.shape != (self.num_envs, 42) or action.shape != (self.num_envs, 14):
+            raise ValueError("Replay expects per-environment 42D states and 14D actions")
+        if next_state.shape != state.shape or frame.shape != (self.num_envs,):
+            raise ValueError("Replay next state or reference time has invalid shape")
+        if not bool(torch.isfinite(state).all() and torch.isfinite(action).all()
+                    and torch.isfinite(next_state).all()):
+            raise ValueError("Replay transition has nonfinite physical data")
         slot = self.steps % self.capacity
         self.state[slot] = state.detach()
         self.action[slot] = action.detach()
+        self.previous_action[slot] = (torch.zeros_like(action) if previous_action is None
+                                      else previous_action).detach()
         self.next_state[slot] = next_state.detach()
+        self.executed_command[slot] = (next_state[:, 28:42] if executed_command is None
+                                       else executed_command).detach()
         self.history[slot] = history.detach()
         self.frame[slot] = frame.detach()
+        self.next_frame[slot] = frame.detach() + 1
+        self.motion_id[slot] = (torch.zeros_like(frame) if motion_id is None else motion_id).detach()
         self.episode[slot] = self.episode_counter
         self.done[slot] = done.detach()
-        self.terminated[slot] = (done if terminated is None else terminated).detach()
+        self.terminated[slot] = terminated.detach()
+        self.truncated[slot] = truncated.detach()
         self.timestamp[slot] = self.steps
         self.episode_counter += done.long()
         self.steps += 1
 
-    def _sample_indices(
-        self,
-        batch: int,
-        horizon: int,
-        env_range: tuple[int, int] | None = None,
-        frame_range: tuple[int, int] | None = None,
-        allow_terminal_at_end: bool = False,
-    ):
-        low = max(0, self.steps - self.capacity)
-        high = self.steps - horizon
-        if high < low:
-            raise ValueError("Not enough replay steps for requested horizon")
+    def _candidates(self, env_range=None, frame_range=None):
+        if self.steps == 0:
+            raise ValueError("Replay is empty")
         env_low, env_high = env_range or (0, self.num_envs)
-        times = torch.arange(low, high + 1, device=self.device)
+        if not (0 <= env_low < env_high <= self.num_envs):
+            raise ValueError("Invalid replay environment range")
+        times = torch.arange(max(0, self.steps - self.capacity), self.steps, device=self.device)
         envs = torch.arange(env_low, env_high, device=self.device)
-        start = times % self.capacity
-        end = (times + horizon - 1) % self.capacity
-        # Episode IDs advance immediately after a terminal transition, so equal
-        # endpoints prove that no reset occurs inside this contiguous window.
-        valid = self.episode[start[:, None], envs[None, :]] == self.episode[end[:, None], envs[None, :]]
-        if not allow_terminal_at_end:
-            valid &= ~self.done[end[:, None], envs[None, :]]
-        if frame_range is not None:
-            frame = self.frame[start[:, None], envs[None, :]]
-            valid &= (frame >= frame_range[0]) & (frame < frame_range[1])
-        candidate_t, candidate_env = valid.nonzero(as_tuple=True)
-        if candidate_t.numel() == 0:
-            raise ValueError("Replay lacks episode-safe continuous windows")
-        selected = torch.randint(candidate_t.numel(), (batch,), device=self.device)
-        return times[candidate_t[selected]], envs[candidate_env[selected]]
+        if frame_range is None:
+            return times[:, None].expand(-1, len(envs)).flatten(), envs.repeat(len(times))
+        frame = self.frame[times[:, None] % self.capacity, envs[None, :]]
+        valid = (frame >= frame_range[0]) & (frame < frame_range[1])
+        time_idx, env_idx = valid.nonzero(as_tuple=True)
+        if not len(time_idx):
+            raise ValueError("Replay lacks requested reference frames")
+        return times[time_idx], envs[env_idx]
 
-    def sample_windows(self, batch: int, horizon: int = 8, env_range: tuple[int, int] | None = None):
-        t, env = self._sample_indices(batch, horizon, env_range, allow_terminal_at_end=True)
-        slots = (t[:, None] + torch.arange(horizon, device=self.device)) % self.capacity
-        return {
-            "state": self.state[slots, env[:, None]],
-            "action": self.action[slots, env[:, None]],
-            "next_state": self.next_state[slots, env[:, None]],
-            "frame": self.frame[slots, env[:, None]],
-            "terminated": self.terminated[slots, env[:, None]],
-        }
+    def sample_windows(self, batch: int, horizon: int = 8, env_range=None, frame_range=None,
+                       *, require_full: bool = False):
+        if batch < 1 or horizon < 1:
+            raise ValueError("Batch and horizon must be positive")
+        times, envs = self._candidates(env_range, frame_range)
+        if require_full:
+            if horizon > self.capacity:
+                raise ValueError("A full window exceeds replay capacity")
+            start_slot = times % self.capacity
+            end_absolute = times + horizon - 1
+            end_slot = end_absolute % self.capacity
+            full = ((end_absolute < self.steps)
+                    & (self.timestamp[end_slot] == end_absolute)
+                    & (self.episode[start_slot, envs] == self.episode[end_slot, envs])
+                    & (self.motion_id[start_slot, envs] == self.motion_id[end_slot, envs])
+                    & (self.frame[end_slot, envs] == self.frame[start_slot, envs] + horizon - 1))
+            times, envs = times[full], envs[full]
+            if not len(times):
+                raise ValueError("Replay lacks full episode-safe windows")
+        selected = torch.randint(len(times), (batch,), device=self.device)
+        start, env = times[selected], envs[selected]
+        absolute = start[:, None] + torch.arange(horizon, device=self.device)
+        slots = absolute % self.capacity
+        env_idx = env[:, None]
+        start_slot = start % self.capacity
+        episode = self.episode[slots, env_idx]
+        frame = self.frame[slots, env_idx]
+        motion_id = self.motion_id[slots, env_idx]
+        present = ((absolute < self.steps) & (absolute >= max(0, self.steps - self.capacity))
+                   & (self.timestamp[slots] == absolute))
+        same_trajectory = ((episode == self.episode[start_slot, env][:, None])
+                           & (motion_id == self.motion_id[start_slot, env][:, None])
+                           & (frame == self.frame[start_slot, env][:, None]
+                              + torch.arange(horizon, device=self.device)))
+        no_prior_done = torch.cumprod(
+            torch.cat((torch.ones((batch, 1), device=self.device, dtype=torch.long),
+                       (~self.done[slots, env_idx][:, :-1]).long()), dim=1), dim=1).bool()
+        mask = present & same_trajectory & no_prior_done
+        assert bool(mask[:, 0].all())
+        keys = ("state", "action", "previous_action", "executed_command", "next_state",
+                "frame", "next_frame", "motion_id", "episode", "done", "terminated", "truncated")
+        out = {key: getattr(self, key)[slots, env_idx] for key in keys}
+        out["mask"] = mask.float()
+        out["env_id"] = env
+        out["absolute_timestamp"] = absolute
+        return out
 
-    def sample_starts(
-        self,
-        batch: int,
-        env_range: tuple[int, int] | None = None,
-        frame_range: tuple[int, int] | None = None,
-    ):
-        t, env = self._sample_indices(batch, 1, env_range, frame_range)
-        slots = t % self.capacity
-        return {
-            "state": self.state[slots, env],
-            "history": self.history[slots, env],
-            "frame": self.frame[slots, env],
-        }
+    def sample_starts(self, batch: int, env_range=None, frame_range=None, *, horizon=None,
+                      clip_length=None):
+        times, envs = self._candidates(env_range, frame_range)
+        slots = times % self.capacity
+        valid = ~self.done[slots, envs]
+        if horizon is not None:
+            if clip_length is None:
+                raise ValueError("A clip length is required for full-horizon imagination")
+            length = torch.as_tensor(clip_length, device=self.device)
+            if length.ndim:
+                length = length[self.motion_id[slots, envs]]
+            valid &= self.frame[slots, envs] + horizon < length
+        times, envs = times[valid], envs[valid]
+        if not len(times):
+            raise ValueError("Replay lacks episode-safe imagination starts")
+        chosen = torch.randint(len(times), (batch,), device=self.device)
+        slot, env = times[chosen] % self.capacity, envs[chosen]
+        return {"state": self.state[slot, env], "history": self.history[slot, env],
+                "frame": self.frame[slot, env], "motion_id": self.motion_id[slot, env],
+                "episode": self.episode[slot, env], "env_id": env}

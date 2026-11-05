@@ -29,6 +29,7 @@ class ResettingEnv:
             motion=SimpleNamespace(frame=torch.tensor([2, 3]), length=10, data={"q_arm": torch.zeros(10, 14)}),
             action_map=SimpleNamespace(origin=torch.zeros(14), scale=torch.ones(14)),
             last_physical_arm_state=torch.zeros(2, 42),
+            previous_action=torch.zeros(2, 14),
             last_policy_contact_counts=torch.zeros(2, dtype=torch.int32),
         )
 
@@ -62,3 +63,5 @@ def test_stateful_collector_keeps_prereset_physics_and_hard_termination_labels()
     assert not replay.terminated[:2, 1].any()
     assert replay.next_state[:2, :, 0].eq(77).all()
     assert replay.action[:2].eq(0).all()
+    assert replay.previous_action[:2].eq(0).all()
+    assert replay.executed_command[:2].eq(77).all()

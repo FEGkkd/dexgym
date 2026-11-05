@@ -1,4 +1,5 @@
 import torch
+import pytest
 from dexgym.algorithms.supermimic.replay_buffer import MotionReplay
 
 
@@ -12,8 +13,9 @@ def test_eight_step_windows_do_not_cross_episode_or_wrap_boundary():
         replay.append(state, action, next_state, torch.zeros(3, 10, 56), torch.full((3,), t), done)
     batch = replay.sample_windows(64, 8)
     assert batch["state"].shape == (64, 8, 42)
-    torch.testing.assert_close(batch["next_state"][:, :, 0], batch["state"][:, :, 0] + 1)
-    torch.testing.assert_close(batch["frame"][:, 1:] - batch["frame"][:, :-1], torch.ones(64, 7, dtype=torch.long))
+    valid = batch["mask"].bool()
+    torch.testing.assert_close(batch["next_state"][valid, 0], batch["state"][valid, 0] + 1)
+    assert ((batch["frame"][:, 1:] - batch["frame"][:, :-1] - 1)[valid[:, 1:]] == 0).all()
     assert replay.bytes_allocated < 1_000_000
     assert replay.sample_starts(4)["history"].shape == (4, 10, 56)
     phase = replay.sample_starts(16, frame_range=(70, 80))
@@ -36,8 +38,9 @@ def test_terminal_at_window_end_is_kept_for_termination_head_without_crossing_re
             terminated,
             terminated=terminated,
         )
-    batch = replay.sample_windows(8, 8)
+    batch = replay.sample_windows(8, 8, frame_range=(0, 1))
     assert batch["frame"][:, 0].eq(0).all()
+    assert batch["mask"].all()
     assert batch["terminated"][:, -1].all()
     assert not batch["terminated"][:, :-1].any()
     assert batch["next_state"][:, -1, 0].eq(77).all()
@@ -57,6 +60,16 @@ def test_rare_single_valid_window_is_sampled_without_rejection_failure():
             torch.full((32,), t),
             done,
         )
-    batch = replay.sample_windows(128, 8)
+    batch = replay.sample_windows(128, 8, require_full=True)
     assert batch["frame"][:, 0].eq(100).all()
+    assert batch["mask"].all()
     assert batch["terminated"][:, -1].all()
+
+
+def test_full_window_validation_rejects_only_short_episodes():
+    replay = MotionReplay(8, 1, "cpu")
+    for t in range(8):
+        replay.append(torch.zeros(1, 42), torch.zeros(1, 14), torch.zeros(1, 42),
+                      torch.zeros(1, 10, 56), torch.tensor([t]), torch.ones(1, dtype=torch.bool))
+    with pytest.raises(ValueError):
+        replay.sample_windows(1, 8, require_full=True)

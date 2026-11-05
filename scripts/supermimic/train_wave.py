@@ -178,7 +178,7 @@ def collect(env, actor, replay, steps, teacher_fraction=0.6, noise=0.18, teacher
 def model_errors(model, replay, mapping, fk, batch=32, env_range=None):
     result = {}
     for horizon in (1, 8, 32):
-        window = replay.sample_windows(batch, horizon, env_range=env_range)
+        window = replay.sample_windows(batch, horizon, env_range=env_range, require_full=True)
         predicted = window["state"][:, 0]
         baseline = predicted.clone()
         for step in range(horizon):

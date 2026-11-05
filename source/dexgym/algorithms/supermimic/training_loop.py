@@ -2,7 +2,7 @@
 
 
 def prepare_model_windows(replay, batch, updates, env_range):
-    """Reserve only complete episode-safe windows before starting WM updates."""
+    """Reserve masked eight-slot windows, including short real episodes."""
     try:
         return [replay.sample_windows(batch, 8, env_range=env_range) for _ in range(updates)]
     except ValueError:

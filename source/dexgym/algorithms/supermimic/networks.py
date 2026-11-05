@@ -78,11 +78,16 @@ class DeltaWorldModel(nn.Module):
             raise ValueError("Termination head expects matching [...,42] state and [...,90] goal")
         return torch.sigmoid(self.termination_head(torch.cat((state, goal), dim=-1)).squeeze(-1))
 
-    def autoregressive_loss(self, windows: dict[str, torch.Tensor], mapping: ArmActionMap):
+    def autoregressive_loss(self, windows: dict[str, torch.Tensor], mapping: ArmActionMap, *,
+                            update_normalizers: bool = True, termination_pos_weight: float = 1.0):
         state, action, truth = windows["state"], windows["action"], windows["next_state"]
         if action.shape[1] != 8:
-            raise ValueError("World model requires eight real continuous transitions")
-        self.update_norms(state, action, truth)
+            raise ValueError("World model requires eight slots, with invalid transitions masked")
+        mask = windows.get("mask", torch.ones_like(action[..., 0])).bool()
+        if mask.shape != action.shape[:2] or not bool(mask[:, 0].all()):
+            raise ValueError("World model window mask must include every first transition")
+        if update_normalizers:
+            self.update_norms(state[mask], action[mask], truth[mask])
         prediction = state[:, 0]
         has_term = "terminated" in windows or "termination_goal" in windows
         if has_term and ("terminated" not in windows or "termination_goal" not in windows):
@@ -96,14 +101,20 @@ class DeltaWorldModel(nn.Module):
         for step in range(8):
             prediction = self(prediction, action[:, step], mapping)
             delta = (prediction[..., :28] - truth[:, step, :28]) / self.delta_norm.std()
-            losses.append(delta.square().mean())
-            errors.append((prediction[..., :28] - truth[:, step, :28]).square().mean(-1).sqrt())
-            if has_term:
-                probability = self.termination_probability(prediction, windows["termination_goal"][:, step])
-                term_losses.append(F.binary_cross_entropy(probability, windows["terminated"][:, step].float()))
-        objective = torch.stack(losses).mean()
+            losses.append(delta[mask[:, step]].square().sum())
+            error = (prediction[..., :28] - truth[:, step, :28]).square().mean(-1).sqrt()
+            errors.append(torch.where(mask[:, step], error, torch.zeros_like(error)))
+            if has_term and bool(mask[:, step].any()):
+                logits = self.termination_head(torch.cat((
+                    prediction[mask[:, step]], windows["termination_goal"][:, step][mask[:, step]]
+                ), dim=-1)).squeeze(-1)
+                labels = windows["terminated"][:, step][mask[:, step]].float()
+                term_losses.append(F.binary_cross_entropy_with_logits(
+                    logits, labels, reduction="sum",
+                    pos_weight=torch.as_tensor(termination_pos_weight, device=logits.device)))
+        objective = torch.stack(losses).sum() / (mask.sum() * 28)
         if term_losses:
-            objective = objective + torch.stack(term_losses).mean()
+            objective = objective + torch.stack(term_losses).sum() / mask.sum()
         return objective, torch.stack(errors, dim=1)
 
 
