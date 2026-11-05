@@ -77,6 +77,8 @@ that created the runs. The shared virtual environment and robot asset were not r
 | E7 prolonged, 4096 env | 2,048,000 | 4,000 / 1,000 / 1,000 | 0.60 / 0.77 mm | full clip; independent right TCP position P95 50.65 mm |
 | E8 cumulative 2000, 4096 env | 2,048,000 | 4,000 / 800 / 800 | 0.60 / 1.00 mm | in-process full clip; two independent replays terminate at steps 1329/1328 |
 | E9 corrective, 4096 env | 2,048,000 | 4,000 / 300 / 300, plus 1,500 auxiliary Actor updates | 0.95 / 0.93 mm | independent full clip at zero, ±0.03, and ±0.05 rad |
+| E10 cumulative 3000, 4096 env | 2,048,000 | 4,000 / 700 / 700 | 0.97 / 1.05 mm | independent full clip at zero, ±0.03, and ±0.05 rad |
+| E11 cumulative 4000, 4096 env | 2,048,000 | 4,000 / 1,000 / 1,000 | 0.80 / 0.77 mm | independent full clip at zero, ±0.03, and ±0.05 rad |
 
 The 1024-environment Actor's measured Newton errors were:
 
@@ -232,6 +234,14 @@ The earlier 4096-environment complete-loop capacity test collected 524,288 real 
 updates. Replay used 1.74 GB; PyTorch's peak allocation was 2.43 GB, while `nvidia-smi`
 observed approximately 15.7/32.6 GB including Newton. Collection had no contact, termination,
 or abnormal speed. Its JSON report is `capacity_4096.json`.
+The same complete-loop benchmark was subsequently run at 256 and 2048 environments
+from the validated E9 checkpoint. Physics throughput was 3,254 and 24,447
+transitions/s; world-model update rates were 173.1 and 188.4/s; 32-step imagination
+update rates were 1.26 and 1.30/s. PyTorch peak allocation was 0.75 and 1.53 GB,
+respectively. Both runs had zero contact and termination. Results are in
+`capacity_256.json` and `capacity_2048.json`; the 512 and 1024 configurations were
+also exercised in full training runs above. Increasing physics environments did
+not proportionally increase the independent imagination update rate.
 
 The single-motion held-out model scores test unseen environment IDs and sampled state/action
 windows, not unseen motions. The teacher-heavy world-model dataset is still a distribution
@@ -308,10 +318,73 @@ prediction, training curves, and separate opening, peak-wave, and active-phase
 statistics. The original human and direct-PD reference videos remain in
 `/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/previews/`.
 
-**Result: Marvin Bimanual SuperMimic Wave v0 is validated for this single seen
-motion under the tested Newton settings and fixed random seed.** It is a research
-baseline, not evidence of unseen-motion generalization, finger contact safety,
-or real-robot readiness.
+**Result at E9: Marvin Bimanual SuperMimic Wave v0 passed the single seen motion
+gate under the tested Newton settings and fixed random seed.** E10 and E11 extended
+the BPTT training duration and improved independent Newton tracking, as detailed below.
+
+## E10–E11 extended training: cumulative 3000 and 4000 BPTT updates
+
+The user requested longer training beyond the initial 500-update comparison. E10
+resumed E9 for another 700 frozen-world-model, 32-step imagination Actor/Critic
+updates; E11 resumed E10 for another 1000. Each run recollected 2,048,000 actual
+Newton transitions from 4096 environments, performed 4000 eight-step world-model
+updates, and trained with a 64-rollout imagination batch. Replay was recollected on
+each resume, as checkpoint Replay is not serialized. The cumulative E6–E11 lineage
+used 12,288,000 real transitions, 24,000 world-model updates, and **4000 BPTT
+Actor plus 4000 TD(λ) Critic updates**. Earlier independent pilot and E1–E5 samples
+are additional. E10 and E11 made no new auxiliary supervised Actor updates.
+
+| Independent checkpoint replay | Left position mean / P95 (mm) | Left SO(3) mean / P95 (deg) | Right position mean / P95 (mm) | Right SO(3) mean / P95 (deg) | Complete / contact physics steps / illegal joints |
+| --- | ---: | ---: | ---: | ---: | --- |
+| E10, zero | 2.95 / 11.44 | 0.39 / 1.35 | 6.20 / 17.38 | 1.42 / 4.07 | 1356 / 0 / 0 |
+| E10, ±0.03 rad | 4.56 / 19.90 | 0.59 / 2.25 | 7.39 / 22.10 | 1.62 / 5.37 | 1356 / 0 / 0 |
+| E10, ±0.05 rad | 4.07 / 19.08 | 0.52 / 2.20 | 7.32 / 20.23 | 1.59 / 4.82 | 1356 / 0 / 0 |
+| E11 `best.pt`, zero | 2.45 / 8.82 | 0.33 / 1.14 | 5.33 / 12.39 | 1.25 / 3.45 | 1356 / 0 / 0 |
+| E11, ±0.03 rad | 3.16 / 11.92 | 0.43 / 1.41 | 7.42 / 21.69 | 2.14 / 6.62 | 1356 / 0 / 0 |
+| E11, ±0.05 rad | 4.09 / 19.05 | 0.53 / 2.21 | 7.13 / 21.28 | 1.52 / 4.76 | 1356 / 0 / 0 |
+
+The E11 `best.pt` zero-perturbation checkpoint's actual speed max was 2.01 rad/s,
+acceleration max 48.67 rad/s², torque saturation rate 0.0053%, joint position
+RMSE 0.00819 rad, and maximum command jump 0.04 rad. Under ±0.05 rad reset, these
+were 2.48 rad/s, 123.76 rad/s², 0.184%, and 0.01379 rad, respectively. Both
+replays completed without an illegal joint state or disallowed contact in Newton
+physics or the source-MJCF geometry audit. The E11 ±0.03 run had a transient left
+TCP maximum of 57.46 mm during the return phase, while its P95 stayed 11.92 mm.
+This maximum is retained in the evaluation record rather than hidden by the gate.
+
+On held-out real Newton windows, E11 world-model TCP position error was 0.80 mm at
+eight steps and 0.77 mm at 32 steps; corresponding constant-velocity baselines were
+19.97 and 81.28 mm. On an independent on-policy physical trajectory, right TCP
+position prediction mean/P95 was 0.99/2.39 mm at eight steps and 1.57/4.64 mm
+at 32 steps. The active 8–12 s wave phase in the in-process complete replay had
+right TCP position mean/P95 3.47/5.35 mm and orientation 0.90/1.92°. These
+measurements separate actual Newton policy tracking from world-model prediction.
+
+E10 training took 637.94 s, and E11 took 947.65 s, each including in-process
+evaluation. E11 collection throughput was 50,938 real transitions/s; the
+recorded PyTorch allocation peak was 6.38 GB, plus Newton and other GPU runtime
+memory. The 4096-environment complete-loop capacity test observed about
+15.7/32.6 GB total device use; E9 training observed 19.8/32.6 GB. The E11 run
+did not record an independent `nvidia-smi` peak, so no exact E11 total-device
+peak is claimed. E11 collection had no contact or safety termination. A rare
+finger Home servo transient reached 0.296 rad across the 2,048,000 randomized
+transitions, with only 0.00163% of sampled finger states over 0.1 rad; the
+independent full-clip ±0.05 rad maximum was 0.109 rad. Finger contact remains
+disabled and is outside the validation claim.
+
+The E11 checkpoint SHA256 is
+`2e6a59eb04d160bc30f004173f7cbaec874f9b9f8bf7b91ff1d9d9fa6b7cef78`.
+Its complete Newton traces are in `e11_4096env_total4000/`; `plots/` includes
+training, model-prediction, phase, and dual-TCP error curves. The final
+`previews/newton_policy_vs_reference.mp4` is a 27.2 s, 272-frame comparison
+of the pinned reference and the recorded physical `best.pt` replay, rendered
+offline by MuJoCo EGL. The machine-readable `final_validation.json` applies
+the mean/P95 and safety gates to three independent `best.pt` Newton replays.
+These are the authoritative results for this single seen motion.
+
+**Final result: the cumulative 4000-update SuperMimic Actor passes the tested
+single-motion dual-arm Newton gate.** This does not establish unseen-motion
+generalization, finger-contact safety, or real-robot readiness.
 
 ## Reproduction and verification
 
@@ -326,12 +399,12 @@ For an independent zero-perturbation checkpoint replay from this worktree:
 ```bash
 PYTHONPATH=/tmp/dexgym-marvin-supermimic-wave-m4/source:/home/ubuntu/miniconda3/envs/manus_wuji_real/lib/python3.12/site-packages:/home/ubuntu/miniconda3/envs/teleop/lib/python3.12/site-packages:/tmp/marvin_wave_python_override \
   /home/ubuntu/dexgym/.venv/bin/python scripts/supermimic/evaluate_wave.py \
-  /home/ubuntu/dexgym_data/marvin_supermimic_wave_m4/e9_4096env_perturb_corrective/best.pt \
+  /home/ubuntu/dexgym_data/marvin_supermimic_wave_m4/e11_4096env_total4000/best.pt \
   --output /tmp/marvin_wave_reproduction
 ```
 
 Add `--initial-perturb-rad 0.03` or `0.05` for the reported fixed-seed robustness
-tests. `metrics.json` in the E9 run records all training flags, optimizer settings,
+tests. `metrics.json` in the E11 run records all training flags, optimizer settings,
 random seed, source commit, and reference hash. Continuing training uses
 `train_wave.py --resume .../best.pt` with a new output directory and fresh Newton
 collection; Replay is reconstructed rather than restored.
