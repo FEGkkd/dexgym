@@ -39,6 +39,8 @@ def _parse_args():
     parser.add_argument("--trust-check-interval", type=int, default=50)
     parser.add_argument("--max-eight-step-tcp-mm", type=float, default=50.0)
     parser.add_argument("--max-32-step-tcp-mm", type=float, default=100.0)
+    parser.add_argument("--max-eight-step-tcp-deg", type=float, default=10.0)
+    parser.add_argument("--max-32-step-tcp-deg", type=float, default=15.0)
     parser.add_argument("--actor-lr", type=float, default=2e-5)
     parser.add_argument("--behavior-prior-weight", type=float, default=0.0)
     parser.add_argument("--prior-checkpoint", type=Path)
@@ -63,6 +65,16 @@ def _parse_args():
         raise ValueError("Aligned training needs at least two envs, one iteration, and 40 Replay slots")
     if args.min_world_updates < 1 or args.trust_check_interval < 1 or args.checkpoint_interval < 1:
         raise ValueError("Model trust and checkpoint intervals must be positive")
+    if any(
+        value <= 0
+        for value in (
+            args.max_eight_step_tcp_mm,
+            args.max_32_step_tcp_mm,
+            args.max_eight_step_tcp_deg,
+            args.max_32_step_tcp_deg,
+        )
+    ):
+        raise ValueError("World-model trust limits must be positive")
     if any(
         value < 0
         for value in (
@@ -159,6 +171,7 @@ def main():
     cfg.observation_position_noise_rad = args.observation_position_noise_rad
     cfg.observation_velocity_noise_rad_s = args.observation_velocity_noise_rad_s
     started = time.perf_counter()
+    sampled_peak_gpu_used = 0
     curves = {"world_loss": [], "actor_loss": [], "critic_loss": [], "physical_reward": [], "termination_rate": []}
     trust_history = []
     with launch_simulation(cfg):
@@ -232,6 +245,8 @@ def main():
                         trusted = (
                             prediction["8"]["tcp_position_mean_mm"] <= args.max_eight_step_tcp_mm
                             and prediction["32"]["tcp_position_mean_mm"] <= args.max_32_step_tcp_mm
+                            and prediction["8"]["tcp_orientation_mean_deg"] <= args.max_eight_step_tcp_deg
+                            and prediction["32"]["tcp_orientation_mean_deg"] <= args.max_32_step_tcp_deg
                         )
                         trust_history.append(
                             {"update": completed_updates, "prediction": prediction, "trusted": trusted}
@@ -292,6 +307,8 @@ def main():
                     critic_update=critic_update,
                 )
                 if (iteration + 1) % args.checkpoint_interval == 0:
+                    free_gpu, total_gpu = torch.cuda.mem_get_info()
+                    sampled_peak_gpu_used = max(sampled_peak_gpu_used, total_gpu - free_gpu)
                     progress = {
                         "iteration": iteration + 1,
                         **loop.counts,
@@ -299,6 +316,11 @@ def main():
                         "terminations": collector.terminations,
                         "trusted_world_model": trusted,
                         "elapsed_s": time.perf_counter() - started,
+                        "gpu_vram_used_bytes": total_gpu - free_gpu,
+                        "last_world_loss": curves["world_loss"][-1] if curves["world_loss"] else None,
+                        "last_actor_loss": curves["actor_loss"][-1] if curves["actor_loss"] else None,
+                        "last_critic_loss": curves["critic_loss"][-1] if curves["critic_loss"] else None,
+                        "last_world_trust_check": trust_history[-1] if trust_history else None,
                     }
                     (args.output / "progress.json").write_text(json.dumps(progress, indent=2))
                     _save_checkpoint_atomic(
@@ -339,7 +361,9 @@ def main():
                 "replay_bytes": replay.bytes_allocated,
                 "train_wall_time_s": time.perf_counter() - started,
                 "peak_torch_vram_bytes": torch.cuda.max_memory_allocated(),
+                "sampled_peak_gpu_vram_used_bytes": sampled_peak_gpu_used,
             }
+            metrics["physical_transitions_per_s"] = metrics["collection"]["transitions"] / metrics["train_wall_time_s"]
         finally:
             env.close()
     checkpoint = _checkpoint(actor, model, critic, optim_actor, optim_model, optim_critic, metrics)
