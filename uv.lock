@@ -514,6 +514,13 @@ dependencies = [
     { name = "isaaclab", extra = ["rsl-rl"] },
 ]
 
+[package.optional-dependencies]
+motion = [
+    { name = "matplotlib" },
+    { name = "numpy" },
+    { name = "scipy" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "pytest" },
@@ -521,7 +528,13 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "isaaclab", extras = ["rsl-rl"], specifier = "==3.0.0", index = "https://pypi.nvidia.com/" }]
+requires-dist = [
+    { name = "isaaclab", extras = ["rsl-rl"], specifier = "==3.0.0", index = "https://pypi.nvidia.com/" },
+    { name = "matplotlib", marker = "extra == 'motion'", specifier = ">=3.11,<4" },
+    { name = "numpy", marker = "extra == 'motion'", specifier = ">=2.5,<3" },
+    { name = "scipy", marker = "extra == 'motion'", specifier = ">=1.18,<2" },
+]
+provides-extras = ["motion"]
 
 [package.metadata.requires-dev]
 dev = [

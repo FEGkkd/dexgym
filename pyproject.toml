@@ -9,6 +9,9 @@ description = "Minimal Isaac Lab 3.0 Newton reinforcement learning tasks"
 requires-python = "==3.12.*"
 dependencies = ["isaaclab[rsl-rl]==3.0.0"]
 
+[project.optional-dependencies]
+motion = ["numpy>=2.5,<3", "scipy>=1.18,<2", "matplotlib>=3.11,<4"]
+
 [project.entry-points."isaaclab.tasks"]
 dexgym = "dexgym.tasks"
 

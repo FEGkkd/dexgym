@@ -1,0 +1,26 @@
+{
+  "name": "HumanUpperBodyMotion",
+  "version": 1,
+  "side_order": ["left", "right"],
+  "time_unit": "s",
+  "position_unit": "m",
+  "angular_velocity_unit": "rad/s",
+  "pose_layout": ["x", "y", "z", "qx", "qy", "qz", "qw"],
+  "quaternion_order": "XYZW",
+  "coordinate_frame": "BVH right-handed, Y up, positive Z forward",
+  "arrays": {
+    "time": ["T"],
+    "shoulder_pose": ["T", 2, 7],
+    "upper_arm_pose": ["T", 2, 7],
+    "elbow_pose": ["T", 2, 7],
+    "forearm_pose": ["T", 2, 7],
+    "hand_pose": ["T", 2, 7],
+    "hand_linear_velocity": ["T", 2, 3],
+    "hand_angular_velocity": ["T", 2, 3],
+    "hand_orientation_valid": ["T", 2]
+  },
+  "validity_semantics": "hand_orientation_valid is true only for clips accepted by the Full-6D source-quality gate; mathematical BVH FK reconstruction is separately recorded in metadata",
+  "source_scale_semantics": "M1 diagnostics may use an assumed T-pose stature; metadata must disclose assumed_stature_m and length_scale_m_per_source_unit",
+  "elbow_frame": "ForeArm joint origin",
+  "forearm_frame": "ForeArm joint frame"
+}
