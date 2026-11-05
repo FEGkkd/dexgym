@@ -72,6 +72,12 @@ def collect(env, actor, replay, steps, teacher_fraction=0.6, noise=0.18, teacher
     rewards = []
     max_joint_speed = 0.0
     max_finger_drift = 0.0
+    max_finger_drift_after_10 = 0.0
+    max_finger_drift_event = None
+    finger_drift_over_0_1 = 0
+    finger_drift_samples = 0
+    finger_drift_over_0_1_after_10 = 0
+    finger_drift_samples_after_10 = 0
     contact_steps = 0
     active_phase_samples = 0
     early_phase_samples = 0
@@ -109,14 +115,26 @@ def collect(env, actor, replay, steps, teacher_fraction=0.6, noise=0.18, teacher
                     "reference_frame": int(native.motion.frame[flat // 14]),
                 }
                 max_joint_speed = speed
-            max_finger_drift = max(
-                max_finger_drift,
-                float(
-                    (native.robot.data.joint_pos.torch[:, native.hand_ids] - native.home_full[native.hand_ids])
-                    .abs()
-                    .max()
-                ),
-            )
+            finger_drift = (
+                native.robot.data.joint_pos.torch[:, native.hand_ids] - native.home_full[native.hand_ids]
+            ).abs()
+            finger_drift_over_0_1 += int((finger_drift > 0.1).sum())
+            finger_drift_samples += finger_drift.numel()
+            drift_max = float(finger_drift.max())
+            if iteration >= 10:
+                max_finger_drift_after_10 = max(max_finger_drift_after_10, drift_max)
+                finger_drift_over_0_1_after_10 += int((finger_drift > 0.1).sum())
+                finger_drift_samples_after_10 += finger_drift.numel()
+            if drift_max > max_finger_drift:
+                flat = int(finger_drift.reshape(-1).argmax())
+                env_id, finger_id = divmod(flat, len(native.hand_ids))
+                max_finger_drift_event = {
+                    "iteration": iteration,
+                    "environment": env_id,
+                    "finger_joint": native.robot.joint_names[int(native.hand_ids[finger_id])],
+                    "reference_frame": int(native.motion.frame[env_id]),
+                }
+                max_finger_drift = drift_max
             contact = int(native.sim.physics_manager._solver.mjw_data.nacon.numpy()[0] > 0)
             contact_steps += contact
             if contact and len(contact_events) < 10:
@@ -145,6 +163,11 @@ def collect(env, actor, replay, steps, teacher_fraction=0.6, noise=0.18, teacher
         "actor_mix": actor_mix,
         "max_actual_arm_speed_rad_s": max_joint_speed,
         "max_finger_home_drift_rad": max_finger_drift,
+        "max_finger_home_drift_after_10_rad": max_finger_drift_after_10,
+        "finger_home_drift_over_0_1_rate": finger_drift_over_0_1 / max(finger_drift_samples, 1),
+        "finger_home_drift_over_0_1_after_10_rate": finger_drift_over_0_1_after_10
+        / max(finger_drift_samples_after_10, 1),
+        "max_finger_home_drift_event": max_finger_drift_event,
         "newton_contact_steps": contact_steps,
         "max_speed_event": max_speed_event,
         "contact_events": contact_events,
@@ -673,7 +696,7 @@ def main():
                 "actor_command_error_after_auxiliary_warmup": warmup_action_error,
                 "actor_command_error_after_bptt": final_action_error,
                 "critic_updates": len(critic_losses),
-                "world_loss_first_last": [model_losses[0], model_losses[-1]],
+                "world_loss_first_last": [model_losses[0], model_losses[-1]] if model_losses else None,
                 "actor_loss_first_last": [actor_losses[0], actor_losses[-1]] if actor_losses else None,
                 "world_prediction": prediction,
                 "world_model_trust_gate": trust_gate,
