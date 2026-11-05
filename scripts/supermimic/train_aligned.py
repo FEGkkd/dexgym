@@ -147,6 +147,7 @@ def _auxiliary_initialize(actor, motion, mapping, device, updates, optimizer):
 def main():
     args = _parse_args()
     preflight = verify()
+    source_commit_at_start = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
     args.output.mkdir(parents=True, exist_ok=True)
     torch.manual_seed(args.seed)
     torch.cuda.reset_peak_memory_stats()
@@ -337,7 +338,7 @@ def main():
             metrics = {
                 "algorithm": "M4.1_alternating_soft_termination",
                 "reference_sha256": REFERENCE_SHA256,
-                "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+                "git_commit": source_commit_at_start,
                 "preflight": preflight,
                 "configuration": {
                     key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()

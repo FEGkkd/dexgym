@@ -42,13 +42,14 @@ Use the process-local Isaac Python path, without editing the shared venv:
 export PYTHONPATH="$PWD/source:/home/ubuntu/miniconda3/envs/manus_wuji_real/lib/python3.12/site-packages:/home/ubuntu/miniconda3/envs/teleop/lib/python3.12/site-packages:/tmp/marvin_wave_python_override"
 /home/ubuntu/dexgym/.venv/bin/python scripts/supermimic/train_aligned.py \
   --num-envs 1024 --iterations 1000 --world-hidden 1024 \
-  --world-batch 128 --imag-batch 64 --replay-steps 1000 \
+  --world-batch 256 --imag-batch 32 --replay-steps 500 \
+  --min-world-updates 20 --trust-check-interval 100 --action-noise 0.005 \
   --resume /home/ubuntu/dexgym_data/marvin_supermimic_wave_m4/e11_4096env_total4000/best.pt \
   --no-goal-latent-tanh --reward-profile marvin_tcp_priority \
   --observation-position-noise-rad 0 --observation-velocity-noise-rad-s 0 \
   --actor-lr 1e-7 --behavior-prior-weight 100 \
   --prior-checkpoint /home/ubuntu/dexgym_data/marvin_supermimic_wave_m4/e11_4096env_total4000/best.pt \
-  --checkpoint-interval 200 --final-eval \
+  --checkpoint-interval 100 --final-eval \
   --output /home/ubuntu/dexgym_data/marvin_supermimic_wave_m41/aligned_1024_1000
 ```
 
@@ -84,6 +85,16 @@ control steps with zero contacts and illegal joint states. Left/right TCP mean
 position errors were 3.65/5.77 mm; mean orientation errors were 0.48°/1.14°.
 This small run establishes stability, not improvement over the E11 baseline.
 
-Longer conservative runs and their independent Newton results are recorded in
-the external M4.1 experiment directories. Training length alone does not
-certify a policy.
+The 1024-environment 1000-iteration run collected 1,024,000 Newton
+transitions and made 961 world-model and 942 Actor/Critic updates in 916 seconds.
+Its held-out world-model TCP position prediction errors were 3.40 mm at eight
+steps and 4.17 mm at 32 steps. The full Newton evaluation completed all 1,356
+control steps with zero contacts and illegal joint states. Left/right TCP mean
+position errors were 2.46/4.42 mm and mean orientation errors were
+0.34°/0.92°. This improves over E11 in the same evaluator. Its validated
+checkpoint is `aligned_1024_1000/best.pt` in the external M4.1 data directory.
+
+Provenance correction: this process launched with source commit `b310d23`.
+The run's JSON `git_commit` field was read at shutdown, after monitoring code
+was committed during training, so it reports the later repository HEAD. The
+trainer now captures the source commit at startup for subsequent runs.
