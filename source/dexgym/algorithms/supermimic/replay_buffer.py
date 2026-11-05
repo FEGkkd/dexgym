@@ -4,6 +4,12 @@ import torch
 
 
 class MotionReplay:
+    @staticmethod
+    def valid_length_histogram(window: dict) -> dict[int, int]:
+        lengths = window["mask"].sum(-1).long()
+        values, counts = torch.unique(lengths, return_counts=True)
+        return {int(length): int(count) for length, count in zip(values, counts)}
+
     def __init__(self, capacity_steps: int, num_envs: int, device: str | torch.device):
         if capacity_steps < 1 or num_envs < 1:
             raise ValueError("Replay capacity and environment count must be positive")
@@ -20,6 +26,7 @@ class MotionReplay:
         self.frame = torch.empty(shape, device=self.device, dtype=torch.long)
         self.next_frame = torch.empty_like(self.frame)
         self.motion_id = torch.empty_like(self.frame)
+        self.source_id = torch.empty(shape, device=self.device, dtype=torch.int8)
         self.episode = torch.empty_like(self.frame)
         self.done = torch.empty(shape, device=self.device, dtype=torch.bool)
         self.terminated = torch.empty_like(self.done)
@@ -32,12 +39,13 @@ class MotionReplay:
     def bytes_allocated(self):
         fields = (self.state, self.action, self.previous_action, self.executed_command,
                   self.next_state, self.history, self.frame, self.next_frame,
-                  self.motion_id, self.episode, self.done, self.terminated,
+                  self.motion_id, self.source_id, self.episode, self.done, self.terminated,
                   self.truncated, self.timestamp, self.episode_counter)
         return sum(field.numel() * field.element_size() for field in fields)
 
     def append(self, state, action, next_state, history, frame, done, *, terminated=None,
-               truncated=None, motion_id=None, previous_action=None, executed_command=None):
+               truncated=None, motion_id=None, previous_action=None, executed_command=None,
+               source_id=None):
         if terminated is None:
             terminated = done
         if truncated is None:
@@ -63,6 +71,7 @@ class MotionReplay:
         self.frame[slot] = frame.detach()
         self.next_frame[slot] = frame.detach() + 1
         self.motion_id[slot] = (torch.zeros_like(frame) if motion_id is None else motion_id).detach()
+        self.source_id[slot] = (torch.zeros_like(frame) if source_id is None else source_id).to(torch.int8)
         self.episode[slot] = self.episode_counter
         self.done[slot] = done.detach()
         self.terminated[slot] = terminated.detach()
@@ -71,7 +80,7 @@ class MotionReplay:
         self.episode_counter += done.long()
         self.steps += 1
 
-    def _candidates(self, env_range=None, frame_range=None):
+    def _candidates(self, env_range=None, frame_range=None, source_id=None):
         if self.steps == 0:
             raise ValueError("Replay is empty")
         env_low, env_high = env_range or (0, self.num_envs)
@@ -79,20 +88,24 @@ class MotionReplay:
             raise ValueError("Invalid replay environment range")
         times = torch.arange(max(0, self.steps - self.capacity), self.steps, device=self.device)
         envs = torch.arange(env_low, env_high, device=self.device)
-        if frame_range is None:
+        if frame_range is None and source_id is None:
             return times[:, None].expand(-1, len(envs)).flatten(), envs.repeat(len(times))
-        frame = self.frame[times[:, None] % self.capacity, envs[None, :]]
-        valid = (frame >= frame_range[0]) & (frame < frame_range[1])
+        valid = torch.ones((len(times), len(envs)), device=self.device, dtype=torch.bool)
+        if frame_range is not None:
+            frame = self.frame[times[:, None] % self.capacity, envs[None, :]]
+            valid &= (frame >= frame_range[0]) & (frame < frame_range[1])
+        if source_id is not None:
+            valid &= self.source_id[times[:, None] % self.capacity, envs[None, :]] == source_id
         time_idx, env_idx = valid.nonzero(as_tuple=True)
         if not len(time_idx):
             raise ValueError("Replay lacks requested reference frames")
         return times[time_idx], envs[env_idx]
 
     def sample_windows(self, batch: int, horizon: int = 8, env_range=None, frame_range=None,
-                       *, require_full: bool = False):
+                       *, require_full: bool = False, source_id: int | None = None):
         if batch < 1 or horizon < 1:
             raise ValueError("Batch and horizon must be positive")
-        times, envs = self._candidates(env_range, frame_range)
+        times, envs = self._candidates(env_range, frame_range, source_id)
         if require_full:
             if horizon > self.capacity:
                 raise ValueError("A full window exceeds replay capacity")
@@ -104,6 +117,9 @@ class MotionReplay:
                     & (self.episode[start_slot, envs] == self.episode[end_slot, envs])
                     & (self.motion_id[start_slot, envs] == self.motion_id[end_slot, envs])
                     & (self.frame[end_slot, envs] == self.frame[start_slot, envs] + horizon - 1))
+            if source_id is not None:
+                for offset in range(1, horizon):
+                    full &= self.source_id[(times + offset) % self.capacity, envs] == source_id
             times, envs = times[full], envs[full]
             if not len(times):
                 raise ValueError("Replay lacks full episode-safe windows")
@@ -128,7 +144,7 @@ class MotionReplay:
         mask = present & same_trajectory & no_prior_done
         assert bool(mask[:, 0].all())
         keys = ("state", "action", "previous_action", "executed_command", "next_state",
-                "frame", "next_frame", "motion_id", "episode", "done", "terminated", "truncated")
+                "frame", "next_frame", "motion_id", "source_id", "episode", "done", "terminated", "truncated")
         out = {key: getattr(self, key)[slots, env_idx] for key in keys}
         out["mask"] = mask.float()
         out["env_id"] = env
@@ -136,8 +152,8 @@ class MotionReplay:
         return out
 
     def sample_starts(self, batch: int, env_range=None, frame_range=None, *, horizon=None,
-                      clip_length=None):
-        times, envs = self._candidates(env_range, frame_range)
+                      clip_length=None, source_id=None):
+        times, envs = self._candidates(env_range, frame_range, source_id)
         slots = times % self.capacity
         valid = ~self.done[slots, envs]
         if horizon is not None:
@@ -154,4 +170,4 @@ class MotionReplay:
         slot, env = times[chosen] % self.capacity, envs[chosen]
         return {"state": self.state[slot, env], "history": self.history[slot, env],
                 "frame": self.frame[slot, env], "motion_id": self.motion_id[slot, env],
-                "episode": self.episode[slot, env], "env_id": env}
+                "episode": self.episode[slot, env], "source_id": self.source_id[slot, env], "env_id": env}

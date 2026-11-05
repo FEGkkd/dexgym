@@ -30,6 +30,7 @@ class ResettingEnv:
             action_map=SimpleNamespace(origin=torch.zeros(14), scale=torch.ones(14)),
             last_physical_arm_state=torch.zeros(2, 42),
             previous_action=torch.zeros(2, 14),
+            last_action=torch.zeros(2, 14),
             last_policy_contact_counts=torch.zeros(2, dtype=torch.int32),
         )
 
@@ -65,3 +66,12 @@ def test_stateful_collector_keeps_prereset_physics_and_hard_termination_labels()
     assert replay.action[:2].eq(0).all()
     assert replay.previous_action[:2].eq(0).all()
     assert replay.executed_command[:2].eq(77).all()
+
+
+def test_reference_pd_is_labeled_as_physics_collection_only():
+    env = ResettingEnv()
+    replay = MotionReplay(8, 2, "cpu")
+    collector = AlignedNewtonCollector(env, ZeroActor(), replay)
+    collector.step(policy="reference_pd")
+    assert replay.source_id[0].eq(1).all()
+    assert replay.action[0].eq(0).all()

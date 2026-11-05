@@ -55,6 +55,8 @@ def test_masked_replay_retains_short_terminal_episode(valid_length):
     assert (batch["mask"].sum(1) >= 1).all()
     terminal = batch["terminated"] & batch["mask"].bool()
     assert (terminal.sum(1) <= 1).all()
+    histogram = replay.valid_length_histogram(batch)
+    assert sum(histogram.values()) == 32
 
 
 def test_partial_reset_and_ring_wrap_never_join_episodes():
@@ -69,3 +71,14 @@ def test_partial_reset_and_ring_wrap_never_join_episodes():
     assert ((batch["next_state"][..., 0] - batch["state"][..., 0] - 1)[valid] == 0).all()
     assert ((batch["frame"][:, 1:] - batch["frame"][:, :-1] - 1)[valid[:, 1:]] == 0).all()
     assert (batch["episode"][:, 0, None] == batch["episode"])[valid].all()
+
+
+def test_replay_separates_actor_and_reference_pd_physics_sources():
+    replay = MotionReplay(8, 1, "cpu")
+    for step in range(4):
+        replay.append(torch.zeros(1, 42), torch.zeros(1, 14), torch.zeros(1, 42),
+                      torch.zeros(1, 10, 56), torch.tensor([step]), torch.tensor([False]),
+                      source_id=torch.tensor([step % 2]))
+    actor = replay.sample_windows(32, 1, source_id=0)
+    teacher = replay.sample_windows(32, 1, source_id=1)
+    assert actor["source_id"].eq(0).all() and teacher["source_id"].eq(1).all()
