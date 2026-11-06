@@ -16,6 +16,8 @@ class MarvinWaveSceneCfg(InteractiveSceneCfg):
 
 @configclass
 class MarvinWaveDirectCfg(DirectRLEnvCfg):
+    reference_path = "/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz"
+    action_schema = "legacy_wave_v1"
     random_reference_start = True
     reset_joint_perturb_rad = 0.03
     active_reset_fraction = 0.0

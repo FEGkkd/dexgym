@@ -9,8 +9,6 @@ import torch
 import warp as wp
 from isaaclab.envs import DirectRLEnv
 
-from dexgym.algorithms.supermimic.action import ArmActionMap
-from dexgym.algorithms.supermimic.differentiable_fk import DifferentiableMarvinFK
 from dexgym.algorithms.supermimic.observation import noisy_proprio_frame
 from dexgym.algorithms.supermimic.rewards import REWARD_PROFILES, tracking_reward
 from dexgym.assets.marvin_wuji.controller import apply_newton_arm_tracking_profile
@@ -18,6 +16,7 @@ from dexgym.motion.motion_manager import MotionManager
 
 from .contact_audit import contact_counts, unsafe_arm_states
 from .env_cfg import MarvinWaveDirectCfg
+from .robot_adapter import MarvinArmDynamicsAdapter
 
 REFERENCE = "/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz"
 MJCF = "/home/ubuntu/dexgym/source/dexgym/assets/marvin_wuji/source_model/dual_arm_marvin.xml"
@@ -30,22 +29,24 @@ class MarvinWaveDirectEnv(DirectRLEnv):
     cfg: MarvinWaveDirectCfg
 
     def __init__(self, cfg: MarvinWaveDirectCfg, render_mode: str | None = None, **kwargs):
+        if cfg.decimation != MarvinArmDynamicsAdapter.physics_substeps or cfg.sim.dt != MarvinArmDynamicsAdapter.physics_dt:
+            raise ValueError("Marvin action contract requires ten 2 ms Newton substeps per control step")
         super().__init__(cfg, render_mode, **kwargs)
         self.robot = self.scene["robot"]
         if self.robot.num_joints != 54:
             raise ValueError("Newton robot must retain all 54 joints")
-        self.motion = MotionManager(REFERENCE, self.num_envs, self.device)
+        self.motion = MotionManager(cfg.reference_path, self.num_envs, self.device)
         self.arm_ids = torch.tensor(
             [self.robot.joint_names.index(name) for name in self.motion.joint_names_arm],
             device=self.device,
             dtype=torch.long,
         )
         model = mujoco.MjModel.from_xml_path(MJCF)
-        joint_ids = [mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name) for name in self.motion.joint_names_arm]
-        limits = torch.tensor(model.jnt_range[joint_ids].copy(), device=self.device, dtype=torch.float32)
+        self.dynamics_adapter = MarvinArmDynamicsAdapter(
+            self.motion, self.device, action_schema=cfg.action_schema, mjcf=MJCF
+        )
+        self.action_map = self.dynamics_adapter.action_map
         start = self.motion.data["q_arm"][0]
-        envelope = (self.motion.data["q_arm"] - start).abs().amax(dim=0) + 0.15
-        self.action_map = ArmActionMap(start, limits[:, 0] + 0.005, limits[:, 1] - 0.005, envelope, 0.04)
         model_names = tuple(mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_JOINT, j) for j in range(54))
         if set(model_names) != set(self.robot.joint_names):
             raise ValueError("Newton/MuJoCo 54DoF joint names differ")
@@ -86,7 +87,7 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         if cfg.reward_profile not in REWARD_PROFILES:
             raise ValueError(f"Unknown reward profile: {cfg.reward_profile}")
         self.reward_weights = REWARD_PROFILES[cfg.reward_profile]
-        self.fk = DifferentiableMarvinFK(MJCF, device=self.device)
+        self.fk = self.dynamics_adapter.fk
         self._substep = 0
         if cfg.audit_contacts_each_physics_step and self._physics_handles_decimation and cfg.decimation > 1:
             raise RuntimeError("Newton internal decimation prevents physics-step contact auditing")
@@ -117,8 +118,9 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         if self.cfg.audit_contacts_each_physics_step and self._substep:
             self._record_contacts()
         self.full_command[:] = self.home_full
-        alpha = (self._substep + 1) / self.cfg.decimation
-        self.full_command[:, self.arm_ids] = self.previous_command + alpha * (self.command - self.previous_command)
+        self.full_command[:, self.arm_ids] = self.dynamics_adapter.interpolate_command(
+            self.previous_command, self.command, self._substep
+        )
         self.robot.actuators.target_command.set_position_index(value=self.full_command, full_data=True)
         self._substep += 1
 
