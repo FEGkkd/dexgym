@@ -15,6 +15,7 @@ class RobotSpec:
     control_dt: float = 0.02
     physics_dt: float = 0.002
     asset_sha256: str = ""
+    command_dim: int | None = None
 
     def __post_init__(self):
         if not self.robot_id or not self.action_schema or not self.state_schema:
@@ -23,6 +24,8 @@ class RobotSpec:
             raise ValueError("Robot dimension must be positive except optional context")
         if not 1 <= self.delta_dim <= self.state_dim:
             raise ValueError("delta_dim must be within the physical state")
+        if self.command_dim is not None and self.command_dim < 1:
+            raise ValueError("Command dimension must be positive")
         if self.control_dt <= 0 or self.physics_dt <= 0 or self.control_dt < self.physics_dt:
             raise ValueError("Robot control and physics dt must be positive and ordered")
 

@@ -104,6 +104,11 @@ class StateDeltaWorldModel(nn.Module):
         self.input_norm.update(torch.cat((state, action, context), dim=-1))
         self.delta_norm.update(robot_adapter.physical_delta(state, next_state))
 
+    def autoregressive_loss(self, window, robot_adapter, **kwargs):
+        from .world_model import masked_autoregressive_loss
+
+        return masked_autoregressive_loss(self, window, robot_adapter, **kwargs)
+
 
 class TaskTerminationHead(nn.Module):
     def __init__(self, robot: RobotSpec, task: TaskSpec, config: NetworkSpec):
