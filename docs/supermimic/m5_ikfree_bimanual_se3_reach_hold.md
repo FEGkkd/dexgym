@@ -93,6 +93,21 @@ A separate closed-loop diagnostic starts the Actor in the learned model and in a
 
 The high-update checkpoint is `m5_v4_highwm_53/model.pt` (SHA256 `2f6b7094fb6ad15335255e4609eeb6ef6ebdfc8a2ec04ab875d137b3be0095a2`). It was produced with an uncommitted high-update config and diagnostic source after commit `351d7b761d65b344d6a772544f28d77bc08b03f5`; the final source revision and exact config are recorded in the external v4 validation manifest. Neither this checkpoint nor any earlier M5 checkpoint is a strict-success policy.
 
+### Paired Newton action-gradient audit
+
+To check the quantity that Actor BPTT actually uses, an independent 30-environment Newton process applied `±0.1` raw action perturbations to all 14 joints from each of four identical, legal near-goal physical states. Two unperturbed environments established a numerical baseline; their reward difference was at most **6×10⁻⁸**. The audit was repeated immediately after reset and after 20 steps of the current deterministic Actor. The latter first cloned the entire 54DoF physical state into every paired environment. This diagnostic generated no Replay or Actor target and used no IK or witness joint target.
+
+| Checkpoint / physical start | Mean reward-gradient cosine to Newton | Mean model/real gradient norm | Mean q-action response cosine | Mean model/real q-response norm |
+| --- | ---: | ---: | ---: | ---: |
+| v3, reset | 0.901 | 3.21× | 0.861 | 2.78× |
+| v4 high-WM, reset | 0.758 | 3.19× | 0.813 | 2.83× |
+| v3, after 20 Actor steps | 0.906 | 2.10× | 0.878 | 1.86× |
+| v4 high-WM, after 20 Actor steps | 0.816 | 1.99× | 0.817 | 1.96× |
+
+Model autograd and finite differences of the **same learned model** agreed (mean cosine ≥0.994, norm ratio 1.01–1.05). The discrepancy is in learned action sensitivity relative to real Newton physics, not in the differentiable reward implementation. At reset, v4's predicted joint-velocity action-response direction had cosine only **0.146** to Newton; after 20 Actor steps it rose to **0.88**. These four-goal results identify a reset-distribution weakness but do not estimate its population-wide rate.
+
+As a separate bounded check, the v4 World Model received 500 additional WM8-only updates in rotation across compatible, teacher-free real Replay from the original three pilots and v4. Robot/Task/actuator contracts were verified before mixing. The held-out noisy 8-step normalized error fell from **1.48 to 1.23**, while deterministic 32-step TCP P95 worsened to **27.1mm**; 8-step trust still failed. Its reset reward-gradient cosine was **0.764** and norm ratio **2.87×**, only a small improvement over v4. Reusing more real data alone did not calibrate the local action Jacobian. The reports and full response matrices are archived under `m5_action_gradient_audit/` and `m5_pooled_replay_diag/`. No additional Policy training was launched.
+
 ## Reproduction
 
 Run from the M5 worktree with the pinned Isaac Sim / Newton overlay:
@@ -110,6 +125,7 @@ $ISAAC_PYTHON scripts/supermimic/isaac_runtime.py diagnose_se3_world_model_m5 --
 $ISAAC_PYTHON scripts/supermimic/isaac_runtime.py train_se3_m5 --config configs/supermimic/m5_se3_near_high_wm_pilot.json --num-envs 64 --iterations 100 --seed 53 --output /tmp/m5_highwm_pilot_53
 $ISAAC_PYTHON scripts/supermimic/isaac_runtime.py evaluate_se3_m5 --checkpoint /tmp/m5_highwm_pilot_53/model.pt --num-envs 16 --seed 9501 --output /tmp/m5_highwm_eval_53
 $ISAAC_PYTHON scripts/supermimic/isaac_runtime.py validate_se3_model_m5 --checkpoint /tmp/m5_highwm_pilot_53/model.pt --physics-trace /tmp/m5_highwm_eval_53/physics_trace.pt --closed-loop --output /tmp/m5_highwm_eval_53/closed_loop_validation.json
+$ISAAC_PYTHON scripts/supermimic/isaac_runtime.py diagnose_se3_action_gradient_m5 --checkpoint /tmp/m5_highwm_pilot_53/model.pt --seed 9501 --trials 4 --action-epsilon 0.1 --output /tmp/m5_gradient_audit.json
 $ISAAC_PYTHON scripts/supermimic/isaac_runtime.py evaluate --checkpoint /home/ubuntu/dexgym_data/marvin_supermimic_wave_m41/selected_best.pt --reference /home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz --output /tmp/m5_wave_legacy
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=source $ISAAC_PYTHON -c "import sys,pytest; sys.path.append('/home/ubuntu/dexgym/.venv/lib/python3.12/site-packages'); raise SystemExit(pytest.main(['-q','tests/supermimic']))"
 ```

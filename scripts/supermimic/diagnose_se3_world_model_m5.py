@@ -10,6 +10,7 @@ import torch
 
 from dexgym.assets.marvin_wuji.controller import ARM_JOINT_NAMES
 from dexgym.algorithms.supermimic.core.models import NetworkFactory, StateDeltaWorldModel
+from dexgym.algorithms.supermimic.core.checkpoint import CoreCheckpoint
 from dexgym.algorithms.supermimic.core.optimization import safe_gradient_step
 from dexgym.algorithms.supermimic.core.replay_buffer import SchemaReplay
 from dexgym.algorithms.supermimic.core.specs import NetworkSpec
@@ -23,6 +24,8 @@ from dexgym.tasks.marvin_supermimic.se3_trust import (
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--checkpoint", type=Path, required=True)
+    parser.add_argument("--additional-checkpoint", type=Path, action="append", default=[],
+                        help="Additional compatible real Replay, sampled without validation lanes")
     parser.add_argument("--updates", type=int, default=500)
     parser.add_argument("--training-source", choices=("mixed", "noisy", "deterministic"),
                         default="mixed")
@@ -63,6 +66,26 @@ def main():
     saved = record["replay"]
     replay = SchemaReplay(saved["capacity"], saved["num_envs"], robot.spec, task.spec, device)
     replay.load_state_dict(saved, fresh_physics=False)
+    training_replays = [(str(args.checkpoint), replay)]
+    for extra_path in args.additional_checkpoint:
+        extra = torch.load(extra_path, map_location="cpu", weights_only=False)
+        for key in ("robot_spec", "task_spec"):
+            if extra[key] != record[key]:
+                raise ValueError(f"Additional Replay {extra_path} has incompatible {key}")
+        for key in ("robot_contract", "task_contract"):
+            if extra["contract_manifest"][key] != record["contract_manifest"][key]:
+                raise ValueError(f"Additional Replay {extra_path} has incompatible {key}")
+        execution = lambda physics: {key: value for key, value in physics.items()
+                                     if key not in CoreCheckpoint.evaluation_protocol_fields}
+        if execution(extra["physics_config"]) != execution(record["physics_config"]):
+            raise ValueError(f"Additional Replay {extra_path} has different Newton execution semantics")
+        source = extra.get("replay")
+        if source is None:
+            raise ValueError(f"Additional checkpoint {extra_path} has no real Replay")
+        extra_replay = SchemaReplay(source["capacity"], source["num_envs"],
+                                    robot.spec, task.spec, device)
+        extra_replay.load_state_dict(source, fresh_physics=False)
+        training_replays.append((str(extra_path), extra_replay))
     heldout = (int(0.75 * replay.num_envs), replay.num_envs)
     collection = record.get("physics_config", {}).get("collection_contract", {})
     if collection.get("version") == "dual_source_geometry_trust_v2":
@@ -92,8 +115,11 @@ def main():
     losses = []
     source_id = {"mixed": None, "noisy": 3, "deterministic": 0}[args.training_source]
     for step in range(1, args.updates + 1):
-        window = replay.sample_windows(64, 8, env_range=(0, heldout[0]),
-                                       source_id=source_id)
+        _, selected_replay = training_replays[(step - 1) % len(training_replays)]
+        train_end = int(0.75 * selected_replay.num_envs)
+        selected_source = source_id if selected_replay is replay else None
+        window = selected_replay.sample_windows(
+            64, 8, env_range=(0, train_end), source_id=selected_source)
         loss, _ = model.autoregressive_loss(window, robot)
         result = safe_gradient_step(loss, model.parameters(), optimizer)
         if not result["updated"]:
@@ -108,6 +134,7 @@ def main():
               "masked_world_model_updates": args.updates,
               "training_source": args.training_source,
               "fresh_world_hidden": args.fresh_world_hidden,
+              "additional_training_replay": [name for name, _ in training_replays[1:]],
               "train_loss_first_100_mean": sum(losses[:100]) / len(losses[:100]),
               "train_loss_last_100_mean": sum(losses[-100:]) / len(losses[-100:]),
               "records": records}
