@@ -36,6 +36,8 @@ def test_checkpoint_resume_with_replay_and_rng(tmp_path):
 def test_checkpoint_rejects_goal_schema_and_missing_replay(tmp_path):
     trainer = make_toy_trainer("position", num_envs=8)
     trainer.run_iteration()
+    trainer.allowed_horizon = 32
+    trainer.trust_report = {"32": {"physical_delta_rmse": 0.0}}
     manager = CoreCheckpoint(git_commit="test", reference_hashes={})
     path = tmp_path / "state.pt"
     manager.save(path, trainer, include_replay=False)
@@ -46,3 +48,4 @@ def test_checkpoint_rejects_goal_schema_and_missing_replay(tmp_path):
     assert report["replay_restored"] is False
     assert fresh.replay.steps == 0
     assert report["requires_fresh_collection"]
+    assert fresh.allowed_horizon == 0 and fresh.trust_report == {}

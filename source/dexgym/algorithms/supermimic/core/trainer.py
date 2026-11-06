@@ -169,6 +169,7 @@ class SuperMimicTrainer:
                 env_range=self.train_env_range, source_id=0)
         except ValueError as error:
             return {"updated": False, "reason": str(error)}
+        actor_began = self._stamp()
         with frozen_parameters(self.world_model, self.critic, self.termination_head):
             rollout = self.engine.rollout(
                 start, self.actor, self.world_model, self.critic, self.robot, self.task,
@@ -177,6 +178,7 @@ class SuperMimicTrainer:
                 termination_head=self.termination_head)
             actor_result = safe_gradient_step(rollout.actor_loss, self.actor.parameters(),
                                               self.optimizers["actor"])
+        actor_finished = self._stamp()
         if not actor_result["updated"]:
             self.counts["nonfinite_actor"] += 1
             return {"updated": False, "reason": actor_result["reason"]}
@@ -188,11 +190,14 @@ class SuperMimicTrainer:
                                         features, targets,
                                         epochs=self.config.critic_epochs,
                                         minibatches=self.config.critic_minibatches)
+        critic_finished = self._stamp()
         self.counts["critic_updates"] += critic_result["updates"]
         self.counts["nonfinite_critic"] += critic_result["skipped_nonfinite"]
         return {"updated": True, "horizon": self.allowed_horizon,
                 "actor_loss": float(rollout.actor_loss.detach()),
                 "actor_grad_norm": actor_result["grad_norm"],
+                "actor_bptt_seconds": actor_finished - actor_began,
+                "critic_optimization_seconds": critic_finished - actor_finished,
                 "critic": critic_result}
 
     def run_iteration(self):

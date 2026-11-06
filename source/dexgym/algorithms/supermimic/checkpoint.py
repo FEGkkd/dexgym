@@ -1,6 +1,7 @@
 """Strict versioned trainer checkpoints and explicit M4.1 actor compatibility."""
 
 import os
+import hashlib
 from pathlib import Path
 
 import torch
@@ -83,3 +84,31 @@ def load_legacy_m41_actor(path: str | Path, *, device: str | torch.device = "cpu
     actor = GoalActor(goal_latent_tanh=False, normalization_mode="legacy").to(device)
     actor.load_state_dict(record["actor"], strict=True)
     return actor.eval()
+
+
+def load_legacy_m42_actor(path: str | Path, *, reference_path: str | Path,
+                          robot_asset_path: str | Path,
+                          device: str | torch.device = "cpu"):
+    """Load an M4.2 tracking Actor only under its original task/action schemas."""
+    from .networks import GoalActor
+
+    record = torch.load(path, map_location="cpu", weights_only=False)
+    if record.get("schema_version") != "m42_v1":
+        raise ValueError("Legacy M4.2 checkpoint schema differs")
+    metadata = record["metadata"]
+    reference_path, robot_asset_path = Path(reference_path), Path(robot_asset_path)
+    reference_sha = hashlib.sha256(reference_path.read_bytes()).hexdigest()
+    asset_sha = hashlib.sha256(robot_asset_path.read_bytes()).hexdigest()
+    if (metadata.get("reference_hashes", {}).get(str(reference_path)) != reference_sha
+            or metadata.get("robot_asset_hashes", {}).get("mjcf") != asset_sha):
+        raise ValueError("Legacy M4.2 reference or robot asset hash differs")
+    if (metadata.get("goal_schema") != "six_link_future_10x90_v1"
+            or metadata.get("observation_schema") != "arm_proprio_history_10x56_v1"
+            or metadata.get("state_schema") != "arm_q14_qd14_command14_v1"
+            or metadata.get("action_schema") not in
+            ("legacy_wave_v1", "robot_fixed_v2", "robot_fixed_v3")):
+        raise ValueError("Legacy M4.2 Actor schema is not six-link Marvin tracking")
+    normalizer = record["config"]["normalization_mode"]
+    actor = GoalActor(goal_latent_tanh=True, normalization_mode=normalizer).to(device)
+    actor.load_state_dict(record["models"]["actor"], strict=True)
+    return actor.eval(), metadata

@@ -43,6 +43,7 @@ def arguments():
     parser.add_argument("--iterations", type=int)
     parser.add_argument("--eval-steps", type=int)
     parser.add_argument("--seed", type=int)
+    parser.add_argument("--resume", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     configured = CoreExperimentConfig.from_json(args.config) if args.config else None
@@ -133,8 +134,23 @@ def main():
                 config=args.trainer,
                 train_env_range=(0, train_envs),
                 validation_env_range=(train_envs, args.num_envs))
+            commit = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
+            checkpoint = CoreCheckpoint(
+                git_commit=commit, reference_hashes=hashes,
+                physics_config={"num_envs": args.num_envs, "physics_dt": cfg.sim.dt,
+                                "policy_dt": 0.02, "decimation": cfg.decimation,
+                                "controller_kp_source": robot.native.controller_kp_source,
+                                "controller_kd_source": robot.native.controller_kd_source,
+                                "controller_damping_scale_source":
+                                    robot.native.controller_damping_scale_source,
+                                "hands_fixed_home": True,
+                                "hand_contact_configuration": "validated_disabled"})
+            resume_report = checkpoint.load(args.resume, trainer) if args.resume else None
+            start_counts = trainer.counts.copy()
             logs, timings = [], {name: 0.0 for name in
                                  ("collection", "world", "trust", "actor_critic")}
+            update_timings = {"actor_bptt_seconds": 0.0,
+                              "critic_optimization_seconds": 0.0}
             if torch.cuda.is_available():
                 torch.cuda.reset_peak_memory_stats()
             for _ in range(args.iterations):
@@ -142,6 +158,9 @@ def main():
                 logs.append(result)
                 for name, duration in result["phase_seconds"].items():
                     timings[name] += duration
+                for update in result["actor"]:
+                    for name in update_timings:
+                        update_timings[name] += update.get(name, 0.0)
                 if trainer.iteration % 10 == 0:
                     print(json.dumps({"iteration": trainer.iteration,
                                       "counts": trainer.counts,
@@ -150,18 +169,24 @@ def main():
                 lambda: CoreNewtonCollector(env, robot, task, action_noise_std=0),
                 task).evaluate(modules.actor, steps=args.eval_steps)
             args.output.mkdir(parents=True, exist_ok=True)
-            commit = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-            checkpoint = CoreCheckpoint(
-                git_commit=commit, reference_hashes=hashes,
-                physics_config={"num_envs": args.num_envs, "physics_dt": cfg.sim.dt,
-                                "policy_dt": 0.02})
             checkpoint_path = checkpoint.save(args.output / f"{args.task}_m43_smoke.pt",
                                               trainer, include_replay=False)
             report = {"task": asdict(task.spec), "robot": asdict(robot.spec),
                       "network": asdict(network), "trainer": asdict(trainer.config),
                       "counts": trainer.counts, "trust": trainer.trust_report,
+                      "new_counts": {name: trainer.counts[name] - start_counts[name]
+                                     for name in trainer.counts},
+                      "resume": resume_report,
                       "trusted_horizon": trainer.allowed_horizon,
                       "evaluation": eval_report, "phase_wall_seconds": timings,
+                      "update_wall_seconds": update_timings,
+                      "mean_world_update_seconds": timings["world"] / max(
+                          trainer.counts["world_updates"] - start_counts["world_updates"], 1),
+                      "mean_actor_bptt_seconds": update_timings["actor_bptt_seconds"] / max(
+                          trainer.counts["actor_updates"] - start_counts["actor_updates"], 1),
+                      "mean_critic_gradient_step_seconds":
+                          update_timings["critic_optimization_seconds"] / max(
+                              trainer.counts["critic_updates"] - start_counts["critic_updates"], 1),
                       "physical_transitions_per_collection_s":
                           args.iterations * args.num_envs / max(timings["collection"], 1e-9),
                       "peak_torch_vram_bytes": (torch.cuda.max_memory_allocated()

@@ -60,7 +60,9 @@ def load_policy(path: str | Path, *, device="cpu", expected_robot: RobotSpec | N
     metadata = record["metadata"]
     if metadata.get("schema") != "supermimic_pytorch_policy_v1":
         raise ValueError("Policy export schema differs")
-    robot, task = RobotSpec(**metadata["robot"]), TaskSpec(**metadata["task"])
+    robot_data = metadata["robot"].copy()
+    robot_data["joint_order"] = tuple(robot_data.get("joint_order", ()))
+    robot, task = RobotSpec(**robot_data), TaskSpec(**metadata["task"])
     if expected_robot is not None and expected_robot != robot:
         raise ValueError("Policy robot/action schema differs")
     if expected_task is not None and expected_task != task:

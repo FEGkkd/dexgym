@@ -140,6 +140,10 @@ class NetworkModules:
 
 class NetworkFactory:
     @staticmethod
-    def build(robot: RobotSpec, task: TaskSpec, config: NetworkSpec) -> NetworkModules:
-        return NetworkModules(StateDeltaWorldModel(robot, config), GoalActor(robot, task, config),
+    def build(robot: RobotSpec, task: TaskSpec, config: NetworkSpec, *,
+              shared_world_model: StateDeltaWorldModel | None = None) -> NetworkModules:
+        if shared_world_model is not None and shared_world_model.robot_spec != robot:
+            raise ValueError("Shared World Model robot/action/context schema differs")
+        world_model = shared_world_model or StateDeltaWorldModel(robot, config)
+        return NetworkModules(world_model, GoalActor(robot, task, config),
                               Critic(task, config), TaskTerminationHead(robot, task, config))

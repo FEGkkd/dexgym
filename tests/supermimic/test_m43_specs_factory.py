@@ -66,3 +66,20 @@ def test_actor_normalizers_are_schema_specific_and_restorable():
                                restored(torch.ones(2, 2, 4), torch.ones(2, 1, 6)))
     assert restored.observation_norm.mean.shape == (4,)
     assert restored.goal_norm.mean.shape == (6,)
+
+
+def test_factory_shares_dynamics_across_tasks_only_with_identical_robot_contract():
+    robot = RobotSpec("marvin", 42, 14, 28, 0, "robot_fixed_v3", "arm42_v1")
+    tracking = TaskSpec("tracking", 56, 10, 90, 10, 0, 146, "six_link_v1")
+    reach = TaskSpec("reach", 48, 4, 6, 1, 6, 48, "dual_tcp_v1")
+    config = NetworkSpec(world_hidden=(16,), goal_hidden=(16,), actor_hidden=(16,),
+                         critic_hidden=(16,), latent_dim=4)
+    first = NetworkFactory.build(robot, tracking, config)
+    second = NetworkFactory.build(robot, reach, config,
+                                  shared_world_model=first.world_model)
+    assert second.world_model is first.world_model
+    assert second.actor is not first.actor and second.critic is not first.critic
+    incompatible = RobotSpec("marvin", 42, 14, 28, 0, "robot_fixed_v2", "arm42_v1")
+    with pytest.raises(ValueError, match="Shared World Model"):
+        NetworkFactory.build(incompatible, reach, config,
+                             shared_world_model=first.world_model)

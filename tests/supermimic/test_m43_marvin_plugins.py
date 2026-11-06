@@ -26,6 +26,7 @@ def test_marvin_contract_and_tracking_reward_parity(plugins):
     library, robot = plugins
     task = MarvinMotionTracking(library, robot, reward_profile="marvin_tcp_priority")
     assert (robot.spec.state_dim, robot.spec.action_dim, robot.spec.delta_dim) == (42, 14, 28)
+    assert robot.spec.joint_order == library.joint_names_arm
     assert (task.spec.observation_dim, task.spec.goal_dim, task.spec.critic_dim) == (56, 90, 146)
     frame = torch.tensor([0, 20])
     motion = torch.tensor([0, 1])

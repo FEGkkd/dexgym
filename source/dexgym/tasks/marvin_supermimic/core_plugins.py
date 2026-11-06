@@ -28,7 +28,8 @@ class MarvinCoreRobot:
         self.spec = RobotSpec(
             "marvin_arm_only", 42, 14, 28, 0, action_schema,
             "q14_qd14_qcmd14_v1", control_dt=0.02, physics_dt=0.002,
-            asset_sha256=hashlib.sha256(self.native.mjcf.read_bytes()).hexdigest())
+            asset_sha256=hashlib.sha256(self.native.mjcf.read_bytes()).hexdigest(),
+            joint_order=tuple(reference_for_joint_order.joint_names_arm))
 
     def integrate(self, state, physical_delta, action, context):
         if (state.shape[-1] != 42 or physical_delta.shape != (*state.shape[:-1], 28)

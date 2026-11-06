@@ -7,8 +7,7 @@ from pathlib import Path
 
 import torch
 
-from dexgym.algorithms.supermimic.checkpoint import load_legacy_m41_actor
-from dexgym.algorithms.supermimic.networks import GoalActor
+from dexgym.algorithms.supermimic.checkpoint import load_legacy_m41_actor, load_legacy_m42_actor
 from dexgym.tasks.marvin_supermimic.robot_adapter import DEFAULT_MJCF
 from dexgym.tasks.marvin_supermimic.legacy_evaluator import evaluate_full
 
@@ -33,9 +32,9 @@ def main():
         if metadata["robot_asset_hashes"]["mjcf"] != _hash(DEFAULT_MJCF):
             raise ValueError("M4.2 checkpoint robot asset hash differs")
         config = record["config"]
-        actor = GoalActor(goal_latent_tanh=True,
-                          normalization_mode=config["normalization_mode"]).to("cuda").eval()
-        actor.load_state_dict(record["models"]["actor"], strict=True)
+        actor, _ = load_legacy_m42_actor(
+            args.checkpoint, reference_path=args.reference,
+            robot_asset_path=DEFAULT_MJCF, device="cuda")
         action_schema = metadata["action_schema"]
         reward_profile = config["reward_profile"]
     else:

@@ -103,8 +103,10 @@ class CoreCheckpoint:
             scheduler.load_state_dict(record["schedulers"][name])
         trainer.iteration = int(record["training"]["iteration"])
         trainer.counts = record["training"]["counts"].copy()
-        trainer.allowed_horizon = int(record["training"]["allowed_horizon"])
-        trainer.trust_report = record["training"]["trust_report"]
+        # Trust is tied to the current actor distribution and held-out real
+        # transitions. A resumed process must revalidate it before BPTT.
+        trainer.allowed_horizon = 0
+        trainer.trust_report = {}
         if record["replay"] is not None:
             trainer.replay.load_state_dict(record["replay"])
             trainer.collector.load_state_dict(record["collector"])
