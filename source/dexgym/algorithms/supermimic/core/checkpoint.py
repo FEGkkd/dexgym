@@ -2,6 +2,8 @@
 
 from dataclasses import asdict
 from pathlib import Path
+import hashlib
+import json
 import os
 import random
 
@@ -10,7 +12,7 @@ import torch
 
 
 class CoreCheckpoint:
-    schema_version = "supermimic_core_v1"
+    schema_version = "supermimic_core_v2"
 
     def __init__(self, *, git_commit: str, reference_hashes: dict[str, str],
                  physics_config: dict | None = None):
@@ -32,13 +34,90 @@ class CoreCheckpoint:
                        for key, value in module.state_dict().items()}
                 for name, module in modules.items()}
 
-    def save(self, path: str | Path, trainer, *, include_replay: bool = True,
-             schedulers: dict | None = None) -> Path:
+    @staticmethod
+    def _manifest(trainer, modules, physics_config, reference_hashes):
+        """Readable executable contract; state-dict shapes alone are insufficient."""
+        robot_contract = getattr(trainer.robot, "checkpoint_contract", None)
+        task_contract = getattr(trainer.task, "checkpoint_contract", None)
+        if not callable(robot_contract) or not callable(task_contract):
+            raise ValueError("Robot and Task adapters must provide checkpoint_contract")
+        networks = {}
+        for name, module in modules.items():
+            spec = getattr(module, "network_spec", None)
+            if spec is None:
+                raise ValueError(f"{name} must provide NetworkSpec for checkpoint")
+            norms = {}
+            for norm_name in ("input_norm", "delta_norm", "observation_norm", "goal_norm"):
+                norm = getattr(module, norm_name, None)
+                if norm is not None:
+                    norms[norm_name] = {
+                        "mode": "running_fp32_v1" if hasattr(norm, "min_std") else "identity_v1",
+                        "min_std": getattr(norm, "min_std", None),
+                        "max_count": getattr(norm, "max_count", None),
+                        "dimension": int(norm.mean.numel()) if hasattr(norm, "mean") else None,
+                    }
+            networks[name] = {
+                "class": type(module).__module__ + "." + type(module).__qualname__,
+                "network_spec": asdict(spec),
+                "goal_latent_tanh": getattr(module, "goal_latent_tanh", None),
+                "normalizers": norms,
+                "integration_version": "robot_adapter_delta_v1" if name == "world_model" else None,
+                "output_activation": "linear_delta_v1" if name == "world_model" else
+                                     "linear_action_v1" if name == "actor" else None,
+            }
+        manifest = {
+            "robot_spec": asdict(trainer.robot.spec),
+            "robot_contract": robot_contract(),
+            "task_spec": asdict(trainer.task.spec),
+            "task_contract": task_contract(),
+            "termination_mode": trainer.task.termination_mode,
+            "networks": networks,
+            "physics_config": physics_config,
+            "reference_hashes": reference_hashes,
+        }
+        # Canonical JSON both validates that the contract is data, and makes
+        # its digest stable across processes and dictionary insertion order.
+        encoded = json.dumps(manifest, sort_keys=True, separators=(",", ":"), allow_nan=False)
+        return manifest, hashlib.sha256(encoded.encode()).hexdigest()
+
+    @staticmethod
+    def _first_difference(saved, current, path="contract"):
+        if isinstance(saved, dict) and isinstance(current, dict):
+            for key in sorted(saved.keys() | current.keys()):
+                if key not in saved or key not in current:
+                    return f"{path}.{key}: missing field"
+                found = CoreCheckpoint._first_difference(saved[key], current[key], f"{path}.{key}")
+                if found:
+                    return found
+            return None
+        if saved != current:
+            return f"{path}: saved={saved!r}, current={current!r}"
+        return None
+
+    def save(self, path: str | Path, trainer, *, include_replay: bool | None = None,
+             resume_mode: str = "fresh_physics", schedulers: dict | None = None) -> Path:
+        if include_replay is not None:
+            if resume_mode != "fresh_physics":
+                raise ValueError("Specify either include_replay or resume_mode")
+            resume_mode = "full" if include_replay else "fresh_physics"
+        if resume_mode not in ("fresh_physics", "replay", "full"):
+            raise ValueError("Unknown checkpoint resume_mode")
+        if resume_mode == "full" and not all(callable(getattr(trainer.collector, method, None))
+                                              for method in ("state_dict", "load_state_dict")):
+            raise ValueError("Full resume requires a restorable collector state")
+        collector_state = trainer.collector.state_dict() if resume_mode == "full" else None
+        if resume_mode == "full" and (not isinstance(collector_state, dict) or not collector_state):
+            raise ValueError("Full resume collector state_dict must return a nonempty state mapping")
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
         modules = self._modules(trainer)
+        manifest, digest = self._manifest(trainer, modules, self.physics_config,
+                                         self.reference_hashes)
         record = {
             "schema": self.schema_version,
+            "contract_manifest": manifest,
+            "contract_sha256": digest,
+            "resume_mode": resume_mode,
             "robot_spec": asdict(trainer.robot.spec),
             "task_spec": asdict(trainer.task.spec),
             "trainer_config": asdict(trainer.config),
@@ -53,9 +132,8 @@ class CoreCheckpoint:
             "training": {"iteration": trainer.iteration, "counts": trainer.counts.copy(),
                          "allowed_horizon": trainer.allowed_horizon,
                          "trust_report": trainer.trust_report},
-            "replay": trainer.replay.state_dict() if include_replay else None,
-            "collector": (trainer.collector.state_dict() if include_replay and
-                          hasattr(trainer.collector, "state_dict") else None),
+            "replay": trainer.replay.state_dict() if resume_mode in ("replay", "full") else None,
+            "collector": collector_state,
             "rng": {"torch": torch.get_rng_state(), "numpy": np.random.get_state(),
                     "python": random.getstate(),
                     "cuda": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None},
@@ -83,6 +161,14 @@ class CoreCheckpoint:
             raise ValueError("Termination schema differs")
         if record["reference_hashes"] != self.reference_hashes or record["physics_config"] != self.physics_config:
             raise ValueError("Reference or physics fingerprint differs")
+        current_manifest, current_digest = self._manifest(trainer, modules, self.physics_config,
+                                                          self.reference_hashes)
+        stored_digest = hashlib.sha256(json.dumps(record["contract_manifest"], sort_keys=True,
+            separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+        if stored_digest != record["contract_sha256"]:
+            raise ValueError("Checkpoint contract SHA256 is invalid")
+        if current_digest != stored_digest:
+            raise ValueError(self._first_difference(record["contract_manifest"], current_manifest))
         if record["module_signatures"] != self._signatures(modules):
             raise ValueError("Network shape or normalization schema differs")
         if set(record["optimizers"]) != set(trainer.optimizers):
@@ -90,8 +176,9 @@ class CoreCheckpoint:
         if set(record["schedulers"]) != set(schedulers or {}):
             raise ValueError("Scheduler schema differs")
         if record["replay"] is not None:
-            if record["collector"] is None or not hasattr(trainer.collector, "load_state_dict"):
-                raise ValueError("Saved Replay requires a resumable physical collector")
+            if record["resume_mode"] == "full" and (record["collector"] is None or
+                    not callable(getattr(trainer.collector, "load_state_dict", None))):
+                raise ValueError("Full resume requires a restorable physical collector")
             if (record["replay"]["capacity"] != trainer.replay.capacity or
                     record["replay"]["num_envs"] != trainer.replay.num_envs):
                 raise ValueError("Replay physical environment schema differs")
@@ -108,13 +195,74 @@ class CoreCheckpoint:
         trainer.allowed_horizon = 0
         trainer.trust_report = {}
         if record["replay"] is not None:
-            trainer.replay.load_state_dict(record["replay"])
-            trainer.collector.load_state_dict(record["collector"])
+            trainer.replay.load_state_dict(record["replay"],
+                                           fresh_physics=record["resume_mode"] != "full")
+            if record["resume_mode"] == "full":
+                trainer.collector.load_state_dict(record["collector"])
         torch.set_rng_state(record["rng"]["torch"])
         np.random.set_state(record["rng"]["numpy"])
         random.setstate(record["rng"]["python"])
         if record["rng"]["cuda"] is not None and torch.cuda.is_available():
             torch.cuda.set_rng_state_all(record["rng"]["cuda"])
         return {"replay_restored": record["replay"] is not None,
-                "requires_fresh_collection": record["replay"] is None,
+                "requires_fresh_collection": record["resume_mode"] != "full",
+                "resume_mode": record["resume_mode"],
                 "git_commit": record["git_commit"], "schema": record["schema"]}
+
+    def load_actor_for_evaluation(self, path: str | Path, *, robot, task, modules) -> dict:
+        """Strict inference-only load; no optimizer, Replay or collector state is touched."""
+        record = torch.load(path, map_location="cpu", weights_only=False)
+        if record.get("schema") != self.schema_version:
+            raise ValueError("Evaluation requires a v2 semantic checkpoint or explicit legacy evaluator")
+        if record["reference_hashes"] != self.reference_hashes:
+            raise ValueError("Reference hashes differ")
+        if record["physics_config"] != self.physics_config:
+            raise ValueError("Physics configuration differs")
+        active = {"actor": modules.actor, "world_model": modules.world_model,
+                  "critic": modules.critic}
+        if record["termination_mode"] == "learned":
+            active["termination"] = modules.termination
+        from types import SimpleNamespace
+        current, digest = self._manifest(SimpleNamespace(robot=robot, task=task), active,
+                                         self.physics_config, self.reference_hashes)
+        if digest != record["contract_sha256"] or current != record["contract_manifest"]:
+            raise ValueError(self._first_difference(record["contract_manifest"], current)
+                             or "Checkpoint contract SHA256 is invalid")
+        if self._signatures(active) != record["module_signatures"]:
+            raise ValueError("Network shape or normalization schema differs")
+        modules.actor.load_state_dict(record["modules"]["actor"], strict=True)
+        modules.actor.eval()
+        return {"schema": record["schema"], "contract_sha256": digest,
+                "git_commit": record["git_commit"], "policy_source": str(path)}
+
+    @staticmethod
+    def load_legacy_m43_v1_actor_for_evaluation(
+            path: str | Path, actor, *, robot_spec, task_spec,
+            reference_hashes: dict, physics_config: dict, source_git_commit: str,
+            assumed_goal_latent_tanh: bool, assumed_normalize: bool) -> dict:
+        """Explicit inference-only M4.3 migration; v1 never recorded these two semantics."""
+        record = torch.load(path, map_location="cpu", weights_only=False)
+        if record.get("schema") != "supermimic_core_v1":
+            raise ValueError("Explicit M4.3 legacy loader requires a v1 checkpoint")
+        current_robot = asdict(robot_spec)
+        current_robot.pop("context_evolution", None)  # introduced by v2
+        if record["robot_spec"] != current_robot or record["task_spec"] != asdict(task_spec):
+            raise ValueError("Legacy Robot or Task schema differs")
+        if (record["reference_hashes"] != reference_hashes
+                or record["physics_config"] != physics_config
+                or record["git_commit"] != source_git_commit):
+            raise ValueError("Legacy source, reference or physics provenance differs")
+        if (actor.goal_latent_tanh != assumed_goal_latent_tanh
+                or actor.network_spec.normalize != assumed_normalize):
+            raise ValueError("Legacy network assumptions differ from the requested Actor")
+        signature = CoreCheckpoint._signatures({"actor": actor})["actor"]
+        if signature != record["module_signatures"]["actor"]:
+            raise ValueError("Legacy Actor shape or normalizer schema differs")
+        actor.load_state_dict(record["modules"]["actor"], strict=True)
+        actor.eval()
+        return {"schema": "supermimic_core_v1", "evaluation_only": True,
+                "unrecorded_semantics_assumed": {
+                    "goal_latent_tanh": assumed_goal_latent_tanh,
+                    "normalize": assumed_normalize,
+                    "network_spec": asdict(actor.network_spec)},
+                "source_git_commit": source_git_commit}

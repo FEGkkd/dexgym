@@ -1,11 +1,16 @@
-"""Newton dual-TCP Reach physics using the existing validated 54DoF servo."""
+"""Independent dual-TCP Reach MDP on the shared Marvin arm Newton physics."""
 
+from types import SimpleNamespace
+
+import numpy as np
 import torch
 from isaaclab.utils import configclass
 
+from dexgym.assets.marvin_wuji.controller import ARM_JOINT_NAMES
+
+from .base_env import MarvinArmNewtonBaseEnv
 from .core_plugins import MarvinDualTCPReach, MarvinCoreRobot
-from .env import MarvinWaveDirectEnv
-from .env_cfg import MarvinWaveDirectCfg
+from .env_cfg import MarvinArmNewtonBaseCfg
 
 
 PROCEDURAL_RESET = (
@@ -14,22 +19,30 @@ PROCEDURAL_RESET = (
 
 
 @configclass
-class MarvinReachDirectCfg(MarvinWaveDirectCfg):
-    reference_path = PROCEDURAL_RESET  # Used only to initialize a safe full-body pose.
+class MarvinReachDirectCfg(MarvinArmNewtonBaseCfg):
+    reset_state_path = PROCEDURAL_RESET
     action_schema = "robot_fixed_v3"
-    initialize_hands_from_pd_replay = False
-    random_reference_start = False
-    reset_joint_perturb_rad = 0.0
     observation_space = 4 * 48 + 6
     episode_length_s = 2.0
 
 
-class MarvinReachDirectEnv(MarvinWaveDirectEnv):
+class MarvinReachDirectEnv(MarvinArmNewtonBaseEnv):
     cfg: MarvinReachDirectCfg
 
     def __init__(self, cfg: MarvinReachDirectCfg, render_mode=None, **kwargs):
         super().__init__(cfg, render_mode, **kwargs)
-        self.core_robot = MarvinCoreRobot(self.motion, self.device, action_schema=cfg.action_schema)
+        joint_source = SimpleNamespace(joint_names_arm=ARM_JOINT_NAMES)
+        with np.load(cfg.reset_state_path, allow_pickle=False) as source:
+            if tuple(source["joint_names_arm"]) != ARM_JOINT_NAMES or source["q_full"].shape[1] != 54:
+                raise ValueError("Reach safe reset pose has an incompatible Marvin joint schema")
+            initial_arm = torch.as_tensor(source["q_arm"][0].copy(), device=self.device)
+            initial_velocity = torch.as_tensor(source["qd_arm"][0].copy(), device=self.device)
+            initial_full = torch.as_tensor(source["q_full"][0].copy(), device=self.device)
+        self._setup_arm_physics(joint_source, initial_arm)
+        self.reset_arm_q = initial_arm
+        self.reset_arm_qd = initial_velocity
+        self.reset_full_q = initial_full[self.model_to_newton]
+        self.core_robot = MarvinCoreRobot(joint_source, self.device, action_schema=cfg.action_schema)
         self.reach_task = MarvinDualTCPReach(self.core_robot, episode_length=100)
         self.reach_target = torch.zeros((self.num_envs, 6), device=self.device)
         self.reach_frame = torch.zeros(self.num_envs, device=self.device, dtype=torch.long)
@@ -80,6 +93,12 @@ class MarvinReachDirectEnv(MarvinWaveDirectEnv):
             return
         if env_ids is None:
             env_ids = self.robot._ALL_INDICES
+        count = len(env_ids)
+        q = self.reset_full_q[None].repeat(count, 1)
+        qd = torch.zeros_like(q)
+        arm_q = self.reset_arm_q[None].repeat(count, 1)
+        arm_qd = self.reset_arm_qd[None].repeat(count, 1)
+        self._write_robot_reset(env_ids, q, qd, arm_q, arm_qd)
         state = self.core_robot.physical_state(self)
         target = self.reach_task.task_state_from_reset(state).data
         self.reach_target[env_ids] = target[env_ids]

@@ -38,6 +38,12 @@ class ImaginationEngine:
         state, history, task_state = start.state, start.history, start.task_state
         previous_action = start.previous_action
         context = start.dynamics_context
+        if (context.shape != (len(state), robot.spec.context_dim)
+                or not bool(torch.isfinite(context).all())):
+            raise ValueError("Initial dynamics context differs from RobotSpec")
+        evolve_context = robot.spec.context_evolution == "adapter_transition"
+        if evolve_context and not callable(getattr(robot, "next_dynamics_context", None)):
+            raise ValueError("Time-varying dynamics context requires next_dynamics_context")
         rewards, probabilities, values, features, states = [], [], [], [], []
         for _ in range(horizon):
             goal = task.goal(state, task_state)
@@ -68,6 +74,12 @@ class ImaginationEngine:
             if next_observation.shape != (len(state), task.spec.observation_dim):
                 raise ValueError("Task observation differs from TaskSpec")
             history = torch.cat((history[:, 1:], next_observation[:, None]), dim=1)
+            if evolve_context:
+                context = robot.next_dynamics_context(context, state, action, next_state,
+                                                      next_task_state)
+                if (context.shape != (len(state), robot.spec.context_dim)
+                        or not bool(torch.isfinite(context).all())):
+                    raise ValueError("Next dynamics context differs from RobotSpec")
             state, task_state, previous_action = next_state, next_task_state, action
         terminal_features = task.critic_features(state, task_state)
         values.append(critic(terminal_features))

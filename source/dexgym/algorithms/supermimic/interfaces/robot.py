@@ -19,3 +19,13 @@ class RobotDynamicsAdapter(Protocol):
 
     def physical_state(self, env) -> torch.Tensor: ...
 
+    def dynamics_context(self, env) -> torch.Tensor:
+        """Return finite [N, context_dim] parameters active during the next real action."""
+        ...
+
+    def next_dynamics_context(self, context: torch.Tensor, state: torch.Tensor,
+                              action: torch.Tensor, next_state: torch.Tensor,
+                              next_task_state) -> torch.Tensor:
+        """Required when RobotSpec.context_evolution is adapter_transition."""
+        ...
+

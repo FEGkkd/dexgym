@@ -11,6 +11,7 @@ from dexgym.algorithms.supermimic.core.transition import TaskState
 class TaskMDP(Protocol):
     spec: TaskSpec
     termination_mode: str
+    success_hold_steps: int
 
     def advance(self, task_state: TaskState) -> TaskState: ...
 
@@ -33,4 +34,8 @@ class TaskMDP(Protocol):
     def valid_imagination_start(self, task_state: TaskState, horizon: int) -> torch.Tensor: ...
 
     def evaluate_metrics(self, trajectory) -> dict: ...
+
+    def success_mask(self, transition) -> torch.Tensor: ...
+
+    def checkpoint_contract(self) -> dict: ...
 

@@ -5,7 +5,9 @@ algorithm Core imports neither this module nor any Wave asset.
 """
 
 import hashlib
+from dataclasses import asdict
 
+import mujoco
 import torch
 
 from dexgym.algorithms.supermimic.core.specs import RobotSpec, TaskSpec
@@ -49,11 +51,45 @@ class MarvinCoreRobot:
     def physical_state(self, env):
         return self.native.physical_state(env)
 
+    def dynamics_context(self, native_env):
+        state = self.physical_state(native_env)
+        return state.new_empty((len(state), 0))
+
+    def next_dynamics_context(self, context, state, action, next_state, task_state):
+        return context  # Current Marvin dynamics context is empty and episode-constant.
+
+    def checkpoint_contract(self):
+        mapping = self.action_map
+        model = mujoco.MjModel.from_xml_path(str(self.native.mjcf))
+        arm_effort_ranges = []
+        for name in self.spec.joint_order:
+            joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name)
+            actuator_id = next(index for index in range(model.nu)
+                               if int(model.actuator_trnid[index, 0]) == joint_id)
+            arm_effort_ranges.append(model.actuator_forcerange[actuator_id].tolist())
+        return {
+            "adapter_version": "marvin_arm_only_v1",
+            "action_origin": mapping.origin.detach().cpu().tolist(),
+            "action_scale": mapping.scale.detach().cpu().tolist(),
+            "joint_lower": mapping.lower.detach().cpu().tolist(),
+            "joint_upper": mapping.upper.detach().cpu().tolist(),
+            "arm_effort_ranges_source": arm_effort_ranges,
+            "max_command_delta_rad": mapping.max_delta,
+            "physics_substeps": self.native.physics_substeps,
+            "interpolation": "linear_10_substeps_v1",
+            "controller_kp_source": self.native.controller_kp_source,
+            "controller_kd_source": self.native.controller_kd_source,
+            "controller_damping_scale_source": self.native.controller_damping_scale_source,
+            "context_schema": "empty_episode_constant_v1",
+            "hands": "home_position_contact_disabled_v1",
+        }
+
 
 class MarvinMotionTracking:
     """Six-link M4.2 tracking math expressed through the generic task protocol."""
 
     termination_mode = "analytic"
+    success_hold_steps = 1
 
     def __init__(self, reference, robot: MarvinCoreRobot, *,
                  reward_profile="marvin_tcp_priority", termination_mode="analytic",
@@ -118,6 +154,14 @@ class MarvinMotionTracking:
     def reward_upper_bound(self):
         return reward_upper_bound(REWARD_PROFILES[self.reward_profile], dt=self.robot.spec.control_dt)
 
+    def checkpoint_contract(self):
+        return {"task_adapter_version": "marvin_motion_tracking_v1",
+                "reward_profile": self.reward_profile,
+                "reward_weights": asdict(REWARD_PROFILES[self.reward_profile]),
+                "termination_thresholds": asdict(self.thresholds),
+                "episode_semantics": "reference_frame_advance_v1",
+                "success_definition": "full_clip_no_failure_v1"}
+
     def soft_termination(self, next_state, next_task_state):
         target = self.reference.reference_at(next_task_state.motion_id, next_task_state.frame)
         pos = self.robot.fk(next_state[:, :14])[0][:, :, 2]
@@ -137,6 +181,14 @@ class MarvinMotionTracking:
     def valid_imagination_start(self, task_state, horizon):
         return task_state.frame + horizon < self.reference.lengths[task_state.motion_id]
 
+    def success_mask(self, transition):
+        end = self.reference.lengths[transition.next_task_state.motion_id] - 1
+        return transition.truncated & ~transition.terminated & (transition.next_task_state.frame >= end)
+
+    def truncation_reason(self, transition):
+        end = self.reference.lengths[transition.next_task_state.motion_id] - 1
+        return "motion_end" if bool((transition.next_task_state.frame >= end).all()) else "time_limit"
+
     def evaluate_metrics(self, trajectory):
         positions, rotations = [], []
         for transition in trajectory:
@@ -155,14 +207,18 @@ class MarvinMotionTracking:
                 "tcp_position_max_m": position.max(0).values.tolist(),
                 "tcp_so3_mean_rad": rotation.mean(0).tolist(),
                 "tcp_so3_p95_rad": torch.quantile(rotation, 0.95, dim=0).tolist(),
-                "motion_completion_fraction": float((~torch.stack(
-                    [item.terminated for item in trajectory]).any(0)).float().mean())}
+                "tcp_so3_max_rad": rotation.max(0).values.tolist(),
+                "motion_progress_fraction": float((trajectory[-1].next_task_state.frame /
+                    (self.reference.lengths[trajectory[-1].next_task_state.motion_id] - 1)).float().mean()),
+                "motion_completion_fraction": float(self.success_mask(trajectory[-1]).float().mean())}
 
 
 class MarvinDualTCPReach:
     """Static Cartesian dual-TCP goals, with no six-link or motion-goal encoding."""
 
     termination_mode = "analytic"
+    success_distance_m = 0.015
+    success_hold_steps = 1
 
     def __init__(self, robot: MarvinCoreRobot, *, episode_length=100,
                  thresholds=TerminationThresholds()):
@@ -217,6 +273,16 @@ class MarvinDualTCPReach:
     def reward_upper_bound():
         return 0.02
 
+    def checkpoint_contract(self):
+        return {"task_adapter_version": "marvin_dual_tcp_reach_v1",
+                "reward": {"version": "dual_tcp_exp_distance_v1", "distance_scale": 40.0,
+                           "command_rate_weight": 0.2, "step_scale": 0.02},
+                "termination_thresholds": asdict(self.thresholds),
+                "episode_length": self.episode_length,
+                "success_distance_m": self.success_distance_m,
+                "success_hold_steps": self.success_hold_steps,
+                "target_offset_m": [0.025, 0.015, 0.0, -0.025, -0.015, 0.0]}
+
     def soft_termination(self, next_state, next_task_state):
         return analytic_soft_termination(
             next_state[:, :14], next_state[:, 14:28], self.robot.action_map.lower,
@@ -231,6 +297,12 @@ class MarvinDualTCPReach:
     def valid_imagination_start(self, task_state, horizon):
         return task_state.frame + horizon <= self.episode_length
 
+    def success_mask(self, transition):
+        next_state = transition.next_state
+        tcp = self.robot.fk(next_state[:, :14])[0][:, :, 2].reshape(-1, 2, 3)
+        target = transition.next_task_state.data.reshape(-1, 2, 3)
+        return (torch.linalg.vector_norm(tcp - target, dim=-1) < self.success_distance_m).all(-1)
+
     def evaluate_metrics(self, trajectory):
         states = torch.cat([item.next_state for item in trajectory])
         tcp = self.robot.fk(states[:, :14])[0][:, :, 2].reshape(-1, 2, 3)
@@ -238,4 +310,6 @@ class MarvinDualTCPReach:
         distances = torch.linalg.vector_norm(tcp - target, dim=-1)
         return {"tcp_distance_mean_m": float(distances.mean()),
                 "tcp_distance_max_m": float(distances.max()),
-                "success_rate": float((distances < 0.015).all(-1).float().mean())}
+                "tcp_final_distance_m": distances[-1].tolist(),
+                "tcp_best_distance_m": distances.min(0).values.tolist(),
+                "step_success_fraction": float((distances < self.success_distance_m).all(-1).float().mean())}

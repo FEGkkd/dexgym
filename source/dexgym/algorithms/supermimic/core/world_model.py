@@ -30,7 +30,8 @@ def masked_autoregressive_loss(model, window: WindowBatch, robot_adapter, *,
         # alter the prediction or the loss for this trajectory.
         prediction = torch.where(active[:, None], proposal, prediction)
         physical_error = robot_adapter.physical_delta(window.next_state[:, step], prediction)
-        normalized_error = physical_error / model.delta_norm.std()
+        normalized_error = (physical_error / model.delta_norm.std()
+                            if hasattr(model.delta_norm, "std") else physical_error)
         squared_error = squared_error + normalized_error[active].square().sum()
         step_errors.append(torch.where(active, physical_error.square().mean(-1).sqrt(),
                                        torch.zeros_like(active, dtype=prediction.dtype)))

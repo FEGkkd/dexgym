@@ -17,6 +17,7 @@ class RobotSpec:
     asset_sha256: str = ""
     command_dim: int | None = None
     joint_order: tuple[str, ...] = ()
+    context_evolution: str = "episode_constant"
 
     def __post_init__(self):
         if not self.robot_id or not self.action_schema or not self.state_schema:
@@ -31,6 +32,8 @@ class RobotSpec:
             raise ValueError("Joint order must match action dimension when specified")
         if self.control_dt <= 0 or self.physics_dt <= 0 or self.control_dt < self.physics_dt:
             raise ValueError("Robot control and physics dt must be positive and ordered")
+        if self.context_evolution not in ("episode_constant", "adapter_transition"):
+            raise ValueError("Unknown dynamics context evolution contract")
 
 
 @dataclass(frozen=True)
@@ -67,10 +70,17 @@ class NetworkSpec:
     latent_dim: int = 32
     goal_latent_tanh: bool = True
     normalize: bool = True
+    normalizer_min_std: float = 1e-2
+    normalizer_max_count: int = 200_000_000
+    normalizer_version: str = "running_fp32_v1"
 
     def __post_init__(self):
         if self.latent_dim < 1 or any(width < 1 for widths in (
             self.world_hidden, self.goal_hidden, self.actor_hidden,
             self.critic_hidden, self.termination_hidden) for width in widths):
             raise ValueError("Network hidden dimensions and latent width must be positive")
+        if self.normalizer_min_std <= 0 or self.normalizer_max_count < 1:
+            raise ValueError("Normalizer floor and maximum count must be positive")
+        if self.normalizer_version != "running_fp32_v1":
+            raise ValueError("Unknown normalizer algorithm version")
 

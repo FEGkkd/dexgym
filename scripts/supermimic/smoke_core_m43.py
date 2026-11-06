@@ -28,6 +28,7 @@ from dexgym.tasks.marvin_supermimic.core_plugins import (
     MarvinCoreRobot, MarvinDualTCPReach, MarvinMotionTracking)
 from dexgym.tasks.marvin_supermimic.env_cfg import MarvinWaveDirectCfg
 from dexgym.tasks.marvin_supermimic.reach_env import MarvinReachDirectCfg, PROCEDURAL_RESET
+from dexgym.tasks.marvin_supermimic.physics_contract import marvin_physics_config
 from dexgym.tasks.marvin_supermimic.register_core import register_marvin
 
 
@@ -87,7 +88,10 @@ def main():
     args = arguments()
     torch.manual_seed(args.seed)
     cfg = MarvinReachDirectCfg() if args.task == "reach" else MarvinWaveDirectCfg()
-    cfg.reference_path = args.reference_path
+    if args.task == "reach":
+        cfg.reset_state_path = args.reference_path
+    else:
+        cfg.reference_path = args.reference_path
     cfg.action_schema = args.action_schema
     cfg.scene.num_envs = args.num_envs
     cfg.seed = args.seed
@@ -137,14 +141,7 @@ def main():
             commit = subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
             checkpoint = CoreCheckpoint(
                 git_commit=commit, reference_hashes=hashes,
-                physics_config={"num_envs": args.num_envs, "physics_dt": cfg.sim.dt,
-                                "policy_dt": 0.02, "decimation": cfg.decimation,
-                                "controller_kp_source": robot.native.controller_kp_source,
-                                "controller_kd_source": robot.native.controller_kd_source,
-                                "controller_damping_scale_source":
-                                    robot.native.controller_damping_scale_source,
-                                "hands_fixed_home": True,
-                                "hand_contact_configuration": "validated_disabled"})
+                physics_config=marvin_physics_config(cfg, robot, task_id=task.spec.task_id))
             resume_report = checkpoint.load(args.resume, trainer) if args.resume else None
             start_counts = trainer.counts.copy()
             logs, timings = [], {name: 0.0 for name in

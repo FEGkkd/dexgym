@@ -210,7 +210,7 @@ class SchemaReplay:
                 "steps": self.steps, "episode_counter": self.episode_counter.detach().cpu().clone(),
                 "timestamp": self.timestamp.detach().cpu().clone(), "fields": fields}
 
-    def load_state_dict(self, record: dict):
+    def load_state_dict(self, record: dict, *, fresh_physics: bool = True):
         if (record["capacity"] != self.capacity or record["num_envs"] != self.num_envs
                 or record["robot_spec"] != asdict(self.robot_spec)
                 or record["task_spec"] != asdict(self.task_spec)
@@ -230,5 +230,6 @@ class SchemaReplay:
         if record["episode_counter"].shape != self.episode_counter.shape:
             raise ValueError("Replay episode counter schema differs")
         self.timestamp.copy_(timestamp)
-        self.episode_counter.copy_(record["episode_counter"].to(self.device) + 1)
+        self.episode_counter.copy_(record["episode_counter"].to(self.device)
+                                   + int(fresh_physics))
         self.steps = steps

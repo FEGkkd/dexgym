@@ -41,6 +41,8 @@ def export_policy(path: str | Path, actor: GoalActor, robot: RobotSpec,
                   git_commit: str) -> dict:
     if actor.robot_spec != robot or actor.task_spec != task:
         raise ValueError("Export Actor contract differs")
+    if actor.network_spec != network or actor.goal_latent_tanh != network.goal_latent_tanh:
+        raise ValueError("Export NetworkSpec differs from the executing Actor")
     state = actor.state_dict()
     digest = policy_sha256(state)
     metadata = {"schema": "supermimic_pytorch_policy_v1", "robot": asdict(robot),

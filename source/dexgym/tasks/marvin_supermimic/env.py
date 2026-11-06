@@ -3,20 +3,16 @@
 from collections.abc import Sequence
 from pathlib import Path
 
-import mujoco
 import numpy as np
 import torch
-import warp as wp
-from isaaclab.envs import DirectRLEnv
 
 from dexgym.algorithms.supermimic.observation import noisy_proprio_frame
 from dexgym.algorithms.supermimic.rewards import REWARD_PROFILES, tracking_reward
-from dexgym.assets.marvin_wuji.controller import apply_newton_arm_tracking_profile
 from dexgym.motion.motion_manager import MotionManager
 
-from .contact_audit import contact_counts, unsafe_arm_states
+from .base_env import MarvinArmNewtonBaseEnv
+from .contact_audit import unsafe_arm_states
 from .env_cfg import MarvinWaveDirectCfg
-from .robot_adapter import MarvinArmDynamicsAdapter
 
 REFERENCE = "/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz"
 MJCF = "/home/ubuntu/dexgym/source/dexgym/assets/marvin_wuji/source_model/dual_arm_marvin.xml"
@@ -25,46 +21,14 @@ PD_STATES = Path(
 )
 
 
-class MarvinWaveDirectEnv(DirectRLEnv):
+class MarvinWaveDirectEnv(MarvinArmNewtonBaseEnv):
     cfg: MarvinWaveDirectCfg
 
     def __init__(self, cfg: MarvinWaveDirectCfg, render_mode: str | None = None, **kwargs):
-        if cfg.decimation != MarvinArmDynamicsAdapter.physics_substeps or cfg.sim.dt != MarvinArmDynamicsAdapter.physics_dt:
-            raise ValueError("Marvin action contract requires ten 2 ms Newton substeps per control step")
         super().__init__(cfg, render_mode, **kwargs)
-        self.robot = self.scene["robot"]
-        if self.robot.num_joints != 54:
-            raise ValueError("Newton robot must retain all 54 joints")
         self.motion = MotionManager(cfg.reference_path, self.num_envs, self.device)
-        self.arm_ids = torch.tensor(
-            [self.robot.joint_names.index(name) for name in self.motion.joint_names_arm],
-            device=self.device,
-            dtype=torch.long,
-        )
-        model = mujoco.MjModel.from_xml_path(MJCF)
-        self.dynamics_adapter = MarvinArmDynamicsAdapter(
-            self.motion, self.device, action_schema=cfg.action_schema, mjcf=MJCF
-        )
-        self.action_map = self.dynamics_adapter.action_map
         start = self.motion.data["q_arm"][0]
-        model_names = tuple(mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_JOINT, j) for j in range(54))
-        if set(model_names) != set(self.robot.joint_names):
-            raise ValueError("Newton/MuJoCo 54DoF joint names differ")
-        self.model_to_newton = torch.tensor(
-            [model_names.index(name) for name in self.robot.joint_names],
-            device=self.device,
-            dtype=torch.long,
-        )
-        self.home_full = torch.tensor(
-            model.key_qpos[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "home")].copy(),
-            device=self.device,
-            dtype=torch.float32,
-        )[self.model_to_newton]
-        self.hand_ids = torch.tensor(
-            [j for j, name in enumerate(self.robot.joint_names) if name not in self.motion.joint_names_arm],
-            device=self.device,
-            dtype=torch.long,
-        )
+        self._setup_arm_physics(self.motion, start)
         if cfg.initialize_hands_from_pd_replay:
             with np.load(PD_STATES, allow_pickle=False) as replay:
                 if replay["q"].shape != (self.motion.length, 1, 54) or replay["qd"].shape != (
@@ -75,58 +39,15 @@ class MarvinWaveDirectEnv(DirectRLEnv):
                     raise ValueError("Pinned Newton PD state shape mismatch")
                 self.pd_hand_q = torch.tensor(replay["q"][:, 0].copy(), device=self.device)[:, self.model_to_newton]
                 self.pd_hand_qd = torch.tensor(replay["qd"][:, 0].copy(), device=self.device)[:, self.model_to_newton]
-        self.full_command = self.robot.data.default_joint_pos.torch.clone()
-        self.command = start[None].repeat(self.num_envs, 1)
-        self.previous_command = self.command.clone()
-        self.previous_q = self.command.clone()
-        self.last_action = torch.zeros((self.num_envs, 14), device=self.device)
-        self.previous_action = self.last_action.clone()
         self.history = torch.zeros((self.num_envs, 10, 56), device=self.device)
         self.prev_link_pos = self.motion.data["link_pos"][0][None].repeat(self.num_envs, 1, 1, 1)
-        self.profile = apply_newton_arm_tracking_profile(self.robot, damping_scale_source=0.5)
         if cfg.reward_profile not in REWARD_PROFILES:
             raise ValueError(f"Unknown reward profile: {cfg.reward_profile}")
         self.reward_weights = REWARD_PROFILES[cfg.reward_profile]
-        self.fk = self.dynamics_adapter.fk
-        self._substep = 0
-        if cfg.audit_contacts_each_physics_step and self._physics_handles_decimation and cfg.decimation > 1:
-            raise RuntimeError("Newton internal decimation prevents physics-step contact auditing")
-        self._contact_accum = torch.zeros(self.num_envs, device=self.device, dtype=torch.int32)
-        self.last_policy_contact_counts = self._contact_accum.clone()
-        self.last_policy_contact_physics_steps = 0
-        self.last_failure_reason = torch.zeros(self.num_envs, device=self.device, dtype=torch.int32)
-
-    def _record_contacts(self) -> None:
-        data = self.sim.physics_manager._solver.mjw_data
-        active_count = int(data.nacon.numpy()[0])
-        if active_count:
-            world_ids = wp.to_torch(data.contact.worldid)
-            self._contact_accum += contact_counts(world_ids, active_count, self.num_envs)
 
     def _pre_physics_step(self, actions: torch.Tensor) -> None:
-        if actions.shape != (self.num_envs, 14) or not torch.isfinite(actions).all():
-            raise ValueError("Invalid 14D policy action")
-        self.previous_q = self.robot.data.joint_pos.torch[:, self.arm_ids].clone()
-        self.previous_command = self.command.clone()
-        self.previous_action = self.last_action.clone()
-        self.command = self.action_map(actions, self.command)
-        self.last_action = actions
+        super()._pre_physics_step(actions)
         self.motion.advance()
-        self._substep = 0
-        self._contact_accum.zero_()
-
-    def _apply_action(self) -> None:
-        if self.cfg.audit_contacts_each_physics_step and self._substep:
-            self._record_contacts()
-        self.full_command[:] = self.home_full
-        self.full_command[:, self.arm_ids] = self.dynamics_adapter.interpolate_command(
-            self.previous_command, self.command, self._substep
-        )
-        self.robot.actuators.target_command.set_position_index(value=self.full_command, full_data=True)
-        self._substep += 1
-
-    def _arm_state(self):
-        return self.robot.data.joint_pos.torch[:, self.arm_ids], self.robot.data.joint_vel.torch[:, self.arm_ids]
 
     def _get_observations(self) -> dict:
         q, qd = self._arm_state()
@@ -229,21 +150,7 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         arm_qd = self.motion.current("qd_arm")[env_ids]
         perturb = (torch.rand_like(arm_q) * 2 - 1) * self.cfg.reset_joint_perturb_rad
         arm_q = torch.clamp(arm_q + perturb, self.action_map.lower, self.action_map.upper)
-        self.command[env_ids] = arm_q
-        self.previous_command[env_ids] = arm_q
-        self.previous_q[env_ids] = arm_q
-        q[:, self.arm_ids] = arm_q
-        qd[:, self.arm_ids] = arm_qd
-        root = self.robot.data.default_root_pose.torch[env_ids].clone()
-        root[:, :3] += self.scene.env_origins[env_ids]
-        self.robot.write_root_pose_to_sim_index(root_pose=root, env_ids=env_ids)
-        self.robot.write_root_velocity_to_sim_index(
-            root_velocity=self.robot.data.default_root_vel.torch[env_ids].clone(), env_ids=env_ids
-        )
-        self.robot.write_joint_position_to_sim_index(position=q, env_ids=env_ids)
-        self.robot.write_joint_velocity_to_sim_index(velocity=qd, env_ids=env_ids)
-        self.last_action[env_ids] = 0
-        self.previous_action[env_ids] = 0
+        self._write_robot_reset(env_ids, q, qd, arm_q, arm_qd)
         first_observation = torch.cat(
             (
                 (arm_q - self.action_map.origin) / self.action_map.scale,

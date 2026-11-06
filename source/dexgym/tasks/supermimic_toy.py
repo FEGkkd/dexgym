@@ -15,6 +15,11 @@ class ToyRobot:
                      "position_velocity_v1", control_dt=0.2, physics_dt=0.2)
 
     @staticmethod
+    def checkpoint_contract():
+        return {"integration": "additive_delta_v1", "command": "tanh_v1",
+                "context": "per_episode_damping_v1", "physics": "damped_point_v1"}
+
+    @staticmethod
     def integrate(state, physical_delta, action, context):
         return state + physical_delta
 
@@ -26,10 +31,19 @@ class ToyRobot:
     def executed_command(state, action):
         return action.tanh()
 
+    @staticmethod
+    def dynamics_context(native_env):
+        return native_env.context.clone()
+
+    @staticmethod
+    def next_dynamics_context(context, state, action, next_state, next_task_state):
+        return context
+
 
 class ToyGoalTask:
     termination_mode = "analytic"
     episode_length = 64
+    success_hold_steps = 1
 
     def __init__(self, task_id: str):
         if task_id not in ("position", "position_velocity"):
@@ -39,6 +53,13 @@ class ToyGoalTask:
         self.spec = TaskSpec(task_id, 3 if goal_dim == 1 else 4, 2,
                              goal_dim, 1, goal_dim, 2 + goal_dim,
                              f"toy_{task_id}_goal_v1")
+
+    def checkpoint_contract(self):
+        return {"reward": "exp_position_error_v1", "position_weight": 2.0,
+                "velocity_weight": 0.8 if self.spec.goal_dim == 2 else 0.0,
+                "action_penalty": 0.005, "termination": "none_v1",
+                "episode_length": self.episode_length,
+                "success_threshold": 0.12}
 
     def initial_task_state(self, num_envs: int, device="cpu"):
         position = torch.where(torch.arange(num_envs, device=device) % 2 == 0, 0.8, -0.8).float()
@@ -84,9 +105,17 @@ class ToyGoalTask:
         return task_state.frame >= self.episode_length
 
     def evaluate_metrics(self, trajectory):
+        if isinstance(trajectory, list):
+            last = trajectory[-1]
+            trajectory = {"rewards": torch.stack([item.reward for item in trajectory]),
+                          "final_error": (last.next_state[:, 0] - last.next_task_state.data[:, 0]).abs()}
         return {"reward_mean": float(trajectory["rewards"].mean()),
                 "final_position_error_mean": float(trajectory["final_error"].mean()),
                 "success_rate": float((trajectory["final_error"] < 0.12).float().mean())}
+
+    @staticmethod
+    def success_mask(transition):
+        return (transition.next_state[:, 0] - transition.next_task_state.data[:, 0]).abs() < 0.12
 
     @staticmethod
     def reward_upper_bound():

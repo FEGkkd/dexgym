@@ -22,13 +22,20 @@ def mlp(widths: tuple[int, ...], *, output_zero: bool = False) -> nn.Sequential:
     return nn.Sequential(*layers)
 
 
+def _norm(dimension: int, config: NetworkSpec) -> nn.Module:
+    return (RunningNorm(dimension, min_std=config.normalizer_min_std,
+                        max_count=config.normalizer_max_count)
+            if config.normalize else nn.Identity())
+
+
 class GoalActor(nn.Module):
     def __init__(self, robot: RobotSpec, task: TaskSpec, config: NetworkSpec):
         super().__init__()
         self.robot_spec, self.task_spec = robot, task
+        self.network_spec = config
         self.goal_latent_tanh = config.goal_latent_tanh
-        self.observation_norm = (RunningNorm(task.observation_dim) if config.normalize else nn.Identity())
-        self.goal_norm = RunningNorm(task.goal_dim) if config.normalize else nn.Identity()
+        self.observation_norm = _norm(task.observation_dim, config)
+        self.goal_norm = _norm(task.goal_dim, config)
         self.goal_encoder = mlp((task.goal_dim * task.goal_horizon,
                                  *config.goal_hidden, config.latent_dim))
         self.decoder = mlp((task.observation_dim * task.history_length + config.latent_dim,
@@ -62,7 +69,8 @@ class Critic(nn.Module):
     def __init__(self, task: TaskSpec, config: NetworkSpec):
         super().__init__()
         self.task_spec = task
-        self.input_norm = RunningNorm(task.critic_dim) if config.normalize else nn.Identity()
+        self.network_spec = config
+        self.input_norm = _norm(task.critic_dim, config)
         self.network = mlp((task.critic_dim, *config.critic_hidden, 1))
 
     @torch.no_grad()
@@ -80,8 +88,9 @@ class StateDeltaWorldModel(nn.Module):
     def __init__(self, robot: RobotSpec, config: NetworkSpec):
         super().__init__()
         self.robot_spec = robot
-        self.input_norm = RunningNorm(robot.state_dim + robot.action_dim + robot.context_dim)
-        self.delta_norm = RunningNorm(robot.delta_dim, min_std=1e-2)
+        self.network_spec = config
+        self.input_norm = _norm(robot.state_dim + robot.action_dim + robot.context_dim, config)
+        self.delta_norm = _norm(robot.delta_dim, config)
         self.network = mlp((robot.state_dim + robot.action_dim + robot.context_dim,
                             *config.world_hidden, robot.delta_dim), output_zero=True)
 
@@ -93,7 +102,10 @@ class StateDeltaWorldModel(nn.Module):
                 or context.shape != (len(state), spec.context_dim)):
             raise ValueError("World Model state/action/context schema differs")
         features = torch.cat((state, action, context), dim=-1)
-        return self.network(self.input_norm(features)) * self.delta_norm.std() + self.delta_norm.mean
+        delta = self.network(self.input_norm(features))
+        if isinstance(self.delta_norm, RunningNorm):
+            delta = delta * self.delta_norm.std() + self.delta_norm.mean
+        return delta
 
     def forward(self, state: torch.Tensor, action: torch.Tensor,
                 context: torch.Tensor, robot_adapter) -> torch.Tensor:
@@ -103,8 +115,9 @@ class StateDeltaWorldModel(nn.Module):
     @torch.no_grad()
     def update_norms(self, state: torch.Tensor, action: torch.Tensor,
                      context: torch.Tensor, next_state: torch.Tensor, robot_adapter):
-        self.input_norm.update(torch.cat((state, action, context), dim=-1))
-        self.delta_norm.update(robot_adapter.physical_delta(state, next_state))
+        if isinstance(self.input_norm, RunningNorm):
+            self.input_norm.update(torch.cat((state, action, context), dim=-1))
+            self.delta_norm.update(robot_adapter.physical_delta(state, next_state))
 
     def autoregressive_loss(self, window, robot_adapter, **kwargs):
         from .world_model import masked_autoregressive_loss
@@ -116,6 +129,7 @@ class TaskTerminationHead(nn.Module):
     def __init__(self, robot: RobotSpec, task: TaskSpec, config: NetworkSpec):
         super().__init__()
         self.robot_spec, self.task_spec = robot, task
+        self.network_spec = config
         width = task.termination_feature_dim or task.goal_dim
         self.feature_dim = width
         self.network = mlp((robot.state_dim + width, *config.termination_hidden, 1))

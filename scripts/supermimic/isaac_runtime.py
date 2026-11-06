@@ -19,7 +19,8 @@ import mujoco_warp  # noqa: F401
 DEFAULT_VENV_SITE = "/home/ubuntu/dexgym/.venv/lib/python3.12/site-packages"
 sys.path.append(os.environ.get("DEXGYM_VENV_SITE", DEFAULT_VENV_SITE))
 
-ALLOWED = {"train", "evaluate", "validate_dynamics", "validate_termination", "smoke_core_m43"}
+ALLOWED = {"train", "evaluate", "validate_dynamics", "validate_termination",
+           "smoke_core_m43", "evaluate_core_m431", "validate_m431_newton_reset"}
 if len(sys.argv) < 2 or sys.argv[1] not in ALLOWED:
     raise SystemExit(f"Select one of {', '.join(sorted(ALLOWED))}")
 entry = sys.argv.pop(1)
