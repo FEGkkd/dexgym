@@ -13,6 +13,7 @@ SOURCE_RELATIVE_PATH = "src/whole_body_mujoco_driver/model/dual_arm_marvin.xml"
 PACKAGED_USD = Path(__file__).parent / "usd" / "dual_arm_marvin.usda"
 NO_HAND_CONTACT_USD = Path(__file__).parent / "usd" / "dual_arm_marvin_no_hand_contacts.usda"
 PACKAGED_KEYFRAMES = Path(__file__).parent / "source_keyframes.json"
+PACKAGED_MJCF = Path(__file__).parent / "source_model" / "dual_arm_marvin.xml"
 
 
 def _hand_joint_order(side: str) -> tuple[str, ...]:
@@ -39,10 +40,8 @@ JOINT_ORDER = (
 
 
 def resolve_source_mjcf(path: str | Path | None = None) -> Path:
-    """Resolve the external model without assuming a user-specific checkout path."""
-    candidate = path or os.environ.get("DEXGYM_MARVIN_MJCF")
-    if not candidate:
-        raise ValueError("Pass --mjcf or set DEXGYM_MARVIN_MJCF to the external dual_arm_marvin.xml")
+    """Resolve an explicit model override or the byte-identical packaged source."""
+    candidate = path or os.environ.get("DEXGYM_MARVIN_MJCF") or PACKAGED_MJCF
     result = Path(candidate).expanduser().resolve()
     if not result.is_file() or result.name != "dual_arm_marvin.xml":
         raise FileNotFoundError(f"Expected dual_arm_marvin.xml: {result}")

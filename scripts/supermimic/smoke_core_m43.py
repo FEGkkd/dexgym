@@ -1,18 +1,15 @@
 """Bounded M4.3 Newton integration smoke for two distinct Task MDP plugins."""
 
 import argparse
-from dataclasses import asdict
 import hashlib
 import json
-from pathlib import Path
 import subprocess
 import time
+from dataclasses import asdict
+from pathlib import Path
 
 import gymnasium as gym
 import torch
-from isaaclab.app import launch_simulation
-
-import dexgym.tasks.marvin_supermimic  # register both task-owned Newton environments
 from dexgym.algorithms.supermimic.core.checkpoint import CoreCheckpoint
 from dexgym.algorithms.supermimic.core.config import CoreExperimentConfig
 from dexgym.algorithms.supermimic.core.evaluator import PhysicalEvaluator
@@ -23,18 +20,16 @@ from dexgym.algorithms.supermimic.core.specs import NetworkSpec
 from dexgym.algorithms.supermimic.core.trainer import SuperMimicTrainer, TrainerConfig
 from dexgym.algorithms.supermimic.core.trust_evaluator import ModelTrustEvaluator, TrustConfig
 from dexgym.algorithms.supermimic.registry import PluginRegistry
+from dexgym.assets.supermimic import WAVE_REFERENCE
 from dexgym.motion.library import MotionLibrary
 from dexgym.tasks.marvin_supermimic.core_collector import CoreNewtonCollector
-from dexgym.tasks.marvin_supermimic.core_plugins import (
-    MarvinCoreRobot, MarvinDualTCPReach, MarvinMotionTracking)
 from dexgym.tasks.marvin_supermimic.env_cfg import MarvinWaveDirectCfg
-from dexgym.tasks.marvin_supermimic.reach_env import MarvinReachDirectCfg, PROCEDURAL_RESET
 from dexgym.tasks.marvin_supermimic.physics_contract import marvin_physics_config
+from dexgym.tasks.marvin_supermimic.reach_env import PROCEDURAL_RESET, MarvinReachDirectCfg
 from dexgym.tasks.marvin_supermimic.register_core import register_marvin
+from isaaclab.app import launch_simulation
 
-
-WAVE = ("/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/"
-        "cmu_141_16_wave_bimanual.npz")
+WAVE = str(WAVE_REFERENCE)
 
 
 def arguments():

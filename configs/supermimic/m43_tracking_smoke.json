@@ -5,6 +5,6 @@
     "trust": {"min_distinct_starts": 4, "max_rmse": [0.9, 1.0, 1.1], "require_baseline_improvement": true, "metric": "normalized"}
   },
   "robot": {"id": "marvin_arm_only", "action_schema": "robot_fixed_v3"},
-  "task": {"id": "marvin_motion_tracking", "reference_path": "/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz"},
+  "task": {"id": "marvin_motion_tracking", "reference_path": "source/dexgym/assets/supermimic/references/cmu_141_16_wave_bimanual.npz"},
   "environment": {"backend": "newton", "num_envs": 16, "iterations": 40, "eval_steps": 12, "seed": 43}
 }

@@ -1,0 +1,183 @@
+{
+  "backend": "Newton MJWarp",
+  "reference": "/home/ubuntu/dexgym_data/marvin_motion_library_v1/preview_motions/cmu_141_16_wave_bimanual.npz",
+  "reference_q_full_sha256": "21e8f7f8e3535ea12f6f9b50f9fe530b72eb1e6457ee3aac04c70bc492435044",
+  "source_mjcf_sha256": "6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce",
+  "usd": "/home/ubuntu/.codex/worktrees/6cb6/dexgym/source/dexgym/assets/marvin_wuji/usd/dual_arm_marvin_no_hand_contacts.usda",
+  "usd_sha256": "8ed2cb9a14a813022149aaa8a101159af86dab676aec7dfdde4a00a8d9698fa6",
+  "num_envs": 1,
+  "frames": 1357,
+  "duration_s": 27.12,
+  "complete": true,
+  "physics_timestep_s": 0.002,
+  "control_timestep_s": 0.02,
+  "physics_steps": 13560,
+  "profile": {
+    "profile": "newton_arm_tcp_tracking",
+    "arm_joints": [
+      "Joint1_L",
+      "Joint2_L",
+      "Joint3_L",
+      "Joint4_L",
+      "Joint5_L",
+      "Joint6_L",
+      "Joint7_L",
+      "Joint1_R",
+      "Joint2_R",
+      "Joint3_R",
+      "Joint4_R",
+      "Joint5_R",
+      "Joint6_R",
+      "Joint7_R"
+    ],
+    "damping_scale_source": 0.5,
+    "source_arm_kp": [
+      400.0,
+      400.0,
+      440.0,
+      340.0,
+      200.0,
+      120.0,
+      85.0
+    ],
+    "source_arm_kd": [
+      45.0,
+      45.0,
+      40.0,
+      34.0,
+      23.0,
+      16.0,
+      12.0
+    ],
+    "imported_arm_kp_scale_source": 57.29577951308232,
+    "kp_unchanged": true,
+    "effort_limits_unchanged": true
+  },
+  "hand_contacts_enabled": false,
+  "body_to_tcp_site_pos_m": [
+    [
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ]
+  ],
+  "body_to_tcp_site_quat_xyzw": [
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ]
+  ],
+  "fk_parity_probes": [
+    {
+      "frame": 0,
+      "pos_mm": [
+        0.0001138106477443172,
+        0.00020839085472246696
+      ],
+      "rot_deg": [
+        7.924092696192469e-06,
+        1.227398881503492e-05
+      ]
+    },
+    {
+      "frame": 20,
+      "pos_mm": [
+        0.00011224361817662567,
+        0.0001317862405829697
+      ],
+      "rot_deg": [
+        1.0316218036268772e-05,
+        1.7641830757352114e-05
+      ]
+    },
+    {
+      "frame": 60,
+      "pos_mm": [
+        0.00015571030834550517,
+        8.081182716522283e-05
+      ],
+      "rot_deg": [
+        1.4602485684023442e-05,
+        1.6124215738503617e-05
+      ]
+    },
+    {
+      "frame": 678,
+      "pos_mm": [
+        0.00012693639253407685,
+        0.00014408609188172464
+      ],
+      "rot_deg": [
+        1.094154937537375e-05,
+        1.7687928986247844e-05
+      ]
+    },
+    {
+      "frame": 1356,
+      "pos_mm": [
+        0.0001138106477443172,
+        0.00020839085472246696
+      ],
+      "rot_deg": [
+        7.924092696192469e-06,
+        1.227398881503492e-05
+      ]
+    }
+  ],
+  "per_side": {
+    "left": {
+      "tcp_pos_mm": {
+        "mean": 0.4677025863155512,
+        "p95": 0.5854400941186719,
+        "max": 1.860087550593477
+      },
+      "tcp_rot_deg": {
+        "mean": 0.05842719465316947,
+        "p95": 0.0719486233094487,
+        "max": 0.2610220956458709
+      },
+      "joint_rmse_rad": 0.0003375441156741951,
+      "joint_velocity_rmse_rad_s": 0.17011780599696505,
+      "max_actual_joint_speed_rad_s": 1.969612717628479,
+      "max_actual_joint_accel_rad_s2": 22.100549697875977
+    },
+    "right": {
+      "tcp_pos_mm": {
+        "mean": 0.6341790441118105,
+        "p95": 1.2027388383438373,
+        "max": 1.3882598005352182
+      },
+      "tcp_rot_deg": {
+        "mean": 0.08372089943053032,
+        "p95": 0.13872479147138816,
+        "max": 0.155710729781241
+      },
+      "joint_rmse_rad": 0.0005393199266507633,
+      "joint_velocity_rmse_rad_s": 0.1784730219765682,
+      "max_actual_joint_speed_rad_s": 1.5479716062545776,
+      "max_actual_joint_accel_rad_s2": 24.303932189941406
+    }
+  },
+  "newton_contact_total": 0,
+  "source_geometry_contact_frame_env_count": 0,
+  "source_geometry_contact_physics_step_env_count": 0,
+  "illegal_joint_state_count": 0,
+  "illegal_joint_state_50hz_count": 0,
+  "torque_saturation_rate": 0.0,
+  "max_actual_joint_speed_rad_s": 1.969612717628479,
+  "max_actual_joint_accel_rad_s2": 24.303932189941406,
+  "state_finite": true
+}

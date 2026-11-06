@@ -1,113 +1,111 @@
-# DexGym 2.0
+# DexGym
 
-DexGym is a small downstream [Isaac Lab 3.0](https://github.com/isaac-sim/IsaacLab/releases/tag/v3.0.0)
-reinforcement learning package. It registers two joint target tracking tasks
-against Newton `newton_mjwarp`. DirectRLEnv owns the step logic; the
-ManagerBasedRLEnv variant composes actions, observations, rewards, commands,
-reset events, and terminations through Isaac Lab managers. Both use the
-official Cartpole asset and a shared RSL-RL PPO configuration.
+DexGym contains Newton MJWarp robot environments for Isaac Lab 3.0 and a
+**complete, usable SuperMimic model-based RL framework**. The SuperMimic Core
+collects real physical transitions, fits an eight-step masked autoregressive
+world model, checks model trust, optimizes an Actor through differentiable
+imagination and BPTT, and fits a TD(λ) Critic with survival-weighted returns.
+Robot dynamics and task MDPs are separate plugins; the same Core trainer runs
+different observation, goal and reward schemas. This is a software and
+algorithm capability, **not a claim that every task or policy has converged**.
 
-| Gym ID | Architecture | Observation | Action |
-| --- | --- | --- | --- |
-| `DexGym-Joint-Tracking-Direct-v0` | DirectRLEnv | cart position, velocity, goal, error (4) | cart position target (1) |
-| `DexGym-Joint-Tracking-Manager-v0` | ManagerBasedRLEnv | same (4) | cart position target (1) |
+## Tasks
 
-## Install
+| Gym ID | Goal | Status |
+| --- | --- | --- |
+| `DexGym-Marvin-SuperMimic-Wave-Direct-v0` | 10×90 bimanual motion tracking | M4.1 validated Actor completed all 1,356 Newton control steps; Core training and evaluation are available. |
+| `DexGym-Marvin-SuperMimic-Reach-Direct-v0` | Static 1×6 dual TCP position | Separate MDP, real Newton collection and short Core training smoke passed; no convergence claim. |
+| `DexGym-Marvin-SuperMimic-SE3-Reach-Hold-Direct-v0` | Static 1×18 dual TCP SE(3) and hold | IK-free task and 4,096-environment pilots run; 2/192 strict evaluation episodes succeeded across three seeds, so stable convergence is unverified. |
+| `DexGym-Joint-Tracking-Direct-v0` | Cartpole joint target | Isaac Lab DirectRLEnv, RSL-RL PPO example. |
+| `DexGym-Joint-Tracking-Manager-v0` | Cartpole joint target | Isaac Lab ManagerBasedRLEnv, RSL-RL PPO example. |
 
-Use Python 3.12, an NVIDIA GPU/driver supported by the
-[Isaac Lab 3.0 installation guide](https://docs.nvidia.com/isaaclab/3.0/isaac-lab/installation),
-and [uv](https://docs.astral.sh/uv/). The lockfile resolves
-`isaaclab[rsl-rl]==3.0.0` from NVIDIA's index, PyTorch 2.11.0,
-and CUDA toolkit 13.0 dependencies selected by Isaac Lab v3.0.0. No Isaac Sim or Kit installation is required for
-Newton headless runs. On the verified Conda-based host, prepend
-`LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6` to runtime commands
-to avoid Conda's older C++ runtime. The full evidence is in
-[host verification](docs/platform/verification.md).
+The Cartpole examples use PPO. **SuperMimic does not use PPO.** The Marvin
+environment simulates all 54 DoF at 500 Hz, controls only 14 arm joints at
+50 Hz, and keeps the 40 hand joints at Home. The validated no-hand-contact
+configuration and controller parameters are unchanged.
+
+## SuperMimic code
+
+- [Core](source/dexgym/algorithms/supermimic/core/): typed transitions, masked Replay, state-delta world model, imagination, Actor/Critic factories, normalization, trust checks, physical evaluation and versioned checkpoints.
+- [Interfaces](source/dexgym/algorithms/supermimic/interfaces/): robot, task, reference and physical collector contracts.
+- [Marvin task plugins](source/dexgym/tasks/marvin_supermimic/): shared Newton arm physics and independent Wave, position Reach and SE(3) Reach & Hold tasks.
+- [Configs](configs/supermimic/) and [scripts](scripts/supermimic/): bounded examples, training, evaluation and diagnostics.
+- [How to add a task](docs/supermimic/task_plugin_guide.md), [architecture](docs/supermimic/core_architecture.md), [checkpoint rules](docs/supermimic/checkpoint_compatibility.md), [main integration validation](docs/supermimic/main_release_validation.md) and [M5 physical results](docs/supermimic/m5_4096_net_hold_validation.md).
+
+WM8, BPTT32, soft termination, survival weighting and TD(λ) are covered by
+the [SuperMimic tests](tests/supermimic/). The trained M4.1 Wave Actor remains
+a legacy checkpoint; newer action and goal schemas are checked rather than
+silently interpreted as that policy. Shared World Model **weights** require
+matching dynamics and controller signatures; sharing Core code does not imply
+that any robot or contact task can reuse the same learned model.
+
+## Assets included
+
+The repository contains the pinned Marvin/Wuji MJCF and its 70 STL dependencies
+under [source_model](source/dexgym/assets/marvin_wuji/source_model/), both
+validated USD variants under [usd](source/dexgym/assets/marvin_wuji/usd/),
+the [Wave and procedural references](source/dexgym/assets/supermimic/references/),
+the Wave physical reset states and validation report, and the validated
+[M4.1 Wave checkpoint](models/supermimic/m41_wave_selected_best.pt) in Git LFS.
+Run `git lfs pull` after cloning before loading that checkpoint.
+
+Pinned SHA256 values: Marvin MJCF
+`6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce`,
+Wave reference
+`b7af95b289e8aff898df7f5dd06b169f74dba2a506aa8fc5bf589ee3fee8106f`,
+M4.1 checkpoint
+`fd0054a7ef707d46a30b0235713c9e00cc4d7e69d6687fc3015e52aac2cb773f`.
+See the [asset notice](source/dexgym/assets/marvin_wuji/source_model/NOTICE.md)
+for source and license attribution. M4.2/M4.3/M5 experiment checkpoints and
+physics traces remain in `/home/ubuntu/dexgym_data/`; the M5 training
+checkpoint is about 1.7 GB per seed and is **not** a selected successful
+policy. Their hashes and results are recorded in the validation documents.
+
+## Install and verify
+
+Use Python 3.12, an NVIDIA GPU and the Isaac Lab 3.0/Newton environment.
+`uv sync --locked --group dev` installs the project dependencies. The physical
+commands below were verified on the project's Isaac Sim 6 host, which uses a
+pinned MuJoCo/Warp overlay at
+`/home/ubuntu/dexgym_data/marvin_supermimic_m42/runtime_overrides`.
+That overlay is a runtime dependency on this host, not a robot model asset.
+Consult [platform verification](docs/platform/verification.md) for host setup;
+another host must supply compatible Isaac Lab, Isaac Sim, Newton and GPU
+libraries. On the verified Conda host, set
+`LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6` if its older C++
+runtime takes precedence.
 
 ```bash
 uv sync --locked --group dev
-uv run isaaclab list_envs --keyword DexGym
+git lfs pull
+
+# Algorithm, schema, asset and legacy parity tests on the verified host.
+PYTHONPATH=/home/ubuntu/dexgym_data/marvin_supermimic_m42/runtime_overrides:source \
+  /home/ubuntu/isaacsim-6.0.1/bin/python -c \
+  "import sys,numpy; sys.path.append('/home/ubuntu/dexgym/.venv/lib/python3.12/site-packages'); import mujoco,pytest; sys.exit(pytest.main(['-q','tests/newton','tests/assets','tests/supermimic']))"
+
+# Bounded Newton integration of two task MDPs; outputs go outside Git.
+PYTHONPATH=/home/ubuntu/dexgym_data/marvin_supermimic_m42/runtime_overrides:source \
+  /home/ubuntu/isaacsim-6.0.1/bin/python scripts/supermimic/isaac_runtime.py \
+  smoke_core_m43 --config configs/supermimic/m43_reach_smoke.json \
+  --num-envs 16 --iterations 12 --eval-steps 12 --output /tmp/dexgym_reach_smoke
+
+# Full, independent Newton replay of the pinned Wave Actor (1,356 control steps).
+PYTHONPATH=/home/ubuntu/dexgym_data/marvin_supermimic_m42/runtime_overrides:source \
+  /home/ubuntu/isaacsim-6.0.1/bin/python scripts/supermimic/isaac_runtime.py \
+  evaluate --checkpoint models/supermimic/m41_wave_selected_best.pt \
+  --reference source/dexgym/assets/supermimic/references/cmu_141_16_wave_bimanual.npz \
+  --output /tmp/dexgym_wave_legacy
 ```
 
-## Train and play
+The test command runs the SuperMimic mathematical/integration suite and the
+Cartpole and asset tests. The verified run passed 208 tests with 3 skips.
+The short Reach run verifies the training path, **not** policy success. The
+Wave replay validates a trained legacy policy without modifying its weights.
+See [M4.3.2 reliability results](docs/supermimic/m432_reliability_validation.md)
+and [M5 pilot results](docs/supermimic/m5_4096_net_hold_validation.md) for
+measured limits and reproducible training/evaluation commands.
 
-Check `uv run isaaclab train --help` and `uv run isaaclab play --help` on your
-installation before changing the commands. These bounded runs are workflow
-checks; ten iterations do not imply a trained controller.
-
-```bash
-uv run isaaclab train --rl_library rsl_rl --task Isaac-Cartpole-Direct \
-  --num_envs 16 --max_iterations 5 physics=newton_mjwarp
-uv run isaaclab train --rl_library rsl_rl --task DexGym-Joint-Tracking-Direct-v0 \
-  --num_envs 16 --max_iterations 10 physics=newton_mjwarp
-uv run isaaclab train --rl_library rsl_rl --task DexGym-Joint-Tracking-Manager-v0 \
-  --num_envs 16 --max_iterations 10 physics=newton_mjwarp
-uv run isaaclab play --rl_library rsl_rl --task DexGym-Joint-Tracking-Direct-v0 \
-  --num_envs 1 --checkpoint /path/to/model.pt physics=newton_mjwarp
-```
-
-## Test
-
-```bash
-uv run ruff check source/dexgym tests scripts/assets scripts/smoke_newton.py
-PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 uv run pytest -q
-uv run python scripts/smoke_newton.py --task DexGym-Joint-Tracking-Direct-v0 --steps 400
-uv run python scripts/smoke_newton.py --task DexGym-Joint-Tracking-Manager-v0 --steps 400
-uv run python scripts/smoke_newton.py --task DexGym-Joint-Tracking-Direct-v0 \
-  --steps 400 --policy logs/rsl_rl/dexgym_joint_tracking/<run>/exported/policy.pt
-```
-
-The smoke script asserts 16-environment observation/action shapes, finite
-rewards, observations and joint states, randomized goals, and episode timeouts.
-Official `isaaclab play` also exports JIT and ONNX policies into the selected
-run's `exported/` directory. The active code reads Isaac Lab 3.0
-`ProxyArray` values through `.torch` and uses indexed simulation writes.
-MuJoCo WXYZ quaternions must pass through `dexgym.utils.quaternion`; Isaac Lab
-3.0 data is XYZW.
-
-## Assets and limits
-
-See [asset inventory](docs/platform/assets.md) and the packaged
-`source/dexgym/assets/manifest.json`. Original Shadow, Allegro, Wuji,
-WujiHand2 Beta, Wrist 6DoF, bottle, source hashes, and PhysX validation
-materials are retained. Only Cartpole is registered as a Newton RL task. A
-separate **54 DoF Marvin M6 + WujiHand2 Beta 2 asset** now loads in Newton MJWarp
-for offline structural, kinematic, control and dynamics validation. The pinned
-converted USD is packaged; its source MJCF and meshes remain in the external
-repository. `make_robot_cfg()` now defaults to the **no-hand-contact** USD:
-all 54 hand collision meshes are disabled while hand mass, inertia, mounting,
-and 40 joint controls remain. Pass `hand_contacts=True` to load the preserved
-full-contact model. The [collision validation](docs/robots/marvin_wuji_no_hand_contacts.md)
-includes actual Newton contact and inertial checks. To reproduce the original
-source conversion, obtain an authorized source checkout, set
-`DEXGYM_MARVIN_MJCF` to its `dual_arm_marvin.xml`, then run:
-
-```bash
-uv run --no-sync python scripts/assets/import_marvin_wuji.py
-USD=artifacts/marvin_wuji/generated/6e0d569e-self-collision/dual_arm_marvin/dual_arm_marvin.usda
-uv run --no-sync python scripts/assets/validate_model_structure.py --usd "$USD"
-uv run --no-sync python scripts/assets/validate_fk_parity.py --usd "$USD"
-uv run --no-sync python scripts/assets/validate_dynamics.py --usd "$USD" --mode smoke --num-envs 16
-```
-
-The [Marvin/Wuji validation report](docs/robots/marvin_wuji_validation.md)
-contains the complete commands and measured limits. FK parity and 54-channel
-control passed; physical fixed-TCP wrist tracking and backend dynamics still
-need calibration. An [opt-in Newton controller profile](docs/robots/marvin_wuji_controller_tuning.md)
-reduced the tested Home-centered fixed-TCP wrist error to about 0.56 mm per
-arm; it is not a real motor calibration. The old
-PhysX-specific Python asset adapters are preserved but not imported by this
-package. Historic tests and validation scripts are in `archive/isaaclab2/` and
-excluded from the current runtime and test suite. No real robot connection is part of this platform.
-
-The older reports under `docs/assets/` and `docs/superpowers/` are historical
-Isaac Lab 2.x research records; their commands do not describe the current CLI.
-
-A future `tasks/direct/arm_s0_ee_tracking/` may use this asset for
-six-dimensional TCP goals, joint-increment actions, wrist rotation,
-full workspace sampling, PPO/imitation evaluation, policy export, and ROS 2
-integration. No S0 task exists and this work did not run PPO or connect a robot.
-
-Version, command, checkpoint and gate outcomes from the host run belong in
-`docs/platform/verification.md`; check that report before claiming a specific
-installation has passed the training loop.
+The Cartpole examples remain available through `uv run isaaclab train` and
+`uv run isaaclab play`; see [platform verification](docs/platform/verification.md)
+for their exact commands. No real robot connection or deployment is included.

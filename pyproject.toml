@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "dexgym"
 version = "2.0.0"
-description = "Minimal Isaac Lab 3.0 Newton reinforcement learning tasks"
+description = "Isaac Lab Newton tasks and a reusable SuperMimic model-based RL framework"
 requires-python = "==3.12.*"
 dependencies = ["isaaclab[rsl-rl]==3.0.0"]
 
@@ -46,4 +46,5 @@ select = ["E", "F", "I"]
 
 [tool.setuptools.package-data]
 "dexgym.assets" = ["manifest.json"]
-"dexgym.assets.marvin_wuji" = ["calibration_status.json", "source_keyframes.json", "usd/*.usda", "usd/payloads/*.usda", "usd/payloads/*.usd", "usd/payloads/Physics/*.usda"]
+"dexgym.assets.marvin_wuji" = ["calibration_status.json", "source_keyframes.json", "usd/*.usda", "usd/payloads/*.usda", "usd/payloads/*.usd", "usd/payloads/Physics/*.usda", "source_model/dual_arm_marvin.xml", "source_model/LICENSE.*", "source_model/NOTICE.md", "source_model/assets/left/*.STL", "source_model/assets/right/*.STL", "source_model/assets/wujihand2/left/*.STL", "source_model/assets/wujihand2/right/*.STL"]
+"dexgym.assets.supermimic" = ["references/*.npz", "references/*.json", "references/reports/*.json"]

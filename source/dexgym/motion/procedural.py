@@ -7,8 +7,7 @@ import mujoco
 import numpy as np
 from scipy.spatial.transform import Rotation
 
-
-DEFAULT_MJCF = Path("/home/ubuntu/dexgym/source/dexgym/assets/marvin_wuji/source_model/dual_arm_marvin.xml")
+DEFAULT_MJCF = Path(__file__).resolve().parents[1] / "assets/marvin_wuji/source_model/dual_arm_marvin.xml"
 
 
 def generate_procedural_bimanual_reference(path: str | Path, *, frames: int = 201,

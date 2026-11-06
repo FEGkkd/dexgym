@@ -7,15 +7,13 @@ import torch
 from isaaclab.utils import configclass
 
 from dexgym.assets.marvin_wuji.controller import ARM_JOINT_NAMES
+from dexgym.assets.supermimic import PROCEDURAL_REFERENCE
 
 from .base_env import MarvinArmNewtonBaseEnv
-from .core_plugins import MarvinDualTCPReach, MarvinCoreRobot
+from .core_plugins import MarvinCoreRobot, MarvinDualTCPReach
 from .env_cfg import MarvinArmNewtonBaseCfg
 
-
-PROCEDURAL_RESET = (
-    "/home/ubuntu/dexgym_data/marvin_supermimic_m42/second_task/"
-    "procedural_bimanual_reach_v1.npz")
+PROCEDURAL_RESET = str(PROCEDURAL_REFERENCE)
 
 
 @configclass

@@ -5,7 +5,7 @@ import gymnasium as gym
 DIRECT_ID = "DexGym-Joint-Tracking-Direct-v0"
 MANAGER_ID = "DexGym-Joint-Tracking-Manager-v0"
 MARVIN_SUPERMIMIC_WAVE_ID = "DexGym-Marvin-SuperMimic-Wave-Direct-v0"
-TASK_IDS = (DIRECT_ID, MANAGER_ID, MARVIN_SUPERMIMIC_WAVE_ID)
+CARTPOLE_TASK_IDS = (DIRECT_ID, MANAGER_ID)
 
 
 gym.register(
@@ -30,3 +30,9 @@ gym.register(
 )
 
 from . import marvin_supermimic as _marvin_supermimic  # noqa: E402, F401
+
+TASK_IDS = CARTPOLE_TASK_IDS + (
+    _marvin_supermimic.TASK_ID,
+    _marvin_supermimic.REACH_TASK_ID,
+    _marvin_supermimic.SE3_REACH_HOLD_TASK_ID,
+)

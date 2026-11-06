@@ -1,24 +1,21 @@
 """Arm-only bimanual motion tracking with real Newton MJWarp stepping."""
 
 from collections.abc import Sequence
-from pathlib import Path
 
 import numpy as np
 import torch
 
 from dexgym.algorithms.supermimic.observation import noisy_proprio_frame
 from dexgym.algorithms.supermimic.rewards import REWARD_PROFILES, tracking_reward
+from dexgym.assets.supermimic import PD_WAVE_STATES, WAVE_REFERENCE
 from dexgym.motion.motion_manager import MotionManager
 
 from .base_env import MarvinArmNewtonBaseEnv
 from .contact_audit import unsafe_arm_states
 from .env_cfg import MarvinWaveDirectCfg
 
-REFERENCE = "/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz"
-MJCF = "/home/ubuntu/dexgym/source/dexgym/assets/marvin_wuji/source_model/dual_arm_marvin.xml"
-PD_STATES = Path(
-    "/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/physics_replays/newton_1env/newton_pd_states.npz"
-)
+REFERENCE = str(WAVE_REFERENCE)
+PD_STATES = PD_WAVE_STATES
 
 
 class MarvinWaveDirectEnv(MarvinArmNewtonBaseEnv):

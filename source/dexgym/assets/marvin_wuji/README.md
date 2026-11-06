@@ -8,13 +8,17 @@ The model retains the Marvin J6/J7 axes and TCP frame conventions. The
 validated, layered USD and its payloads are packaged here under `usd/`.
 The four source keyframes are packaged in `source_keyframes.json` because the
 MJCF importer does not author USD keyframes.
-Raw MJCF, URDF and STL files remain in the pinned source repository; this
-branch records their commit and SHA256 values for reproduction.
+The pinned runtime MJCF and its 70 referenced STL meshes are now packaged in
+`source_model/`, with upstream notices in `source_model/NOTICE.md`. The full
+original source repository, duplicate URDFs and generated previews are not
+needed at runtime and are not copied here. The original XML and the packaged
+copy have the same SHA256; no robot axes, limits, meshes or controller gains
+were changed for this packaging update.
 
 Install the standalone importer with `bash scripts/assets/setup_mjcf_importer.sh`
-after `uv sync --locked --group dev`. Set `DEXGYM_MARVIN_MJCF` to the
-external XML and run
-`scripts/assets/import_marvin_wuji.py`. The importer verifies the source hash
+after `uv sync --locked --group dev`. The importer uses the packaged XML by
+default; set `DEXGYM_MARVIN_MJCF` only to select an explicit compatible source.
+Run `scripts/assets/import_marvin_wuji.py`. The importer verifies the source hash
 and 70 mesh dependencies, converts with Isaac Lab 3.0's `MjcfConverter`, fixes
 the base, and enables self collisions while preserving the 38 excluded pairs.
 Its output is under `artifacts/marvin_wuji/generated/` by default for

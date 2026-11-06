@@ -1,0 +1,242 @@
+{
+  "status": "validated",
+  "gate_a": true,
+  "gate_b": true,
+  "gate_c": true,
+  "gate_d": true,
+  "candidate_path": "/home/ubuntu/dexgym_data/marvin_motion_library_v1/preview_motions/cmu_141_16_wave_bimanual.npz",
+  "reference_q_full_sha256": "21e8f7f8e3535ea12f6f9b50f9fe530b72eb1e6457ee3aac04c70bc492435044",
+  "frames": 1357,
+  "duration_s": 27.12,
+  "exact_50hz": true,
+  "shape_ok": true,
+  "finite": true,
+  "quaternion_max_norm_error": 2.220446049250313e-16,
+  "joint_names_match": true,
+  "link_names_match": true,
+  "loader_future_10_ok": true,
+  "original_bvh_sha256": "d428d2c4fa8873d077537567ad32c95b9687a479a10522d314b203fddea37daf",
+  "source_mjcf_sha256": "6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce",
+  "offline_right_tcp": {
+    "position_mm": {
+      "mean": 2.6986035341791013,
+      "p95": 4.481371714075965,
+      "max": 7.2079713664244105
+    },
+    "rotation_deg": {
+      "mean": 1.0644248249302877,
+      "p95": 1.883080441828669,
+      "max": 3.6310050005878187
+    }
+  },
+  "offline_left_tcp": {
+    "position_mm": {
+      "mean": 0.39922313847033325,
+      "p95": 1.0601567649221664,
+      "max": 5.935429618445204
+    },
+    "rotation_deg": {
+      "mean": 0.16643599124988484,
+      "p95": 0.5136019599006655,
+      "max": 2.127901983663947
+    }
+  },
+  "left_elbow_error_p95_mm": 21.752610377946496,
+  "left_joint_ranges_rad": [
+    0.5493447753190563,
+    0.3155987441560708,
+    1.2299235467203793,
+    0.45592277210819465,
+    0.8905700933903054,
+    0.4381402434210916,
+    0.34256140032037435
+  ],
+  "reference_max_joint_step_rad": 0.03956576458317462,
+  "right_elbow_error_p95_mm": 88.29295339389711,
+  "right_elbow_direction_cosine_mean": 0.9796271803540904,
+  "reference_max_speed_rad_s": 1.97828822915872,
+  "reference_max_accel_rad_s2": 10.826833260041967,
+  "right_wrist_joint_ranges_rad": [
+    1.0313712704548994,
+    0.7919416376762356,
+    0.7328996509811516
+  ],
+  "left_static_max_rad": 1.2299235467203793,
+  "hands_home_max_rad": 0.0,
+  "joint_limit_violations": 0,
+  "fk_max_tcp_position_error_mm": 0.0,
+  "fk_max_tcp_rotation_error_deg": 0.0,
+  "fk_max_link_position_error_mm": 0.0,
+  "fk_max_link_rotation_error_deg": 0.0,
+  "contact_frames_reference": 0,
+  "midpoint_contacts_reference": 0,
+  "right_hand_min_clearance_to_support_or_left_m": 0.2996616616377604,
+  "video_paths": {
+    "human": "/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/previews/cmu_141_16_human.mp4",
+    "human_vs_marvin": "/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/previews/cmu_141_16_human_vs_marvin.mp4",
+    "newton_pd": "/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/previews/cmu_141_16_newton_pd.mp4"
+  },
+  "videos_ok": {
+    "human": true,
+    "human_vs_marvin": true,
+    "newton_pd": true
+  },
+  "video_provenance_ok": true,
+  "physical_reports": {
+    "mujoco_source": "/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/physics_replays/mujoco_pd_report.json",
+    "mujoco_profile": "/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/physics_replays/mujoco_newton_comparable/mujoco_pd_report.json",
+    "newton_1env": "/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/physics_replays/newton_1env/newton_pd_report.json",
+    "newton_16env": "/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/physics_replays/newton_16env/newton_pd_report.json"
+  },
+  "physics_summary": {
+    "mujoco_source": {
+      "right": {
+        "tcp_pos_mm": {
+          "mean": 39.26862056996789,
+          "p95": 80.59418754262668,
+          "max": 125.26665347692004
+        },
+        "tcp_rot_deg": {
+          "mean": 7.735449939362061,
+          "p95": 15.434694245760905,
+          "max": 20.412119949675617
+        },
+        "joint_rmse_rad": 0.046741295628563294,
+        "joint_velocity_rmse_rad_s": 0.13006489333204382,
+        "max_actual_joint_speed_rad_s": 1.4363856439683345,
+        "max_actual_joint_accel_rad_s2": 10.09230800483501
+      },
+      "left": {
+        "tcp_pos_mm": {
+          "mean": 27.224379760637625,
+          "p95": 41.82459515510322,
+          "max": 98.93180815977063
+        },
+        "tcp_rot_deg": {
+          "mean": 3.812145769966101,
+          "p95": 5.472398273937084,
+          "max": 12.693115155201689
+        },
+        "joint_rmse_rad": 0.02251990918407789,
+        "joint_velocity_rmse_rad_s": 0.04591019651307908,
+        "max_actual_joint_speed_rad_s": 1.8805395623483323,
+        "max_actual_joint_accel_rad_s2": 10.32139058487467
+      },
+      "contacts": 0,
+      "illegal": 0,
+      "saturation_rate": 0.0
+    },
+    "mujoco_profile": {
+      "right": {
+        "tcp_pos_mm": {
+          "mean": 0.638055064678198,
+          "p95": 1.064442159486774,
+          "max": 1.678781018457355
+        },
+        "tcp_rot_deg": {
+          "mean": 0.09987540344045864,
+          "p95": 0.1833767115863929,
+          "max": 0.2351936679092767
+        },
+        "joint_rmse_rad": 0.0005174930532313254,
+        "joint_velocity_rmse_rad_s": 0.019833623816144026,
+        "max_actual_joint_speed_rad_s": 1.5716102717697533,
+        "max_actual_joint_accel_rad_s2": 11.096959705065876
+      },
+      "left": {
+        "tcp_pos_mm": {
+          "mean": 0.4812637079392746,
+          "p95": 0.6337177054251593,
+          "max": 2.1048639103265137
+        },
+        "tcp_rot_deg": {
+          "mean": 0.06762595665529468,
+          "p95": 0.08264065969930694,
+          "max": 0.3130297005244443
+        },
+        "joint_rmse_rad": 0.00032540826123029186,
+        "joint_velocity_rmse_rad_s": 0.009821401552568767,
+        "max_actual_joint_speed_rad_s": 1.978100756209032,
+        "max_actual_joint_accel_rad_s2": 22.218349654328325
+      },
+      "contacts": 0,
+      "illegal": 0,
+      "saturation_rate": 0.0
+    },
+    "newton_1env": {
+      "right": {
+        "tcp_pos_mm": {
+          "mean": 0.6341790441118105,
+          "p95": 1.2027388383438373,
+          "max": 1.3882598005352182
+        },
+        "tcp_rot_deg": {
+          "mean": 0.08372089943053032,
+          "p95": 0.13872479147138816,
+          "max": 0.155710729781241
+        },
+        "joint_rmse_rad": 0.0005393199266507633,
+        "joint_velocity_rmse_rad_s": 0.1784730219765682,
+        "max_actual_joint_speed_rad_s": 1.5479716062545776,
+        "max_actual_joint_accel_rad_s2": 24.303932189941406
+      },
+      "left": {
+        "tcp_pos_mm": {
+          "mean": 0.4677025863155512,
+          "p95": 0.5854400941186719,
+          "max": 1.860087550593477
+        },
+        "tcp_rot_deg": {
+          "mean": 0.05842719465316947,
+          "p95": 0.0719486233094487,
+          "max": 0.2610220956458709
+        },
+        "joint_rmse_rad": 0.0003375441156741951,
+        "joint_velocity_rmse_rad_s": 0.17011780599696505,
+        "max_actual_joint_speed_rad_s": 1.969612717628479,
+        "max_actual_joint_accel_rad_s2": 22.100549697875977
+      },
+      "contacts": 0,
+      "illegal": 0,
+      "saturation_rate": 0.0
+    },
+    "newton_16env": {
+      "right": {
+        "tcp_pos_mm": {
+          "mean": 0.6348188981419093,
+          "p95": 1.206008595236474,
+          "max": 1.3940129352231507
+        },
+        "tcp_rot_deg": {
+          "mean": 0.08417188917512655,
+          "p95": 0.13855380268032624,
+          "max": 0.15606981507685863
+        },
+        "joint_rmse_rad": 0.0005382806291415035,
+        "joint_velocity_rmse_rad_s": 0.17495958817780674,
+        "max_actual_joint_speed_rad_s": 1.6148675680160522,
+        "max_actual_joint_accel_rad_s2": 24.303937911987305
+      },
+      "left": {
+        "tcp_pos_mm": {
+          "mean": 0.46701893542685485,
+          "p95": 0.583695069638044,
+          "max": 1.862086963313673
+        },
+        "tcp_rot_deg": {
+          "mean": 0.05805432237757222,
+          "p95": 0.07237807893441288,
+          "max": 0.2620888435491613
+        },
+        "joint_rmse_rad": 0.0003375604197219512,
+        "joint_velocity_rmse_rad_s": 0.1707781835283029,
+        "max_actual_joint_speed_rad_s": 1.9743279218673706,
+        "max_actual_joint_accel_rad_s2": 22.100563049316406
+      },
+      "contacts": 0,
+      "illegal": 0,
+      "saturation_rate": 0.0
+    }
+  },
+  "formal_npz": "/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz"
+}

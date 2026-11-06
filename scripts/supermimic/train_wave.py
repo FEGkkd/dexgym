@@ -22,9 +22,7 @@ from isaaclab.app import launch_simulation
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from preflight import REFERENCE, REFERENCE_SHA256, SOURCE, verify
 
-PD_STATES = Path(
-    "/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/physics_replays/newton_1env/newton_pd_states.npz"
-)
+PD_STATES = Path(__file__).resolve().parents[2] / "source/dexgym/assets/supermimic/references/newton_pd_states.npz"
 
 
 def pd_actor_examples(motion, mapping, device):

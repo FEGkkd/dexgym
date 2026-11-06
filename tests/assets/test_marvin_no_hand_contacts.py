@@ -11,8 +11,17 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def run_script(name: str, *args: str) -> None:
+    # Isaac Sim's Python may need site packages appended *after* importing its
+    # bundled NumPy. Preserve the parent test runner's path in the child.
+    bootstrap = (
+        "import json, numpy, runpy, sys; "
+        "sys.path.extend(json.loads(sys.argv.pop(1))); "
+        "script = sys.argv.pop(1); sys.argv[0] = script; "
+        "runpy.run_path(script, run_name='__main__')"
+    )
     subprocess.run(
-        [sys.executable, str(ROOT / "scripts" / "assets" / name), *args],
+        [sys.executable, "-c", bootstrap, json.dumps(sys.path),
+         str(ROOT / "scripts" / "assets" / name), *args],
         check=True,
         cwd=ROOT,
         capture_output=True,

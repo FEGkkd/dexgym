@@ -9,8 +9,7 @@ from dexgym.algorithms.supermimic.action import ArmActionMap, ArmJointDeltaActio
 from dexgym.algorithms.supermimic.differentiable_fk import DifferentiableMarvinFK
 from dexgym.assets.marvin_wuji.controller import ARM_KD_SOURCE, ARM_KP_SOURCE
 
-
-DEFAULT_MJCF = Path("/home/ubuntu/dexgym/source/dexgym/assets/marvin_wuji/source_model/dual_arm_marvin.xml")
+DEFAULT_MJCF = Path(__file__).resolve().parents[2] / "assets/marvin_wuji/source_model/dual_arm_marvin.xml"
 
 
 class MarvinArmDynamicsAdapter:

@@ -7,13 +7,12 @@ from pathlib import Path
 
 import mujoco
 import numpy as np
+from dexgym.assets.supermimic import WAVE_REFERENCE, WAVE_VALIDATION
 from scipy.spatial.transform import Rotation
 
-REFERENCE = Path("/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz")
-REPORT = Path(
-    "/home/ubuntu/dexgym_data/marvin_motion_library_v1/bimanual/reports/cmu_141_16_wave_bimanual_validation.json"
-)
-SOURCE = Path("/home/ubuntu/dexgym/source/dexgym/assets/marvin_wuji/source_model/dual_arm_marvin.xml")
+REFERENCE = WAVE_REFERENCE
+REPORT = WAVE_VALIDATION
+SOURCE = Path(__file__).resolve().parents[2] / "source/dexgym/assets/marvin_wuji/source_model/dual_arm_marvin.xml"
 USD = Path(__file__).resolve().parents[2] / "source/dexgym/assets/marvin_wuji/usd/dual_arm_marvin_no_hand_contacts.usda"
 REFERENCE_SHA256 = "b7af95b289e8aff898df7f5dd06b169f74dba2a506aa8fc5bf589ee3fee8106f"
 SOURCE_SHA256 = "6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce"
@@ -95,8 +94,9 @@ def verify():
         if max(pos_error) > 0.001 or max(rot_error) > 0.001:
             raise ValueError("TCP FK differs from pinned reference")
     physical = {}
-    for name, path in report["physical_reports"].items():
-        item = json.loads(Path(path).read_text())
+    for name in report["physical_reports"]:
+        path = WAVE_VALIDATION.parent / "reports" / f"{name}.json"
+        item = json.loads(path.read_text())
         if (
             not item["complete"]
             or item["reference_q_full_sha256"] != q_hash
