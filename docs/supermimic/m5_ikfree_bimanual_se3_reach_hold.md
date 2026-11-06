@@ -4,7 +4,7 @@
 
 This is a new `marvin_bimanual_se3_reach_hold` task on the M4.3.2 SuperMimic Core. It does not use IK, Jacobian inverse, a joint target label, a motion reference, a teacher policy, or PPO. FK is used to create reachable TCP pose targets and to calculate observations and differentiable reward. The generated witness joint configuration is discarded inside `SE3GoalSampler._draw`; the returned sample and Replay contain only the 18D dual TCP pose and difficulty statistics.
 
-**Engineering integration passed. Strict dual-TCP 6D Reach & Hold learning did not pass.** The first three bounded near-goal pilots updated the model, Actor and Critic, but only 1-step imagination passed the original model trust gate. A subsequent dual-distribution pilot correctly blocked Actor updates because held-out model error was still too high. All independently evaluated policies had 0/16 successful full Episodes and zero valid hold steps. Medium and wider levels were physically preflighted but not trained.
+**Engineering integration passed. Strict dual-TCP 6D Reach & Hold learning did not pass.** The first three bounded near-goal pilots updated the model, Actor and Critic, but only 1-step imagination passed the original model trust gate. A subsequent dual-distribution pilot correctly blocked Actor updates because held-out model error was still too high. The later [4096-environment validation](m5_4096_scale_validation.md) found consistent bilateral physical error reduction at 40 iterations in three seeds, but every 64-Episode evaluation still had zero strict success and zero hold. Medium and wider levels were physically preflighted but not trained.
 
 ## Contracts
 
@@ -136,6 +136,6 @@ The pilot launcher rejects any resume that would exceed 200 total iterations; a 
 ## Remaining gates
 
 - **Passed:** schema/action/FK/reward math tests, 32-step differentiable path unit test, Newton command/Reward/Termination parity, fresh physics resume, independent evaluation protocol, full M4.1 regression.
-- **Not passed:** 8/32-step Model Trust, sustained 32-step pilot BPTT, consistent physical improvement across seeds, complete SE(3) arrival, 25-step hold, Medium/Wider trained-policy performance, collision-free exploratory training, dynamic feasibility proof for each sampled target. The final dual-distribution pilot also failed 1-step trust and therefore made no Actor/Critic updates.
+- **Not passed:** sustained 8/32-step Model Trust, actual 32-step pilot BPTT, complete SE(3) arrival, 25-step hold, Medium/Wider trained-policy performance, collision-free exploratory training, dynamic feasibility proof for each sampled target. The 4096-environment 40-iteration pilots showed consistent physical error reduction across three seeds, but all strict Episode success rates remained zero and a seed-53 80-iteration continuation regressed.
 
 The task is a usable, versioned Core integration and a documented failed strict-pure learning pilot. No convergence or generalization claim follows from these results.

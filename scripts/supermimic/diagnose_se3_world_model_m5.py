@@ -17,6 +17,7 @@ from dexgym.algorithms.supermimic.core.specs import NetworkSpec
 from dexgym.algorithms.supermimic.core.trust_evaluator import ModelTrustEvaluator, TrustConfig
 from dexgym.tasks.marvin_supermimic.core_plugins import MarvinCoreRobot
 from dexgym.tasks.marvin_supermimic.se3_reach_hold import MarvinBimanualSE3ReachHold
+from dexgym.tasks.marvin_supermimic.se3_probe import validate_probe_metadata
 from dexgym.tasks.marvin_supermimic.se3_trust import (
     SE3DualDistributionTrustEvaluator, SE3GeometryTrustConfig)
 
@@ -27,14 +28,17 @@ def main():
     parser.add_argument("--additional-checkpoint", type=Path, action="append", default=[],
                         help="Additional compatible real Replay, sampled without validation lanes")
     parser.add_argument("--updates", type=int, default=500)
+    parser.add_argument("--batch-size", type=int, default=64)
+    parser.add_argument("--probe-data", type=Path,
+                        help="Strict-Pure one-step Newton probes; every fifth WM8 update uses their mask")
     parser.add_argument("--training-source", choices=("mixed", "noisy", "deterministic"),
                         default="mixed")
     parser.add_argument("--fresh-world-hidden", type=int, nargs="+",
                         help="Fit a new World Model from the same real-data normalizers")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    if not 1 <= args.updates <= 500:
-        parser.error("Offline WM8 diagnosis is bounded to 1-500 updates")
+    if not 1 <= args.updates <= 500 or not 1 <= args.batch_size <= 2048:
+        parser.error("Offline WM8 diagnosis is bounded to 500 updates and batch size 2048")
     torch.manual_seed(5331)
     record = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
     if record.get("replay") is None or record["robot_spec"]["action_schema"] != "arm_joint_delta_v1":
@@ -67,6 +71,26 @@ def main():
     replay = SchemaReplay(saved["capacity"], saved["num_envs"], robot.spec, task.spec, device)
     replay.load_state_dict(saved, fresh_physics=False)
     training_replays = [(str(args.checkpoint), replay)]
+    probe_train = probe_validation = None
+    if args.probe_data is not None:
+        probe_record = torch.load(args.probe_data, map_location="cpu", weights_only=False)
+        validate_probe_metadata(probe_record["metadata"], robot, task)
+        execution = lambda physics: {key: value for key, value in physics.items()
+                                     if key not in CoreCheckpoint.evaluation_protocol_fields}
+        if execution(probe_record["metadata"]["physics_config"]) != execution(record["physics_config"]):
+            raise ValueError("Probe and checkpoint Newton execution contracts differ")
+        for name in ("train", "validation"):
+            saved_probe = probe_record[name]
+            candidate = SchemaReplay(saved_probe["capacity"], saved_probe["num_envs"],
+                                     robot.spec, task.spec, device)
+            candidate.load_state_dict(saved_probe, fresh_physics=False)
+            if not (bool((candidate.source_id[:candidate.steps] == 4).all())
+                    and bool(candidate.done[:candidate.steps].all())):
+                raise ValueError("Probe Replay must contain only marked one-step physical experiments")
+            if name == "train":
+                probe_train = candidate
+            else:
+                probe_validation = candidate
     for extra_path in args.additional_checkpoint:
         extra = torch.load(extra_path, map_location="cpu", weights_only=False)
         for key in ("robot_spec", "task_spec"):
@@ -107,24 +131,36 @@ def main():
     def validate(step):
         report = evaluator.evaluate_available(model, replay, robot, batch=128,
                                                env_range=heldout, source_id=0)
+        probe_loss = None
+        if probe_validation is not None:
+            window = probe_validation.sample_windows(128, 8, source_id=4)
+            with torch.no_grad():
+                loss, _ = model.autoregressive_loss(window, robot)
+            probe_loss = float(loss)
         records.append({"additional_world_updates": step,
                         "trusted_horizon": evaluator.trusted_horizon(report),
-                        "validation": report})
+                        "validation": report,
+                        "independent_probe_masked_wm8_loss": probe_loss})
 
     validate(0)
     losses = []
     source_id = {"mixed": None, "noisy": 3, "deterministic": 0}[args.training_source]
+    probe_updates = 0
     for step in range(1, args.updates + 1):
-        _, selected_replay = training_replays[(step - 1) % len(training_replays)]
-        train_end = int(0.75 * selected_replay.num_envs)
-        selected_source = source_id if selected_replay is replay else None
+        is_probe = probe_train is not None and step % 5 == 0
+        _, selected_replay = ("strict_pure_physical_probe", probe_train) if is_probe else (
+            training_replays[(step - 1) % len(training_replays)])
+        train_end = (selected_replay.num_envs if is_probe
+                     else int(0.75 * selected_replay.num_envs))
+        selected_source = 4 if is_probe else source_id if selected_replay is replay else None
         window = selected_replay.sample_windows(
-            64, 8, env_range=(0, train_end), source_id=selected_source)
+            args.batch_size, 8, env_range=(0, train_end), source_id=selected_source)
         loss, _ = model.autoregressive_loss(window, robot)
         result = safe_gradient_step(loss, model.parameters(), optimizer)
         if not result["updated"]:
             raise RuntimeError(f"Offline World Model update {step} rejected: {result['reason']}")
         losses.append(float(loss.detach()))
+        probe_updates += int(is_probe)
         if step % 100 == 0 or step == args.updates:
             validate(step)
     args.output.mkdir(parents=True, exist_ok=True)
@@ -132,6 +168,14 @@ def main():
               "diagnostic_only": True, "actor_updated": False,
               "newton_transitions_collected": 0,
               "masked_world_model_updates": args.updates,
+              "world_batch": args.batch_size,
+              "strict_pure_probe_data": str(args.probe_data) if args.probe_data else None,
+              "probe_world_updates": probe_updates,
+              "probe_train_physical_transitions": (probe_train.steps * probe_train.num_envs
+                                                     if probe_train is not None else 0),
+              "probe_validation_physical_transitions": (
+                  probe_validation.steps * probe_validation.num_envs
+                  if probe_validation is not None else 0),
               "training_source": args.training_source,
               "fresh_world_hidden": args.fresh_world_hidden,
               "additional_training_replay": [name for name, _ in training_replays[1:]],
