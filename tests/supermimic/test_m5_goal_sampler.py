@@ -55,3 +55,24 @@ def test_medium_and_wider_curricula_have_larger_bimanual_difficulty():
     wider = sampler.sample(24, "wider_feasible")
     assert float(near.position_difficulty_m.mean()) < float(medium.position_difficulty_m.mean())
     assert float(medium.position_difficulty_m.mean()) < float(wider.position_difficulty_m.mean())
+
+
+def test_training_only_hold_mix_samples_two_safe_goal_difficulty_bands_without_joint_labels():
+    robot = _robot()
+    a = SE3GoalSampler(robot, train_seed=194, evaluation_seed=9194)
+    b = SE3GoalSampler(robot, train_seed=194, evaluation_seed=9194)
+    mixed = a.sample(64, "near_hold_mix")
+    repeated = b.sample(64, "near_hold_mix")
+    torch.testing.assert_close(mixed.start_q, repeated.start_q)
+    torch.testing.assert_close(mixed.goal_pose, repeated.goal_pose)
+    assert mixed.goal_pose.shape == (64, 18)
+    assert not hasattr(mixed, "q_goal")
+    assert torch.all(mixed.start_q >= robot.action_map.lower + 0.02)
+    assert torch.all(mixed.start_q <= robot.action_map.upper - 0.02)
+    # Near-hold starts stay outside the strict 5 mm target; ordinary near
+    # starts retain a harder bilateral displacement in the same training batch.
+    small = ((mixed.position_difficulty_m >= 0.006).all(-1)
+             & (mixed.position_difficulty_m <= 0.012).all(-1))
+    harder = (mixed.position_difficulty_m > 0.015).any(-1)
+    assert int(small.sum()) >= 20
+    assert int(harder.sum()) >= 20

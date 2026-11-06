@@ -22,3 +22,15 @@ def test_4096_profile_bounds_replay_and_model_update_ratio():
                               / (profile["num_envs"]
                                  * trainer["physics_steps_per_iteration"]))
     assert targets_per_transition >= 16
+
+
+def test_hold_bootstrap_changes_only_training_goal_sampling():
+    root = Path("configs/supermimic")
+    standard = json.loads((root / "m5_se3_near_4096_pilot.json").read_text())
+    hold = json.loads((root / "m5_se3_near_hold_mix_4096_pilot.json").read_text())
+    assert hold["num_envs"] == 4096
+    assert hold["curriculum_level"] == "near_hold_mix"
+    assert hold["replay_capacity_steps"] == 128
+    assert hold["scale_profile"] == "4096_env_hold_mix_v1"
+    for field in ("network", "trainer", "trust", "geometry_trust", "exploration"):
+        assert hold[field] == standard[field]

@@ -25,6 +25,10 @@ CURRICULUM = {
     "near": SE3CurriculumLevel(0.08, 0.045, 0.030, 0.005, 0.08, 0.005, 0.25),
     "medium": SE3CurriculumLevel(0.15, 0.11, 0.075, 0.012, 0.18, 0.012, 0.55),
     "wider_feasible": SE3CurriculumLevel(0.22, 0.19, 0.13, 0.020, 0.30, 0.020, 1.0),
+    # Train-only near-target resets expose the actual low-speed hold region.
+    # Both TCPs start outside the strict 5 mm position-success boundary.
+    "near_hold_bootstrap": SE3CurriculumLevel(0.08, 0.018, 0.012,
+                                                 0.006, 0.012, 0.015, 0.07),
 }
 
 
@@ -128,9 +132,27 @@ class SE3GoalSampler:
                               torch.stack(accepted_position), torch.stack(accepted_rotation))
 
     def sample(self, count: int, level: str) -> SE3GoalSamples:
+        if level == "near_hold_mix":
+            if count < 1:
+                raise ValueError("Goal batch size must be positive")
+            hold_count = int(self.train_rng.binomial(count, 0.5))
+            parts = []
+            if hold_count:
+                parts.append(self._draw(hold_count, "near_hold_bootstrap", self.train_rng))
+            if count > hold_count:
+                parts.append(self._draw(count - hold_count, "near", self.train_rng))
+            combined = SE3GoalSamples(*(
+                torch.cat([getattr(part, field) for part in parts], dim=0)
+                for field in ("start_q", "goal_pose", "position_difficulty_m",
+                              "rotation_difficulty_rad")))
+            order = torch.as_tensor(self.train_rng.permutation(count),
+                                    device=combined.start_q.device, dtype=torch.long)
+            return combined.index(order)
         return self._draw(count, level, self.train_rng)
 
     def sample_evaluation(self, count: int, level: str) -> SE3GoalSamples:
+        if level not in ("near", "medium", "wider_feasible"):
+            raise ValueError("Evaluation goal sets use the original Near/Medium/Wider levels")
         if level not in self._evaluation_sets:
             self._evaluation_sets[level] = self._draw(self.evaluation_set_size,
                                                       level, self.eval_rng)

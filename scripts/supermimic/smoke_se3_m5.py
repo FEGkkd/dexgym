@@ -18,7 +18,7 @@ def main():
     parser.add_argument("--num-envs", type=int, default=16)
     parser.add_argument("--steps", type=int, default=20)
     parser.add_argument("--seed", type=int, default=51)
-    parser.add_argument("--level", choices=("near", "medium", "wider_feasible"), default="near")
+    parser.add_argument("--level", choices=("near", "near_hold_mix", "medium", "wider_feasible"), default="near")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if not 1 <= args.num_envs <= 64 or not 1 <= args.steps <= 200:

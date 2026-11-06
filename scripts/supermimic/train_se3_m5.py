@@ -36,7 +36,7 @@ def main():
     parser.add_argument("--num-envs", type=int)
     parser.add_argument("--iterations", type=int)
     parser.add_argument("--seed", type=int)
-    parser.add_argument("--level", choices=("near", "medium", "wider_feasible"))
+    parser.add_argument("--level", choices=("near", "near_hold_mix", "medium", "wider_feasible"))
     parser.add_argument("--resume", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
@@ -67,11 +67,16 @@ def main():
             or not 0 < exploration["train_env_fraction"] < 1
             or not 0 < exploration["validation_noisy_fraction"] < 1):
         parser.error("Invalid temporal exploration config")
-    large_profile = experiment.get("scale_profile") == "4096_env_near_v1"
+    large_profile = experiment.get("scale_profile") in (
+        "4096_env_near_v1", "4096_env_hold_mix_v1")
     if large_profile:
         if (args.num_envs != 4096 or not 0 <= args.iterations <= 40
                 or experiment.get("replay_capacity_steps") != 128):
             parser.error("4096-environment pilot requires its bounded 128-step Replay profile")
+        expected_level = ("near_hold_mix" if experiment["scale_profile"]
+                          == "4096_env_hold_mix_v1" else "near")
+        if args.level != expected_level:
+            parser.error("4096-environment profile and training goal curriculum differ")
     elif not 16 <= args.num_envs <= 256 or not 0 <= args.iterations <= 200:
         parser.error("Small pilot is bounded to 16-256 environments and 200 iterations")
     replay_capacity = int(experiment.get("replay_capacity_steps", 512))
