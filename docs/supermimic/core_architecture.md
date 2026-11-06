@@ -16,7 +16,7 @@ flowchart LR
   I --> FK[Marvin FK]
   I --> MM[MotionManager]
   I --> N[42D 14D 10x90 networks]
-  E[legacy evaluate.py] --> TW[train_wave.evaluate_full]
+  E[M4.2 evaluate.py before migration] --> TW[train_wave.evaluate_full]
   RE[legacy replay_buffer.py] --> FIX[42D state, 14D action, 10x56 history]
 ```
 
@@ -35,7 +35,7 @@ flowchart TD
   TRACK --> CORE
   REACH --> CORE
   CORE --> TORCH[PyTorch]
-  LEGACY[M4.1/M4.2 compatibility modules] --> CORE
+  LEGACY[M4.1/M4.2 compatibility modules] --> TORCH
 ```
 
 No module in `algorithms.supermimic.core` imports `dexgym.tasks`, `dexgym.motion`, the Marvin FK, or Wave scripts. The plugin registry is outside Core. Legacy files retain their existing behavior and strict checkpoint loaders. New components use explicit `RobotSpec`, `TaskSpec`, `TransitionBatch`, and `TaskState` dataclasses with dimensions and schema versions checked at construction.
@@ -45,7 +45,7 @@ No module in `algorithms.supermimic.core` imports `dexgym.tasks`, `dexgym.motion
 - `RobotDynamicsAdapter`: `spec`, `integrate(state, delta, action, dynamics_context)`, `physical_delta(state, next_state)`, `executed_command(state, action)`, `physical_state(env)`, action bounds, optional differentiable kinematics, controller timing and asset hash. The Marvin implementation uses 42D `[q14, qd14, qcmd14]`, predicts 28 physical deltas, and applies the versioned analytic 14D command update. A Toy robot uses different dimensions in tests.
 - `TaskMDP`: `spec`, `initial_task_state`, `advance`, `goal`, `observation`, `critic_features`, `reward`, `hard_termination`, `soft_termination`, `valid_imagination_start`, `evaluate_metrics`. It may have `motion_id` and `frame` or an independent static `task_data` target. The task owns success and failure metrics. Arrival reward and termination consume `s_(t+1)` with the advanced task state.
 - `ReferenceProvider`: current reference, future goals, clip length, FPS and hash; only tracking task uses it. Non-50 Hz references are rejected on import until SO(3)-correct resampling is implemented.
-- `PhysicalCollector`: produces a typed, pre-reset `TransitionBatch` from the actual simulator. The batch contains the executed action and command, previous action, state/next-state, dynamics context, task state before/after, hard terminal/truncation, source, failure reason and environment ID.
+- `PhysicalCollector`: produces a typed, pre-reset `TransitionBatch` from the actual simulator. The batch contains the executed action and command, previous action, state/next-state, dynamics context, task state before/after, hard terminal/truncation, source and failure reason. Replay supplies the environment index from the batch axis.
 
 `TaskState` contains `task_id`, `motion_id`, integer `frame`, and schema-checked floating `task_data`. Motion tracking uses motion ID and frame with zero task-data width. TCP Reach uses a six-number dual-TCP target with no reference timeline. A single trainer instance has one TaskSpec; mixed task batches require a compatible union schema and are deliberately deferred. Replay still records Task ID for provenance and future weighted sampling.
 
@@ -55,9 +55,9 @@ No module in `algorithms.supermimic.core` imports `dexgym.tasks`, `dexgym.motion
 
 `SchemaReplay` owns the typed ring with absolute timestamps and Episode IDs, masks terminal transitions correctly, and stores configurable state/action/history/context/task-data widths. It never joins a newly reset physical episode to an old one. The `ImaginationEngine` asks the task for observation/goal/reward/termination/critic features and the robot for integration, so it contains no FK, NPZ or link names. It computes `c[t+1]=c[t](1-d[t+1])`, the survival-weighted H-step Actor objective and TD(λ) targets with the same arrival termination index. World model and Critic parameters are frozen during Actor backward; state/action gradients are retained.
 
-`SuperMimicTrainer` alternates physical collection, masked eight-step model fit, actor-source held-out trust evaluation, legal imagination starts, Actor BPTT and Critic fitting. It owns update counts, finite-gradient protection, schedule, checkpoints and evaluation intervals. It receives adapters, modules and collector by injection. Teacher dynamics collection is tagged; supervised Actor initialization is a separate optional initializer supplied by the task, never imported from Wave in Core.
+`SuperMimicTrainer` alternates physical collection, masked eight-step model fit, actor-source held-out trust evaluation, legal imagination starts, Actor BPTT and Critic fitting. It owns update counts and finite-gradient protection. The configured physical entry point invokes `CoreCheckpoint` and `PhysicalEvaluator` on its bounded schedule. The trainer receives adapters, modules and collector by injection. Teacher dynamics collection is tagged; supervised Actor initialization is a separate optional initializer supplied by the task, never imported from Wave in Core.
 
-`PhysicalEvaluator` orchestrates a task-defined metric accumulator over an independent Newton episode. `PolicyBundle` exports only Actor and inference preprocessing schema, normalizers, robot action version, joint order, control frequency and asset hash; it does not imply real-hardware certification. Old M4.1 and M4.2 checkpoints remain loadable only under their exact original schemas.
+`PhysicalEvaluator` orchestrates task-defined metrics after a fresh Newton reset. `InferencePolicy` exports only Actor and inference preprocessing schema, normalizers, robot action version, joint order, control frequency and asset hash; it does not imply real-hardware certification. Old M4.1 and M4.2 checkpoints remain loadable only under their exact original schemas.
 
 ## Validation sequence and claims
 
