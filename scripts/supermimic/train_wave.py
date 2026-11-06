@@ -232,8 +232,15 @@ def evaluate_full(
     initial_perturb_rad=0.0,
     physics_contact_audit=True,
     reward_profile="marvin_tcp_priority",
+    reference_path=None,
+    action_schema="legacy_wave_v1",
+    initialize_hands_from_pd_replay=True,
 ):
     cfg = MarvinWaveDirectCfg()
+    if reference_path is not None:
+        cfg.reference_path = str(reference_path)
+    cfg.action_schema = action_schema
+    cfg.initialize_hands_from_pd_replay = initialize_hands_from_pd_replay
     cfg.scene.num_envs = num_envs
     cfg.episode_length_s = 28.0
     cfg.random_reference_start = False
@@ -265,7 +272,7 @@ def evaluate_full(
             saturations = 0
             torque_samples = 0
             command_jump_max = 0.0
-            for control_step in range(1356):
+            for control_step in range(native.motion.length - 1):
                 with torch.no_grad():
                     action = (
                         action_fn(native, control_step)
@@ -368,7 +375,7 @@ def evaluate_full(
                 "wall_time_s": time.perf_counter() - start,
                 "terminations": terminations,
                 "first_failure_control_step": first_failure_step,
-                "full_motion_completed": first_failure_step is None and len(errors_p) == 1356,
+                "full_motion_completed": first_failure_step is None and len(errors_p) == native.motion.length - 1,
                 "reward_mean": float(np.mean(rewards)),
                 "newton_contact_control_steps": contact_steps,
                 "newton_contact_physics_steps": contact_physics_steps if physics_contact_audit else None,
