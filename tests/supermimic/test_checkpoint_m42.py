@@ -60,3 +60,32 @@ def test_checkpoint_restores_ring_replay_without_joining_new_physics_episode(tmp
     assert torch.equal(restored.episode[5 % 3], replay.episode_counter + 1)
     window = restored.sample_windows(16, 3, source_id=2)
     assert bool((window["mask"][:, 0] == 1).all())
+
+
+def test_checkpoint_restores_learning_rate_schedule(tmp_path: Path):
+    metadata = {"action_schema": "robot_fixed_v3", "state_schema": "arm_42_v1",
+                "observation_schema": "proprio_10x56", "goal_schema": "links_10x90",
+                "reference_hashes": {"task": "hashA"}, "robot_asset_hashes": {"mjcf": "hashB"}}
+    model = torch.nn.Linear(2, 1)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+    schedule = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=10)
+    for _ in range(3):
+        optimizer.step()
+        schedule.step()
+    saved_lr = optimizer.param_groups[0]["lr"]
+    path = tmp_path / "schedule.pt"
+    manager = CheckpointManager(metadata)
+    manager.save(path, models={"model": model}, optimizers={"model": optimizer},
+                 schedulers={"model": schedule}, training={"iteration": 3}, config={}, seed=3)
+    new_model = torch.nn.Linear(2, 1)
+    new_optimizer = torch.optim.Adam(new_model.parameters(), lr=0.01)
+    new_schedule = torch.optim.lr_scheduler.CosineAnnealingLR(new_optimizer, T_max=10)
+    manager.load(path, models={"model": new_model}, optimizers={"model": new_optimizer},
+                 schedulers={"model": new_schedule})
+    assert new_schedule.last_epoch == 3
+    assert new_optimizer.param_groups[0]["lr"] == pytest.approx(saved_lr)
+    new_optimizer.step()
+    new_schedule.step()
+    optimizer.step()
+    schedule.step()
+    assert new_optimizer.param_groups[0]["lr"] == pytest.approx(optimizer.param_groups[0]["lr"])

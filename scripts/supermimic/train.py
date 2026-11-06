@@ -16,6 +16,7 @@ from isaaclab.app import launch_simulation
 from dexgym.algorithms.supermimic.checkpoint import CheckpointManager
 from dexgym.algorithms.supermimic.networks import DeltaWorldModel, GoalActor, PrivilegedCritic
 from dexgym.algorithms.supermimic.replay_buffer import MotionReplay
+from dexgym.algorithms.supermimic.scheduling import step_schedulers_after_updates
 from dexgym.algorithms.supermimic.trainer import SuperMimicTrainer, TrainerConfig
 from dexgym.algorithms.supermimic.trust_evaluator import ModelTrustEvaluator
 from dexgym.algorithms.supermimic.termination import TaskTerminationHead
@@ -61,6 +62,12 @@ def arguments():
     parser.add_argument("--random-reference-start", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--seed", type=int, default=140116)
     parser.add_argument("--checkpoint-interval", type=int, default=100)
+    parser.add_argument("--actor-lr", type=float, default=2e-5)
+    parser.add_argument("--world-lr", type=float, default=2e-4)
+    parser.add_argument("--critic-lr", type=float, default=2e-4)
+    parser.add_argument("--lr-schedule", choices=("constant", "cosine"), default=None)
+    parser.add_argument("--schedule-total-iterations", type=int)
+    parser.add_argument("--min-lr-fraction", type=float, default=0.1)
     parser.add_argument("--resume", type=Path)
     parser.add_argument("--save-replay", action=argparse.BooleanOptionalAction, default=None,
                         help="Save full physical Replay; defaults on for learned termination")
@@ -71,6 +78,8 @@ def arguments():
         parser.error("supervised_init_model_based requires --supervised-init-updates")
     if args.iterations < 1 or args.num_envs < 2 or args.checkpoint_interval < 1:
         parser.error("Need positive iterations/checkpoint interval and at least two environments")
+    if min(args.actor_lr, args.world_lr, args.critic_lr) <= 0 or not 0 <= args.min_lr_fraction <= 1:
+        parser.error("Learning rates must be positive and minimum LR fraction within [0, 1]")
     return args
 
 
@@ -94,6 +103,19 @@ def main():
     torch.manual_seed(args.seed)
     device = torch.device("cuda")
     preview = torch.load(args.resume, map_location="cpu", weights_only=False) if args.resume else None
+    previous_config = preview["config"] if preview is not None else {}
+    args.lr_schedule = args.lr_schedule or previous_config.get("lr_schedule", "constant")
+    if args.schedule_total_iterations is None:
+        args.schedule_total_iterations = previous_config.get("schedule_total_iterations")
+    if args.lr_schedule == "cosine" and args.schedule_total_iterations is None:
+        args.schedule_total_iterations = args.iterations
+    for key, legacy_default in (("actor_lr", 2e-5), ("world_lr", 2e-4),
+                                ("critic_lr", 2e-4), ("min_lr_fraction", 0.1),
+                                ("lr_schedule", "constant"), ("schedule_total_iterations", None)):
+        if preview is not None and getattr(args, key) != previous_config.get(key, legacy_default):
+            raise ValueError(f"Resume learning-rate contract differs: {key}")
+    if args.lr_schedule == "cosine" and args.schedule_total_iterations < 1:
+        raise ValueError("Cosine schedule needs a positive total iteration count")
     separate_task_head = preview is None or "termination" in preview["models"]
     legacy_model_head = args.legacy_world_head or (preview is not None and any(
         name.startswith("termination_head.") for name in preview["models"]["world_model"]))
@@ -107,12 +129,16 @@ def main():
     if termination is not None:
         models["termination"] = termination
     optimizers = {
-        "actor": torch.optim.Adam(actor.parameters(), lr=2e-5, betas=(0.9, 0.95)),
+        "actor": torch.optim.Adam(actor.parameters(), lr=args.actor_lr, betas=(0.9, 0.95)),
         "world_model": torch.optim.Adam(
             list(model.parameters()) + (list(termination.parameters()) if termination is not None else []),
-            lr=2e-4),
-        "critic": torch.optim.Adam(critic.parameters(), lr=2e-4),
+            lr=args.world_lr),
+        "critic": torch.optim.Adam(critic.parameters(), lr=args.critic_lr),
     }
+    schedulers = ({name: torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer, T_max=args.schedule_total_iterations,
+        eta_min=optimizer.param_groups[0]["lr"] * args.min_lr_fraction)
+        for name, optimizer in optimizers.items()} if args.lr_schedule == "cosine" else {})
     cfg = MarvinWaveDirectCfg()
     cfg.reference_path = str(args.reference)
     cfg.action_schema = args.action_schema
@@ -149,6 +175,7 @@ def main():
         "termination_mode": args.termination_mode,
         "reward_profile": args.reward_profile,
         "normalization_mode": args.normalization_mode,
+        "lr_schedule": args.lr_schedule,
         "git_sha": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
     }
     manager = CheckpointManager(metadata)
@@ -156,7 +183,8 @@ def main():
     replay = MotionReplay(args.replay_steps, args.num_envs, device)
     if args.resume:
         record = manager.load(args.resume, models=models,
-                              optimizers=optimizers, map_location="cpu", replay=replay)
+                              optimizers=optimizers, schedulers=schedulers,
+                              map_location="cpu", replay=replay)
         if record["resume_requires_recollection"]:
             print("Replay was not saved; collecting new Newton transitions before model trust.", flush=True)
             if args.termination_mode == "learned":
@@ -204,7 +232,12 @@ def main():
                         trainer.resume_boundary_probe_steps_remaining = 32
             starting_counts = trainer.counts.copy()
             for local_iteration in range(1, args.iterations + 1):
+                before_updates = trainer.counts.copy()
                 result = trainer.run_iteration()
+                step_schedulers_after_updates(schedulers, before_updates, trainer.counts,
+                                              max_steps=args.schedule_total_iterations or 0)
+                result["learning_rates"] = {name: optimizer.param_groups[0]["lr"]
+                                            for name, optimizer in optimizers.items()}
                 for phase, seconds in result["phase_seconds"].items():
                     phase_seconds[phase] += seconds
                 result["wall_time_s"] = time.perf_counter() - started
@@ -214,6 +247,7 @@ def main():
                     manager.save(args.output / f"iteration_{trainer.iteration:06d}.pt",
                                  models=models,
                                  optimizers=optimizers,
+                                 schedulers=schedulers,
                                  training={"iteration": trainer.iteration,
                                            "real_transitions": trainer.counts["real_transitions"],
                                            "counts": trainer.counts.copy(), "trust": trainer.trust_report},

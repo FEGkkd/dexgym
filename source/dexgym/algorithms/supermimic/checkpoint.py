@@ -18,13 +18,14 @@ class CheckpointManager:
         self.metadata = metadata.copy()
 
     def save(self, path: str | Path, *, models: dict, optimizers: dict, training: dict,
-             config: dict, seed: int, replay=None):
+             config: dict, seed: int, replay=None, schedulers: dict | None = None):
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
         record = {
             "schema_version": self.schema_version, "metadata": self.metadata.copy(),
             "models": {name: model.state_dict() for name, model in models.items()},
             "optimizers": {name: optimizer.state_dict() for name, optimizer in optimizers.items()},
+            "schedulers": {name: scheduler.state_dict() for name, scheduler in (schedulers or {}).items()},
             "training": training.copy(), "config": config.copy(), "seed": seed,
             "rng_cpu": torch.get_rng_state(),
             "rng_cuda": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
@@ -37,7 +38,8 @@ class CheckpointManager:
         os.replace(temporary, path)
 
     def load(self, path: str | Path, *, models: dict, optimizers: dict,
-             restore_rng: bool = True, map_location=None, replay=None) -> dict:
+             restore_rng: bool = True, map_location=None, replay=None,
+             schedulers: dict | None = None) -> dict:
         record = torch.load(path, map_location=map_location, weights_only=False)
         if record.get("schema_version") != self.schema_version:
             raise ValueError("Checkpoint schema version differs")
@@ -52,10 +54,14 @@ class CheckpointManager:
                 raise ValueError(f"Checkpoint {key} differs")
         if set(record["models"]) != set(models) or set(record["optimizers"]) != set(optimizers):
             raise ValueError("Checkpoint model or optimizer set differs")
+        if set(record.get("schedulers", {})) != set(schedulers or {}):
+            raise ValueError("Checkpoint learning-rate scheduler set differs")
         for name, model in models.items():
             model.load_state_dict(record["models"][name], strict=True)
         for name, optimizer in optimizers.items():
             optimizer.load_state_dict(record["optimizers"][name])
+        for name, scheduler in (schedulers or {}).items():
+            scheduler.load_state_dict(record["schedulers"][name])
         if record.get("replay_saved"):
             if replay is None:
                 raise ValueError("Checkpoint contains Replay; a matching Replay object is required")
