@@ -171,6 +171,13 @@ def main():
             args.output.mkdir(parents=True, exist_ok=True)
             checkpoint_path = checkpoint.save(args.output / f"{args.task}_m43_smoke.pt",
                                               trainer, include_replay=False)
+            try:
+                used, total = subprocess.check_output(
+                    ["nvidia-smi", "--query-gpu=memory.used,memory.total",
+                     "--format=csv,noheader,nounits"], text=True).splitlines()[0].split(",")
+                device_memory = {"used_mb": int(used), "total_mb": int(total)}
+            except (OSError, ValueError, subprocess.CalledProcessError):
+                device_memory = None
             report = {"task": asdict(task.spec), "robot": asdict(robot.spec),
                       "network": asdict(network), "trainer": asdict(trainer.config),
                       "counts": trainer.counts, "trust": trainer.trust_report,
@@ -191,6 +198,7 @@ def main():
                           args.iterations * args.num_envs / max(timings["collection"], 1e-9),
                       "peak_torch_vram_bytes": (torch.cuda.max_memory_allocated()
                                                if torch.cuda.is_available() else None),
+                      "device_memory_at_end": device_memory,
                       "checkpoint": str(checkpoint_path), "git_commit": commit,
                       "wall_time_s": time.perf_counter() - started}
             (args.output / "report.json").write_text(json.dumps(report, indent=2))
