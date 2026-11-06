@@ -1,0 +1,37 @@
+{
+  "version": "m5_se3_near_pilot_v1",
+  "num_envs": 64,
+  "iterations": 80,
+  "seed": 51,
+  "curriculum_level": "near",
+  "network": {
+    "world_hidden": [128, 128],
+    "goal_hidden": [64],
+    "actor_hidden": [128, 64],
+    "critic_hidden": [64, 64],
+    "latent_dim": 16
+  },
+  "trainer": {
+    "mode": "pure_model_based",
+    "physics_steps_per_iteration": 4,
+    "world_updates_per_iteration": 2,
+    "world_batch": 64,
+    "imagination_batch": 16,
+    "actor_updates_per_iteration": 1,
+    "world_warmup_updates": 20,
+    "trust_interval": 10,
+    "validation_batch": 32,
+    "critic_epochs": 2,
+    "critic_minibatches": 4
+  },
+  "trust": {
+    "min_distinct_starts": 8,
+    "max_rmse": [0.9, 1.0, 1.1],
+    "require_baseline_improvement": true,
+    "metric": "normalized"
+  },
+  "exploration": {
+    "rho": 0.95,
+    "sigma": 0.8
+  }
+}

@@ -20,6 +20,7 @@ class CoreCheckpoint:
         "active_reset_fraction", "early_reset_fraction",
         "observation_position_noise_rad", "observation_velocity_noise_rad_s",
         "reference_start_frame", "evaluation_episode_count", "evaluation_trace_path",
+        "goal_train_seed", "goal_eval_seed", "goal_curriculum_level", "evaluation_mode",
     })
 
     def __init__(self, *, git_commit: str, reference_hashes: dict[str, str],

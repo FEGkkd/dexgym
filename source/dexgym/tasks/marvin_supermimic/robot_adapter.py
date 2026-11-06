@@ -5,7 +5,7 @@ from pathlib import Path
 import mujoco
 import torch
 
-from dexgym.algorithms.supermimic.action import ArmActionMap
+from dexgym.algorithms.supermimic.action import ArmActionMap, ArmJointDeltaActionMap
 from dexgym.algorithms.supermimic.differentiable_fk import DifferentiableMarvinFK
 from dexgym.assets.marvin_wuji.controller import ARM_KD_SOURCE, ARM_KP_SOURCE
 
@@ -26,7 +26,8 @@ class MarvinArmDynamicsAdapter:
 
     def __init__(self, motion, device: str | torch.device, *, action_schema: str = "legacy_wave_v1",
                  mjcf: str | Path = DEFAULT_MJCF):
-        if action_schema not in ("legacy_wave_v1", "robot_fixed_v2", "robot_fixed_v3"):
+        if action_schema not in ("legacy_wave_v1", "robot_fixed_v2", "robot_fixed_v3",
+                                 "arm_joint_delta_v1"):
             raise ValueError("Unknown Marvin arm action schema")
         self.action_schema = action_schema
         self.device = torch.device(device)
@@ -49,8 +50,12 @@ class MarvinArmDynamicsAdapter:
             scale = ((upper - lower) / 2 if action_schema == "robot_fixed_v2" else
                      torch.minimum((upper - lower) / 2,
                                    torch.full_like(lower, self.fixed_v3_action_envelope_rad)))
-        max_delta = self.fixed_v3_max_command_delta_rad if action_schema == "robot_fixed_v3" else 0.04
-        self.action_map = ArmActionMap(origin, lower, upper, scale, max_delta=max_delta)
+        if action_schema == "arm_joint_delta_v1":
+            self.action_map = ArmJointDeltaActionMap(
+                origin, lower, upper, delta_q_max=self.fixed_v3_max_command_delta_rad)
+        else:
+            max_delta = self.fixed_v3_max_command_delta_rad if action_schema == "robot_fixed_v3" else 0.04
+            self.action_map = ArmActionMap(origin, lower, upper, scale, max_delta=max_delta)
         self.fk = DifferentiableMarvinFK(self.mjcf, device=self.device)
 
     def interpolate_command(self, previous: torch.Tensor, current: torch.Tensor,

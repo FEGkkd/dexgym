@@ -72,12 +72,15 @@ class PhysicalEvaluator:
             failed = bool(last.terminated[0])
             truncated = bool(last.truncated[0])
             metrics = self.task.evaluate_metrics(items)
+            episode_success = getattr(self.task, "episode_success", None)
+            success = (bool(episode_success(items, complete=complete))
+                       if callable(episode_success) else longest >= hold_steps)
             record = {
                 "env_id": env_id, "episode_id": episode_ids[env_id],
                 "episode_start_step": global_step - len(items) + 1,
                 "episode_length": len(items),
                 "episode_return": float(sum(float(item.reward[0]) for item in items)),
-                "complete": complete, "success": longest >= hold_steps,
+                "complete": complete, "success": success,
                 "first_success_step": first_success,
                 "first_success_time_s": (
                     first_success * collector.robot.spec.control_dt

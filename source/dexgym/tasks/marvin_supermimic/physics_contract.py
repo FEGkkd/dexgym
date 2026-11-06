@@ -36,3 +36,27 @@ def marvin_physics_config(cfg, robot, *, task_id: str) -> dict:
         "initialize_hands_from_pd_replay": (cfg.initialize_hands_from_pd_replay
                                             if task_id == "marvin_motion_tracking" else False),
     }
+
+
+def marvin_se3_physics_config(cfg, robot) -> dict:
+    """Immutable servo/asset contract plus explicit goal sampling protocol."""
+    return {
+        "backend": "newton_mjwarp_v1",
+        "num_envs": cfg.scene.num_envs,
+        "seed": cfg.seed,
+        "physics_dt": cfg.sim.dt,
+        "policy_dt": cfg.sim.dt * cfg.decimation,
+        "decimation": cfg.decimation,
+        "episode_length_s": cfg.episode_length_s,
+        "controller_kp_source": robot.native.controller_kp_source,
+        "controller_kd_source": robot.native.controller_kd_source,
+        "controller_damping_scale_source": robot.native.controller_damping_scale_source,
+        "hands_fixed_home": True,
+        "hand_contact_configuration": "validated_disabled",
+        "audit_contacts_each_physics_step": cfg.audit_contacts_each_physics_step,
+        "goal_sampler_version": "seeded_fk_static_path_screen_v1",
+        "goal_train_seed": cfg.goal_train_seed,
+        "goal_eval_seed": cfg.goal_eval_seed,
+        "goal_curriculum_level": cfg.curriculum_level,
+        "evaluation_mode": cfg.evaluation_mode,
+    }

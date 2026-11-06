@@ -67,7 +67,7 @@ class MarvinCoreRobot:
             actuator_id = next(index for index in range(model.nu)
                                if int(model.actuator_trnid[index, 0]) == joint_id)
             arm_effort_ranges.append(model.actuator_forcerange[actuator_id].tolist())
-        return {
+        result = {
             "adapter_version": "marvin_arm_only_v1",
             "action_origin": mapping.origin.detach().cpu().tolist(),
             "action_scale": mapping.scale.detach().cpu().tolist(),
@@ -83,6 +83,10 @@ class MarvinCoreRobot:
             "context_schema": "empty_episode_constant_v1",
             "hands": "home_position_contact_disabled_v1",
         }
+        if self.spec.action_schema == "arm_joint_delta_v1":
+            result["action_semantics"] = "relative_qcmd_plus_tanh_delta_v1"
+            result["delta_q_max_rad"] = mapping.delta_q_max
+        return result
 
 
 class MarvinMotionTracking:
