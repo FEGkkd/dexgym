@@ -1,6 +1,7 @@
 """Fixed-target TD(lambda) critic fitting with configurable minibatch epochs."""
 
 import torch
+from .optimization import safe_gradient_step
 
 
 def optimize_critic(critic, optimizer, features: torch.Tensor, targets: torch.Tensor,
@@ -18,7 +19,6 @@ def optimize_critic(critic, optimizer, features: torch.Tensor, targets: torch.Te
     updates, skipped, losses, td_errors, value_means, gradient_norms = 0, 0, [], [], [], []
     for _ in range(epochs):
         for index in torch.randperm(len(features), device=features.device).tensor_split(minibatches):
-            optimizer.zero_grad(set_to_none=True)
             prediction = critic.forward_features(features[index])
             target = targets[index]
             if not bool(torch.isfinite(prediction).all() and torch.isfinite(target).all()):
@@ -29,25 +29,17 @@ def optimize_critic(critic, optimizer, features: torch.Tensor, targets: torch.Te
             if not bool(torch.isfinite(loss)):
                 skipped += 1
                 continue
-            loss.backward()
-            gradients = [parameter.grad for parameter in parameters if parameter.grad is not None]
-            if not gradients or not all(bool(torch.isfinite(gradient).all()) for gradient in gradients):
-                optimizer.zero_grad(set_to_none=True)
+            result = safe_gradient_step(loss, parameters, optimizer,
+                                        grad_norm_clip=grad_norm_clip,
+                                        grad_value_clip=grad_value_clip)
+            if not result["updated"]:
                 skipped += 1
                 continue
-            norm = torch.nn.utils.clip_grad_norm_(parameters, grad_norm_clip)
-            if not bool(torch.isfinite(norm)):
-                optimizer.zero_grad(set_to_none=True)
-                skipped += 1
-                continue
-            if grad_value_clip is not None:
-                torch.nn.utils.clip_grad_value_(parameters, grad_value_clip)
-            optimizer.step()
             updates += 1
             losses.append(float(loss.detach()))
             td_errors.append(float(error.detach().abs().mean()))
             value_means.append(float(prediction.detach().mean()))
-            gradient_norms.append(float(norm))
+            gradient_norms.append(result["grad_norm"])
     return {
         "updates": updates, "skipped_nonfinite": skipped,
         "loss_mean": sum(losses) / len(losses) if losses else None,

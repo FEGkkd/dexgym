@@ -66,6 +66,7 @@ def imagined_rollout(
     observation_velocity_noise_rad_s: float = 0.0,
     termination_mode: str = "learned",
     termination_thresholds: TerminationThresholds = TerminationThresholds(),
+    bootstrap_weight: float = 1.0,
 ):
     if termination_mode not in ("learned", "analytic"):
         raise ValueError("Termination mode must be learned or analytic")
@@ -143,7 +144,8 @@ def imagined_rollout(
     termination_tensor = torch.stack(terminations)
     value_tensor = torch.stack(values)
     survival = survival_weights(termination_tensor)
-    objective = discounted_imagined_return(reward_tensor, termination_tensor, value_tensor[-1], gamma=gamma)
+    objective = discounted_imagined_return(reward_tensor, termination_tensor,
+                                           bootstrap_weight * value_tensor[-1], gamma=gamma)
     if prior_costs:
         discounts = gamma ** torch.arange(horizon, device=state.device, dtype=state.dtype)
         objective = objective - prior_weight * (discounts[:, None] * survival[:-1] * torch.stack(prior_costs)).sum(0)

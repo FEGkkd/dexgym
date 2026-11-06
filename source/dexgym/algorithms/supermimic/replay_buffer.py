@@ -146,6 +146,12 @@ class MotionReplay:
         keys = ("state", "action", "previous_action", "executed_command", "next_state",
                 "frame", "next_frame", "motion_id", "source_id", "episode", "done", "terminated", "truncated")
         out = {key: getattr(self, key)[slots, env_idx] for key in keys}
+        for key in ("state", "action", "previous_action", "executed_command", "next_state"):
+            out[key] = torch.where(mask[..., None], out[key], torch.zeros_like(out[key]))
+        for key in ("frame", "next_frame", "motion_id", "source_id", "episode"):
+            out[key] = torch.where(mask, out[key], torch.zeros_like(out[key]))
+        for key in ("done", "terminated", "truncated"):
+            out[key] = out[key] & mask
         out["mask"] = mask.float()
         out["env_id"] = env
         out["absolute_timestamp"] = absolute
