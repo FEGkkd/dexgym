@@ -38,7 +38,9 @@ class GoalActor(nn.Module):
     def update_norms(self, history: torch.Tensor, goal: torch.Tensor):
         self._validate(history, goal)
         if isinstance(self.observation_norm, RunningNorm):
-            self.observation_norm.update(history)
+            # Each real physical observation enters the statistics once. Old
+            # history frames and sampled Replay windows are not reweighted.
+            self.observation_norm.update(history[:, -1])
             self.goal_norm.update(goal)
 
     def _validate(self, history: torch.Tensor, goal: torch.Tensor):
