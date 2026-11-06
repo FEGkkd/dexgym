@@ -85,7 +85,11 @@ def evaluate(checkpoint_path: Path, *, seed: int = 71, batch: int = 64,
     device = "cuda" if torch.cuda.is_available() else "cpu"
     robot = MarvinCoreRobot(SimpleNamespace(joint_names_arm=ARM_JOINT_NAMES), device,
                             action_schema="arm_joint_delta_v1")
-    task = MarvinBimanualSE3ReachHold(robot)
+    stored_task = record["contract_manifest"]["task_contract"]
+    task = MarvinBimanualSE3ReachHold(
+        robot, hold_speed_mode=stored_task.get("hold_speed_mode", "instantaneous_qd_v1"))
+    if task.checkpoint_contract() != stored_task:
+        raise ValueError("Model diagnostic Task contract differs from checkpoint")
     network = NetworkSpec(**record["contract_manifest"]["networks"]["world_model"]["network_spec"])
     modules = NetworkFactory.build(robot.spec, task.spec, network, robot_adapter=robot)
     model = modules.world_model.to(device)

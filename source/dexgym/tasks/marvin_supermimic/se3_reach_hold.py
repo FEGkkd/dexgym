@@ -82,8 +82,12 @@ class MarvinBimanualSE3ReachHold:
 
     def __init__(self, robot, *, reward_config=SE3RewardConfig(),
                  success_config=SE3SuccessConfig(),
-                 safety_thresholds=TerminationThresholds()):
+                 safety_thresholds=TerminationThresholds(),
+                 hold_speed_mode="instantaneous_qd_v1"):
+        if hold_speed_mode not in ("instantaneous_qd_v1", "policy_step_displacement_v2"):
+            raise ValueError(f"Unknown hold_speed_mode: {hold_speed_mode}")
         self.robot = robot
+        self.hold_speed_mode = hold_speed_mode
         self.reward_config, self.success_config = reward_config, success_config
         self.safety_thresholds = safety_thresholds
         self.episode_length = success_config.episode_steps
@@ -95,13 +99,32 @@ class MarvinBimanualSE3ReachHold:
             "physical_state42_target_pose18_v1", 18)
 
     def checkpoint_contract(self):
-        return {"task_adapter_version": "marvin_bimanual_se3_reach_hold_v1",
+        contract = {"task_adapter_version": "marvin_bimanual_se3_reach_hold_v1",
                 "reward": asdict(self.reward_config),
                 "success": asdict(self.success_config),
                 "safety_thresholds": asdict(self.safety_thresholds),
                 "episode_semantics": "fixed_goal_200_steps_no_success_reset_v1",
                 "goal_frame": "fixed_robot_base_v1",
                 "witness_joint_angle_usage": "sampler_only_not_transition_v1"}
+        if self.hold_speed_mode == "policy_step_displacement_v2":
+            contract["task_adapter_version"] = "marvin_bimanual_se3_reach_hold_v2"
+            contract["hold_speed_mode"] = self.hold_speed_mode
+            contract["episode_semantics"] = "fixed_goal_200_steps_50hz_net_hold_v2"
+        return contract
+
+    def _hold_velocity(self, state, next_state):
+        if self.hold_speed_mode == "policy_step_displacement_v2":
+            if state is None:
+                raise ValueError("Policy-step hold speed requires the pre-action physical state")
+            return (next_state[..., :14] - state[..., :14]).abs() / self.robot.spec.control_dt
+        return next_state[..., 14:28].abs()
+
+    def _trajectory_hold_velocity(self, trajectory, next_states):
+        if self.hold_speed_mode == "policy_step_displacement_v2":
+            prior_states = torch.cat([item.state for item in trajectory])
+        else:
+            prior_states = None
+        return self._hold_velocity(prior_states, next_states)
 
     @staticmethod
     def task_state_from_goal(goal_pose: torch.Tensor, *, frame=None) -> TaskState:
@@ -158,7 +181,7 @@ class MarvinBimanualSE3ReachHold:
         goal_pose = next_task_state.data
         old_position, old_rotation, _ = self._errors(state, goal_pose)
         position, rotation, _ = self._errors(next_state, goal_pose)
-        velocity = next_state[..., 14:28].abs()
+        velocity = self._hold_velocity(state, next_state)
         bounded_action = action.tanh()
         previous_bounded = (torch.zeros_like(bounded_action) if previous_action is None
                             else previous_action.tanh())
@@ -213,9 +236,12 @@ class MarvinBimanualSE3ReachHold:
         position, rotation, _ = self._errors(transition.next_state,
                                              transition.next_task_state.data)
         config = self.success_config
+        prior_state = (transition.state if self.hold_speed_mode == "policy_step_displacement_v2"
+                       else None)
         return ((position <= config.position_m).all(-1)
                 & (rotation <= config.rotation_rad).all(-1)
-                & (transition.next_state[..., 14:28].abs() <= config.max_joint_speed_rad_s).all(-1)
+                & (self._hold_velocity(prior_state, transition.next_state)
+                   <= config.max_joint_speed_rad_s).all(-1)
                 & ~transition.terminated)
 
     @staticmethod
@@ -229,7 +255,8 @@ class MarvinBimanualSE3ReachHold:
         config = self.success_config
         position_arrived = (position <= config.position_m).all(-1)
         se3_arrived = position_arrived & (rotation <= config.rotation_rad).all(-1)
-        valid = se3_arrived & (states[:, 14:28].abs() <= config.max_joint_speed_rad_s).all(-1)
+        valid = se3_arrived & (self._trajectory_hold_velocity(trajectory, states)
+                               <= config.max_joint_speed_rad_s).all(-1)
 
         def first_true(mask):
             found = torch.nonzero(mask, as_tuple=False)
@@ -280,6 +307,8 @@ class MarvinBimanualSE3ReachHold:
             "tcp_so3_max_rad": rotation.max(0).values.tolist(),
             "tcp_so3_final_rad": rotation[-1].tolist(),
             "joint_velocity_abs_max_rad_s": float(states[:, 14:28].abs().max()),
+            "hold_velocity_abs_max_rad_s": float(
+                self._trajectory_hold_velocity(trajectory, states).max()),
             "action_rate_abs_max": float(action_rate.max()),
             "command_jump_abs_max_rad": float(command_jump.max()),
             "contact_event_steps": sum(bool(int(item.failure_reason[0]) & 8) for item in trajectory),

@@ -16,6 +16,7 @@ from dexgym.algorithms.supermimic.core.specs import NetworkSpec
 from dexgym.tasks.marvin_supermimic.core_collector import CoreNewtonCollector
 from dexgym.tasks.marvin_supermimic.physics_contract import marvin_se3_physics_config
 from dexgym.tasks.marvin_supermimic.se3_env import MarvinSE3ReachHoldCfg
+from dexgym.tasks.marvin_supermimic.velocity_audit import SubstepPeakRecorder
 
 
 def main():
@@ -29,15 +30,19 @@ def main():
     if not 1 <= args.num_envs <= 64:
         parser.error("Independent evaluation is bounded to at most 64 environments")
     saved = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
-    if saved.get("schema") != CoreCheckpoint.schema_version or saved["task_spec"]["task_id"] != "marvin_bimanual_se3_reach_hold":
+    if (saved.get("schema") != CoreCheckpoint.schema_version
+            or saved["task_spec"]["task_id"] != "marvin_bimanual_se3_reach_hold"):
         parser.error("Expected a semantic v2 SE(3) reach and hold checkpoint")
     network = NetworkSpec(**saved["contract_manifest"]["networks"]["actor"]["network_spec"])
+    hold_speed_mode = saved["contract_manifest"]["task_contract"].get(
+        "hold_speed_mode", "instantaneous_qd_v1")
     cfg = MarvinSE3ReachHoldCfg()
     cfg.scene.num_envs = args.num_envs
     cfg.seed = args.seed
     cfg.goal_train_seed = saved["physics_config"]["goal_train_seed"]
     cfg.goal_eval_seed = args.seed + 100101
     cfg.curriculum_level = args.level
+    cfg.hold_speed_mode = hold_speed_mode
     cfg.evaluation_mode = True
     cfg.audit_contacts_each_physics_step = saved["physics_config"]["audit_contacts_each_physics_step"]
     torch.manual_seed(args.seed)
@@ -55,13 +60,53 @@ def main():
             load = checkpoint.load_actor_for_evaluation(
                 args.checkpoint, robot=robot, task=task, modules=modules)
             before = {key: value.clone() for key, value in modules.actor.state_dict().items()}
-            evaluator = PhysicalEvaluator(
-                lambda: CoreNewtonCollector(env, robot, task, action_noise_std=0), task,
-                evaluation_kind="independent_physics_evaluation")
+            collector = CoreNewtonCollector(env, robot, task, action_noise_std=0)
+            audit = SubstepPeakRecorder(num_envs=args.num_envs, joints=14,
+                                        substeps=cfg.decimation)
+            original_pre = native._pre_physics_step
+            original_apply = native._apply_action
+            original_dones = native._get_dones
+
+            def pre_with_audit(actions):
+                original_pre(actions)
+                audit.begin()
+
+            def apply_with_audit():
+                audit.sample(native.robot.data.joint_vel.torch[:, native.arm_ids])
+                original_apply()
+
+            def dones_with_audit():
+                result = original_dones()
+                audit.finish(native.robot.data.joint_vel.torch[:, native.arm_ids])
+                return result
+
+            native._pre_physics_step = pre_with_audit
+            native._apply_action = apply_with_audit
+            native._get_dones = dones_with_audit
+            evaluator = PhysicalEvaluator(lambda: collector, task,
+                                          evaluation_kind="independent_physics_evaluation")
             args.output.mkdir(parents=True, exist_ok=True)
-            report = evaluator.evaluate(modules.actor, steps=task.episode_length,
-                                        one_episode_per_env=True,
-                                        trace_path=args.output / "physics_trace.pt")
+            try:
+                report = evaluator.evaluate(modules.actor, steps=task.episode_length,
+                                            one_episode_per_env=True,
+                                            trace_path=args.output / "physics_trace.pt")
+            finally:
+                native._pre_physics_step = original_pre
+                native._apply_action = original_apply
+                native._get_dones = original_dones
+            substep_peaks = audit.peaks()
+            episode_peaks = []
+            for episode in report["episodes"]:
+                peak = float(substep_peaks[:episode["episode_length"],
+                                           episode["env_id"]].max())
+                episode["metrics"]["newton_500hz_joint_velocity_abs_max_rad_s"] = peak
+                episode_peaks.append(peak)
+            report["newton_500hz_velocity_audit"] = {
+                "per_episode_peak_rad_s": episode_peaks,
+                "all_episode_peak_rad_s": max(episode_peaks),
+                "safety_hard_speed_threshold_rad_s": task.safety_thresholds.speed_rad_s,
+                "sampled_substeps_per_policy_step": cfg.decimation,
+            }
             if any(not torch.equal(value, modules.actor.state_dict()[key])
                    for key, value in before.items()):
                 raise RuntimeError("Evaluation modified Actor weights or normalizers")
@@ -69,6 +114,7 @@ def main():
                            "num_envs": args.num_envs, "goal_curriculum_level": args.level,
                            "exploration_noise": 0.0,
                            "checkpoint": str(args.checkpoint)})
+            report["hold_speed_mode"] = hold_speed_mode
             (args.output / "report.json").write_text(json.dumps(report, indent=2))
             print(json.dumps({key: value for key, value in report.items()
                               if key != "episodes"}), flush=True)

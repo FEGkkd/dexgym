@@ -48,6 +48,9 @@ def main():
     args.iterations = args.iterations if args.iterations is not None else experiment["iterations"]
     args.seed = args.seed if args.seed is not None else experiment["seed"]
     args.level = args.level or experiment["curriculum_level"]
+    hold_speed_mode = experiment.get("hold_speed_mode", "instantaneous_qd_v1")
+    if hold_speed_mode not in ("instantaneous_qd_v1", "policy_step_displacement_v2"):
+        parser.error("Unknown hold speed contract")
     network_fields = experiment["network"].copy()
     for name in ("world_hidden", "goal_hidden", "actor_hidden", "critic_hidden",
                  "termination_hidden"):
@@ -68,13 +71,13 @@ def main():
             or not 0 < exploration["validation_noisy_fraction"] < 1):
         parser.error("Invalid temporal exploration config")
     large_profile = experiment.get("scale_profile") in (
-        "4096_env_near_v1", "4096_env_hold_mix_v1")
+        "4096_env_near_v1", "4096_env_hold_mix_v1", "4096_env_hold_mix_v2")
     if large_profile:
         if (args.num_envs != 4096 or not 0 <= args.iterations <= 40
                 or experiment.get("replay_capacity_steps") != 128):
             parser.error("4096-environment pilot requires its bounded 128-step Replay profile")
         expected_level = ("near_hold_mix" if experiment["scale_profile"]
-                          == "4096_env_hold_mix_v1" else "near")
+                          in ("4096_env_hold_mix_v1", "4096_env_hold_mix_v2") else "near")
         if args.level != expected_level:
             parser.error("4096-environment profile and training goal curriculum differ")
     elif not 16 <= args.num_envs <= 256 or not 0 <= args.iterations <= 200:
@@ -88,6 +91,7 @@ def main():
     cfg.goal_train_seed = args.seed + 101
     cfg.goal_eval_seed = args.seed + 100101
     cfg.curriculum_level = args.level
+    cfg.hold_speed_mode = hold_speed_mode
     cfg.audit_contacts_each_physics_step = True
     train_count = max(1, int(0.75 * args.num_envs))
     exploration_count = max(1, int(train_count * exploration["train_env_fraction"]))
@@ -184,6 +188,7 @@ def main():
                       "resume": resume,
                       "strict_pure": True, "teacher_data": False,
                       "goal_curriculum_level": args.level,
+                      "hold_speed_mode": hold_speed_mode,
                       "checkpoint": str(checkpoint_path), "git_commit": git_commit,
                       "peak_torch_vram_bytes": (torch.cuda.max_memory_allocated()
                                                if torch.cuda.is_available() else None),

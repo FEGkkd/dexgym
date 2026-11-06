@@ -77,4 +77,6 @@ def marvin_se3_physics_config(cfg, robot) -> dict:
                 "noisy_trust_config": cfg.noisy_trust_config,
                 "geometry_trust_config": cfg.geometry_trust_config,
             })
+    if getattr(cfg, "hold_speed_mode", "instantaneous_qd_v1") != "instantaneous_qd_v1":
+        contract["hold_speed_mode"] = cfg.hold_speed_mode
     return contract

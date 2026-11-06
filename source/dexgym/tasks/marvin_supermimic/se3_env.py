@@ -22,6 +22,7 @@ class MarvinSE3ReachHoldCfg(MarvinArmNewtonBaseCfg):
     goal_train_seed = 5101
     goal_eval_seed = 9501
     curriculum_level = "near"
+    hold_speed_mode = "instantaneous_qd_v1"
     evaluation_mode = False
     collection_contract_version = None
 
@@ -38,7 +39,8 @@ class MarvinSE3ReachHoldEnv(MarvinArmNewtonBaseEnv):
         source = SimpleNamespace(joint_names_arm=ARM_JOINT_NAMES)
         self.core_robot = MarvinCoreRobot(source, self.device, action_schema=cfg.action_schema)
         self._setup_arm_physics(source, self.core_robot.action_map.origin)
-        self.se3_task = MarvinBimanualSE3ReachHold(self.core_robot)
+        self.se3_task = MarvinBimanualSE3ReachHold(
+            self.core_robot, hold_speed_mode=cfg.hold_speed_mode)
         self.goal_sampler = SE3GoalSampler(
             self.core_robot, train_seed=cfg.goal_train_seed,
             evaluation_seed=cfg.goal_eval_seed)

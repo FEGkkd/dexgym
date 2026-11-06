@@ -19,6 +19,8 @@ def main():
     parser.add_argument("--steps", type=int, default=20)
     parser.add_argument("--seed", type=int, default=51)
     parser.add_argument("--level", choices=("near", "near_hold_mix", "medium", "wider_feasible"), default="near")
+    parser.add_argument("--hold-speed-mode", choices=("instantaneous_qd_v1", "policy_step_displacement_v2"),
+                        default="instantaneous_qd_v1")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if not 1 <= args.num_envs <= 64 or not 1 <= args.steps <= 200:
@@ -29,6 +31,7 @@ def main():
     cfg.goal_train_seed = args.seed + 101
     cfg.goal_eval_seed = args.seed + 100101
     cfg.curriculum_level = args.level
+    cfg.hold_speed_mode = args.hold_speed_mode
     cfg.audit_contacts_each_physics_step = True
     torch.manual_seed(args.seed)
     with launch_simulation(cfg):
@@ -52,6 +55,7 @@ def main():
                     - batch.next_state[:, 28:42]).abs().max()))
                 rewards.append(float(batch.reward.mean()))
             report = {"task_id": native.se3_task.spec.task_id,
+                      "hold_speed_mode": native.se3_task.hold_speed_mode,
                       "action_schema": native.core_robot.spec.action_schema,
                       "goal_shape": list(batch.task_state.data.shape),
                       "state_shape": list(batch.state.shape),
