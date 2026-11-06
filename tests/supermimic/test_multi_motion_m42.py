@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 import torch
 
 from dexgym.motion.library import MotionLibrary
@@ -55,3 +56,19 @@ def test_real_wave_and_procedural_references_share_schema_but_keep_own_lengths()
     frames = torch.tensor([1356, 200])
     assert library.reference_at(ids, frames)["q_arm"].shape == (2, 14)
     assert library.future_goal_at(ids, frames, 10).shape == (2, 10, 90)
+
+
+def test_motion_import_rejects_non_policy_fps_and_inconsistent_time_grid(tmp_path):
+    source, bad = tmp_path / "source.npz", tmp_path / "bad.npz"
+    _make_motion(source, "source", 9, 0.0)
+    with np.load(source) as record:
+        fields = {key: record[key] for key in record.files}
+    fields["fps"] = 60
+    np.savez(bad, **fields)
+    with pytest.raises(ValueError, match="FPS"):
+        MotionLibrary({"source": bad}, "cpu")
+    fields["fps"] = 50
+    fields["time"] = np.arange(9) / 60
+    np.savez(bad, **fields)
+    with pytest.raises(ValueError, match="50 Hz"):
+        MotionLibrary({"source": bad}, "cpu")

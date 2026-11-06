@@ -44,7 +44,7 @@ class GoalTask:
     def critic_features(self, state, task_state):
         return torch.cat((state, task_state.data), dim=-1)
 
-    def reward(self, state, next_state, action, next_task_state):
+    def reward(self, state, next_state, action, next_task_state, previous_action=None):
         return -((next_state[:, 0] - next_task_state.data[:, 0]) ** 2)
 
     def soft_termination(self, next_state, next_task_state):

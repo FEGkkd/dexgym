@@ -25,6 +25,8 @@ class MotionLibrary:
             self.hashes[name] = hashlib.sha256(path.read_bytes()).hexdigest()
             with np.load(path, allow_pickle=False) as data:
                 frame_rate = int(data["fps"]) if "fps" in data else round(1 / float(np.diff(data["time"]).mean()))
+            if frame_rate != 50:
+                raise ValueError(f"{name}: declared FPS must equal 50 Hz policy rate")
             fps.append(frame_rate)
         joint_names = self.clips[0].joint_names_arm
         link_names = self.clips[0].link_names

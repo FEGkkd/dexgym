@@ -66,7 +66,7 @@ class ToyGoalTask:
     def critic_features(self, state, task_state):
         return torch.cat((state, task_state.data), dim=-1)
 
-    def reward(self, state, next_state, action, next_task_state):
+    def reward(self, state, next_state, action, next_task_state, previous_action=None):
         position_error = next_state[:, 0] - next_task_state.data[:, 0]
         penalty = 2 * position_error.square()
         if self.spec.goal_dim == 2:
@@ -80,10 +80,17 @@ class ToyGoalTask:
     def valid_imagination_start(self, task_state, horizon):
         return task_state.frame + horizon <= self.episode_length
 
+    def episode_end(self, task_state):
+        return task_state.frame >= self.episode_length
+
     def evaluate_metrics(self, trajectory):
         return {"reward_mean": float(trajectory["rewards"].mean()),
                 "final_position_error_mean": float(trajectory["final_error"].mean()),
                 "success_rate": float((trajectory["final_error"] < 0.12).float().mean())}
+
+    @staticmethod
+    def reward_upper_bound():
+        return 1.0
 
 
 class ToyCollector:
@@ -124,7 +131,7 @@ class ToyCollector:
         next_position = self.state[:, :1] + 0.2 * next_velocity
         next_state = torch.cat((next_position, next_velocity), dim=-1)
         arrival = self.task.advance(self.task_state)
-        truncated = arrival.frame >= self.task.episode_length
+        truncated = self.task.episode_end(arrival)
         reward = self.task.reward(self.state, next_state, action, arrival)
         transition = TransitionBatch(
             self.state.clone(), action.clone(), self.previous_action.clone(),

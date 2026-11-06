@@ -60,11 +60,21 @@ class MotionManager:
             self.link_names = tuple(tuple(row) for row in npz["link_names"])
             self.joint_names_arm = tuple(npz["joint_names_arm"])
             stored_motion_id = str(npz["motion_id"])
+            declared_fps = int(npz["fps"]) if "fps" in npz else None
             if motion_id is not None and motion_id != stored_motion_id:
                 raise ValueError(f"motion_id mismatch: expected {motion_id}, found {stored_motion_id}")
             self.motion_id = stored_motion_id
         self.device = torch.device(device)
         self.length = len(arrays["time"])
+        if declared_fps is not None and declared_fps != 50:
+            raise ValueError("Motion declared FPS must equal the 50 Hz policy rate")
+        # Physics and reference time advance together at the 50 Hz policy
+        # boundary. Reject incompatible clips until an explicit SO(3)-aware
+        # resampling importer is implemented.
+        expected_time = np.arange(self.length, dtype=np.float64) * 0.02
+        if self.length < 2 or not np.allclose(arrays["time"] - arrays["time"][0],
+                                               expected_time, rtol=0, atol=1e-5):
+            raise ValueError("Motion time grid must be uniformly sampled at the 50 Hz policy rate")
         self.frame = torch.zeros(num_envs, device=self.device, dtype=torch.long)
         self.data = {
             key: torch.as_tensor(value.copy(), device=self.device, dtype=torch.float32) for key, value in arrays.items()

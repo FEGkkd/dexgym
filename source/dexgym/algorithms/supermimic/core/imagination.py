@@ -22,10 +22,13 @@ class ImaginedRollout:
 
 
 class ImaginationEngine:
-    def __init__(self, *, gamma: float = 0.99, lam: float = 0.95):
+    def __init__(self, *, gamma: float = 0.99, lam: float = 0.95,
+                 value_upper_bound: float | None = None):
         if not 0 <= gamma < 1 or not 0 <= lam <= 1:
             raise ValueError("Imagination gamma or lambda is invalid")
-        self.gamma, self.lam = gamma, lam
+        if value_upper_bound is not None and value_upper_bound <= 0:
+            raise ValueError("Value bound must follow a positive reward upper bound")
+        self.gamma, self.lam, self.value_upper_bound = gamma, lam, value_upper_bound
 
     def rollout(self, start: StartBatch, actor, world_model, critic, robot, task, *,
                 horizon: int = 32, bootstrap_weight: float = 1.0,
@@ -33,6 +36,7 @@ class ImaginationEngine:
         if horizon < 1 or not bool(task.valid_imagination_start(start.task_state, horizon).all()):
             raise ValueError("Imagination would cross the task episode boundary")
         state, history, task_state = start.state, start.history, start.task_state
+        previous_action = start.previous_action
         context = start.dynamics_context
         rewards, probabilities, values, features, states = [], [], [], [], []
         for _ in range(horizon):
@@ -46,7 +50,7 @@ class ImaginationEngine:
             action = actor(history, goal)
             next_state = world_model(state, action, context, robot)
             next_task_state = task.advance(task_state)
-            reward = task.reward(state, next_state, action, next_task_state)
+            reward = task.reward(state, next_state, action, next_task_state, previous_action)
             if task.termination_mode == "learned":
                 if termination_head is None:
                     raise ValueError("Learned termination needs a task-shaped head")
@@ -64,16 +68,18 @@ class ImaginationEngine:
             if next_observation.shape != (len(state), task.spec.observation_dim):
                 raise ValueError("Task observation differs from TaskSpec")
             history = torch.cat((history[:, 1:], next_observation[:, None]), dim=1)
-            state, task_state = next_state, next_task_state
+            state, task_state, previous_action = next_state, next_task_state, action
         terminal_features = task.critic_features(state, task_state)
         values.append(critic(terminal_features))
         reward_tensor = torch.stack(rewards)
         termination_tensor = torch.stack(probabilities)
         value_tensor = torch.stack(values)
+        bounded_terminal = (value_tensor[-1].clamp(max=self.value_upper_bound)
+                            if self.value_upper_bound is not None else value_tensor[-1])
         return ImaginedRollout(
             actor_loss=-discounted_imagined_return(
                 reward_tensor, termination_tensor,
-                bootstrap_weight * value_tensor[-1], gamma=self.gamma).mean(),
+                bootstrap_weight * bounded_terminal, gamma=self.gamma).mean(),
             rewards=reward_tensor, terminations=termination_tensor,
             survival=survival_weights(termination_tensor), values=value_tensor,
             critic_features=torch.stack(features),
@@ -81,8 +87,12 @@ class ImaginationEngine:
             terminal_state=state.detach())
 
 
-def critic_td_lambda_batch(rollout: ImaginedRollout, *, gamma=0.99, lam=0.95):
+def critic_td_lambda_batch(rollout: ImaginedRollout, *, gamma=0.99, lam=0.95,
+                           value_upper_bound: float | None = None):
     with torch.no_grad():
-        targets = lambda_returns(rollout.rewards.detach(), rollout.values.detach(),
+        values = rollout.values.detach()
+        if value_upper_bound is not None:
+            values = values.clamp(max=value_upper_bound)
+        targets = lambda_returns(rollout.rewards.detach(), values,
                                  rollout.terminations.detach(), gamma=gamma, lam=lam)
     return rollout.critic_features.reshape(-1, rollout.critic_features.shape[-1]).detach(), targets.flatten().detach()
