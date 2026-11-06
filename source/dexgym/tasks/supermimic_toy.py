@@ -123,15 +123,21 @@ class ToyGoalTask:
 
 
 class ToyCollector:
-    def __init__(self, task: ToyGoalTask, num_envs: int, *, exploration_std: float = 0.15):
+    def __init__(self, task: ToyGoalTask, num_envs: int, *, exploration_std: float = 0.15,
+                 observation_noise=None):
         if num_envs < 2 or exploration_std < 0:
             raise ValueError("Toy collector needs multiple environments and nonnegative exploration")
         self.task, self.num_envs, self.exploration_std = task, num_envs, exploration_std
+        self.observation_noise = observation_noise
+        if observation_noise is not None:
+            observation_noise.validate(task.spec)
         self.state = torch.zeros(num_envs, 2)
         self.task_state = task.initial_task_state(num_envs)
         self.previous_action = torch.zeros(num_envs, 1)
         self.context = (0.85 + 0.1 * (torch.arange(num_envs) % 3).float() / 2)[:, None]
         initial = task.observation(self.state, self.previous_action, self.task_state)
+        if observation_noise is not None:
+            initial = observation_noise(initial, mode="train")
         self.history = initial[:, None].repeat(1, task.spec.history_length, 1)
 
     def state_dict(self):
@@ -175,6 +181,8 @@ class ToyCollector:
                                     arrival.data)
         self.previous_action = torch.where(truncated[:, None], torch.zeros_like(action), action)
         observation = self.task.observation(self.state, self.previous_action, self.task_state)
+        if self.observation_noise is not None:
+            observation = self.observation_noise(observation, mode="train")
         advanced = torch.cat((self.history[:, 1:], observation[:, None]), dim=1)
         self.history = torch.where(truncated[:, None, None],
                                    observation[:, None].expand_as(advanced), advanced)
@@ -198,7 +206,7 @@ class ToyPhysicalEvaluator:
 
 def make_toy_trainer(task_id: str, *, num_envs: int = 16,
                      world_hidden: int = 64, world_batch: int = 32,
-                     imagination_batch: int = 16):
+                     imagination_batch: int = 16, observation_noise=None):
     task, robot = ToyGoalTask(task_id), ToyRobot()
     modules = NetworkFactory.build(robot.spec, task.spec, NetworkSpec(
         world_hidden=(world_hidden, world_hidden), goal_hidden=(32,),
@@ -210,7 +218,7 @@ def make_toy_trainer(task_id: str, *, num_envs: int = 16,
     }
     train_envs = max(1, int(num_envs * 0.75))
     return SuperMimicTrainer(
-        collector=ToyCollector(task, num_envs),
+        collector=ToyCollector(task, num_envs, observation_noise=observation_noise),
         replay=SchemaReplay(128, num_envs, robot.spec, task.spec, "cpu"),
         robot=robot, task=task, modules=modules, optimizers=optimizers,
         trust_evaluator=ModelTrustEvaluator(TrustConfig(
@@ -220,4 +228,5 @@ def make_toy_trainer(task_id: str, *, num_envs: int = 16,
                              world_updates_per_iteration=4, world_warmup_updates=8,
                              trust_interval=1, validation_batch=16,
                              critic_epochs=2, critic_minibatches=4),
-        train_env_range=(0, train_envs), validation_env_range=(train_envs, num_envs))
+        train_env_range=(0, train_envs), validation_env_range=(train_envs, num_envs),
+        observation_noise=observation_noise)

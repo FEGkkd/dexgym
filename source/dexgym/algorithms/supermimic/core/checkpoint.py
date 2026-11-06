@@ -13,6 +13,14 @@ import torch
 
 class CoreCheckpoint:
     schema_version = "supermimic_core_v2"
+    # These affect the sampling protocol, not the executable robot/Actor/MDP.
+    # Every other physics field remains part of the immutable inference contract.
+    evaluation_protocol_fields = frozenset({
+        "num_envs", "seed", "reset_joint_perturb_rad", "reset_random_reference_start",
+        "active_reset_fraction", "early_reset_fraction",
+        "observation_position_noise_rad", "observation_velocity_noise_rad_s",
+        "reference_start_frame", "evaluation_episode_count", "evaluation_trace_path",
+    })
 
     def __init__(self, *, git_commit: str, reference_hashes: dict[str, str],
                  physics_config: dict | None = None):
@@ -65,6 +73,8 @@ class CoreCheckpoint:
                 "output_activation": "linear_delta_v1" if name == "world_model" else
                                      "linear_action_v1" if name == "actor" else None,
             }
+            if name == "actor" and getattr(module, "observation_noise_spec", None) is not None:
+                networks[name]["observation_noise"] = module.observation_noise_spec.manifest()
         manifest = {
             "robot_spec": asdict(trainer.robot.spec),
             "robot_contract": robot_contract(),
@@ -136,6 +146,8 @@ class CoreCheckpoint:
             "collector": collector_state,
             "rng": {"torch": torch.get_rng_state(), "numpy": np.random.get_state(),
                     "python": random.getstate(),
+                    "observation_noise": (trainer.observation_noise.state_dict()
+                                          if getattr(trainer, "observation_noise", None) is not None else None),
                     "cuda": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None},
         }
         temporary = path.with_name(path.name + ".tmp")
@@ -182,6 +194,11 @@ class CoreCheckpoint:
             if (record["replay"]["capacity"] != trainer.replay.capacity or
                     record["replay"]["num_envs"] != trainer.replay.num_envs):
                 raise ValueError("Replay physical environment schema differs")
+        noise_record = record["rng"].get("observation_noise")
+        if noise_record is not None:
+            current_noise = getattr(trainer, "observation_noise", None)
+            if current_noise is None or noise_record["spec"] != current_noise.spec.manifest():
+                raise ValueError("Checkpoint observation noise contract differs")
         for name, module in modules.items():
             module.load_state_dict(record["modules"][name], strict=True)
         for name, optimizer in trainer.optimizers.items():
@@ -200,6 +217,8 @@ class CoreCheckpoint:
             if record["resume_mode"] == "full":
                 trainer.collector.load_state_dict(record["collector"])
         torch.set_rng_state(record["rng"]["torch"])
+        if noise_record is not None:
+            trainer.observation_noise.load_state_dict(noise_record)
         np.random.set_state(record["rng"]["numpy"])
         random.setstate(record["rng"]["python"])
         if record["rng"]["cuda"] is not None and torch.cuda.is_available():
@@ -216,24 +235,39 @@ class CoreCheckpoint:
             raise ValueError("Evaluation requires a v2 semantic checkpoint or explicit legacy evaluator")
         if record["reference_hashes"] != self.reference_hashes:
             raise ValueError("Reference hashes differ")
-        if record["physics_config"] != self.physics_config:
-            raise ValueError("Physics configuration differs")
+        stored_digest = hashlib.sha256(json.dumps(record["contract_manifest"], sort_keys=True,
+            separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+        if stored_digest != record["contract_sha256"]:
+            raise ValueError("Checkpoint contract SHA256 is invalid")
+        if record["physics_config"] != record["contract_manifest"]["physics_config"]:
+            raise ValueError("Checkpoint physics configuration record differs from manifest")
         active = {"actor": modules.actor, "world_model": modules.world_model,
                   "critic": modules.critic}
         if record["termination_mode"] == "learned":
             active["termination"] = modules.termination
         from types import SimpleNamespace
-        current, digest = self._manifest(SimpleNamespace(robot=robot, task=task), active,
+        current, _ = self._manifest(SimpleNamespace(robot=robot, task=task), active,
                                          self.physics_config, self.reference_hashes)
-        if digest != record["contract_sha256"] or current != record["contract_manifest"]:
-            raise ValueError(self._first_difference(record["contract_manifest"], current)
-                             or "Checkpoint contract SHA256 is invalid")
+        saved = record["contract_manifest"].copy()
+        current = current.copy()
+        saved["physics_config"] = {key: value for key, value in saved["physics_config"].items()
+                                   if key not in self.evaluation_protocol_fields}
+        current["physics_config"] = {key: value for key, value in current["physics_config"].items()
+                                     if key not in self.evaluation_protocol_fields}
+        difference = self._first_difference(saved, current)
+        if difference:
+            raise ValueError(difference)
         if self._signatures(active) != record["module_signatures"]:
             raise ValueError("Network shape or normalization schema differs")
         modules.actor.load_state_dict(record["modules"]["actor"], strict=True)
         modules.actor.eval()
-        return {"schema": record["schema"], "contract_sha256": digest,
-                "git_commit": record["git_commit"], "policy_source": str(path)}
+        protocol = {key: self.physics_config[key] for key in sorted(self.evaluation_protocol_fields)
+                    if key in self.physics_config}
+        overrides = {key: value for key, value in protocol.items()
+                     if record["physics_config"].get(key) != value}
+        return {"schema": record["schema"], "contract_sha256": stored_digest,
+                "git_commit": record["git_commit"], "policy_source": str(path),
+                "evaluation_protocol": protocol, "evaluation_overrides": overrides}
 
     @staticmethod
     def load_legacy_m43_v1_actor_for_evaluation(

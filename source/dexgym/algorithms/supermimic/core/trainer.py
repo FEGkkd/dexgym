@@ -6,7 +6,8 @@ import time
 import torch
 
 from .imagination import ImaginationEngine, critic_td_lambda_batch
-from .optimization import frozen_parameters, optimize_critic, safe_gradient_step
+from .optimization import (frozen_parameters, optimize_critic, safe_gradient_step,
+                           validate_optimizer_ownership)
 
 
 @dataclass(frozen=True)
@@ -53,7 +54,7 @@ class SuperMimicTrainer:
     def __init__(self, *, collector, replay, robot, task, modules, optimizers,
                  trust_evaluator, config: TrainerConfig,
                  train_env_range, validation_env_range,
-                 supervised_initializer=None):
+                 supervised_initializer=None, observation_noise=None):
         if collector.num_envs != replay.num_envs or robot.spec != replay.robot_spec or task.spec != replay.task_spec:
             raise ValueError("Collector, Replay, Robot and Task contracts differ")
         if set(optimizers) != {"world_model", "actor", "critic"}:
@@ -67,6 +68,17 @@ class SuperMimicTrainer:
         self.world_model, self.actor, self.critic = (
             modules.world_model, modules.actor, modules.critic)
         self.termination_head = modules.termination if task.termination_mode == "learned" else None
+        validate_optimizer_ownership(modules, optimizers, task.termination_mode)
+        existing_owner = getattr(self.world_model, "_supermimic_optimizer_owner", None)
+        if existing_owner is not None and existing_owner is not optimizers["world_model"]:
+            raise ValueError("Shared World Model parameters require one common World Model optimizer")
+        self.world_model._supermimic_optimizer_owner = optimizers["world_model"]
+        self.observation_noise = observation_noise
+        if observation_noise is not None:
+            observation_noise.validate(task.spec)
+            if getattr(collector, "observation_noise", None) is not observation_noise:
+                raise ValueError("Real Collector and Imagination must share the observation noise contract")
+            self.actor.observation_noise_spec = observation_noise.spec
         self.optimizers = optimizers
         self.trust_evaluator, self.config = trust_evaluator, config
         self.train_env_range, self.validation_env_range = train_env_range, validation_env_range
@@ -175,7 +187,8 @@ class SuperMimicTrainer:
                 start, self.actor, self.world_model, self.critic, self.robot, self.task,
                 horizon=self.allowed_horizon,
                 bootstrap_weight=0.0 if self.allowed_horizon == 1 else 1.0,
-                termination_head=self.termination_head)
+                termination_head=self.termination_head,
+                observation_noise=self.observation_noise)
             actor_result = safe_gradient_step(rollout.actor_loss, self.actor.parameters(),
                                               self.optimizers["actor"])
         actor_finished = self._stamp()

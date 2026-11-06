@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from .specs import NetworkSpec
+from .observation_noise import ObservationNoiseSpec
 from .trainer import TrainerConfig
 from .trust_evaluator import TrustConfig
 
@@ -23,6 +24,8 @@ class CoreExperimentConfig:
     network: NetworkSpec
     trainer: TrainerConfig
     trust: TrustConfig
+    observation_noise: ObservationNoiseSpec | None = None
+    termination_mode: str = "analytic"
 
     @classmethod
     def from_json(cls, path: str | Path):
@@ -39,6 +42,11 @@ class CoreExperimentConfig:
         trust = algorithm["trust"].copy()
         if "max_rmse" in trust:
             trust["max_rmse"] = tuple(trust["max_rmse"])
+        noise = task.get("observation_noise")
+        if noise is not None:
+            noise = dict(noise)
+            noise["scale"] = tuple(noise["scale"])
+            noise["units"] = tuple(noise.get("units", ()))
         result = cls(robot_id=robot["id"], action_schema=robot["action_schema"],
                      task_id=task["id"], reference_path=task.get("reference_path"),
                      backend=environment["backend"], num_envs=int(environment["num_envs"]),
@@ -46,8 +54,11 @@ class CoreExperimentConfig:
                      eval_steps=int(environment["eval_steps"]), seed=int(environment["seed"]),
                      network=NetworkSpec(**network),
                      trainer=TrainerConfig(**algorithm["trainer"]),
-                     trust=TrustConfig(**trust))
+                     trust=TrustConfig(**trust),
+                     observation_noise=ObservationNoiseSpec(**noise) if noise is not None else None,
+                     termination_mode=task.get("termination_mode", "analytic"))
         if (not result.robot_id or not result.task_id or not result.action_schema
-                or result.num_envs < 4 or result.iterations < 1 or result.eval_steps < 1):
+                or result.num_envs < 4 or result.iterations < 1 or result.eval_steps < 1
+                or result.termination_mode not in ("analytic", "learned")):
             raise ValueError("Experiment IDs, environments, steps and iterations must be valid")
         return result

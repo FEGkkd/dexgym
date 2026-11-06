@@ -80,3 +80,22 @@ def test_reach_has_distinct_goal_observation_and_bptt(plugins):
     assert reach.soft_termination(next_state, task_state).shape == (2,)
     assert reach.critic_features(state, task_state).shape == (2, reach.spec.critic_dim)
     assert torch.autograd.grad(reward.sum(), action, retain_graph=True)[0].abs().sum() > 0
+
+
+def test_real_marvin_tracking_and_reach_share_only_same_dynamics(plugins, monkeypatch):
+    library, robot = plugins
+    tracking = MarvinMotionTracking(library, robot)
+    reach = MarvinDualTCPReach(robot)
+    config = NetworkSpec(world_hidden=(16,), goal_hidden=(16,), actor_hidden=(16,),
+                         critic_hidden=(16,), latent_dim=4)
+    first = NetworkFactory.build(robot.spec, tracking.spec, config, robot_adapter=robot)
+    second = NetworkFactory.build(robot.spec, reach.spec, config,
+                                  robot_adapter=robot,
+                                  shared_world_model=first.world_model)
+    assert first.world_model is second.world_model
+    assert first.world_model.input_norm is second.world_model.input_norm
+    monkeypatch.setattr(robot.native, "controller_kp_source", "changed_gain_profile")
+    with pytest.raises(ValueError, match="controller_kp_source"):
+        NetworkFactory.build(robot.spec, reach.spec, config,
+                             robot_adapter=robot,
+                             shared_world_model=first.world_model)

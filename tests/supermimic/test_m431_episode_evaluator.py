@@ -70,3 +70,12 @@ def test_independent_evaluation_uses_first_episode_per_env(tmp_path):
     saved = torch.load(trace, weights_only=False)
     assert bool(saved["evaluated_mask"][2][0])
     assert not bool(saved["evaluated_mask"][3][0])
+
+
+def test_independent_evaluation_can_request_two_separate_episodes_per_env():
+    report = PhysicalEvaluator(_Collector, _Task(),
+        evaluation_kind="independent_physics_evaluation").evaluate(
+            _Actor(), steps=10, episodes_per_env=2)
+    assert [item["episode_length"] for item in report["episodes"]
+            if item["env_id"] == 0] == [3, 3]
+    assert report["evaluated_transitions"] == 36

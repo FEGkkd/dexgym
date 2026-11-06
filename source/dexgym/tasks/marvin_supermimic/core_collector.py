@@ -6,16 +6,26 @@ from dexgym.algorithms.supermimic.core.transition import TransitionBatch
 
 
 class CoreNewtonCollector:
-    def __init__(self, env, robot, task, *, action_noise_std=0.0):
+    def __init__(self, env, robot, task, *, action_noise_std=0.0,
+                 observation_noise=None, observation_mode="train"):
         if action_noise_std < 0:
             raise ValueError("Action noise must be nonnegative")
         self.env, self.native, self.robot, self.task = env, env.unwrapped, robot, task
         self.num_envs = self.native.num_envs
         self.action_noise_std = action_noise_std
+        self.observation_noise, self.observation_mode = observation_noise, observation_mode
+        if observation_noise is not None:
+            observation_noise.validate(task.spec)
+        cfg = getattr(self.native, "cfg", None)
+        if (getattr(cfg, "observation_position_noise_rad", 0.0)
+                or getattr(cfg, "observation_velocity_noise_rad_s", 0.0)):
+            raise ValueError("Core Collector requires native observation noise disabled; use its own Actor noise contract")
         env.reset()
         state = robot.physical_state(self.native)
         task_state = task.physical_task_state(self.native)
-        observation = task.observation(state, self.native.last_action, task_state)
+        self.last_clean_observation = task.observation(state, self.native.last_action, task_state)
+        observation = (observation_noise(self.last_clean_observation, mode=observation_mode)
+                       if observation_noise is not None else self.last_clean_observation)
         self.history = observation[:, None].expand(-1, task.spec.history_length, -1).clone()
 
     @torch.no_grad()
@@ -38,7 +48,7 @@ class CoreNewtonCollector:
         previous_action = native.last_action.detach().clone()
         history = self.history.clone()
         expected_observation = task.observation(state, previous_action, task_state)
-        if not torch.allclose(history[:, -1], expected_observation, atol=1e-6, rtol=1e-6):
+        if not torch.allclose(self.last_clean_observation, expected_observation, atol=1e-6, rtol=1e-6):
             raise RuntimeError("Newton and Task MDP observation history differs")
         if policy == "actor":
             action = actor(history, task.goal(state, task_state))
@@ -92,7 +102,10 @@ class CoreNewtonCollector:
             native.last_failure_reason.clone().to(torch.int32), reward)
         post_state = self.robot.physical_state(native)
         post_task = task.physical_task_state(native)
-        observation = task.observation(post_state, native.last_action, post_task)
+        self.last_clean_observation = task.observation(post_state, native.last_action, post_task)
+        observation = (self.observation_noise(self.last_clean_observation,
+                                              mode=self.observation_mode)
+                       if self.observation_noise is not None else self.last_clean_observation)
         advanced = torch.cat((self.history[:, 1:], observation[:, None]), dim=1)
         self.history = torch.where((terminated | truncated)[:, None, None],
                                    observation[:, None].expand_as(advanced), advanced)

@@ -6,6 +6,68 @@ import math
 import torch
 
 
+def build_optimizers(modules, *, world_lr: float, actor_lr: float,
+                     critic_lr: float, termination_mode: str):
+    """The learned task head is fitted by the same real-transition loss as dynamics."""
+    if termination_mode not in ("analytic", "learned"):
+        raise ValueError("Unknown termination mode")
+    world = list(modules.world_model.parameters())
+    if termination_mode == "learned":
+        if modules.termination is None:
+            raise ValueError("Learned termination requires a termination head")
+        world.extend(modules.termination.parameters())
+    return {
+        "world_model": torch.optim.Adam(world, lr=world_lr),
+        "actor": torch.optim.Adam(modules.actor.parameters(), lr=actor_lr),
+        "critic": torch.optim.Adam(modules.critic.parameters(), lr=critic_lr),
+    }
+
+
+def validate_optimizer_ownership(modules, optimizers, termination_mode: str):
+    """Reject missing, duplicated or cross-owned trainable parameters before training."""
+    if termination_mode == "learned" and modules.termination is None:
+        raise ValueError("Learned termination requires a termination head")
+    expected = {
+        "world_model": list(modules.world_model.named_parameters()),
+        "actor": list(modules.actor.named_parameters()),
+        "critic": list(modules.critic.named_parameters()),
+    }
+    if termination_mode == "learned":
+        expected["world_model"] += [
+            (f"termination.{name}", parameter)
+            for name, parameter in modules.termination.named_parameters()]
+    owners = {}
+    for optimizer_name, optimizer in optimizers.items():
+        seen = set()
+        for group in optimizer.param_groups:
+            for parameter in group["params"]:
+                identity = id(parameter)
+                if identity in seen:
+                    raise ValueError(f"{optimizer_name} optimizer registers a parameter twice")
+                seen.add(identity)
+                owners.setdefault(identity, []).append(optimizer_name)
+    names = {id(parameter): f"{module}.{name}" for module, pairs in expected.items()
+             for name, parameter in pairs}
+    if modules.termination is not None:
+        names.update({id(parameter): f"termination.{name}"
+                      for name, parameter in modules.termination.named_parameters()})
+    for optimizer_name, pairs in expected.items():
+        for name, parameter in pairs:
+            if not parameter.requires_grad:
+                continue
+            actual = owners.get(id(parameter), [])
+            if actual != [optimizer_name]:
+                label = f"termination.{name}" if name.startswith("termination.") else f"{optimizer_name}.{name}"
+                raise ValueError(f"Optimizer ownership for {label}: expected {optimizer_name}, found {actual}")
+    for identity, actual in owners.items():
+        if identity not in names:
+            raise ValueError(f"Optimizer owns unknown parameter id={identity}")
+        if len(actual) != 1:
+            raise ValueError(f"Parameter {names[identity]} belongs to multiple optimizers: {actual}")
+        if termination_mode == "analytic" and names[identity].startswith("termination."):
+            raise ValueError(f"Analytic termination cannot optimize {names[identity]}")
+
+
 @contextmanager
 def frozen_parameters(*modules):
     parameters = tuple(parameter for module in modules if module is not None

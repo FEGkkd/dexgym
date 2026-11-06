@@ -29,9 +29,13 @@ class PhysicalEvaluator:
 
     @torch.no_grad()
     def evaluate(self, actor, *, steps: int, trace_path: str | Path | None = None,
-                 one_episode_per_env: bool = False):
+                 one_episode_per_env: bool = False,
+                 episodes_per_env: int | None = None):
         if steps < 1:
             raise ValueError("Evaluation needs positive physical steps")
+        if episodes_per_env is not None and (episodes_per_env < 1 or one_episode_per_env):
+            raise ValueError("Specify one positive Episode count limit")
+        episode_limit = 1 if one_episode_per_env else episodes_per_env
         collector = self.collector_factory()
         if getattr(collector, "action_noise_std", 0.0) != 0:
             raise ValueError("Physical evaluation must disable exploration noise")
@@ -89,6 +93,8 @@ class PhysicalEvaluator:
             episodes.append(record)
             pending[env_id] = []
             episode_ids[env_id] += 1
+            if complete and episode_limit is not None and episode_ids[env_id] >= episode_limit:
+                inactive.add(env_id)
 
         try:
             for global_step in range(1, steps + 1):
@@ -111,8 +117,6 @@ class PhysicalEvaluator:
                         reason_counts[key] = reason_counts.get(key, 0) + 1
                     if bool(item.terminated[0] or item.truncated[0]):
                         close_episode(env_id, complete=True)
-                        if one_episode_per_env:
-                            inactive.add(env_id)
                 if len(inactive) == num_envs:
                     break
             for env_id in range(num_envs):

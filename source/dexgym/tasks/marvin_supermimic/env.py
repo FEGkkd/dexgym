@@ -125,11 +125,14 @@ class MarvinWaveDirectEnv(MarvinArmNewtonBaseEnv):
             env_ids = self.robot._ALL_INDICES
         super()._reset_idx(env_ids)
         count = len(env_ids)
-        frames = (
-            torch.randint(0, self.motion.length - 1, (count,), device=self.device)
-            if self.cfg.random_reference_start
-            else torch.zeros(count, device=self.device, dtype=torch.long)
-        )
+        fixed_start = getattr(self.cfg, "fixed_reference_start_frame", None)
+        if fixed_start is not None and not 0 <= fixed_start < self.motion.length - 1:
+            raise ValueError("Evaluation reference start frame is outside the motion")
+        frames = (torch.full((count,), fixed_start, device=self.device, dtype=torch.long)
+                  if fixed_start is not None else
+                  torch.randint(0, self.motion.length - 1, (count,), device=self.device)
+                  if self.cfg.random_reference_start else
+                  torch.zeros(count, device=self.device, dtype=torch.long))
         if self.cfg.random_reference_start and (self.cfg.active_reset_fraction or self.cfg.early_reset_fraction):
             selector = torch.rand(count, device=self.device)
             active = selector < self.cfg.active_reset_fraction

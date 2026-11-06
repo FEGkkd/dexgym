@@ -74,12 +74,21 @@ def test_factory_shares_dynamics_across_tasks_only_with_identical_robot_contract
     reach = TaskSpec("reach", 48, 4, 6, 1, 6, 48, "dual_tcp_v1")
     config = NetworkSpec(world_hidden=(16,), goal_hidden=(16,), actor_hidden=(16,),
                          critic_hidden=(16,), latent_dim=4)
-    first = NetworkFactory.build(robot, tracking, config)
+    class Adapter:
+        def __init__(self, spec):
+            self.spec = spec
+
+        def checkpoint_contract(self):
+            return {"controller": "same_v1", "context_schema": "empty_v1"}
+
+    first = NetworkFactory.build(robot, tracking, config, robot_adapter=Adapter(robot))
     second = NetworkFactory.build(robot, reach, config,
+                                  robot_adapter=Adapter(robot),
                                   shared_world_model=first.world_model)
     assert second.world_model is first.world_model
     assert second.actor is not first.actor and second.critic is not first.critic
     incompatible = RobotSpec("marvin", 42, 14, 28, 0, "robot_fixed_v2", "arm42_v1")
     with pytest.raises(ValueError, match="Shared World Model"):
         NetworkFactory.build(incompatible, reach, config,
+                             robot_adapter=Adapter(incompatible),
                              shared_world_model=first.world_model)

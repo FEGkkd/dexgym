@@ -39,6 +39,7 @@ class MarvinWaveSceneCfg(MarvinArmNewtonSceneCfg):
 @configclass
 class MarvinWaveDirectCfg(MarvinArmNewtonBaseCfg):
     reference_path = "/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz"
+    fixed_reference_start_frame = None
     random_reference_start = True
     reset_joint_perturb_rad = 0.03
     active_reset_fraction = 0.0

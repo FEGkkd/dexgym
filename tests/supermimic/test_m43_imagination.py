@@ -6,6 +6,7 @@ from torch import nn
 
 from dexgym.algorithms.supermimic.core.imagination import ImaginedRollout, ImaginationEngine, critic_td_lambda_batch
 from dexgym.algorithms.supermimic.core.models import NetworkFactory
+from dexgym.algorithms.supermimic.core.observation_noise import ObservationNoiseModel, ObservationNoiseSpec
 from dexgym.algorithms.supermimic.core.optimization import frozen_parameters
 from dexgym.algorithms.supermimic.core.returns import discounted_imagined_return, lambda_returns
 from dexgym.algorithms.supermimic.core.specs import NetworkSpec, RobotSpec, TaskSpec
@@ -121,3 +122,31 @@ def test_same_engine_backpropagates_through_two_goal_schemas(goal_dim):
     assert features.shape == (16, 1 + goal_dim)
     assert targets.shape == (16,)
     assert bool(torch.isfinite(targets).all())
+
+
+def test_imagination_noise_is_applied_after_physical_reward_and_preserves_bptt():
+    robot, task, world = ToyRobot(), GoalTask(1), ExactToyWorld()
+    config = NetworkSpec(world_hidden=(8,), goal_hidden=(8,), actor_hidden=(8,),
+                         critic_hidden=(8,), latent_dim=4)
+    modules = NetworkFactory.build(robot.spec, task.spec, config)
+    task_state = TaskState(torch.zeros(4, dtype=torch.long),
+                           torch.zeros(4, dtype=torch.long),
+                           torch.zeros(4, dtype=torch.long), torch.ones(4, 1))
+    start = StartBatch(torch.zeros(4, 1), torch.zeros(4, 2, 2), torch.empty(4, 0),
+                       task_state, torch.zeros(4, 1), torch.arange(4),
+                       torch.zeros(4, dtype=torch.long), torch.zeros(4, dtype=torch.int8))
+    noise = ObservationNoiseModel(ObservationNoiseSpec(
+        "uniform", "goal1", (0.1, 0.1), ("m", "m")), seed=432)
+    engine = ImaginationEngine()
+    clean = engine.rollout(start, modules.actor, world, modules.critic,
+                           robot, task, horizon=1)
+    noisy = engine.rollout(start, modules.actor, world, modules.critic,
+                           robot, task, horizon=1, observation_noise=noise)
+    assert torch.equal(clean.rewards, noisy.rewards)
+    assert torch.equal(clean.terminations, noisy.terminations)
+    with frozen_parameters(world, modules.critic):
+        multi = engine.rollout(start, modules.actor, world, modules.critic,
+                               robot, task, horizon=4, observation_noise=noise)
+        multi.actor_loss.backward()
+    assert torch.isfinite(multi.actor_loss)
+    assert float(modules.actor.decoder[-1].bias.grad.abs().sum()) > 0

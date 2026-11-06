@@ -6,6 +6,8 @@ import torch
 from torch import nn
 
 from .normalization import RunningNorm
+from .dynamics_contract import (first_dynamics_difference,
+                                world_model_dynamics_signature)
 from .specs import NetworkSpec, RobotSpec, TaskSpec
 
 
@@ -155,9 +157,23 @@ class NetworkModules:
 class NetworkFactory:
     @staticmethod
     def build(robot: RobotSpec, task: TaskSpec, config: NetworkSpec, *,
+              robot_adapter=None,
               shared_world_model: StateDeltaWorldModel | None = None) -> NetworkModules:
         if shared_world_model is not None and shared_world_model.robot_spec != robot:
             raise ValueError("Shared World Model robot/action/context schema differs")
-        world_model = shared_world_model or StateDeltaWorldModel(robot, config)
+        if robot_adapter is not None and robot_adapter.spec != robot:
+            raise ValueError("Robot Adapter and RobotSpec differ")
+        signature = (world_model_dynamics_signature(robot_adapter, config)
+                     if robot_adapter is not None else None)
+        if shared_world_model is not None:
+            old = getattr(shared_world_model, "dynamics_signature", None)
+            if old is None or signature is None:
+                raise ValueError("Shared World Model requires explicit source and target physics adapters")
+            if old[1] != signature[1]:
+                raise ValueError("Shared World Model dynamics mismatch: "
+                                 + str(first_dynamics_difference(old[0], signature[0])))
+        world_model = shared_world_model if shared_world_model is not None else StateDeltaWorldModel(robot, config)
+        if signature is not None and shared_world_model is None:
+            world_model.dynamics_signature = signature
         return NetworkModules(world_model, GoalActor(robot, task, config),
                               Critic(task, config), TaskTerminationHead(robot, task, config))

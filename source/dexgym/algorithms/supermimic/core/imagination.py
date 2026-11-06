@@ -32,7 +32,7 @@ class ImaginationEngine:
 
     def rollout(self, start: StartBatch, actor, world_model, critic, robot, task, *,
                 horizon: int = 32, bootstrap_weight: float = 1.0,
-                termination_head=None) -> ImaginedRollout:
+                termination_head=None, observation_noise=None) -> ImaginedRollout:
         if horizon < 1 or not bool(task.valid_imagination_start(start.task_state, horizon).all()):
             raise ValueError("Imagination would cross the task episode boundary")
         state, history, task_state = start.state, start.history, start.task_state
@@ -73,6 +73,8 @@ class ImaginationEngine:
             next_observation = task.observation(next_state, action, next_task_state)
             if next_observation.shape != (len(state), task.spec.observation_dim):
                 raise ValueError("Task observation differs from TaskSpec")
+            if observation_noise is not None:
+                next_observation = observation_noise(next_observation, mode="train")
             history = torch.cat((history[:, 1:], next_observation[:, None]), dim=1)
             if evolve_context:
                 context = robot.next_dynamics_context(context, state, action, next_state,
