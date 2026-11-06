@@ -99,6 +99,8 @@ def main():
                 git_commit=git_commit, reference_hashes={},
                 physics_config=marvin_se3_physics_config(cfg, robot))
             resume = checkpoint.load(args.resume, trainer) if args.resume else None
+            if trainer.iteration + args.iterations > 200:
+                raise ValueError("The bounded M5 pilot cannot exceed 200 total iterations across resumes")
             args.output.mkdir(parents=True, exist_ok=True)
             if torch.cuda.is_available():
                 torch.cuda.reset_peak_memory_stats()

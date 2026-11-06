@@ -76,6 +76,7 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=source $ISAAC_PYTHON -c "import sys,
 ```
 
 The `train_se3_m5` config fixes WM8, BPTT horizon cap32, TD(lambda), model trust thresholds and strict-pure mode. CLI overrides are explicit. Evaluation uses a separate Newton process and fixed seeded goal set; it records overrides in the report.
+The pilot launcher rejects any resume that would exceed 200 total iterations; a 121-iteration request from an 80-iteration checkpoint was tested and failed before new training.
 
 ## Remaining gates
 
