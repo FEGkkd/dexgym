@@ -176,9 +176,11 @@ class SchemaReplay:
         return self.window_at(times[choice], envs[choice], horizon)
 
     def sample_starts(self, batch: int, *, horizon: int, valid_start,
-                      env_range=None, source_id=None, task_id=None) -> StartBatch:
+                      env_range=None, source_id=None, task_id=None,
+                      motion_id=None) -> StartBatch:
         times, envs = self._active_candidates(env_range=env_range,
-                                              source_id=source_id, task_id=task_id)
+                                              source_id=source_id, task_id=task_id,
+                                              motion_id=motion_id)
         slot = times % self.capacity
         task_state = TaskState(self.task_id[slot, envs], self.motion_id[slot, envs],
                                self.frame[slot, envs], self.task_data[slot, envs])

@@ -4,7 +4,7 @@ import pytest
 import torch
 from torch import nn
 
-from dexgym.algorithms.supermimic.core.imagination import ImaginationEngine, critic_td_lambda_batch
+from dexgym.algorithms.supermimic.core.imagination import ImaginedRollout, ImaginationEngine, critic_td_lambda_batch
 from dexgym.algorithms.supermimic.core.models import NetworkFactory
 from dexgym.algorithms.supermimic.core.optimization import frozen_parameters
 from dexgym.algorithms.supermimic.core.returns import discounted_imagined_return, lambda_returns
@@ -24,6 +24,21 @@ def test_survival_and_td_lambda_match_hand_calculation():
     first = 1 + 0.9 * 0.8 * (0.5 * 1 + 0.5 * second)
     assert float(td[1]) == pytest.approx(second)
     assert float(td[0]) == pytest.approx(first)
+
+
+def test_optional_value_bound_clips_only_bootstrap_from_proven_reward_limit():
+    features = torch.zeros(2, 1, 3)
+    rollout = ImaginedRollout(
+        actor_loss=torch.zeros(()), rewards=torch.ones(2, 1),
+        terminations=torch.zeros(2, 1), survival=torch.ones(3, 1),
+        values=torch.full((3, 1), 100.0), critic_features=features,
+        terminal_features=torch.zeros(1, 3), states=torch.zeros(2, 1, 1),
+        terminal_state=torch.zeros(1, 1))
+    _, unbounded = critic_td_lambda_batch(rollout, gamma=0.9, lam=0)
+    _, bounded = critic_td_lambda_batch(rollout, gamma=0.9, lam=0,
+                                        value_upper_bound=10)
+    assert torch.allclose(unbounded, torch.full((2,), 91.0))
+    assert torch.allclose(bounded, torch.full((2,), 10.0))
 
 
 class ToyRobot:
@@ -68,7 +83,7 @@ class GoalTask:
     def critic_features(self, state, task_state):
         return torch.cat((state, task_state.data), dim=-1)
 
-    def reward(self, state, next_state, action, next_task_state):
+    def reward(self, state, next_state, action, next_task_state, previous_action=None):
         return -((next_state[:, 0] - next_task_state.data[:, 0]) ** 2)
 
     def soft_termination(self, next_state, next_task_state):

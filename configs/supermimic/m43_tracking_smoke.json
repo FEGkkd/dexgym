@@ -1,0 +1,10 @@
+{
+  "algorithm": {
+    "network": {"world_hidden": [64, 64], "goal_hidden": [64], "actor_hidden": [128, 64], "critic_hidden": [64], "latent_dim": 16},
+    "trainer": {"mode": "pure_model_based", "world_window": 8, "max_imagination_horizon": 32, "world_batch": 32, "imagination_batch": 8, "world_updates_per_iteration": 2, "world_warmup_updates": 8, "trust_interval": 4, "validation_batch": 16, "critic_epochs": 2, "critic_minibatches": 4},
+    "trust": {"min_distinct_starts": 4, "max_rmse": [0.9, 1.0, 1.1], "require_baseline_improvement": true, "metric": "normalized"}
+  },
+  "robot": {"id": "marvin_arm_only", "action_schema": "robot_fixed_v3"},
+  "task": {"id": "marvin_motion_tracking", "reference_path": "/home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz"},
+  "environment": {"backend": "newton", "num_envs": 16, "iterations": 40, "eval_steps": 12, "seed": 43}
+}

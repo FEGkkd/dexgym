@@ -29,6 +29,7 @@ class TrainerConfig:
     lam: float = 0.95
     trust_interval: int = 25
     validation_batch: int = 64
+    value_bound: bool = False
 
     def __post_init__(self):
         if self.mode not in ("pure_model_based", "teacher_bootstrap_model_based",
@@ -69,7 +70,16 @@ class SuperMimicTrainer:
         self.optimizers = optimizers
         self.trust_evaluator, self.config = trust_evaluator, config
         self.train_env_range, self.validation_env_range = train_env_range, validation_env_range
-        self.engine = ImaginationEngine(gamma=config.gamma, lam=config.lam)
+        self.value_upper_bound = None
+        if config.value_bound:
+            if not hasattr(task, "reward_upper_bound"):
+                raise ValueError("Value bound needs a task-proven reward upper bound")
+            reward_bound = float(task.reward_upper_bound())
+            if not 0 < reward_bound < float("inf"):
+                raise ValueError("Task reward upper bound must be finite and positive")
+            self.value_upper_bound = reward_bound / (1 - config.gamma)
+        self.engine = ImaginationEngine(gamma=config.gamma, lam=config.lam,
+                                        value_upper_bound=self.value_upper_bound)
         self.iteration = 0
         self.allowed_horizon = 0
         self.trust_report = {}
@@ -172,7 +182,8 @@ class SuperMimicTrainer:
             return {"updated": False, "reason": actor_result["reason"]}
         self.counts["actor_updates"] += 1
         features, targets = critic_td_lambda_batch(rollout, gamma=self.config.gamma,
-                                                    lam=self.config.lam)
+                                                    lam=self.config.lam,
+                                                    value_upper_bound=self.value_upper_bound)
         critic_result = optimize_critic(self.critic, self.optimizers["critic"],
                                         features, targets,
                                         epochs=self.config.critic_epochs,

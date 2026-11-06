@@ -10,7 +10,7 @@ import torch
 from dexgym.algorithms.supermimic.checkpoint import load_legacy_m41_actor
 from dexgym.algorithms.supermimic.networks import GoalActor
 from dexgym.tasks.marvin_supermimic.robot_adapter import DEFAULT_MJCF
-from train_wave import evaluate_full
+from dexgym.tasks.marvin_supermimic.legacy_evaluator import evaluate_full
 
 
 def _hash(path):
