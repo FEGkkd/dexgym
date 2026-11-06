@@ -41,6 +41,26 @@ def test_inference_accepts_explicit_protocol_overrides_without_changing_policy(t
         evaluation.load(path, target)
 
 
+def test_inference_ignores_training_collection_protocol_but_resume_rejects_it(tmp_path):
+    source = make_toy_trainer("position", num_envs=8)
+    training_physics = dict(TRAIN_PHYSICS, collection_contract={
+        "version": "dual_source_geometry_trust_v2", "exploration_sigma": 0.8})
+    path = CoreCheckpoint(git_commit="test", reference_hashes={},
+                          physics_config=training_physics).save(tmp_path / "model.pt", source)
+    target = make_toy_trainer("position", num_envs=8)
+    manager = CoreCheckpoint(git_commit="test", reference_hashes={},
+                             physics_config=dict(TRAIN_PHYSICS, num_envs=1, seed=42))
+    modules = type("Modules", (), {"actor": target.actor,
+                                   "world_model": target.world_model,
+                                   "critic": target.critic, "termination": None})()
+    report = manager.load_actor_for_evaluation(
+        path, robot=target.robot, task=target.task, modules=modules)
+    assert report["evaluation_overrides"]["num_envs"] == 1
+    assert report["evaluation_overrides"]["collection_contract"] is None
+    with pytest.raises(ValueError, match="physics"):
+        manager.load(path, target)
+
+
 @pytest.mark.parametrize("key,value", [
     ("physics_dt", 0.01), ("controller_kp_source", "v2"),
 ])

@@ -22,7 +22,7 @@ sys.path.append(os.environ.get("DEXGYM_VENV_SITE", DEFAULT_VENV_SITE))
 ALLOWED = {"train", "evaluate", "validate_dynamics", "validate_termination",
            "smoke_core_m43", "evaluate_core_m431", "validate_m431_newton_reset",
            "smoke_se3_m5", "train_se3_m5", "evaluate_se3_m5",
-           "validate_se3_model_m5"}
+           "validate_se3_model_m5", "diagnose_se3_world_model_m5"}
 if len(sys.argv) < 2 or sys.argv[1] not in ALLOWED:
     raise SystemExit(f"Select one of {', '.join(sorted(ALLOWED))}")
 entry = sys.argv.pop(1)

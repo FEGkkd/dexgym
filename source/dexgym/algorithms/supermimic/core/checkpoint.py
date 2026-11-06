@@ -21,6 +21,7 @@ class CoreCheckpoint:
         "observation_position_noise_rad", "observation_velocity_noise_rad_s",
         "reference_start_frame", "evaluation_episode_count", "evaluation_trace_path",
         "goal_train_seed", "goal_eval_seed", "goal_curriculum_level", "evaluation_mode",
+        "collection_contract",
     })
 
     def __init__(self, *, git_commit: str, reference_hashes: dict[str, str],
@@ -262,8 +263,8 @@ class CoreCheckpoint:
             raise ValueError("Network shape or normalization schema differs")
         modules.actor.load_state_dict(record["modules"]["actor"], strict=True)
         modules.actor.eval()
-        protocol = {key: self.physics_config[key] for key in sorted(self.evaluation_protocol_fields)
-                    if key in self.physics_config}
+        protocol = {key: self.physics_config.get(key) for key in sorted(self.evaluation_protocol_fields)
+                    if key in self.physics_config or key in record["physics_config"]}
         overrides = {key: value for key, value in protocol.items()
                      if record["physics_config"].get(key) != value}
         return {"schema": record["schema"], "contract_sha256": stored_digest,

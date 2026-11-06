@@ -23,6 +23,7 @@ class MarvinSE3ReachHoldCfg(MarvinArmNewtonBaseCfg):
     goal_eval_seed = 9501
     curriculum_level = "near"
     evaluation_mode = False
+    collection_contract_version = None
 
 
 class MarvinSE3ReachHoldEnv(MarvinArmNewtonBaseEnv):

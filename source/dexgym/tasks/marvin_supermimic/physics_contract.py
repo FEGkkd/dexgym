@@ -40,7 +40,7 @@ def marvin_physics_config(cfg, robot, *, task_id: str) -> dict:
 
 def marvin_se3_physics_config(cfg, robot) -> dict:
     """Immutable servo/asset contract plus explicit goal sampling protocol."""
-    return {
+    contract = {
         "backend": "newton_mjwarp_v1",
         "num_envs": cfg.scene.num_envs,
         "seed": cfg.seed,
@@ -60,3 +60,21 @@ def marvin_se3_physics_config(cfg, robot) -> dict:
         "goal_curriculum_level": cfg.curriculum_level,
         "evaluation_mode": cfg.evaluation_mode,
     }
+    version = getattr(cfg, "collection_contract_version", None)
+    if version is not None:
+        contract["collection_contract"] = {
+            "version": version,
+            "source_id_deterministic_actor": 0,
+            "source_id_noisy_actor": 3,
+            "exploration_env_count": cfg.exploration_env_count,
+            "exploration_rho": cfg.exploration_rho,
+            "exploration_sigma": cfg.exploration_sigma,
+        }
+        if version == "dual_source_geometry_trust_v2":
+            contract["collection_contract"].update({
+                "train_env_count": cfg.train_env_count,
+                "validation_exploration_env_count": cfg.validation_exploration_env_count,
+                "noisy_trust_config": cfg.noisy_trust_config,
+                "geometry_trust_config": cfg.geometry_trust_config,
+            })
+    return contract
