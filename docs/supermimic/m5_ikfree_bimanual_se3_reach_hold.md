@@ -79,6 +79,20 @@ All post-pilot reports, checkpoint copies and real Newton traces are preserved i
 
 The corrected evaluator also loaded an earlier M5 checkpoint into a new single-environment Newton process and completed its 200-step episode. This confirms backward inference compatibility only; it does not make its old Replay valid under the new collection protocol.
 
+### Bounded model diagnosis and higher-update near-goal pilot
+
+The final v3 Replay revealed a genuine coverage split. All deterministic Actor lanes had zero raw action because the newly initialized Actor had not passed trust; the exploratory lanes had mean `abs(tanh(action))=0.472`, mean command increment 0.00472rad, 34 hard terminations and 16 time-limit truncations in 10,240 transitions. The one-step exploratory World Model q/qd RMSE was 0.00266rad / 0.144rad/s, versus 0.00544rad / 0.147rad/s for a stationary-state baseline. At eight steps it was 0.02035rad / 0.227rad/s, versus 0.04172rad / 0.248rad/s. The velocity component and accumulated joint error still made the 8-step model too inaccurate for trusted BPTT.
+
+Two additional offline 500-update ablations used only the archived real Replay and made no Actor update or new Newton transition. Training only on exploratory source 3 yielded noisy 8-step normalized error **1.42** but degraded deterministic 32-step TCP position P95 to **46.1mm**. A fresh 256×256×256 World Model trained on the same mixed data yielded noisy 8-step error **1.54** and deterministic 32-step P95 **12.3mm**. The existing 128×128 mixed-data model reached **1.45** and **12.1mm** under the same diagnostic budget. Neither simple source reweighting nor network width alone solved the long-horizon error.
+
+One further **bounded Strict-Pure near-goal** run used the same 64 environments and safety settings, with eight WM8 updates per iteration for 100 iterations. It collected 25,600 real transitions, performed 800 WM8 updates, **50 one-step Actor BPTT updates** and 400 Critic updates, with zero nonfinite updates. The noisy held-out normalized 1/8/32-step error at the end was **0.82/1.48/3.32**; only the 1-step trust gate passed. The higher model update ratio reduced held-out exploratory 1/8/32-step mean TCP position error to L/R **1.73/1.75**, **8.54/8.85**, **25.90/24.44mm**. It did not justify 8- or 32-step policy imagination.
+
+Independent Newton evaluation after this run still had **0/16 complete SE(3) success, zero hold, and no contacts**. Mean TCP position error changed from initial **18.75/19.47mm** to **18.37/17.26mm**, while mean orientation worsened from **3.82/4.03°** to **4.00/4.12°**; final position error worsened to **25.02/21.97mm**. Mean reward per step changed from 0.04533 to 0.04548. This is not consistent bilateral 6D improvement. No additional seeds or curriculum levels were started under this higher-update setting.
+
+A separate closed-loop diagnostic starts the Actor in the learned model and in an independent Newton trace from the same physical state and compares each system's own Actor actions. For the high-update checkpoint, the model-versus-Newton mean TCP position error L/R at 1/8/32 steps was **0.98/0.95**, **5.09/4.35**, **13.05/10.73mm**. The corresponding action-conditioned open-loop errors on the independent trace were **0.81/0.78**, **3.91/3.94**, **15.10/14.07mm**. These metrics are deliberately reported separately: closed-loop errors include divergence in the Actor's future actions. The 8-step closed-loop left error already exceeds the 5mm target tolerance. The failure traces and this comparison are archived under `m5_v4_highwm_*`.
+
+The high-update checkpoint is `m5_v4_highwm_53/model.pt` (SHA256 `2f6b7094fb6ad15335255e4609eeb6ef6ebdfc8a2ec04ab875d137b3be0095a2`). It was produced with an uncommitted high-update config and diagnostic source after commit `351d7b761d65b344d6a772544f28d77bc08b03f5`; the final source revision and exact config are recorded in the external v4 validation manifest. Neither this checkpoint nor any earlier M5 checkpoint is a strict-success policy.
+
 ## Reproduction
 
 Run from the M5 worktree with the pinned Isaac Sim / Newton overlay:
@@ -92,6 +106,10 @@ $ISAAC_PYTHON scripts/supermimic/isaac_runtime.py evaluate_se3_m5 --checkpoint /
 $ISAAC_PYTHON scripts/supermimic/isaac_runtime.py validate_se3_model_m5 --checkpoint /tmp/m5_pilot_53/model.pt --output /tmp/m5_pilot_53/model_validation.json
 $ISAAC_PYTHON scripts/supermimic/isaac_runtime.py validate_se3_model_m5 --checkpoint /tmp/m5_pilot_53/model.pt --physics-trace /tmp/m5_eval_pilot_53/physics_trace.pt --output /tmp/m5_eval_pilot_53/independent_model_validation.json
 $ISAAC_PYTHON scripts/supermimic/isaac_runtime.py diagnose_se3_world_model_m5 --checkpoint /tmp/m5_pilot_53/model.pt --updates 500 --output /tmp/m5_wm_diagnostic
+$ISAAC_PYTHON scripts/supermimic/isaac_runtime.py diagnose_se3_world_model_m5 --checkpoint /tmp/m5_pilot_53/model.pt --updates 500 --training-source noisy --output /tmp/m5_wm_noisy_diagnostic
+$ISAAC_PYTHON scripts/supermimic/isaac_runtime.py train_se3_m5 --config configs/supermimic/m5_se3_near_high_wm_pilot.json --num-envs 64 --iterations 100 --seed 53 --output /tmp/m5_highwm_pilot_53
+$ISAAC_PYTHON scripts/supermimic/isaac_runtime.py evaluate_se3_m5 --checkpoint /tmp/m5_highwm_pilot_53/model.pt --num-envs 16 --seed 9501 --output /tmp/m5_highwm_eval_53
+$ISAAC_PYTHON scripts/supermimic/isaac_runtime.py validate_se3_model_m5 --checkpoint /tmp/m5_highwm_pilot_53/model.pt --physics-trace /tmp/m5_highwm_eval_53/physics_trace.pt --closed-loop --output /tmp/m5_highwm_eval_53/closed_loop_validation.json
 $ISAAC_PYTHON scripts/supermimic/isaac_runtime.py evaluate --checkpoint /home/ubuntu/dexgym_data/marvin_supermimic_wave_m41/selected_best.pt --reference /home/ubuntu/dexgym_data/marvin_motion_library_v1/validated_motions/cmu_141_16_wave_bimanual.npz --output /tmp/m5_wave_legacy
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=source $ISAAC_PYTHON -c "import sys,pytest; sys.path.append('/home/ubuntu/dexgym/.venv/lib/python3.12/site-packages'); raise SystemExit(pytest.main(['-q','tests/supermimic']))"
 ```
