@@ -67,8 +67,16 @@ def main():
             or not 0 < exploration["train_env_fraction"] < 1
             or not 0 < exploration["validation_noisy_fraction"] < 1):
         parser.error("Invalid temporal exploration config")
-    if not 16 <= args.num_envs <= 256 or not 0 <= args.iterations <= 200:
-        parser.error("Pilot is bounded to 16-256 environments and at most 200 iterations")
+    large_profile = experiment.get("scale_profile") == "4096_env_near_v1"
+    if large_profile:
+        if (args.num_envs != 4096 or not 0 <= args.iterations <= 40
+                or experiment.get("replay_capacity_steps") != 128):
+            parser.error("4096-environment pilot requires its bounded 128-step Replay profile")
+    elif not 16 <= args.num_envs <= 256 or not 0 <= args.iterations <= 200:
+        parser.error("Small pilot is bounded to 16-256 environments and 200 iterations")
+    replay_capacity = int(experiment.get("replay_capacity_steps", 512))
+    if replay_capacity < config.world_window or replay_capacity < config.max_imagination_horizon:
+        parser.error("Replay capacity must contain a complete WM and imagination horizon")
     cfg = MarvinSE3ReachHoldCfg()
     cfg.scene.num_envs = args.num_envs
     cfg.seed = args.seed
@@ -106,7 +114,8 @@ def main():
                 exploration_env_count=exploration_count,
                 train_env_count=train_count,
                 validation_exploration_env_count=validation_noisy_count)
-            replay = SchemaReplay(512, args.num_envs, robot.spec, task.spec, native.device)
+            replay = SchemaReplay(replay_capacity, args.num_envs,
+                                  robot.spec, task.spec, native.device)
             optimizers = build_optimizers(modules, world_lr=3e-4, actor_lr=2e-4,
                                           critic_lr=3e-4,
                                           termination_mode=task.termination_mode)
@@ -128,8 +137,9 @@ def main():
                 git_commit=git_commit, reference_hashes={},
                 physics_config=marvin_se3_physics_config(cfg, robot))
             resume = checkpoint.load(args.resume, trainer) if args.resume else None
-            if trainer.iteration + args.iterations > 200:
-                raise ValueError("The bounded M5 pilot cannot exceed 200 total iterations across resumes")
+            total_limit = 80 if large_profile else 200
+            if trainer.iteration + args.iterations > total_limit:
+                raise ValueError(f"The bounded M5 pilot cannot exceed {total_limit} total iterations")
             args.output.mkdir(parents=True, exist_ok=True)
             if torch.cuda.is_available():
                 torch.cuda.reset_peak_memory_stats()
@@ -159,7 +169,14 @@ def main():
                       "noisy_validation_env_count": validation_noisy_count,
                       "trust": trainer.trust_report,
                       "allowed_horizon": trainer.allowed_horizon,
-                      "replay_steps": replay.steps, "resume": resume,
+                      "replay_steps": replay.steps,
+                      "replay_capacity_steps": replay.capacity,
+                      "replay_bytes_allocated": replay.bytes_allocated,
+                      "nominal_wm_targets_per_real_transition": (
+                          config.world_updates_per_iteration * config.world_batch
+                          * config.world_window
+                          / (args.num_envs * config.physics_steps_per_iteration)),
+                      "resume": resume,
                       "strict_pure": True, "teacher_data": False,
                       "goal_curriculum_level": args.level,
                       "checkpoint": str(checkpoint_path), "git_commit": git_commit,
