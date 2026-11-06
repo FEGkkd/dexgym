@@ -94,6 +94,7 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         self._contact_accum = torch.zeros(self.num_envs, device=self.device, dtype=torch.int32)
         self.last_policy_contact_counts = self._contact_accum.clone()
         self.last_policy_contact_physics_steps = 0
+        self.last_failure_reason = torch.zeros(self.num_envs, device=self.device, dtype=torch.int32)
 
     def _record_contacts(self) -> None:
         data = self.sim.physics_manager._solver.mjw_data
@@ -181,8 +182,19 @@ class MarvinWaveDirectEnv(DirectRLEnv):
         tcp_error = torch.linalg.vector_norm(tcp_pos - reference_tcp, dim=-1)
         self.last_policy_contact_counts = self._contact_accum.clone()
         self.last_policy_contact_physics_steps = int(self._contact_accum.sum())
+        from dexgym.algorithms.supermimic.termination import TerminationThresholds
+        thresholds = TerminationThresholds()
+        self.last_failure_reason = (
+            ((tcp_error > thresholds.tcp_error_m).any(-1).int() * 1)
+            | (((q < self.action_map.lower - thresholds.joint_limit_margin_rad)
+                | (q > self.action_map.upper + thresholds.joint_limit_margin_rad)).any(-1).int() * 2)
+            | ((qd.abs() > thresholds.speed_rad_s).any(-1).int() * 4)
+            | (self.last_policy_contact_counts.gt(0).int() * 8)
+            | ((~torch.isfinite(q).all(-1) | ~torch.isfinite(qd).all(-1)).int() * 16)
+        )
         bad = unsafe_arm_states(
-            q, qd, self.action_map.lower, self.action_map.upper, tcp_error, self.last_policy_contact_counts
+            q, qd, self.action_map.lower, self.action_map.upper, tcp_error, self.last_policy_contact_counts,
+            thresholds=thresholds,
         )
         timeout = (self.episode_length_buf >= self.max_episode_length) | (self.motion.frame >= self.motion.length - 1)
         return bad, timeout

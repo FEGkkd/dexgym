@@ -27,6 +27,9 @@ class ToyWorld:
 
 
 class ToyReference:
+    def reference_at(self, frame):
+        return {"link_pos": torch.zeros(len(frame), 2, 3, 3)}
+
     def reference_features_at(self, frame):
         return torch.zeros(len(frame), 90)
 
@@ -48,6 +51,7 @@ def test_model_trust_evaluates_actor_data_separately_from_teacher_and_baseline()
     assert exact["joint_position_rmse_rad"] < 1e-6
     assert exact["tcp_position_mean_mm"] < 1e-3
     assert exact["constant_velocity_tcp_mean_mm"] > 1
+    assert sum(item["count"] for item in exact["termination"]["tcp_error_bins_m"][1:]) > 0
     wrong = evaluator.evaluate_horizon(ToyWorld(0.02), replay, mapping=None, horizon=8,
                                        batch=16, source_id=0)
     assert wrong["joint_position_rmse_rad"] > 0.1

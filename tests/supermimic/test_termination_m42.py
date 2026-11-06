@@ -39,6 +39,18 @@ def test_termination_metrics_report_class_balance_and_brier_score():
     assert result["precision"] == 0.5 and result["recall"] == 0.5
     assert result["false_positive_rate"] == 0.5
     assert abs(result["brier_score"] - 0.255) < 1e-6
+    assert result["sufficient_class_support"] is False
+    assert result["calibrated"] is False
+
+
+def test_calibration_needs_both_class_support_and_probability_agreement():
+    labels = torch.tensor([0.0] * 20 + [1.0] * 20)
+    calibrated = termination_calibration(labels.clone(), labels)
+    assert calibrated["sufficient_class_support"] and calibrated["calibrated"]
+    assert calibrated["ece_10_bin"] == 0.0
+    wrong = termination_calibration(1 - labels, labels)
+    assert wrong["sufficient_class_support"] and not wrong["calibrated"]
+    assert wrong["ece_10_bin"] == 1.0
 
 
 def test_imagination_analytic_mode_uses_next_state_and_arrival_reference():

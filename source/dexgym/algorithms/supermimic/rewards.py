@@ -44,6 +44,17 @@ REWARD_PROFILES = {
 }
 
 
+def reward_upper_bound(weights: RewardWeights, *, dt: float = 0.02) -> float:
+    """Maximum possible positive tracking reward; all remaining terms are penalties."""
+    if weights.paper_multilink:
+        positive = (weights.link_position + weights.link_rotation
+                    + weights.linear_velocity + weights.angular_velocity)
+    else:
+        positive = (weights.tcp_position + weights.tcp_rotation + weights.link_position
+                    + weights.link_rotation + weights.linear_velocity + weights.angular_velocity)
+    return dt * positive
+
+
 def so3_log(rotation: torch.Tensor) -> torch.Tensor:
     skew = (
         torch.stack(

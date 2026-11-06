@@ -28,6 +28,7 @@ def safe_gradient_step(loss, parameters, optimizer, *, grad_norm_clip=1.0,
         with torch.no_grad():
             for parameter, saved in zip(parameters, before):
                 parameter.copy_(saved)
+        optimizer.state.clear()
         optimizer.zero_grad(set_to_none=True)
         return {"updated": False, "reason": "nonfinite_parameter", "grad_norm": float(norm)}
     return {"updated": True, "reason": None, "grad_norm": float(norm)}

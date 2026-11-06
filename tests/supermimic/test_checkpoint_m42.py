@@ -4,6 +4,7 @@ import pytest
 import torch
 
 from dexgym.algorithms.supermimic.checkpoint import CheckpointManager
+from dexgym.algorithms.supermimic.replay_buffer import MotionReplay
 
 
 def test_checkpoint_restores_network_optimizer_and_rng_and_rejects_contract_change(tmp_path: Path):
@@ -26,3 +27,36 @@ def test_checkpoint_restores_network_optimizer_and_rng_and_rejects_contract_chan
     with pytest.raises(ValueError, match="action_schema"):
         CheckpointManager({**metadata, "action_schema": "legacy_wave_v1"}).load(
             path, models={"actor": actor}, optimizers={"actor": optimizer})
+
+
+def test_checkpoint_restores_ring_replay_without_joining_new_physics_episode(tmp_path: Path):
+    metadata = {"action_schema": "robot_fixed_v3", "state_schema": "arm_42_v1",
+                "observation_schema": "proprio_10x56", "goal_schema": "links_10x90",
+                "reference_hashes": {"task": "hashA"}, "robot_asset_hashes": {"mjcf": "hashB"}}
+    manager = CheckpointManager(metadata)
+    replay = MotionReplay(3, 2, "cpu")
+    for frame in range(5):
+        state = torch.full((2, 42), float(frame))
+        action = torch.zeros(2, 14)
+        replay.append(state, action, state + 1, torch.zeros(2, 10, 56),
+                      torch.full((2,), frame), torch.zeros(2, dtype=torch.bool),
+                      source_id=torch.full((2,), 2, dtype=torch.int8))
+    actor = torch.nn.Linear(2, 1)
+    optimizer = torch.optim.Adam(actor.parameters())
+    path = tmp_path / "replay.pt"
+    manager.save(path, models={"actor": actor}, optimizers={"actor": optimizer},
+                 training={"iteration": 5}, config={}, seed=5, replay=replay)
+    restored = MotionReplay(3, 2, "cpu")
+    record = manager.load(path, models={"actor": actor}, optimizers={"actor": optimizer},
+                          replay=restored)
+    assert record["replay_saved"] and not record["resume_requires_recollection"]
+    assert restored.steps == 5
+    torch.testing.assert_close(restored.timestamp, replay.timestamp)
+    torch.testing.assert_close(restored.state, replay.state)
+    assert torch.equal(restored.episode_counter, replay.episode_counter + 1)
+    restored.append(torch.zeros(2, 42), torch.zeros(2, 14), torch.ones(2, 42),
+                    torch.zeros(2, 10, 56), torch.zeros(2, dtype=torch.long),
+                    torch.zeros(2, dtype=torch.bool))
+    assert torch.equal(restored.episode[5 % 3], replay.episode_counter + 1)
+    window = restored.sample_windows(16, 3, source_id=2)
+    assert bool((window["mask"][:, 0] == 1).all())

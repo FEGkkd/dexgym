@@ -18,6 +18,7 @@ from dexgym.algorithms.supermimic.networks import DeltaWorldModel, GoalActor, Pr
 from dexgym.algorithms.supermimic.replay_buffer import MotionReplay
 from dexgym.algorithms.supermimic.trainer import SuperMimicTrainer, TrainerConfig
 from dexgym.algorithms.supermimic.trust_evaluator import ModelTrustEvaluator
+from dexgym.algorithms.supermimic.termination import TaskTerminationHead
 from dexgym.tasks.marvin_supermimic.collector import AlignedNewtonCollector
 from dexgym.tasks.marvin_supermimic.env_cfg import MarvinWaveDirectCfg
 from dexgym.tasks.marvin_supermimic.task_adapter import MarvinTrackingTask
@@ -39,12 +40,16 @@ def arguments():
     parser.add_argument("--physics-steps-per-iteration", type=int, default=1)
     parser.add_argument("--replay-steps", type=int, default=400)
     parser.add_argument("--world-hidden", type=int, default=256)
+    parser.add_argument("--legacy-world-head", action="store_true",
+                        help="Match M4.2 v1 dynamics initialization for controlled ablations")
     parser.add_argument("--world-batch", type=int, default=64)
     parser.add_argument("--imag-batch", type=int, default=32)
     parser.add_argument("--world-updates-per-iteration", type=int, default=1)
     parser.add_argument("--actor-updates-per-iteration", type=int, default=1)
     parser.add_argument("--world-warmup-updates", type=int, default=30)
     parser.add_argument("--reference-pd-bootstrap-steps", type=int, default=0)
+    parser.add_argument("--boundary-probe-steps", type=int, default=0)
+    parser.add_argument("--termination-pos-weight", type=float, default=1.0)
     parser.add_argument("--supervised-init-updates", type=int, default=0)
     parser.add_argument("--critic-epochs", type=int, default=2)
     parser.add_argument("--critic-minibatches", type=int, default=4)
@@ -57,6 +62,8 @@ def arguments():
     parser.add_argument("--seed", type=int, default=140116)
     parser.add_argument("--checkpoint-interval", type=int, default=100)
     parser.add_argument("--resume", type=Path)
+    parser.add_argument("--save-replay", action=argparse.BooleanOptionalAction, default=None,
+                        help="Save full physical Replay; defaults on for learned termination")
     args = parser.parse_args()
     if args.supervised_init_updates and args.mode != "supervised_init_model_based":
         parser.error("Supervised actor initialization is only legal in supervised_init_model_based")
@@ -86,12 +93,24 @@ def main():
     args.output.mkdir(parents=True, exist_ok=True)
     torch.manual_seed(args.seed)
     device = torch.device("cuda")
+    preview = torch.load(args.resume, map_location="cpu", weights_only=False) if args.resume else None
+    separate_task_head = preview is None or "termination" in preview["models"]
+    legacy_model_head = args.legacy_world_head or (preview is not None and any(
+        name.startswith("termination_head.") for name in preview["models"]["world_model"]))
     actor = GoalActor(goal_latent_tanh=True, normalization_mode=args.normalization_mode).to(device)
-    model = DeltaWorldModel(hidden=args.world_hidden).to(device)
+    model = DeltaWorldModel(hidden=args.world_hidden,
+                            legacy_termination_head=legacy_model_head).to(device)
+    termination = (TaskTerminationHead(42, 90).to(device)
+                   if args.termination_mode == "learned" and separate_task_head else None)
     critic = PrivilegedCritic(normalization_mode=args.normalization_mode).to(device)
+    models = {"actor": actor, "world_model": model, "critic": critic}
+    if termination is not None:
+        models["termination"] = termination
     optimizers = {
         "actor": torch.optim.Adam(actor.parameters(), lr=2e-5, betas=(0.9, 0.95)),
-        "world_model": torch.optim.Adam(model.parameters(), lr=2e-4),
+        "world_model": torch.optim.Adam(
+            list(model.parameters()) + (list(termination.parameters()) if termination is not None else []),
+            lr=2e-4),
         "critic": torch.optim.Adam(critic.parameters(), lr=2e-4),
     }
     cfg = MarvinWaveDirectCfg()
@@ -112,10 +131,15 @@ def main():
         max_imagination_horizon=args.max_imagination_horizon,
         world_warmup_updates=args.world_warmup_updates,
         reference_pd_bootstrap_steps=args.reference_pd_bootstrap_steps,
+        boundary_probe_steps=args.boundary_probe_steps,
+        termination_pos_weight=args.termination_pos_weight,
         critic_epochs=args.critic_epochs, critic_minibatches=args.critic_minibatches,
         trust_interval=args.trust_interval, validation_batch=args.validation_batch)
     metadata = {
-        "algorithm_version": "m42_model_based_v1", "robot_adapter_version": "marvin_arms_v2",
+        "algorithm_version": (preview["metadata"]["algorithm_version"] if preview else
+                              "m42_model_based_v1" if args.legacy_world_head else
+                              "m42_model_based_v2_split_task_head"),
+        "robot_adapter_version": "marvin_arms_v2",
         "task_adapter_version": "marvin_tracking_v2", "action_schema": args.action_schema,
         "state_schema": "arm_q14_qd14_command14_v1",
         "observation_schema": "arm_proprio_history_10x56_v1",
@@ -123,17 +147,23 @@ def main():
         "reference_hashes": {str(args.reference): sha256(args.reference)},
         "robot_asset_hashes": {"mjcf": sha256(DEFAULT_MJCF)},
         "termination_mode": args.termination_mode,
+        "reward_profile": args.reward_profile,
+        "normalization_mode": args.normalization_mode,
         "git_sha": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
     }
     manager = CheckpointManager(metadata)
     record = None
+    replay = MotionReplay(args.replay_steps, args.num_envs, device)
     if args.resume:
-        record = manager.load(args.resume, models={"actor": actor, "world_model": model, "critic": critic},
-                              optimizers=optimizers, map_location=device)
+        record = manager.load(args.resume, models=models,
+                              optimizers=optimizers, map_location="cpu", replay=replay)
         if record["resume_requires_recollection"]:
             print("Replay was not saved; collecting new Newton transitions before model trust.", flush=True)
+            if args.termination_mode == "learned":
+                print("Recollecting hard failure probes so the learned head retains positive labels.", flush=True)
     training_log = args.output / "training.jsonl"
     started = time.perf_counter()
+    phase_seconds = {"collection": 0.0, "world": 0.0, "trust": 0.0, "actor_critic": 0.0}
     torch.cuda.reset_peak_memory_stats()
     with launch_simulation(cfg):
         env = gym.make("DexGym-Marvin-SuperMimic-Wave-Direct-v0", cfg=cfg)
@@ -141,8 +171,8 @@ def main():
             native = env.unwrapped
             robot = native.dynamics_adapter
             task = MarvinTrackingTask(native.motion, robot, reward_profile=args.reward_profile,
-                                      termination_mode=args.termination_mode)
-            replay = MotionReplay(args.replay_steps, args.num_envs, device)
+                                      termination_mode=args.termination_mode,
+                                      termination_module=termination)
             if args.supervised_init_updates:
                 sys.path.insert(0, str(Path(__file__).resolve().parent))
                 from train_wave import pd_actor_examples
@@ -168,19 +198,28 @@ def main():
                 trainer.counts.update(record["training"]["counts"])
                 trainer.trust_report = {}
                 trainer.allowed_horizon = 0
-            for _ in range(args.iterations):
+                if record["resume_requires_recollection"]:
+                    trainer.resume_recollection_steps_required = 32
+                    if args.termination_mode == "learned":
+                        trainer.resume_boundary_probe_steps_remaining = 32
+            starting_counts = trainer.counts.copy()
+            for local_iteration in range(1, args.iterations + 1):
                 result = trainer.run_iteration()
+                for phase, seconds in result["phase_seconds"].items():
+                    phase_seconds[phase] += seconds
                 result["wall_time_s"] = time.perf_counter() - started
                 with training_log.open("a") as stream:
                     stream.write(json.dumps(_jsonable(result)) + "\n")
-                if trainer.iteration % args.checkpoint_interval == 0 or trainer.iteration == args.iterations:
+                if trainer.iteration % args.checkpoint_interval == 0 or local_iteration == args.iterations:
                     manager.save(args.output / f"iteration_{trainer.iteration:06d}.pt",
-                                 models={"actor": actor, "world_model": model, "critic": critic},
+                                 models=models,
                                  optimizers=optimizers,
                                  training={"iteration": trainer.iteration,
                                            "real_transitions": trainer.counts["real_transitions"],
                                            "counts": trainer.counts.copy(), "trust": trainer.trust_report},
-                                 config={**vars(args), **dataclasses.asdict(config)}, seed=args.seed)
+                                 config={**vars(args), **dataclasses.asdict(config)}, seed=args.seed,
+                                 replay=(replay if (args.save_replay if args.save_replay is not None
+                                                    else args.termination_mode == "learned") else None))
                 if trainer.iteration % 10 == 0:
                     print(json.dumps({"iteration": trainer.iteration, "counts": trainer.counts,
                                       "horizon": trainer.allowed_horizon,
@@ -189,7 +228,31 @@ def main():
                                       "wall_time_s": result["wall_time_s"]}), flush=True)
         finally:
             env.close()
+    elapsed = time.perf_counter() - started
+    try:
+        gpu_memory_mb = subprocess.check_output(
+            ["nvidia-smi", "--query-gpu=memory.used,memory.total",
+             "--format=csv,noheader,nounits"], text=True).strip().splitlines()[0]
+    except (OSError, subprocess.CalledProcessError):
+        gpu_memory_mb = None
     summary = {"counts": trainer.counts, "peak_torch_vram_bytes": torch.cuda.max_memory_allocated(),
+               "torch_reserved_vram_bytes": torch.cuda.memory_reserved(),
+               "device_memory_used_total_mb": gpu_memory_mb,
+               "replay_bytes_allocated": replay.bytes_allocated,
+               "phase_wall_time_s": phase_seconds,
+               "physics_transitions_per_collection_s": (
+                   args.iterations * args.physics_steps_per_iteration * args.num_envs /
+                   max(phase_seconds["collection"], 1e-9)),
+               "world_updates_per_world_phase_s": (
+                   args.iterations * args.world_updates_per_iteration /
+                   max(phase_seconds["world"], 1e-9)),
+               "actor_updates_per_actor_phase_s": (
+                   (trainer.counts["actor_updates"] - starting_counts["actor_updates"]) /
+                   max(phase_seconds["actor_critic"], 1e-9)),
+               "physics_transitions_per_s": (trainer.counts["real_transitions"] - starting_counts["real_transitions"]) / elapsed,
+               "world_updates_per_s": (trainer.counts["world_updates"] - starting_counts["world_updates"]) / elapsed,
+               "actor_updates_per_s": (trainer.counts["actor_updates"] - starting_counts["actor_updates"]) / elapsed,
+               "critic_updates_per_s": (trainer.counts["critic_updates"] - starting_counts["critic_updates"]) / elapsed,
                "wall_time_s": time.perf_counter() - started, "metadata": metadata,
                "config": _jsonable({**vars(args), **dataclasses.asdict(config)})}
     (args.output / "summary.json").write_text(json.dumps(summary, indent=2))

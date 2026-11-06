@@ -75,3 +75,13 @@ def test_reference_pd_is_labeled_as_physics_collection_only():
     collector.step(policy="reference_pd")
     assert replay.source_id[0].eq(1).all()
     assert replay.action[0].eq(0).all()
+
+
+def test_boundary_probe_collects_real_labeled_failure_transition_without_actor_target():
+    env = ResettingEnv()
+    replay = MotionReplay(8, 2, "cpu")
+    collector = AlignedNewtonCollector(env, ZeroActor(), replay)
+    collector.step(policy="boundary_probe")
+    assert replay.source_id[0].eq(2).all()
+    assert replay.action[0].abs().eq(1.5).all()
+    assert replay.terminated[0, 0]

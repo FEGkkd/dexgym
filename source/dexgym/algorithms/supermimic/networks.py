@@ -66,13 +66,14 @@ def mlp(widths, *, output_zero=False):
 class DeltaWorldModel(nn.Module):
     """Predict q/qd deltas; command state follows the exact analytic servo map."""
 
-    def __init__(self, hidden=2048):
+    def __init__(self, hidden=2048, *, legacy_termination_head: bool = True):
         super().__init__()
         self.input_norm = RunningNorm(56)
         self.delta_norm = RunningNorm(28, min_std=0.01)
         self.network = mlp((56, hidden, hidden, hidden, 28), output_zero=True)
-        self.termination_head = mlp((42 + 90, 128, 128, 1))
-        nn.init.constant_(self.termination_head[-1].bias, -4.0)
+        self.termination_head = mlp((42 + 90, 128, 128, 1)) if legacy_termination_head else None
+        if self.termination_head is not None:
+            nn.init.constant_(self.termination_head[-1].bias, -4.0)
 
     @torch.no_grad()
     def update_norms(self, state, action, next_state):
@@ -86,12 +87,15 @@ class DeltaWorldModel(nn.Module):
         return torch.cat((state[..., :28] + delta, command), dim=-1)
 
     def termination_probability(self, state: torch.Tensor, goal: torch.Tensor) -> torch.Tensor:
+        if self.termination_head is None:
+            raise ValueError("Shared dynamics model has no task termination head")
         if state.shape[-1] != 42 or goal.shape[-1] != 90 or state.shape[:-1] != goal.shape[:-1]:
             raise ValueError("Termination head expects matching [...,42] state and [...,90] goal")
         return torch.sigmoid(self.termination_head(torch.cat((state, goal), dim=-1)).squeeze(-1))
 
     def autoregressive_loss(self, windows: dict[str, torch.Tensor], mapping: ArmActionMap, *,
-                            update_normalizers: bool = True, termination_pos_weight: float = 1.0):
+                            update_normalizers: bool = True, termination_pos_weight: float = 1.0,
+                            termination_module=None):
         state, action, truth = windows["state"], windows["action"], windows["next_state"]
         if action.shape[1] != 8:
             raise ValueError("World model requires eight slots, with invalid transitions masked")
@@ -104,9 +108,12 @@ class DeltaWorldModel(nn.Module):
         has_term = "terminated" in windows or "termination_goal" in windows
         if has_term and ("terminated" not in windows or "termination_goal" not in windows):
             raise ValueError("Termination labels require aligned next-state goals")
+        if has_term and termination_module is None and self.termination_head is None:
+            raise ValueError("Learned termination requires a task-specific head")
+        goal_dim = termination_module.goal_dim if termination_module is not None else 90
         if has_term and (
             windows["terminated"].shape != action.shape[:2]
-            or windows["termination_goal"].shape != (*action.shape[:2], 90)
+            or windows["termination_goal"].shape != (*action.shape[:2], goal_dim)
         ):
             raise ValueError("Termination labels and goals must align with eight real transitions")
         losses, errors, term_losses = [], [], []
@@ -117,9 +124,11 @@ class DeltaWorldModel(nn.Module):
             error = (prediction[..., :28] - truth[:, step, :28]).square().mean(-1).sqrt()
             errors.append(torch.where(mask[:, step], error, torch.zeros_like(error)))
             if has_term and bool(mask[:, step].any()):
-                logits = self.termination_head(torch.cat((
-                    prediction[mask[:, step]], windows["termination_goal"][:, step][mask[:, step]]
-                ), dim=-1)).squeeze(-1)
+                predicted_valid = prediction[mask[:, step]]
+                goal_valid = windows["termination_goal"][:, step][mask[:, step]]
+                logits = (termination_module.logits(predicted_valid, goal_valid)
+                          if termination_module is not None else
+                          self.termination_head(torch.cat((predicted_valid, goal_valid), dim=-1)).squeeze(-1))
                 labels = windows["terminated"][:, step][mask[:, step]].float()
                 term_losses.append(F.binary_cross_entropy_with_logits(
                     logits, labels, reduction="sum",

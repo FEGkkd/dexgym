@@ -29,6 +29,7 @@ class ToyModel(torch.nn.Module):
         pass
 
     def autoregressive_loss(self, windows, mapping, **kwargs):
+        self.last_windows = windows
         return self.weight.square(), torch.ones_like(windows["mask"])
 
 
@@ -108,3 +109,31 @@ def test_strict_pure_rejects_reference_pd_bootstrap():
     except ValueError:
         return
     assert False, "Strict pure mode accepted a reference PD collector"
+
+
+def test_learned_head_uses_arrival_reference_once_even_at_final_clip_transition():
+    replay = MotionReplay(8, 2, "cpu")
+    state = torch.zeros(2, 42)
+    replay.append(state, torch.zeros(2, 14), state, torch.zeros(2, 10, 56),
+                  torch.tensor([98, 98]), torch.tensor([True, True]),
+                  terminated=torch.tensor([True, True]))
+
+    class LearnedTask(ToyTask):
+        termination_mode = "learned"
+
+        def arrival_goal(self, frame):
+            if bool((frame + 1 >= self.reference.length).any()):
+                raise ValueError("Double arrival-frame offset")
+            return (frame + 1).float()[:, None].expand(-1, 90)
+
+    world, actor, critic = ToyModel(), ToyActor(), ToyCritic()
+    trainer = SuperMimicTrainer(
+        collector=ToyCollector(replay), replay=replay,
+        robot=type("Robot", (), {"action_map": None})(), task=LearnedTask(),
+        world_model=world, actor=actor, critic=critic,
+        world_optimizer=torch.optim.SGD(world.parameters(), lr=0.01),
+        actor_optimizer=torch.optim.SGD(actor.parameters(), lr=0.01),
+        critic_optimizer=torch.optim.SGD(critic.parameters(), lr=0.01),
+        trust_evaluator=ToyTrust(), config=TrainerConfig(world_batch=2))
+    assert trainer.update_world_model()["updated"]
+    torch.testing.assert_close(world.last_windows["termination_goal"][:, 0, 0], torch.tensor([99.0, 99.0]))

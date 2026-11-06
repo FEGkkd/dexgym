@@ -3,7 +3,8 @@ import math
 import pytest
 import torch
 from dexgym.algorithms.supermimic.differentiable_fk import DifferentiableMarvinFK
-from dexgym.algorithms.supermimic.rewards import REWARD_PROFILES, RewardWeights, so3_geodesic, tracking_reward
+from dexgym.algorithms.supermimic.rewards import (
+    REWARD_PROFILES, RewardWeights, reward_upper_bound, so3_geodesic, tracking_reward)
 from dexgym.motion.motion_manager import MotionManager
 
 MJCF = "/home/ubuntu/dexgym/source/dexgym/assets/marvin_wuji/source_model/dual_arm_marvin.xml"
@@ -17,6 +18,8 @@ def test_reward_profiles_are_distinct_and_tcp_priority_is_stronger():
     assert priority.tcp_position > baseline.tcp_position
     assert priority.tcp_rotation > baseline.tcp_rotation
     assert priority.link_position < baseline.link_position
+    assert reward_upper_bound(REWARD_PROFILES["paper_multilink"]) == pytest.approx(0.08)
+    assert reward_upper_bound(REWARD_PROFILES["marvin_tcp_priority"]) == pytest.approx(0.1)
 
 
 def test_so3_orientation_distance_and_reward_ascend():

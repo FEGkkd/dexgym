@@ -17,7 +17,8 @@ class ModelTrustEvaluator:
     def evaluate_horizon(self, model, replay, mapping, *, horizon: int, batch: int = 128,
                          env_range=None, source_id: int | None = None, frame_range=None,
                          termination_mode: str = "learned",
-                         termination_thresholds: TerminationThresholds = TerminationThresholds()) -> dict:
+                         termination_thresholds: TerminationThresholds = TerminationThresholds(),
+                         termination_module=None) -> dict:
         window = replay.sample_windows(batch, horizon, env_range=env_range,
                                        frame_range=frame_range, require_full=True,
                                        source_id=source_id)
@@ -37,24 +38,32 @@ class ModelTrustEvaluator:
         orientation = so3_geodesic(pred_rot[:, :, 2], true_rot[:, :, 2])
         joint_error = state[:, :14] - truth[:, :14]
         velocity_error = state[:, 14:28] - truth[:, 14:28]
+        arrival_frame = window["next_frame"][:, -1]
+        arrival = self.reference.reference_at(arrival_frame)
+        tracking_tcp_error = (true_pos[:, :, 2] - arrival["link_pos"][:, :, 2]).norm(dim=-1)
         if termination_mode == "learned":
-            arrival_reference = self.reference.reference_features_at(window["next_frame"][:, -1])
-            termination_probability = model.termination_probability(state, arrival_reference)
+            arrival_reference = self.reference.reference_features_at(arrival_frame)
+            termination_probability = (termination_module(state, arrival_reference)
+                                       if termination_module is not None else
+                                       model.termination_probability(state, arrival_reference))
         elif termination_mode == "analytic":
-            arrival = self.reference.reference_at(window["next_frame"][:, -1])
             target_tcp = arrival["link_pos"][:, :, 2]
             termination_probability = analytic_soft_termination(
                 state[:, :14], state[:, 14:28], mapping.lower, mapping.upper,
                 (pred_pos[:, :, 2] - target_tcp).norm(dim=-1), termination_thresholds)
         else:
             raise ValueError("Unknown termination mode")
-        calibration = termination_calibration(termination_probability, window["terminated"][:, -1],
-                                              tcp_error=tcp_error)
         start_id = torch.stack((window["absolute_timestamp"][:, 0], window["env_id"]), dim=-1)
+        unique_start, inverse = torch.unique(start_id, dim=0, return_inverse=True)
+        first = torch.full((len(unique_start),), batch, device=start_id.device, dtype=torch.long)
+        first.scatter_reduce_(0, inverse, torch.arange(batch, device=start_id.device), reduce="amin")
+        calibration = termination_calibration(
+            termination_probability[first], window["terminated"][first, -1],
+            tcp_error=tracking_tcp_error[first], failure_reason=window["failure_reason"][first, -1])
         return {
             "evaluation_kind": "action_conditioned_open_loop",
             "horizon": horizon, "sample_count": batch,
-            "distinct_start_count": int(torch.unique(start_id, dim=0).shape[0]),
+            "distinct_start_count": len(unique_start),
             "source_id": source_id, "env_range": env_range, "frame_range": frame_range,
             "joint_position_rmse_rad": float(joint_error.square().mean().sqrt()),
             "joint_velocity_rmse_rad_s": float(velocity_error.square().mean().sqrt()),
@@ -72,7 +81,8 @@ class ModelTrustEvaluator:
     @torch.no_grad()
     def evaluate_available(self, model, replay, mapping, *, batch=128, env_range=None,
                            source_id=None, termination_mode="learned",
-                           termination_thresholds=TerminationThresholds()) -> dict:
+                           termination_thresholds=TerminationThresholds(),
+                           termination_module=None) -> dict:
         result = {}
         for horizon in (1, 8, 32):
             try:
@@ -80,7 +90,8 @@ class ModelTrustEvaluator:
                     model, replay, mapping, horizon=horizon, batch=batch,
                     env_range=env_range, source_id=source_id,
                     termination_mode=termination_mode,
-                    termination_thresholds=termination_thresholds)
+                    termination_thresholds=termination_thresholds,
+                    termination_module=termination_module)
             except ValueError as error:
                 result[str(horizon)] = {"available": False, "reason": str(error)}
         return result

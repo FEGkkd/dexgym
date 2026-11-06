@@ -4,6 +4,10 @@ import torch
 
 
 class MotionReplay:
+    fields = ("state", "action", "previous_action", "executed_command", "next_state",
+              "history", "frame", "next_frame", "motion_id", "source_id",
+              "failure_reason", "episode", "done", "terminated", "truncated", "timestamp")
+
     @staticmethod
     def valid_length_histogram(window: dict) -> dict[int, int]:
         lengths = window["mask"].sum(-1).long()
@@ -27,6 +31,7 @@ class MotionReplay:
         self.next_frame = torch.empty_like(self.frame)
         self.motion_id = torch.empty_like(self.frame)
         self.source_id = torch.empty(shape, device=self.device, dtype=torch.int8)
+        self.failure_reason = torch.empty(shape, device=self.device, dtype=torch.int32)
         self.episode = torch.empty_like(self.frame)
         self.done = torch.empty(shape, device=self.device, dtype=torch.bool)
         self.terminated = torch.empty_like(self.done)
@@ -39,13 +44,48 @@ class MotionReplay:
     def bytes_allocated(self):
         fields = (self.state, self.action, self.previous_action, self.executed_command,
                   self.next_state, self.history, self.frame, self.next_frame,
-                  self.motion_id, self.source_id, self.episode, self.done, self.terminated,
+                  self.motion_id, self.source_id, self.failure_reason, self.episode, self.done, self.terminated,
                   self.truncated, self.timestamp, self.episode_counter)
         return sum(field.numel() * field.element_size() for field in fields)
 
+    def state_dict(self):
+        """Persist the physical ring and provenance; fresh environments start a new episode."""
+        valid_slot = self.timestamp.detach().cpu() >= 0
+        fields = {}
+        for key in self.fields:
+            value = getattr(self, key).detach().cpu().clone()
+            if key != "timestamp":
+                value[~valid_slot] = 0
+            fields[key] = value
+        return {"capacity": self.capacity, "num_envs": self.num_envs, "steps": self.steps,
+                "episode_counter": self.episode_counter.detach().cpu().clone(),
+                "fields": fields}
+
+    def load_state_dict(self, record):
+        if (record["capacity"], record["num_envs"]) != (self.capacity, self.num_envs):
+            raise ValueError("Replay capacity or environment count differs")
+        if set(record["fields"]) != set(self.fields):
+            raise ValueError("Replay field schema differs")
+        for key in self.fields:
+            target, source = getattr(self, key), record["fields"][key]
+            if target.shape != source.shape or target.dtype != source.dtype:
+                raise ValueError(f"Replay {key} schema differs")
+            target.copy_(source.to(self.device))
+        self.steps = int(record["steps"])
+        expected = torch.arange(max(0, self.steps - self.capacity), self.steps,
+                                device=self.device)
+        observed = torch.sort(self.timestamp[self.timestamp >= 0]).values
+        if self.steps < 0 or (self.timestamp >= self.steps).any() or not torch.equal(observed, expected):
+            raise ValueError("Replay absolute timestamps are invalid")
+        if record["episode_counter"].shape != self.episode_counter.shape:
+            raise ValueError("Replay episode counter schema differs")
+        # The Newton environments are recreated on resume. Never stitch the
+        # first transition from a fresh environment to a saved trajectory.
+        self.episode_counter.copy_(record["episode_counter"].to(self.device) + 1)
+
     def append(self, state, action, next_state, history, frame, done, *, terminated=None,
                truncated=None, motion_id=None, previous_action=None, executed_command=None,
-               source_id=None):
+               source_id=None, failure_reason=None):
         if terminated is None:
             terminated = done
         if truncated is None:
@@ -72,6 +112,8 @@ class MotionReplay:
         self.next_frame[slot] = frame.detach() + 1
         self.motion_id[slot] = (torch.zeros_like(frame) if motion_id is None else motion_id).detach()
         self.source_id[slot] = (torch.zeros_like(frame) if source_id is None else source_id).to(torch.int8)
+        self.failure_reason[slot] = (torch.zeros_like(frame) if failure_reason is None
+                                     else failure_reason).to(torch.int32)
         self.episode[slot] = self.episode_counter
         self.done[slot] = done.detach()
         self.terminated[slot] = terminated.detach()
@@ -144,11 +186,12 @@ class MotionReplay:
         mask = present & same_trajectory & no_prior_done
         assert bool(mask[:, 0].all())
         keys = ("state", "action", "previous_action", "executed_command", "next_state",
-                "frame", "next_frame", "motion_id", "source_id", "episode", "done", "terminated", "truncated")
+                "frame", "next_frame", "motion_id", "source_id", "failure_reason",
+                "episode", "done", "terminated", "truncated")
         out = {key: getattr(self, key)[slots, env_idx] for key in keys}
         for key in ("state", "action", "previous_action", "executed_command", "next_state"):
             out[key] = torch.where(mask[..., None], out[key], torch.zeros_like(out[key]))
-        for key in ("frame", "next_frame", "motion_id", "source_id", "episode"):
+        for key in ("frame", "next_frame", "motion_id", "source_id", "failure_reason", "episode"):
             out[key] = torch.where(mask, out[key], torch.zeros_like(out[key]))
         for key in ("done", "terminated", "truncated"):
             out[key] = out[key] & mask

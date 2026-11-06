@@ -18,7 +18,7 @@ class CheckpointManager:
         self.metadata = metadata.copy()
 
     def save(self, path: str | Path, *, models: dict, optimizers: dict, training: dict,
-             config: dict, seed: int):
+             config: dict, seed: int, replay=None):
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
         record = {
@@ -28,19 +28,27 @@ class CheckpointManager:
             "training": training.copy(), "config": config.copy(), "seed": seed,
             "rng_cpu": torch.get_rng_state(),
             "rng_cuda": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
-            "replay_saved": False, "resume_requires_recollection": True,
+            "replay_saved": replay is not None,
+            "replay": replay.state_dict() if replay is not None else None,
+            "resume_requires_recollection": replay is None,
         }
         temporary = path.with_suffix(path.suffix + ".tmp")
         torch.save(record, temporary)
         os.replace(temporary, path)
 
     def load(self, path: str | Path, *, models: dict, optimizers: dict,
-             restore_rng: bool = True, map_location=None) -> dict:
+             restore_rng: bool = True, map_location=None, replay=None) -> dict:
         record = torch.load(path, map_location=map_location, weights_only=False)
         if record.get("schema_version") != self.schema_version:
             raise ValueError("Checkpoint schema version differs")
         for key in self.required_contract:
             if record["metadata"].get(key) != self.metadata[key]:
+                raise ValueError(f"Checkpoint {key} differs")
+        for key in ("algorithm_version", "robot_adapter_version", "task_adapter_version",
+                    "termination_mode", "reward_profile", "normalization_mode"):
+            expected = self.metadata.get(key)
+            actual = record["metadata"].get(key, record["config"].get(key))
+            if expected is not None and actual != expected:
                 raise ValueError(f"Checkpoint {key} differs")
         if set(record["models"]) != set(models) or set(record["optimizers"]) != set(optimizers):
             raise ValueError("Checkpoint model or optimizer set differs")
@@ -48,10 +56,14 @@ class CheckpointManager:
             model.load_state_dict(record["models"][name], strict=True)
         for name, optimizer in optimizers.items():
             optimizer.load_state_dict(record["optimizers"][name])
+        if record.get("replay_saved"):
+            if replay is None:
+                raise ValueError("Checkpoint contains Replay; a matching Replay object is required")
+            replay.load_state_dict(record["replay"])
         if restore_rng:
-            torch.set_rng_state(record["rng_cpu"])
+            torch.set_rng_state(record["rng_cpu"].cpu())
             if record.get("rng_cuda") is not None and torch.cuda.is_available():
-                torch.cuda.set_rng_state_all(record["rng_cuda"])
+                torch.cuda.set_rng_state_all([state.cpu() for state in record["rng_cuda"]])
         return record
 
 

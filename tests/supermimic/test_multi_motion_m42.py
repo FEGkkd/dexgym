@@ -36,3 +36,22 @@ def test_multi_motion_current_future_and_horizon_sampling_do_not_cross_clips(tmp
     assert ((sampled_frames + 4) < library.lengths[sampled_ids]).all()
     assert all(len(value) == 64 for value in library.reference_at(sampled_ids, sampled_frames).values())
     assert set(library.hashes) == {"short", "long"}
+
+
+def test_real_wave_and_procedural_references_share_schema_but_keep_own_lengths():
+    library = MotionLibrary({
+        "cmu_141_16_wave_bimanual": "/home/ubuntu/dexgym_data/marvin_motion_library_v1/"
+                                       "validated_motions/cmu_141_16_wave_bimanual.npz",
+        "procedural_bimanual_reach_v1": "/home/ubuntu/dexgym_data/marvin_supermimic_m42/"
+                                         "second_task/procedural_bimanual_reach_v1.npz",
+    }, "cpu")
+    assert library.lengths.tolist() == [1357, 201]
+    assert library.fps.tolist() == [50, 50]
+    assert library.hashes["cmu_141_16_wave_bimanual"] == (
+        "b7af95b289e8aff898df7f5dd06b169f74dba2a506aa8fc5bf589ee3fee8106f")
+    assert library.hashes["procedural_bimanual_reach_v1"] == (
+        "ca4741f01734389dd62f9e64c66cdc9c237c90da6370cf76b13bcda89e143af2")
+    ids = torch.tensor([0, 1])
+    frames = torch.tensor([1356, 200])
+    assert library.reference_at(ids, frames)["q_arm"].shape == (2, 14)
+    assert library.future_goal_at(ids, frames, 10).shape == (2, 10, 90)

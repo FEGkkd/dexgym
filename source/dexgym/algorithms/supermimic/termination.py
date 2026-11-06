@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 
 import torch
+from torch import nn
 
 
 @dataclass(frozen=True)
@@ -17,6 +18,28 @@ class TerminationThresholds:
     def __post_init__(self):
         if min(self.tcp_softness_m, self.joint_softness_rad, self.speed_softness_rad_s) <= 0:
             raise ValueError("Soft termination widths must be positive")
+
+
+class TaskTerminationHead(nn.Module):
+    """Goal-schema-specific learned head, separate from shared physical dynamics."""
+
+    def __init__(self, state_dim: int, goal_dim: int, hidden: int = 128):
+        super().__init__()
+        if min(state_dim, goal_dim, hidden) < 1:
+            raise ValueError("Termination head dimensions must be positive")
+        self.state_dim, self.goal_dim = state_dim, goal_dim
+        self.network = nn.Sequential(nn.Linear(state_dim + goal_dim, hidden), nn.SiLU(),
+                                     nn.Linear(hidden, hidden), nn.SiLU(), nn.Linear(hidden, 1))
+        nn.init.constant_(self.network[-1].bias, -4.0)
+
+    def logits(self, state: torch.Tensor, current_goal: torch.Tensor) -> torch.Tensor:
+        if (state.shape[-1] != self.state_dim or current_goal.shape[-1] != self.goal_dim
+                or state.shape[:-1] != current_goal.shape[:-1]):
+            raise ValueError("Task termination state and arrival-goal schemas differ")
+        return self.network(torch.cat((state, current_goal), dim=-1)).squeeze(-1)
+
+    def forward(self, state: torch.Tensor, current_goal: torch.Tensor) -> torch.Tensor:
+        return torch.sigmoid(self.logits(state, current_goal))
 
 
 def analytic_soft_termination(q: torch.Tensor, qd: torch.Tensor, lower: torch.Tensor,
@@ -52,13 +75,28 @@ def termination_calibration(probability: torch.Tensor, label: torch.Tensor,
     negatives = len(label) - positives
     tp = int((predicted & label).sum())
     fp = int((predicted & ~label).sum())
+    ece = 0.0
+    for index in range(10):
+        low, high = index / 10, (index + 1) / 10
+        selected = ((probability >= low) &
+                    ((probability < high) if index < 9 else (probability <= high)))
+        if bool(selected.any()):
+            ece += float(selected.float().mean() *
+                         (probability[selected].mean() - label[selected].float().mean()).abs())
+    support = positives >= 20 and negatives >= 20
+    brier = float((probability - label.float()).square().mean())
+    prevalence = positives / len(label)
+    baseline_brier = prevalence * (1 - prevalence)
     result = {
         "positive_count": positives, "negative_count": negatives,
         "precision": tp / (tp + fp) if tp + fp else None,
         "recall": tp / positives if positives else None,
         "false_positive_rate": fp / negatives if negatives else None,
-        "brier_score": float((probability - label.float()).square().mean()),
-        "calibrated": positives >= 20 and negatives >= 20,
+        "brier_score": brier,
+        "brier_skill_score": 1 - brier / baseline_brier if baseline_brier else None,
+        "ece_10_bin": ece,
+        "sufficient_class_support": support,
+        "calibrated": support and ece <= 0.05,
     }
     if tcp_error is not None:
         error = tcp_error.detach().float().reshape(len(label), -1).amax(-1)

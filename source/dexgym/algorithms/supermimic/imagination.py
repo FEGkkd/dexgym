@@ -67,6 +67,7 @@ def imagined_rollout(
     termination_mode: str = "learned",
     termination_thresholds: TerminationThresholds = TerminationThresholds(),
     bootstrap_weight: float = 1.0,
+    termination_module=None,
 ):
     if termination_mode not in ("learned", "analytic"):
         raise ValueError("Termination mode must be learned or analytic")
@@ -112,7 +113,10 @@ def imagined_rollout(
         )
         rewards.append(reward)
         if termination_mode == "learned":
-            probability = world_model.termination_probability(next_state, motion.reference_features_at(next_frame))
+            arrival_reference = motion.reference_features_at(next_frame)
+            probability = (termination_module(next_state, arrival_reference)
+                           if termination_module is not None else
+                           world_model.termination_probability(next_state, arrival_reference))
         else:
             next_tcp = fk(next_state[:, :14])[0][:, :, 2]
             tcp_error = torch.linalg.vector_norm(next_tcp - target["link_pos"][:, :, 2], dim=-1)

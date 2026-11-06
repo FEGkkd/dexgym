@@ -17,7 +17,8 @@ class MarvinTrackingTask:
 
     def __init__(self, reference, robot, *, reward_profile: str = "paper_multilink",
                  termination_mode: str = "analytic",
-                 thresholds: TerminationThresholds = TerminationThresholds()):
+                 thresholds: TerminationThresholds = TerminationThresholds(),
+                 termination_module=None):
         if reward_profile not in REWARD_PROFILES:
             raise ValueError("Unknown tracking reward profile")
         if termination_mode not in ("analytic", "learned"):
@@ -27,6 +28,7 @@ class MarvinTrackingTask:
         self.reward_profile = reward_profile
         self.termination_mode = termination_mode
         self.thresholds = thresholds
+        self.termination_module = termination_module
 
     def arrival_goal(self, frame: torch.Tensor) -> torch.Tensor:
         return arrival_reference_features(self.reference, frame)
@@ -46,7 +48,8 @@ class MarvinTrackingTask:
                                 horizon=horizon, weights=REWARD_PROFILES[self.reward_profile],
                                 termination_mode=self.termination_mode,
                                 termination_thresholds=self.thresholds,
-                                bootstrap_weight=0.0 if horizon == 1 else 1.0)
+                                bootstrap_weight=0.0 if horizon == 1 else 1.0,
+                                termination_module=self.termination_module)
 
     def critic_batch(self, critic, rollout: dict):
         return critic_td_lambda_batch(critic, self.reference, rollout)
