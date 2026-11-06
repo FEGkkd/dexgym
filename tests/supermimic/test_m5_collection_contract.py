@@ -37,3 +37,8 @@ def test_partitioned_actor_collection_has_immutable_checkpoint_contract():
     dual = marvin_se3_physics_config(cfg, _robot())
     assert dual["collection_contract"]["validation_exploration_env_count"] == 2
     assert "collection_contract" in CoreCheckpoint._first_difference(new, dual)
+    cfg.collection_contract_version = "dual_source_geometry_trust_v3_full32"
+    cfg.minimum_actor_horizon = 32
+    full = marvin_se3_physics_config(cfg, _robot())
+    assert full["collection_contract"]["minimum_actor_horizon"] == 32
+    assert "collection_contract" in CoreCheckpoint._first_difference(dual, full)

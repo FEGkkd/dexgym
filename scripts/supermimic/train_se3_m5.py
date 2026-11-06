@@ -1,18 +1,16 @@
 """Bounded strict-pure SuperMimic pilot for IK-free Marvin SE(3) reach and hold."""
 
 import argparse
-from dataclasses import asdict
 import hashlib
 import json
-from pathlib import Path
 import subprocess
 import time
-
-import gymnasium as gym
-import torch
-from isaaclab.app import launch_simulation
+from dataclasses import asdict
+from pathlib import Path
 
 import dexgym.tasks.marvin_supermimic  # noqa: F401
+import gymnasium as gym
+import torch
 from dexgym.algorithms.supermimic.core.checkpoint import CoreCheckpoint
 from dexgym.algorithms.supermimic.core.models import NetworkFactory
 from dexgym.algorithms.supermimic.core.optimization import build_optimizers
@@ -23,9 +21,8 @@ from dexgym.algorithms.supermimic.core.trust_evaluator import TrustConfig
 from dexgym.tasks.marvin_supermimic.physics_contract import marvin_se3_physics_config
 from dexgym.tasks.marvin_supermimic.se3_collector import SE3CorrelatedExplorationCollector
 from dexgym.tasks.marvin_supermimic.se3_env import MarvinSE3ReachHoldCfg
-from dexgym.tasks.marvin_supermimic.se3_trust import (
-    SE3DualDistributionTrustEvaluator, SE3GeometryTrustConfig)
-
+from dexgym.tasks.marvin_supermimic.se3_trust import SE3DualDistributionTrustEvaluator, SE3GeometryTrustConfig
+from isaaclab.app import launch_simulation
 
 DEFAULT_CONFIG = Path("configs/supermimic/m5_se3_near_pilot.json")
 
@@ -70,14 +67,27 @@ def main():
             or not 0 < exploration["train_env_fraction"] < 1
             or not 0 < exploration["validation_noisy_fraction"] < 1):
         parser.error("Invalid temporal exploration config")
-    large_profile = experiment.get("scale_profile") in (
-        "4096_env_near_v1", "4096_env_hold_mix_v1", "4096_env_hold_mix_v2")
+    profile = experiment.get("scale_profile")
+    full32_profile = profile in (
+        "4096_env_full32_wm256_v1", "4096_env_full32_wm256_bootstrap_v2")
+    large_profile = profile in (
+        "4096_env_near_v1", "4096_env_hold_mix_v1", "4096_env_hold_mix_v2",
+        "4096_env_full32_wm256_v1", "4096_env_full32_wm256_bootstrap_v2")
+    minimum_actor_horizon = int(experiment.get("minimum_actor_horizon", 1))
+    if minimum_actor_horizon != (32 if full32_profile else 1):
+        parser.error("Imagination minimum horizon differs from the versioned scale profile")
+    expected_bootstrap_warmup = 50 if profile == "4096_env_full32_wm256_bootstrap_v2" else 0
+    if config.actor_bootstrap_warmup_updates != expected_bootstrap_warmup:
+        parser.error("Actor Bootstrap schedule differs from the versioned scale profile")
     if large_profile:
+        expected_capacity = 256 if full32_profile else 128
         if (args.num_envs != 4096 or not 0 <= args.iterations <= 40
-                or experiment.get("replay_capacity_steps") != 128):
-            parser.error("4096-environment pilot requires its bounded 128-step Replay profile")
+                or experiment.get("replay_capacity_steps") != expected_capacity):
+            parser.error("4096-environment pilot requires its versioned Replay capacity")
         expected_level = ("near_hold_mix" if experiment["scale_profile"]
-                          in ("4096_env_hold_mix_v1", "4096_env_hold_mix_v2") else "near")
+                          in ("4096_env_hold_mix_v1", "4096_env_hold_mix_v2",
+                              "4096_env_full32_wm256_v1",
+                              "4096_env_full32_wm256_bootstrap_v2") else "near")
         if args.level != expected_level:
             parser.error("4096-environment profile and training goal curriculum differ")
     elif not 16 <= args.num_envs <= 256 or not 0 <= args.iterations <= 200:
@@ -99,7 +109,10 @@ def main():
     validation_noisy_count = max(1, int(validation_count * exploration["validation_noisy_fraction"]))
     if exploration_count >= train_count or validation_noisy_count >= validation_count:
         parser.error("Trust requires deterministic Actor lanes in train and validation Replay")
-    cfg.collection_contract_version = "dual_source_geometry_trust_v2"
+    cfg.collection_contract_version = ("dual_source_geometry_trust_v3_full32" if full32_profile
+                                       else "dual_source_geometry_trust_v2")
+    if full32_profile:
+        cfg.minimum_actor_horizon = 32
     cfg.exploration_env_count = exploration_count
     cfg.train_env_count = train_count
     cfg.validation_exploration_env_count = validation_noisy_count
@@ -137,7 +150,8 @@ def main():
                     trust, geometry_trust,
                     noisy_validation_range=(train_count, train_count + validation_noisy_count),
                     deterministic_validation_range=(train_count + validation_noisy_count,
-                                                    args.num_envs)),
+                                                    args.num_envs),
+                    minimum_actor_horizon=minimum_actor_horizon),
                 config=config,
                 train_env_range=(0, train_count),
                 validation_env_range=(train_count, args.num_envs))
@@ -146,7 +160,10 @@ def main():
                 git_commit=git_commit, reference_hashes={},
                 physics_config=marvin_se3_physics_config(cfg, robot))
             resume = checkpoint.load(args.resume, trainer) if args.resume else None
-            total_limit = 80 if large_profile else 200
+            # Keep each 4096-env launch at 40 iterations while allowing
+            # evidence-based continuations after an independent evaluation.
+            total_limit = (400 if profile == "4096_env_full32_wm256_bootstrap_v2"
+                           else 160 if large_profile else 200)
             if trainer.iteration + args.iterations > total_limit:
                 raise ValueError(f"The bounded M5 pilot cannot exceed {total_limit} total iterations")
             args.output.mkdir(parents=True, exist_ok=True)

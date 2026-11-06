@@ -4,8 +4,7 @@ from dataclasses import dataclass
 
 import torch
 
-from dexgym.algorithms.supermimic.core.trust_evaluator import (
-    ModelTrustEvaluator, TrustConfig)
+from dexgym.algorithms.supermimic.core.trust_evaluator import ModelTrustEvaluator, TrustConfig
 from dexgym.algorithms.supermimic.rewards import so3_geodesic
 
 
@@ -35,17 +34,21 @@ class SE3DualDistributionTrustEvaluator:
 
     def __init__(self, noisy_config: TrustConfig, geometry_config: SE3GeometryTrustConfig,
                  *, noisy_validation_range: tuple[int, int],
-                 deterministic_validation_range: tuple[int, int]):
+                 deterministic_validation_range: tuple[int, int],
+                 minimum_actor_horizon: int = 1):
         if (noisy_validation_range[0] >= noisy_validation_range[1]
                 or noisy_validation_range[1] != deterministic_validation_range[0]
                 or deterministic_validation_range[0] >= deterministic_validation_range[1]):
             raise ValueError("Trust needs disjoint nonempty noisy and deterministic held-out lanes")
         if not noisy_config.require_baseline_improvement:
             raise ValueError("Noisy action-response trust must beat the zero-delta baseline")
+        if minimum_actor_horizon not in (1, 8, 32):
+            raise ValueError("minimum_actor_horizon must be 1, 8 or 32")
         self.noisy = ModelTrustEvaluator(noisy_config)
         self.geometry = geometry_config
         self.noisy_range = noisy_validation_range
         self.deterministic_range = deterministic_validation_range
+        self.minimum_actor_horizon = minimum_actor_horizon
 
     @torch.no_grad()
     def evaluate_available(self, model, replay, robot, *, batch=64,
@@ -101,4 +104,5 @@ class SE3DualDistributionTrustEvaluator:
                         > self.geometry.max_joint_velocity_rmse_rad_s[index]):
                 break
             geometry_horizon = horizon
-        return min(noisy_horizon, geometry_horizon)
+        admitted = min(noisy_horizon, geometry_horizon)
+        return admitted if admitted >= self.minimum_actor_horizon else 0

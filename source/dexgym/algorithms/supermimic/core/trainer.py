@@ -1,13 +1,12 @@
 """Alternating real-physics/model/BPTT/TD(lambda) trainer with injected adapters."""
 
-from dataclasses import dataclass
 import time
+from dataclasses import dataclass
 
 import torch
 
 from .imagination import ImaginationEngine, critic_td_lambda_batch
-from .optimization import (frozen_parameters, optimize_critic, safe_gradient_step,
-                           validate_optimizer_ownership)
+from .optimization import frozen_parameters, optimize_critic, safe_gradient_step, validate_optimizer_ownership
 
 
 @dataclass(frozen=True)
@@ -31,6 +30,7 @@ class TrainerConfig:
     trust_interval: int = 25
     validation_batch: int = 64
     value_bound: bool = False
+    actor_bootstrap_warmup_updates: int = 0
 
     def __post_init__(self):
         if self.mode not in ("pure_model_based", "teacher_bootstrap_model_based",
@@ -48,6 +48,8 @@ class TrainerConfig:
         if (self.world_warmup_updates < 0 or self.reference_pd_bootstrap_steps < 0
                 or self.boundary_probe_steps < 0 or self.termination_pos_weight <= 0):
             raise ValueError("World warmup, bootstrap or termination weight is invalid")
+        if self.actor_bootstrap_warmup_updates < 0:
+            raise ValueError("actor_bootstrap_warmup_updates must be nonnegative")
 
 
 class SuperMimicTrainer:
@@ -171,6 +173,15 @@ class SuperMimicTrainer:
             self.counts["trust_failures"] += 1
         return self.trust_report
 
+    def _actor_bootstrap_weight(self) -> float:
+        # Preserve the original 1/8/32 curriculum behavior by default. A new
+        # task can ramp in the terminal Critic as it learns from imagined
+        # returns; this avoids the random Critic directing the first BPTT step.
+        if self.allowed_horizon == 1:
+            return 0.0
+        warmup = self.config.actor_bootstrap_warmup_updates
+        return min(1.0, self.counts["actor_updates"] / warmup) if warmup else 1.0
+
     def update_actor_critic(self):
         if self.counts["world_updates"] < self.config.world_warmup_updates or not self.allowed_horizon:
             return {"updated": False, "reason": "world_warmup_or_trust"}
@@ -182,11 +193,12 @@ class SuperMimicTrainer:
         except ValueError as error:
             return {"updated": False, "reason": str(error)}
         actor_began = self._stamp()
+        bootstrap_weight = self._actor_bootstrap_weight()
         with frozen_parameters(self.world_model, self.critic, self.termination_head):
             rollout = self.engine.rollout(
                 start, self.actor, self.world_model, self.critic, self.robot, self.task,
                 horizon=self.allowed_horizon,
-                bootstrap_weight=0.0 if self.allowed_horizon == 1 else 1.0,
+                bootstrap_weight=bootstrap_weight,
                 termination_head=self.termination_head,
                 observation_noise=self.observation_noise)
             actor_result = safe_gradient_step(rollout.actor_loss, self.actor.parameters(),
@@ -207,6 +219,7 @@ class SuperMimicTrainer:
         self.counts["critic_updates"] += critic_result["updates"]
         self.counts["nonfinite_critic"] += critic_result["skipped_nonfinite"]
         return {"updated": True, "horizon": self.allowed_horizon,
+                "actor_bootstrap_weight": bootstrap_weight,
                 "actor_loss": float(rollout.actor_loss.detach()),
                 "actor_grad_norm": actor_result["grad_norm"],
                 "actor_bptt_seconds": actor_finished - actor_began,

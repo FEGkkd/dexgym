@@ -1,25 +1,23 @@
 """Bounded offline WM8 fit diagnostic on existing real Replay; no Actor update."""
 
 import argparse
-from dataclasses import replace
 import json
+from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
 import torch
-
-from dexgym.assets.marvin_wuji.controller import ARM_JOINT_NAMES
-from dexgym.algorithms.supermimic.core.models import NetworkFactory, StateDeltaWorldModel
 from dexgym.algorithms.supermimic.core.checkpoint import CoreCheckpoint
+from dexgym.algorithms.supermimic.core.models import NetworkFactory, StateDeltaWorldModel
 from dexgym.algorithms.supermimic.core.optimization import safe_gradient_step
 from dexgym.algorithms.supermimic.core.replay_buffer import SchemaReplay
 from dexgym.algorithms.supermimic.core.specs import NetworkSpec
 from dexgym.algorithms.supermimic.core.trust_evaluator import ModelTrustEvaluator, TrustConfig
+from dexgym.assets.marvin_wuji.controller import ARM_JOINT_NAMES
 from dexgym.tasks.marvin_supermimic.core_plugins import MarvinCoreRobot
-from dexgym.tasks.marvin_supermimic.se3_reach_hold import MarvinBimanualSE3ReachHold
 from dexgym.tasks.marvin_supermimic.se3_probe import validate_probe_metadata
-from dexgym.tasks.marvin_supermimic.se3_trust import (
-    SE3DualDistributionTrustEvaluator, SE3GeometryTrustConfig)
+from dexgym.tasks.marvin_supermimic.se3_reach_hold import MarvinBimanualSE3ReachHold
+from dexgym.tasks.marvin_supermimic.se3_trust import SE3DualDistributionTrustEvaluator, SE3GeometryTrustConfig
 
 
 def main():
@@ -75,8 +73,9 @@ def main():
     if args.probe_data is not None:
         probe_record = torch.load(args.probe_data, map_location="cpu", weights_only=False)
         validate_probe_metadata(probe_record["metadata"], robot, task)
-        execution = lambda physics: {key: value for key, value in physics.items()
-                                     if key not in CoreCheckpoint.evaluation_protocol_fields}
+        def execution(physics):
+            return {key: value for key, value in physics.items()
+                    if key not in CoreCheckpoint.evaluation_protocol_fields}
         if execution(probe_record["metadata"]["physics_config"]) != execution(record["physics_config"]):
             raise ValueError("Probe and checkpoint Newton execution contracts differ")
         for name in ("train", "validation"):
@@ -99,8 +98,9 @@ def main():
         for key in ("robot_contract", "task_contract"):
             if extra["contract_manifest"][key] != record["contract_manifest"][key]:
                 raise ValueError(f"Additional Replay {extra_path} has incompatible {key}")
-        execution = lambda physics: {key: value for key, value in physics.items()
-                                     if key not in CoreCheckpoint.evaluation_protocol_fields}
+        def execution(physics):
+            return {key: value for key, value in physics.items()
+                    if key not in CoreCheckpoint.evaluation_protocol_fields}
         if execution(extra["physics_config"]) != execution(record["physics_config"]):
             raise ValueError(f"Additional Replay {extra_path} has different Newton execution semantics")
         source = extra.get("replay")
@@ -112,7 +112,8 @@ def main():
         training_replays.append((str(extra_path), extra_replay))
     heldout = (int(0.75 * replay.num_envs), replay.num_envs)
     collection = record.get("physics_config", {}).get("collection_contract", {})
-    if collection.get("version") == "dual_source_geometry_trust_v2":
+    if collection.get("version") in (
+            "dual_source_geometry_trust_v2", "dual_source_geometry_trust_v3_full32"):
         noisy = collection["noisy_trust_config"].copy()
         noisy["max_rmse"] = tuple(noisy["max_rmse"])
         geometry = {key: tuple(value) for key, value in
@@ -122,7 +123,8 @@ def main():
         evaluator = SE3DualDistributionTrustEvaluator(
             TrustConfig(**noisy), SE3GeometryTrustConfig(**geometry),
             noisy_validation_range=(noisy_start, deterministic_start),
-            deterministic_validation_range=(deterministic_start, replay.num_envs))
+            deterministic_validation_range=(deterministic_start, replay.num_envs),
+            minimum_actor_horizon=collection.get("minimum_actor_horizon", 1))
     else:
         evaluator = ModelTrustEvaluator(TrustConfig(min_distinct_starts=8,
             max_rmse=(0.9, 1.0, 1.1), require_baseline_improvement=True, metric="normalized"))

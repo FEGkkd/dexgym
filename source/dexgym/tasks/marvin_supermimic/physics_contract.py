@@ -70,13 +70,15 @@ def marvin_se3_physics_config(cfg, robot) -> dict:
             "exploration_rho": cfg.exploration_rho,
             "exploration_sigma": cfg.exploration_sigma,
         }
-        if version == "dual_source_geometry_trust_v2":
+        if version in ("dual_source_geometry_trust_v2", "dual_source_geometry_trust_v3_full32"):
             contract["collection_contract"].update({
                 "train_env_count": cfg.train_env_count,
                 "validation_exploration_env_count": cfg.validation_exploration_env_count,
                 "noisy_trust_config": cfg.noisy_trust_config,
                 "geometry_trust_config": cfg.geometry_trust_config,
             })
+        if version == "dual_source_geometry_trust_v3_full32":
+            contract["collection_contract"]["minimum_actor_horizon"] = cfg.minimum_actor_horizon
     if getattr(cfg, "hold_speed_mode", "instantaneous_qd_v1") != "instantaneous_qd_v1":
         contract["hold_speed_mode"] = cfg.hold_speed_mode
     return contract

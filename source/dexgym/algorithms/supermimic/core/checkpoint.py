@@ -1,11 +1,11 @@
 """Strict, versioned checkpoint for the injected SuperMimic Core contracts."""
 
-from dataclasses import asdict
-from pathlib import Path
 import hashlib
 import json
 import os
 import random
+from dataclasses import asdict
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -169,7 +169,14 @@ class CoreCheckpoint:
             raise ValueError("Robot/action/state schema differs")
         if record["task_spec"] != asdict(trainer.task.spec):
             raise ValueError("Task schema differs")
-        if record["trainer_config"] != asdict(trainer.config):
+        current_trainer_config = asdict(trainer.config)
+        if "actor_bootstrap_warmup_updates" not in record["trainer_config"]:
+            # v2 checkpoints predate this optional schedule and used its
+            # zero-warmup behavior. Do not infer a nonzero schedule on resume.
+            if current_trainer_config["actor_bootstrap_warmup_updates"] != 0:
+                raise ValueError("Trainer configuration differs")
+            current_trainer_config.pop("actor_bootstrap_warmup_updates")
+        if record["trainer_config"] != current_trainer_config:
             raise ValueError("Trainer configuration differs")
         if record["termination_mode"] != trainer.task.termination_mode:
             raise ValueError("Termination schema differs")

@@ -6,13 +6,12 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import torch
-
-from dexgym.assets.marvin_wuji.controller import ARM_JOINT_NAMES
 from dexgym.algorithms.supermimic.core.models import NetworkFactory
 from dexgym.algorithms.supermimic.core.replay_buffer import SchemaReplay
 from dexgym.algorithms.supermimic.core.specs import NetworkSpec
 from dexgym.algorithms.supermimic.core.transition import TaskState
 from dexgym.algorithms.supermimic.rewards import so3_geodesic
+from dexgym.assets.marvin_wuji.controller import ARM_JOINT_NAMES
 from dexgym.tasks.marvin_supermimic.core_plugins import MarvinCoreRobot
 from dexgym.tasks.marvin_supermimic.se3_reach_hold import MarvinBimanualSE3ReachHold
 
@@ -105,7 +104,8 @@ def evaluate(checkpoint_path: Path, *, seed: int = 71, batch: int = 64,
                               robot.spec, task.spec, device)
         replay.load_state_dict(saved_replay, fresh_physics=False)
         collection = record.get("physics_config", {}).get("collection_contract", {})
-        if collection.get("version") == "dual_source_geometry_trust_v2":
+        if collection.get("version") in (
+                "dual_source_geometry_trust_v2", "dual_source_geometry_trust_v3_full32"):
             noisy_start = collection["train_env_count"]
             deterministic_start = noisy_start + collection["validation_exploration_env_count"]
             selections = (("heldout_exploratory_actor_replay", (noisy_start, deterministic_start), 3),
