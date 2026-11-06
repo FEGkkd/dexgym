@@ -160,6 +160,50 @@ class CoreCheckpoint:
             temporary.unlink(missing_ok=True)
         return path
 
+    @classmethod
+    def export_fresh_physics(cls, source: str | Path, destination: str | Path) -> Path:
+        """Publish an exact model/optimizer copy without a multi-GB physics Replay.
+
+        The result resumes with fresh Newton collection and invalidated trust.
+        The original replay checkpoint is left byte-for-byte untouched.
+        """
+        source, destination = Path(source), Path(destination)
+        if source.resolve() == destination.resolve() or destination.exists():
+            raise FileExistsError(f"Checkpoint export destination already exists: {destination}")
+        record = torch.load(source, map_location="cpu", weights_only=False)
+        if record.get("schema") != cls.schema_version:
+            raise ValueError("Checkpoint algorithm schema differs")
+        manifest = record.get("contract_manifest")
+        if not isinstance(manifest, dict):
+            raise ValueError("Checkpoint contract manifest is missing")
+        digest = hashlib.sha256(json.dumps(manifest, sort_keys=True,
+            separators=(",", ":"), allow_nan=False).encode()).hexdigest()
+        if digest != record.get("contract_sha256"):
+            raise ValueError("Checkpoint contract SHA256 is invalid")
+        if (record.get("resume_mode") not in ("replay", "full")
+                or record.get("replay") is None):
+            raise ValueError("Export requires a Replay-bearing source checkpoint")
+        source_digest = hashlib.sha256()
+        with source.open("rb") as stream:
+            for chunk in iter(lambda: stream.read(8 * 1024 * 1024), b""):
+                source_digest.update(chunk)
+        record["export_provenance"] = {
+            "kind": "fresh_physics_from_replay_v1",
+            "source_sha256": source_digest.hexdigest(),
+            "source_resume_mode": record["resume_mode"],
+        }
+        record["resume_mode"] = "fresh_physics"
+        record["replay"] = None
+        record["collector"] = None
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        temporary = destination.with_name(destination.name + ".tmp")
+        try:
+            torch.save(record, temporary)
+            os.replace(temporary, destination)
+        finally:
+            temporary.unlink(missing_ok=True)
+        return destination
+
     def load(self, path: str | Path, trainer, *, schedulers: dict | None = None) -> dict:
         record = torch.load(path, map_location="cpu", weights_only=False)
         modules = self._modules(trainer)

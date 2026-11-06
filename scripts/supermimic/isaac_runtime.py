@@ -4,6 +4,8 @@ Usage: python isaac_runtime.py train [train.py arguments]
 Set PYTHONPATH to the pinned Newton overlay and this checkout's source directory.
 """
 
+# ruff: noqa: I001  -- import order below is required by pinned Newton/Isaac.
+
 import os
 import runpy
 import sys
@@ -24,7 +26,7 @@ ALLOWED = {"train", "evaluate", "validate_dynamics", "validate_termination",
            "smoke_se3_m5", "train_se3_m5", "evaluate_se3_m5",
            "validate_se3_model_m5", "diagnose_se3_world_model_m5",
            "diagnose_se3_action_gradient_m5", "collect_se3_action_probes_m5",
-           "diagnose_se3_velocity_m5"}
+           "diagnose_se3_velocity_m5", "export_core_checkpoint"}
 if len(sys.argv) < 2 or sys.argv[1] not in ALLOWED:
     raise SystemExit(f"Select one of {', '.join(sorted(ALLOWED))}")
 entry = sys.argv.pop(1)
