@@ -1,7 +1,7 @@
 # Data layout for right-hand fingertip tracking
 
-The GRAB recordings and generated motion library stay local. Git tracks this
-README, but does not track files under `data/` other than this guide.
+The GRAB recordings and generated right-hand motion library stay local. Git
+tracks this README; those local inputs and outputs are ignored.
 
 Expected local inputs:
 
