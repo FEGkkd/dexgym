@@ -27,6 +27,9 @@ ALLOWED = {"train", "evaluate", "validate_dynamics", "validate_termination",
            "validate_se3_model_m5", "diagnose_se3_world_model_m5",
            "diagnose_se3_action_gradient_m5", "collect_se3_action_probes_m5",
            "diagnose_se3_velocity_m5", "export_core_checkpoint"}
+ALLOWED.add("smoke_continuous_se3")
+ALLOWED.add("evaluate_continuous_se3")
+ALLOWED.add("train_continuous_se3")
 if len(sys.argv) < 2 or sys.argv[1] not in ALLOWED:
     raise SystemExit(f"Select one of {', '.join(sorted(ALLOWED))}")
 entry = sys.argv.pop(1)

@@ -1,0 +1,56 @@
+{
+  "version": "marvin_continuous_se3_follow_v1",
+  "num_envs": 4096,
+  "iterations_per_segment": 100,
+  "max_total_iterations": 1000,
+  "seed": 72,
+  "reference_sha256": "ca4741f01734389dd62f9e64c66cdc9c237c90da6370cf76b13bcda89e143af2",
+  "include_reverse": true,
+  "random_reference_start": true,
+  "max_reference_start_frame": 100,
+  "reset_joint_perturb_rad": 0.005,
+  "replay_capacity_steps": 256,
+  "minimum_actor_horizon": 32,
+  "network": {
+    "world_hidden": [256, 256, 256],
+    "goal_hidden": [64],
+    "actor_hidden": [128, 64],
+    "critic_hidden": [64, 64],
+    "latent_dim": 32
+  },
+  "trainer": {
+    "mode": "pure_model_based",
+    "physics_steps_per_iteration": 4,
+    "world_window": 8,
+    "world_updates_per_iteration": 32,
+    "world_batch": 2048,
+    "imagination_batch": 256,
+    "actor_updates_per_iteration": 1,
+    "max_imagination_horizon": 32,
+    "world_warmup_updates": 128,
+    "reference_pd_bootstrap_steps": 0,
+    "trust_interval": 2,
+    "validation_batch": 512,
+    "critic_epochs": 5,
+    "critic_minibatches": 4,
+    "value_bound": true,
+    "actor_bootstrap_warmup_updates": 50
+  },
+  "trust": {
+    "min_distinct_starts": 8,
+    "max_rmse": [0.9, 1.0, 1.1],
+    "require_baseline_improvement": true,
+    "metric": "normalized"
+  },
+  "geometry_trust": {
+    "max_tcp_position_p95_m": [0.005, 0.005, 0.005],
+    "max_tcp_so3_p95_rad": [0.0349066, 0.0349066, 0.0349066],
+    "max_joint_velocity_rmse_rad_s": [0.15, 0.15, 0.15]
+  },
+  "exploration": {
+    "rho": 0.95,
+    "sigma": 0.8,
+    "train_env_fraction": 0.5,
+    "validation_noisy_fraction": 0.5
+  }
+}

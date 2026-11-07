@@ -82,3 +82,28 @@ def marvin_se3_physics_config(cfg, robot) -> dict:
     if getattr(cfg, "hold_speed_mode", "instantaneous_qd_v1") != "instantaneous_qd_v1":
         contract["hold_speed_mode"] = cfg.hold_speed_mode
     return contract
+
+
+def marvin_continuous_se3_physics_config(cfg, robot) -> dict:
+    """Continuous reference and servo semantics; evaluation may change reset protocol."""
+    return {
+        "backend": "newton_mjwarp_v1",
+        "num_envs": cfg.scene.num_envs,
+        "seed": cfg.seed,
+        "physics_dt": cfg.sim.dt,
+        "policy_dt": cfg.sim.dt * cfg.decimation,
+        "decimation": cfg.decimation,
+        "episode_length_s": cfg.episode_length_s,
+        "controller_kp_source": robot.native.controller_kp_source,
+        "controller_kd_source": robot.native.controller_kd_source,
+        "controller_damping_scale_source": robot.native.controller_damping_scale_source,
+        "hands_fixed_home": True,
+        "hand_contact_configuration": "validated_disabled",
+        "audit_contacts_each_physics_step": cfg.audit_contacts_each_physics_step,
+        "reference_asset_sha256": hashlib.sha256(Path(cfg.reference_path).read_bytes()).hexdigest(),
+        "reference_transform": "forward_and_reverse_v1" if cfg.include_reverse else "forward_only_v1",
+        "reset_random_reference_start": cfg.random_reference_start,
+        "max_reference_start_frame": cfg.max_reference_start_frame,
+        "reset_joint_perturb_rad": cfg.reset_joint_perturb_rad,
+        "evaluation_mode": cfg.evaluation_mode,
+    }
