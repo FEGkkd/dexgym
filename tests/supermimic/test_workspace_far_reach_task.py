@@ -93,6 +93,48 @@ def test_arrival_deadline_applies_to_start_of_sustained_hold():
     assert not task.episode_success(trajectory, complete=True)
 
 
+def test_reach_success_reports_late_drift_separately_from_initial_hold():
+    task = _task()
+    task.success_config = replace(task.success_config, hold_steps=5)
+    trajectory = []
+    for step in range(1, 41):
+        state = torch.zeros(1, 42)
+        if step <= 8:
+            state[0, 0], state[0, 7] = 0.4, -0.4
+        trajectory.append(SimpleNamespace(
+            state=state, next_state=state, action=torch.zeros(1, 14),
+            next_task_state=task.task_state(torch.tensor([0]), torch.tensor([step])),
+            terminated=torch.tensor([False]), truncated=torch.tensor([step == 40]),
+            failure_reason=torch.zeros(1, dtype=torch.int32)))
+    assert task.episode_success(trajectory, complete=True)
+    metrics = task.evaluate_metrics(trajectory)
+    assert metrics["first_valid_hold_step"] == 5
+    assert metrics["longest_hold_steps"] == 8
+    assert metrics["terminal_hold_steps"] == 0
+    assert not metrics["held_to_episode_end"]
+
+
+def test_reach_reports_uninterrupted_hold_through_episode_end():
+    task = _task()
+    task.success_config = replace(task.success_config, hold_steps=5)
+    trajectory = []
+    for step in range(1, 41):
+        state = torch.zeros(1, 42)
+        if step >= 6:
+            state[0, 0], state[0, 7] = 0.4, -0.4
+        trajectory.append(SimpleNamespace(
+            state=state, next_state=state, action=torch.zeros(1, 14),
+            next_task_state=task.task_state(torch.tensor([0]), torch.tensor([step])),
+            terminated=torch.tensor([False]), truncated=torch.tensor([step == 40]),
+            failure_reason=torch.zeros(1, dtype=torch.int32)))
+    metrics = task.evaluate_metrics(trajectory)
+    assert metrics["terminal_hold_steps"] == 35
+    assert metrics["held_to_episode_end"]
+    trajectory[-1].terminated[0] = True
+    trajectory[-1].truncated[0] = False
+    assert not task.evaluate_metrics(trajectory)["held_to_episode_end"]
+
+
 def test_evaluation_difficulty_filter_uses_held_out_goals_only():
     from dexgym.tasks.marvin_supermimic.teleop_trajectory_env import (
         MarvinTeleopWorkspaceEnv, MarvinTeleopWorkspaceCfg)

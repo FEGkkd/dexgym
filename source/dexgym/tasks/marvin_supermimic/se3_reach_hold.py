@@ -285,6 +285,23 @@ class MarvinBimanualSE3ReachHold:
         position, rotation, first_position, first_se3, first_hold, longest = (
             self._episode_statistics(trajectory))
         states = torch.cat([item.next_state for item in trajectory])
+        config = self.success_config
+        valid_hold = ((position <= config.position_m).all(-1)
+                      & (rotation <= config.rotation_rad).all(-1)
+                      & (self._trajectory_hold_velocity(trajectory, states)
+                         <= config.max_joint_speed_rad_s).all(-1))
+        terminal_hold_steps = 0
+        for is_valid in reversed(valid_hold.tolist()):
+            if not is_valid:
+                break
+            terminal_hold_steps += 1
+        # Keep the versioned 25-step arrival success criterion intact. These
+        # separate metrics reveal a policy that reaches briefly, then drifts.
+        completed_safely = (len(trajectory) == config.episode_steps
+                            and bool(trajectory[-1].truncated[0])
+                            and not any(bool(item.terminated[0]) for item in trajectory))
+        held_to_episode_end = bool(completed_safely and first_hold is not None
+                                   and valid_hold[first_hold - 1:].all())
         actions = torch.cat([item.action.tanh() for item in trajectory])
         commands = states[:, 28:42]
         action_rate = (actions[1:] - actions[:-1]).abs() if len(actions) > 1 else actions.new_zeros((1, 14))
@@ -298,6 +315,8 @@ class MarvinBimanualSE3ReachHold:
             "first_complete_se3_arrival_time_s": None if first_se3 is None else first_se3 * dt,
             "first_valid_hold_time_s": None if first_hold is None else first_hold * dt,
             "longest_hold_steps": longest,
+            "terminal_hold_steps": terminal_hold_steps,
+            "held_to_episode_end": held_to_episode_end,
             "tcp_position_mean_m": position.mean(0).tolist(),
             "tcp_position_p95_m": torch.quantile(position, 0.95, dim=0).tolist(),
             "tcp_position_max_m": position.max(0).values.tolist(),

@@ -114,6 +114,7 @@ def main():
         cfg.reference_bank_path = str(args.reference_bank)
         cfg.evaluation_split = args.evaluation_split
         cfg.evaluation_max_difficulty = args.evaluation_max_difficulty
+        cfg.curriculum_level = args.evaluation_max_difficulty
         with np.load(args.reference_bank, allow_pickle=False) as bank:
             cfg.reach_curriculum_version = str(bank["version"])
             if (args.task == "workspace_reach" and str(bank["version"]) not in
@@ -170,6 +171,8 @@ def main():
                                args.evaluation_max_difficulty if workspace else None),
                            "reach_success_semantics": (
                                cfg.reach_success_semantics if args.task == "workspace_reach" else None),
+                           "reach_temporal_context": (
+                               cfg.reach_temporal_context if args.task == "workspace_reach" else None),
                            "allow_new_reference": args.allow_new_reference,
                            "reference_names": native.reference.names,
                            "reference_hashes": native.reference.hashes,

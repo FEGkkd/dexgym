@@ -170,12 +170,66 @@ contacts, 600-step valid hold**, mean final TCP position error
 0.000604/0.000584 m and SO(3) error 0.00131/0.00115 rad. This validates
 the Hold task setup and zero-action baseline, not a learned policy.
 
+## Task definition re-audit: arrival, sustained hold, and workspace coverage
+
+The first strict-pure Hold segment used 4096 Newton environments for 160
+iterations (2,621,440 real transitions, 5,120 WM8 updates, 140 Actor BPTT32
+updates, 2,800 Critic updates, zero nonfinite updates). Its independent
+eight-goal Newton test completed every 600-step episode with zero hard safety
+failures. Under the versioned **25-consecutive-step arrival** criterion it
+scored 8/8 successes. Under the additional **held-to-episode-end** diagnostic
+it scored **0/8**: all eight policies left the valid dual-TCP hold region by
+the final step. The mean longest hold was 176 steps, and mean final left/right
+TCP position errors were 0.0140/0.0147 m, with SO(3) errors 0.0594/0.0406 rad.
+The independent trace and report are in
+`/home/ubuntu/dexgym_data/marvin_supermimic_workspace_reach_v4/hold_seed97_4096_seg1/eval_hold8_task_audit/`.
+The compact checkpoint is
+`/home/ubuntu/dexgym_data/marvin_supermimic_workspace_reach_v4/hold_seed97_4096_seg1/fresh_physics.pt`
+(SHA256 `0bf5a9e8373a839f3959c35d54b5c52a57d298877822ab5cbdf6d919db1e83c1`).
+Its mean absolute bounded arm action was only 0.0027 at step 1 and 0.0038 at
+step 600, but the 0.01-rad joint-increment map accumulated a mean 0.015-rad
+per-joint physical drift over the episode. The Actor did not learn a stable
+stationary command. We therefore report both the original 25-step success
+criterion and the new terminal hold metrics; the latter do not alter old
+checkpoint/task semantics.
+
+The hold speed criterion is the 50 Hz net joint displacement divided by
+0.02 s, as requested. `joint_velocity_abs_max_rad_s` in the current episode
+report samples the joint-velocity state once per policy step; it is **not** a
+certified 500 Hz substep maximum. A separate 500 Hz audit is required for any
+claim about instantaneous peak speed.
+
+The v5 target bank has only 64 training and eight held-out targets per level.
+The Hold training TCP locations span roughly 1.0–1.3 m along each Cartesian
+axis, but the held-out Hold TCP positions are on average 0.146/0.119 m from
+their nearest training position (left/right). Across all four levels the
+corresponding means range from 0.113 to 0.175 m. This is evidence of spatial
+diversity, **not** dense or arbitrary-pose coverage. A target's FK witness and
+collision-free sampled joint interpolation establish only a possible static
+path, not a dynamically feasible time-optimal route under the 50 Hz joint
+increment controller. Orientation and simultaneous bimanual coverage require
+separate measurement. The curriculum's Hold level has zero target displacement;
+its 8/8 25-step success is not a reach result. Near, Medium and Wide have not
+passed independent learned-policy Newton acceptance.
+
+This static-goal Reach & Hold MDP is a prerequisite diagnostic for a broad
+workspace policy. It is **not** the continuous 50 Hz target-stream task used
+for teleoperation. The separate `MarvinTeleopWorkspaceFollow` MDP evaluates a
+current pose target during each action, but its present generated trajectories
+are local strokes around sampled starts. Neither task currently demonstrates
+arbitrary reachable dual-TCP SE(3) tracking or deployment readiness. Before
+advancing curriculum, the learned policy should pass terminal hold on held-out
+Hold goals; then Near movement and both-arm orientation should be checked in
+independent Newton episodes. Long-range and changing-goal tests remain separate
+acceptance gates.
+
 ## Verified commands
 
 ```bash
 cd /tmp/dexgym-supermimic-teleop-workspace
 PYTHONPATH=source /home/ubuntu/isaacsim-6.0.1/bin/python scripts/supermimic/generate_teleop_workspace_bank.py --profile reach_curriculum_v4 --duration-s 12 --seed 20261113 --train-clips 256 --validation-clips 32 --test-clips 32 --output source/dexgym/assets/supermimic/references/teleop_workspace_pose_curriculum_train_seed20261113.npz
 PYTHONPATH=/home/ubuntu/dexgym_data/marvin_supermimic_m42/runtime_overrides:source MUJOCO_GL=egl /home/ubuntu/isaacsim-6.0.1/bin/python scripts/supermimic/isaac_runtime.py evaluate_continuous_se3 --task workspace_reach --baseline zero --reference-bank source/dexgym/assets/supermimic/references/teleop_workspace_pose_curriculum_train_seed20261113.npz --num-envs 11 --evaluation-max-difficulty 0 --seed 9301 --output /tmp/dexgym_workspace_reach_v4_near_zero11
+PYTHONPATH=/home/ubuntu/dexgym_data/marvin_supermimic_m42/runtime_overrides:source MUJOCO_GL=egl /home/ubuntu/isaacsim-6.0.1/bin/python scripts/supermimic/isaac_runtime.py evaluate_continuous_se3 --task workspace_reach --checkpoint /home/ubuntu/dexgym_data/marvin_supermimic_workspace_reach_v4/hold_seed97_4096_seg1/fresh_physics.pt --reference-bank source/dexgym/assets/supermimic/references/teleop_workspace_hold_curriculum_seed20261114.npz --num-envs 8 --evaluation-max-difficulty 0 --seed 9301 --output /home/ubuntu/dexgym_data/marvin_supermimic_workspace_reach_v4/hold_seed97_4096_seg1/eval_hold8_task_audit
 ```
 
 The legacy Wave policy and older workspace checkpoint files were not edited.
