@@ -115,7 +115,7 @@ class MarvinContinuousSE3FollowEnv(MarvinArmNewtonBaseEnv):
                          torch.full((count,), self.cfg.evaluation_motion_id,
                                     device=self.device, dtype=torch.long))
             frame = torch.zeros(count, device=self.device, dtype=torch.long)
-            perturb = 0.0
+            perturb = self.cfg.reset_joint_perturb_rad
         else:
             motion_id = torch.randint(len(self.reference.names), (count,), device=self.device)
             frame = (torch.randint(self.cfg.max_reference_start_frame + 1,

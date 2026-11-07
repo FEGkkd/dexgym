@@ -16,12 +16,14 @@ algorithm capability, **not a claim that every task or policy has converged**.
 | `DexGym-Marvin-SuperMimic-Wave-Direct-v0` | 10×90 bimanual motion tracking | M4.1 validated Actor completed all 1,356 Newton control steps; Core training and evaluation are available. |
 | `DexGym-Marvin-SuperMimic-Reach-Direct-v0` | Static 1×6 dual TCP position | Separate MDP, real Newton collection and short Core training smoke passed; no convergence claim. |
 | `DexGym-Marvin-SuperMimic-SE3-Reach-Hold-Direct-v0` | Static 1×18 dual TCP SE(3) and hold | IK-free, 4,096-environment WM8/BPTT32 training: three random 400-iteration seeds achieved 384/384 strict successes across two independent Near goal sets, without safety failures. One seed reached 59/64 Medium and 16/64 Wider Feasible; harder curricula remain open. |
+| `DexGym-Marvin-SuperMimic-Continuous-SE3-Follow-Direct-v0` | Moving 10×18 dual TCP SE(3) targets | Strict-pure 4,096-environment WM8/BPTT32 training completed 1,000 iterations. The selected 800-iteration checkpoint completed 64/64 Newton episodes on the pinned forward/reverse procedural trajectories under 0.01 and 0.02 rad reset perturbations. This does not establish unseen-trajectory generalization. |
 | `DexGym-Joint-Tracking-Direct-v0` | Cartpole joint target | Isaac Lab DirectRLEnv, RSL-RL PPO example. |
 | `DexGym-Joint-Tracking-Manager-v0` | Cartpole joint target | Isaac Lab ManagerBasedRLEnv, RSL-RL PPO example. |
 
 The Cartpole examples use PPO. **SuperMimic does not use PPO.** The Marvin
 environment simulates all 54 DoF at 500 Hz, controls only 14 arm joints at
-50 Hz, and keeps the 40 hand joints at Home. The validated no-hand-contact
+50 Hz, and commands the 40 hand joints to Home. Hand states and actions are
+absent from the SuperMimic policy and world model. The validated no-hand-contact
 configuration and controller parameters are unchanged.
 
 ## SuperMimic code
@@ -30,7 +32,7 @@ configuration and controller parameters are unchanged.
 - [Interfaces](source/dexgym/algorithms/supermimic/interfaces/): robot, task, reference and physical collector contracts.
 - [Marvin task plugins](source/dexgym/tasks/marvin_supermimic/): shared Newton arm physics and independent Wave, position Reach and SE(3) Reach & Hold tasks.
 - [Configs](configs/supermimic/) and [scripts](scripts/supermimic/): bounded examples, training, evaluation and diagnostics.
-- [How to add a task](docs/supermimic/task_plugin_guide.md), [architecture](docs/supermimic/core_architecture.md), [checkpoint rules](docs/supermimic/checkpoint_compatibility.md), [main integration validation](docs/supermimic/main_release_validation.md) and [M5 full-horizon physical results](docs/supermimic/m5_full32_4096_training.md).
+- [How to add a task](docs/supermimic/task_plugin_guide.md), [architecture](docs/supermimic/core_architecture.md), [checkpoint rules](docs/supermimic/checkpoint_compatibility.md), [main integration validation](docs/supermimic/main_release_validation.md), [M5 full-horizon physical results](docs/supermimic/m5_full32_4096_training.md) and [continuous SE(3) following](docs/supermimic/continuous_se3_follow_training.md).
 
 WM8, BPTT32, soft termination, survival weighting and TD(λ) are covered by
 the [SuperMimic tests](tests/supermimic/). The trained M4.1 Wave Actor remains
@@ -48,7 +50,8 @@ the [Wave and procedural references](source/dexgym/assets/supermimic/references/
 the Wave physical reset states and validation report, and the validated
 [M4.1 Wave checkpoint](models/supermimic/m41_wave_selected_best.pt) and the
 [M5 SE(3) Reach & Hold checkpoint](models/supermimic/m5_se3_reach_hold_seed60_iter400.pt)
-in Git LFS. Run `git lfs pull` after cloning before loading either checkpoint.
+and the [continuous SE(3) following checkpoint](models/supermimic/continuous_se3_follow_seed72_iter800.pt)
+in Git LFS. Run `git lfs pull` after cloning before loading these checkpoints.
 
 Pinned SHA256 values: Marvin MJCF
 `6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce`,
@@ -58,6 +61,8 @@ M4.1 checkpoint
 `fd0054a7ef707d46a30b0235713c9e00cc4d7e69d6687fc3015e52aac2cb773f`,
 M5 exported checkpoint
 `fab9ccff3382b71679e1eb360d421fb6dcfbb7e5ac859ec0e5f904305ae6ff91`.
+Selected continuous SE(3) policy
+`cd9eb16b1b1ce36ad32be2728865a2eb478ec0c507b195bb62ad10ad7849c689`.
 See the [asset notice](source/dexgym/assets/marvin_wuji/source_model/NOTICE.md)
 for source and license attribution. The committed M5 file is a 3.2 MB
 `fresh_physics` checkpoint: model, normalizers, optimizer state and semantic
@@ -104,7 +109,7 @@ PYTHONPATH=/home/ubuntu/dexgym_data/marvin_supermimic_m42/runtime_overrides:sour
 ```
 
 The test command runs the SuperMimic mathematical/integration suite and the
-Cartpole and asset tests. The latest verified run passed 215 tests with 3 skips.
+Cartpole and asset tests. The latest verified run passed 221 tests with 3 skips.
 The short Reach run verifies the training path, **not** policy success. The
 Wave replay validates a trained legacy policy without modifying its weights.
 See [M4.3.2 reliability results](docs/supermimic/m432_reliability_validation.md)
