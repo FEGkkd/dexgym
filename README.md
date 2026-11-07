@@ -38,7 +38,9 @@ It uses no object state. Local recordings and generated
 motions are excluded from Git; [data/README.md](data/README.md) describes the
 required layout and conversion command. The
 [pilot report](docs/experiments/hand_only_right_pilot.md) records task settings,
-data counts, and the small PPO check.
+data counts, and the small PPO check. The
+[4096-environment PPO report](docs/experiments/hand_only_4096_1000_s42.md)
+records the 1000-iteration training and held-out tracking results.
 
 ```bash
 PYTHONPATH=source uv run python scripts/data/build_grab_right_hand_library.py \
