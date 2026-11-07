@@ -113,6 +113,7 @@ def test_far_goal_episode_accepts_late_hold_after_early_large_error():
             failure_reason=torch.zeros(1, dtype=torch.int32)))
     assert task.episode_success(trajectory, complete=True)
     metrics = task.evaluate_metrics(trajectory)
+    assert metrics["reference_motion_id"] == 0
     assert metrics["first_complete_se3_arrival_step"] == 16
     assert metrics["longest_hold_steps"] == 25
     assert not task.episode_success(trajectory[:-1], complete=False)

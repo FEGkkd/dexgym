@@ -185,3 +185,15 @@ class MarvinWorkspaceSE3ReachHold(MarvinBimanualSE3ReachHold):
             reward = reward - (weights.step_scale * weights.stationary_action_weight
                                * stationary_gate * action.tanh().square().mean(-1))
         return reward
+
+    def evaluate_metrics(self, trajectory):
+        result = super().evaluate_metrics(trajectory)
+        motion_id = int(trajectory[0].next_task_state.motion_id[0])
+        result["reference_motion_id"] = motion_id
+        result["reference_name"] = self.reference.names[motion_id]
+        if hasattr(self.reference, "difficulty"):
+            result["reference_difficulty"] = int(self.reference.difficulty[motion_id])
+        if hasattr(self.reference, "split"):
+            result["reference_split"] = ("train", "validation", "test")[
+                int(self.reference.split[motion_id])]
+        return result
