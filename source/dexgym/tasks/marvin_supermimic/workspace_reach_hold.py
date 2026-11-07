@@ -27,6 +27,13 @@ class WorkspaceReachRewardConfigV5(WorkspaceReachRewardConfig):
     stationary_rotation_width_rad: float = 0.007
 
 
+@dataclass(frozen=True)
+class WorkspaceReachRewardConfigV6(WorkspaceReachRewardConfigV5):
+    """Weight selected from measured early/late BPTT output gradients."""
+
+    stationary_action_weight: float = 50.0
+
+
 class MarvinWorkspaceSE3ReachHold(MarvinBimanualSE3ReachHold):
     """Use a hidden-witness FK goal bank as a true fixed-goal MDP.
 
@@ -109,6 +116,9 @@ class MarvinWorkspaceSE3ReachHold(MarvinBimanualSE3ReachHold):
         if isinstance(self.reward_config, WorkspaceReachRewardConfigV5):
             contract["task_adapter_version"] = "marvin_workspace_se3_reach_hold_v4"
             contract["reward_shape"] = "linear_dual_tcp_distance_plus_se3_progress_hold_stationarity_v2"
+        if isinstance(self.reward_config, WorkspaceReachRewardConfigV6):
+            contract["task_adapter_version"] = "marvin_workspace_se3_reach_hold_v5"
+            contract["reward_shape"] = "linear_dual_tcp_distance_plus_se3_progress_hold_stationarity_v3"
         return contract
 
     def _remaining_time(self, task_state):

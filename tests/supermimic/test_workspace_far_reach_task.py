@@ -79,6 +79,25 @@ def test_versioned_hold_reward_penalizes_persistent_joint_increment_only_near_go
     assert legacy.checkpoint_contract()["task_adapter_version"].endswith("_v2")
 
 
+def test_strong_hold_reward_has_separate_checkpoint_semantics_and_far_goal_gradient():
+    from dexgym.tasks.marvin_supermimic.workspace_reach_hold import (
+        MarvinWorkspaceSE3ReachHold, WorkspaceReachRewardConfigV6)
+
+    task = MarvinWorkspaceSE3ReachHold(
+        StaticFarReference(), LinearTCPRobot(),
+        reward_config=WorkspaceReachRewardConfigV6(),
+        temporal_context="normalized_time_remaining_v3")
+    assert task.reward_config.stationary_action_weight == 50.0
+    assert task.checkpoint_contract()["task_adapter_version"].endswith("_v5")
+    state = torch.zeros(1, 42)
+    state.requires_grad_()
+    target = task.task_state(torch.tensor([0]), torch.tensor([1]))
+    task.reward(state.detach(), state, torch.zeros(1, 14), target).backward()
+    assert torch.isfinite(state.grad).all()
+    assert state.grad[0, 0] > 0.005
+    assert state.grad[0, 7] < -0.005
+
+
 def test_far_goal_episode_accepts_late_hold_after_early_large_error():
     task = _task()
     target = task.task_state(torch.tensor([0]), torch.tensor([0])).data
@@ -241,6 +260,12 @@ def test_hold_stationarity_task_profile_is_separate_from_legacy_reward():
         "marvin_workspace_se3_reach_hold_v4")
     assert task.reward_config.stationary_action_weight == 10.0
     assert _task_profile("marvin_workspace_reach_hold_v5")[2] == (
+        "marvin_teleop_workspace_bank_v5")
+    env.cfg.reach_reward_profile = "hold_stationarity_strong_v3"
+    stronger = MarvinWorkspaceSE3ReachHoldEnv._make_task(
+        env, StaticFarReference(), LinearTCPRobot())
+    assert stronger.checkpoint_contract()["task_adapter_version"].endswith("_v5")
+    assert _task_profile("marvin_workspace_reach_hold_v6")[2] == (
         "marvin_teleop_workspace_bank_v5")
 
 

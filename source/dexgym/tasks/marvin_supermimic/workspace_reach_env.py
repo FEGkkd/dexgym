@@ -5,7 +5,8 @@ from isaaclab.utils import configclass
 from .teleop_trajectory_env import MarvinTeleopWorkspaceCfg, MarvinTeleopWorkspaceEnv
 from .workspace_reach_hold import (MarvinWorkspaceSE3ReachHold,
                                    WorkspaceReachRewardConfig,
-                                   WorkspaceReachRewardConfigV5)
+                                   WorkspaceReachRewardConfigV5,
+                                   WorkspaceReachRewardConfigV6)
 
 
 @configclass
@@ -24,11 +25,14 @@ class MarvinWorkspaceSE3ReachHoldEnv(MarvinTeleopWorkspaceEnv):
 
     def _make_task(self, reference, robot):
         profile = getattr(self.cfg, "reach_reward_profile", "legacy_v1")
-        if profile not in ("legacy_v1", "hold_stationarity_v2"):
+        if profile not in ("legacy_v1", "hold_stationarity_v2",
+                           "hold_stationarity_strong_v3"):
             raise ValueError(f"Unknown workspace reach reward profile: {profile}")
         return MarvinWorkspaceSE3ReachHold(
             reference, robot, success_semantics=self.cfg.reach_success_semantics,
             temporal_context=getattr(self.cfg, "reach_temporal_context", None),
-            reward_config=(WorkspaceReachRewardConfigV5()
+            reward_config=(WorkspaceReachRewardConfigV6()
+                           if profile == "hold_stationarity_strong_v3" else
+                           WorkspaceReachRewardConfigV5()
                            if profile == "hold_stationarity_v2" else
                            WorkspaceReachRewardConfig()))

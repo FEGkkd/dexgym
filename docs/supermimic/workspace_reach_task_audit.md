@@ -223,6 +223,38 @@ Hold goals; then Near movement and both-arm orientation should be checked in
 independent Newton episodes. Long-range and changing-goal tests remain separate
 acceptance gates.
 
+## Evidence-guided hold stationarity experiment
+
+A versioned near-goal reward variant adds a smooth penalty on bounded joint
+increments only while both TCP poses are inside the strict hold neighborhood.
+The original reward and checkpoints remain loadable unchanged. With weight 10,
+the matched seed-97, 4096-environment, 160-iteration run made 140 Actor BPTT32
+updates and had zero nonfinite updates. On the same eight held-out Hold goals,
+it scored 8/8 under the brief 25-step criterion but 0/8 held to episode end;
+mean longest hold was 198.5 steps and final position error 0.0144/0.0157 m.
+One strict Replay/optimizer resume to iteration 320 reached 298 Actor updates,
+5,242,880 Newton transitions and zero nonfinite updates. It also scored 0/8
+held to episode end, with mean longest hold falling to 61.1 steps and final
+position error rising to 0.0425/0.0507 m. More iterations of this exact
+configuration are not justified by the physical evidence.
+
+On the 160-iteration model, a 32-step closed-loop imagination starting from
+the same eight real held-out Hold states ranked a zero-action policy above the
+trained Actor: discounted Actor objectives 3.3502 versus 3.3418 at the
+actual 0.28 Critic bootstrap weight. The trained Actor's final decoder had a
+positive loss derivative along its output scale (+0.0127), so scaling its
+outputs toward zero improved the imagined objective at those starts. In the
+saved deterministic training Replay, however, there were 61,440 eligible
+early starts (frames 0–40) and 677,376 later starts (frames 128–568). At
+iteration 320 the Actor outperformed zero in sampled late, already-drifted
+states, but zero outperformed it in sampled early states. At stationarity
+weight 10, the Actor output-scale loss derivative was +0.0485 early and
+-0.0100 late; a weight of 50 changed the sampled late derivative to +0.0029
+without removing the far-goal position gradient. The new v6 reward profile
+uses this measured weight of 50 as a controlled test; it is **not yet a
+successful policy**. The reward, Task Adapter and checkpoint contracts are
+versioned separately from the weight-10 experiment.
+
 ## Verified commands
 
 ```bash
