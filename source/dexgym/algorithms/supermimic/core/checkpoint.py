@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import random
+from copy import deepcopy
 from dataclasses import asdict
 from pathlib import Path
 
@@ -20,6 +21,7 @@ class CoreCheckpoint:
         "active_reset_fraction", "early_reset_fraction",
         "observation_position_noise_rad", "observation_velocity_noise_rad_s",
         "reference_start_frame", "evaluation_episode_count", "evaluation_trace_path",
+        "max_reference_start_frame",
         "goal_train_seed", "goal_eval_seed", "goal_curriculum_level", "evaluation_mode",
         "collection_contract",
     })
@@ -281,12 +283,14 @@ class CoreCheckpoint:
                 "resume_mode": record["resume_mode"],
                 "git_commit": record["git_commit"], "schema": record["schema"]}
 
-    def load_actor_for_evaluation(self, path: str | Path, *, robot, task, modules) -> dict:
+    def load_actor_for_evaluation(self, path: str | Path, *, robot, task, modules,
+                                  allow_reference_override: bool = False) -> dict:
         """Strict inference-only load; no optimizer, Replay or collector state is touched."""
         record = torch.load(path, map_location="cpu", weights_only=False)
         if record.get("schema") != self.schema_version:
             raise ValueError("Evaluation requires a v2 semantic checkpoint or explicit legacy evaluator")
-        if record["reference_hashes"] != self.reference_hashes:
+        changing_reference = record["reference_hashes"] != self.reference_hashes
+        if changing_reference and not allow_reference_override:
             raise ValueError("Reference hashes differ")
         stored_digest = hashlib.sha256(json.dumps(record["contract_manifest"], sort_keys=True,
             separators=(",", ":"), allow_nan=False).encode()).hexdigest()
@@ -301,8 +305,26 @@ class CoreCheckpoint:
         from types import SimpleNamespace
         current, _ = self._manifest(SimpleNamespace(robot=robot, task=task), active,
                                          self.physics_config, self.reference_hashes)
-        saved = record["contract_manifest"].copy()
+        saved = deepcopy(record["contract_manifest"])
         current = current.copy()
+        target_source_override = None
+        if changing_reference:
+            if (not getattr(task, "inference_reference_agnostic", False)
+                    or not saved["task_contract"].get("target_stream")
+                    or saved["task_contract"].get("target_stream")
+                        != current["task_contract"].get("target_stream")):
+                raise ValueError("Task does not declare compatible causal target-stream evaluation")
+            # Only the target source can change. Robot asset, controller,
+            # action/goal schema, task math and network semantics remain strict.
+            saved["reference_hashes"] = current["reference_hashes"]
+            if "reference_hashes" in saved["task_contract"]:
+                saved["task_contract"]["reference_hashes"] = current["task_contract"].get(
+                    "reference_hashes")
+            if "reference_asset_sha256" in saved["physics_config"]:
+                saved["physics_config"]["reference_asset_sha256"] = current[
+                    "physics_config"].get("reference_asset_sha256")
+            target_source_override = {"training": record["reference_hashes"],
+                                      "evaluation": self.reference_hashes}
         saved["physics_config"] = {key: value for key, value in saved["physics_config"].items()
                                    if key not in self.evaluation_protocol_fields}
         current["physics_config"] = {key: value for key, value in current["physics_config"].items()
@@ -320,7 +342,8 @@ class CoreCheckpoint:
                      if record["physics_config"].get(key) != value}
         return {"schema": record["schema"], "contract_sha256": stored_digest,
                 "git_commit": record["git_commit"], "policy_source": str(path),
-                "evaluation_protocol": protocol, "evaluation_overrides": overrides}
+                "evaluation_protocol": protocol, "evaluation_overrides": overrides,
+                "target_source_override": target_source_override}
 
     @staticmethod
     def load_legacy_m43_v1_actor_for_evaluation(

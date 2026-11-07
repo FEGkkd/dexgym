@@ -18,9 +18,11 @@ from dexgym.algorithms.supermimic.core.replay_buffer import SchemaReplay
 from dexgym.algorithms.supermimic.core.specs import NetworkSpec
 from dexgym.algorithms.supermimic.core.trainer import SuperMimicTrainer, TrainerConfig
 from dexgym.algorithms.supermimic.core.trust_evaluator import TrustConfig
-from dexgym.tasks.marvin_supermimic.physics_contract import marvin_continuous_se3_physics_config
+from dexgym.tasks.marvin_supermimic.physics_contract import (
+    marvin_continuous_se3_physics_config, marvin_teleop_workspace_physics_config)
 from dexgym.tasks.marvin_supermimic.se3_collector import SE3CorrelatedExplorationCollector
 from dexgym.tasks.marvin_supermimic.se3_trajectory_env import MarvinContinuousSE3FollowCfg
+from dexgym.tasks.marvin_supermimic.teleop_trajectory_env import MarvinTeleopWorkspaceCfg
 from dexgym.tasks.marvin_supermimic.se3_trust import SE3DualDistributionTrustEvaluator, SE3GeometryTrustConfig
 from isaaclab.app import launch_simulation
 
@@ -46,11 +48,18 @@ def main():
     parser.add_argument("--seed", type=int)
     parser.add_argument("--resume", type=Path)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--reference-bank", type=Path,
+                        help="FK-generated target bank for the causal workspace task")
+    parser.add_argument("--curriculum-level", type=int, choices=(0, 1, 2),
+                        help="Explicitly expand the generated workspace target difficulty")
     args = parser.parse_args()
     config_bytes = args.config.read_bytes()
     experiment = json.loads(config_bytes)
-    if experiment.get("version") != "marvin_continuous_se3_follow_v1":
+    workspace = experiment.get("version") == "marvin_teleop_workspace_follow_v1"
+    if not workspace and experiment.get("version") != "marvin_continuous_se3_follow_v1":
         parser.error("Unknown continuous SE(3) experiment version")
+    if not workspace and (args.reference_bank is not None or args.curriculum_level is not None):
+        parser.error("Workspace reference and curriculum overrides require the workspace config")
     num_envs = args.num_envs if args.num_envs is not None else experiment["num_envs"]
     iterations = args.iterations if args.iterations is not None else experiment["iterations_per_segment"]
     seed = args.seed if args.seed is not None else experiment["seed"]
@@ -64,15 +73,24 @@ def main():
     replay_capacity = int(experiment["replay_capacity_steps"])
     if replay_capacity < max(schedule.world_window, schedule.max_imagination_horizon):
         parser.error("Replay cannot hold a full World Model and imagination horizon")
-    cfg = MarvinContinuousSE3FollowCfg()
+    cfg = MarvinTeleopWorkspaceCfg() if workspace else MarvinContinuousSE3FollowCfg()
     cfg.scene.num_envs = num_envs
     cfg.seed = seed
-    cfg.include_reverse = bool(experiment["include_reverse"])
+    if workspace:
+        if args.reference_bank is None:
+            parser.error("The workspace task requires --reference-bank")
+        cfg.reference_bank_path = str(args.reference_bank)
+        cfg.curriculum_level = (args.curriculum_level if args.curriculum_level is not None
+                                else int(experiment["curriculum_level"]))
+        cfg.train_env_fraction = 0.75
+    else:
+        cfg.include_reverse = bool(experiment["include_reverse"])
     cfg.random_reference_start = bool(experiment["random_reference_start"])
     cfg.max_reference_start_frame = int(experiment["max_reference_start_frame"])
     cfg.reset_joint_perturb_rad = float(experiment["reset_joint_perturb_rad"])
-    if hashlib.sha256(Path(cfg.reference_path).read_bytes()).hexdigest() != experiment["reference_sha256"]:
-        parser.error("Validated procedural reference hash differs")
+    source_reference = cfg.reference_bank_path if workspace else cfg.reference_path
+    if hashlib.sha256(Path(source_reference).read_bytes()).hexdigest() != experiment["reference_sha256"]:
+        parser.error("Reference bank or validated procedural reference hash differs")
     exploration = experiment["exploration"]
     train_count = int(0.75 * num_envs)
     exploratory_count = int(train_count * exploration["train_env_fraction"])
@@ -83,7 +101,8 @@ def main():
     torch.manual_seed(seed)
     began = time.perf_counter()
     with launch_simulation(cfg):
-        env = gym.make("DexGym-Marvin-SuperMimic-Continuous-SE3-Follow-Direct-v0", cfg=cfg)
+        env = gym.make(("DexGym-Marvin-SuperMimic-Teleop-Workspace-SE3-Direct-v0"
+                        if workspace else "DexGym-Marvin-SuperMimic-Continuous-SE3-Follow-Direct-v0"), cfg=cfg)
         try:
             native = env.unwrapped
             robot, task = native.core_robot, native.follow_task
@@ -113,7 +132,8 @@ def main():
             checkpoint = CoreCheckpoint(
                 git_commit=subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
                 reference_hashes=native.reference.hashes,
-                physics_config=marvin_continuous_se3_physics_config(cfg, robot))
+                physics_config=(marvin_teleop_workspace_physics_config(cfg, robot)
+                                if workspace else marvin_continuous_se3_physics_config(cfg, robot)))
             resume_info = checkpoint.load(args.resume, trainer) if args.resume else None
             if trainer.iteration + iterations > experiment["max_total_iterations"]:
                 raise ValueError("Training continuation exceeds the versioned iteration budget")
@@ -140,6 +160,9 @@ def main():
                       "trust": trainer.trust_report, "trusted_horizon": trainer.allowed_horizon,
                       "replay_bytes_allocated": replay.bytes_allocated,
                       "strict_pure": True, "teacher_data": False,
+                      "target_stream_contract": ("causal_current_50hz_fixed_base_v1"
+                                                 if workspace else "future_10_frames_v1"),
+                      "curriculum_level": cfg.curriculum_level if workspace else None,
                       "resume": resume_info, "checkpoint": str(checkpoint_path),
                       "wall_time_s": time.perf_counter() - began,
                       "peak_torch_vram_bytes": (torch.cuda.max_memory_allocated()

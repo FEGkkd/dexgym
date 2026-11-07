@@ -41,10 +41,8 @@ class MarvinContinuousSE3FollowEnv(MarvinArmNewtonBaseEnv):
         source = SimpleNamespace(joint_names_arm=ARM_JOINT_NAMES)
         self.core_robot = MarvinCoreRobot(source, self.device, action_schema=cfg.action_schema)
         self._setup_arm_physics(source, self.core_robot.action_map.origin)
-        self.reference = SE3TCPReferenceProvider(
-            {"procedural_bimanual_reach_v1": cfg.reference_path}, self.device,
-            include_reverse=cfg.include_reverse)
-        self.follow_task = MarvinContinuousSE3Follow(self.reference, self.core_robot)
+        self.reference = self._make_reference(cfg)
+        self.follow_task = self._make_task(self.reference, self.core_robot)
         if (cfg.max_reference_start_frame < 0
                 or cfg.max_reference_start_frame + 32 >= int(self.reference.lengths.min())):
             raise ValueError("Reference reset start must leave a 32-step imagination window")
@@ -54,6 +52,31 @@ class MarvinContinuousSE3FollowEnv(MarvinArmNewtonBaseEnv):
         self.reference_frame = torch.zeros(self.num_envs, device=self.device, dtype=torch.long)
         self.follow_history = torch.zeros((self.num_envs, 10, 68), device=self.device)
         self.previous_qd = torch.zeros((self.num_envs, 14), device=self.device)
+
+    def _make_reference(self, cfg):
+        return SE3TCPReferenceProvider(
+            {"procedural_bimanual_reach_v1": cfg.reference_path}, self.device,
+            include_reverse=cfg.include_reverse)
+
+    @staticmethod
+    def _make_task(reference, robot):
+        return MarvinContinuousSE3Follow(reference, robot)
+
+    def _sample_reference(self, env_ids):
+        count = len(env_ids)
+        if self.cfg.evaluation_mode:
+            motion_id = (torch.arange(count, device=self.device) % len(self.reference.names)
+                         if self.cfg.evaluation_motion_id is None else
+                         torch.full((count,), self.cfg.evaluation_motion_id,
+                                    device=self.device, dtype=torch.long))
+            frame = torch.zeros(count, device=self.device, dtype=torch.long)
+        else:
+            motion_id = torch.randint(len(self.reference.names), (count,), device=self.device)
+            frame = (torch.randint(self.cfg.max_reference_start_frame + 1,
+                                   (count,), device=self.device)
+                     if self.cfg.random_reference_start else
+                     torch.zeros(count, device=self.device, dtype=torch.long))
+        return motion_id, frame
 
     def task_state(self):
         return self.follow_task.task_state(self.reference_id.clone(), self.reference_frame.clone())
@@ -109,20 +132,8 @@ class MarvinContinuousSE3FollowEnv(MarvinArmNewtonBaseEnv):
         if env_ids is None:
             env_ids = self.robot._ALL_INDICES
         count = len(env_ids)
-        if self.cfg.evaluation_mode:
-            motion_id = (torch.arange(count, device=self.device) % len(self.reference.names)
-                         if self.cfg.evaluation_motion_id is None else
-                         torch.full((count,), self.cfg.evaluation_motion_id,
-                                    device=self.device, dtype=torch.long))
-            frame = torch.zeros(count, device=self.device, dtype=torch.long)
-            perturb = self.cfg.reset_joint_perturb_rad
-        else:
-            motion_id = torch.randint(len(self.reference.names), (count,), device=self.device)
-            frame = (torch.randint(self.cfg.max_reference_start_frame + 1,
-                                   (count,), device=self.device)
-                     if self.cfg.random_reference_start else
-                     torch.zeros(count, device=self.device, dtype=torch.long))
-            perturb = self.cfg.reset_joint_perturb_rad
+        motion_id, frame = self._sample_reference(env_ids)
+        perturb = self.cfg.reset_joint_perturb_rad
         arm_q = self.reference.reset_q_at(motion_id, frame).clone()
         if perturb:
             arm_q += (torch.rand_like(arm_q) * 2 - 1) * perturb

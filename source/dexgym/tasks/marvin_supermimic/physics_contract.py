@@ -107,3 +107,28 @@ def marvin_continuous_se3_physics_config(cfg, robot) -> dict:
         "reset_joint_perturb_rad": cfg.reset_joint_perturb_rad,
         "evaluation_mode": cfg.evaluation_mode,
     }
+
+
+def marvin_teleop_workspace_physics_config(cfg, robot) -> dict:
+    """50 Hz causal target stream; train/evaluation split is a recorded protocol."""
+    return {
+        "backend": "newton_mjwarp_v1",
+        "num_envs": cfg.scene.num_envs,
+        "seed": cfg.seed,
+        "physics_dt": cfg.sim.dt,
+        "policy_dt": cfg.sim.dt * cfg.decimation,
+        "decimation": cfg.decimation,
+        "episode_length_s": cfg.episode_length_s,
+        "controller_kp_source": robot.native.controller_kp_source,
+        "controller_kd_source": robot.native.controller_kd_source,
+        "controller_damping_scale_source": robot.native.controller_damping_scale_source,
+        "hands_fixed_home": True,
+        "hand_contact_configuration": "validated_disabled",
+        "audit_contacts_each_physics_step": cfg.audit_contacts_each_physics_step,
+        "reference_asset_sha256": hashlib.sha256(Path(cfg.reference_bank_path).read_bytes()).hexdigest(),
+        "reference_transform": "causal_current_50hz_fixed_base_v1",
+        "reset_random_reference_start": cfg.random_reference_start,
+        "max_reference_start_frame": cfg.max_reference_start_frame,
+        "reset_joint_perturb_rad": cfg.reset_joint_perturb_rad,
+        "evaluation_mode": cfg.evaluation_mode,
+    }

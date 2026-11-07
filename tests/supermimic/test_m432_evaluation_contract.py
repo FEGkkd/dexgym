@@ -61,6 +61,61 @@ def test_inference_ignores_training_collection_protocol_but_resume_rejects_it(tm
         manager.load(path, target)
 
 
+def test_inference_may_change_reference_start_sampler_bound_but_resume_may_not(tmp_path):
+    source = make_toy_trainer("position", num_envs=8)
+    training_physics = dict(TRAIN_PHYSICS, max_reference_start_frame=80)
+    path = CoreCheckpoint(git_commit="test", reference_hashes={},
+                          physics_config=training_physics).save(tmp_path / "model.pt", source)
+    target = make_toy_trainer("position", num_envs=8)
+    evaluation = CoreCheckpoint(git_commit="test", reference_hashes={},
+                                physics_config=dict(TRAIN_PHYSICS, max_reference_start_frame=0))
+    modules = type("Modules", (), {"actor": target.actor,
+                                   "world_model": target.world_model,
+                                   "critic": target.critic, "termination": None})()
+    report = evaluation.load_actor_for_evaluation(
+        path, robot=target.robot, task=target.task, modules=modules)
+    assert report["evaluation_overrides"]["max_reference_start_frame"] == 0
+    with pytest.raises(ValueError, match="physics"):
+        evaluation.load(path, target)
+
+
+def test_causal_stream_evaluation_can_explicitly_override_target_bank_not_training_resume(tmp_path):
+    source = make_toy_trainer("position", num_envs=8)
+    old_contract = source.task.checkpoint_contract
+    source.task.checkpoint_contract = lambda: dict(
+        old_contract(), target_stream="causal_fixed_base_50hz_v1",
+        reference_hashes={"bank": "train"})
+    path = CoreCheckpoint(git_commit="test", reference_hashes={"bank": "train"},
+                          physics_config=TRAIN_PHYSICS).save(tmp_path / "model.pt", source)
+    target = make_toy_trainer("position", num_envs=8)
+    target.task.inference_reference_agnostic = True
+    new_contract = target.task.checkpoint_contract
+    target.task.checkpoint_contract = lambda: dict(
+        new_contract(), target_stream="causal_fixed_base_50hz_v1",
+        reference_hashes={"bank": "unseen"})
+    manager = CoreCheckpoint(git_commit="test", reference_hashes={"bank": "unseen"},
+                             physics_config=TRAIN_PHYSICS)
+    modules = type("Modules", (), {"actor": target.actor,
+                                   "world_model": target.world_model,
+                                   "critic": target.critic, "termination": None})()
+    with pytest.raises(ValueError, match="Reference hashes"):
+        manager.load_actor_for_evaluation(
+            path, robot=target.robot, task=target.task, modules=modules)
+    report = manager.load_actor_for_evaluation(
+        path, robot=target.robot, task=target.task, modules=modules,
+        allow_reference_override=True)
+    assert report["target_source_override"]["evaluation"] == {"bank": "unseen"}
+    incompatible = CoreCheckpoint(
+        git_commit="test", reference_hashes={"bank": "unseen"},
+        physics_config=dict(TRAIN_PHYSICS, controller_kp_source="different"))
+    with pytest.raises(ValueError, match="controller_kp_source"):
+        incompatible.load_actor_for_evaluation(
+            path, robot=target.robot, task=target.task, modules=modules,
+            allow_reference_override=True)
+    with pytest.raises(ValueError, match="Reference"):
+        manager.load(path, target)
+
+
 @pytest.mark.parametrize("key,value", [
     ("physics_dt", 0.01), ("controller_kp_source", "v2"),
 ])
