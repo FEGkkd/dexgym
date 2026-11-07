@@ -87,10 +87,14 @@ class Critic(nn.Module):
 
 
 class StateDeltaWorldModel(nn.Module):
-    def __init__(self, robot: RobotSpec, config: NetworkSpec):
+    def __init__(self, robot: RobotSpec, config: NetworkSpec, *,
+                 integration_version: str = "robot_adapter_delta_v1"):
         super().__init__()
+        if integration_version not in ("robot_adapter_delta_v1", "command_centered_residual_v2"):
+            raise ValueError("Unknown World Model integration version")
         self.robot_spec = robot
         self.network_spec = config
+        self.integration_version = integration_version
         self.input_norm = _norm(robot.state_dim + robot.action_dim + robot.context_dim, config)
         self.delta_norm = _norm(robot.delta_dim, config)
         self.network = mlp((robot.state_dim + robot.action_dim + robot.context_dim,
@@ -111,15 +115,26 @@ class StateDeltaWorldModel(nn.Module):
 
     def forward(self, state: torch.Tensor, action: torch.Tensor,
                 context: torch.Tensor, robot_adapter) -> torch.Tensor:
-        return robot_adapter.integrate(state, self.predict_delta(state, action, context),
-                                       action, context)
+        delta = self.predict_delta(state, action, context)
+        if self.integration_version == "command_centered_residual_v2":
+            integrate = getattr(robot_adapter, "integrate_command_centered", None)
+            if not callable(integrate):
+                raise ValueError("Command-centered World Model requires a position-servo Robot Adapter")
+            return integrate(state, delta, action, context)
+        return robot_adapter.integrate(state, delta, action, context)
 
     @torch.no_grad()
     def update_norms(self, state: torch.Tensor, action: torch.Tensor,
                      context: torch.Tensor, next_state: torch.Tensor, robot_adapter):
         if isinstance(self.input_norm, RunningNorm):
             self.input_norm.update(torch.cat((state, action, context), dim=-1))
-            self.delta_norm.update(robot_adapter.physical_delta(state, next_state))
+            if self.integration_version == "command_centered_residual_v2":
+                target = getattr(robot_adapter, "command_centered_target", None)
+                if not callable(target):
+                    raise ValueError("Command-centered World Model requires a position-servo Robot Adapter")
+                self.delta_norm.update(target(state, next_state))
+            else:
+                self.delta_norm.update(robot_adapter.physical_delta(state, next_state))
 
     def autoregressive_loss(self, window, robot_adapter, **kwargs):
         from .world_model import masked_autoregressive_loss
@@ -158,12 +173,14 @@ class NetworkFactory:
     @staticmethod
     def build(robot: RobotSpec, task: TaskSpec, config: NetworkSpec, *,
               robot_adapter=None,
+              world_integration_version: str = "robot_adapter_delta_v1",
               shared_world_model: StateDeltaWorldModel | None = None) -> NetworkModules:
         if shared_world_model is not None and shared_world_model.robot_spec != robot:
             raise ValueError("Shared World Model robot/action/context schema differs")
         if robot_adapter is not None and robot_adapter.spec != robot:
             raise ValueError("Robot Adapter and RobotSpec differ")
-        signature = (world_model_dynamics_signature(robot_adapter, config)
+        signature = (world_model_dynamics_signature(
+            robot_adapter, config, integration_version=world_integration_version)
                      if robot_adapter is not None else None)
         if shared_world_model is not None:
             old = getattr(shared_world_model, "dynamics_signature", None)
@@ -172,7 +189,9 @@ class NetworkFactory:
             if old[1] != signature[1]:
                 raise ValueError("Shared World Model dynamics mismatch: "
                                  + str(first_dynamics_difference(old[0], signature[0])))
-        world_model = shared_world_model if shared_world_model is not None else StateDeltaWorldModel(robot, config)
+        world_model = (shared_world_model if shared_world_model is not None else
+                       StateDeltaWorldModel(robot, config,
+                                            integration_version=world_integration_version))
         if signature is not None and shared_world_model is None:
             world_model.dynamics_signature = signature
         return NetworkModules(world_model, GoalActor(robot, task, config),

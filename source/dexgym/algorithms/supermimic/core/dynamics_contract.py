@@ -5,7 +5,8 @@ import hashlib
 import json
 
 
-def world_model_dynamics_signature(robot_adapter, network_spec) -> tuple[dict, str]:
+def world_model_dynamics_signature(robot_adapter, network_spec, *,
+                                   integration_version="robot_adapter_delta_v1") -> tuple[dict, str]:
     contract = getattr(robot_adapter, "checkpoint_contract", None)
     if not callable(contract):
         raise ValueError("Shared World Model needs Robot Adapter checkpoint_contract")
@@ -26,7 +27,7 @@ def world_model_dynamics_signature(robot_adapter, network_spec) -> tuple[dict, s
             "normalizer_version": network_spec.normalizer_version,
             "normalizer_min_std": network_spec.normalizer_min_std,
             "normalizer_max_count": network_spec.normalizer_max_count,
-            "delta_integration": "robot_adapter_delta_v1",
+            "delta_integration": integration_version,
             "weight_contract": "same_model_instance_v1",
         },
     }

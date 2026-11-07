@@ -18,6 +18,7 @@ class MarvinTeleopWorkspaceCfg(MarvinContinuousSE3FollowCfg):
     reference_path = ""  # The pinned procedural trajectory is not an input to this task.
     reference_bank_path = ""
     evaluation_split = "test"
+    evaluation_max_difficulty = 2
     curriculum_level = 2
     # First 75% of Newton environments train; the rest are held out for WM trust.
     train_env_fraction = 0.75
@@ -40,16 +41,24 @@ class MarvinTeleopWorkspaceEnv(MarvinContinuousSE3FollowEnv):
     def _sample_reference(self, env_ids):
         count = len(env_ids)
         if self.cfg.evaluation_mode:
+            maximum = self.cfg.evaluation_max_difficulty
+            if not 0 <= maximum <= 2:
+                raise ValueError("Evaluation difficulty must be 0, 1 or 2")
             if self.cfg.evaluation_motion_id is not None:
                 motion_id = torch.full((count,), self.cfg.evaluation_motion_id,
                                        device=self.device, dtype=torch.long)
                 required_split = ("train", "validation", "test").index(self.cfg.evaluation_split)
                 if bool((self.reference.split[motion_id] != required_split).any()):
                     raise ValueError("Selected evaluation clip does not belong to its declared split")
+                if bool((self.reference.difficulty[motion_id] > maximum).any()):
+                    raise ValueError("Selected evaluation clip exceeds the declared difficulty")
             else:
                 eligible = torch.nonzero(
-                    self.reference.split == ("train", "validation", "test").index(
-                        self.cfg.evaluation_split)).flatten()
+                    (self.reference.split == ("train", "validation", "test").index(
+                        self.cfg.evaluation_split))
+                    & (self.reference.difficulty <= maximum)).flatten()
+                if len(eligible) == 0:
+                    raise ValueError("No target clips match evaluation split and difficulty")
                 motion_id = eligible[torch.arange(count, device=self.device) % len(eligible)]
             frame = torch.zeros(count, device=self.device, dtype=torch.long)
         else:

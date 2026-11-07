@@ -7,6 +7,7 @@ REACH_TASK_ID = "DexGym-Marvin-SuperMimic-Reach-Direct-v0"
 SE3_REACH_HOLD_TASK_ID = "DexGym-Marvin-SuperMimic-SE3-Reach-Hold-Direct-v0"
 CONTINUOUS_SE3_FOLLOW_TASK_ID = "DexGym-Marvin-SuperMimic-Continuous-SE3-Follow-Direct-v0"
 TELEOP_WORKSPACE_TASK_ID = "DexGym-Marvin-SuperMimic-Teleop-Workspace-SE3-Direct-v0"
+WORKSPACE_REACH_HOLD_TASK_ID = "DexGym-Marvin-SuperMimic-Workspace-Reach-Hold-Direct-v0"
 
 gym.register(
     id=TASK_ID,
@@ -43,4 +44,12 @@ gym.register(
     disable_env_checker=True,
     kwargs={"env_cfg_entry_point":
             "dexgym.tasks.marvin_supermimic.teleop_trajectory_env:MarvinTeleopWorkspaceCfg"},
+)
+
+gym.register(
+    id=WORKSPACE_REACH_HOLD_TASK_ID,
+    entry_point="dexgym.tasks.marvin_supermimic.workspace_reach_env:MarvinWorkspaceSE3ReachHoldEnv",
+    disable_env_checker=True,
+    kwargs={"env_cfg_entry_point":
+            "dexgym.tasks.marvin_supermimic.workspace_reach_env:MarvinWorkspaceSE3ReachHoldCfg"},
 )

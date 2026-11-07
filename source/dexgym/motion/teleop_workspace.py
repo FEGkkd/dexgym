@@ -260,6 +260,99 @@ def generate_teleop_reach_probe_bank(path: str | Path, *, seed: int,
             "clips": len(split), "frames": frames, "profile": "static_far_reach_probe_v3"}
 
 
+def generate_teleop_reach_curriculum_bank(path: str | Path, *, seed: int,
+                                          split_counts=(256, 32, 32), frames=601,
+                                          max_attempts_per_clip=1000,
+                                          mjcf: str | Path = DEFAULT_MJCF) -> dict:
+    """Sample static, FK-reachable dual TCP goals in measured SE(3) bins.
+
+    The start witness is saved only for Newton reset. The goal joint witness
+    is discarded after FK and static collision/path screening. This certifies
+    kinematic feasibility; policy execution still needs independent physics.
+    """
+    if (len(split_counts) != 3 or min(split_counts) < 1 or frames < 401
+            or max_attempts_per_clip < 1):
+        raise ValueError("Curriculum bank needs three nonempty splits and a bounded long episode")
+    path = Path(path)
+    model = mujoco.MjModel.from_xml_path(str(mjcf))
+    data = mujoco.MjData(model)
+    joint_names = tuple(f"Joint{j}_{side}" for side in ("L", "R") for j in range(1, 8))
+    joint_ids = [mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name)
+                 for name in joint_names]
+    addresses = model.jnt_qposadr[joint_ids]
+    site_ids = [mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, f"tcp_{side}")
+                for side in ("L", "R")]
+    home = model.key_qpos[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "home")].copy()
+    lower, upper = model.jnt_range[joint_ids, 0] + 0.08, model.jnt_range[joint_ids, 1] - 0.08
+    # Bounds apply separately to each arm; neither arm may be a trivial goal.
+    pose_bins = ((0.015, 0.12, 0.035, 0.45),
+                 (0.08, 0.35, 0.15, 1.1),
+                 (0.20, 1.1, 0.4, 3.0))
+    joint_radii = (0.12, 0.35, 1.1)
+    rng = np.random.default_rng(seed)
+
+    def pose_at(q):
+        nonlocal data
+        data.qpos[:] = home
+        data.qpos[addresses] = q
+        try:
+            mujoco.mj_forward(model, data)
+        except mujoco.FatalError:
+            data = mujoco.MjData(model)
+            return None
+        if data.ncon:
+            return None
+        return np.stack([np.r_[data.site_xpos[site], Rotation.from_matrix(
+            data.site_xmat[site].reshape(3, 3)).as_quat()] for site in site_ids])
+
+    starts, targets, difficulties = [], [], []
+    for index in range(sum(split_counts)):
+        difficulty = index % 3
+        p_min, p_max, r_min, r_max = pose_bins[difficulty]
+        for _ in range(max_attempts_per_clip):
+            start = rng.uniform(lower, upper)
+            start_pose = pose_at(start)
+            if start_pose is None:
+                continue
+            goal_q = np.clip(start + rng.uniform(-joint_radii[difficulty],
+                                                 joint_radii[difficulty], 14), lower, upper)
+            goal_pose = pose_at(goal_q)
+            if goal_pose is None:
+                continue
+            displacement = np.linalg.norm(goal_pose[:, :3] - start_pose[:, :3], axis=-1)
+            rotation = (Rotation.from_quat(start_pose[:, 3:]).inv()
+                        * Rotation.from_quat(goal_pose[:, 3:])).magnitude()
+            if (np.any(displacement < p_min) or np.any(displacement > p_max)
+                    or np.any(rotation < r_min) or np.any(rotation > r_max)):
+                continue
+            if any(pose_at(start * (1 - alpha) + goal_q * alpha) is None
+                   for alpha in np.linspace(0, 1, 21)):
+                continue
+            starts.append(start.astype(np.float32))
+            targets.append(goal_pose.astype(np.float32))
+            difficulties.append(difficulty)
+            break
+        else:
+            raise RuntimeError(f"Could not sample measured-pose goal {index} at level {difficulty}")
+    split = np.repeat(np.arange(3, dtype=np.int8), split_counts)
+    reset = np.repeat(np.asarray(starts)[:, None], frames, axis=1)
+    goals = np.repeat(np.asarray(targets)[:, None], frames, axis=1)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(path, version="marvin_teleop_workspace_bank_v4", seed=seed,
+                        fps=50, joint_names_arm=np.asarray(joint_names),
+                        names=np.asarray([f"pose_reach_{SPLITS[int(s)]}_{i:04d}_l{d}"
+                                          for i, (s, d) in enumerate(zip(split, difficulties))]),
+                        split=split, family=np.asarray(["static_se3_reach"] * len(split)),
+                        difficulty=np.asarray(difficulties, np.int8),
+                        difficulty_contract=np.asarray(pose_bins, np.float32),
+                        q_reset_witness=reset, tcp_pos=goals[..., :3],
+                        tcp_quat_xyzw=goals[..., 3:])
+    return {"path": str(path), "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "clips": len(split), "frames": frames,
+            "profile": "measured_dual_tcp_se3_bins_v4",
+            "position_and_rotation_bins": pose_bins}
+
+
 class TeleopWorkspaceReferenceBank:
     """GPU batched TCP lookup; joint witness is exposed only to physical reset."""
 
@@ -271,7 +364,8 @@ class TeleopWorkspaceReferenceBank:
             self.version = str(data["version"])
             if self.version not in ("marvin_teleop_workspace_bank_v1",
                                     "marvin_teleop_workspace_bank_v2",
-                                    "marvin_teleop_workspace_bank_v3") or int(data["fps"]) != 50:
+                                    "marvin_teleop_workspace_bank_v3",
+                                    "marvin_teleop_workspace_bank_v4") or int(data["fps"]) != 50:
                 raise ValueError("Target bank version or 50 Hz rate differs")
             self.names = tuple(str(x) for x in data["names"])
             self.joint_names_arm = tuple(str(x) for x in data["joint_names_arm"])

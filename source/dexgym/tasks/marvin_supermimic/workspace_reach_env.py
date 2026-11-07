@@ -1,0 +1,22 @@
+"""Newton far-goal reach-and-hold task on the common Marvin arm servo."""
+
+from isaaclab.utils import configclass
+
+from .teleop_trajectory_env import MarvinTeleopWorkspaceCfg, MarvinTeleopWorkspaceEnv
+from .workspace_reach_hold import MarvinWorkspaceSE3ReachHold
+
+
+@configclass
+class MarvinWorkspaceSE3ReachHoldCfg(MarvinTeleopWorkspaceCfg):
+    episode_length_s = 12.0
+    reach_success_semantics = "hold_start_deadline_v2"
+
+
+class MarvinWorkspaceSE3ReachHoldEnv(MarvinTeleopWorkspaceEnv):
+    """Keep reference-bank reset mechanics; train a distinct arrival MDP."""
+
+    cfg: MarvinWorkspaceSE3ReachHoldCfg
+
+    def _make_task(self, reference, robot):
+        return MarvinWorkspaceSE3ReachHold(
+            reference, robot, success_semantics=self.cfg.reach_success_semantics)

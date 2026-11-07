@@ -17,6 +17,7 @@ from dexgym.tasks.marvin_supermimic.physics_contract import (
     marvin_continuous_se3_physics_config, marvin_teleop_workspace_physics_config)
 from dexgym.tasks.marvin_supermimic.se3_trajectory_env import MarvinContinuousSE3FollowCfg
 from dexgym.tasks.marvin_supermimic.teleop_trajectory_env import MarvinTeleopWorkspaceCfg
+from dexgym.tasks.marvin_supermimic.workspace_reach_env import MarvinWorkspaceSE3ReachHoldCfg
 from dexgym.motion.teleop_workspace import reference_episode_control_steps
 from isaaclab.app import launch_simulation
 
@@ -42,6 +43,22 @@ class ReferenceServoDiagnostic(torch.nn.Module):
         return torch.atanh(requested)
 
 
+def _evaluation_task_profile(name):
+    if name == "pinned":
+        return (MarvinContinuousSE3FollowCfg,
+                "DexGym-Marvin-SuperMimic-Continuous-SE3-Follow-Direct-v0",
+                "marvin_bimanual_continuous_se3_follow")
+    if name == "workspace":
+        return (MarvinTeleopWorkspaceCfg,
+                "DexGym-Marvin-SuperMimic-Teleop-Workspace-SE3-Direct-v0",
+                "marvin_bimanual_teleop_workspace_se3_follow")
+    if name == "workspace_reach":
+        return (MarvinWorkspaceSE3ReachHoldCfg,
+                "DexGym-Marvin-SuperMimic-Workspace-Reach-Hold-Direct-v0",
+                "marvin_bimanual_workspace_se3_reach_hold")
+    raise ValueError(f"Unknown SE(3) evaluation task: {name}")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     source = parser.add_mutually_exclusive_group(required=True)
@@ -51,9 +68,12 @@ def main():
     parser.add_argument("--seed", type=int, default=9101)
     parser.add_argument("--motion-id", type=int)
     parser.add_argument("--reference-bank", type=Path)
-    parser.add_argument("--task", choices=("pinned", "workspace"), default="pinned")
+    parser.add_argument("--task", choices=("pinned", "workspace", "workspace_reach"),
+                        default="pinned")
     parser.add_argument("--evaluation-split", choices=("train", "validation", "test"),
                         default="test")
+    parser.add_argument("--evaluation-max-difficulty", type=int, choices=(0, 1, 2),
+                        default=2, help="Maximum held-out goal difficulty, inclusive")
     parser.add_argument("--allow-new-reference", action="store_true",
                         help="Explicitly evaluate the causal workspace Actor on a different target bank")
     parser.add_argument("--reset-perturb-rad", type=float, default=0.0)
@@ -63,19 +83,24 @@ def main():
         parser.error("Independent evaluation uses 1-64 environments and bounded reset perturbation")
     saved = (torch.load(args.checkpoint, map_location="cpu", weights_only=False)
              if args.checkpoint else None)
-    workspace = args.task == "workspace"
+    cfg_class, environment_id, expected_task = _evaluation_task_profile(args.task)
+    workspace = args.task in ("workspace", "workspace_reach")
     if workspace and args.baseline == "reference_pd":
         parser.error("The causal workspace task has no joint-witness policy or IK baseline")
     if args.allow_new_reference and not workspace:
         parser.error("Reference source override is only supported for the causal workspace task")
-    expected_task = ("marvin_bimanual_teleop_workspace_se3_follow" if workspace
-                     else "marvin_bimanual_continuous_se3_follow")
     if saved and (saved.get("schema") != CoreCheckpoint.schema_version
                   or saved["task_spec"]["task_id"] != expected_task):
         parser.error("Expected a compatible continuous SE(3) Core checkpoint")
     if workspace and args.reference_bank is None:
         parser.error("Workspace evaluation requires --reference-bank")
-    cfg = MarvinTeleopWorkspaceCfg() if workspace else MarvinContinuousSE3FollowCfg()
+    cfg = cfg_class()
+    if args.task == "workspace_reach" and saved:
+        task_version = saved["contract_manifest"]["task_contract"]["task_adapter_version"]
+        if task_version == "marvin_workspace_se3_reach_hold_v1":
+            cfg.reach_success_semantics = "pre_deadline_arrival_v1"
+        elif task_version != "marvin_workspace_se3_reach_hold_v2":
+            parser.error(f"Unsupported workspace reach success contract: {task_version}")
     cfg.scene.num_envs = args.num_envs
     cfg.seed = args.seed
     cfg.evaluation_mode = True
@@ -85,18 +110,24 @@ def main():
     if workspace:
         cfg.reference_bank_path = str(args.reference_bank)
         cfg.evaluation_split = args.evaluation_split
+        cfg.evaluation_max_difficulty = args.evaluation_max_difficulty
         with np.load(args.reference_bank, allow_pickle=False) as bank:
+            if (args.task == "workspace_reach" and str(bank["version"]) not in
+                    ("marvin_teleop_workspace_bank_v3", "marvin_teleop_workspace_bank_v4")):
+                parser.error("Workspace reach-and-hold requires a static far-goal bank")
             cfg.episode_length_s = (bank["tcp_pos"].shape[1] - 1) / 50
     torch.manual_seed(args.seed)
     with launch_simulation(cfg):
-        env = gym.make(("DexGym-Marvin-SuperMimic-Teleop-Workspace-SE3-Direct-v0"
-                        if workspace else "DexGym-Marvin-SuperMimic-Continuous-SE3-Follow-Direct-v0"), cfg=cfg)
+        env = gym.make(environment_id, cfg=cfg)
         try:
             native = env.unwrapped
             robot, task = native.core_robot, native.follow_task
             if saved:
                 network = NetworkSpec(**saved["contract_manifest"]["networks"]["actor"]["network_spec"])
-                modules = NetworkFactory.build(robot.spec, task.spec, network, robot_adapter=robot)
+                integration = saved["contract_manifest"]["networks"]["world_model"]["integration_version"]
+                modules = NetworkFactory.build(
+                    robot.spec, task.spec, network, robot_adapter=robot,
+                    world_integration_version=integration)
                 for module in (modules.world_model, modules.actor, modules.critic, modules.termination):
                     module.to(native.device)
                 checkpoint = CoreCheckpoint(
@@ -130,6 +161,10 @@ def main():
                            "seed": args.seed, "num_envs": args.num_envs,
                            "evaluation_motion_id": args.motion_id,
                            "evaluation_split": args.evaluation_split if workspace else None,
+                           "evaluation_max_difficulty": (
+                               args.evaluation_max_difficulty if workspace else None),
+                           "reach_success_semantics": (
+                               cfg.reach_success_semantics if args.task == "workspace_reach" else None),
                            "allow_new_reference": args.allow_new_reference,
                            "reference_names": native.reference.names,
                            "reference_hashes": native.reference.hashes,

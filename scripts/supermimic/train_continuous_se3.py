@@ -24,10 +24,39 @@ from dexgym.tasks.marvin_supermimic.physics_contract import (
 from dexgym.tasks.marvin_supermimic.se3_collector import SE3CorrelatedExplorationCollector
 from dexgym.tasks.marvin_supermimic.se3_trajectory_env import MarvinContinuousSE3FollowCfg
 from dexgym.tasks.marvin_supermimic.teleop_trajectory_env import MarvinTeleopWorkspaceCfg
+from dexgym.tasks.marvin_supermimic.workspace_reach_env import MarvinWorkspaceSE3ReachHoldCfg
 from dexgym.tasks.marvin_supermimic.se3_trust import SE3DualDistributionTrustEvaluator, SE3GeometryTrustConfig
 from isaaclab.app import launch_simulation
 
 DEFAULT_CONFIG = Path("configs/supermimic/continuous_se3_follow_4096_full32_v1.json")
+
+
+def _model_integration_version(experiment):
+    version = experiment.get("world_model_integration", "robot_adapter_delta_v1")
+    if version not in ("robot_adapter_delta_v1", "command_centered_residual_v2"):
+        raise ValueError(f"Unknown World Model integration version: {version}")
+    return version
+
+
+def _task_profile(version):
+    if version == "marvin_continuous_se3_follow_v1":
+        return (MarvinContinuousSE3FollowCfg,
+                "DexGym-Marvin-SuperMimic-Continuous-SE3-Follow-Direct-v0", None)
+    if version in ("marvin_teleop_workspace_follow_v1",
+                   "marvin_teleop_workspace_follow_v2",
+                   "marvin_teleop_workspace_follow_v3"):
+        return (MarvinTeleopWorkspaceCfg,
+                "DexGym-Marvin-SuperMimic-Teleop-Workspace-SE3-Direct-v0",
+                "marvin_teleop_workspace_bank_" + version.rsplit("_", 1)[-1])
+    if version == "marvin_workspace_reach_hold_v1":
+        return (MarvinWorkspaceSE3ReachHoldCfg,
+                "DexGym-Marvin-SuperMimic-Workspace-Reach-Hold-Direct-v0",
+                "marvin_teleop_workspace_bank_v3")
+    if version == "marvin_workspace_reach_hold_v2":
+        return (MarvinWorkspaceSE3ReachHoldCfg,
+                "DexGym-Marvin-SuperMimic-Workspace-Reach-Hold-Direct-v0",
+                "marvin_teleop_workspace_bank_v4")
+    raise ValueError(f"Unknown continuous SE(3) experiment version: {version}")
 
 
 def _configured_components(experiment):
@@ -63,11 +92,11 @@ def main():
         parser.error("Choose one of strict resume, full model transfer or dynamics-only transfer")
     config_bytes = args.config.read_bytes()
     experiment = json.loads(config_bytes)
-    workspace = experiment.get("version") in (
-        "marvin_teleop_workspace_follow_v1", "marvin_teleop_workspace_follow_v2",
-        "marvin_teleop_workspace_follow_v3")
-    if not workspace and experiment.get("version") != "marvin_continuous_se3_follow_v1":
-        parser.error("Unknown continuous SE(3) experiment version")
+    try:
+        cfg_class, environment_id, bank_version = _task_profile(experiment.get("version"))
+    except ValueError as error:
+        parser.error(str(error))
+    workspace = bank_version is not None
     if not workspace and (args.reference_bank is not None or args.curriculum_level is not None):
         parser.error("Workspace reference and curriculum overrides require the workspace config")
     num_envs = args.num_envs if args.num_envs is not None else experiment["num_envs"]
@@ -76,6 +105,12 @@ def main():
     if not 16 <= num_envs <= 4096 or not 1 <= iterations <= experiment["iterations_per_segment"]:
         parser.error("Training segment must use 16-4096 environments and a bounded iteration count")
     network, schedule, trust, geometry = _configured_components(experiment)
+    try:
+        world_integration = _model_integration_version(experiment)
+    except ValueError as error:
+        parser.error(str(error))
+    if world_integration == "command_centered_residual_v2" and not workspace:
+        parser.error("Command-centered dynamics is only validated for the Marvin workspace task")
     if (schedule.mode != "pure_model_based" or schedule.reference_pd_bootstrap_steps
             or schedule.world_window != 8 or schedule.max_imagination_horizon != 32
             or experiment["minimum_actor_horizon"] != 32):
@@ -83,15 +118,16 @@ def main():
     replay_capacity = int(experiment["replay_capacity_steps"])
     if replay_capacity < max(schedule.world_window, schedule.max_imagination_horizon):
         parser.error("Replay cannot hold a full World Model and imagination horizon")
-    cfg = MarvinTeleopWorkspaceCfg() if workspace else MarvinContinuousSE3FollowCfg()
+    cfg = cfg_class()
+    if experiment["version"] == "marvin_workspace_reach_hold_v1":
+        cfg.reach_success_semantics = "pre_deadline_arrival_v1"
     cfg.scene.num_envs = num_envs
     cfg.seed = seed
     if workspace:
         if args.reference_bank is None:
             parser.error("The workspace task requires --reference-bank")
         with np.load(args.reference_bank, allow_pickle=False) as bank:
-            required = "marvin_teleop_workspace_bank_" + experiment["version"].rsplit("_", 1)[-1]
-            if str(bank["version"]) != required:
+            if str(bank["version"]) != bank_version:
                 parser.error("Workspace training config and target bank version differ")
         cfg.reference_bank_path = str(args.reference_bank)
         cfg.episode_length_s = float(experiment.get("episode_length_s", 4.0))
@@ -116,12 +152,13 @@ def main():
     torch.manual_seed(seed)
     began = time.perf_counter()
     with launch_simulation(cfg):
-        env = gym.make(("DexGym-Marvin-SuperMimic-Teleop-Workspace-SE3-Direct-v0"
-                        if workspace else "DexGym-Marvin-SuperMimic-Continuous-SE3-Follow-Direct-v0"), cfg=cfg)
+        env = gym.make(environment_id, cfg=cfg)
         try:
             native = env.unwrapped
             robot, task = native.core_robot, native.follow_task
-            modules = NetworkFactory.build(robot.spec, task.spec, network, robot_adapter=robot)
+            modules = NetworkFactory.build(
+                robot.spec, task.spec, network, robot_adapter=robot,
+                world_integration_version=world_integration)
             for module in (modules.world_model, modules.actor, modules.critic, modules.termination):
                 module.to(native.device)
             collector = SE3CorrelatedExplorationCollector(
@@ -172,7 +209,8 @@ def main():
             checkpoint_path = checkpoint.save(args.output / "model.pt", trainer,
                                               resume_mode="replay")
             report = {"task": asdict(task.spec), "robot": asdict(robot.spec),
-                      "network": asdict(network), "trainer": asdict(schedule),
+                      "network": asdict(network), "world_model_integration": world_integration,
+                      "trainer": asdict(schedule),
                       "trust_config": asdict(trust), "geometry_trust_config": asdict(geometry),
                       "reference_hashes": native.reference.hashes,
                       "config_sha256": hashlib.sha256(config_bytes).hexdigest(),
@@ -180,8 +218,12 @@ def main():
                       "trust": trainer.trust_report, "trusted_horizon": trainer.allowed_horizon,
                       "replay_bytes_allocated": replay.bytes_allocated,
                       "strict_pure": True, "teacher_data": False,
-                      "target_stream_contract": ("causal_current_50hz_fixed_base_v1"
-                                                 if workspace else "future_10_frames_v1"),
+                      "target_stream_contract": (
+                          "static_far_goal_50hz_fixed_base_v1"
+                          if experiment["version"] in ("marvin_workspace_reach_hold_v1",
+                                                       "marvin_workspace_reach_hold_v2") else
+                          "causal_current_50hz_fixed_base_v1" if workspace else
+                          "future_10_frames_v1"),
                       "curriculum_level": cfg.curriculum_level if workspace else None,
                       "resume": resume_info, "checkpoint": str(checkpoint_path),
                       "wall_time_s": time.perf_counter() - began,

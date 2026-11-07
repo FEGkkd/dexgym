@@ -74,7 +74,8 @@ class CoreCheckpoint:
                 "network_spec": asdict(spec),
                 "goal_latent_tanh": getattr(module, "goal_latent_tanh", None),
                 "normalizers": norms,
-                "integration_version": "robot_adapter_delta_v1" if name == "world_model" else None,
+                "integration_version": getattr(module, "integration_version", "robot_adapter_delta_v1")
+                                       if name == "world_model" else None,
                 "output_activation": "linear_delta_v1" if name == "world_model" else
                                      "linear_action_v1" if name == "actor" else None,
             }

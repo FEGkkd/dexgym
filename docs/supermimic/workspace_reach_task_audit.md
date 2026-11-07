@@ -1,0 +1,92 @@
+# Dual TCP workspace reach task audit
+
+This audit concerns the arm-only, fixed-base Marvin task. The physical state is
+`q14, qd14, qcmd14`; the Actor controls 14 arm joints at 50 Hz through the
+versioned `arm_joint_delta_v1` map. The 40 finger joints remain at Home in the
+54-DoF Newton robot and are absent from Actor, Critic and World Model data.
+The Goal is one fixed 18D dual-TCP SE(3) pose in the robot base frame. FK is
+used to generate targets and to evaluate the pose; the goal joint witness is
+discarded and never used as an Actor input, Critic input or reward target.
+
+## Why the earlier pilot was not a workspace-reach result
+
+The original far-goal v3 probes were initially run with the continuous
+tracking MDP. That MDP scored full-clip tracking and had Gaussian position and
+rotation accuracy terms that were nearly zero at the far targets. The separate
+`MarvinWorkspaceSE3ReachHold` task now supplies a broad, differentiable
+position/orientation reward, a fixed target, a 600-control-step episode and a
+deadline plus sustained hold metric. Its reward, observation and termination
+still pass through the shared SuperMimic trainer and Newton collector.
+
+The v3 bank's “Near” level was also too hard for a random-policy bootstrap:
+86 training Near targets averaged 0.277/0.253 m of left/right TCP position
+displacement and 49.6°/48.6° of rotation. Position P95 was 0.507/0.471 m.
+The former 100-iteration training segment collected 400 control steps per
+environment, shorter than its 600-step episode. Fresh-physics restart began
+another episode, so the first two segments did not observe a complete episode.
+The new training segment is 160 iterations × 4 physics steps = 640 steps.
+
+The saved v3 pilot is evidence of failure, not a converged policy. After two
+4096-environment, 100-iteration segments, 178 Actor BPTT32 and 3560 Critic
+updates were recorded, but a 16-environment independent Newton evaluation had
+0/16 successes and six hard failures. On the eleven held-out Near targets,
+the zero-action baseline had 0.262/0.289 m final left/right position error and
+no safety failure; the Stage 2 policy had 0.689/0.487 m and three failures.
+On those 16 real episodes, the Critic predicted initial mean value 1.015,
+whereas the actual discounted return was -0.459; mean bias was +1.474 and
+predicted/actual return correlation was -0.157. At an exact real starting
+state, the 32-step imagined reward contribution was -0.146 while the terminal
+Critic contribution was +0.791. This is a plausible source of the bad Actor
+gradient; it is not proof that every World Model term is wrong. The saved
+Stage 2 model's action-conditioned 32-step joint-position RMSE on its own
+Newton trace was 0.000482 rad.
+
+## Corrected task and curriculum
+
+The v4 target bank uses three **measured per-arm TCP pose bins**. Each sampled
+start and target is within joint bounds, both endpoints and a 21-point joint
+interpolation have no MuJoCo contacts, and each arm must move in position and
+orientation. This is a kinematic/static safety screen; it does not prove a
+learned policy or a dynamically executed path is safe.
+
+| Level | Allowed position per TCP | Allowed SO(3) angle per TCP | Measured training mean position L/R | Measured training mean angle L/R |
+| --- | --- | --- | --- | --- |
+| Near | 0.015–0.12 m | 0.035–0.45 rad | 0.055/0.058 m | 10.7°/9.9° |
+| Medium | 0.08–0.35 m | 0.15–1.1 rad | 0.170/0.170 m | 29.9°/28.4° |
+| Wide | 0.20–1.1 m | 0.4–3.0 rad | 0.428/0.435 m | 83.3°/81.4° |
+
+The versioned bank is
+`source/dexgym/assets/supermimic/references/teleop_workspace_pose_curriculum_train_seed20261113.npz`,
+SHA256 `9e6373df05ad3b8888ab6a1b5d459f07c0e973e774e49c1e80fd89bcfd85cdb4`.
+It contains 256 train, 32 validation and 32 held-out test targets at 50 Hz.
+It stores only the reset joint witness and the two target TCP poses; no goal
+joint witness is serialized. A zero-action independent Newton baseline on all
+eleven held-out Near goals completed 11/11 episodes without hard failure,
+with final position error 0.0559/0.0586 m, SO(3) error 0.1818/0.1799 rad,
+and 0/11 successes. Physics evidence:
+`/tmp/dexgym_workspace_reach_v4_near_zero11/{report.json,physics_trace.pt}`.
+
+The current strict success contract requires both TCPs within 5 mm and 2°,
+joint net displacement speed at 50 Hz no greater than 0.15 rad/s, and a
+25-step continuous hold that **starts no later than control step 400**. The
+episode must finish all 600 control steps with no hard safety failure. The
+500 Hz instantaneous velocity peak is reported separately. The old v1 metric
+is explicitly retained only for loading the earlier experimental v3
+checkpoint; the corrected v2 metric is versioned in new checkpoints.
+
+The new 4096-environment pilot configuration keeps WM8 and BPTT32. Its first
+segment covers a full physical episode. Critic bootstrap ramps over 500 Actor
+updates, a controlled response to the observed value overestimation. The
+curriculum initially samples Near targets; Medium and Wide need separate
+Newton evaluation and should not be reported as trained coverage yet.
+
+## Verified commands
+
+```bash
+cd /tmp/dexgym-supermimic-teleop-workspace
+PYTHONPATH=source /home/ubuntu/isaacsim-6.0.1/bin/python scripts/supermimic/generate_teleop_workspace_bank.py --profile reach_curriculum_v4 --duration-s 12 --seed 20261113 --train-clips 256 --validation-clips 32 --test-clips 32 --output source/dexgym/assets/supermimic/references/teleop_workspace_pose_curriculum_train_seed20261113.npz
+PYTHONPATH=/home/ubuntu/dexgym_data/marvin_supermimic_m42/runtime_overrides:source MUJOCO_GL=egl /home/ubuntu/isaacsim-6.0.1/bin/python scripts/supermimic/isaac_runtime.py evaluate_continuous_se3 --task workspace_reach --baseline zero --reference-bank source/dexgym/assets/supermimic/references/teleop_workspace_pose_curriculum_train_seed20261113.npz --num-envs 11 --evaluation-max-difficulty 0 --seed 9301 --output /tmp/dexgym_workspace_reach_v4_near_zero11
+```
+
+The legacy Wave policy and older workspace checkpoint files were not edited.
+No full-workspace arbitrary-pose policy has yet passed physical acceptance.

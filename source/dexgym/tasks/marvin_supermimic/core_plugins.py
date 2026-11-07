@@ -41,6 +41,30 @@ class MarvinCoreRobot:
         command = self.action_map(action, state[..., 28:42])
         return torch.cat((state[..., :28] + physical_delta, command), dim=-1)
 
+    def integrate_command_centered(self, state, residual_and_velocity_delta, action, context):
+        """Position-servo prediction: exact command plus learned tracking residual."""
+        if (state.shape[-1] != 42
+                or residual_and_velocity_delta.shape != (*state.shape[:-1], 28)
+                or action.shape != (*state.shape[:-1], 14)
+                or context.shape != (*state.shape[:-1], 0)):
+            raise ValueError("Marvin command-centered dynamics contract differs")
+        command = self.executed_command(state, action)
+        # All held-out safe Newton transitions for this servo contract stayed
+        # within 4.7 mrad of the executed command. Bound model extrapolation
+        # smoothly so a small residual cannot accumulate into a fictitious
+        # arm motion during 32-step imagination.
+        residual = 0.005 * torch.tanh(residual_and_velocity_delta[..., :14] / 0.005)
+        return torch.cat((command + residual,
+                          state[..., 14:28] + residual_and_velocity_delta[..., 14:28],
+                          command), dim=-1)
+
+    @staticmethod
+    def command_centered_target(state, next_state):
+        if state.shape[-1] != 42 or next_state.shape != state.shape:
+            raise ValueError("Marvin command-centered target state differs")
+        return torch.cat((next_state[..., :14] - next_state[..., 28:42],
+                          next_state[..., 14:28] - state[..., 14:28]), dim=-1)
+
     @staticmethod
     def physical_delta(state, next_state):
         return next_state[..., :28] - state[..., :28]
