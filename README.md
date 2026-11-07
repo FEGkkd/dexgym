@@ -43,7 +43,8 @@ data counts, and the small PPO check. The
 records the 1000-iteration training and held-out tracking results. The
 [direct position-target hold probe](docs/experiments/hand_only_position_hold_20261108.md)
 measures joint and fingertip drift when a GRAB reference target is held for
-1.5 seconds.
+1.5 seconds. The [three backend controls](docs/experiments/hand_only_backend_controls_20261108.md)
+compare zero gravity, one-joint response, and source MuJoCo versus Newton.
 
 ```bash
 PYTHONPATH=source uv run python scripts/data/build_grab_right_hand_library.py \

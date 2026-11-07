@@ -33,6 +33,7 @@ def main() -> None:
     parser.add_argument("--hold-seconds", type=float, default=1.5)
     parser.add_argument("--goal-offset", type=int, default=4)
     parser.add_argument("--disable-hand-contacts", action="store_true")
+    parser.add_argument("--zero-gravity", action="store_true")
     parser.add_argument("--seed", type=int, default=20261108)
     parser.add_argument("--output-dir", type=Path, default=Path("artifacts/hand_only_position_hold"))
     args = parser.parse_args()
@@ -44,6 +45,8 @@ def main() -> None:
     cfg.split = args.split
     cfg.seed = args.seed
     cfg.sim.physics = cfg.sim.physics.newton_mjwarp
+    if args.zero_gravity:
+        cfg.sim.gravity = (0.0, 0.0, 0.0)
     if args.disable_hand_contacts:
         cfg.scene.robot = make_robot_cfg(hand_contacts=False)
     # Count motions before scene creation so every motion is covered equally.
@@ -83,6 +86,9 @@ def main() -> None:
             robot = task.robot
             scene = task.scene
             sim = task.sim
+            actual_gravity = tuple(sim.physics_manager._gravity_vector)
+            if not np.allclose(actual_gravity, cfg.sim.gravity, atol=1e-9):
+                raise AssertionError(f"Newton gravity {actual_gravity} differs from requested {cfg.sim.gravity}")
 
             def write_pose(right_q: torch.Tensor) -> None:
                 full_q = task.home_q[None].repeat(task.num_envs, 1)
@@ -143,6 +149,7 @@ def main() -> None:
                 "control_steps": control_steps,
                 "physics_steps_per_control": cfg.decimation,
                 "robot_usd": cfg.scene.robot.spawn.usd_path,
+                "gravity_m_s2": list(actual_gravity),
                 "contacts_enabled": not args.disable_hand_contacts,
                 "target_frame_stride": args.goal_offset,
                 "max_target_tip_displacement_mm": statistics(target_displacement),
