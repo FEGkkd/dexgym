@@ -1,0 +1,56 @@
+"""Hand-only subgoal reward and action contracts."""
+
+import torch
+from dexgym.assets.marvin_wuji.robot_cfg import JOINT_ORDER
+from dexgym.tasks.direct.right_hand_tracking.logic import (
+    fingertips_in_wrist_frame,
+    right_hand_joint_indices,
+    tracking_step,
+)
+
+
+def test_sparse_bonus_requires_every_finger_for_two_steps():
+    goal = torch.zeros((2, 5, 3))
+    current = goal.clone()
+    current[1, 4, 0] = 0.03
+    dwell = torch.zeros(2, dtype=torch.long)
+    action_delta = torch.zeros((2, 20))
+
+    first_reward, first_reached, dwell, error = tracking_step(current, goal, dwell, action_delta)
+    assert first_reached.tolist() == [False, False]
+    assert dwell.tolist() == [1, 0]
+    assert error.tolist() == [0.0, 0.006000000052154064]
+
+    second_reward, second_reached, dwell, _ = tracking_step(current, goal, dwell, action_delta)
+    assert second_reached.tolist() == [True, False]
+    assert dwell.tolist() == [2, 0]
+    assert second_reward[0] > first_reward[0] + 9.0
+    assert second_reward[1] < second_reward[0]
+
+
+def test_action_change_is_penalized_without_affecting_success():
+    goal = torch.zeros((1, 5, 3))
+    dwell = torch.ones(1, dtype=torch.long)
+    calm = torch.zeros((1, 20))
+    moving = torch.ones((1, 20))
+    calm_reward, calm_reached, _, _ = tracking_step(goal, goal, dwell, calm)
+    moving_reward, moving_reached, _, _ = tracking_step(goal, goal, dwell, moving)
+    assert calm_reached.item() and moving_reached.item()
+    assert calm_reward.item() > moving_reward.item()
+
+
+def test_right_hand_joint_selection_excludes_both_arms_and_left_hand():
+    selected = right_hand_joint_indices(JOINT_ORDER)
+    assert len(selected) == 20
+    assert selected == list(range(34, 54))
+    assert all(JOINT_ORDER[index].startswith("r_") for index in selected)
+
+
+def test_fingertip_fk_converts_distal_offsets_to_wrist_frame():
+    poses = torch.zeros((1, 6, 7))
+    poses[..., 6] = 1.0  # XYZW identity
+    poses[:, 0, :3] = torch.tensor([0.1, 0.2, 0.3])  # wrist
+    poses[:, 1:, :3] = torch.tensor([0.11, 0.22, 0.33])
+    offsets = torch.tensor([[0.0, 0.0, -0.02]] * 5)
+    tips = fingertips_in_wrist_frame(poses, 0, [1, 2, 3, 4, 5], offsets)
+    torch.testing.assert_close(tips, torch.tensor([[[0.01, 0.02, 0.01]] * 5]), atol=1e-6, rtol=0)

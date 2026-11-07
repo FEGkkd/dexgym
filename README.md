@@ -20,12 +20,34 @@ algorithm capability, **not a claim that every task or policy has converged**.
 | `DexGym-Marvin-SuperMimic-Teleop-Workspace-SE3-Direct-v0` | Causal current 1×18 dual TCP SE(3) target at 50 Hz | Strict-pure 4,096-environment WM8/BPTT32 training ran 820 iterations. The selected policy completed 93/96 full Newton episodes over three disjoint unseen or reversed target banks, with no safety terminations. Tested within a bounded procedural workspace; human teleoperation and real hardware remain unvalidated. |
 | `DexGym-Joint-Tracking-Direct-v0` | Cartpole joint target | Isaac Lab DirectRLEnv, RSL-RL PPO example. |
 | `DexGym-Joint-Tracking-Manager-v0` | Cartpole joint target | Isaac Lab ManagerBasedRLEnv, RSL-RL PPO example. |
+| `DexGym-Wuji-Right-Hand-Tracking-Direct-v0` | Right WujiHand2 five-fingertip sequence tracking | TeleDexter-inspired hand-only DirectRLEnv; GRAB retargeting and a bounded PPO workflow check passed. No convergence claim. |
 
-The Cartpole examples use PPO. **SuperMimic does not use PPO.** The Marvin
+The Cartpole examples use PPO. **SuperMimic does not use PPO.** The SuperMimic Marvin
 environment simulates all 54 DoF at 500 Hz, controls only 14 arm joints at
 50 Hz, and commands the 40 hand joints to Home. Hand states and actions are
 absent from the SuperMimic policy and world model. The validated no-hand-contact
 configuration and controller parameters are unchanged.
+
+## Right-hand fingertip tracking
+
+The separate hand-only task uses GRAB right-hand MANO poses retargeted by the
+local WujiHand2 SDK. It controls 20 right-hand joints with PPO, holds both arms
+and the left hand at Home, and follows five robot-FK fingertip targets in the
+right-wrist frame. It uses no object state. Local recordings and generated
+motions are excluded from Git; [data/README.md](data/README.md) describes the
+required layout and conversion command. The
+[pilot report](docs/experiments/hand_only_right_pilot.md) records task settings,
+data counts, and the small PPO check.
+
+```bash
+PYTHONPATH=source uv run python scripts/data/build_grab_right_hand_library.py \
+  --data-root data --output data/processed/hand_only_right
+PYTHONPATH=source uv run python scripts/smoke_right_hand_tracking.py \
+  --num-envs 8 --steps 120 --split validation
+PYTHONPATH=source uv run isaaclab train --rl_library rsl_rl \
+  --task DexGym-Wuji-Right-Hand-Tracking-Direct-v0 \
+  --num_envs 16 --max_iterations 10 physics=newton_mjwarp
+```
 
 ## SuperMimic code
 

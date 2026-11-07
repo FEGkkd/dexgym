@@ -40,3 +40,13 @@ artifacts/**/*
 *.gif
 !source/dexgym/assets/supermimic/references/*.npz
 !models/supermimic/m41_wave_selected_best.pt
+
+# Data-pipeline source directories are code, not local datasets.
+!source/dexgym/data/
+!scripts/data/
+!tests/data/
+
+# Keep a data layout guide without tracking local recordings or generated motions.
+!/data/
+/data/*
+!/data/README.md
