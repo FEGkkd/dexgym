@@ -310,6 +310,17 @@ Actor updates as task-level learning. Diagnose the short-horizon objective,
 Actor start distribution, Critic ranking and target curriculum before another
 large Newton run; retain this failed checkpoint as reproducible evidence.
 
+A bounded model-only diagnostic started from the same 16 held-out Newton
+states. With the saved Actor/Critic and 32-step imagination at bootstrap weight
+0.28, the learned model ranked the trained Actor below zero action: imagined
+objectives 2.8016 versus 2.8356. The Actor's predicted unweighted 32-step
+reward sum was 1.8790, while its actual Newton reward sum on those steps was
+1.8622. Scaling down the Actor decoder output also improved this local
+imagined objective; its output-scale loss derivative was +0.0530. These are
+**initial-state local checks**. They do not certify all model rollouts or
+explain why training selected a drifting policy, but they do not show a
+reversed World Model gradient on these held-out starts either.
+
 ## Task-definition boundary for a general workspace policy
 
 The v5 Reach & Hold bank contains 320 clips (256 train, 32 validation and 32
