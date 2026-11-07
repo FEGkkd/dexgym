@@ -111,7 +111,7 @@ def marvin_continuous_se3_physics_config(cfg, robot) -> dict:
 
 def marvin_teleop_workspace_physics_config(cfg, robot) -> dict:
     """50 Hz causal target stream; train/evaluation split is a recorded protocol."""
-    return {
+    contract = {
         "backend": "newton_mjwarp_v1",
         "num_envs": cfg.scene.num_envs,
         "seed": cfg.seed,
@@ -132,3 +132,6 @@ def marvin_teleop_workspace_physics_config(cfg, robot) -> dict:
         "reset_joint_perturb_rad": cfg.reset_joint_perturb_rad,
         "evaluation_mode": cfg.evaluation_mode,
     }
+    if getattr(cfg, "reach_curriculum_version", "") == "marvin_teleop_workspace_bank_v5":
+        contract["goal_curriculum_level"] = cfg.curriculum_level
+    return contract

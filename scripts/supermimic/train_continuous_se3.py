@@ -56,6 +56,10 @@ def _task_profile(version):
         return (MarvinWorkspaceSE3ReachHoldCfg,
                 "DexGym-Marvin-SuperMimic-Workspace-Reach-Hold-Direct-v0",
                 "marvin_teleop_workspace_bank_v4")
+    if version == "marvin_workspace_reach_hold_v4":
+        return (MarvinWorkspaceSE3ReachHoldCfg,
+                "DexGym-Marvin-SuperMimic-Workspace-Reach-Hold-Direct-v0",
+                "marvin_teleop_workspace_bank_v5")
     raise ValueError(f"Unknown continuous SE(3) experiment version: {version}")
 
 
@@ -84,7 +88,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reference-bank", type=Path,
                         help="FK-generated target bank for the causal workspace task")
-    parser.add_argument("--curriculum-level", type=int, choices=(0, 1, 2),
+    parser.add_argument("--curriculum-level", type=int, choices=(0, 1, 2, 3),
                         help="Explicitly expand the generated workspace target difficulty")
     args = parser.parse_args()
     if sum(path is not None for path in (args.resume, args.init_from,
@@ -121,7 +125,8 @@ def main():
     cfg = cfg_class()
     if experiment["version"] == "marvin_workspace_reach_hold_v1":
         cfg.reach_success_semantics = "pre_deadline_arrival_v1"
-    if experiment["version"] == "marvin_workspace_reach_hold_v3":
+    if experiment["version"] in ("marvin_workspace_reach_hold_v3",
+                                 "marvin_workspace_reach_hold_v4"):
         cfg.reach_temporal_context = "normalized_time_remaining_v3"
         cfg.observation_space = 10 * 69 + 18
     cfg.scene.num_envs = num_envs
@@ -133,6 +138,7 @@ def main():
             if str(bank["version"]) != bank_version:
                 parser.error("Workspace training config and target bank version differ")
         cfg.reference_bank_path = str(args.reference_bank)
+        cfg.reach_curriculum_version = bank_version
         cfg.episode_length_s = float(experiment.get("episode_length_s", 4.0))
         cfg.curriculum_level = (args.curriculum_level if args.curriculum_level is not None
                                 else int(experiment["curriculum_level"]))
@@ -225,7 +231,8 @@ def main():
                           "static_far_goal_50hz_fixed_base_v1"
                           if experiment["version"] in ("marvin_workspace_reach_hold_v1",
                                                        "marvin_workspace_reach_hold_v2",
-                                                       "marvin_workspace_reach_hold_v3") else
+                                                       "marvin_workspace_reach_hold_v3",
+                                                       "marvin_workspace_reach_hold_v4") else
                           "causal_current_50hz_fixed_base_v1" if workspace else
                           "future_10_frames_v1"),
                       "curriculum_level": cfg.curriculum_level if workspace else None,

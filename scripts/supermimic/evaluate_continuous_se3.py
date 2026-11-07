@@ -72,7 +72,7 @@ def main():
                         default="pinned")
     parser.add_argument("--evaluation-split", choices=("train", "validation", "test"),
                         default="test")
-    parser.add_argument("--evaluation-max-difficulty", type=int, choices=(0, 1, 2),
+    parser.add_argument("--evaluation-max-difficulty", type=int, choices=(0, 1, 2, 3),
                         default=2, help="Maximum held-out goal difficulty, inclusive")
     parser.add_argument("--allow-new-reference", action="store_true",
                         help="Explicitly evaluate the causal workspace Actor on a different target bank")
@@ -115,8 +115,10 @@ def main():
         cfg.evaluation_split = args.evaluation_split
         cfg.evaluation_max_difficulty = args.evaluation_max_difficulty
         with np.load(args.reference_bank, allow_pickle=False) as bank:
+            cfg.reach_curriculum_version = str(bank["version"])
             if (args.task == "workspace_reach" and str(bank["version"]) not in
-                    ("marvin_teleop_workspace_bank_v3", "marvin_teleop_workspace_bank_v4")):
+                    ("marvin_teleop_workspace_bank_v3", "marvin_teleop_workspace_bank_v4",
+                     "marvin_teleop_workspace_bank_v5")):
                 parser.error("Workspace reach-and-hold requires a static far-goal bank")
             cfg.episode_length_s = (bank["tcp_pos"].shape[1] - 1) / 50
     torch.manual_seed(args.seed)

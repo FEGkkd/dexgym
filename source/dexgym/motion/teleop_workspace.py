@@ -263,6 +263,7 @@ def generate_teleop_reach_probe_bank(path: str | Path, *, seed: int,
 def generate_teleop_reach_curriculum_bank(path: str | Path, *, seed: int,
                                           split_counts=(256, 32, 32), frames=601,
                                           max_attempts_per_clip=1000,
+                                          profile="measured_pose_v4",
                                           mjcf: str | Path = DEFAULT_MJCF) -> dict:
     """Sample static, FK-reachable dual TCP goals in measured SE(3) bins.
 
@@ -273,6 +274,8 @@ def generate_teleop_reach_curriculum_bank(path: str | Path, *, seed: int,
     if (len(split_counts) != 3 or min(split_counts) < 1 or frames < 401
             or max_attempts_per_clip < 1):
         raise ValueError("Curriculum bank needs three nonempty splits and a bounded long episode")
+    if profile not in ("measured_pose_v4", "hold_bootstrap_v5"):
+        raise ValueError("Unknown measured-pose curriculum profile")
     path = Path(path)
     model = mujoco.MjModel.from_xml_path(str(mjcf))
     data = mujoco.MjData(model)
@@ -285,10 +288,13 @@ def generate_teleop_reach_curriculum_bank(path: str | Path, *, seed: int,
     home = model.key_qpos[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "home")].copy()
     lower, upper = model.jnt_range[joint_ids, 0] + 0.08, model.jnt_range[joint_ids, 1] - 0.08
     # Bounds apply separately to each arm; neither arm may be a trivial goal.
-    pose_bins = ((0.015, 0.12, 0.035, 0.45),
-                 (0.08, 0.35, 0.15, 1.1),
-                 (0.20, 1.1, 0.4, 3.0))
-    joint_radii = (0.12, 0.35, 1.1)
+    moving_bins = ((0.015, 0.12, 0.035, 0.45),
+                   (0.08, 0.35, 0.15, 1.1),
+                   (0.20, 1.1, 0.4, 3.0))
+    pose_bins = (((0.0, 0.004, 0.0, 0.03), *moving_bins)
+                 if profile == "hold_bootstrap_v5" else moving_bins)
+    joint_radii = ((0.0, 0.12, 0.35, 1.1)
+                   if profile == "hold_bootstrap_v5" else (0.12, 0.35, 1.1))
     rng = np.random.default_rng(seed)
 
     def pose_at(q):
@@ -307,16 +313,19 @@ def generate_teleop_reach_curriculum_bank(path: str | Path, *, seed: int,
 
     starts, targets, difficulties = [], [], []
     for index in range(sum(split_counts)):
-        difficulty = index % 3
+        difficulty = index % len(pose_bins)
         p_min, p_max, r_min, r_max = pose_bins[difficulty]
         for _ in range(max_attempts_per_clip):
             start = rng.uniform(lower, upper)
             start_pose = pose_at(start)
             if start_pose is None:
                 continue
-            goal_q = np.clip(start + rng.uniform(-joint_radii[difficulty],
-                                                 joint_radii[difficulty], 14), lower, upper)
-            goal_pose = pose_at(goal_q)
+            goal_q = (start if difficulty == 0 and profile == "hold_bootstrap_v5"
+                      else np.clip(start + rng.uniform(-joint_radii[difficulty],
+                                                        joint_radii[difficulty], 14),
+                                   lower, upper))
+            goal_pose = (start_pose if difficulty == 0 and profile == "hold_bootstrap_v5"
+                         else pose_at(goal_q))
             if goal_pose is None:
                 continue
             displacement = np.linalg.norm(goal_pose[:, :3] - start_pose[:, :3], axis=-1)
@@ -338,18 +347,26 @@ def generate_teleop_reach_curriculum_bank(path: str | Path, *, seed: int,
     reset = np.repeat(np.asarray(starts)[:, None], frames, axis=1)
     goals = np.repeat(np.asarray(targets)[:, None], frames, axis=1)
     path.parent.mkdir(parents=True, exist_ok=True)
-    np.savez_compressed(path, version="marvin_teleop_workspace_bank_v4", seed=seed,
+    version = ("marvin_teleop_workspace_bank_v5" if profile == "hold_bootstrap_v5"
+               else "marvin_teleop_workspace_bank_v4")
+    np.savez_compressed(path, version=version, seed=seed,
                         fps=50, joint_names_arm=np.asarray(joint_names),
                         names=np.asarray([f"pose_reach_{SPLITS[int(s)]}_{i:04d}_l{d}"
                                           for i, (s, d) in enumerate(zip(split, difficulties))]),
                         split=split, family=np.asarray(["static_se3_reach"] * len(split)),
                         difficulty=np.asarray(difficulties, np.int8),
                         difficulty_contract=np.asarray(pose_bins, np.float32),
+                        difficulty_labels=np.asarray(
+                            ("hold", "near", "medium", "wide")
+                            if profile == "hold_bootstrap_v5" else
+                            ("near", "medium", "wide")),
                         q_reset_witness=reset, tcp_pos=goals[..., :3],
                         tcp_quat_xyzw=goals[..., 3:])
     return {"path": str(path), "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
             "clips": len(split), "frames": frames,
-            "profile": "measured_dual_tcp_se3_bins_v4",
+            "profile": ("hold_bootstrap_dual_tcp_se3_bins_v5"
+                        if profile == "hold_bootstrap_v5" else
+                        "measured_dual_tcp_se3_bins_v4"),
             "position_and_rotation_bins": pose_bins}
 
 
@@ -365,7 +382,8 @@ class TeleopWorkspaceReferenceBank:
             if self.version not in ("marvin_teleop_workspace_bank_v1",
                                     "marvin_teleop_workspace_bank_v2",
                                     "marvin_teleop_workspace_bank_v3",
-                                    "marvin_teleop_workspace_bank_v4") or int(data["fps"]) != 50:
+                                    "marvin_teleop_workspace_bank_v4",
+                                    "marvin_teleop_workspace_bank_v5") or int(data["fps"]) != 50:
                 raise ValueError("Target bank version or 50 Hz rate differs")
             self.names = tuple(str(x) for x in data["names"])
             self.joint_names_arm = tuple(str(x) for x in data["joint_names_arm"])
@@ -374,6 +392,7 @@ class TeleopWorkspaceReferenceBank:
             self._reset_q = torch.as_tensor(data["q_reset_witness"].copy(), device=self.device)
             self.split = torch.as_tensor(data["split"].copy(), device=self.device, dtype=torch.long)
             self.difficulty = torch.as_tensor(data["difficulty"].copy(), device=self.device, dtype=torch.long)
+            self.max_difficulty = int(self.difficulty.max())
             self.family = tuple(str(x) for x in data["family"])
         if (pos.ndim != 4 or pos.shape[-2:] != (2, 3)
                 or quat.shape != (*pos.shape[:-1], 4)
@@ -406,7 +425,9 @@ class TeleopWorkspaceReferenceBank:
         return self._reset_q[motion_id, frame]
 
     def sample_ids(self, count, *, split: str, max_difficulty=2):
-        if split not in SPLITS or not 0 <= max_difficulty <= 2:
+        # Historical small banks may contain only levels 0/1 while callers
+        # still use the established default max_difficulty=2.
+        if split not in SPLITS or not 0 <= max_difficulty <= max(2, self.max_difficulty):
             raise ValueError("Unknown bank split or difficulty")
         eligible = torch.nonzero((self.split == SPLITS.index(split))
                                  & (self.difficulty <= max_difficulty)).flatten()

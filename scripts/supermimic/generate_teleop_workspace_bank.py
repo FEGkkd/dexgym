@@ -15,15 +15,19 @@ def main():
     parser.add_argument("--train-clips", type=int, default=256)
     parser.add_argument("--validation-clips", type=int, default=32)
     parser.add_argument("--test-clips", type=int, default=32)
-    parser.add_argument("--profile", choices=("local_v1", "broad_v2", "reach_curriculum_v4"),
+    parser.add_argument("--profile", choices=("local_v1", "broad_v2", "reach_curriculum_v4",
+                                             "reach_hold_curriculum_v5"),
                         default="local_v1")
     parser.add_argument("--duration-s", type=int, choices=(4, 8, 12, 16, 20), default=4)
     args = parser.parse_args()
-    if args.profile == "reach_curriculum_v4" and args.duration_s < 8:
+    reach = args.profile in ("reach_curriculum_v4", "reach_hold_curriculum_v5")
+    if reach and args.duration_s < 8:
         parser.error("Measured reach curriculum requires an episode of at least 8 seconds")
     generator = (generate_teleop_reach_curriculum_bank
-                 if args.profile == "reach_curriculum_v4" else generate_teleop_workspace_bank)
-    kwargs = {} if args.profile == "reach_curriculum_v4" else {"profile": args.profile}
+                 if reach else generate_teleop_workspace_bank)
+    kwargs = ({"profile": "hold_bootstrap_v5"}
+              if args.profile == "reach_hold_curriculum_v5" else
+              {} if reach else {"profile": args.profile})
     report = generator(
         args.output, seed=args.seed,
         split_counts=(args.train_clips, args.validation_clips, args.test_clips),

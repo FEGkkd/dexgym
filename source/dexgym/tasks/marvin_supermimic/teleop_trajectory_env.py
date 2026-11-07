@@ -42,8 +42,8 @@ class MarvinTeleopWorkspaceEnv(MarvinContinuousSE3FollowEnv):
         count = len(env_ids)
         if self.cfg.evaluation_mode:
             maximum = self.cfg.evaluation_max_difficulty
-            if not 0 <= maximum <= 2:
-                raise ValueError("Evaluation difficulty must be 0, 1 or 2")
+            if not 0 <= maximum <= int(self.reference.difficulty.max()):
+                raise ValueError("Evaluation difficulty is outside the target bank")
             if self.cfg.evaluation_motion_id is not None:
                 motion_id = torch.full((count,), self.cfg.evaluation_motion_id,
                                        device=self.device, dtype=torch.long)

@@ -39,7 +39,8 @@ class MarvinWorkspaceSE3ReachHold(MarvinBimanualSE3ReachHold):
         if temporal_context is not None and success_semantics != "hold_start_deadline_v2":
             raise ValueError("Time-aware task requires the corrected hold deadline")
         if getattr(reference, "version", "marvin_teleop_workspace_bank_v3") not in (
-                "marvin_teleop_workspace_bank_v3", "marvin_teleop_workspace_bank_v4"):
+                "marvin_teleop_workspace_bank_v3", "marvin_teleop_workspace_bank_v4",
+                "marvin_teleop_workspace_bank_v5"):
             raise ValueError("Workspace reach-and-hold requires a static far-goal bank")
         lengths = reference.lengths
         if lengths.ndim != 1 or not bool((lengths == lengths[0]).all()) or int(lengths[0]) < 33:

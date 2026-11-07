@@ -11,6 +11,7 @@ class MarvinWorkspaceSE3ReachHoldCfg(MarvinTeleopWorkspaceCfg):
     episode_length_s = 12.0
     reach_success_semantics = "hold_start_deadline_v2"
     reach_temporal_context = None
+    reach_curriculum_version = ""
 
 
 class MarvinWorkspaceSE3ReachHoldEnv(MarvinTeleopWorkspaceEnv):

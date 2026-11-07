@@ -121,6 +121,28 @@ def test_training_segment_covers_a_full_physical_episode():
     assert physics_steps >= int(config["episode_length_s"] * 50)
 
 
+def test_v5_training_checkpoint_records_goal_curriculum_level():
+    from dexgym.tasks.marvin_supermimic.physics_contract import (
+        marvin_teleop_workspace_physics_config)
+    from dexgym.tasks.marvin_supermimic.workspace_reach_env import (
+        MarvinWorkspaceSE3ReachHoldCfg)
+
+    cfg = MarvinWorkspaceSE3ReachHoldCfg()
+    cfg.reference_bank_path = (
+        "source/dexgym/assets/supermimic/references/"
+        "teleop_workspace_hold_curriculum_seed20261114.npz")
+    cfg.reach_curriculum_version = "marvin_teleop_workspace_bank_v5"
+    cfg.curriculum_level = 0
+    robot = SimpleNamespace(native=SimpleNamespace(
+        controller_kp_source="fixed", controller_kd_source="fixed",
+        controller_damping_scale_source=1.0))
+    hold = marvin_teleop_workspace_physics_config(cfg, robot)
+    cfg.curriculum_level = 1
+    near = marvin_teleop_workspace_physics_config(cfg, robot)
+    assert hold["goal_curriculum_level"] == 0
+    assert near["goal_curriculum_level"] == 1
+
+
 def test_far_goal_newton_plugin_selects_reach_mdp_instead_of_tracking_mdp():
     from dexgym.tasks.marvin_supermimic.workspace_reach_env import (
         MarvinWorkspaceSE3ReachHoldEnv)
@@ -235,6 +257,8 @@ def test_shared_training_entrypoint_selects_far_reach_without_copying_trainer():
     assert selected[2] == "marvin_teleop_workspace_bank_v3"
     assert _task_profile("marvin_workspace_reach_hold_v2")[2] == (
         "marvin_teleop_workspace_bank_v4")
+    assert _task_profile("marvin_workspace_reach_hold_v4")[2] == (
+        "marvin_teleop_workspace_bank_v5")
 
 
 def test_shared_evaluation_entrypoint_selects_reach_episode_metrics():

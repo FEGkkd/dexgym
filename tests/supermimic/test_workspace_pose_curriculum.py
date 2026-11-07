@@ -42,3 +42,31 @@ def test_fk_curriculum_has_measured_dual_arm_pose_bins_and_no_goal_joint_label(t
                      & (rotation_error[selected] <= r_max + 0.003)).all())
     reference = TeleopWorkspaceReferenceBank(target, "cpu")
     assert reference.version == "marvin_teleop_workspace_bank_v4"
+
+
+def test_hold_bootstrap_curriculum_contains_exact_goal_starts_and_four_levels(tmp_path):
+    from dexgym.motion.teleop_workspace import (
+        TeleopWorkspaceReferenceBank, generate_teleop_reach_curriculum_bank)
+
+    target = tmp_path / "hold_bootstrap.npz"
+    generate_teleop_reach_curriculum_bank(
+        target, seed=20261114, split_counts=(4, 4, 4), frames=601,
+        profile="hold_bootstrap_v5")
+    with np.load(target, allow_pickle=False) as bank:
+        assert str(bank["version"]) == "marvin_teleop_workspace_bank_v5"
+        assert sorted(set(bank["difficulty"].tolist())) == [0, 1, 2, 3]
+        assert not any("goal_q" in key or "q_goal" in key for key in bank.files)
+        hold = bank["difficulty"] == 0
+        assert int(hold.sum()) == 3
+        start_q = torch.tensor(bank["q_reset_witness"][hold, 0], dtype=torch.float32)
+        goal_position = torch.tensor(bank["tcp_pos"][hold, 0], dtype=torch.float32)
+        goal_rotation = torch.tensor(Rotation.from_quat(
+            bank["tcp_quat_xyzw"][hold, 0].reshape(-1, 4)).as_matrix()
+            .reshape(-1, 2, 3, 3), dtype=torch.float32)
+    start_position, start_rotation = DifferentiableMarvinFK(DEFAULT_MJCF, "cpu")(start_q)
+    assert float((start_position[:, :, 2] - goal_position).abs().max()) < 1e-4
+    assert float(so3_geodesic(start_rotation[:, :, 2], goal_rotation).max()) < 0.01
+    reference = TeleopWorkspaceReferenceBank(target, "cpu")
+    assert reference.version == "marvin_teleop_workspace_bank_v5"
+    assert reference.max_difficulty == 3
+    assert len(reference.sample_ids(8, split="train", max_difficulty=3)) == 8

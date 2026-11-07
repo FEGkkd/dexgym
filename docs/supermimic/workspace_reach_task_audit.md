@@ -131,6 +131,45 @@ physical/task integration only. A separate v3 32-step imagination test
 confirmed finite nonzero Actor gradients and zero terminal Critic bootstrap
 at the episode boundary.
 
+The full v3 seed-97 pilot used 4096 environments and 160 iterations. It made
+5,120 WM8, 134 BPTT32 Actor and 2,680 Critic updates. Held-out Near Newton
+evaluation had 0/11 successes and five contact failures; final position
+errors were 0.231/0.459 m. The v3 Actor moved the arms by an average of
+0.628 rad per joint by step 600 and still issued mean bounded action 0.118
+at that time. When the dual-TCP goal was set exactly to the current pose, it
+issued mean bounded action 0.126, an average commanded increment of
+1.26 mrad per step. Thus the learned policy did not know how to hold.
+
+Model-only closed-loop replay of the same Actor predicted the same broad
+drift as Newton: by step 600, among the six physically surviving episodes,
+the model predicted left/right position error 0.264/0.429 m versus Newton
+0.276/0.434 m. One held-out goal's paired 30-environment Newton finite
+difference gave learned-model versus physical one-step reward-gradient cosine
+0.992 and joint-action-response cosine 0.994. These are local checks, not a
+global model guarantee. They support the diagnosis that the current Actor
+training/task curriculum, rather than an obviously reversed WM gradient,
+caused this failure.
+
+## Hold-first curriculum v5
+
+The v4 Near bank never reset within its 5 mm success radius: it required at
+least 15 mm of movement per arm. Consequently the policy had no deliberately
+sampled examples of a successful, stationary dual-TCP hold. The v5 bank adds
+a separate level 0 Hold class where the TCP goal equals the safe reset pose;
+its other levels are the measured Near, Medium and Wide bins above. It has
+256/32/32 disjoint train/validation/test goals, evenly distributed among
+the four levels. SHA256:
+`6a4726337ab5913fb21634382d9dd65177fa86ec9dde2505da728abb338d6d59`.
+The target joint witness is discarded; only the reset witness and TCP goal
+are stored. The selected curriculum level is included in new training
+checkpoint physics contracts, so a strict resume cannot silently change it.
+
+All eight held-out Hold goals were physically maintainable in independent
+Newton zero-action evaluation: **8/8 successful full 600-step episodes, zero
+contacts, 600-step valid hold**, mean final TCP position error
+0.000604/0.000584 m and SO(3) error 0.00131/0.00115 rad. This validates
+the Hold task setup and zero-action baseline, not a learned policy.
+
 ## Verified commands
 
 ```bash
