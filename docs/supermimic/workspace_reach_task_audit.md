@@ -80,6 +80,49 @@ updates, a controlled response to the observed value overestimation. The
 curriculum initially samples Near targets; Medium and Wide need separate
 Newton evaluation and should not be reported as trained coverage yet.
 
+## 4096-environment Near pilot and controlled ablation
+
+On the v4 bank, the 160-iteration, seed-97 strict-pure pilot collected
+2,621,440 Newton transitions, made 5,120 WM updates, 136 Actor BPTT32
+updates and 2,720 Critic updates, with zero nonfinite update events. At the
+600-step boundary the real collector logged 2,574 normal truncations. The
+model's held-out deterministic action-conditioned 32-step TCP position P95
+was 0.00108 m and SO(3) P95 was 0.00233 rad. For the exact Actor action
+sequence in the first 32 steps of independent Newton evaluation, the model's
+reward mean absolute error was 0.0000662 per step and final joint-position
+RMSE was 0.000486 rad.
+
+The policy **did not learn stable reach-and-hold**. On the eleven held-out
+Near test goals it completed 11/11 episodes safely but had 0/11 successes;
+final TCP position errors were 0.274/0.330 m versus zero-action
+0.056/0.059 m. It initially moved toward the goals: at step 32 error was
+0.049/0.048 m, then drifted to 0.274/0.330 m by step 600. The actor's
+mean initial Critic value (4.119) was close to its mean actual discounted
+Newton return (4.160), but the across-goal value/return correlation was
+-0.283. Mean calibration alone did not give useful per-goal guidance.
+
+A matched seed-97 control changed only the Actor's terminal Critic bootstrap
+ramp from 500 to 100000 updates, making its contribution negligible in this
+pilot. It also collected 2,621,440 transitions, made 5,120 WM updates and
+134 BPTT32 updates with no nonfinite events. Independent Near evaluation was
+again 0/11 successes, with final position errors 0.338/0.365 m and zero
+hard failures. Therefore weak Critic bootstrap alone did not fix the
+long-horizon drift. Further rounds of the same v2 setup are not justified by
+these results.
+
+## Finite-horizon task contract v3
+
+A second task-level issue was found by a failing test: the v2 Actor and
+Critic did not observe the remaining time of the 600-step finite episode,
+and imagined TD(λ)/Actor returns could bootstrap from the terminal timeout
+frame. The versioned v3 task appends normalized remaining time to the 69D
+Actor observation and 61D Critic features; its analytic soft termination is
+exactly one at the terminal time. This keeps the World Model state/action
+contract and WM8/BPTT32 formulas unchanged. V1 and v2 checkpoint contracts
+remain explicit and their original 68D/60D networks remain loadable. The
+v3 change has passed mathematical unit tests; it has not yet demonstrated a
+successful physical policy.
+
 ## Verified commands
 
 ```bash

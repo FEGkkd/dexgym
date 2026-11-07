@@ -145,6 +145,37 @@ def test_old_workspace_checkpoint_success_semantics_remain_explicit():
         "marvin_workspace_se3_reach_hold_v1")
 
 
+def test_time_aware_workspace_task_exposes_remaining_episode_to_actor_and_critic():
+    from dexgym.tasks.marvin_supermimic.workspace_reach_hold import MarvinWorkspaceSE3ReachHold
+
+    task = MarvinWorkspaceSE3ReachHold(
+        StaticFarReference(), LinearTCPRobot(),
+        temporal_context="normalized_time_remaining_v3")
+    state = torch.zeros(1, 42)
+    early = task.task_state(torch.tensor([0]), torch.tensor([0]))
+    late = task.task_state(torch.tensor([0]), torch.tensor([39]))
+    assert task.spec.observation_dim == 69
+    assert task.spec.critic_dim == 61
+    assert task.observation(state, torch.zeros(1, 14), early)[0, -1] == 1
+    assert task.observation(state, torch.zeros(1, 14), late)[0, -1] == 1 / 40
+    assert task.critic_features(state, early)[0, -1] == 1
+    assert task.critic_features(state, late)[0, -1] == 1 / 40
+    assert task.checkpoint_contract()["task_adapter_version"].endswith("_v3")
+
+
+def test_finite_episode_timeout_is_terminal_for_imagined_bootstrap():
+    from dexgym.tasks.marvin_supermimic.workspace_reach_hold import MarvinWorkspaceSE3ReachHold
+
+    task = MarvinWorkspaceSE3ReachHold(
+        StaticFarReference(), LinearTCPRobot(),
+        temporal_context="normalized_time_remaining_v3")
+    next_state = torch.zeros(1, 42)
+    before_end = task.task_state(torch.tensor([0]), torch.tensor([39]))
+    end = task.task_state(torch.tensor([0]), torch.tensor([40]))
+    assert task.soft_termination(next_state, end).item() == 1.0
+    assert task.soft_termination(next_state, before_end).item() < 1.0
+
+
 def test_shared_training_entrypoint_selects_far_reach_without_copying_trainer():
     from scripts.supermimic.train_continuous_se3 import _task_profile
 

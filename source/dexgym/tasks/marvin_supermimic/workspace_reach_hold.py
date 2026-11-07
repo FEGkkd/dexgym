@@ -30,9 +30,14 @@ class MarvinWorkspaceSE3ReachHold(MarvinBimanualSE3ReachHold):
     def __init__(self, reference, robot, *,
                  reward_config=WorkspaceReachRewardConfig(),
                  success_config=None, safety_thresholds=None,
-                 success_semantics="hold_start_deadline_v2"):
+                 success_semantics="hold_start_deadline_v2",
+                 temporal_context=None):
         if success_semantics not in ("pre_deadline_arrival_v1", "hold_start_deadline_v2"):
             raise ValueError("Unknown workspace reach success semantics")
+        if temporal_context not in (None, "normalized_time_remaining_v3"):
+            raise ValueError("Unknown workspace reach temporal context")
+        if temporal_context is not None and success_semantics != "hold_start_deadline_v2":
+            raise ValueError("Time-aware task requires the corrected hold deadline")
         if getattr(reference, "version", "marvin_teleop_workspace_bank_v3") not in (
                 "marvin_teleop_workspace_bank_v3", "marvin_teleop_workspace_bank_v4"):
             raise ValueError("Workspace reach-and-hold requires a static far-goal bank")
@@ -52,11 +57,19 @@ class MarvinWorkspaceSE3ReachHold(MarvinBimanualSE3ReachHold):
         super().__init__(robot, **kwargs)
         self.reference = reference
         self.success_semantics = success_semantics
-        self.spec = TaskSpec(
-            "marvin_bimanual_workspace_se3_reach_hold", 68, 10, 18, 1, 18, 60,
-            "static_dual_tcp_base_se3_rotation6d_1x18_v1",
-            "arm_q_qd_qcmd_previous_action_tcp_error_log_68_v1",
-            "physical_state42_target_pose18_v1", 18)
+        self.temporal_context = temporal_context
+        if temporal_context is None:
+            self.spec = TaskSpec(
+                "marvin_bimanual_workspace_se3_reach_hold", 68, 10, 18, 1, 18, 60,
+                "static_dual_tcp_base_se3_rotation6d_1x18_v1",
+                "arm_q_qd_qcmd_previous_action_tcp_error_log_68_v1",
+                "physical_state42_target_pose18_v1", 18)
+        else:
+            self.spec = TaskSpec(
+                "marvin_bimanual_workspace_se3_reach_hold", 69, 10, 18, 1, 18, 61,
+                "static_dual_tcp_base_se3_rotation6d_1x18_v1",
+                "arm_q_qd_qcmd_previous_action_tcp_error_log_remaining_time_69_v3",
+                "physical_state42_target_pose18_remaining_time_61_v3", 18)
 
     def checkpoint_contract(self):
         contract = {"task_adapter_version": "marvin_workspace_se3_reach_hold_v1",
@@ -73,7 +86,33 @@ class MarvinWorkspaceSE3ReachHold(MarvinBimanualSE3ReachHold):
             contract["task_adapter_version"] = "marvin_workspace_se3_reach_hold_v2"
             contract["episode_semantics"] = "static_goal_hold_starts_before_deadline_v2"
             contract["success_deadline_contract"] = self.success_semantics
+        if self.temporal_context is not None:
+            contract["task_adapter_version"] = "marvin_workspace_se3_reach_hold_v3"
+            contract["episode_semantics"] = "finite_horizon_time_aware_terminal_timeout_v3"
+            contract["temporal_context"] = self.temporal_context
+            contract["timeout_soft_termination"] = "exact_one_at_episode_end_v3"
         return contract
+
+    def _remaining_time(self, task_state):
+        return ((self.episode_length - task_state.frame).clamp(min=0)
+                .to(dtype=task_state.data.dtype) / self.episode_length)[:, None]
+
+    def observation(self, state, previous_action, task_state):
+        clean = super().observation(state, previous_action, task_state)
+        return (torch.cat((clean, self._remaining_time(task_state)), dim=-1)
+                if self.temporal_context is not None else clean)
+
+    def critic_features(self, state, task_state):
+        features = super().critic_features(state, task_state)
+        return (torch.cat((features, self._remaining_time(task_state)), dim=-1)
+                if self.temporal_context is not None else features)
+
+    def soft_termination(self, next_state, next_task_state):
+        safety = super().soft_termination(next_state, next_task_state)
+        if self.temporal_context is None:
+            return safety
+        return torch.where(next_task_state.frame >= self.episode_length,
+                           torch.ones_like(safety), safety)
 
     def episode_success(self, trajectory, *, complete: bool):
         if not super().episode_success(trajectory, complete=complete):

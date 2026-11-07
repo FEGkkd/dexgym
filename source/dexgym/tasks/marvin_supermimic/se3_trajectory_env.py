@@ -52,7 +52,9 @@ class MarvinContinuousSE3FollowEnv(MarvinArmNewtonBaseEnv):
             raise ValueError("Evaluation motion ID is outside the reference library")
         self.reference_id = torch.zeros(self.num_envs, device=self.device, dtype=torch.long)
         self.reference_frame = torch.zeros(self.num_envs, device=self.device, dtype=torch.long)
-        self.follow_history = torch.zeros((self.num_envs, 10, 68), device=self.device)
+        self.follow_history = torch.zeros(
+            (self.num_envs, self.follow_task.spec.history_length,
+             self.follow_task.spec.observation_dim), device=self.device)
         self.previous_qd = torch.zeros((self.num_envs, 14), device=self.device)
 
     def _make_reference(self, cfg):
@@ -148,4 +150,5 @@ class MarvinContinuousSE3FollowEnv(MarvinArmNewtonBaseEnv):
         self.reference_frame[env_ids] = frame
         state = self.core_robot.physical_state(self)
         first = self.follow_task.observation(state, self.last_action, self.task_state())
-        self.follow_history[env_ids] = first[env_ids, None].expand(-1, 10, -1)
+        self.follow_history[env_ids] = first[env_ids, None].expand(
+            -1, self.follow_task.spec.history_length, -1)

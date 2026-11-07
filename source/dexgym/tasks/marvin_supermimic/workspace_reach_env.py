@@ -10,6 +10,7 @@ from .workspace_reach_hold import MarvinWorkspaceSE3ReachHold
 class MarvinWorkspaceSE3ReachHoldCfg(MarvinTeleopWorkspaceCfg):
     episode_length_s = 12.0
     reach_success_semantics = "hold_start_deadline_v2"
+    reach_temporal_context = None
 
 
 class MarvinWorkspaceSE3ReachHoldEnv(MarvinTeleopWorkspaceEnv):
@@ -19,4 +20,5 @@ class MarvinWorkspaceSE3ReachHoldEnv(MarvinTeleopWorkspaceEnv):
 
     def _make_task(self, reference, robot):
         return MarvinWorkspaceSE3ReachHold(
-            reference, robot, success_semantics=self.cfg.reach_success_semantics)
+            reference, robot, success_semantics=self.cfg.reach_success_semantics,
+            temporal_context=getattr(self.cfg, "reach_temporal_context", None))

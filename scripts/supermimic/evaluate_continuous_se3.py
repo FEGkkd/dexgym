@@ -99,6 +99,9 @@ def main():
         task_version = saved["contract_manifest"]["task_contract"]["task_adapter_version"]
         if task_version == "marvin_workspace_se3_reach_hold_v1":
             cfg.reach_success_semantics = "pre_deadline_arrival_v1"
+        elif task_version == "marvin_workspace_se3_reach_hold_v3":
+            cfg.reach_temporal_context = "normalized_time_remaining_v3"
+            cfg.observation_space = 10 * 69 + 18
         elif task_version != "marvin_workspace_se3_reach_hold_v2":
             parser.error(f"Unsupported workspace reach success contract: {task_version}")
     cfg.scene.num_envs = args.num_envs
