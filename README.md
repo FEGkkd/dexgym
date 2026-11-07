@@ -45,6 +45,9 @@ records the 1000-iteration training and held-out tracking results. The
 measures joint and fingertip drift when a GRAB reference target is held for
 1.5 seconds. The [three backend controls](docs/experiments/hand_only_backend_controls_20261108.md)
 compare zero gravity, one-joint response, and source MuJoCo versus Newton.
+The [layered Hand-only drive validation](docs/experiments/hand_only_drive_layered_validation_20261108.md)
+records the isolated USD gain correction, timestep and collision sweep, and
+324-pose fixed-target acceptance test.
 
 ```bash
 PYTHONPATH=source uv run python scripts/data/build_grab_right_hand_library.py \

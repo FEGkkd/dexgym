@@ -1,0 +1,533 @@
+#usda 1.0
+(
+    customLayerData = {
+        string purpose = "isolated hand-only drive diagnostic; source USD unchanged"
+    }
+    defaultPrim = "marvin_m6_dual_arm_wujihand2_beta2"
+    subLayers = [
+        @dual_arm_marvin_no_hand_contacts.usda@
+    ]
+)
+
+over "marvin_m6_dual_arm_wujihand2_beta2"
+{
+    over "Geometry"
+    {
+        over "pedestal"
+        {
+            over "center_mount"
+            {
+                over "Base_L"
+                {
+                    over "Link1_L"
+                    {
+                        over "Joint1_L"
+                        {
+                            float drive:angular:physics:damping = 0.7853982
+                            float drive:angular:physics:stiffness = 6.981317
+                        }
+
+                        over "Link2_L"
+                        {
+                            over "Joint2_L"
+                            {
+                                float drive:angular:physics:damping = 0.7853982
+                                float drive:angular:physics:stiffness = 6.981317
+                            }
+
+                            over "Link3_L"
+                            {
+                                over "Joint3_L"
+                                {
+                                    float drive:angular:physics:damping = 0.6981317
+                                    float drive:angular:physics:stiffness = 7.6794486
+                                }
+
+                                over "Link4_L"
+                                {
+                                    over "Joint4_L"
+                                    {
+                                        float drive:angular:physics:damping = 0.5934119
+                                        float drive:angular:physics:stiffness = 5.934119
+                                    }
+
+                                    over "Link5_L"
+                                    {
+                                        over "Joint5_L"
+                                        {
+                                            float drive:angular:physics:damping = 0.40142572
+                                            float drive:angular:physics:stiffness = 3.4906585
+                                        }
+
+                                        over "Link6_L"
+                                        {
+                                            over "Joint6_L"
+                                            {
+                                                float drive:angular:physics:damping = 0.27925268
+                                                float drive:angular:physics:stiffness = 2.0943952
+                                            }
+
+                                            over "Link7_L"
+                                            {
+                                                over "Joint7_L"
+                                                {
+                                                    float drive:angular:physics:damping = 0.20943952
+                                                    float drive:angular:physics:stiffness = 1.4835298
+                                                }
+
+                                                over "TCP_Link_L"
+                                                {
+                                                    over "l_mount"
+                                                    {
+                                                        over "l_wrist"
+                                                        {
+                                                            over "l_thumb_proximal"
+                                                            {
+                                                                over "l_thumb_cmc_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.00036445985
+                                                                    float drive:angular:physics:stiffness = 0.0071287467
+                                                                }
+
+                                                                over "l_thumb_proximal_abd"
+                                                                {
+                                                                    over "l_thumb_cmc_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.0005342617
+                                                                        float drive:angular:physics:stiffness = 0.011970517
+                                                                    }
+
+                                                                    over "l_thumb_middle"
+                                                                    {
+                                                                        over "l_thumb_mcp"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.00017770026
+                                                                            float drive:angular:physics:stiffness = 0.004173278
+                                                                        }
+
+                                                                        over "l_thumb_distal"
+                                                                        {
+                                                                            over "l_thumb_ip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.0001587724
+                                                                                float drive:angular:physics:stiffness = 0.0036191372
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "l_index_finger_proximal"
+                                                            {
+                                                                over "l_index_finger_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.00032851886
+                                                                    float drive:angular:physics:stiffness = 0.006519192
+                                                                }
+
+                                                                over "l_index_finger_proximal_abd"
+                                                                {
+                                                                    over "l_index_finger_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.0003455432
+                                                                        float drive:angular:physics:stiffness = 0.007957383
+                                                                    }
+
+                                                                    over "l_index_finger_middle"
+                                                                    {
+                                                                        over "l_index_finger_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.0001828587
+                                                                            float drive:angular:physics:stiffness = 0.0042530824
+                                                                        }
+
+                                                                        over "l_index_finger_distal"
+                                                                        {
+                                                                            over "l_index_finger_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.00014381883
+                                                                                float drive:angular:physics:stiffness = 0.0031463
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "l_middle_finger_proximal"
+                                                            {
+                                                                over "l_middle_finger_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.0003226455
+                                                                    float drive:angular:physics:stiffness = 0.006435192
+                                                                }
+
+                                                                over "l_middle_finger_proximal_abd"
+                                                                {
+                                                                    over "l_middle_finger_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.0003147343
+                                                                        float drive:angular:physics:stiffness = 0.0072679934
+                                                                    }
+
+                                                                    over "l_middle_finger_middle"
+                                                                    {
+                                                                        over "l_middle_finger_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.00016741548
+                                                                            float drive:angular:physics:stiffness = 0.0038778787
+                                                                        }
+
+                                                                        over "l_middle_finger_distal"
+                                                                        {
+                                                                            over "l_middle_finger_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.00015974989
+                                                                                float drive:angular:physics:stiffness = 0.003390757
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "l_ring_finger_proximal"
+                                                            {
+                                                                over "l_ring_finger_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.0003207323
+                                                                    float drive:angular:physics:stiffness = 0.0062339935
+                                                                }
+
+                                                                over "l_ring_finger_proximal_abd"
+                                                                {
+                                                                    over "l_ring_finger_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.0003259753
+                                                                        float drive:angular:physics:stiffness = 0.0075009568
+                                                                    }
+
+                                                                    over "l_ring_finger_middle"
+                                                                    {
+                                                                        over "l_ring_finger_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.00018491974
+                                                                            float drive:angular:physics:stiffness = 0.004351132
+                                                                        }
+
+                                                                        over "l_ring_finger_distal"
+                                                                        {
+                                                                            over "l_ring_finger_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.00017309483
+                                                                                float drive:angular:physics:stiffness = 0.003988134
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "l_pinky_proximal"
+                                                            {
+                                                                over "l_pinky_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.00032492724
+                                                                    float drive:angular:physics:stiffness = 0.0063797473
+                                                                }
+
+                                                                over "l_pinky_proximal_abd"
+                                                                {
+                                                                    over "l_pinky_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.00032693817
+                                                                        float drive:angular:physics:stiffness = 0.007224461
+                                                                    }
+
+                                                                    over "l_pinky_middle"
+                                                                    {
+                                                                        over "l_pinky_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.00016598176
+                                                                            float drive:angular:physics:stiffness = 0.003967023
+                                                                        }
+
+                                                                        over "l_pinky_distal"
+                                                                        {
+                                                                            over "l_pinky_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.0001573815
+                                                                                float drive:angular:physics:stiffness = 0.0034290894
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                over "Base_R"
+                {
+                    over "Link1_R"
+                    {
+                        over "Joint1_R"
+                        {
+                            float drive:angular:physics:damping = 0.7853982
+                            float drive:angular:physics:stiffness = 6.981317
+                        }
+
+                        over "Link2_R"
+                        {
+                            over "Joint2_R"
+                            {
+                                float drive:angular:physics:damping = 0.7853982
+                                float drive:angular:physics:stiffness = 6.981317
+                            }
+
+                            over "Link3_R"
+                            {
+                                over "Joint3_R"
+                                {
+                                    float drive:angular:physics:damping = 0.6981317
+                                    float drive:angular:physics:stiffness = 7.6794486
+                                }
+
+                                over "Link4_R"
+                                {
+                                    over "Joint4_R"
+                                    {
+                                        float drive:angular:physics:damping = 0.5934119
+                                        float drive:angular:physics:stiffness = 5.934119
+                                    }
+
+                                    over "Link5_R"
+                                    {
+                                        over "Joint5_R"
+                                        {
+                                            float drive:angular:physics:damping = 0.40142572
+                                            float drive:angular:physics:stiffness = 3.4906585
+                                        }
+
+                                        over "Link6_R"
+                                        {
+                                            over "Joint6_R"
+                                            {
+                                                float drive:angular:physics:damping = 0.27925268
+                                                float drive:angular:physics:stiffness = 2.0943952
+                                            }
+
+                                            over "Link7_R"
+                                            {
+                                                over "Joint7_R"
+                                                {
+                                                    float drive:angular:physics:damping = 0.20943952
+                                                    float drive:angular:physics:stiffness = 1.4835298
+                                                }
+
+                                                over "TCP_Link_R"
+                                                {
+                                                    over "r_mount"
+                                                    {
+                                                        over "r_wrist"
+                                                        {
+                                                            over "r_thumb_proximal"
+                                                            {
+                                                                over "r_thumb_cmc_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.00036445985
+                                                                    float drive:angular:physics:stiffness = 0.0071287467
+                                                                }
+
+                                                                over "r_thumb_proximal_abd"
+                                                                {
+                                                                    over "r_thumb_cmc_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.0005342617
+                                                                        float drive:angular:physics:stiffness = 0.011970517
+                                                                    }
+
+                                                                    over "r_thumb_middle"
+                                                                    {
+                                                                        over "r_thumb_mcp"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.00017770026
+                                                                            float drive:angular:physics:stiffness = 0.004173278
+                                                                        }
+
+                                                                        over "r_thumb_distal"
+                                                                        {
+                                                                            over "r_thumb_ip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.0001587724
+                                                                                float drive:angular:physics:stiffness = 0.0036191372
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "r_index_finger_proximal"
+                                                            {
+                                                                over "r_index_finger_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.00032851886
+                                                                    float drive:angular:physics:stiffness = 0.006519192
+                                                                }
+
+                                                                over "r_index_finger_proximal_abd"
+                                                                {
+                                                                    over "r_index_finger_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.0003455432
+                                                                        float drive:angular:physics:stiffness = 0.007957383
+                                                                    }
+
+                                                                    over "r_index_finger_middle"
+                                                                    {
+                                                                        over "r_index_finger_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.0001828587
+                                                                            float drive:angular:physics:stiffness = 0.0042530824
+                                                                        }
+
+                                                                        over "r_index_finger_distal"
+                                                                        {
+                                                                            over "r_index_finger_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.00014381883
+                                                                                float drive:angular:physics:stiffness = 0.0031463
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "r_middle_finger_proximal"
+                                                            {
+                                                                over "r_middle_finger_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.0003226455
+                                                                    float drive:angular:physics:stiffness = 0.006435192
+                                                                }
+
+                                                                over "r_middle_finger_proximal_abd"
+                                                                {
+                                                                    over "r_middle_finger_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.0003147343
+                                                                        float drive:angular:physics:stiffness = 0.0072679934
+                                                                    }
+
+                                                                    over "r_middle_finger_middle"
+                                                                    {
+                                                                        over "r_middle_finger_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.00016741548
+                                                                            float drive:angular:physics:stiffness = 0.0038778787
+                                                                        }
+
+                                                                        over "r_middle_finger_distal"
+                                                                        {
+                                                                            over "r_middle_finger_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.00015974989
+                                                                                float drive:angular:physics:stiffness = 0.003390757
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "r_ring_finger_proximal"
+                                                            {
+                                                                over "r_ring_finger_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.0003207323
+                                                                    float drive:angular:physics:stiffness = 0.0062339935
+                                                                }
+
+                                                                over "r_ring_finger_proximal_abd"
+                                                                {
+                                                                    over "r_ring_finger_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.0003259753
+                                                                        float drive:angular:physics:stiffness = 0.0075009568
+                                                                    }
+
+                                                                    over "r_ring_finger_middle"
+                                                                    {
+                                                                        over "r_ring_finger_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.00018491974
+                                                                            float drive:angular:physics:stiffness = 0.004351132
+                                                                        }
+
+                                                                        over "r_ring_finger_distal"
+                                                                        {
+                                                                            over "r_ring_finger_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.00017309483
+                                                                                float drive:angular:physics:stiffness = 0.003988134
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+
+                                                            over "r_pinky_proximal"
+                                                            {
+                                                                over "r_pinky_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.00032492724
+                                                                    float drive:angular:physics:stiffness = 0.0063797473
+                                                                }
+
+                                                                over "r_pinky_proximal_abd"
+                                                                {
+                                                                    over "r_pinky_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.00032693817
+                                                                        float drive:angular:physics:stiffness = 0.007224461
+                                                                    }
+
+                                                                    over "r_pinky_middle"
+                                                                    {
+                                                                        over "r_pinky_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.00016598176
+                                                                            float drive:angular:physics:stiffness = 0.003967023
+                                                                        }
+
+                                                                        over "r_pinky_distal"
+                                                                        {
+                                                                            over "r_pinky_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.0001573815
+                                                                                float drive:angular:physics:stiffness = 0.0034290894
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
