@@ -272,7 +272,84 @@ half remains uniformly sampled from legal starts. This sampling rule is
 task-neutral in Core, disabled by default for legacy tasks, and recorded in
 the strict training configuration. It does not change WM8, BPTT32, Reward,
 Critic, action mapping or the physical target bank. Its Newton outcome is
-pending and must not be inferred from the unit tests.
+not inferred from the unit tests. The measured result was negative: after a
+fresh-physics 4096-environment, 160-iteration segment, the eight held-out Hold
+episodes remained safe but **0/8 held to episode end**; mean longest hold was
+119.6 steps and final left/right TCP position error was 0.0244/0.0243 m.
+Thus replay start stratification did not fix the drift.
+
+## Mixed Hold+Near physical test
+
+A separate versioned weight-50 pilot initialized compatible modules from the
+weight-50 Hold checkpoint, started fresh physics/Replay/optimizers, and sampled
+Hold plus Near targets from the same v5 bank. In 160 iterations with 4096
+Newton environments, it collected 2,621,440 real transitions and made 5,120
+WM8, 148 Actor BPTT32 and 2,960 Critic updates. Four trust evaluations failed;
+the final trusted horizon was 32. There were zero nonfinite optimizer events.
+This is a short, bounded task diagnostic, **not** a successful workspace
+training run.
+
+Independent 16-environment Newton evaluation used the eight held-out Hold and
+eight held-out Near targets at seed 9301, with no exploration noise or reset
+perturbation. There were no hard failures. The zero-action and trained policy
+results are separated by difficulty:
+
+| Policy and level | Old 25-step success | Held to episode end | Final TCP position L/R | Final SO(3) L/R |
+| --- | ---: | ---: | ---: | ---: |
+| Zero action, Hold | 8/8 | 8/8 | 0.00061/0.00059 m | 0.00132/0.00117 rad |
+| Trained, Hold | 6/8 | 0/8 | 0.04935/0.04510 m | 0.20208/0.23505 rad |
+| Zero action, Near | 0/8 | 0/8 | 0.04407/0.05788 m | 0.13886/0.17606 rad |
+| Trained, Near | 0/8 | 0/8 | 0.11021/0.12246 m | 0.32089/0.42961 rad |
+
+The trained Near policy is worse than zero action on both final TCP position
+and orientation, and the Hold policy lost the stationarity demonstrated by its
+source checkpoint. The report and real physics trace are under
+`/home/ubuntu/dexgym_data/marvin_supermimic_workspace_reach_v4/near_hold_strong_seed97_4096_seg1/eval_hold_near16/`.
+Do not continue this exact configuration to Medium/Wide or report its 148
+Actor updates as task-level learning. Diagnose the short-horizon objective,
+Actor start distribution, Critic ranking and target curriculum before another
+large Newton run; retain this failed checkpoint as reproducible evidence.
+
+## Task-definition boundary for a general workspace policy
+
+The v5 Reach & Hold bank contains 320 clips (256 train, 32 validation and 32
+test), with 64 training clips at each Hold, Near, Medium and Wide difficulty.
+**Every target is constant throughout its 601 frames**: measured maximum TCP
+position change between any two target frames is exactly zero. At the current
+Hold+Near curriculum, the Actor therefore sees only stationary goals and
+nearby start-to-goal pairs; it has not trained on a changing teleoperation
+stream, nor on independently sampled far start/goal pairs.
+
+The separate broad v2 *continuous* bank has target motion, but its 256
+training clips are smooth local strokes around widely distributed starting
+configurations. The measured mean per-episode left/right TCP position span is
+0.071/0.077 m at Near, 0.140/0.134 m at Medium, and 0.211/0.206 m at Wide;
+the Wide P95 span is 0.361/0.347 m. These statistics were computed directly
+from the committed `teleop_workspace_broad_12s_seed20261107.npz` target poses.
+Wide joint-range *starting positions* do not turn these local strokes into
+arbitrary start-to-goal workspace traversal. Existing broad-v2 physical
+evaluation also failed its full-clip tracking gate (0/16 at iteration 400).
+
+The Reach & Hold `episode_success` contract counts a 25-step valid hold that
+begins by step 400, even if the Actor later drifts. This is a valid, versioned
+arrival benchmark, but it does not measure sustained command following. The
+separate `held_to_episode_end` and `terminal_hold_steps` metrics must be
+reported for every fixed-goal policy; dynamic 50 Hz following must be tested
+with its own full-clip position/SO(3) metrics and independent Newton traces.
+The default 32-step Actor imagination spans only 0.64 s and the joint-delta
+command can change by at most 0.32 rad per joint within that rollout; longer
+start-to-goal credit assignment depends on the Critic and actual multi-step
+physical outcomes. This is a task/training limitation, not evidence that the
+eight-step World Model formula is incorrect.
+
+The intended acceptance sequence is: held-out Hold with stable terminal
+hold; held-out Near, Medium and Wide *arrival* with both arms meeting 5 mm and
+2° plus safety; held-out continuous streams across distributed workspace
+regions; then independent far start/goal and goal-switch tests with measured
+latency and success. None of the present static or smooth-local banks certifies
+all collision-free reachable dual-TCP poses. Samples are screened by FK and
+MuJoCo contact checks, while dynamic execution and coverage remain separate
+Newton acceptance gates.
 
 ## Verified commands
 
