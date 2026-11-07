@@ -31,7 +31,7 @@ training and reward tuning are separate decisions.
 ## RL task
 
 Use Isaac Lab 3.0 `DirectRLEnv` and the existing Newton MJWarp packaged 54-DoF
-asset. The environment holds the arms and left hand at home while the action is
+full-contact asset. The environment holds the arms and left hand at home while the action is
 a 20D right-hand joint target increment. The policy observes right joint
 position and velocity, current fingertip positions in the right-wrist frame,
 the active five-fingertip goal and its error, and the previous action. It sees
@@ -39,7 +39,7 @@ no reference joint angles.
 
 At reset, sample a training sequence and a valid starting frame, set right-hand
 joints to its `q_ref`, and choose a later fingertip target. A goal is reached
-when every fingertip stays within a configured position tolerance for a short
+when every fingertip stays within 10 mm for a two-step
 dwell. Reaching advances the frame index by a curriculum-controlled stride;
 otherwise the goal remains active. Reward combines a sparse reached-goal bonus,
 dense fingertip tracking, a small action-rate penalty and a time cost. Episodes

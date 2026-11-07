@@ -18,9 +18,13 @@ def main() -> None:
     parser.add_argument("--tolerance-m", type=float, default=None)
     parser.add_argument("--max-goal-steps", type=int, default=None)
     parser.add_argument("--split", choices=("train", "validation"), default="train")
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--check-terminal", action="store_true")
     args = parser.parse_args()
+    torch.manual_seed(args.seed)
     load_external_tasks()
     cfg = RightHandTrackingDirectCfg()
+    cfg.seed = args.seed
     cfg.scene.num_envs = args.num_envs
     cfg.split = args.split
     if args.stride is not None:
@@ -42,6 +46,22 @@ def main() -> None:
             initial_error = torch.linalg.vector_norm(task._current_tips() - reference, dim=-1)
             fk_error_m = initial_error.max().item()
             assert fk_error_m < 0.005, f"Wrist-frame FK mismatch: {fk_error_m:.6f} m"
+            if args.check_terminal:
+                assert args.num_envs >= 2
+                task.cfg.goal_tolerance_m = 1.0  # isolate step ordering from tracking difficulty
+                task.goal_frame[0] = task.bank.lengths[task.motion_ids[0]] - 1
+                task.goal_tips[0] = task._current_tips()[0]
+                task.dwell[0] = task.cfg.goal_dwell_steps - 1
+                task.goal_age[0] = 0
+                task.goal_tips[1] = 10.0
+                task.dwell[1] = 0
+                task.goal_age[1] = task.cfg.max_goal_steps - 1
+                _, reward, terminated, truncated, _ = env.step(torch.zeros((args.num_envs, 20), device=task.device))
+                assert terminated[:2].tolist() == [True, True]
+                assert not truncated[:2].any().item()
+                assert reward[0].item() > 10.0
+                print("RIGHT_HAND_TERMINAL_OK completion_and_goal_timeout_same_step")
+                return
             reached = 0.0
             resets = 0
             tip_errors = []

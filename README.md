@@ -33,7 +33,8 @@ configuration and controller parameters are unchanged.
 The separate hand-only task uses GRAB right-hand MANO poses retargeted by the
 local WujiHand2 SDK. It controls 20 right-hand joints with PPO, holds both arms
 and the left hand at Home, and follows five robot-FK fingertip targets in the
-right-wrist frame. It uses no object state. Local recordings and generated
+right-wrist frame with full hand collisions and a 10 mm all-finger goal threshold.
+It uses no object state. Local recordings and generated
 motions are excluded from Git; [data/README.md](data/README.md) describes the
 required layout and conversion command. The
 [pilot report](docs/experiments/hand_only_right_pilot.md) records task settings,

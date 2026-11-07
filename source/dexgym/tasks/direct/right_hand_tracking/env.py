@@ -62,6 +62,7 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         self.previous_action = torch.zeros((self.num_envs, 20), device=self.device)
         self.action_delta = torch.zeros_like(self.previous_action)
         self.goals_reached = torch.zeros(self.num_envs, dtype=torch.long, device=self.device)
+        self._step_reward = torch.zeros(self.num_envs, device=self.device)
 
     def _current_tips(self) -> torch.Tensor:
         return fingertips_in_wrist_frame(
@@ -102,6 +103,12 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         return {"policy": policy}
 
     def _get_rewards(self) -> torch.Tensor:
+        return self._step_reward
+
+    def _get_dones(self) -> tuple[torch.Tensor, torch.Tensor]:
+        # DirectRLEnv calls this hook before _get_rewards. Update the current
+        # subgoal here so completion and stalled-goal termination occur on the
+        # same transition that earns its reward.
         reward, reached, self.dwell, mean_error = tracking_step(
             self._current_tips(),
             self.goal_tips,
@@ -125,9 +132,7 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
             "goal_reach_fraction": reached.float().mean(),
             "mean_goals_reached": self.goals_reached.float().mean(),
         }
-        return reward
-
-    def _get_dones(self) -> tuple[torch.Tensor, torch.Tensor]:
+        self._step_reward = reward
         q = self.robot.data.joint_pos.torch[:, self.right_ids]
         qdot = self.robot.data.joint_vel.torch[:, self.right_ids]
         unsafe = (
@@ -136,7 +141,7 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
             | (q < self.joint_limits[:, 0] - 0.05).any(dim=-1)
             | (q > self.joint_limits[:, 1] + 0.05).any(dim=-1)
         )
-        failed = unsafe | (self.goal_age > self.cfg.max_goal_steps) | self.completed
+        failed = unsafe | (self.goal_age >= self.cfg.max_goal_steps) | self.completed
         timeout = self.episode_length_buf >= self.max_episode_length
         return failed, timeout
 

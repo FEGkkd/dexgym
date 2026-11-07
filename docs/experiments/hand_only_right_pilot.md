@@ -39,7 +39,7 @@ right-wrist FK differs by at most about 0.005 mm in the smoke runs.
 ## Task definition
 
 - Isaac Lab 3.0 `DirectRLEnv`, Newton MJWarp, full 54 DoF packaged asset with
-  hand collisions disabled; 20 right-hand actions, 105 policy observations.
+  hand collisions enabled; 20 right-hand actions, 105 policy observations.
 - Policy observes right joint positions and velocities, five current and five
   goal fingertips in the right-wrist frame, their 15D error, and previous 20D
   action. No object features, left-hand joints, arm joints, or reference joint
@@ -47,21 +47,24 @@ right-wrist FK differs by at most about 0.005 mm in the smoke runs.
 - Each 30 Hz action adds at most 0.08 rad to each right-hand joint target, then
   clips to robot limits. Other joints hold home targets. At reset, right joints
   are set to a sampled motion frame and the goal is four library frames ahead.
-- A subgoal is reached after all five tip errors remain below 25 mm for two
+- A subgoal is reached after all five tip errors remain below 10 mm for two
   consecutive policy steps. Reward is a +10 reached bonus plus mean
   `exp(-50 * fingertip_error_m)`, minus 0.02 times mean squared action change
   and a 0.01 step cost. Reach advances by four frames, clamping to the last
-  frame. Unsafe joint states, more than 45 steps without a reach, completion,
+  frame. Unsafe joint states, 45 steps without a reach, completion,
   or the 8 s episode limit end an episode.
 
 The original 15 mm, 30-step pilot setting yielded very few reached goals under
-direct joint replay. With a 25 mm tolerance and 45-step limit, an eight-env,
+direct joint replay. In the initial no-hand-contact pilot, a 25 mm tolerance and 45-step limit in an eight-env,
 120-step train-split replay reached 41 subgoals with 10 resets in one short
 run; the same setting on held-out `s8` reached 33 subgoals with 8 resets.
-The held-out run had 20.69 mm mean fingertip error and 0.1168 rad mean joint
+That held-out run had 20.69 mm mean fingertip error and 0.1168 rad mean joint
 target error. These are replay diagnostics, not policy scores.
 
 ## PPO workflow check
+
+The following 10-iteration run used the initial 25 mm, no-hand-contact task;
+its reward and error numbers are not measurements of the corrected task.
 
 Bounded command: `isaaclab train --rl_library rsl_rl --task
 DexGym-Wuji-Right-Hand-Tracking-Direct-v0 --num_envs 16 --max_iterations 10
@@ -93,8 +96,41 @@ initial FK parity, and subgoal progression.
 
 ## Next discussion
 
-Before a larger run, decide whether to keep the 25 mm bootstrap tolerance or
-use a staged tolerance/stride curriculum, and choose success metrics on held-out
+Before a larger run, keep the specified 10 mm success criterion and decide
+whether to vary subgoal stride or data sampling, then choose metrics on held-out
 subjects (subgoals per episode, completion rate, five-tip error, and control
 smoothness). The present pilot does not evaluate a converged policy or physical
 hand transfer.
+
+## Corrections after review (2026-11-08)
+
+Isaac Lab calls `_get_dones()` before `_get_rewards()`. The original task
+advanced its subgoal inside `_get_rewards()`, so completion and stalled-goal
+termination lagged one policy step. The task now computes the fingertip reward,
+dwell, goal advancement and terminal flags together in `_get_dones()`; the
+reward hook returns the cached reward from that same transition. A unit
+regression and a live two-environment Newton check confirmed that both final
+subgoal completion and the 45-step goal timeout terminate immediately, with
+the completion bonus paid on the terminal step.
+
+The task now selects `make_robot_cfg(hand_contacts=True)`. The original
+full-contact USD generated 32 Newton hand/support contacts in a legal source
+pose (zero in Home); the eight-environment held-out replay remained finite.
+This enables physical hand collision, although there is still no object in the
+task scene.
+
+The all-five-finger tolerance was briefly set to 20 mm. In equal-seed (`42`), full-contact,
+eight-environment, 120-step held-out joint replays with stride 4, the 15, 20,
+and 25 mm thresholds reached 3, 31, and 43 subgoals respectively. The 20 mm
+setting kept the original stride and provided a reachable bootstrap
+condition. These are short direct-replay diagnostics, not PPO policy outcomes.
+The 20 mm task also completed a bounded 16-environment, 10-iteration PPO check with finite
+losses, 5,120 interaction steps, and a saved checkpoint. At iteration 9 its
+mean fingertip error was 29.4 mm and goal reach fraction 0.0059; this remains
+a workflow check, not evidence of convergence. The requested final task
+threshold is **10 mm**, with the same all-five-finger, two-step dwell rule.
+Its attainability has not been established and is intentionally not used to
+relax the threshold. A 10 mm, full-contact, eight-environment, 120-step
+held-out direct replay (seed 42) remained finite and reached zero subgoals;
+a one-iteration PPO startup check also exited successfully with finite losses.
+Neither result changes the specified 10 mm goal definition.

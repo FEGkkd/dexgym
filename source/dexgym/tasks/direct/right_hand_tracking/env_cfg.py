@@ -20,7 +20,7 @@ REPO_ROOT = Path(__file__).resolve().parents[5]
 
 @configclass
 class RightHandTrackingSceneCfg(InteractiveSceneCfg):
-    robot: ArticulationCfg = make_robot_cfg()
+    robot: ArticulationCfg = make_robot_cfg(hand_contacts=True)
 
 
 @configclass
@@ -43,7 +43,7 @@ class RightHandTrackingDirectCfg(DirectRLEnvCfg):
     library_path: str = str(REPO_ROOT / "data/processed/hand_only_right/manifest.json")
     split: str = "train"
     subgoal_stride: int = 4
-    goal_tolerance_m: float = 0.025
+    goal_tolerance_m: float = 0.010
     goal_dwell_steps: int = 2
     max_goal_steps: int = 45
     action_delta_rad: float = 0.08
