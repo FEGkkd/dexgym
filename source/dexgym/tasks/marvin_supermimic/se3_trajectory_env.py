@@ -7,6 +7,7 @@ from isaaclab.utils import configclass
 
 from dexgym.assets.marvin_wuji.controller import ARM_JOINT_NAMES
 from dexgym.assets.supermimic import PROCEDURAL_REFERENCE
+from dexgym.motion.teleop_workspace import reference_episode_control_steps
 
 from .base_env import MarvinArmNewtonBaseEnv
 from .core_plugins import MarvinCoreRobot
@@ -35,13 +36,14 @@ class MarvinContinuousSE3FollowEnv(MarvinArmNewtonBaseEnv):
     cfg: MarvinContinuousSE3FollowCfg
 
     def __init__(self, cfg: MarvinContinuousSE3FollowCfg, render_mode=None, **kwargs):
-        if cfg.action_schema != "arm_joint_delta_v1" or cfg.episode_length_s != 4.0:
-            raise ValueError("Continuous SE(3) following needs delta actions and 200 control steps")
+        if cfg.action_schema != "arm_joint_delta_v1":
+            raise ValueError("Continuous SE(3) following needs delta actions")
         super().__init__(cfg, render_mode, **kwargs)
         source = SimpleNamespace(joint_names_arm=ARM_JOINT_NAMES)
         self.core_robot = MarvinCoreRobot(source, self.device, action_schema=cfg.action_schema)
         self._setup_arm_physics(source, self.core_robot.action_map.origin)
         self.reference = self._make_reference(cfg)
+        reference_episode_control_steps(self.reference.lengths, cfg.episode_length_s)
         self.follow_task = self._make_task(self.reference, self.core_robot)
         if (cfg.max_reference_start_frame < 0
                 or cfg.max_reference_start_frame + 32 >= int(self.reference.lengths.min())):

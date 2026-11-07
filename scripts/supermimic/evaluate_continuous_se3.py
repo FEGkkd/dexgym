@@ -4,6 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
+import numpy as np
 import dexgym.tasks.marvin_supermimic  # noqa: F401
 import gymnasium as gym
 import torch
@@ -16,6 +17,7 @@ from dexgym.tasks.marvin_supermimic.physics_contract import (
     marvin_continuous_se3_physics_config, marvin_teleop_workspace_physics_config)
 from dexgym.tasks.marvin_supermimic.se3_trajectory_env import MarvinContinuousSE3FollowCfg
 from dexgym.tasks.marvin_supermimic.teleop_trajectory_env import MarvinTeleopWorkspaceCfg
+from dexgym.motion.teleop_workspace import reference_episode_control_steps
 from isaaclab.app import launch_simulation
 
 
@@ -83,6 +85,8 @@ def main():
     if workspace:
         cfg.reference_bank_path = str(args.reference_bank)
         cfg.evaluation_split = args.evaluation_split
+        with np.load(args.reference_bank, allow_pickle=False) as bank:
+            cfg.episode_length_s = (bank["tcp_pos"].shape[1] - 1) / 50
     torch.manual_seed(args.seed)
     with launch_simulation(cfg):
         env = gym.make(("DexGym-Marvin-SuperMimic-Teleop-Workspace-SE3-Direct-v0"
@@ -114,7 +118,9 @@ def main():
             evaluator = PhysicalEvaluator(lambda: collector, task,
                                           evaluation_kind="independent_physics_evaluation")
             args.output.mkdir(parents=True, exist_ok=True)
-            report = evaluator.evaluate(policy, steps=200, one_episode_per_env=True,
+            steps = reference_episode_control_steps(native.reference.lengths,
+                                                    cfg.episode_length_s)
+            report = evaluator.evaluate(policy, steps=steps, one_episode_per_env=True,
                                         trace_path=args.output / "physics_trace.pt")
             if saved and any(not torch.equal(value, policy.state_dict()[name])
                              for name, value in before.items()):

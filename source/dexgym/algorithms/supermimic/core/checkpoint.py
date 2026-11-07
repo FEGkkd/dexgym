@@ -24,6 +24,7 @@ class CoreCheckpoint:
         "max_reference_start_frame",
         "goal_train_seed", "goal_eval_seed", "goal_curriculum_level", "evaluation_mode",
         "collection_contract",
+        "episode_length_s",
     })
 
     def __init__(self, *, git_commit: str, reference_hashes: dict[str, str],
@@ -344,6 +345,62 @@ class CoreCheckpoint:
                 "git_commit": record["git_commit"], "policy_source": str(path),
                 "evaluation_protocol": protocol, "evaluation_overrides": overrides,
                 "target_source_override": target_source_override}
+
+    def initialize_modules_for_new_reference(self, path: str | Path, trainer) -> dict:
+        """Transfer compatible model weights, starting fresh physics and optimization.
+
+        This is explicitly a new experiment: no Replay, optimizer state,
+        training counts or stale World Model Trust is imported. The inference
+        compatibility check still rejects action, actuator, network and task
+        semantic changes before any weights are loaded.
+        """
+        if trainer.iteration or any(trainer.counts.values()):
+            raise ValueError("New-reference initialization requires a fresh Trainer")
+        if any(optimizer.state for optimizer in trainer.optimizers.values()):
+            raise ValueError("New-reference initialization requires fresh optimizers")
+        from types import SimpleNamespace
+        modules = SimpleNamespace(actor=trainer.actor, world_model=trainer.world_model,
+                                  critic=trainer.critic, termination=trainer.termination_head)
+        report = self.load_actor_for_evaluation(
+            path, robot=trainer.robot, task=trainer.task, modules=modules,
+            allow_reference_override=True)
+        record = torch.load(path, map_location="cpu", weights_only=False)
+        trainer.world_model.load_state_dict(record["modules"]["world_model"], strict=True)
+        trainer.critic.load_state_dict(record["modules"]["critic"], strict=True)
+        if trainer.termination_head is not None:
+            trainer.termination_head.load_state_dict(record["modules"]["termination"], strict=True)
+        trainer.actor.train()
+        trainer.world_model.train()
+        trainer.critic.train()
+        trainer.allowed_horizon = 0
+        trainer.trust_report = {}
+        return {**report, "transfer_kind": "compatible_modules_fresh_physics_v1",
+                "replay_restored": False, "optimizer_restored": False,
+                "trust_revalidation_required": True}
+
+    def initialize_dynamics_for_new_reference(self, path: str | Path, trainer) -> dict:
+        """Reuse compatible physical dynamics while keeping a new random Actor.
+
+        The full semantic compatibility check is reused. Actor, Critic and
+        task termination statistics are restored to their fresh initialization
+        before collection starts; only the World Model and its norms transfer.
+        """
+        untouched = {"actor": deepcopy(trainer.actor.state_dict()),
+                     "critic": deepcopy(trainer.critic.state_dict())}
+        if trainer.termination_head is not None:
+            untouched["termination"] = deepcopy(trainer.termination_head.state_dict())
+        try:
+            report = self.initialize_modules_for_new_reference(path, trainer)
+        finally:
+            trainer.actor.load_state_dict(untouched["actor"], strict=True)
+            trainer.critic.load_state_dict(untouched["critic"], strict=True)
+            if trainer.termination_head is not None:
+                trainer.termination_head.load_state_dict(untouched["termination"], strict=True)
+            trainer.actor.train()
+            trainer.critic.train()
+        return {**report, "transfer_kind": "compatible_world_model_fresh_actor_v1",
+                "world_model_source": str(path), "actor_source": "fresh_random_init",
+                "critic_source": "fresh_random_init", "policy_source": None}
 
     @staticmethod
     def load_legacy_m43_v1_actor_for_evaluation(

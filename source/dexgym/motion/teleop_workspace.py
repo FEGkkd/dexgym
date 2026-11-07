@@ -17,6 +17,16 @@ FAMILIES = ("independent_strokes", "opposed_strokes", "oscillatory", "move_hold"
 SPLITS = ("train", "validation", "test")
 
 
+def reference_episode_control_steps(lengths: torch.Tensor, episode_length_s: float) -> int:
+    """Require the Newton timeout to cover the longest 50 Hz target clip exactly."""
+    if lengths.ndim != 1 or lengths.numel() == 0 or bool((lengths < 33).any()):
+        raise ValueError("Reference lengths must be nonempty and allow BPTT32")
+    steps = int(lengths.max()) - 1
+    if abs(episode_length_s * 50 - steps) > 1e-4:
+        raise ValueError("Newton episode length must match reference duration")
+    return steps
+
+
 def _smoothstep(x):
     return x * x * x * (10 + x * (-15 + 6 * x))
 
@@ -49,17 +59,59 @@ def _joint_path(rng, home_arm, frames, family, difficulty):
     return path
 
 
+def _broad_joint_path(rng, home_arm, lower, upper, frames, family, difficulty):
+    """Sample safe-region starts throughout joint bounds and smooth local strokes.
+
+    The joint path is a target-generation witness, never an Actor input or a
+    joint-space training target. Longer episodes allow larger TCP excursions
+    without asking the position servo to follow an impossible frame jump.
+    """
+    fraction = (0.25, 0.55, 1.0)[difficulty]
+    extent = (0.08, 0.16, 0.24)[difficulty]
+    base = rng.uniform(home_arm + fraction * (lower - home_arm),
+                       home_arm + fraction * (upper - home_arm))
+    anchors = np.empty((5, 14), np.float64)
+    anchors[0] = base
+    for index in range(1, 5):
+        left = rng.uniform(-extent, extent, 7)
+        right = rng.uniform(-extent, extent, 7)
+        if family == "opposed_strokes":
+            right = -left + rng.uniform(-extent * 0.2, extent * 0.2, 7)
+        elif family == "asymmetric_arms":
+            (left if index % 2 else right)[:] *= 0.25
+        elif family == "move_hold" and index in (2, 4):
+            anchors[index] = anchors[index - 1]
+            continue
+        elif family == "oscillatory" and index >= 3:
+            anchors[index] = anchors[index - 2]
+            continue
+        anchors[index] = np.clip(base + np.concatenate((left, right)), lower, upper)
+    sample = np.linspace(0, 4, frames)
+    segment = np.minimum(sample.astype(int), 3)
+    phase = _smoothstep(sample - segment)
+    return anchors[segment] * (1 - phase[:, None]) + anchors[segment + 1] * phase[:, None]
+
+
 def generate_teleop_workspace_bank(path: str | Path, *, seed: int,
                                    split_counts=(256, 32, 32), frames=201,
                                    max_attempts_per_clip=120,
+                                   profile="local_v1",
                                    mjcf: str | Path = DEFAULT_MJCF) -> dict:
     """Generate disjoint train/validation/test target streams at exactly 50 Hz.
 
     Each accepted frame is collision-free in source MuJoCo kinematics. This is
     a screen, not a claim that a policy has physically executed each target.
     """
-    if len(split_counts) != 3 or min(split_counts) < 1 or frames != 201:
-        raise ValueError("Bank requires three nonempty 201-frame splits at 50 Hz")
+    if len(split_counts) != 3 or min(split_counts) < 1:
+        raise ValueError("Bank requires three nonempty splits")
+    if profile == "local_v1":
+        if frames != 201:
+            raise ValueError("local_v1 requires a 201-frame, 4-second bank")
+    elif profile == "broad_v2":
+        if frames < 401 or (frames - 1) % 200:
+            raise ValueError("broad_v2 requires at least 401 frames and whole 4-second blocks")
+    else:
+        raise ValueError("Unknown workspace target profile")
     path = Path(path)
     model = mujoco.MjModel.from_xml_path(str(mjcf))
     data = mujoco.MjData(model)
@@ -71,18 +123,23 @@ def generate_teleop_workspace_bank(path: str | Path, *, seed: int,
                 for side in ("L", "R")]
     key = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "home")
     home = model.key_qpos[key].copy()
-    lower = model.jnt_range[joint_ids, 0] + 0.03
-    upper = model.jnt_range[joint_ids, 1] - 0.03
+    margin = 0.08 if profile == "broad_v2" else 0.03
+    lower = model.jnt_range[joint_ids, 0] + margin
+    upper = model.jnt_range[joint_ids, 1] - margin
     rng = np.random.default_rng(seed)
     poses, witnesses, families, difficulties, splits, names = [], [], [], [], [], []
     total = sum(split_counts)
     for index in range(total):
         split = next(i for i, cutoff in enumerate(np.cumsum(split_counts)) if index < cutoff)
         family_index = (index + split) % len(FAMILIES)
-        difficulty = (index // len(FAMILIES)) % 3
+        difficulty = ((index % 3) if profile == "broad_v2"
+                      else (index // len(FAMILIES)) % 3)
         family = FAMILIES[family_index]
         for _ in range(max_attempts_per_clip):
-            witness = _joint_path(rng, home[joint_addresses], frames, family, difficulty)
+            witness = (_broad_joint_path(rng, home[joint_addresses], lower, upper,
+                                         frames, family, difficulty)
+                       if profile == "broad_v2" else
+                       _joint_path(rng, home[joint_addresses], frames, family, difficulty))
             if (np.any(witness <= lower) or np.any(witness >= upper)
                     or np.max(np.abs(np.diff(witness, axis=0))) > 0.009):
                 continue
@@ -113,7 +170,9 @@ def generate_teleop_workspace_bank(path: str | Path, *, seed: int,
         splits.append(split)
         names.append(f"teleop_{SPLITS[split]}_{index:04d}_{family}_l{difficulty}")
     path.parent.mkdir(parents=True, exist_ok=True)
-    np.savez_compressed(path, version="marvin_teleop_workspace_bank_v1", seed=seed,
+    version = ("marvin_teleop_workspace_bank_v2" if profile == "broad_v2"
+               else "marvin_teleop_workspace_bank_v1")
+    np.savez_compressed(path, version=version, seed=seed,
                         fps=50, joint_names_arm=np.array(joint_names),
                         names=np.array(names), split=np.array(splits, np.int8),
                         family=np.array(families), difficulty=np.array(difficulties, np.int8),
@@ -122,7 +181,83 @@ def generate_teleop_workspace_bank(path: str | Path, *, seed: int,
                         tcp_quat_xyzw=np.stack(poses)[..., 3:])
     return {"path": str(path), "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
             "clips": total, "frames": frames, "split_counts": list(split_counts),
-            "families": list(FAMILIES), "seed": seed}
+            "families": list(FAMILIES), "seed": seed, "profile": profile,
+            "duration_s": (frames - 1) / 50}
+
+
+def generate_teleop_reach_probe_bank(path: str | Path, *, seed: int,
+                                     split_counts=(1, 1, 32), frames=601,
+                                     max_attempts_per_clip=500,
+                                     mjcf: str | Path = DEFAULT_MJCF) -> dict:
+    """FK-only, held target probes from independently sampled safe starts.
+
+    The goal joint witness is discarded after FK. The saved reset witness is
+    deliberately different from the target, so this probes long-range reaching
+    that smooth tracking clips starting on their target cannot measure.
+    """
+    if len(split_counts) != 3 or min(split_counts) < 1 or frames < 401:
+        raise ValueError("Far-goal probe needs three splits and at least eight seconds")
+    path = Path(path)
+    model = mujoco.MjModel.from_xml_path(str(mjcf))
+    data = mujoco.MjData(model)
+    names = tuple(f"Joint{joint}_{side}" for side in ("L", "R") for joint in range(1, 8))
+    ids = [mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name) for name in names]
+    addresses = model.jnt_qposadr[ids]
+    sites = [mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_SITE, f"tcp_{side}")
+             for side in ("L", "R")]
+    home = model.key_qpos[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_KEY, "home")].copy()
+    lower, upper = model.jnt_range[ids, 0] + 0.08, model.jnt_range[ids, 1] - 0.08
+    rng = np.random.default_rng(seed)
+    starts, target_poses, difficulties = [], [], []
+
+    def pose_at(q):
+        data.qpos[:] = home
+        data.qpos[addresses] = q
+        mujoco.mj_forward(model, data)
+        if data.ncon:
+            return None
+        return np.stack([np.r_[data.site_xpos[site], Rotation.from_matrix(
+            data.site_xmat[site].reshape(3, 3)).as_quat()] for site in sites])
+
+    for index in range(sum(split_counts)):
+        difficulty = index % 3
+        radius = (0.65, 1.1, 1.8)[difficulty]
+        for _ in range(max_attempts_per_clip):
+            start = rng.uniform(lower, upper)
+            start_pose = pose_at(start)
+            if start_pose is None:
+                continue
+            goal_q = np.clip(start + rng.uniform(-radius, radius, 14), lower, upper)
+            goal_pose = pose_at(goal_q)
+            if goal_pose is None or np.linalg.norm(
+                    goal_pose[:, :3] - start_pose[:, :3], axis=-1).min() <= 0.05:
+                continue
+            # Existence of a contact-free joint interpolation is a useful
+            # static feasibility screen; Newton still decides dynamic safety.
+            if any(pose_at(start * (1 - alpha) + goal_q * alpha) is None
+                   for alpha in np.linspace(0, 1, 21)):
+                continue
+            starts.append(start.astype(np.float32))
+            target_poses.append(goal_pose.astype(np.float32))
+            difficulties.append(difficulty)
+            break
+        else:
+            raise RuntimeError(f"Could not sample safe far-goal probe {index}")
+
+    split = np.repeat(np.arange(3, dtype=np.int8), split_counts)
+    targets = np.repeat(np.array(target_poses, np.float32)[:, None], frames, axis=1)
+    reset = np.repeat(np.array(starts, np.float32)[:, None], frames, axis=1)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(path, version="marvin_teleop_workspace_bank_v3", seed=seed,
+                        fps=50, joint_names_arm=np.array(names),
+                        names=np.array([f"far_reach_{SPLITS[int(s)]}_{i:04d}"
+                                        for i, s in enumerate(split)]),
+                        split=split, family=np.array(["static_far_reach"] * len(split)),
+                        difficulty=np.array(difficulties, np.int8),
+                        q_reset_witness=reset,
+                        tcp_pos=targets[..., :3], tcp_quat_xyzw=targets[..., 3:])
+    return {"path": str(path), "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "clips": len(split), "frames": frames, "profile": "static_far_reach_probe_v3"}
 
 
 class TeleopWorkspaceReferenceBank:
@@ -133,7 +268,10 @@ class TeleopWorkspaceReferenceBank:
         self.device = torch.device(device)
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         with np.load(path, allow_pickle=False) as data:
-            if str(data["version"]) != "marvin_teleop_workspace_bank_v1" or int(data["fps"]) != 50:
+            self.version = str(data["version"])
+            if self.version not in ("marvin_teleop_workspace_bank_v1",
+                                    "marvin_teleop_workspace_bank_v2",
+                                    "marvin_teleop_workspace_bank_v3") or int(data["fps"]) != 50:
                 raise ValueError("Target bank version or 50 Hz rate differs")
             self.names = tuple(str(x) for x in data["names"])
             self.joint_names_arm = tuple(str(x) for x in data["joint_names_arm"])
@@ -153,7 +291,10 @@ class TeleopWorkspaceReferenceBank:
         self._poses = torch.cat((pos, quaternion_xyzw_to_6d(quat)), dim=-1).flatten(-2)
         self.lengths = torch.full((len(self.names),), pos.shape[1],
                                   device=self.device, dtype=torch.long)
-        self.hashes = {"teleop_workspace_bank_v1": digest}
+        # The key is part of existing v1 checkpoint manifests, not a display name.
+        hash_key = ("teleop_workspace_bank_v1" if self.version.endswith("_v1")
+                    else self.version)
+        self.hashes = {hash_key: digest}
 
     def _check(self, motion_id, frame):
         if (motion_id.ndim != 1 or motion_id.shape != frame.shape

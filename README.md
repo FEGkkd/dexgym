@@ -33,7 +33,7 @@ configuration and controller parameters are unchanged.
 - [Interfaces](source/dexgym/algorithms/supermimic/interfaces/): robot, task, reference and physical collector contracts.
 - [Marvin task plugins](source/dexgym/tasks/marvin_supermimic/): shared Newton arm physics and independent Wave, position Reach and SE(3) Reach & Hold tasks.
 - [Configs](configs/supermimic/) and [scripts](scripts/supermimic/): bounded examples, training, evaluation and diagnostics.
-- [How to add a task](docs/supermimic/task_plugin_guide.md), [architecture](docs/supermimic/core_architecture.md), [checkpoint rules](docs/supermimic/checkpoint_compatibility.md), [main integration validation](docs/supermimic/main_release_validation.md), [M5 full-horizon physical results](docs/supermimic/m5_full32_4096_training.md), [pinned continuous SE(3) following](docs/supermimic/continuous_se3_follow_training.md), and [causal workspace tracking](docs/supermimic/teleop_workspace_se3_follow.md).
+- [How to add a task](docs/supermimic/task_plugin_guide.md), [architecture](docs/supermimic/core_architecture.md), [checkpoint rules](docs/supermimic/checkpoint_compatibility.md), [main integration validation](docs/supermimic/main_release_validation.md), [M5 full-horizon physical results](docs/supermimic/m5_full32_4096_training.md), [pinned continuous SE(3) following](docs/supermimic/continuous_se3_follow_training.md), [causal workspace tracking](docs/supermimic/teleop_workspace_se3_follow.md), and [broad workspace pilot limits](docs/supermimic/broad_workspace_pilot.md).
 
 WM8, BPTT32, soft termination, survival weighting and TD(λ) are covered by
 the [SuperMimic tests](tests/supermimic/). The trained M4.1 Wave Actor remains

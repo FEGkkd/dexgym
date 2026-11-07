@@ -60,6 +60,7 @@ def test_fk_bank_has_disjoint_splits_and_uses_only_current_pose(tmp_path):
     bank = TeleopWorkspaceReferenceBank(path, "cpu")
     assert report["clips"] == 6
     assert bank.lengths.tolist() == [201] * 6
+    assert set(bank.hashes) == {"teleop_workspace_bank_v1"}
     assert bank.pose_at(torch.tensor([0, 5]), torch.tensor([10, 20])).shape == (2, 18)
     assert bank.reset_q_at(torch.tensor([0]), torch.tensor([10])).shape == (1, 14)
     assert set(bank.sample_ids(100, split="train").tolist()) <= {0, 1, 2}

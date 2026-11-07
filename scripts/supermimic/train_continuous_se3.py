@@ -8,6 +8,7 @@ import time
 from dataclasses import asdict
 from pathlib import Path
 
+import numpy as np
 import dexgym.tasks.marvin_supermimic  # noqa: F401
 import gymnasium as gym
 import torch
@@ -47,15 +48,24 @@ def main():
     parser.add_argument("--iterations", type=int)
     parser.add_argument("--seed", type=int)
     parser.add_argument("--resume", type=Path)
+    parser.add_argument("--init-from", type=Path,
+                        help="Explicit compatible model transfer; fresh Replay, optimizer and trust")
+    parser.add_argument("--init-dynamics-from", type=Path,
+                        help="Transfer only compatible World Model; keep random Actor and fresh Critic")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reference-bank", type=Path,
                         help="FK-generated target bank for the causal workspace task")
     parser.add_argument("--curriculum-level", type=int, choices=(0, 1, 2),
                         help="Explicitly expand the generated workspace target difficulty")
     args = parser.parse_args()
+    if sum(path is not None for path in (args.resume, args.init_from,
+                                        args.init_dynamics_from)) > 1:
+        parser.error("Choose one of strict resume, full model transfer or dynamics-only transfer")
     config_bytes = args.config.read_bytes()
     experiment = json.loads(config_bytes)
-    workspace = experiment.get("version") == "marvin_teleop_workspace_follow_v1"
+    workspace = experiment.get("version") in (
+        "marvin_teleop_workspace_follow_v1", "marvin_teleop_workspace_follow_v2",
+        "marvin_teleop_workspace_follow_v3")
     if not workspace and experiment.get("version") != "marvin_continuous_se3_follow_v1":
         parser.error("Unknown continuous SE(3) experiment version")
     if not workspace and (args.reference_bank is not None or args.curriculum_level is not None):
@@ -79,7 +89,12 @@ def main():
     if workspace:
         if args.reference_bank is None:
             parser.error("The workspace task requires --reference-bank")
+        with np.load(args.reference_bank, allow_pickle=False) as bank:
+            required = "marvin_teleop_workspace_bank_" + experiment["version"].rsplit("_", 1)[-1]
+            if str(bank["version"]) != required:
+                parser.error("Workspace training config and target bank version differ")
         cfg.reference_bank_path = str(args.reference_bank)
+        cfg.episode_length_s = float(experiment.get("episode_length_s", 4.0))
         cfg.curriculum_level = (args.curriculum_level if args.curriculum_level is not None
                                 else int(experiment["curriculum_level"]))
         cfg.train_env_fraction = 0.75
@@ -134,7 +149,12 @@ def main():
                 reference_hashes=native.reference.hashes,
                 physics_config=(marvin_teleop_workspace_physics_config(cfg, robot)
                                 if workspace else marvin_continuous_se3_physics_config(cfg, robot)))
-            resume_info = checkpoint.load(args.resume, trainer) if args.resume else None
+            resume_info = (checkpoint.load(args.resume, trainer) if args.resume else
+                           checkpoint.initialize_modules_for_new_reference(args.init_from, trainer)
+                           if args.init_from else
+                           checkpoint.initialize_dynamics_for_new_reference(
+                               args.init_dynamics_from, trainer)
+                           if args.init_dynamics_from else None)
             if trainer.iteration + iterations > experiment["max_total_iterations"]:
                 raise ValueError("Training continuation exceeds the versioned iteration budget")
             args.output.mkdir(parents=True, exist_ok=True)
