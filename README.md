@@ -40,7 +40,10 @@ required layout and conversion command. The
 [pilot report](docs/experiments/hand_only_right_pilot.md) records task settings,
 data counts, and the small PPO check. The
 [4096-environment PPO report](docs/experiments/hand_only_4096_1000_s42.md)
-records the 1000-iteration training and held-out tracking results.
+records the 1000-iteration training and held-out tracking results. The
+[direct position-target hold probe](docs/experiments/hand_only_position_hold_20261108.md)
+measures joint and fingertip drift when a GRAB reference target is held for
+1.5 seconds.
 
 ```bash
 PYTHONPATH=source uv run python scripts/data/build_grab_right_hand_library.py \
