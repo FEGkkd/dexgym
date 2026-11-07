@@ -176,6 +176,56 @@ def test_finite_episode_timeout_is_terminal_for_imagined_bootstrap():
     assert task.soft_termination(next_state, before_end).item() < 1.0
 
 
+def test_v3_bptt32_keeps_actor_gradient_and_cuts_terminal_value():
+    from dexgym.algorithms.supermimic.core.imagination import (
+        ImaginationEngine, critic_td_lambda_batch)
+    from dexgym.algorithms.supermimic.core.transition import StartBatch
+    from dexgym.tasks.marvin_supermimic.workspace_reach_hold import MarvinWorkspaceSE3ReachHold
+
+    robot = LinearTCPRobot()
+    robot.spec = SimpleNamespace(control_dt=0.02, context_dim=0,
+                                 context_evolution="episode_constant")
+    task = MarvinWorkspaceSE3ReachHold(
+        StaticFarReference(), robot,
+        temporal_context="normalized_time_remaining_v3")
+
+    class Actor(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.raw = torch.nn.Parameter(torch.zeros(14))
+
+        def forward(self, history, goal):
+            return self.raw.expand(len(history), -1)
+
+    class CommandModel(torch.nn.Module):
+        def forward(self, state, action, context, robot):
+            delta = torch.zeros_like(state)
+            delta[:, 0] = 0.01 * action[:, 0].tanh()
+            delta[:, 7] = 0.01 * action[:, 7].tanh()
+            return state + delta
+
+    class Critic(torch.nn.Module):
+        def forward(self, features):
+            return features[:, -1] * 0 + 100.0
+
+    actor = Actor()
+    state = torch.zeros(1, 42)
+    clock = task.task_state(torch.tensor([0]), torch.tensor([8]))
+    observation = task.observation(state, torch.zeros(1, 14), clock)
+    start = StartBatch(state, observation[:, None].expand(-1, 10, -1).clone(),
+                       torch.empty(1, 0), clock, torch.zeros(1, 14),
+                       torch.tensor([0]), torch.tensor([0]), torch.tensor([0]))
+    rollout = ImaginationEngine().rollout(start, actor, CommandModel(), Critic(),
+                                          robot, task, horizon=32)
+    assert rollout.terminations[-1, 0] == 1.0
+    assert rollout.survival[-1, 0] == 0.0
+    _, targets = critic_td_lambda_batch(rollout)
+    torch.testing.assert_close(targets[-1], rollout.rewards[-1, 0])
+    rollout.actor_loss.backward()
+    assert torch.isfinite(actor.raw.grad).all()
+    assert actor.raw.grad[[0, 7]].abs().sum() > 0
+
+
 def test_shared_training_entrypoint_selects_far_reach_without_copying_trainer():
     from scripts.supermimic.train_continuous_se3 import _task_profile
 

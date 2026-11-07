@@ -123,6 +123,14 @@ remain explicit and their original 68D/60D networks remain loadable. The
 v3 change has passed mathematical unit tests; it has not yet demonstrated a
 successful physical policy.
 
+A 32-environment, 40-iteration v3 Newton smoke collected 5,120 real
+transitions and made 1,280 WM8 updates with zero nonfinite events. The noisy
+held-out normalized 32-step error was 2.10 versus a 1.10 trust threshold,
+so the gate correctly blocked Actor and Critic updates. This smoke verifies
+physical/task integration only. A separate v3 32-step imagination test
+confirmed finite nonzero Actor gradients and zero terminal Critic bootstrap
+at the episode boundary.
+
 ## Verified commands
 
 ```bash
