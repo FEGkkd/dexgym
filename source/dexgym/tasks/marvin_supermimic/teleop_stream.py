@@ -32,9 +32,10 @@ class LiveDualTCPTarget:
             raise ValueError("TCP target must be expressed in Marvin fixed-base coordinates")
         if (position.shape != (2, 3) or rotation.shape != (2, 3, 3)
                 or position.device != self.device or rotation.device != self.device
+                or position.dtype != torch.float32 or rotation.dtype != torch.float32
                 or not bool(torch.isfinite(position).all())
                 or not bool(torch.isfinite(rotation).all())):
-            raise ValueError("Dual TCP target must be finite [2,3] and [2,3,3] on policy device")
+            raise ValueError("Dual TCP target must be finite FP32 [2,3] and [2,3,3] on policy device")
         identity = torch.eye(3, device=self.device, dtype=rotation.dtype)
         if (float((rotation.transpose(-1, -2) @ rotation - identity).abs().max()) > 1e-3
                 or bool(((torch.linalg.det(rotation) - 1).abs() > 1e-3).any())):
@@ -80,8 +81,9 @@ class StatefulTeleopPolicy:
              *, frame_id="marvin_fixed_base"):
         if (physical_state.shape != (1, self.robot.spec.state_dim)
                 or physical_state.device != self.reference.device
+                or physical_state.dtype != torch.float32
                 or not bool(torch.isfinite(physical_state).all())):
-            raise ValueError("Policy input needs one finite physical arm-only state")
+            raise ValueError("Policy input needs one finite FP32 physical arm-only state")
         self.reference.push(timestamp_s, target_position, target_rotation, frame_id=frame_id)
         task_state = self.task.task_state(
             torch.zeros(1, dtype=torch.long, device=self.reference.device),

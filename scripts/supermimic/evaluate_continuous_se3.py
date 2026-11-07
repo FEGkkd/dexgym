@@ -108,6 +108,9 @@ def main():
                 load = None
                 policy = ZeroPolicy() if args.baseline == "zero" else ReferenceServoDiagnostic(native)
             collector = CoreNewtonCollector(env, robot, task, action_noise_std=0)
+            actual_reset_perturb = float((
+                native.command - native.reference.reset_q_at(
+                    native.reference_id, native.reference_frame)).abs().max())
             evaluator = PhysicalEvaluator(lambda: collector, task,
                                           evaluation_kind="independent_physics_evaluation")
             args.output.mkdir(parents=True, exist_ok=True)
@@ -125,6 +128,7 @@ def main():
                            "reference_names": native.reference.names,
                            "reference_hashes": native.reference.hashes,
                            "reset_perturb_rad": args.reset_perturb_rad,
+                           "actual_reset_perturb_max_abs_rad": actual_reset_perturb,
                            "exploration_noise": 0.0})
             (args.output / "report.json").write_text(json.dumps(report, indent=2))
             print(json.dumps({key: value for key, value in report.items()

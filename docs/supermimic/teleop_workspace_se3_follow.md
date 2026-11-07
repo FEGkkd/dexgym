@@ -127,6 +127,12 @@ has SHA256 `f4137b4a45d6114f330e445ffe84fa689de5c6358a9f1f345ed4b59b0c6639c0`.
 Checkpoint loading verifies that hash and the task/action/network contract.
 The separately committed 32-clip new-seed test bank has SHA256
 `d94b1159b158eec578208978122ad8d2cbf9918186508c4f0ac85e9d70e01b3d`.
+A third bank reverses those 32 unseen target streams in time without changing
+their reachable poses. Its SHA256 is
+`7adf8fb02eefebe5ee0d799e0359531faebfde965feb9ffefbf5e390aea5e874`.
+The reverse bank is produced by
+`scripts/supermimic/reverse_teleop_workspace_bank.py` and is used for
+evaluation only.
 
 ## Current independent Newton evidence
 
@@ -143,10 +149,63 @@ orientation errors are left/right means in degrees.
 | Iteration 420, all difficulties | 25/32 | 2.93 / 3.00 | 0.83 / 0.79 | 0 |
 | Iteration 520, original test split | 28/32 | 1.81 / 1.73 | 0.46 / 0.46 | 0 |
 | Iteration 520, new seed and new bank | 29/32 | 1.77 / 1.66 | 0.56 / 0.47 | 0 |
+| Iteration 620, original test split | 30/32 | 1.35 / 1.28 | 0.33 / 0.34 | 0 |
+| Iteration 720, original test split | 31/32 | 1.27 / 1.32 | 0.31 / 0.36 | 0 |
+| Iteration 720, new seed and new bank | 30/32 | 1.25 / 1.33 | 0.39 / 0.36 | 0 |
+| Iteration 720, reversed unseen streams | 30/32 | 1.26 / 1.35 | 0.39 / 0.38 | 0 |
+| Iteration 820, original test split | 31/32 | 1.14 / 1.11 | 0.29 / 0.54 | 0 |
+| Iteration 820, new seed and new bank | 32/32 | 1.22 / 1.18 | 0.36 / 0.54 | 0 |
+| Iteration 820, reversed unseen streams | 30/32 | 1.18 / 1.17 | 0.36 / 0.52 | 0 |
+| Iteration 820, new seed with ±0.02 rad reset | 32/32 | 1.37 / 1.32 | 0.39 / 0.59 | 0 |
 
-At iteration 520, the original test split succeeds on 12/12 near, 10/10
-medium and 6/10 wider targets; the new seed succeeds on 12/12, 10/10 and
-7/10. These are 200-step closed-loop Newton runs, not World Model rollout
-scores. Remaining wider failures and absent human target streams mean this is
-**a bounded workspace learning pilot**, not a general teleoperation
-deployment policy.
+Iteration 820 is selected by the highest aggregate success across the three
+fixed unperturbed test sets: 93/96 episodes, versus 91/96 at iteration 720.
+The right TCP's mean orientation error increased somewhat between those two
+checkpoints; success and position accuracy improved. At iteration 820, the
+original split succeeds on 12/12 near, 10/10 medium and 9/10 wider targets;
+the new-seed bank succeeds on all 32, while the reverse bank succeeds on
+12/12, 10/10 and 8/10. The remaining failures are mainly wide oscillatory
+targets whose SO(3) P95 exceeds the 4° success threshold. The separate
+perturbed-start test actually applied a maximum 0.01996 rad arm offset and
+completed 32/32 episodes. These are 200-step closed-loop Newton runs, not
+World Model rollout scores.
+
+The selected 820-iteration run collected 13,434,880 real Newton transitions,
+performed 26,240 World Model updates, 784 Actor BPTT updates and 15,680
+Critic updates. There were zero nonfinite optimizer events. The selected
+held-out noisy action-conditioned 1/8/32-step normalized World Model errors
+were 0.339/0.495/0.579, against zero-delta baselines 1.033/3.215/8.458.
+On deterministic Actor data, 32-step action-conditioned open-loop prediction
+had a maximum TCP position P95 of 3.01 mm, maximum SO(3) P95 of 0.54°, and
+joint-velocity RMSE of 0.0374 rad/s. These model errors are distinct from
+the policy's real Newton tracking errors; a separate policy-closed-loop
+model-vs-physics metric is not asserted here. The 4,096-environment run used
+about 5.42 GiB peak PyTorch allocation and a sampled 23.6 GiB total RTX 5090
+device allocation, including Newton.
+
+The selected Replay-bearing checkpoint is archived separately. The committed
+[`fresh_physics` inference checkpoint](../../models/supermimic/teleop_workspace_seed97_iter820.pt)
+has SHA256 `44740c7ad90627c93e0317ea70ceebaf13e5f849efb35c4714d92a569cc274b6`.
+Its Actor and World Model tensors are exactly equal to the selected Replay
+checkpoint; on the same perturbed 32-episode Newton protocol the exported
+policy also completed 32/32 episodes, with mean tracking metrics differing by
+at most `3.5e-5` in reported units across independent simulator runs. The
+export omits Replay and cannot restore the old physics environment.
+All nine bounded Replay checkpoints, iteration logs, independent Newton
+physics traces, and the protected Wave regression are archived under
+`/home/ubuntu/dexgym_data/marvin_supermimic_teleop_workspace_seed97_20261107/`.
+The selected full checkpoint is
+`training/dexgym_teleop_4096_stage9/model.pt`; it records source commit
+`a5b25ca4732ed854c71bdb979ee10972caa5fcaf` and is marked `replay`
+resume. The committed 10.3 MB export is marked `fresh_physics`.
+
+The combined Newton, asset and SuperMimic regression run passed **228 tests
+with 3 skips**. The protected M4.1 Wave checkpoint also completed all
+1,356 Newton control steps independently: zero hard terminations, zero Newton
+contact control/physics steps and zero illegal joint-state frames. Its left
+and right TCP mean position errors were 1.85 and 4.45 mm in this run. This
+legacy result is a regression check, not training data for the new Actor.
+
+Absent human target streams, payload variation, contact-rich tasks, network
+latency tests and hardware safety validation mean this is **a bounded
+workspace learning pilot**, not a general teleoperation deployment policy.

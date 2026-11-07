@@ -96,8 +96,25 @@ def test_live_target_stream_is_causal_and_enforces_fixed_base_50hz_contract():
     assert action.shape == command.shape == (1, 14)
     with pytest.raises(ValueError, match="fixed-base"):
         policy.step(state, 0.02, pos, rotation, frame_id="world")
+    with pytest.raises(ValueError, match="FP32"):
+        policy.step(state, 0.02, pos.double(), rotation)
     with pytest.raises(ValueError, match="50 Hz"):
         policy.step(state, 0.1, pos, rotation)
     policy.step(state, 0.02, pos, rotation)
     with pytest.raises(ValueError, match="current received"):
         policy.reference.pose_at(torch.tensor([0]), torch.tensor([0]))
+
+
+def test_reverse_evaluation_bank_changes_time_direction_without_new_joint_targets(tmp_path):
+    import numpy as np
+    from dexgym.motion.teleop_workspace import generate_teleop_workspace_bank
+    from scripts.supermimic.reverse_teleop_workspace_bank import reverse_test_bank
+
+    source, output = tmp_path / "source.npz", tmp_path / "reversed.npz"
+    generate_teleop_workspace_bank(source, seed=8, split_counts=(1, 1, 2))
+    report = reverse_test_bank(source, output)
+    assert report["clips"] == 2
+    with np.load(source, allow_pickle=False) as old, np.load(output, allow_pickle=False) as new:
+        assert new["split"].tolist() == [2, 2]
+        np.testing.assert_array_equal(new["tcp_pos"][0, 0], old["tcp_pos"][2, -1])
+        np.testing.assert_array_equal(new["tcp_pos"][1, -1], old["tcp_pos"][3, 0])

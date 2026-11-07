@@ -17,6 +17,7 @@ algorithm capability, **not a claim that every task or policy has converged**.
 | `DexGym-Marvin-SuperMimic-Reach-Direct-v0` | Static 1×6 dual TCP position | Separate MDP, real Newton collection and short Core training smoke passed; no convergence claim. |
 | `DexGym-Marvin-SuperMimic-SE3-Reach-Hold-Direct-v0` | Static 1×18 dual TCP SE(3) and hold | IK-free, 4,096-environment WM8/BPTT32 training: three random 400-iteration seeds achieved 384/384 strict successes across two independent Near goal sets, without safety failures. One seed reached 59/64 Medium and 16/64 Wider Feasible; harder curricula remain open. |
 | `DexGym-Marvin-SuperMimic-Continuous-SE3-Follow-Direct-v0` | Moving 10×18 dual TCP SE(3) targets | Strict-pure 4,096-environment WM8/BPTT32 training completed 1,000 iterations. The selected 800-iteration checkpoint completed 64/64 Newton episodes on the pinned forward/reverse procedural trajectories under 0.01 and 0.02 rad reset perturbations. This does not establish unseen-trajectory generalization. |
+| `DexGym-Marvin-SuperMimic-Teleop-Workspace-SE3-Direct-v0` | Causal current 1×18 dual TCP SE(3) target at 50 Hz | Strict-pure 4,096-environment WM8/BPTT32 training ran 820 iterations. The selected policy completed 93/96 full Newton episodes over three disjoint unseen or reversed target banks, with no safety terminations. Tested within a bounded procedural workspace; human teleoperation and real hardware remain unvalidated. |
 | `DexGym-Joint-Tracking-Direct-v0` | Cartpole joint target | Isaac Lab DirectRLEnv, RSL-RL PPO example. |
 | `DexGym-Joint-Tracking-Manager-v0` | Cartpole joint target | Isaac Lab ManagerBasedRLEnv, RSL-RL PPO example. |
 
@@ -32,7 +33,7 @@ configuration and controller parameters are unchanged.
 - [Interfaces](source/dexgym/algorithms/supermimic/interfaces/): robot, task, reference and physical collector contracts.
 - [Marvin task plugins](source/dexgym/tasks/marvin_supermimic/): shared Newton arm physics and independent Wave, position Reach and SE(3) Reach & Hold tasks.
 - [Configs](configs/supermimic/) and [scripts](scripts/supermimic/): bounded examples, training, evaluation and diagnostics.
-- [How to add a task](docs/supermimic/task_plugin_guide.md), [architecture](docs/supermimic/core_architecture.md), [checkpoint rules](docs/supermimic/checkpoint_compatibility.md), [main integration validation](docs/supermimic/main_release_validation.md), [M5 full-horizon physical results](docs/supermimic/m5_full32_4096_training.md) and [continuous SE(3) following](docs/supermimic/continuous_se3_follow_training.md).
+- [How to add a task](docs/supermimic/task_plugin_guide.md), [architecture](docs/supermimic/core_architecture.md), [checkpoint rules](docs/supermimic/checkpoint_compatibility.md), [main integration validation](docs/supermimic/main_release_validation.md), [M5 full-horizon physical results](docs/supermimic/m5_full32_4096_training.md), [pinned continuous SE(3) following](docs/supermimic/continuous_se3_follow_training.md), and [causal workspace tracking](docs/supermimic/teleop_workspace_se3_follow.md).
 
 WM8, BPTT32, soft termination, survival weighting and TD(λ) are covered by
 the [SuperMimic tests](tests/supermimic/). The trained M4.1 Wave Actor remains
@@ -51,6 +52,7 @@ the Wave physical reset states and validation report, and the validated
 [M4.1 Wave checkpoint](models/supermimic/m41_wave_selected_best.pt) and the
 [M5 SE(3) Reach & Hold checkpoint](models/supermimic/m5_se3_reach_hold_seed60_iter400.pt)
 and the [continuous SE(3) following checkpoint](models/supermimic/continuous_se3_follow_seed72_iter800.pt)
+and the [causal workspace tracking checkpoint](models/supermimic/teleop_workspace_seed97_iter820.pt)
 in Git LFS. Run `git lfs pull` after cloning before loading these checkpoints.
 
 Pinned SHA256 values: Marvin MJCF
@@ -63,6 +65,8 @@ M5 exported checkpoint
 `fab9ccff3382b71679e1eb360d421fb6dcfbb7e5ac859ec0e5f904305ae6ff91`.
 Selected continuous SE(3) policy
 `cd9eb16b1b1ce36ad32be2728865a2eb478ec0c507b195bb62ad10ad7849c689`.
+Selected causal workspace policy
+`44740c7ad90627c93e0317ea70ceebaf13e5f849efb35c4714d92a569cc274b6`.
 See the [asset notice](source/dexgym/assets/marvin_wuji/source_model/NOTICE.md)
 for source and license attribution. The committed M5 file is a 3.2 MB
 `fresh_physics` checkpoint: model, normalizers, optimizer state and semantic
