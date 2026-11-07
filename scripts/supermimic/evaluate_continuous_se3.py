@@ -102,6 +102,10 @@ def main():
         elif task_version == "marvin_workspace_se3_reach_hold_v3":
             cfg.reach_temporal_context = "normalized_time_remaining_v3"
             cfg.observation_space = 10 * 69 + 18
+        elif task_version == "marvin_workspace_se3_reach_hold_v4":
+            cfg.reach_temporal_context = "normalized_time_remaining_v3"
+            cfg.reach_reward_profile = "hold_stationarity_v2"
+            cfg.observation_space = 10 * 69 + 18
         elif task_version != "marvin_workspace_se3_reach_hold_v2":
             parser.error(f"Unsupported workspace reach success contract: {task_version}")
     cfg.scene.num_envs = args.num_envs
@@ -173,6 +177,8 @@ def main():
                                cfg.reach_success_semantics if args.task == "workspace_reach" else None),
                            "reach_temporal_context": (
                                cfg.reach_temporal_context if args.task == "workspace_reach" else None),
+                           "reach_reward_profile": (
+                               cfg.reach_reward_profile if args.task == "workspace_reach" else None),
                            "allow_new_reference": args.allow_new_reference,
                            "reference_names": native.reference.names,
                            "reference_hashes": native.reference.hashes,

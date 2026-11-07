@@ -18,6 +18,15 @@ class WorkspaceReachRewardConfig(SE3RewardConfig):
     rotation_scale_rad: float = 1.2
 
 
+@dataclass(frozen=True)
+class WorkspaceReachRewardConfigV5(WorkspaceReachRewardConfig):
+    """Discourage tiny joint increments when both TCP goals are already met."""
+
+    stationary_action_weight: float = 10.0
+    stationary_position_width_m: float = 0.001
+    stationary_rotation_width_rad: float = 0.007
+
+
 class MarvinWorkspaceSE3ReachHold(MarvinBimanualSE3ReachHold):
     """Use a hidden-witness FK goal bank as a true fixed-goal MDP.
 
@@ -38,6 +47,11 @@ class MarvinWorkspaceSE3ReachHold(MarvinBimanualSE3ReachHold):
             raise ValueError("Unknown workspace reach temporal context")
         if temporal_context is not None and success_semantics != "hold_start_deadline_v2":
             raise ValueError("Time-aware task requires the corrected hold deadline")
+        if isinstance(reward_config, WorkspaceReachRewardConfigV5) and (
+                reward_config.stationary_action_weight < 0
+                or reward_config.stationary_position_width_m <= 0
+                or reward_config.stationary_rotation_width_rad <= 0):
+            raise ValueError("Stationary action reward requires nonnegative weight and positive gate widths")
         if getattr(reference, "version", "marvin_teleop_workspace_bank_v3") not in (
                 "marvin_teleop_workspace_bank_v3", "marvin_teleop_workspace_bank_v4",
                 "marvin_teleop_workspace_bank_v5"):
@@ -92,6 +106,9 @@ class MarvinWorkspaceSE3ReachHold(MarvinBimanualSE3ReachHold):
             contract["episode_semantics"] = "finite_horizon_time_aware_terminal_timeout_v3"
             contract["temporal_context"] = self.temporal_context
             contract["timeout_soft_termination"] = "exact_one_at_episode_end_v3"
+        if isinstance(self.reward_config, WorkspaceReachRewardConfigV5):
+            contract["task_adapter_version"] = "marvin_workspace_se3_reach_hold_v4"
+            contract["reward_shape"] = "linear_dual_tcp_distance_plus_se3_progress_hold_stationarity_v2"
         return contract
 
     def _remaining_time(self, task_state):
@@ -146,5 +163,15 @@ class MarvinWorkspaceSE3ReachHold(MarvinBimanualSE3ReachHold):
             + weights.rotation_weight * torch.exp(-(rotation / weights.rotation_scale_rad).square()).mean(-1))
         broad_accuracy = (weights.position_weight * (1 - position.mean(-1) / weights.position_scale_m)
                           + weights.rotation_weight * (1 - rotation.mean(-1) / weights.rotation_scale_rad))
-        return (super().reward(state, next_state, action, next_task_state, previous_action)
-                + weights.step_scale * (broad_accuracy - nearby_accuracy))
+        reward = (super().reward(state, next_state, action, next_task_state, previous_action)
+                  + weights.step_scale * (broad_accuracy - nearby_accuracy))
+        if isinstance(weights, WorkspaceReachRewardConfigV5):
+            previous_position, previous_rotation, _ = self._errors(state, next_task_state.data)
+            stationary_gate = (
+                torch.sigmoid((self.success_config.position_m - previous_position.max(-1).values)
+                              / weights.stationary_position_width_m)
+                * torch.sigmoid((self.success_config.rotation_rad - previous_rotation.max(-1).values)
+                                / weights.stationary_rotation_width_rad))
+            reward = reward - (weights.step_scale * weights.stationary_action_weight
+                               * stationary_gate * action.tanh().square().mean(-1))
+        return reward
