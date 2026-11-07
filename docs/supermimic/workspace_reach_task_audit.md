@@ -255,6 +255,25 @@ uses this measured weight of 50 as a controlled test; it is **not yet a
 successful policy**. The reward, Task Adapter and checkpoint contracts are
 versioned separately from the weight-10 experiment.
 
+The weight-50 pilot used the same 4096 environments, seed 97 and 160 iterations:
+2,621,440 Newton transitions, 5,120 WM8 and 142 BPTT32 Actor updates, zero
+nonfinite updates. On the same eight held-out Hold goals, the mean longest
+hold improved to 243.3 steps and final dual-TCP position error fell to
+0.0100/0.0112 m. All eight episodes were safe, but **0/8 were held to episode
+end**. This is a partial improvement, not Hold acceptance, and it does not
+justify increasing the penalty again without inspecting the training starts.
+
+The 512-step-per-environment Replay keeps only a small part of the episode's
+initial 40 frames after a 640-step training segment. The saved deterministic
+Replay contained 61,440 eligible early starts versus 677,376 later starts.
+The next controlled configuration uses a 768-step ring and reserves half of
+each Actor imagination batch for legal real starts at frame 0–40; the other
+half remains uniformly sampled from legal starts. This sampling rule is
+task-neutral in Core, disabled by default for legacy tasks, and recorded in
+the strict training configuration. It does not change WM8, BPTT32, Reward,
+Critic, action mapping or the physical target bank. Its Newton outcome is
+pending and must not be inferred from the unit tests.
+
 ## Verified commands
 
 ```bash

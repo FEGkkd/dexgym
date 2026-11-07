@@ -1,4 +1,5 @@
 import copy
+from dataclasses import replace
 import pytest
 import torch
 
@@ -49,3 +50,19 @@ def test_checkpoint_rejects_goal_schema_and_missing_replay(tmp_path):
     assert fresh.replay.steps == 0
     assert report["requires_fresh_collection"]
     assert fresh.allowed_horizon == 0 and fresh.trust_report == {}
+
+
+def test_old_checkpoint_defaults_preserve_sampling_while_new_schedule_needs_new_experiment(tmp_path):
+    source = make_toy_trainer("position", num_envs=8)
+    manager = CoreCheckpoint(git_commit="test", reference_hashes={})
+    path = manager.save(tmp_path / "state.pt", source, include_replay=False)
+    record = torch.load(path, weights_only=False)
+    record["trainer_config"].pop("imagination_initial_frame_fraction")
+    record["trainer_config"].pop("imagination_initial_frame_max")
+    torch.save(record, path)
+    manager.load(path, make_toy_trainer("position", num_envs=8))
+    changed = make_toy_trainer("position", num_envs=8)
+    changed.config = replace(changed.config, imagination_initial_frame_fraction=0.5,
+                             imagination_initial_frame_max=40)
+    with pytest.raises(ValueError, match="Trainer configuration differs"):
+        manager.load(path, changed)

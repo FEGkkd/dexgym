@@ -1,6 +1,7 @@
 """Schema-driven GPU ring replay of real pre-reset transitions and episode-safe windows."""
 
 from dataclasses import asdict
+import math
 
 import torch
 
@@ -177,7 +178,11 @@ class SchemaReplay:
 
     def sample_starts(self, batch: int, *, horizon: int, valid_start,
                       env_range=None, source_id=None, task_id=None,
-                      motion_id=None) -> StartBatch:
+                      motion_id=None, initial_frame_fraction: float = 0.0,
+                      initial_frame_max: int = 0) -> StartBatch:
+        if (not 0 <= initial_frame_fraction <= 1
+                or initial_frame_max < 0):
+            raise ValueError("Imagination initial frame sampling contract is invalid")
         times, envs = self._active_candidates(env_range=env_range,
                                               source_id=source_id, task_id=task_id,
                                               motion_id=motion_id)
@@ -190,7 +195,18 @@ class SchemaReplay:
         times, envs = times[valid], envs[valid]
         if not len(times):
             raise ValueError("Replay has no legal imagination starts")
-        chosen = torch.randint(len(times), (batch,), device=self.device)
+        initial_count = math.ceil(batch * initial_frame_fraction)
+        if initial_count:
+            initial = torch.nonzero(
+                self.frame[times % self.capacity, envs] <= initial_frame_max).flatten()
+            if len(initial) == 0:
+                raise ValueError("Replay has no legal initial frame imagination starts")
+            chosen = torch.cat((
+                initial[torch.randint(len(initial), (initial_count,), device=self.device)],
+                torch.randint(len(times), (batch - initial_count,), device=self.device)))
+            chosen = chosen[torch.randperm(batch, device=self.device)]
+        else:
+            chosen = torch.randint(len(times), (batch,), device=self.device)
         slot, env = times[chosen] % self.capacity, envs[chosen]
         return StartBatch(self.state[slot, env], self.history[slot, env],
                           self.dynamics_context[slot, env],

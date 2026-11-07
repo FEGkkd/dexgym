@@ -218,12 +218,16 @@ class CoreCheckpoint:
         if record["task_spec"] != asdict(trainer.task.spec):
             raise ValueError("Task schema differs")
         current_trainer_config = asdict(trainer.config)
-        if "actor_bootstrap_warmup_updates" not in record["trainer_config"]:
-            # v2 checkpoints predate this optional schedule and used its
-            # zero-warmup behavior. Do not infer a nonzero schedule on resume.
-            if current_trainer_config["actor_bootstrap_warmup_updates"] != 0:
-                raise ValueError("Trainer configuration differs")
-            current_trainer_config.pop("actor_bootstrap_warmup_updates")
+        for name, legacy_default in (
+                ("actor_bootstrap_warmup_updates", 0),
+                ("imagination_initial_frame_fraction", 0.0),
+                ("imagination_initial_frame_max", 0)):
+            if name not in record["trainer_config"]:
+                # Older v2 checkpoints used the default behavior. A new
+                # schedule must be requested through a new experiment.
+                if current_trainer_config[name] != legacy_default:
+                    raise ValueError("Trainer configuration differs")
+                current_trainer_config.pop(name)
         if record["trainer_config"] != current_trainer_config:
             raise ValueError("Trainer configuration differs")
         if record["termination_mode"] != trainer.task.termination_mode:

@@ -77,6 +77,32 @@ def test_replay_schema_and_restored_episode_counter_are_strict():
         other.load_state_dict(replay.state_dict())
 
 
+def test_imagination_starts_can_reserve_reset_frame_samples_without_crossing_episode():
+    replay = SchemaReplay(16, 2, ROBOT, TASK, "cpu")
+    for step in range(10):
+        replay.append(transition(step))
+    valid_start = lambda task_state, horizon: task_state.frame + horizon <= 10
+    torch.manual_seed(13)
+    starts = replay.sample_starts(
+        100, horizon=1, valid_start=valid_start,
+        initial_frame_fraction=0.5, initial_frame_max=2)
+    assert int((starts.task_state.frame <= 2).sum()) >= 50
+    assert bool((starts.task_state.frame <= 9).all())
+    all_early = replay.sample_starts(
+        20, horizon=1, valid_start=valid_start,
+        initial_frame_fraction=1.0, initial_frame_max=2)
+    assert bool((all_early.task_state.frame <= 2).all())
+    with pytest.raises(ValueError, match="initial frame"):
+        replay.sample_starts(10, horizon=1, valid_start=valid_start,
+                             initial_frame_fraction=0.5, initial_frame_max=-1)
+    late_only = SchemaReplay(3, 2, ROBOT, TASK, "cpu")
+    for step in range(7, 10):
+        late_only.append(transition(step))
+    with pytest.raises(ValueError, match="initial frame"):
+        late_only.sample_starts(10, horizon=1, valid_start=valid_start,
+                                initial_frame_fraction=0.5, initial_frame_max=2)
+
+
 def test_transition_rejects_wrong_next_time_and_nonfinite_state():
     batch = transition(4)
     batch.next_task_state.frame[0] = 6

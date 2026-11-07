@@ -91,6 +91,18 @@ class ToyCollector:
         return transition
 
 
+def test_reset_start_fraction_is_explicit_validated_trainer_config():
+    configured = TrainerConfig(imagination_initial_frame_fraction=0.5,
+                               imagination_initial_frame_max=40)
+    assert configured.imagination_initial_frame_fraction == 0.5
+    with pytest.raises(ValueError, match="initial frame"):
+        TrainerConfig(imagination_initial_frame_fraction=1.1,
+                      imagination_initial_frame_max=40)
+    with pytest.raises(ValueError, match="initial frame"):
+        TrainerConfig(imagination_initial_frame_fraction=0.5,
+                      imagination_initial_frame_max=-1)
+
+
 @pytest.mark.parametrize("goal_dim", [1, 3])
 def test_shared_trainer_updates_world_actor_critic_without_validation_norm_leak(goal_dim):
     torch.manual_seed(17)

@@ -31,6 +31,8 @@ class TrainerConfig:
     validation_batch: int = 64
     value_bound: bool = False
     actor_bootstrap_warmup_updates: int = 0
+    imagination_initial_frame_fraction: float = 0.0
+    imagination_initial_frame_max: int = 0
 
     def __post_init__(self):
         if self.mode not in ("pure_model_based", "teacher_bootstrap_model_based",
@@ -50,6 +52,9 @@ class TrainerConfig:
             raise ValueError("World warmup, bootstrap or termination weight is invalid")
         if self.actor_bootstrap_warmup_updates < 0:
             raise ValueError("actor_bootstrap_warmup_updates must be nonnegative")
+        if (not 0 <= self.imagination_initial_frame_fraction <= 1
+                or self.imagination_initial_frame_max < 0):
+            raise ValueError("imagination initial frame sampling contract is invalid")
 
 
 class SuperMimicTrainer:
@@ -189,7 +194,9 @@ class SuperMimicTrainer:
             start = self.replay.sample_starts(
                 self.config.imagination_batch, horizon=self.allowed_horizon,
                 valid_start=self.task.valid_imagination_start,
-                env_range=self.train_env_range, source_id=0)
+                env_range=self.train_env_range, source_id=0,
+                initial_frame_fraction=self.config.imagination_initial_frame_fraction,
+                initial_frame_max=self.config.imagination_initial_frame_max)
         except ValueError as error:
             return {"updated": False, "reason": str(error)}
         actor_began = self._stamp()
