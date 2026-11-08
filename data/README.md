@@ -1,5 +1,53 @@
 # Data layout for right-hand fingertip tracking
 
+## Wuji Hand 2.1 rebuild (current)
+
+The current independent right-hand model is the official Wuji Hand 2.1 USD
+under `source/dexgym/assets/wuji_hand21/`. Local GRAB recordings now cover all
+ten subjects, `s1`–`s10`. The additional `grab__s6.zip`, `grab__s7.zip`,
+`grab__s9.zip`, and `grab__s10.zip` were extracted into `data/grab/` without
+overwriting earlier recordings. Raw GRAB files and generated libraries remain
+ignored by Git.
+
+Retarget with the official Python `wuji-sdk==2026.10.26`
+`RetargetSession.for_hand(HandModel.WujiHand2, side=Handedness.Right)`. Retarget
+output is 20 joint angles in firmware order. Hand 2.1 FK then generates all
+five `tip_ref` positions in the right-wrist frame. The subjects `s1`–`s7` are
+the train split; `s8`–`s10` are held out by subject.
+Install `wuji-sdk==2026.10.26` in the data-processing Python environment
+alongside NumPy, SciPy, and MuJoCo before running these commands.
+
+```bash
+PYTHONPATH=source python scripts/data/build_grab_hand21_library.py \
+  --output data/processed/hand21_right_sdk
+PYTHONPATH=source python scripts/data/postoptimize_grab_right_hand_library.py \
+  --input data/processed/hand21_right_sdk \
+  --output data/processed/hand21_right_collision_aware \
+  --right-xml source/dexgym/assets/wuji_hand21/official/mjcf/right.xml --workers 24
+PYTHONPATH=source python scripts/data/filter_hand21_severe_collisions.py \
+  --input data/processed/hand21_right_collision_aware \
+  --output data/processed/hand21_right_geometry_feasible
+```
+
+The last stage removes residual self-penetration greater than 5 mm at the
+**frame** level, then saves all contiguous valid segments, including short ones. It
+records every removed frame and split in `collision_audit.json`. It does not
+apply the old whole-motion, every-frame 10 mm position replay rule. The three
+libraries stay separate so optimization and filtering can be audited.
+
+The local 2026-11-09 rebuild produced 1,335 SDK motions (406,264 frames).
+Geometry filtering removed 1,953 severe-collision frames and retained 1,404
+segments (404,311 frames) spanning all 1,335 original motions. Sixteen very
+short segments are preserved as data; a later training sampler can choose its
+minimum segment length. See
+[the model and data report](../docs/experiments/wuji_hand21_model_data_20261109.md).
+The independent Newton Hand 2.1 model passed 100 sampled 1.5-second
+fixed-pose holds with all five fingertips under 10 mm. One 170-frame GRAB
+clip was directly replayed through its position controller and rendered at
+`artifacts/hand21/hand21_grab_direct_replay_newton.mp4` (local, not pushed).
+
+## Earlier Beta 2 library and strict replay screen
+
 The GRAB recordings and generated right-hand motion library stay local. Git
 tracks this README; those local inputs and outputs are ignored.
 

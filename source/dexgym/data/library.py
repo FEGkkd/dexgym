@@ -1,6 +1,7 @@
 """Build a 30-Hz library of reachable Wuji right-hand fingertip motions."""
 
 import hashlib
+import importlib.metadata
 import json
 from collections.abc import Iterable
 from pathlib import Path
@@ -12,6 +13,7 @@ from .wuji_retarget import (
     FIRMWARE_JOINT_NAMES,
     SDK_VERSION,
     TIP_SITE_NAMES,
+    OfficialWujiRetargetSession,
     RightHandFK,
     WujiRetargetSession,
     retarget_sequence,
@@ -40,17 +42,27 @@ def build_library(
     grab_root: str | Path,
     data_root: str | Path,
     mano_path: str | Path,
-    sdk_path: str | Path,
+    sdk_path: str | Path | None,
     right_xml: str | Path,
     output_dir: str | Path,
     selected: Iterable[str | Path] | None = None,
     output_fps: float = 30.0,
+    retarget_backend: str = "legacy_c",
+    validation_subjects: tuple[str, ...] = ("s8",),
 ) -> dict:
     """Convert selected GRAB files, retaining errors in a reproducible manifest."""
     grab_root = Path(grab_root).expanduser().resolve()
     data_root = Path(data_root).expanduser().resolve()
     mano_path = Path(mano_path).expanduser().resolve()
-    sdk_path = Path(sdk_path).expanduser().resolve()
+    if retarget_backend not in {"legacy_c", "official_python"}:
+        raise ValueError(f"Unknown retarget backend: {retarget_backend}")
+    allowed_subjects = (
+        {"s1", "s2", "s3", "s4", "s5", "s8"} if retarget_backend == "legacy_c" else {f"s{i}" for i in range(1, 11)}
+    )
+    if retarget_backend == "legacy_c":
+        if sdk_path is None:
+            raise ValueError("Legacy C SDK path is required")
+        sdk_path = Path(sdk_path).expanduser().resolve()
     right_xml = Path(right_xml).expanduser().resolve()
     output_dir = Path(output_dir).expanduser().resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -65,13 +77,20 @@ def build_library(
     template_cache: dict[Path, np.ndarray] = {}
     manifest: dict = {
         "format_version": 1,
-        "description": "GRAB right hand -> Wuji SDK joint targets -> Wuji FK fingertips in r_wrist frame",
+        "description": (
+            "GRAB right hand -> official wuji-sdk Hand 2 retarget -> Hand 2.1 FK fingertips"
+            if retarget_backend == "official_python"
+            else "GRAB right hand -> Wuji SDK joint targets -> Wuji FK fingertips in r_wrist frame"
+        ),
         "fps": output_fps,
         "joint_names": list(FIRMWARE_JOINT_NAMES),
         "tip_names": list(TIP_SITE_NAMES),
-        "train_subjects": ["s1", "s2", "s3", "s4", "s5"],
-        "validation_subjects": ["s8"],
-        "sdk_version": SDK_VERSION.decode(),
+        "train_subjects": sorted(allowed_subjects - set(validation_subjects), key=lambda name: int(name[1:])),
+        "validation_subjects": list(validation_subjects),
+        "sdk_version": SDK_VERSION.decode()
+        if retarget_backend == "legacy_c"
+        else importlib.metadata.version("wuji-sdk"),
+        "retarget_backend": retarget_backend,
         "mano_sha256": _sha256(mano_path),
         "right_xml_sha256": _sha256(right_xml),
         "accepted": 0,
@@ -80,12 +99,11 @@ def build_library(
         "motions": [],
         "errors": [],
     }
-    with WujiRetargetSession(sdk_path) as session:
+    session_context = WujiRetargetSession(sdk_path) if retarget_backend == "legacy_c" else OfficialWujiRetargetSession()
+    with session_context as session:
         for source in sources:
             try:
-                if not source.is_relative_to(grab_root) or source.parent.name not in {
-                    "s1", "s2", "s3", "s4", "s5", "s8"
-                }:
+                if not source.is_relative_to(grab_root) or source.parent.name not in allowed_subjects:
                     raise ValueError("Motion must be in a known GRAB subject directory")
                 with np.load(source, allow_pickle=True) as raw:
                     hand = raw["rhand"].item()
@@ -123,7 +141,7 @@ def build_library(
                     "source": str(relative),
                     "template": str(template_path.relative_to(data_root)),
                     "file": filename,
-                    "split": "validation" if relative.parent.name == "s8" else "train",
+                    "split": "validation" if relative.parent.name in validation_subjects else "train",
                     "source_fps": source_fps,
                     "source_frames": len(fullpose),
                     "frames": len(q),

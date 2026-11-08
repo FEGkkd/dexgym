@@ -118,6 +118,7 @@ class HandPostOptimizer:
         original_max_step = float(np.abs(np.diff(source, axis=0)).max()) if len(source) > 1 else 0.0
         step_cap = max(original_max_step + self.weights.step_slack_rad, self.weights.min_step_cap_rad)
         failures = 0
+        infeasible_temporal_frames = 0
         for _ in range(self.weights.max_sweeps):
             changed = 0
             for frame in active:
@@ -134,7 +135,11 @@ class HandPostOptimizer:
                     high = np.minimum(high, next_q + step_cap)
                 bounds = list(zip(low, high))
                 if np.any(low > high):
-                    raise RuntimeError("Temporal step bounds have no feasible joint configuration")
+                    # Earlier optimized neighbors can make the local hard step
+                    # constraints inconsistent. Keep this frame and audit
+                    # its collision later instead of dropping the whole clip.
+                    infeasible_temporal_frames += 1
+                    continue
                 solution = minimize(
                     self.frame_loss_and_grad,
                     before,
@@ -182,5 +187,6 @@ class HandPostOptimizer:
             "max_joint_step_rad": float(np.abs(np.diff(q, axis=0)).max()) if len(q) > 1 else 0.0,
             "joint_step_cap_rad": step_cap,
             "optimization_nonfinite_failures": failures,
+            "infeasible_temporal_frames": infeasible_temporal_frames,
         }
         return q.astype(np.float32), tips, metrics

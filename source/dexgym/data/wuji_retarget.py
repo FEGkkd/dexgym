@@ -8,7 +8,10 @@ import numpy as np
 SDK_VERSION = b"2026.10.26"
 FIRMWARE_JOINT_NAMES = tuple(f"r_{finger}J{joint}" for finger in ("TH", "FF", "MF", "RF", "LF") for joint in range(4))
 ROBOT_RIGHT_JOINT_NAMES = (
-    "r_thumb_cmc_flex", "r_thumb_cmc_abd", "r_thumb_mcp", "r_thumb_ip",
+    "r_thumb_cmc_flex",
+    "r_thumb_cmc_abd",
+    "r_thumb_mcp",
+    "r_thumb_ip",
     *(
         f"r_{finger}_{joint}"
         for finger in ("index_finger", "middle_finger", "ring_finger", "pinky")
@@ -92,6 +95,33 @@ class WujiRetargetSession:
 
     def __exit__(self, *_):
         self.close()
+
+
+class OfficialWujiRetargetSession:
+    """Official wuji-sdk Python RetargetSession, independent of hand hardware."""
+
+    def __init__(self):
+        from wuji_sdk import Handedness, HandModel, RetargetSession
+
+        self._session = RetargetSession.for_hand(HandModel.WujiHand2, side=Handedness.Right)
+
+    def step(self, keypoints: np.ndarray) -> np.ndarray:
+        points = np.asarray(keypoints, dtype=np.float32)
+        if points.shape != (21, 3) or not np.isfinite(points).all():
+            raise ValueError("Official Wuji SDK expects finite MediaPipe keypoints[21,3]")
+        q = np.asarray(self._session.step(np.ascontiguousarray(points)), dtype=np.float32)
+        if q.shape != (20,) or not np.isfinite(q).all():
+            raise RuntimeError("Official Wuji SDK returned invalid right-hand joints")
+        return q
+
+    def reset(self) -> None:
+        self._session.reset()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        return None
 
 
 class RightHandFK:
