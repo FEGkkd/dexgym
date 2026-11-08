@@ -47,7 +47,9 @@ measures joint and fingertip drift when a GRAB reference target is held for
 compare zero gravity, one-joint response, and source MuJoCo versus Newton.
 The [layered Hand-only drive validation](docs/experiments/hand_only_drive_layered_validation_20261108.md)
 records the isolated USD gain correction, timestep and collision sweep, and
-324-pose fixed-target acceptance test.
+324-pose fixed-target acceptance test. The
+[self-collision post-optimization report](docs/experiments/hand_only_collision_postopt_20261108.md)
+describes the separate GRAB refinement library and full-contact Newton check.
 
 ```bash
 PYTHONPATH=source uv run python scripts/data/build_grab_right_hand_library.py \

@@ -33,6 +33,57 @@ SDK, and saves one `.npz` per motion with `q_ref[T,20]` and robot-FK
 Subjects `s1`–`s5` are used for training and `s8` is reserved for validation.
 The source recordings are never modified.
 
+To refine the SDK library against Wuji hand self-collision, write a separate
+library with:
+
+```bash
+PYTHONPATH=source uv run python scripts/data/postoptimize_grab_right_hand_library.py \
+  --input data/processed/hand_only_right \
+  --output data/processed/hand_only_right_collision_aware --workers 8
+```
+
+The optimizer starts from each `q_ref`, penalizes fingertip displacement,
+deviation from the SDK angles, MuJoCo hand-mesh penetration, and temporal
+roughness. It keeps the raw GRAB recordings and SDK library unchanged. Each
+output `tip_ref` is recomputed by Wuji FK from its optimized `q_ref`. The
+output manifest records optimization weights and per-motion contact and
+fingertip-change metrics. Motions with worse maximum penetration or over
+12 mm fingertip shift fall back to the SDK targets and are marked in the
+manifest. A separate output directory is required. Use
+`--split validation` for a smaller first pass.
+
+For a strict clean bank, screen every optimized motion with full hand
+collision, the isolated `hand_x2` controller, a 1/500 s physics step, and
+direct 30 Hz joint-reference replay. Then copy only motions whose **every
+frame** has all five fingertip errors below 10 mm and that did not fall back
+to the SDK result:
+
+```bash
+PYTHONPATH=source uv run python scripts/data/screen_grab_right_hand_library.py \
+  --library-path data/processed/hand_only_right_collision_aware/manifest.json \
+  --split train --batch-size 64 --output-dir artifacts/hand_only_postopt/screen_train
+PYTHONPATH=source uv run python scripts/data/screen_grab_right_hand_library.py \
+  --library-path data/processed/hand_only_right_collision_aware/manifest.json \
+  --split validation --batch-size 64 --output-dir artifacts/hand_only_postopt/screen_validation
+PYTHONPATH=source uv run python scripts/data/build_clean_grab_right_hand_library.py \
+  --input data/processed/hand_only_right_collision_aware \
+  --train-screen artifacts/hand_only_postopt/screen_train/screen.json \
+  --validation-screen artifacts/hand_only_postopt/screen_validation/screen.json \
+  --output data/processed/hand_only_right_collision_clean
+```
+
+The clean directory contains only selected motion files plus `manifest.json`
+and `excluded.json`. The original GRAB and both intermediate banks remain
+available for provenance. This screen checks direct position-controller
+replay; it does not certify PPO tracking. The screen records each input motion
+file's SHA-256, and the clean-bank builder rechecks it before copying.
+
+In the current local run, the strict clean bank contains 140 motions and
+37,768 frames (51 train motions, 89 validation motions). The two validation
+clips `s8/flashlight_on_1.npz` and `s8/fryingpan_cook_2.npz` are excluded.
+The exact results and limitations are recorded in the
+[post-optimization report](../docs/experiments/hand_only_collision_postopt_20261108.md).
+
 On the current local dataset, conversion produced 797 motions and 252,679
 frames with no rejected motions. See the
 [pilot report](../docs/experiments/hand_only_right_pilot.md) for the exact audit

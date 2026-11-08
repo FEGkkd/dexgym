@@ -30,6 +30,8 @@ def statistics(values: np.ndarray) -> dict[str, float]:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--split", choices=("train", "validation"), default="validation")
+    parser.add_argument("--library-path", type=Path, default=None, help="Override the task's motion manifest")
+    parser.add_argument("--sample-pairs-csv", type=Path, default=None, help="Use exact motion/start/goal rows")
     parser.add_argument("--starts-per-motion", type=int, default=2)
     parser.add_argument("--hold-seconds", type=float, default=1.5)
     parser.add_argument("--goal-offset", type=int, default=4)
@@ -54,9 +56,19 @@ def main() -> None:
 
     load_external_tasks()
     reference_cfg = RightHandTrackingDirectCfg()
+    if args.library_path is not None:
+        reference_cfg.library_path = str(args.library_path.expanduser().resolve())
     manifest = json.loads(Path(reference_cfg.library_path).read_text())
     records = [record for record in manifest["motions"] if record["split"] == args.split]
-    num_envs = len(records) * args.starts_per_motion
+    sampled_rows = None
+    if args.sample_pairs_csv is not None:
+        with args.sample_pairs_csv.expanduser().open(newline="") as stream:
+            sampled_rows = list(csv.DictReader(stream))
+        selected_names = {record["source"] for record in records}
+        sampled_rows = [row for row in sampled_rows if row["motion"] in selected_names]
+        if not sampled_rows:
+            parser.error("--sample-pairs-csv has no rows for the selected library split")
+    num_envs = len(sampled_rows) if sampled_rows is not None else len(records) * args.starts_per_motion
     if args.corrected_drive:
         cfg = make_drive_experiment_cfg(
             physics_dt=1.0 / args.dt_denominator,
@@ -73,6 +85,7 @@ def main() -> None:
         if args.disable_hand_contacts:
             cfg.scene.robot = make_robot_cfg(hand_contacts=False)
     cfg.split = args.split
+    cfg.library_path = reference_cfg.library_path
     cfg.seed = args.seed
     cfg.sim.physics = cfg.sim.physics.newton_mjwarp
     if args.zero_gravity:
@@ -88,18 +101,31 @@ def main() -> None:
             task = raw_env.unwrapped
             raw_env.reset(seed=args.seed)
             generator = torch.Generator(device=task.device).manual_seed(args.seed)
-            motion_ids = torch.arange(task.bank.motion_count, device=task.device).repeat_interleave(
-                args.starts_per_motion
-            )
-            # Keep identical sampled starts between the default four-frame
-            # target and the zero-offset hold control.
-            max_start_plus_one = task.bank.lengths[motion_ids] - max(cfg.subgoal_stride, args.goal_offset, 1)
-            if (max_start_plus_one <= 0).any():
-                raise ValueError("--goal-offset exceeds the length of at least one motion")
-            start_frames = torch.floor(
-                torch.rand(len(motion_ids), device=task.device, generator=generator) * max_start_plus_one
-            ).long()
-            goal_frames = start_frames + args.goal_offset
+            if sampled_rows is None:
+                motion_ids = torch.arange(task.bank.motion_count, device=task.device).repeat_interleave(
+                    args.starts_per_motion
+                )
+                # Keep identical sampled starts between the default four-frame
+                # target and the zero-offset hold control.
+                max_start_plus_one = task.bank.lengths[motion_ids] - max(cfg.subgoal_stride, args.goal_offset, 1)
+                if (max_start_plus_one <= 0).any():
+                    raise ValueError("--goal-offset exceeds the length of at least one motion")
+                start_frames = torch.floor(
+                    torch.rand(len(motion_ids), device=task.device, generator=generator) * max_start_plus_one
+                ).long()
+                goal_frames = start_frames + args.goal_offset
+            else:
+                names = {entry["source"]: index for index, entry in enumerate(task.bank.records)}
+                motion_ids = torch.tensor([names[row["motion"]] for row in sampled_rows], device=task.device)
+                start_frames = torch.tensor([int(row["start_frame"]) for row in sampled_rows], device=task.device)
+                goal_frames = torch.tensor([int(row["goal_frame"]) for row in sampled_rows], device=task.device)
+                if (
+                    (start_frames < 0).any()
+                    or (goal_frames < 0).any()
+                    or (start_frames >= task.bank.lengths[motion_ids]).any()
+                    or (goal_frames >= task.bank.lengths[motion_ids]).any()
+                ):
+                    raise ValueError("A supplied sample frame is outside its motion")
             q_start = task.bank.joints(motion_ids, start_frames)
             q_goal = task.bank.joints(motion_ids, goal_frames)
             tip_start = task.bank.fingertips(motion_ids, start_frames)
