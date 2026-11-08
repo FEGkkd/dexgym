@@ -36,3 +36,21 @@ def test_goal_advance_stops_at_last_frame_without_wraparound():
     next_frame, completed = advance_goal_frames(current, length, reached, stride=3)
     assert next_frame.tolist() == [6, 7, 4]
     assert completed.tolist() == [False, True, False]
+
+
+def test_motion_bank_can_skip_short_segments_without_changing_manifest(tmp_path):
+    records = []
+    for name, length in (("short", 3), ("usable", 8)):
+        np.savez_compressed(
+            tmp_path / f"{name}.npz",
+            q_ref=np.zeros((length, 20), dtype=np.float32),
+            tip_ref=np.zeros((length, 5, 3), dtype=np.float32),
+        )
+        records.append({"file": f"{name}.npz", "split": "train", "frames": length})
+    manifest = tmp_path / "manifest.json"
+    manifest.write_text(json.dumps({"motions": records, "fps": 30.0}))
+
+    bank = MotionBank(manifest, split="train", device="cpu", min_frames=6)
+    assert bank.motion_count == 1
+    assert bank.records[0]["file"] == "usable.npz"
+    assert bank.sample_starts(16, stride=4)[0].tolist() == [0] * 16

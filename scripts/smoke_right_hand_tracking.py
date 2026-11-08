@@ -4,8 +4,9 @@ import argparse
 
 import gymnasium as gym
 import torch
-from dexgym.tasks import RIGHT_HAND_HYBRID125_ID, RIGHT_HAND_ID, RIGHT_HAND_OBS125_ID
+from dexgym.tasks import RIGHT_HAND_CLEAN_ID, RIGHT_HAND_HYBRID125_ID, RIGHT_HAND_ID, RIGHT_HAND_OBS125_ID
 from dexgym.tasks.direct.right_hand_tracking.ablation_cfg import RightHandCleanHybrid125Cfg, RightHandCleanObs125Cfg
+from dexgym.tasks.direct.right_hand_tracking.clean_env_cfg import RightHandCleanTrackingCfg
 from dexgym.tasks.direct.right_hand_tracking.env_cfg import RightHandTrackingDirectCfg
 from isaaclab.app import launch_simulation
 from isaaclab.cli import load_external_tasks
@@ -21,12 +22,14 @@ def main() -> None:
     parser.add_argument("--split", choices=("train", "validation"), default="train")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--check-terminal", action="store_true")
-    parser.add_argument("--variant", choices=("obs125", "hybrid125"))
+    parser.add_argument("--variant", choices=("clean", "obs125", "hybrid125"))
+    parser.add_argument("--library-path", help="Override the motion-bank manifest for an isolated checkout")
     args = parser.parse_args()
     torch.manual_seed(args.seed)
     load_external_tasks()
     cfg_type, task_id = {
         None: (RightHandTrackingDirectCfg, RIGHT_HAND_ID),
+        "clean": (RightHandCleanTrackingCfg, RIGHT_HAND_CLEAN_ID),
         "obs125": (RightHandCleanObs125Cfg, RIGHT_HAND_OBS125_ID),
         "hybrid125": (RightHandCleanHybrid125Cfg, RIGHT_HAND_HYBRID125_ID),
     }[args.variant]
@@ -34,6 +37,8 @@ def main() -> None:
     cfg.seed = args.seed
     cfg.scene.num_envs = args.num_envs
     cfg.split = args.split
+    if args.library_path is not None:
+        cfg.library_path = args.library_path
     if args.stride is not None:
         cfg.subgoal_stride = args.stride
     if args.tolerance_m is not None:

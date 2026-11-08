@@ -1,5 +1,8 @@
 # Right-hand clean tracking: observation and reward ablations
 
+**Historical task semantics:** These task IDs now use the standalone Hand 2.1
+model and new GRAB bank. Use commit `3c57d1e` to reproduce these old results.
+
 **Date:** 2026-11-08. The existing 105D clean task and its 500-iteration PPO
 checkpoint are the reference. Both ablations keep the same screened GRAB
 MotionBank (51 train, 89 validation), full-contact `hand_x2` USD, 480 Hz Newton

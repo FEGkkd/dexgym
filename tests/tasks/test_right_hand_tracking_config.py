@@ -5,6 +5,7 @@ from dataclasses import asdict
 import gymnasium as gym
 import torch
 from dexgym.assets.marvin_wuji.robot_cfg import PACKAGED_USD
+from dexgym.assets.wuji_hand21 import OFFICIAL_USD
 from dexgym.tasks import (
     RIGHT_HAND_CLEAN_ID,
     RIGHT_HAND_HYBRID125_BETA_ID,
@@ -68,8 +69,10 @@ def test_right_hand_task_registers_its_own_ppo_configuration():
 def test_clean_task_has_independent_30hz_full_contact_configuration():
     clean = RightHandCleanTrackingCfg()
     old = RightHandTrackingDirectCfg()
-    assert clean.library_path.endswith("hand_only_right_collision_clean/manifest.json")
-    assert clean.scene.robot.spawn.usd_path.endswith("hand_only_drive_corrected_hand_x2.usda")
+    assert clean.library_path.endswith("hand21_right_geometry_feasible/manifest.json")
+    assert clean.scene.robot.spawn.usd_path == str(OFFICIAL_USD)
+    assert clean.scene.robot.spawn.variants == {"Physics": "PhysX"}
+    assert clean.sim.physics.newton_mjwarp.solver_cfg.integrator == "implicitfast"
     assert clean.sim.dt == 1 / 480
     assert clean.decimation == 16
     assert clean.sim.dt * clean.decimation == 1 / 30

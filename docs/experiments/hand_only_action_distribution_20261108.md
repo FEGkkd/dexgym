@@ -1,5 +1,8 @@
 # Hybrid125 action-distribution diagnosis
 
+**Historical task semantics:** These task IDs now use the standalone Hand 2.1
+model and new GRAB bank. Use commit `3c57d1e` to reproduce these old results.
+
 **Date:** 2026-11-08. This follows the 4096-environment Hybrid125 PPO run
 documented in [the observation and reward ablation](hand_only_obs_reward_ablation_20261108.md).
 The task, screened 51/89 train/validation motion bank, 480 Hz full-contact

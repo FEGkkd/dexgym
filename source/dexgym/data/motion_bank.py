@@ -8,14 +8,27 @@ import torch
 
 
 class MotionBank:
-    def __init__(self, manifest_path: str | Path, *, split: str, device: str | torch.device):
+    def __init__(
+        self,
+        manifest_path: str | Path,
+        *,
+        split: str,
+        device: str | torch.device,
+        min_frames: int | None = None,
+    ):
         if split not in {"train", "validation"}:
             raise ValueError("split must be train or validation")
+        if min_frames is not None and min_frames < 1:
+            raise ValueError("min_frames must be positive")
         manifest_path = Path(manifest_path).expanduser().resolve()
         manifest = json.loads(manifest_path.read_text())
         if not np.isclose(float(manifest["fps"]), 30.0):
             raise ValueError("Hand tracking task requires a 30-Hz motion library")
-        records = [entry for entry in manifest["motions"] if entry["split"] == split]
+        records = [
+            entry
+            for entry in manifest["motions"]
+            if entry["split"] == split and (min_frames is None or entry["frames"] >= min_frames)
+        ]
         if not records:
             raise ValueError(f"No {split} motions in {manifest_path}")
         q_parts, tip_parts, lengths = [], [], []

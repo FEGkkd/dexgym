@@ -1,5 +1,9 @@
 # Clean right-hand tracking: 480 Hz controller and PPO
 
+**Historical task semantics:** This report used the dual-arm `hand_x2` asset
+and strict 51/89 motion bank. The Clean task ID was later switched to the
+standalone Hand 2.1 model. Use commit `3c57d1e` to reproduce this run.
+
 **Date:** 2026-11-08. This run uses the independent
 `DexGym-Wuji-Right-Hand-Clean-Tracking-Direct-v0` task. The original task ID,
 motion bank, and drive remain available.

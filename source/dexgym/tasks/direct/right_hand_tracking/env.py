@@ -11,6 +11,7 @@ from isaaclab.envs import DirectRLEnv
 
 from dexgym.assets.marvin_wuji.robot_cfg import PACKAGED_KEYFRAMES
 from dexgym.data.motion_bank import MotionBank, advance_goal_frames
+from dexgym.data.wuji_retarget import TIP_SITE_NAMES
 
 from .env_cfg import RightHandTrackingDirectCfg
 from .logic import build_right_hand_observation, fingertips_in_wrist_frame, right_hand_joint_indices, tracking_step
@@ -32,27 +33,34 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
     def __init__(self, cfg: RightHandTrackingDirectCfg, render_mode: str | None = None, **kwargs):
         super().__init__(cfg, render_mode, **kwargs)
         self.robot = self.scene["robot"]
-        if self.robot.num_joints != 54:
-            raise ValueError("Expected the pinned 54-DoF Marvin/Wuji articulation")
+        if self.robot.num_joints not in (20, 54):
+            raise ValueError("Expected the 20-DoF Hand 2.1 or legacy 54-DoF articulation")
+        standalone_hand = self.robot.num_joints == 20
         self.right_ids = right_hand_joint_indices(self.robot.joint_names)
         wrist_ids, _ = self.robot.find_bodies("r_wrist")
         if len(wrist_ids) != 1:
             raise ValueError("Expected exactly one right-wrist body")
         self.wrist_body_id = wrist_ids[0]
         self.tip_body_ids = []
-        for name in TIP_DISTAL_BODY_NAMES:
+        for name in TIP_SITE_NAMES if standalone_hand else TIP_DISTAL_BODY_NAMES:
             ids, _ = self.robot.find_bodies(name)
             if len(ids) != 1:
-                raise ValueError(f"Expected exactly one distal body {name}")
+                raise ValueError(f"Expected exactly one fingertip body {name}")
             self.tip_body_ids.append(ids[0])
-        self.tip_offsets = torch.tensor([[0.0, 0.0, z] for z in TIP_LOCAL_Z], dtype=torch.float32, device=self.device)
-        keyframes = json.loads(PACKAGED_KEYFRAMES.read_text())
-        home_by_name = dict(zip(keyframes["joint_order"], keyframes["keyframes"]["home"], strict=True))
-        self.home_q = torch.tensor([home_by_name[name] for name in self.robot.joint_names], device=self.device)
+        offsets = (0.0,) * 5 if standalone_hand else TIP_LOCAL_Z
+        self.tip_offsets = torch.tensor([[0.0, 0.0, z] for z in offsets], dtype=torch.float32, device=self.device)
+        if standalone_hand:
+            self.home_q = self.robot.data.default_joint_pos.torch[0].clone()
+        else:
+            keyframes = json.loads(PACKAGED_KEYFRAMES.read_text())
+            home_by_name = dict(zip(keyframes["joint_order"], keyframes["keyframes"]["home"], strict=True))
+            self.home_q = torch.tensor([home_by_name[name] for name in self.robot.joint_names], device=self.device)
         self.full_target = self.home_q[None].repeat(self.num_envs, 1)
         self.target_q = self.full_target[:, self.right_ids].clone()
         self.joint_limits = self.robot.data.joint_pos_limits.torch[0, self.right_ids].clone()
-        self.bank = MotionBank(cfg.library_path, split=cfg.split, device=self.device)
+        self.bank = MotionBank(
+            cfg.library_path, split=cfg.split, device=self.device, min_frames=cfg.subgoal_stride + 2
+        )
         self.motion_ids = torch.zeros(self.num_envs, dtype=torch.long, device=self.device)
         self.goal_frame = torch.zeros(self.num_envs, dtype=torch.long, device=self.device)
         self.goal_tips = torch.zeros((self.num_envs, 5, 3), device=self.device)
@@ -81,7 +89,8 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         self.full_target[:, self.right_ids] = self.target_q
 
     def _apply_action(self) -> None:
-        # The full command holds both arms and the left hand at home.
+        # Legacy full-body commands hold both arms and the left hand at home;
+        # the standalone hand command contains only the 20 tracked joints.
         # Source: https://isaac-sim.github.io/IsaacLab/v3.0.0/source/api/lab/isaaclab.assets.html
         self.robot.actuators.target_command.set_position_index(value=self.full_target, full_data=True)
 

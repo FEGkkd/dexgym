@@ -21,6 +21,7 @@ algorithm capability, **not a claim that every task or policy has converged**.
 | `DexGym-Joint-Tracking-Direct-v0` | Cartpole joint target | Isaac Lab DirectRLEnv, RSL-RL PPO example. |
 | `DexGym-Joint-Tracking-Manager-v0` | Cartpole joint target | Isaac Lab ManagerBasedRLEnv, RSL-RL PPO example. |
 | `DexGym-Wuji-Right-Hand-Tracking-Direct-v0` | Right WujiHand2 five-fingertip sequence tracking | TeleDexter-inspired hand-only DirectRLEnv; GRAB retargeting and a bounded PPO workflow check passed. No convergence claim. |
+| `DexGym-Wuji-Right-Hand-Clean-Tracking-Direct-v0` and its 125D variants | Official Wuji Hand 2.1 right-hand GRAB tracking | Standalone 20-DoF USD, full collisions, 480 Hz Newton / 30 Hz policy. Environment smoke passed; PPO on this model has not yet been evaluated. |
 
 The Cartpole examples use PPO. **SuperMimic does not use PPO.** The SuperMimic Marvin
 environment simulates all 54 DoF at 500 Hz, controls only 14 arm joints at
@@ -30,7 +31,7 @@ configuration and controller parameters are unchanged.
 
 ## Right-hand fingertip tracking
 
-The separate hand-only task uses GRAB right-hand MANO poses retargeted by the
+The original hand-only task uses GRAB right-hand MANO poses retargeted by the
 local WujiHand2 SDK. It controls 20 right-hand joints with PPO, holds both arms
 and the left hand at Home, and follows five robot-FK fingertip targets in the
 right-wrist frame with full hand collisions and a 10 mm all-finger goal threshold.
@@ -50,6 +51,13 @@ records the isolated USD gain correction, timestep and collision sweep, and
 324-pose fixed-target acceptance test. The
 [self-collision post-optimization report](docs/experiments/hand_only_collision_postopt_20261108.md)
 describes the separate GRAB refinement library and full-contact Newton check.
+
+The current Clean task family uses the official standalone
+[Wuji Hand 2.1 model](source/dexgym/assets/wuji_hand21/README.md) and the
+full s1–s10 geometry-screened GRAB library. The 54-DoF original task ID
+remains available for historical comparisons. See the
+[model-switch report](docs/experiments/hand21_rl_model_switch_20261109.md)
+for the exact task IDs, compatibility note, and smoke results.
 
 ```bash
 PYTHONPATH=source uv run python scripts/data/build_grab_right_hand_library.py \

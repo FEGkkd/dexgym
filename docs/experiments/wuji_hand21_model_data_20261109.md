@@ -39,7 +39,9 @@ The 5 mm cutoff is above the 95th percentile (3.875 mm) of each clip's maximum
 residual penetration after post-optimization. This is an operational severity
 criterion, not proof that every rejected frame is mathematically irreparable.
 Training metadata assigns s1–s7 to train and s8–s10 to validation; no RL task
-has yet been modified to load this library.
+was modified as part of this data/model import. The later
+[RL model switch](hand21_rl_model_switch_20261109.md) connects the Clean
+task family to this library.
 
 Two clips initially hit infeasible *local optimizer step bounds* rather than a
 data-quality failure. The optimizer now retains such frames for final collision
