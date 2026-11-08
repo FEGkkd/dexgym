@@ -67,6 +67,11 @@ def main() -> None:
             truncated_count = 0
             episode_length_sum = 0
             seen_motions = torch.zeros(task.bank.motion_count, dtype=torch.bool, device=task.device)
+            duration_bins = cfg.max_goal_steps + 1
+            goal_duration_by_motion = torch.zeros(
+                (task.bank.motion_count, duration_bins), dtype=torch.long, device=task.device
+            )
+            goal_timeout_count = 0
             with torch.inference_mode():
                 for _ in range(args.steps):
                     seen_motions[task.motion_ids] = True
@@ -78,12 +83,23 @@ def main() -> None:
                         goal_q = task.bank.joints(task.motion_ids, task.goal_frame)
                         action = ((goal_q - task.target_q) / cfg.action_delta_rad).clamp(-1.0, 1.0)
                     at_last_frame = task.goal_frame >= task.bank.lengths[task.motion_ids] - 1
+                    motion_ids = task.motion_ids.clone()
+                    goal_duration = task.goal_age.clone() + 1
                     episode_length = task.episode_length_buf.clone() + 1
                     obs_dict, reward, terminated, truncated, extras = raw_env.step(action)
                     done = terminated | truncated
                     # The +10 sparse bonus is separated from all dense rewards (<1).
                     reached = reward > 9.0
-                    completed_count += int((reached & at_last_frame & terminated).sum().item())
+                    completed = reached & at_last_frame & terminated
+                    if (goal_duration[reached] > cfg.max_goal_steps).any():
+                        raise AssertionError("Reached subgoal exceeded the configured step limit")
+                    flat_duration = motion_ids[reached] * duration_bins + goal_duration[reached]
+                    goal_duration_by_motion += torch.bincount(
+                        flat_duration, minlength=task.bank.motion_count * duration_bins
+                    ).reshape(task.bank.motion_count, duration_bins)
+                    age_limit_termination = terminated & ~completed & (goal_duration >= cfg.max_goal_steps)
+                    goal_timeout_count += int(age_limit_termination.sum().item())
+                    completed_count += int(completed.sum().item())
                     reached_count += int(reached.sum().item())
                     terminated_count += int(terminated.sum().item())
                     truncated_count += int(truncated.sum().item())
@@ -97,6 +113,25 @@ def main() -> None:
 
             env_steps = args.num_envs * args.steps
             episodes = terminated_count + truncated_count
+            duration_hist = goal_duration_by_motion.sum(dim=0).cpu()
+            duration_count = int(duration_hist.sum().item())
+            if duration_count != reached_count:
+                raise AssertionError("Goal-duration histogram disagrees with the success count")
+
+            def duration_summary(hist: torch.Tensor) -> dict:
+                count = int(hist.sum().item())
+                if count == 0:
+                    return {"count": 0, "mean_steps": None, "p50_steps": None, "p90_steps": None, "p95_steps": None}
+                bins = torch.arange(len(hist))
+                cumulative = hist.cumsum(0)
+                return {
+                    "count": count,
+                    "mean_steps": float((bins * hist).sum().item() / count),
+                    "p50_steps": int(torch.searchsorted(cumulative, (count + 1) // 2).item()),
+                    "p90_steps": int(torch.searchsorted(cumulative, (9 * count + 9) // 10).item()),
+                    "p95_steps": int(torch.searchsorted(cumulative, (19 * count + 19) // 20).item()),
+                }
+
             result = {
                 "task_id": task_id,
                 "mode": args.mode,
@@ -116,6 +151,13 @@ def main() -> None:
                 "action_rms": (action_sq_sum / args.steps) ** 0.5,
                 "subgoals_reached": reached_count,
                 "subgoals_per_1000_steps": 1000 * reached_count / env_steps,
+                "goal_duration_steps": duration_summary(duration_hist),
+                "goal_duration_histogram": duration_hist.tolist(),
+                "goal_timeout_count": goal_timeout_count,
+                "goal_duration_by_motion": [
+                    {"motion": record["source"], **duration_summary(hist.cpu())}
+                    for record, hist in zip(task.bank.records, goal_duration_by_motion, strict=True)
+                ],
                 "completed_motions": completed_count,
                 "terminated_episodes": terminated_count,
                 "truncated_episodes": truncated_count,

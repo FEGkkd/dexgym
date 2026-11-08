@@ -123,3 +123,41 @@ training log, and all evaluation JSON files are preserved locally under
 `/home/ubuntu/dexgym/artifacts/hand_only_clean_480/`. They are Git-ignored.
 The SHA-256 of `model_500.pt` is
 `baf59af87a18711621a5f70081b65e3e433ba8b4800120bc42d482160b34b704`.
+
+## Subgoal-duration audit
+
+The evaluator was rerun on both checkpoints and both validation seeds, still
+with 256 environments and 1000 policy steps per environment. For every paid
+subgoal bonus it records the task's pre-step `goal_age + 1`: the actual number
+of 30 Hz control steps spent on that subgoal, including the two required
+within-threshold steps. The additional measurement does not change the task,
+action, reward, or checkpoint. Small changes in aggregate counts relative to
+the earlier evaluation runs reflect run-to-run simulation variation.
+
+| Seed | Policy | Mean steps per reached goal | p90 | p95 | Noncompletion terminations at goal age 45 |
+| --- | --- | ---: | ---: | ---: | ---: |
+| 42 | Iteration 250 | 2.483 | 3 | 5 | 329 |
+| 42 | Iteration 500 | 2.962 | 6 | 8 | 102 |
+| 43 | Iteration 250 | 2.483 | 3 | 5 | 341 |
+| 43 | Iteration 500 | 2.939 | 6 | 8 | 99 |
+
+On a per-motion comparison, iteration 500 takes longer on 80/89 validation
+motions for seed 42 and 82/89 for seed 43. Its longer goal time comes with
+fewer noncompletion terminations at the 45-step limit and higher
+completed-episode rates. The termination count can include an unsafe-state
+termination on the same step; it is not an exclusive cause label. This confirms
+that the later policy advances more slowly while completing sequences more
+reliably. The measurements do not identify the reward weights as the cause.
+
+The current policy observation omits the accumulated position command
+`q_cmd` although actions update it incrementally. Adding `q_cmd - q` would
+make a separate 125D observation variant for an ablation with the same reward.
+The current dense term is the mean of `exp(-50 e_f)` over five fingers, so
+`exp(-50 × mean_error)` is only a lower bound on its average, not its exact
+value. Its scale relative to the constant +10 reach bonus and 0.01 time cost
+makes a reward-speed tradeoff plausible. A reward ablation should follow the
+observation ablation and compare completion, goals per 1000 steps, per-goal
+duration, and 45-step terminations on the same validation bank.
+
+Timing JSON files are local under
+`artifacts/hand_only_clean_480/eval_policy{250,500}_timing_s{42,43}.json`.
