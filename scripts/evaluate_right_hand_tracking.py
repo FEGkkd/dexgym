@@ -6,9 +6,10 @@ from pathlib import Path
 
 import gymnasium as gym
 import torch
-from dexgym.tasks import RIGHT_HAND_ID
+from dexgym.tasks import RIGHT_HAND_CLEAN_ID, RIGHT_HAND_ID
+from dexgym.tasks.direct.right_hand_tracking.clean_env_cfg import RightHandCleanTrackingCfg
 from dexgym.tasks.direct.right_hand_tracking.env_cfg import RightHandTrackingDirectCfg
-from dexgym.tasks.ppo_cfg import RightHandTrackingPPOCfg
+from dexgym.tasks.ppo_cfg import RightHandCleanTrackingPPOCfg, RightHandTrackingPPOCfg
 from isaaclab.app import launch_simulation
 from isaaclab.cli import load_external_tasks
 from isaaclab_rl.rsl_rl import RslRlVecEnvWrapper
@@ -24,6 +25,7 @@ def main() -> None:
     parser.add_argument("--steps", type=int, default=1000)
     parser.add_argument("--seed", type=int, default=20261108)
     parser.add_argument("--split", choices=("train", "validation"), default="validation")
+    parser.add_argument("--clean", action="store_true", help="Use the independent 480 Hz clean tracking task")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     if args.mode == "policy" and (args.checkpoint is None or not args.checkpoint.is_file()):
@@ -32,18 +34,19 @@ def main() -> None:
         parser.error("--num-envs and --steps must be positive")
 
     load_external_tasks()
-    cfg = RightHandTrackingDirectCfg()
+    cfg = RightHandCleanTrackingCfg() if args.clean else RightHandTrackingDirectCfg()
+    task_id = RIGHT_HAND_CLEAN_ID if args.clean else RIGHT_HAND_ID
     cfg.scene.num_envs = args.num_envs
     cfg.split = args.split
     cfg.seed = args.seed
     cfg.sim.physics = cfg.sim.physics.newton_mjwarp
-    agent_cfg = RightHandTrackingPPOCfg()
+    agent_cfg = RightHandCleanTrackingPPOCfg() if args.clean else RightHandTrackingPPOCfg()
     agent_cfg.seed = args.seed
     agent_cfg.device = "cuda:0"
     agent_cfg = handle_deprecated_rsl_rl_cfg(agent_cfg, check_rsl_rl_version())
 
     with launch_simulation(cfg):
-        raw_env = gym.make(RIGHT_HAND_ID, cfg=cfg)
+        raw_env = gym.make(task_id, cfg=cfg)
         try:
             task = raw_env.unwrapped
             policy = None
@@ -95,6 +98,7 @@ def main() -> None:
             env_steps = args.num_envs * args.steps
             episodes = terminated_count + truncated_count
             result = {
+                "task_id": task_id,
                 "mode": args.mode,
                 "checkpoint": str(args.checkpoint.resolve()) if args.checkpoint else None,
                 "split": args.split,

@@ -66,3 +66,10 @@ class RightHandTrackingPPOCfg(RslRlOnPolicyRunnerCfg):
         desired_kl=0.01,
         max_grad_norm=1.0,
     )
+
+
+@configclass
+class RightHandCleanTrackingPPOCfg(RightHandTrackingPPOCfg):
+    """Separate logs for the clean-bank controller experiment."""
+
+    experiment_name = "dexgym_wuji_right_hand_clean_tracking"

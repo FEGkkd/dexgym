@@ -6,6 +6,7 @@ DIRECT_ID = "DexGym-Joint-Tracking-Direct-v0"
 MANAGER_ID = "DexGym-Joint-Tracking-Manager-v0"
 MARVIN_SUPERMIMIC_WAVE_ID = "DexGym-Marvin-SuperMimic-Wave-Direct-v0"
 RIGHT_HAND_ID = "DexGym-Wuji-Right-Hand-Tracking-Direct-v0"
+RIGHT_HAND_CLEAN_ID = "DexGym-Wuji-Right-Hand-Clean-Tracking-Direct-v0"
 CARTPOLE_TASK_IDS = (DIRECT_ID, MANAGER_ID)
 
 
@@ -41,10 +42,22 @@ gym.register(
     },
 )
 
+gym.register(
+    id=RIGHT_HAND_CLEAN_ID,
+    entry_point="dexgym.tasks.direct.right_hand_tracking.env:RightHandTrackingDirectEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": "dexgym.tasks.direct.right_hand_tracking.clean_env_cfg:RightHandCleanTrackingCfg",
+        "rsl_rl_cfg_entry_point": "dexgym.tasks.ppo_cfg:RightHandCleanTrackingPPOCfg",
+        "default_agent": "rsl_rl",
+    },
+)
+
 from . import marvin_supermimic as _marvin_supermimic  # noqa: E402, F401
 
 TASK_IDS = CARTPOLE_TASK_IDS + (
     RIGHT_HAND_ID,
+    RIGHT_HAND_CLEAN_ID,
     _marvin_supermimic.TASK_ID,
     _marvin_supermimic.REACH_TASK_ID,
     _marvin_supermimic.SE3_REACH_HOLD_TASK_ID,

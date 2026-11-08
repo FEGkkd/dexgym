@@ -39,7 +39,7 @@ def main() -> None:
     parser.add_argument("--zero-gravity", action="store_true")
     parser.add_argument("--corrected-drive", action="store_true")
     parser.add_argument("--drive-profile", choices=("source", "hand_x2"), default="source")
-    parser.add_argument("--dt-denominator", type=int, choices=(120, 240, 500), default=120)
+    parser.add_argument("--dt-denominator", type=int, choices=(120, 240, 480, 500), default=120)
     parser.add_argument("--hand-kp-scale", type=float, default=1.0)
     parser.add_argument("--hand-kd-scale", type=float, default=1.0)
     parser.add_argument("--seed", type=int, default=20261108)
