@@ -1,7 +1,17 @@
 """Shared official Isaac Lab RSL-RL PPO configuration."""
 
+from copy import deepcopy
+
 from isaaclab.utils import configclass
 from isaaclab_rl.rsl_rl import RslRlMLPModelCfg, RslRlOnPolicyRunnerCfg, RslRlPpoAlgorithmCfg
+
+
+@configclass
+class MatchedBetaDistributionCfg(RslRlMLPModelCfg.DistributionCfg):
+    """Beta head with initial action std matched to the Gaussian pilots."""
+
+    class_name: str = "dexgym.algorithms.action_distributions:MatchedBetaDistribution"
+    init_std: float = 0.3
 
 
 @configclass
@@ -87,3 +97,30 @@ class RightHandCleanHybrid125PPOCfg(RightHandCleanTrackingPPOCfg):
     """Separate logs for the observation-plus-reward ablation."""
 
     experiment_name = "dexgym_wuji_right_hand_clean_hybrid125"
+
+
+@configclass
+class RightHandCleanHybrid125Entropy0PPOCfg(RightHandCleanHybrid125PPOCfg):
+    """Paired continuation that changes only the PPO entropy coefficient."""
+
+    experiment_name = "dexgym_wuji_right_hand_clean_hybrid125_entropy0"
+    algorithm = deepcopy(RightHandCleanHybrid125PPOCfg().algorithm)
+    algorithm.entropy_coef = 0.0
+
+
+@configclass
+class RightHandCleanHybrid125TanhGaussianPPOCfg(RightHandCleanHybrid125Entropy0PPOCfg):
+    """Entropy-free pilot with a tanh-squashed Gaussian action head."""
+
+    experiment_name = "dexgym_wuji_right_hand_clean_hybrid125_tanh_gaussian"
+    actor = deepcopy(RightHandCleanHybrid125Entropy0PPOCfg().actor)
+    actor.distribution_cfg.class_name = "dexgym.algorithms.action_distributions:TanhGaussianDistribution"
+
+
+@configclass
+class RightHandCleanHybrid125BetaPPOCfg(RightHandCleanHybrid125Entropy0PPOCfg):
+    """Entropy-free pilot with a spread-matched RSL-RL bounded Beta action head."""
+
+    experiment_name = "dexgym_wuji_right_hand_clean_hybrid125_beta"
+    actor = deepcopy(RightHandCleanHybrid125Entropy0PPOCfg().actor)
+    actor.distribution_cfg = MatchedBetaDistributionCfg()

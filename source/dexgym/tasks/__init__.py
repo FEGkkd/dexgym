@@ -9,6 +9,9 @@ RIGHT_HAND_ID = "DexGym-Wuji-Right-Hand-Tracking-Direct-v0"
 RIGHT_HAND_CLEAN_ID = "DexGym-Wuji-Right-Hand-Clean-Tracking-Direct-v0"
 RIGHT_HAND_OBS125_ID = "DexGym-Wuji-Right-Hand-Clean-Obs125-Direct-v0"
 RIGHT_HAND_HYBRID125_ID = "DexGym-Wuji-Right-Hand-Clean-Hybrid125-Direct-v0"
+RIGHT_HAND_HYBRID125_ENTROPY0_ID = "DexGym-Wuji-Right-Hand-Clean-Hybrid125-Entropy0-Direct-v0"
+RIGHT_HAND_HYBRID125_TANH_GAUSSIAN_ID = "DexGym-Wuji-Right-Hand-Clean-Hybrid125-TanhGaussian-Direct-v0"
+RIGHT_HAND_HYBRID125_BETA_ID = "DexGym-Wuji-Right-Hand-Clean-Hybrid125-Beta-Direct-v0"
 CARTPOLE_TASK_IDS = (DIRECT_ID, MANAGER_ID)
 
 
@@ -77,6 +80,39 @@ gym.register(
     },
 )
 
+gym.register(
+    id=RIGHT_HAND_HYBRID125_ENTROPY0_ID,
+    entry_point="dexgym.tasks.direct.right_hand_tracking.env:RightHandTrackingDirectEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": "dexgym.tasks.direct.right_hand_tracking.ablation_cfg:RightHandCleanHybrid125Cfg",
+        "rsl_rl_cfg_entry_point": "dexgym.tasks.ppo_cfg:RightHandCleanHybrid125Entropy0PPOCfg",
+        "default_agent": "rsl_rl",
+    },
+)
+
+gym.register(
+    id=RIGHT_HAND_HYBRID125_TANH_GAUSSIAN_ID,
+    entry_point="dexgym.tasks.direct.right_hand_tracking.env:RightHandTrackingDirectEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": "dexgym.tasks.direct.right_hand_tracking.ablation_cfg:RightHandCleanHybrid125Cfg",
+        "rsl_rl_cfg_entry_point": "dexgym.tasks.ppo_cfg:RightHandCleanHybrid125TanhGaussianPPOCfg",
+        "default_agent": "rsl_rl",
+    },
+)
+
+gym.register(
+    id=RIGHT_HAND_HYBRID125_BETA_ID,
+    entry_point="dexgym.tasks.direct.right_hand_tracking.env:RightHandTrackingDirectEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": "dexgym.tasks.direct.right_hand_tracking.ablation_cfg:RightHandCleanHybrid125Cfg",
+        "rsl_rl_cfg_entry_point": "dexgym.tasks.ppo_cfg:RightHandCleanHybrid125BetaPPOCfg",
+        "default_agent": "rsl_rl",
+    },
+)
+
 from . import marvin_supermimic as _marvin_supermimic  # noqa: E402, F401
 
 TASK_IDS = CARTPOLE_TASK_IDS + (
@@ -84,6 +120,9 @@ TASK_IDS = CARTPOLE_TASK_IDS + (
     RIGHT_HAND_CLEAN_ID,
     RIGHT_HAND_OBS125_ID,
     RIGHT_HAND_HYBRID125_ID,
+    RIGHT_HAND_HYBRID125_ENTROPY0_ID,
+    RIGHT_HAND_HYBRID125_TANH_GAUSSIAN_ID,
+    RIGHT_HAND_HYBRID125_BETA_ID,
     _marvin_supermimic.TASK_ID,
     _marvin_supermimic.REACH_TASK_ID,
     _marvin_supermimic.SE3_REACH_HOLD_TASK_ID,

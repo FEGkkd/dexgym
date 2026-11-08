@@ -6,12 +6,23 @@ from pathlib import Path
 
 import gymnasium as gym
 import torch
-from dexgym.tasks import RIGHT_HAND_CLEAN_ID, RIGHT_HAND_HYBRID125_ID, RIGHT_HAND_ID, RIGHT_HAND_OBS125_ID
+from dexgym.tasks import (
+    RIGHT_HAND_CLEAN_ID,
+    RIGHT_HAND_HYBRID125_BETA_ID,
+    RIGHT_HAND_HYBRID125_ENTROPY0_ID,
+    RIGHT_HAND_HYBRID125_ID,
+    RIGHT_HAND_HYBRID125_TANH_GAUSSIAN_ID,
+    RIGHT_HAND_ID,
+    RIGHT_HAND_OBS125_ID,
+)
 from dexgym.tasks.direct.right_hand_tracking.ablation_cfg import RightHandCleanHybrid125Cfg, RightHandCleanObs125Cfg
 from dexgym.tasks.direct.right_hand_tracking.clean_env_cfg import RightHandCleanTrackingCfg
 from dexgym.tasks.direct.right_hand_tracking.env_cfg import RightHandTrackingDirectCfg
 from dexgym.tasks.ppo_cfg import (
+    RightHandCleanHybrid125BetaPPOCfg,
+    RightHandCleanHybrid125Entropy0PPOCfg,
     RightHandCleanHybrid125PPOCfg,
+    RightHandCleanHybrid125TanhGaussianPPOCfg,
     RightHandCleanObs125PPOCfg,
     RightHandCleanTrackingPPOCfg,
     RightHandTrackingPPOCfg,
@@ -26,13 +37,23 @@ from tensordict import TensorDict
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mode", choices=("policy", "zero", "joint_replay"), required=True)
+    parser.add_argument(
+        "--policy-action",
+        choices=("mean", "sample"),
+        default="mean",
+        help="Use the policy mean or raw stochastic sample",
+    )
     parser.add_argument("--checkpoint", type=Path)
     parser.add_argument("--num-envs", type=int, default=256)
     parser.add_argument("--steps", type=int, default=1000)
     parser.add_argument("--seed", type=int, default=20261108)
     parser.add_argument("--split", choices=("train", "validation"), default="validation")
     parser.add_argument("--clean", action="store_true", help="Use the independent 480 Hz clean tracking task")
-    parser.add_argument("--variant", choices=("obs125", "hybrid125"), help="Evaluate an isolated clean-task ablation")
+    parser.add_argument(
+        "--variant",
+        choices=("obs125", "hybrid125", "entropy0", "tanh_gaussian", "beta"),
+        help="Evaluate an isolated clean-task ablation",
+    )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     if args.mode == "policy" and (args.checkpoint is None or not args.checkpoint.is_file()):
@@ -41,6 +62,8 @@ def main() -> None:
         parser.error("--num-envs and --steps must be positive")
     if args.clean and args.variant:
         parser.error("Use either --clean or --variant")
+    if args.mode != "policy" and args.policy_action != "mean":
+        parser.error("--policy-action sample requires --mode policy")
 
     load_external_tasks()
     cfg_type, task_id, agent_type = {
@@ -51,6 +74,17 @@ def main() -> None:
         ),
         "obs125": (RightHandCleanObs125Cfg, RIGHT_HAND_OBS125_ID, RightHandCleanObs125PPOCfg),
         "hybrid125": (RightHandCleanHybrid125Cfg, RIGHT_HAND_HYBRID125_ID, RightHandCleanHybrid125PPOCfg),
+        "entropy0": (
+            RightHandCleanHybrid125Cfg,
+            RIGHT_HAND_HYBRID125_ENTROPY0_ID,
+            RightHandCleanHybrid125Entropy0PPOCfg,
+        ),
+        "tanh_gaussian": (
+            RightHandCleanHybrid125Cfg,
+            RIGHT_HAND_HYBRID125_TANH_GAUSSIAN_ID,
+            RightHandCleanHybrid125TanhGaussianPPOCfg,
+        ),
+        "beta": (RightHandCleanHybrid125Cfg, RIGHT_HAND_HYBRID125_BETA_ID, RightHandCleanHybrid125BetaPPOCfg),
     }[args.variant]
     cfg = cfg_type()
     cfg.scene.num_envs = args.num_envs
@@ -78,6 +112,12 @@ def main() -> None:
             reward_sum = 0.0
             tip_error_sum = 0.0
             action_sq_sum = 0.0
+            raw_action_sq_sum = 0.0
+            raw_clip_count = 0
+            any_clip_count = 0
+            raw_clip_excess_sum = 0.0
+            raw_clip_count_by_joint = torch.zeros(20, dtype=torch.long, device=task.device)
+            policy_mean_clip_count = 0
             reached_count = 0
             completed_count = 0
             terminated_count = 0
@@ -93,7 +133,16 @@ def main() -> None:
                 for _ in range(args.steps):
                     seen_motions[task.motion_ids] = True
                     if args.mode == "policy":
-                        action = policy(obs).clamp(-1.0, 1.0)
+                        raw_action = policy(obs, stochastic_output=args.policy_action == "sample")
+                        clipped = raw_action.abs() > 1.0
+                        raw_clip_count += int(clipped.sum().item())
+                        any_clip_count += int(clipped.any(dim=-1).sum().item())
+                        raw_clip_count_by_joint += clipped.sum(dim=0)
+                        raw_clip_excess_sum += float((raw_action.abs() - 1.0).clamp_min(0).sum().item())
+                        raw_action_sq_sum += float(raw_action.square().mean().item())
+                        if args.policy_action == "sample":
+                            policy_mean_clip_count += int((policy.output_mean.abs() > 1.0).sum().item())
+                        action = raw_action.clamp(-1.0, 1.0)
                     elif args.mode == "zero":
                         action = torch.zeros((args.num_envs, 20), device=task.device)
                     else:
@@ -152,6 +201,7 @@ def main() -> None:
             result = {
                 "task_id": task_id,
                 "mode": args.mode,
+                "policy_action": args.policy_action if args.mode == "policy" else None,
                 "checkpoint": str(args.checkpoint.resolve()) if args.checkpoint else None,
                 "split": args.split,
                 "seed": args.seed,
@@ -166,6 +216,18 @@ def main() -> None:
                 "mean_reward_per_step": reward_sum / env_steps,
                 "mean_tip_error_m": tip_error_sum / args.steps,
                 "action_rms": (action_sq_sum / args.steps) ** 0.5,
+                "raw_action_rms": (raw_action_sq_sum / args.steps) ** 0.5 if policy is not None else None,
+                "raw_action_clip_fraction": raw_clip_count / (env_steps * 20) if policy is not None else None,
+                "env_step_any_raw_clip_fraction": any_clip_count / env_steps if policy is not None else None,
+                "raw_clip_excess_per_action": raw_clip_excess_sum / (env_steps * 20) if policy is not None else None,
+                "raw_action_clip_fraction_by_joint": (
+                    (raw_clip_count_by_joint.float() / env_steps).tolist() if policy is not None else None
+                ),
+                "policy_mean_clip_fraction": (
+                    policy_mean_clip_count / (env_steps * 20)
+                    if args.policy_action == "sample" and policy is not None
+                    else None
+                ),
                 "subgoals_reached": reached_count,
                 "subgoals_per_1000_steps": 1000 * reached_count / env_steps,
                 "goal_duration_steps": duration_summary(duration_hist),

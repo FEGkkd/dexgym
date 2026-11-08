@@ -2,7 +2,10 @@ import gymnasium as gym
 from dexgym.tasks import (
     CARTPOLE_TASK_IDS,
     RIGHT_HAND_CLEAN_ID,
+    RIGHT_HAND_HYBRID125_BETA_ID,
+    RIGHT_HAND_HYBRID125_ENTROPY0_ID,
     RIGHT_HAND_HYBRID125_ID,
+    RIGHT_HAND_HYBRID125_TANH_GAUSSIAN_ID,
     RIGHT_HAND_ID,
     RIGHT_HAND_OBS125_ID,
     TASK_IDS,
@@ -10,7 +13,7 @@ from dexgym.tasks import (
 
 
 def test_task_registration():
-    assert len(TASK_IDS) == 9
+    assert len(TASK_IDS) == 12
     for task_id in TASK_IDS:
         spec = gym.spec(task_id)
         assert spec.kwargs["env_cfg_entry_point"]
@@ -19,6 +22,9 @@ def test_task_registration():
             RIGHT_HAND_CLEAN_ID,
             RIGHT_HAND_OBS125_ID,
             RIGHT_HAND_HYBRID125_ID,
+            RIGHT_HAND_HYBRID125_ENTROPY0_ID,
+            RIGHT_HAND_HYBRID125_TANH_GAUSSIAN_ID,
+            RIGHT_HAND_HYBRID125_BETA_ID,
         ):
             assert spec.kwargs["rsl_rl_cfg_entry_point"]
         else:

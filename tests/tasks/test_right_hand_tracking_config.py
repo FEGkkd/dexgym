@@ -1,15 +1,28 @@
 """Static registration and PPO task contract before GPU smoke testing."""
 
+from dataclasses import asdict
+
 import gymnasium as gym
 import torch
 from dexgym.assets.marvin_wuji.robot_cfg import PACKAGED_USD
-from dexgym.tasks import RIGHT_HAND_CLEAN_ID, RIGHT_HAND_HYBRID125_ID, RIGHT_HAND_ID, RIGHT_HAND_OBS125_ID
+from dexgym.tasks import (
+    RIGHT_HAND_CLEAN_ID,
+    RIGHT_HAND_HYBRID125_BETA_ID,
+    RIGHT_HAND_HYBRID125_ENTROPY0_ID,
+    RIGHT_HAND_HYBRID125_ID,
+    RIGHT_HAND_HYBRID125_TANH_GAUSSIAN_ID,
+    RIGHT_HAND_ID,
+    RIGHT_HAND_OBS125_ID,
+)
 from dexgym.tasks.direct.right_hand_tracking.ablation_cfg import RightHandCleanHybrid125Cfg, RightHandCleanObs125Cfg
 from dexgym.tasks.direct.right_hand_tracking.clean_env_cfg import RightHandCleanTrackingCfg
 from dexgym.tasks.direct.right_hand_tracking.env_cfg import RightHandTrackingDirectCfg
 from dexgym.tasks.direct.right_hand_tracking.logic import tracking_step
 from dexgym.tasks.ppo_cfg import (
+    RightHandCleanHybrid125BetaPPOCfg,
+    RightHandCleanHybrid125Entropy0PPOCfg,
     RightHandCleanHybrid125PPOCfg,
+    RightHandCleanHybrid125TanhGaussianPPOCfg,
     RightHandCleanObs125PPOCfg,
     RightHandCleanTrackingPPOCfg,
     RightHandTrackingPPOCfg,
@@ -106,3 +119,40 @@ def test_observation_and_reward_ablations_are_isolated_from_clean_baseline():
         RightHandCleanHybrid125PPOCfg().experiment_name,
     }
     assert len(names) == 3
+
+
+def test_entropy_zero_variant_changes_only_ppo_entropy_coefficient():
+    baseline = RightHandCleanHybrid125PPOCfg()
+    no_entropy = RightHandCleanHybrid125Entropy0PPOCfg()
+    baseline_algorithm = asdict(baseline.algorithm)
+    no_entropy_algorithm = asdict(no_entropy.algorithm)
+    baseline_algorithm["entropy_coef"] = 0.0
+    assert no_entropy_algorithm == baseline_algorithm
+    assert baseline.algorithm.entropy_coef == 0.005
+    assert no_entropy.experiment_name != baseline.experiment_name
+    spec = gym.spec(RIGHT_HAND_HYBRID125_ENTROPY0_ID)
+    assert spec.kwargs["env_cfg_entry_point"].endswith(":RightHandCleanHybrid125Cfg")
+    assert spec.kwargs["rsl_rl_cfg_entry_point"].endswith(":RightHandCleanHybrid125Entropy0PPOCfg")
+
+
+def test_bounded_distribution_pilots_keep_the_hybrid_task_and_zero_entropy():
+    entropy0 = RightHandCleanHybrid125Entropy0PPOCfg()
+    for task_id, ppo_class, class_name in (
+        (
+            RIGHT_HAND_HYBRID125_TANH_GAUSSIAN_ID,
+            RightHandCleanHybrid125TanhGaussianPPOCfg,
+            "dexgym.algorithms.action_distributions:TanhGaussianDistribution",
+        ),
+        (
+            RIGHT_HAND_HYBRID125_BETA_ID,
+            RightHandCleanHybrid125BetaPPOCfg,
+            "dexgym.algorithms.action_distributions:MatchedBetaDistribution",
+        ),
+    ):
+        ppo = ppo_class()
+        spec = gym.spec(task_id)
+        assert spec.kwargs["env_cfg_entry_point"].endswith(":RightHandCleanHybrid125Cfg")
+        assert ppo.algorithm.entropy_coef == 0.0
+        assert asdict(ppo.algorithm) == asdict(entropy0.algorithm)
+        assert ppo.actor.distribution_cfg.class_name == class_name
+        assert ppo.experiment_name != entropy0.experiment_name

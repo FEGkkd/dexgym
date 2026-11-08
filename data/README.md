@@ -121,6 +121,15 @@ changes the source GRAB files or the clean-bank contents. Their 4096-env,
 500-iteration comparison is in the
 [observation and reward ablation report](../docs/experiments/hand_only_obs_reward_ablation_20261108.md).
 
+Action-distribution diagnostic task IDs reuse the same Hybrid125 environment
+and clean bank: `DexGym-Wuji-Right-Hand-Clean-Hybrid125-Entropy0-Direct-v0`,
+`DexGym-Wuji-Right-Hand-Clean-Hybrid125-TanhGaussian-Direct-v0`, and
+`DexGym-Wuji-Right-Hand-Clean-Hybrid125-Beta-Direct-v0`. They vary PPO entropy
+and action distribution while keeping the environment and clean bank fixed.
+See the [action-distribution report](../docs/experiments/hand_only_action_distribution_20261108.md)
+for clipping audits and held-out policy results. These task IDs do not alter
+GRAB files or the generated motion banks.
+
 On the current local dataset, conversion produced 797 motions and 252,679
 frames with no rejected motions. See the
 [pilot report](../docs/experiments/hand_only_right_pilot.md) for the exact audit
