@@ -82,28 +82,28 @@ class RightHandTrackingPPOCfg(RslRlOnPolicyRunnerCfg):
 class RightHandCleanTrackingPPOCfg(RightHandTrackingPPOCfg):
     """Separate logs for the official Hand 2.1 tracking experiment."""
 
-    experiment_name = "dexgym_wuji_hand21_right_hand_tracking"
+    experiment_name = "dexgym_wuji_hand21_right_hand_deadzone_tracking"
 
 
 @configclass
 class RightHandCleanObs125PPOCfg(RightHandCleanTrackingPPOCfg):
     """Separate logs for the observation-only ablation."""
 
-    experiment_name = "dexgym_wuji_hand21_right_hand_obs125"
+    experiment_name = "dexgym_wuji_hand21_right_hand_deadzone_obs125"
 
 
 @configclass
 class RightHandCleanHybrid125PPOCfg(RightHandCleanTrackingPPOCfg):
     """Separate logs for the observation-plus-reward ablation."""
 
-    experiment_name = "dexgym_wuji_hand21_right_hand_hybrid125"
+    experiment_name = "dexgym_wuji_hand21_right_hand_deadzone_hybrid125"
 
 
 @configclass
 class RightHandCleanHybrid125Entropy0PPOCfg(RightHandCleanHybrid125PPOCfg):
     """Paired continuation that changes only the PPO entropy coefficient."""
 
-    experiment_name = "dexgym_wuji_hand21_right_hand_hybrid125_entropy0"
+    experiment_name = "dexgym_wuji_hand21_right_hand_deadzone_hybrid125_entropy0"
     algorithm = deepcopy(RightHandCleanHybrid125PPOCfg().algorithm)
     algorithm.entropy_coef = 0.0
 
@@ -112,7 +112,7 @@ class RightHandCleanHybrid125Entropy0PPOCfg(RightHandCleanHybrid125PPOCfg):
 class RightHandCleanHybrid125TanhGaussianPPOCfg(RightHandCleanHybrid125Entropy0PPOCfg):
     """Entropy-free pilot with a tanh-squashed Gaussian action head."""
 
-    experiment_name = "dexgym_wuji_hand21_right_hand_hybrid125_tanh_gaussian"
+    experiment_name = "dexgym_wuji_hand21_right_hand_deadzone_hybrid125_tanh_gaussian"
     actor = deepcopy(RightHandCleanHybrid125Entropy0PPOCfg().actor)
     actor.distribution_cfg.class_name = "dexgym.algorithms.action_distributions:TanhGaussianDistribution"
 
@@ -121,6 +121,6 @@ class RightHandCleanHybrid125TanhGaussianPPOCfg(RightHandCleanHybrid125Entropy0P
 class RightHandCleanHybrid125BetaPPOCfg(RightHandCleanHybrid125Entropy0PPOCfg):
     """Entropy-free pilot with a spread-matched RSL-RL bounded Beta action head."""
 
-    experiment_name = "dexgym_wuji_hand21_right_hand_hybrid125_beta"
+    experiment_name = "dexgym_wuji_hand21_right_hand_deadzone_hybrid125_beta"
     actor = deepcopy(RightHandCleanHybrid125Entropy0PPOCfg().actor)
     actor.distribution_cfg = MatchedBetaDistributionCfg()

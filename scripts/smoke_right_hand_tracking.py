@@ -8,6 +8,7 @@ from dexgym.tasks import RIGHT_HAND_CLEAN_ID, RIGHT_HAND_HYBRID125_ID, RIGHT_HAN
 from dexgym.tasks.direct.right_hand_tracking.ablation_cfg import RightHandCleanHybrid125Cfg, RightHandCleanObs125Cfg
 from dexgym.tasks.direct.right_hand_tracking.clean_env_cfg import RightHandCleanTrackingCfg
 from dexgym.tasks.direct.right_hand_tracking.env_cfg import RightHandTrackingDirectCfg
+from dexgym.tasks.direct.right_hand_tracking.logic import action_toward_joint_target
 from isaaclab.app import launch_simulation
 from isaaclab.cli import load_external_tasks
 
@@ -80,7 +81,9 @@ def main() -> None:
             joint_errors = []
             for _ in range(args.steps):
                 q_goal = task.bank.joints(task.motion_ids, task.goal_frame)
-                action = ((q_goal - task.target_q) / cfg.action_delta_rad).clamp(-1.0, 1.0)
+                action = action_toward_joint_target(
+                    q_goal, task.target_q, scale=cfg.action_delta_rad, deadzone=cfg.action_deadzone
+                )
                 obs, reward, terminated, truncated, _ = env.step(action)
                 assert torch.isfinite(obs["policy"]).all()
                 assert torch.isfinite(reward).all()

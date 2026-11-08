@@ -73,6 +73,8 @@ def test_clean_task_has_independent_30hz_full_contact_configuration():
     assert clean.scene.robot.spawn.usd_path == str(OFFICIAL_USD)
     assert clean.scene.robot.spawn.variants == {"Physics": "PhysX"}
     assert clean.sim.physics.newton_mjwarp.solver_cfg.integrator == "implicitfast"
+    assert (clean.action_delta_rad, clean.action_deadzone) == (0.1, 0.1)
+    assert (old.action_delta_rad, old.action_deadzone) == (0.08, 0.0)
     assert clean.sim.dt == 1 / 480
     assert clean.decimation == 16
     assert clean.sim.dt * clean.decimation == 1 / 30
@@ -94,6 +96,7 @@ def test_clean_task_has_separate_gym_id_and_ppo_log_directory():
     assert spec.kwargs["env_cfg_entry_point"].endswith(":RightHandCleanTrackingCfg")
     assert spec.kwargs["rsl_rl_cfg_entry_point"].endswith(":RightHandCleanTrackingPPOCfg")
     assert RightHandCleanTrackingPPOCfg().experiment_name != RightHandTrackingPPOCfg().experiment_name
+    assert "deadzone" in RightHandCleanTrackingPPOCfg().experiment_name
 
 
 def test_observation_and_reward_ablations_are_isolated_from_clean_baseline():

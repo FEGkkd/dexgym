@@ -33,6 +33,8 @@ class RightHandCleanTrackingCfg(RightHandTrackingDirectCfg):
 
     decimation = 16
     episode_length_s = 30.0
+    action_delta_rad = 0.1
+    action_deadzone = 0.1
     sim: SimulationCfg = SimulationCfg(dt=1 / 480, render_interval=16, physics=RightHand21PhysicsCfg())
     scene: RightHandCleanSceneCfg = RightHandCleanSceneCfg(num_envs=16, env_spacing=2.0)
     library_path: str = str(REPO_ROOT / "data/processed/hand21_right_geometry_feasible/manifest.json")

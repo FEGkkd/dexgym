@@ -5,6 +5,36 @@ import torch
 from dexgym.data.wuji_retarget import ROBOT_RIGHT_JOINT_NAMES
 
 
+def residual_joint_target(
+    command_q: torch.Tensor,
+    action: torch.Tensor,
+    joint_limits: torch.Tensor,
+    *,
+    scale: float,
+    deadzone: float,
+) -> torch.Tensor:
+    """TELEDEXTER Appendix C.1: accumulate a soft-deadzone action on the last command."""
+    if command_q.shape != action.shape or command_q.ndim != 2 or joint_limits.shape != (command_q.shape[1], 2):
+        raise ValueError("Expected commands/actions[N,D] and joint limits[D,2]")
+    if scale <= 0 or not 0 <= deadzone < 1:
+        raise ValueError("Action scale must be positive and deadzone in [0,1)")
+    bounded = action.clamp(-1.0, 1.0)
+    delta = bounded.sign() * (bounded.abs() - deadzone).clamp_min(0.0)
+    return torch.clamp(command_q + scale * delta, min=joint_limits[:, 0], max=joint_limits[:, 1])
+
+
+def action_toward_joint_target(
+    goal_q: torch.Tensor, command_q: torch.Tensor, *, scale: float, deadzone: float
+) -> torch.Tensor:
+    """Invert the deadzone mapping for privileged joint-replay diagnostics."""
+    if goal_q.shape != command_q.shape or goal_q.ndim != 2:
+        raise ValueError("Expected matching goal and command arrays[N,D]")
+    if scale <= 0 or not 0 <= deadzone < 1:
+        raise ValueError("Action scale must be positive and deadzone in [0,1)")
+    needed = (goal_q - command_q) / scale
+    return (needed.sign() * (needed.abs() + deadzone)).clamp(-1.0, 1.0)
+
+
 def right_hand_joint_indices(joint_names: tuple[str, ...] | list[str]) -> list[int]:
     """Map SDK firmware order to the corresponding 20 robot articulation joints."""
     names = list(joint_names)

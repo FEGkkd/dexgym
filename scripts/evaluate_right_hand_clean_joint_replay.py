@@ -8,6 +8,7 @@ import gymnasium as gym
 import torch
 from dexgym.tasks import RIGHT_HAND_CLEAN_ID
 from dexgym.tasks.direct.right_hand_tracking.clean_env_cfg import RightHandCleanTrackingCfg
+from dexgym.tasks.direct.right_hand_tracking.logic import action_toward_joint_target
 from isaaclab.app import launch_simulation
 from isaaclab.cli import load_external_tasks
 
@@ -27,7 +28,9 @@ def main() -> None:
     cfg.split = args.split
     cfg.seed = args.seed
     manifest = json.loads(Path(cfg.library_path).read_text())
-    cfg.scene.num_envs = sum(m["split"] == args.split for m in manifest["motions"])
+    cfg.scene.num_envs = sum(
+        m["split"] == args.split and m["frames"] >= cfg.subgoal_stride + 2 for m in manifest["motions"]
+    )
     cfg.sim.physics = cfg.sim.physics.newton_mjwarp
     if cfg.decimation * cfg.sim.dt != 1 / 30:
         raise AssertionError("Joint Replay requires an exact 30 Hz policy loop")
@@ -114,7 +117,9 @@ def main() -> None:
                     previous_frame = task.goal_frame.clone()
                     motion_ids = task.motion_ids.clone()
                     q_goal = task.bank.joints(motion_ids, previous_frame)
-                    action = ((q_goal - task.target_q) / cfg.action_delta_rad).clamp(-1.0, 1.0)
+                    action = action_toward_joint_target(
+                        q_goal, task.target_q, scale=cfg.action_delta_rad, deadzone=cfg.action_deadzone
+                    )
                     action[~active] = 0.0
                     _, reward, terminated, truncated, _ = env.step(action)
                     if not torch.isfinite(reward).all():

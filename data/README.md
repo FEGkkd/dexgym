@@ -52,6 +52,9 @@ and the independent 20-DoF USD model. At stride 4, the task sampler uses
 segments with at least six frames: 942 train and 446 validation segments.
 Shorter segments stay in the library and audit. See the
 [RL model-switch report](../docs/experiments/hand21_rl_model_switch_20261109.md).
+Their current action mapping follows TELEDEXTER Appendix C.1: a 0.1-rad
+residual scale with a soft deadzone of 0.1 on each bounded action component.
+See the [action report](../docs/experiments/hand21_deadzone_action_20261109.md).
 
 ## Earlier Beta 2 library and strict replay screen (historical)
 

@@ -14,7 +14,13 @@ from dexgym.data.motion_bank import MotionBank, advance_goal_frames
 from dexgym.data.wuji_retarget import TIP_SITE_NAMES
 
 from .env_cfg import RightHandTrackingDirectCfg
-from .logic import build_right_hand_observation, fingertips_in_wrist_frame, right_hand_joint_indices, tracking_step
+from .logic import (
+    build_right_hand_observation,
+    fingertips_in_wrist_frame,
+    residual_joint_target,
+    right_hand_joint_indices,
+    tracking_step,
+)
 
 TIP_DISTAL_BODY_NAMES = (
     "r_thumb_distal",
@@ -81,10 +87,12 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         bounded = actions.clamp(-1.0, 1.0)
         self.action_delta = bounded - self.previous_action
         self.previous_action = bounded
-        self.target_q = torch.clamp(
-            self.target_q + bounded * self.cfg.action_delta_rad,
-            min=self.joint_limits[:, 0],
-            max=self.joint_limits[:, 1],
+        self.target_q = residual_joint_target(
+            self.target_q,
+            bounded,
+            self.joint_limits,
+            scale=self.cfg.action_delta_rad,
+            deadzone=self.cfg.action_deadzone,
         )
         self.full_target[:, self.right_ids] = self.target_q
 

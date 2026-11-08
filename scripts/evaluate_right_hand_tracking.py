@@ -18,6 +18,7 @@ from dexgym.tasks import (
 from dexgym.tasks.direct.right_hand_tracking.ablation_cfg import RightHandCleanHybrid125Cfg, RightHandCleanObs125Cfg
 from dexgym.tasks.direct.right_hand_tracking.clean_env_cfg import RightHandCleanTrackingCfg
 from dexgym.tasks.direct.right_hand_tracking.env_cfg import RightHandTrackingDirectCfg
+from dexgym.tasks.direct.right_hand_tracking.logic import action_toward_joint_target
 from dexgym.tasks.ppo_cfg import (
     RightHandCleanHybrid125BetaPPOCfg,
     RightHandCleanHybrid125Entropy0PPOCfg,
@@ -147,7 +148,9 @@ def main() -> None:
                         action = torch.zeros((args.num_envs, 20), device=task.device)
                     else:
                         goal_q = task.bank.joints(task.motion_ids, task.goal_frame)
-                        action = ((goal_q - task.target_q) / cfg.action_delta_rad).clamp(-1.0, 1.0)
+                        action = action_toward_joint_target(
+                            goal_q, task.target_q, scale=cfg.action_delta_rad, deadzone=cfg.action_deadzone
+                        )
                     at_last_frame = task.goal_frame >= task.bank.lengths[task.motion_ids] - 1
                     motion_ids = task.motion_ids.clone()
                     goal_duration = task.goal_age.clone() + 1

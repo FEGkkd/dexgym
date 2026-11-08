@@ -3,11 +3,35 @@
 import torch
 from dexgym.assets.marvin_wuji.robot_cfg import JOINT_ORDER
 from dexgym.tasks.direct.right_hand_tracking.logic import (
+    action_toward_joint_target,
     build_right_hand_observation,
     fingertips_in_wrist_frame,
+    residual_joint_target,
     right_hand_joint_indices,
     tracking_step,
 )
+
+
+def test_teledexter_deadzone_residual_accumulates_and_clips_joint_targets():
+    command = torch.zeros((1, 20))
+    limits = torch.tensor([[-0.05, 0.05]] * 20)
+    action = torch.zeros_like(command)
+    action[0, :7] = torch.tensor([-1.5, -0.5, -0.1, 0.0, 0.1, 0.5, 1.5])
+    result = residual_joint_target(command, action, limits, scale=0.1, deadzone=0.1)
+    torch.testing.assert_close(result[0, :7], torch.tensor([-0.05, -0.04, 0.0, 0.0, 0.0, 0.04, 0.05]))
+    held = residual_joint_target(result, torch.full_like(command, 0.08), limits, scale=0.1, deadzone=0.1)
+    torch.testing.assert_close(held, result)
+
+
+def test_joint_replay_inverse_reaches_small_targets_through_deadzone():
+    command = torch.zeros((1, 20))
+    goal = torch.full_like(command, 0.002)
+    limits = torch.tensor([[-1.0, 1.0]] * 20)
+    action = action_toward_joint_target(goal, command, scale=0.1, deadzone=0.1)
+    torch.testing.assert_close(action, torch.full_like(action, 0.12))
+    torch.testing.assert_close(residual_joint_target(command, action, limits, scale=0.1, deadzone=0.1), goal)
+    zero = action_toward_joint_target(command, command, scale=0.1, deadzone=0.1)
+    torch.testing.assert_close(zero, torch.zeros_like(zero))
 
 
 def test_command_error_observation_adds_the_actual_accumulated_target_gap():

@@ -21,7 +21,7 @@ algorithm capability, **not a claim that every task or policy has converged**.
 | `DexGym-Joint-Tracking-Direct-v0` | Cartpole joint target | Isaac Lab DirectRLEnv, RSL-RL PPO example. |
 | `DexGym-Joint-Tracking-Manager-v0` | Cartpole joint target | Isaac Lab ManagerBasedRLEnv, RSL-RL PPO example. |
 | `DexGym-Wuji-Right-Hand-Tracking-Direct-v0` | Right WujiHand2 five-fingertip sequence tracking | TeleDexter-inspired hand-only DirectRLEnv; GRAB retargeting and a bounded PPO workflow check passed. No convergence claim. |
-| `DexGym-Wuji-Right-Hand-Clean-Tracking-Direct-v0` and its 125D variants | Official Wuji Hand 2.1 right-hand GRAB tracking | Standalone 20-DoF USD, full collisions, 480 Hz Newton / 30 Hz policy. Environment smoke passed; PPO on this model has not yet been evaluated. |
+| `DexGym-Wuji-Right-Hand-Clean-Tracking-Direct-v0` and its 125D variants | Official Wuji Hand 2.1 right-hand GRAB tracking | Standalone 20-DoF USD, full collisions, 480 Hz Newton / 30 Hz policy, TELEDEXTER deadzone residual action. Environment smoke passed; PPO learning on this action mapping has not yet been evaluated. |
 
 The Cartpole examples use PPO. **SuperMimic does not use PPO.** The SuperMimic Marvin
 environment simulates all 54 DoF at 500 Hz, controls only 14 arm joints at
@@ -58,6 +58,8 @@ full s1–s10 geometry-screened GRAB library. The 54-DoF original task ID
 remains available for historical comparisons. See the
 [model-switch report](docs/experiments/hand21_rl_model_switch_20261109.md)
 for the exact task IDs, compatibility note, and smoke results.
+The [deadzone action report](docs/experiments/hand21_deadzone_action_20261109.md)
+records the current action equation and its validation.
 
 ```bash
 PYTHONPATH=source uv run python scripts/data/build_grab_right_hand_library.py \

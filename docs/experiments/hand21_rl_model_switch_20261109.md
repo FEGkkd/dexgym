@@ -1,5 +1,10 @@
 # Right-hand RL task switched to official Hand 2.1 (2026-11-09)
 
+**Subsequent action update:** The Clean task family now uses the TELEDEXTER
+deadzone residual action described in
+[the action report](hand21_deadzone_action_20261109.md). The one-iteration
+PPO check below predates that action change.
+
 ## Scope and compatibility
 
 The existing Clean task ID and its Obs125, Hybrid125, Entropy0, TanhGaussian,
