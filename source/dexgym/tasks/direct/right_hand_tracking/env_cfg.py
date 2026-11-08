@@ -47,3 +47,8 @@ class RightHandTrackingDirectCfg(DirectRLEnvCfg):
     goal_dwell_steps: int = 2
     max_goal_steps: int = 45
     action_delta_rad: float = 0.08
+    include_command_error: bool = False
+    reward_sparse_bonus: float = 10.0
+    reward_dense_scale: float = 1.0
+    reward_time_cost: float = 0.01
+    reward_action_rate_penalty: float = 0.02

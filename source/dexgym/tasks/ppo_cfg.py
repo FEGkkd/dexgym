@@ -73,3 +73,17 @@ class RightHandCleanTrackingPPOCfg(RightHandTrackingPPOCfg):
     """Separate logs for the clean-bank controller experiment."""
 
     experiment_name = "dexgym_wuji_right_hand_clean_tracking"
+
+
+@configclass
+class RightHandCleanObs125PPOCfg(RightHandCleanTrackingPPOCfg):
+    """Separate logs for the observation-only ablation."""
+
+    experiment_name = "dexgym_wuji_right_hand_clean_obs125"
+
+
+@configclass
+class RightHandCleanHybrid125PPOCfg(RightHandCleanTrackingPPOCfg):
+    """Separate logs for the observation-plus-reward ablation."""
+
+    experiment_name = "dexgym_wuji_right_hand_clean_hybrid125"

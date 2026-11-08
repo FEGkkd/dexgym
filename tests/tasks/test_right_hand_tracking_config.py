@@ -3,11 +3,17 @@
 import gymnasium as gym
 import torch
 from dexgym.assets.marvin_wuji.robot_cfg import PACKAGED_USD
-from dexgym.tasks import RIGHT_HAND_CLEAN_ID, RIGHT_HAND_ID
+from dexgym.tasks import RIGHT_HAND_CLEAN_ID, RIGHT_HAND_HYBRID125_ID, RIGHT_HAND_ID, RIGHT_HAND_OBS125_ID
+from dexgym.tasks.direct.right_hand_tracking.ablation_cfg import RightHandCleanHybrid125Cfg, RightHandCleanObs125Cfg
 from dexgym.tasks.direct.right_hand_tracking.clean_env_cfg import RightHandCleanTrackingCfg
 from dexgym.tasks.direct.right_hand_tracking.env_cfg import RightHandTrackingDirectCfg
 from dexgym.tasks.direct.right_hand_tracking.logic import tracking_step
-from dexgym.tasks.ppo_cfg import RightHandCleanTrackingPPOCfg, RightHandTrackingPPOCfg
+from dexgym.tasks.ppo_cfg import (
+    RightHandCleanHybrid125PPOCfg,
+    RightHandCleanObs125PPOCfg,
+    RightHandCleanTrackingPPOCfg,
+    RightHandTrackingPPOCfg,
+)
 
 
 def test_right_hand_task_uses_reachable_library_and_twenty_actions():
@@ -72,3 +78,31 @@ def test_clean_task_has_separate_gym_id_and_ppo_log_directory():
     assert spec.kwargs["env_cfg_entry_point"].endswith(":RightHandCleanTrackingCfg")
     assert spec.kwargs["rsl_rl_cfg_entry_point"].endswith(":RightHandCleanTrackingPPOCfg")
     assert RightHandCleanTrackingPPOCfg().experiment_name != RightHandTrackingPPOCfg().experiment_name
+
+
+def test_observation_and_reward_ablations_are_isolated_from_clean_baseline():
+    baseline = RightHandCleanTrackingCfg()
+    obs = RightHandCleanObs125Cfg()
+    hybrid = RightHandCleanHybrid125Cfg()
+    assert (baseline.observation_space, obs.observation_space, hybrid.observation_space) == (105, 125, 125)
+    assert not baseline.include_command_error
+    assert obs.include_command_error and hybrid.include_command_error
+    assert (baseline.reward_dense_scale, baseline.reward_time_cost) == (1.0, 0.01)
+    assert (obs.reward_dense_scale, obs.reward_time_cost) == (1.0, 0.01)
+    assert (hybrid.reward_dense_scale, hybrid.reward_time_cost) == (0.1, 0.05)
+    assert obs.library_path == hybrid.library_path == baseline.library_path
+    assert obs.scene.robot.spawn.usd_path == hybrid.scene.robot.spawn.usd_path == baseline.scene.robot.spawn.usd_path
+    assert obs.sim.dt == hybrid.sim.dt == baseline.sim.dt == 1 / 480
+    for task_id, cfg_name, ppo_name in (
+        (RIGHT_HAND_OBS125_ID, "RightHandCleanObs125Cfg", "RightHandCleanObs125PPOCfg"),
+        (RIGHT_HAND_HYBRID125_ID, "RightHandCleanHybrid125Cfg", "RightHandCleanHybrid125PPOCfg"),
+    ):
+        spec = gym.spec(task_id)
+        assert spec.kwargs["env_cfg_entry_point"].endswith(f":{cfg_name}")
+        assert spec.kwargs["rsl_rl_cfg_entry_point"].endswith(f":{ppo_name}")
+    names = {
+        RightHandCleanTrackingPPOCfg().experiment_name,
+        RightHandCleanObs125PPOCfg().experiment_name,
+        RightHandCleanHybrid125PPOCfg().experiment_name,
+    }
+    assert len(names) == 3

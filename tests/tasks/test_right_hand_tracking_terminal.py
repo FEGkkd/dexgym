@@ -4,10 +4,13 @@ from types import SimpleNamespace
 
 import torch
 from dexgym.tasks.direct.right_hand_tracking.env import RightHandTrackingDirectEnv
+from dexgym.tasks.direct.right_hand_tracking.env_cfg import RightHandTrackingDirectCfg
 
 
 def test_completed_goal_and_stalled_goal_terminate_on_their_triggering_step():
     q = torch.zeros((2, 20))
+    cfg = RightHandTrackingDirectCfg()
+    cfg.goal_tolerance_m = 0.015
     task = SimpleNamespace(
         robot=SimpleNamespace(
             data=SimpleNamespace(
@@ -19,7 +22,7 @@ def test_completed_goal_and_stalled_goal_terminate_on_their_triggering_step():
             lengths=torch.tensor([5]),
             fingertips=lambda _motion_ids, frames: torch.zeros((len(frames), 5, 3)),
         ),
-        cfg=SimpleNamespace(goal_tolerance_m=0.015, goal_dwell_steps=2, subgoal_stride=4, max_goal_steps=45),
+        cfg=cfg,
         joint_limits=torch.tensor([[-1.0, 1.0]] * 20),
         right_ids=list(range(20)),
         motion_ids=torch.zeros(2, dtype=torch.long),

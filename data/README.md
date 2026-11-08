@@ -112,6 +112,15 @@ cap.
 The 480 Hz controller checks, full-library Joint Replay, and PPO comparison
 are in the [clean tracking report](../docs/experiments/hand_only_clean_480_4096_500_s42.md).
 
+Two isolated PPO ablations also use this same clean bank:
+`DexGym-Wuji-Right-Hand-Clean-Obs125-Direct-v0` adds the 20D accumulated
+position-command error to the observation; and
+`DexGym-Wuji-Right-Hand-Clean-Hybrid125-Direct-v0` additionally reduces the
+dense reward coefficient and raises the per-step time cost. Neither variant
+changes the source GRAB files or the clean-bank contents. Their 4096-env,
+500-iteration comparison is in the
+[observation and reward ablation report](../docs/experiments/hand_only_obs_reward_ablation_20261108.md).
+
 On the current local dataset, conversion produced 797 motions and 252,679
 frames with no rejected motions. See the
 [pilot report](../docs/experiments/hand_only_right_pilot.md) for the exact audit

@@ -13,7 +13,7 @@ from dexgym.assets.marvin_wuji.robot_cfg import PACKAGED_KEYFRAMES
 from dexgym.data.motion_bank import MotionBank, advance_goal_frames
 
 from .env_cfg import RightHandTrackingDirectCfg
-from .logic import fingertips_in_wrist_frame, right_hand_joint_indices, tracking_step
+from .logic import build_right_hand_observation, fingertips_in_wrist_frame, right_hand_joint_indices, tracking_step
 
 TIP_DISTAL_BODY_NAMES = (
     "r_thumb_distal",
@@ -89,16 +89,13 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         q = self.robot.data.joint_pos.torch[:, self.right_ids]
         qdot = self.robot.data.joint_vel.torch[:, self.right_ids]
         tips = self._current_tips()
-        policy = torch.cat(
-            (
-                q,
-                qdot,
-                tips.flatten(1),
-                self.goal_tips.flatten(1),
-                (self.goal_tips - tips).flatten(1),
-                self.previous_action,
-            ),
-            dim=-1,
+        policy = build_right_hand_observation(
+            q,
+            qdot,
+            tips,
+            self.goal_tips,
+            self.previous_action,
+            command_q=self.target_q if self.cfg.include_command_error else None,
         )
         return {"policy": policy}
 
@@ -116,6 +113,10 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
             self.action_delta,
             tolerance_m=self.cfg.goal_tolerance_m,
             dwell_steps=self.cfg.goal_dwell_steps,
+            sparse_bonus=self.cfg.reward_sparse_bonus,
+            dense_scale=self.cfg.reward_dense_scale,
+            action_rate_penalty=self.cfg.reward_action_rate_penalty,
+            time_cost=self.cfg.reward_time_cost,
         )
         self.goal_age += 1
         self.goals_reached += reached.long()

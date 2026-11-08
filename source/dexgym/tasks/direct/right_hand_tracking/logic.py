@@ -13,6 +13,28 @@ def right_hand_joint_indices(joint_names: tuple[str, ...] | list[str]) -> list[i
     return [names.index(name) for name in ROBOT_RIGHT_JOINT_NAMES]
 
 
+def build_right_hand_observation(
+    q: torch.Tensor,
+    qdot: torch.Tensor,
+    tips: torch.Tensor,
+    goal_tips: torch.Tensor,
+    previous_action: torch.Tensor,
+    *,
+    command_q: torch.Tensor | None = None,
+) -> torch.Tensor:
+    """Build the original 105D policy input, optionally exposing the PD target gap."""
+    if q.ndim != 2 or q.shape[-1] != 20 or qdot.shape != q.shape or previous_action.shape != q.shape:
+        raise ValueError("Expected matching right-hand joint and action tensors[N,20]")
+    if tips.shape != (len(q), 5, 3) or goal_tips.shape != tips.shape:
+        raise ValueError("Expected matching fingertip tensors[N,5,3]")
+    pieces = [q, qdot, tips.flatten(1), goal_tips.flatten(1), (goal_tips - tips).flatten(1), previous_action]
+    if command_q is not None:
+        if command_q.shape != q.shape:
+            raise ValueError("Expected position command[N,20]")
+        pieces.append(command_q - q)
+    return torch.cat(pieces, dim=-1)
+
+
 def fingertips_in_wrist_frame(
     body_poses_w: torch.Tensor,
     wrist_body_id: int,

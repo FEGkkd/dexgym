@@ -3,10 +3,26 @@
 import torch
 from dexgym.assets.marvin_wuji.robot_cfg import JOINT_ORDER
 from dexgym.tasks.direct.right_hand_tracking.logic import (
+    build_right_hand_observation,
     fingertips_in_wrist_frame,
     right_hand_joint_indices,
     tracking_step,
 )
+
+
+def test_command_error_observation_adds_the_actual_accumulated_target_gap():
+    q = torch.full((2, 20), 0.2)
+    qdot = torch.zeros_like(q)
+    tips = torch.zeros((2, 5, 3))
+    goals = torch.ones_like(tips)
+    previous_action = torch.full_like(q, 0.5)
+    command_q = q + 0.12
+    old = build_right_hand_observation(q, qdot, tips, goals, previous_action)
+    augmented = build_right_hand_observation(q, qdot, tips, goals, previous_action, command_q=command_q)
+    assert old.shape == (2, 105)
+    assert augmented.shape == (2, 125)
+    torch.testing.assert_close(augmented[:, :105], old)
+    torch.testing.assert_close(augmented[:, 105:], command_q - q)
 
 
 def test_sparse_bonus_requires_every_finger_for_two_steps():

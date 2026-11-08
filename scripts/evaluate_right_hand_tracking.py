@@ -6,10 +6,16 @@ from pathlib import Path
 
 import gymnasium as gym
 import torch
-from dexgym.tasks import RIGHT_HAND_CLEAN_ID, RIGHT_HAND_ID
+from dexgym.tasks import RIGHT_HAND_CLEAN_ID, RIGHT_HAND_HYBRID125_ID, RIGHT_HAND_ID, RIGHT_HAND_OBS125_ID
+from dexgym.tasks.direct.right_hand_tracking.ablation_cfg import RightHandCleanHybrid125Cfg, RightHandCleanObs125Cfg
 from dexgym.tasks.direct.right_hand_tracking.clean_env_cfg import RightHandCleanTrackingCfg
 from dexgym.tasks.direct.right_hand_tracking.env_cfg import RightHandTrackingDirectCfg
-from dexgym.tasks.ppo_cfg import RightHandCleanTrackingPPOCfg, RightHandTrackingPPOCfg
+from dexgym.tasks.ppo_cfg import (
+    RightHandCleanHybrid125PPOCfg,
+    RightHandCleanObs125PPOCfg,
+    RightHandCleanTrackingPPOCfg,
+    RightHandTrackingPPOCfg,
+)
 from isaaclab.app import launch_simulation
 from isaaclab.cli import load_external_tasks
 from isaaclab_rl.rsl_rl import RslRlVecEnvWrapper
@@ -26,21 +32,32 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=20261108)
     parser.add_argument("--split", choices=("train", "validation"), default="validation")
     parser.add_argument("--clean", action="store_true", help="Use the independent 480 Hz clean tracking task")
+    parser.add_argument("--variant", choices=("obs125", "hybrid125"), help="Evaluate an isolated clean-task ablation")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     if args.mode == "policy" and (args.checkpoint is None or not args.checkpoint.is_file()):
         parser.error("--mode policy requires an existing --checkpoint")
     if args.num_envs < 1 or args.steps < 1:
         parser.error("--num-envs and --steps must be positive")
+    if args.clean and args.variant:
+        parser.error("Use either --clean or --variant")
 
     load_external_tasks()
-    cfg = RightHandCleanTrackingCfg() if args.clean else RightHandTrackingDirectCfg()
-    task_id = RIGHT_HAND_CLEAN_ID if args.clean else RIGHT_HAND_ID
+    cfg_type, task_id, agent_type = {
+        None: (
+            RightHandCleanTrackingCfg if args.clean else RightHandTrackingDirectCfg,
+            RIGHT_HAND_CLEAN_ID if args.clean else RIGHT_HAND_ID,
+            RightHandCleanTrackingPPOCfg if args.clean else RightHandTrackingPPOCfg,
+        ),
+        "obs125": (RightHandCleanObs125Cfg, RIGHT_HAND_OBS125_ID, RightHandCleanObs125PPOCfg),
+        "hybrid125": (RightHandCleanHybrid125Cfg, RIGHT_HAND_HYBRID125_ID, RightHandCleanHybrid125PPOCfg),
+    }[args.variant]
+    cfg = cfg_type()
     cfg.scene.num_envs = args.num_envs
     cfg.split = args.split
     cfg.seed = args.seed
     cfg.sim.physics = cfg.sim.physics.newton_mjwarp
-    agent_cfg = RightHandCleanTrackingPPOCfg() if args.clean else RightHandTrackingPPOCfg()
+    agent_cfg = agent_type()
     agent_cfg.seed = args.seed
     agent_cfg.device = "cuda:0"
     agent_cfg = handle_deprecated_rsl_rl_cfg(agent_cfg, check_rsl_rl_version())

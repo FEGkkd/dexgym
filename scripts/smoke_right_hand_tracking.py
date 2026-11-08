@@ -4,7 +4,8 @@ import argparse
 
 import gymnasium as gym
 import torch
-from dexgym.tasks import RIGHT_HAND_ID
+from dexgym.tasks import RIGHT_HAND_HYBRID125_ID, RIGHT_HAND_ID, RIGHT_HAND_OBS125_ID
+from dexgym.tasks.direct.right_hand_tracking.ablation_cfg import RightHandCleanHybrid125Cfg, RightHandCleanObs125Cfg
 from dexgym.tasks.direct.right_hand_tracking.env_cfg import RightHandTrackingDirectCfg
 from isaaclab.app import launch_simulation
 from isaaclab.cli import load_external_tasks
@@ -20,10 +21,16 @@ def main() -> None:
     parser.add_argument("--split", choices=("train", "validation"), default="train")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--check-terminal", action="store_true")
+    parser.add_argument("--variant", choices=("obs125", "hybrid125"))
     args = parser.parse_args()
     torch.manual_seed(args.seed)
     load_external_tasks()
-    cfg = RightHandTrackingDirectCfg()
+    cfg_type, task_id = {
+        None: (RightHandTrackingDirectCfg, RIGHT_HAND_ID),
+        "obs125": (RightHandCleanObs125Cfg, RIGHT_HAND_OBS125_ID),
+        "hybrid125": (RightHandCleanHybrid125Cfg, RIGHT_HAND_HYBRID125_ID),
+    }[args.variant]
+    cfg = cfg_type()
     cfg.seed = args.seed
     cfg.scene.num_envs = args.num_envs
     cfg.split = args.split
@@ -35,11 +42,11 @@ def main() -> None:
         cfg.max_goal_steps = args.max_goal_steps
     cfg.sim.physics = cfg.sim.physics.newton_mjwarp
     with launch_simulation(cfg):
-        env = gym.make(RIGHT_HAND_ID, cfg=cfg)
+        env = gym.make(task_id, cfg=cfg)
         try:
             obs, _ = env.reset()
             task = env.unwrapped
-            assert obs["policy"].shape == (args.num_envs, 105)
+            assert obs["policy"].shape == (args.num_envs, cfg.observation_space)
             assert env.action_space.shape[-1] == 20
             start = task.goal_frame - task.cfg.subgoal_stride
             reference = task.bank.fingertips(task.motion_ids, start)
