@@ -231,3 +231,23 @@ first-frame PNG, and JSON provenance/pose-reconstruction report. The reference
 actor's 30-second example was checked with zero palm/cube root-position error.
 Playback uses the bundled nominal visual geometry; it is a visualization of
 recorded simulation, not real camera footage or a new dynamics simulation.
+
+## Live TensorBoard
+
+The running training process writes `metrics.jsonl`. The optional TensorBoard
+mirror imports its existing history and follows new records every five seconds;
+it also imports native checkpoint evaluation results. This does not change the
+optimizer or require restarting training.
+
+```bash
+bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.tensorboard --run-dir /path/to/run --evaluations /path/to/evaluation-root --follow
+tensorboard --logdir /path/to/run/tensorboard --port 6007 --reload_interval 5
+```
+
+Use `world_model/train_loss` and `world_model/holdout_loss` for WM fitting;
+`actor/loss`, `critic/loss`, and `gradients/*` for optimizer diagnostics;
+`train/rotation_error_rad` for collected behavior; and `eval/goals_per_episode`
+for completed-task evaluation. The collection drop fraction is per control step,
+while `eval/drop_fraction_per_episode` is per episode. Actor/Critic curves start
+after the 500-iteration WM warmup. Avoid launching multiple mirror writers into
+the same events directory simultaneously.
