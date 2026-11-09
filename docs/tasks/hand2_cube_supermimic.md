@@ -1,6 +1,11 @@
 # Wuji Hand 2 cube reorientation: native SuperMimic reproduction
 
-Status: native task and optimizer parity validated; learned-policy reproduction is not yet established.
+Status: scene revision 2 is validated; learned-policy reproduction is not yet established.
+
+The initial port omitted the upstream ground plane. The first training run was
+stopped after preserving its 1000-iteration checkpoint. The corrected scene adds
+the ground and matches the full upstream scene options; a clean 4096-environment
+run uses `train_seed42_scene_v2`. Historical results below are explicitly qualified.
 
 The reference is CumulusAlpha/Dex-Supermimic at commit
 `2becb7380fed86171056f9bf4338b2a6a0c14b01`. The task uses the reference
@@ -80,7 +85,7 @@ the shared virtual environment. From the dexgym checkout:
 bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.validate_native --output /tmp/cube_native.json
 bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.validate_algorithm --reference /home/ubuntu/dexgym/artifacts/dex_supermimic_reference --output /tmp/cube_algorithm.json
 bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.smoke --full-config --num-envs 4096 --output /tmp/cube_capacity.json
-bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.train --num-envs 4096 --output /home/ubuntu/dexgym/artifacts/cube_reorient/train_seed42
+bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.train --num-envs 4096 --output /home/ubuntu/dexgym/artifacts/cube_reorient/train_seed42_scene_v2
 bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.evaluate --checkpoint /path/to/model.pt --output /tmp/cube_evaluation.json
 ```
 
@@ -98,7 +103,17 @@ To regenerate bundled MJCF/USD (optional):
 bash scripts/supermimic/hand_s0_host.sh -m dexgym.assets.wuji_hand2_cube.export_assets --importer-root /home/ubuntu/dexgym/.venv/lib/python3.12/site-packages/isaacsim
 ```
 
-## Evidence so far
+## Validation and historical evidence
+
+Authoritative scene-v2 reports: `original_scene_probe.json` (full upstream scene),
+`native_scene_parity.json` (live Warp solver options and actual floor contact),
+`native_with_ground.json` (FK/DR/reset), and `full_config_4096_scene_v2.json`
+(production-size learning chain). All pass. Live solver option differences are zero;
+terrain material differences are float32 rounding. Four dropped cubes contact the
+floor and settle at center height 0.0268714 m.
+
+The earlier reports below predate the ground fix. They remain historical evidence
+for the optimizer and individual interfaces, not a complete scene-fidelity claim.
 
 Machine-readable validation snapshots are committed in
 `docs/experiments/cube_reorient_validation/`. Registration and original hand-task
@@ -128,13 +143,13 @@ Host evidence directory: `/home/ubuntu/dexgym/artifacts/cube_reorient/`.
 
 The first production run uses code `70e4a6a`, 4096 environments, seed 42,
 8000 configured iterations and the reference 500-iteration WM warmup. Host output:
-`/home/ubuntu/dexgym/artifacts/cube_reorient/train_seed42/`. The run is in progress;
-no trained-policy result is claimed.
+`/home/ubuntu/dexgym/artifacts/cube_reorient/train_seed42/`. That initial run is superseded because its scene lacked ground collision. Its
+1000-iteration checkpoint completed only one goal across 256 evaluation episodes.
 
 Training and policy evaluations must be recorded before changing the status above
 or claiming the task has been trained successfully.
 
-## Published-actor diagnostic
+## Published-actor diagnostic (historical scene revision 1)
 
 `evaluate --reference-checkpoint PATH` loads the upstream public Hand 2 actor
 without changing native training. Its released 8000-iteration weights predate the
@@ -156,3 +171,31 @@ The untrained baseline achieves zero goals. This supports functional observation
 action and physical-environment compatibility; differences from the upstream backend
 and the high drop rate still warrant evaluation. Native training remains separate.
 The full result is `docs/experiments/cube_reorient_validation/eval_reference8000_seed123.json`.
+
+## Full-scene audit and correction
+
+The upstream MJLab scene includes a plane at z=0 with friction [1, 0.005, 0.0001],
+condim 3, solref [0.02, 1] and solimp [0.9, 0.95, 0.001, 0.5, 2]. The native
+`ground.usda` now preserves these values and is bundled without external asset URLs.
+The resolved upstream parent scene also keeps disableflags=0; the native task no
+longer applies the child asset's EULERDAMP-disable flag. Both backends use implicitfast.
+
+Compare live Warp options, not only CPU-model metadata: Newton supplies timestep
+when stepping, and MuJoCo Warp clamps the requested 1e-8 solver tolerance to 1e-6.
+The upstream MJLab runtime does the same. The verifier checks relative precision
+for small option values rather than allowing a loose global absolute tolerance.
+
+In a runtime with the pinned reference's MJLab dependencies:
+
+```bash
+python -m dexgym.tasks.direct.hand2_cube_supermimic.probe_reference_scene --reference /path/to/Dex-Supermimic --output /tmp/reference_scene.json
+```
+
+Then in the native runtime:
+
+```bash
+bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.validate_scene --reference-scene /tmp/reference_scene.json --output /tmp/scene_parity.json
+```
+
+The stored probe used MuJoCo Warp 3.12, as did the native runtime. It resolves the
+pinned source's task configuration but does not establish 3.11/3.12 trajectory identity.

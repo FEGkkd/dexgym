@@ -3,7 +3,7 @@
 import json
 
 from isaaclab.actuators import ImplicitActuatorCfg
-from isaaclab.assets import ArticulationCfg, RigidObjectCfg
+from isaaclab.assets import ArticulationCfg, AssetBaseCfg, RigidObjectCfg
 from isaaclab.envs import DirectRLEnvCfg
 from isaaclab.scene import InteractiveSceneCfg
 from isaaclab.sim import SimulationCfg, UsdFileCfg
@@ -27,6 +27,11 @@ JOINT_NAMES = _METADATA["joint_names"]
 
 @configclass
 class Hand2CubeSceneCfg(InteractiveSceneCfg):
+    ground = AssetBaseCfg(
+        prim_path="/World/Ground",
+        collision_group=-1,
+        spawn=UsdFileCfg(usd_path=str(ROOT / "ground.usda")),
+    )
     robot: ArticulationCfg = ArticulationCfg(
         prim_path="{ENV_REGEX_NS}/Hand",
         spawn=UsdFileCfg(
@@ -78,6 +83,7 @@ class Hand2CubePhysicsCfg(PresetCfg):
 
 @configclass
 class Hand2CubeSuperMimicCfg(DirectRLEnvCfg):
+    scene_revision: int = 2
     decimation = 2
     episode_length_s = 50.0
     action_space = 20

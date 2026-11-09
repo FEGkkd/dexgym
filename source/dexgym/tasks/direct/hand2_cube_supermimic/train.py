@@ -58,6 +58,7 @@ def main():
             {
                 "task": HAND2_CUBE_SUPERMIMIC_ID,
                 "reference_sha": REFERENCE_SHA,
+                "scene_revision": cfg.scene_revision,
                 "dexgym_commit": git("rev-parse", "HEAD"),
                 "worktree_status": git("status", "--porcelain"),
                 "num_envs": args.num_envs,

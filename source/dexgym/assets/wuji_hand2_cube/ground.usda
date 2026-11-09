@@ -1,0 +1,33 @@
+#usda 1.0
+(
+    defaultPrim = "Ground"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Ground"
+{
+    def Plane "Collision" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "NewtonCollisionAPI", "MjcCollisionAPI", "MaterialBindingAPI"]
+    )
+    {
+        uniform token axis = "Z"
+        double width = 100
+        double length = 100
+        bool physics:collisionEnabled = 1
+        uniform int mjc:condim = 3
+        uniform double[] mjc:solref = [0.02, 1]
+        uniform double[] mjc:solimp = [0.9, 0.95, 0.001, 0.5, 2]
+        rel material:binding:physics = </Ground/Material>
+    }
+
+    def Material "Material" (
+        prepend apiSchemas = ["PhysicsMaterialAPI", "NewtonMaterialAPI"]
+    )
+    {
+        float physics:dynamicFriction = 1
+        float physics:staticFriction = 1
+        float newton:torsionalFriction = 0.005
+        float newton:rollingFriction = 0.0001
+    }
+}

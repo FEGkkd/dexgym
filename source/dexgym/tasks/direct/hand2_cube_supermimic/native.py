@@ -61,9 +61,8 @@ class NativePhysics:
         self.mdp.force_limit = tensor(ref.actuator_forcerange[:, 1])
         self.mdp.gear = tensor(ref.actuator_gear[:, 0])
         self.native_model = self.solver.mj_model
-        # The asset contributes EULERDAMP; MJLab's scene config selects implicitfast.
-        self.native_model.opt.disableflags |= int(mujoco.mjtDisableBit.mjDSBL_EULERDAMP)
-        self.solver.mjw_model.opt.disableflags |= int(mujoco.mjtDisableBit.mjDSBL_EULERDAMP)
+        # MJLab resolves the scene options after attaching assets. Its parent
+        # scene keeps EULERDAMP enabled (disableflags=0), ignoring the child flag.
         model = self.native_model
         self.joint_ids = [
             next(i for i in range(model.njnt) if model.joint(i).name.endswith("_" + name)) for name in self.joint_names

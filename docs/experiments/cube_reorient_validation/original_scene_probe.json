@@ -1,0 +1,79 @@
+{
+  "ngeom": 77,
+  "nbody": 32,
+  "floors": [
+    {
+      "name": "terrain",
+      "contype": 1,
+      "conaffinity": 1,
+      "friction": [
+        1.0,
+        0.005,
+        0.0001
+      ],
+      "solref": [
+        0.02,
+        1.0
+      ],
+      "solimp": [
+        0.9,
+        0.95,
+        0.001,
+        0.5,
+        2.0
+      ],
+      "condim": 3,
+      "pos": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "quat": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "options": {
+    "disableflags": 0,
+    "enableflags": 0,
+    "integrator": 3,
+    "solver": 2,
+    "iterations": 10,
+    "ls_iterations": 20,
+    "ccd_iterations": 50,
+    "timestep": 0.01,
+    "tolerance": 1e-08,
+    "gravity": [
+      0.0,
+      0.0,
+      -9.81
+    ]
+  },
+  "live_options": {
+    "disableflags": 0,
+    "enableflags": 0,
+    "integrator": 3,
+    "solver": 2,
+    "iterations": 10,
+    "ls_iterations": 20,
+    "ccd_iterations": 50,
+    "timestep": [
+      0.009999999776482582
+    ],
+    "tolerance": [
+      9.999999974752427e-07
+    ],
+    "gravity": [
+      [
+        0.0,
+        0.0,
+        -9.8100004196167
+      ]
+    ]
+  },
+  "reference_sha": "2becb7380fed86171056f9bf4338b2a6a0c14b01",
+  "mujoco_version": "3.12.0"
+}

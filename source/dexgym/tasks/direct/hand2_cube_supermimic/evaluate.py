@@ -124,6 +124,7 @@ def main():
             total_steps = sum(r["steps"] for r in records)
             result = dict(
                 reference_sha=REFERENCE_SHA,
+                evaluated_scene_revision=cfg.scene_revision,
                 checkpoint=str(checkpoint_path) if checkpoint_path else None,
                 checkpoint_sha256=checkpoint_hash,
                 checkpoint_kind="upstream_diagnostic"
