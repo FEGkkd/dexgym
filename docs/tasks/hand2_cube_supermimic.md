@@ -199,3 +199,35 @@ bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_superm
 
 The stored probe used MuJoCo Warp 3.12, as did the native runtime. It resolves the
 pinned source's task configuration but does not establish 3.11/3.12 trajectory identity.
+
+## Scene-v2 baseline and published actor
+
+Under identical seed-123, 64-environment, four-episode evaluation settings:
+
+| Policy | Goals/episode | Episodes with >=1 goal | Episodes with >=3 goals | Drop fraction | Mean angle (rad) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Untrained | 0 | 0 | 0 | 0.0234375 | 2.22934 |
+| Published upstream actor | 6.50391 | 0.863281 | 0.644531 | 0.660156 | 0.834614 |
+
+These scene-v2 results supersede the earlier diagnostic numbers. They demonstrate
+that the native environment supports the reference actor's continuous reorientation;
+they are not results of the native training run, which remains in progress.
+
+## Record and render native policy behavior
+
+Evaluation can optionally record the first four environment lanes, retaining their
+joint positions, actual palm/cube poses, targets, episode indices and goal counts.
+Recording does not alter actions or task rules. The renderer replays those poses
+without running another physics rollout. Overlay text identifies checkpoint type,
+scene revision, time, environment, episode, goals and target error.
+
+```bash
+bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.evaluate --checkpoint /path/to/model.pt --output /tmp/eval.json --trace-output /tmp/trace.npz
+bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.render_trace --trace /tmp/trace.npz --output /tmp/rollout.mp4 --env-index 0 --seconds 30
+```
+
+Rendering requires EGL, Pillow and an `ffmpeg` executable. It produces an MP4,
+first-frame PNG, and JSON provenance/pose-reconstruction report. The reference
+actor's 30-second example was checked with zero palm/cube root-position error.
+Playback uses the bundled nominal visual geometry; it is a visualization of
+recorded simulation, not real camera footage or a new dynamics simulation.

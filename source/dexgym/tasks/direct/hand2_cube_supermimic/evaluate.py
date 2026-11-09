@@ -33,9 +33,15 @@ def main():
     parser.add_argument("--episodes-per-env", type=int, default=4)
     parser.add_argument("--seed", type=int, default=123)
     parser.add_argument("--no-push", action="store_true", help="Report a separate evaluation without interval pushes")
+    parser.add_argument("--trace-output", type=Path, help="Optional recorded native poses for offline playback")
+    parser.add_argument("--trace-envs", type=int, default=4)
+    parser.add_argument("--trace-stride", type=int, default=2)
+    parser.add_argument("--trace-seconds", type=float, default=60.0)
     args = parser.parse_args()
     if args.num_envs < 1 or args.episodes_per_env < 1:
         parser.error("Environment and episode counts must be positive")
+    if args.trace_envs < 1 or args.trace_stride < 1 or args.trace_seconds <= 0:
+        parser.error("Trace environment count, stride and duration must be positive")
     cfg = Hand2CubeSuperMimicCfg()
     cfg.seed = args.seed
     cfg.scene.num_envs = args.num_envs
@@ -85,8 +91,35 @@ def main():
             returns = torch.zeros_like(successes)
             records = []
             steps = 0
+            trace = []
+            trace_n = min(args.trace_envs, env.num_envs)
             with torch.inference_mode():
                 while bool((completed < args.episodes_per_env).any()):
+                    if (
+                        args.trace_output
+                        and steps % args.trace_stride == 0
+                        and steps * env.step_dt < args.trace_seconds
+                    ):
+                        hand = env.robot.data.body_link_pose_w.torch[:trace_n, env.physics.palm_body_id].clone()
+                        cube = env.cube.data.root_link_pose_w.torch[:trace_n].clone()
+                        hand[:, :3] -= env.scene.env_origins[:trace_n]
+                        cube[:, :3] -= env.scene.env_origins[:trace_n]
+                        trace.append(
+                            torch.cat(
+                                (
+                                    env.robot.data.joint_pos.torch[:trace_n],
+                                    hand,
+                                    cube,
+                                    env.memory["goal"][:trace_n],
+                                    env.memory["count"][:trace_n],
+                                    completed[:trace_n, None],
+                                    (completed[:trace_n, None] < args.episodes_per_env),
+                                ),
+                                -1,
+                            )
+                            .cpu()
+                            .numpy()
+                        )
                     obs_dict, reward, terminated, truncated, _ = env.step(actor(obs))
                     obs = obs_dict["policy"]
                     cap = env.transition
@@ -151,6 +184,18 @@ def main():
                 mean_angle_rad=sum(r["mean_angle_rad"] * r["steps"] for r in records) / total_steps,
                 records=records,
             )
+            if args.trace_output:
+                args.trace_output.parent.mkdir(parents=True, exist_ok=True)
+                with args.trace_output.open("wb") as stream:
+                    np.savez_compressed(
+                        stream,
+                        frames=np.stack(trace),
+                        frame_dt=env.step_dt * args.trace_stride,
+                        joint_names=np.asarray(env.physics.joint_names),
+                        metadata=json.dumps({k: v for k, v in result.items() if k != "records"}),
+                        columns="q[20],hand_pose_xyzw[7],cube_pose_xyzw[7],goal_palm_rotation[9],success_count,episode,active",
+                    )
+                result["trace_path"] = str(args.trace_output)
             args.output.write_text(json.dumps(result, indent=2))
             print(json.dumps({k: v for k, v in result.items() if k != "records"}), flush=True)
         finally:
