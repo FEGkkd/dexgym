@@ -46,12 +46,18 @@ class Hand21Task:
                           self.goal_landmarks(task_state).flatten(1), task_state.data,
                           task_state.frame[:, None].float()), -1)
 
-    def exact_reward(self, next_state, old_task_state):
+    def exact_reward(self, next_state, old_task_state, *, fingertip_errors=None):
         old = HandGoals.unpack(old_task_state.data)
         landmarks = self.robot.fk.landmarks(next_state[:, :20])
         errors, _, reached, _ = teledexter_hand_dwell(
             landmarks[:, 0], self.goal(next_state, old_task_state).reshape(-1, 5, 3),
             old.dwell, old.dwell_required, tolerance_m=self.cfg.goal_tolerance_m)
+        if fingertip_errors is not None:
+            # True physics measurements are authoritative at a discontinuous
+            # threshold: sub-micron FK rounding can change the sparse indicator.
+            errors = fingertip_errors
+            reached = ((errors < self.cfg.goal_tolerance_m).all(-1)
+                       & (old.dwell + 1 >= old.dwell_required))
         return paper_hand_reward(errors, reached, old.goal_span, landmarks,
                                  self.goal_landmarks(old_task_state),
                                  dense_scale=self.cfg.reward_dense_scale, time_cost=self.cfg.reward_time_cost)

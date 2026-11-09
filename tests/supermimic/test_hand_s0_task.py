@@ -68,3 +68,15 @@ def test_learned_reach_is_differentiable_but_real_success_remains_exact():
     assert step.next_task_state.frame.tolist() == [1, 1]
     assert task.critic_features(state, ts).shape == (2, 162)
     assert task.termination_features(state, ts).shape == (2, 26)
+
+
+def test_physics_threshold_labels_survive_submicron_fk_rounding():
+    robot, task, goals, ts, state = setup()
+    errors = torch.full((2, 5), .015 - 1e-7)
+    actual = task.exact_reward(state, ts, fingertip_errors=errors)
+    errors_outside = torch.full((2, 5), .015 + 1e-7)
+    missed = task.exact_reward(state, ts, fingertip_errors=errors_outside)
+    assert torch.all(actual - missed > 8.)
+    expected = paper_hand_reward(errors, torch.ones(2, dtype=torch.bool), goals.goal_span,
+                                 robot.fk.landmarks(state[:, :20]), task.goal_landmarks(ts))
+    torch.testing.assert_close(actual, expected)

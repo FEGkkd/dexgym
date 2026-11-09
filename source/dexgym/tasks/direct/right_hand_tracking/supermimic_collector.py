@@ -38,9 +38,17 @@ class HandNewtonCollector:
             raise RuntimeError("Hand physical/model command mismatch")
         if not torch.equal(task.hard_termination(next_state, arrival), terminated):
             raise RuntimeError("Hand physical/model terminal mismatch")
-        exact_reward = task.exact_reward(next_state, old)
+        modeled_errors = torch.linalg.vector_norm(robot.fk(next_state[:, :20]) -
+                           task.goal(next_state, old).reshape(-1, 5, 3), dim=-1)
+        if not torch.allclose(modeled_errors, env.last_hand_errors, atol=1e-5, rtol=1e-4):
+            raise RuntimeError('Hand physical/model fingertip geometry mismatch')
+        exact_reward = task.exact_reward(next_state, old, fingertip_errors=env.last_hand_errors)
         if not torch.allclose(exact_reward, reward, atol=2e-3, rtol=2e-3):
-            raise RuntimeError(f"Hand reward mismatch: {float((exact_reward - reward).abs().max())}")
+            bad = (exact_reward - reward).abs().argmax()
+            raise RuntimeError(f"Hand reward mismatch: {float((exact_reward - reward).abs().max())}; "
+                f"lane={int(bad)} physical_errors={env.last_hand_errors[bad].tolist()} "
+                f"model_errors={modeled_errors[bad].tolist()} old={old.data[bad].tolist()} "
+                f"physical_reached={bool(env.last_hand_reached[bad])}")
         transition = TransitionBatch(
             state, action.clone(), previous, command, next_state, history,
             robot.dynamics_context(env).clone(), old, arrival, terminated.clone(), truncated.clone(),

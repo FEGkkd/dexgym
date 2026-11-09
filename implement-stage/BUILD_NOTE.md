@@ -28,3 +28,6 @@ Existing venv process-exit SIGBUS under diagnosis; stdlib preflight is independe
 
 ## F2 physical task bridge — passed
 239 tests passed in 19.92 s. Newton smoke: 16x64=1024 transitions, 30 terminal, 21 goals, FK max6.055631160961639e-7 m; pre-reset capture, exact rewards/commands/termination and finite WM8 update passed. Raw artifacts /home/ubuntu/dexgym/artifacts/hand_s0/newton_smoke.json and f2_suite.log. F3 training and F4 precision pending.
+
+## F3 initial actual training — running
+Core suite236 passed in19.87s. Pilot v1 completed150 iterations /38400 real transitions /300 WM updates /50 Actor BPTT32 updates /1000 Critic updates, exit0, zero nonfinite updates. 32-step held-out-lane prediction mean fingertip error1.867 mm; this is model prediction error, not target tracking error. Saved artifacts/hand_s0/pilot_v1/model_150.pt. Pilot v2 continues1000 iterations with fresh physics/replay and preserved curriculum. Final policy accuracy still unassessed.
