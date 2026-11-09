@@ -11,11 +11,9 @@ from dexgym.data.wuji_retarget import TIP_SITE_NAMES
 from .env_cfg import WujiHand21TeleDexterCfg
 from .logic import (
     build_right_hand_observation,
-    curriculum_stride_upper,
     fingertips_in_wrist_frame,
     residual_joint_target,
     right_hand_joint_indices,
-    sample_goal_span,
     teledexter_hand_reward,
 )
 from .subgoals import HandGoals, advance_hand_goals, unsafe_hand_state
@@ -46,7 +44,7 @@ class Hand21PPOEnv(DirectRLEnv):
         self.full_target = self.home_q[None].repeat(self.num_envs, 1)
         self.target_q = self.full_target[:, self.right_ids].clone()
         self.joint_limits = self.robot.data.joint_pos_limits.torch[0, self.right_ids].clone()
-        self.bank = MotionBank(cfg.library_path, split=cfg.split, device=self.device, min_frames=cfg.subgoal_stride + 2)
+        self.bank = MotionBank(cfg.library_path, split=cfg.split, device=self.device, min_frames=cfg.subgoal_stride + 1)
         self.motion_ids = torch.zeros(self.num_envs, dtype=torch.long, device=self.device)
         self.goal_frame = torch.zeros(self.num_envs, dtype=torch.long, device=self.device)
         self.goal_tips = torch.zeros((self.num_envs, 5, 3), device=self.device)
@@ -128,12 +126,10 @@ class Hand21PPOEnv(DirectRLEnv):
         timeout = self.episode_length_buf >= self.max_episode_length
         self.extras["log"] = {
             "mean_tip_error_m": result.errors.mean(),
-            "goal_reach_fraction": result.reached.float().mean(),
-            "mean_goals_reached": self.goals_reached.float().mean(),
-            "cross_trajectory_fraction": result.crossed.float().mean(),
-            "mean_goal_span_frames": self.goal_span.float().mean(),
-            "curriculum_stride_upper": result.stride_upper.float().mean(),
-            "mean_fail_frames": self.fail_frames.float().mean(),
+            "frame_hit_fraction": result.reached.float().mean(),
+            "mean_frames_hit": self.goals_reached.float().mean(),
+            "reference_stride_frames": result.stride_upper.float().mean(),
+            "mean_consecutive_misses": self.fail_frames.float().mean(),
         }
         return (failed, timeout)
 
@@ -157,22 +153,12 @@ class Hand21PPOEnv(DirectRLEnv):
         self.full_target[env_ids] = q
         self.target_q[env_ids] = q[:, self.right_ids]
         self.motion_ids[env_ids] = motion_ids
-        upper = curriculum_stride_upper(
-            self.curriculum_steps[env_ids],
-            minimum=self.cfg.curriculum_stride_min,
-            maximum=self.cfg.curriculum_stride_max,
-            anneal_steps=self.cfg.curriculum_anneal_steps,
-            sigma_min=self.cfg.curriculum_sigma_min,
-        )
-        span = sample_goal_span(upper)
-        goal = torch.minimum(start + span, self.bank.lengths[motion_ids] - 1)
-        self.goal_span[env_ids] = goal - start
+        goal = start + 1
+        self.goal_span[env_ids] = 1
         self.goal_frame[env_ids] = goal
-        self.fail_budget[env_ids] = self.cfg.failure_tolerance_scale * self.goal_span[env_ids]
+        self.fail_budget[env_ids] = self.cfg.max_goal_steps
         self.fail_frames[env_ids] = 0
-        self.dwell_required[env_ids] = torch.randint(
-            self.cfg.dwell_min_steps, self.cfg.dwell_max_steps + 1, (count,), device=self.device
-        )
+        self.dwell_required[env_ids] = 1
         self.goal_tips[env_ids] = self.bank.fingertips(motion_ids, self.goal_frame[env_ids])
         self.dwell[env_ids] = 0
         self.goal_age[env_ids] = 0

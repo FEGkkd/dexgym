@@ -175,9 +175,10 @@ def test_current_hand21_teledexter_ppo_contract_uses_15mm():
     assert cfg.library_path.endswith("hand21_right_geometry_feasible/manifest.json")
     assert cfg.teledexter_style and cfg.goal_tolerance_m == 0.015
     assert (cfg.observation_space, cfg.action_space) == (125, 20)
-    assert (cfg.dwell_min_steps, cfg.dwell_max_steps) == (5, 15)
-    assert (cfg.curriculum_stride_min, cfg.curriculum_stride_max) == (20, 40)
-    assert (cfg.cross_trajectory_probability, cfg.failure_tolerance_scale) == (0.1, 1.5)
+    assert (cfg.dwell_min_steps, cfg.dwell_max_steps) == (1, 1)
+    assert (cfg.curriculum_stride_min, cfg.curriculum_stride_max) == (1, 1)
+    assert cfg.cross_trajectory_probability == 0.0
+    assert "frame_tracking" in ppo.experiment_name
     assert ppo.actor.distribution_cfg.class_name == "dexgym.algorithms.action_distributions:TanhGaussianDistribution"
     assert ppo.actor.distribution_cfg.init_std == 1.0
     assert ppo.algorithm.entropy_coef == 0.005

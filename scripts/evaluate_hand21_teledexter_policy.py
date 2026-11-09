@@ -62,7 +62,9 @@ def main():
                     return sampler(count, first_fraction=first_fraction)
                 used = True
                 ids = torch.arange(count, device=task.device) % task.bank.motion_count
-                choices = torch.minimum(torch.ceil(task.bank.lengths[ids] * first_fraction).long(), task.bank.lengths[ids] - 1)
+                choices = torch.minimum(
+                    torch.ceil(task.bank.lengths[ids] * first_fraction).long(), task.bank.lengths[ids] - 1
+                )
                 frames = torch.floor(torch.rand(count, device=task.device) * choices).long()
                 return ids, frames
 
@@ -85,7 +87,8 @@ def main():
                 return terminated, truncated
 
             task._get_dones = audited_get_dones
-            counts = torch.zeros((41, 4), dtype=torch.long, device=task.device)
+            span_bins = cfg.curriculum_stride_max + 1
+            counts = torch.zeros((span_bins, 4), dtype=torch.long, device=task.device)
             reward_sum = torch.zeros((), device=task.device)
             mean_error_sum = torch.zeros((), device=task.device)
             max_error_sum = torch.zeros((), device=task.device)
@@ -110,7 +113,7 @@ def main():
                     other = decision["terminated"] & ~reached & ~timeout
                     cutoff = decision["truncated"] & ~reached & ~decision["terminated"]
                     for i, mask in enumerate((reached, timeout, other, cutoff)):
-                        counts[:, i] += torch.bincount(decision["span"][mask], minlength=41)
+                        counts[:, i] += torch.bincount(decision["span"][mask], minlength=span_bins)
                     reward_sum += reward.sum()
                     mean_error_sum += decision["errors"].mean()
                     max_error_sum += decision["errors"].max(dim=-1).values.mean()
@@ -126,10 +129,14 @@ def main():
             total = [sum(row[i] for row in cpu) for i in range(4)]
             result = dict(mode=args.mode, checkpoint=str(args.checkpoint) if args.checkpoint else None,
                 split=args.split, seed=args.seed, num_envs=args.num_envs, steps=args.steps,
-                goal_tolerance_mm=cfg.goal_tolerance_m*1000, curriculum_upper=40,
+                goal_tolerance_mm=cfg.goal_tolerance_m*1000,
+                curriculum_upper=cfg.curriculum_stride_max,
                 totals=dict(zip(("reached", "budget_timeout", "other_termination", "episode_truncation"), total)),
-                by_span={str(i): dict(zip(("reached", "budget_timeout", "other_termination", "episode_truncation"), row))
-                         for i, row in enumerate(cpu)},
+                frame_hit_fraction=total[0]/(args.num_envs*args.steps),
+                by_span={
+                    str(i): dict(zip(("reached", "budget_timeout", "other_termination", "episode_truncation"), row))
+                    for i, row in enumerate(cpu)
+                },
                 mean_reward_per_step=float(reward_sum.item()/(args.num_envs*args.steps)),
                 mean_tip_error_mm=float(mean_error_sum.item()*1000/args.steps),
                 mean_max_tip_error_mm=float(max_error_sum.item()*1000/args.steps),

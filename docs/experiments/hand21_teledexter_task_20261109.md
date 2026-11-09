@@ -1,8 +1,11 @@
 # Hand-only TELEDEXTER task on Wuji Hand 2.1 (2026-11-09)
 
-This report records the original 20 mm task and its diagnostics. The active
-task now uses a 15 mm fingertip threshold for the
-[training run stopped at iteration 3812](hand21_teledexter_15mm_4096_50k_run_20261109.md).
+This is a historical report of the random-span, variable-dwell task and its
+diagnostics. The active Hand 2.1 PPO task now tracks every consecutive 30 Hz
+GRAB frame, as described in the
+[frame-tracking task report](hand21_frame_tracking_task_20261109.md). The prior
+15 mm [training run stopped at iteration 3812](hand21_teledexter_15mm_4096_50k_run_20261109.md)
+used the older random-span task.
 
 ## Active task and data gate
 

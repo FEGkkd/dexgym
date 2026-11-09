@@ -1,10 +1,10 @@
-"""One shared discrete TELEDEXTER goal transition for physics and imagination."""
+"""One-step-per-frame reference transition for Hand 2.1 PPO."""
 
 from dataclasses import dataclass, fields
 
 import torch
 
-from .logic import curriculum_stride_upper, sample_goal_span, teledexter_hand_dwell, update_failure_count
+from .logic import teledexter_hand_dwell, update_failure_count
 
 
 @dataclass
@@ -57,59 +57,35 @@ class GoalAdvance:
 
 
 def advance_hand_goals(current_tips, old: HandGoals, bank, cfg) -> GoalAdvance:
-    """Score the old goal and sample its successor only after a successful hold.
-
-    No tensors in ``old`` are mutated. Reference switches do not reset a physical
-    episode. Random draws intentionally retain the original PPO task's ordering.
-    """
+    """Score the active frame, then advance one reference frame regardless of error."""
     goal_tips = bank.fingertips(old.motion_ids, old.goal_frame)
-    errors, within, reached, next_dwell = teledexter_hand_dwell(
-        current_tips, goal_tips, old.dwell, old.dwell_required, tolerance_m=cfg.goal_tolerance_m
+    errors, within, _, _ = teledexter_hand_dwell(
+        current_tips, goal_tips, torch.zeros_like(old.dwell), torch.ones_like(old.dwell_required),
+        tolerance_m=cfg.goal_tolerance_m,
     )
-    upper = curriculum_stride_upper(
-        old.curriculum_steps,
-        minimum=cfg.curriculum_stride_min,
-        maximum=cfg.curriculum_stride_max,
-        anneal_steps=cfg.curriculum_anneal_steps,
-        sigma_min=cfg.curriculum_sigma_min,
-    )
-    count, device = len(current_tips), current_tips.device
+    reached = within
     lengths = bank.lengths[old.motion_ids]
     at_end = old.goal_frame >= lengths - 1
-    wants_switch = reached & ((torch.rand(count, device=device) < cfg.cross_trajectory_probability) | at_end)
     crossed = torch.zeros_like(reached)
-    motion, frame, span, budget = (
-        old.motion_ids.clone(),
-        old.goal_frame.clone(),
-        old.goal_span.clone(),
-        old.fail_budget.clone(),
-    )
-    if wants_switch.any():
-        candidates, available = bank.sample_other_at_frame(old.motion_ids[wants_switch], old.goal_frame[wants_switch])
-        motion[wants_switch], crossed[wants_switch] = candidates, available
-    span = torch.where(crossed, torch.zeros_like(span), span)
-    budget = torch.where(crossed, cfg.cross_trajectory_failure_budget, budget)
-    forward = reached & ~crossed & ~at_end
-    if forward.any():
-        frame[forward] = torch.minimum(old.goal_frame[forward] + sample_goal_span(upper[forward]), lengths[forward] - 1)
-        span[forward] = frame[forward] - old.goal_frame[forward]
-        budget[forward] = cfg.failure_tolerance_scale * span[forward]
+    frame = torch.minimum(old.goal_frame + 1, lengths - 1)
     failures = update_failure_count(old.fail_frames, within, reached)
-    sampled_dwell = torch.randint(cfg.dwell_min_steps, cfg.dwell_max_steps + 1, (count,), device=device)
     goals = HandGoals(
-        motion,
+        old.motion_ids.clone(),
         frame,
-        span,
-        torch.where(reached, 0, next_dwell),
-        torch.where(reached, sampled_dwell, old.dwell_required),
+        torch.ones_like(old.goal_span),
+        torch.zeros_like(old.dwell),
+        torch.ones_like(old.dwell_required),
         failures,
-        budget,
+        torch.full_like(old.fail_budget, cfg.max_goal_steps),
         old.curriculum_steps + 1,
-        torch.where(reached, 0, old.goal_age + 1),
+        torch.zeros_like(old.goal_age),
         old.goals_reached + reached.long(),
-        old.completed | (reached & at_end & ~crossed),
+        old.completed | at_end,
     )
-    return GoalAdvance(goals, errors, within, reached, crossed, failures > old.fail_budget, upper)
+    return GoalAdvance(
+        goals, errors, within, reached, crossed, failures > old.fail_budget,
+        torch.ones_like(old.goal_span),
+    )
 
 
 def unsafe_hand_state(q, qdot, limits):

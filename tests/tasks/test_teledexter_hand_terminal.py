@@ -1,4 +1,4 @@
-"""Paper-style failure budgets and cross-trajectory switches act on the current transition."""
+"""Per-frame Hand 2.1 rewards and terminals use the current reference frame."""
 
 from types import SimpleNamespace
 
@@ -7,9 +7,8 @@ from dexgym.tasks.direct.hand21_ppo.env import Hand21PPOEnv
 from dexgym.tasks.direct.hand21_ppo.env_cfg import WujiHand21TeleDexterCfg
 
 
-def _task(*, cross_probability: float) -> SimpleNamespace:
+def _task() -> SimpleNamespace:
     cfg = WujiHand21TeleDexterCfg()
-    cfg.cross_trajectory_probability = cross_probability
     q = torch.zeros((2, 20))
     return SimpleNamespace(
         cfg=cfg,
@@ -29,9 +28,9 @@ def _task(*, cross_probability: float) -> SimpleNamespace:
         goal_span=torch.ones(2, dtype=torch.long),
         goal_tips=torch.zeros((2, 5, 3)),
         dwell=torch.zeros(2, dtype=torch.long),
-        dwell_required=torch.full((2,), 5, dtype=torch.long),
+        dwell_required=torch.ones(2, dtype=torch.long),
         fail_frames=torch.zeros(2, dtype=torch.long),
-        fail_budget=torch.full((2,), 1.5),
+        fail_budget=torch.full((2,), 45.0),
         curriculum_steps=torch.zeros(2, dtype=torch.long),
         goal_age=torch.zeros(2, dtype=torch.long),
         goals_reached=torch.zeros(2, dtype=torch.long),
@@ -47,44 +46,42 @@ def _task(*, cross_probability: float) -> SimpleNamespace:
 
 
 def test_failure_budget_terminates_on_the_frame_that_exceeds_it():
-    task = _task(cross_probability=0.0)
-    task.fail_frames[0] = 1
+    task = _task()
+    task.fail_frames[:] = torch.tensor([45, 44])
     current = torch.zeros((2, 5, 3))
-    current[0, 0, 0] = 0.03
+    current[:, 0, 0] = 0.03
     task._current_tips = lambda: current
     terminated, truncated = Hand21PPOEnv._get_dones_teledexter(task)
     assert terminated.tolist() == [True, False]
     assert not truncated.any()
-    assert task.fail_frames.tolist() == [2, 0]
+    assert task.fail_frames.tolist() == [46, 45]
 
 
-def test_cross_switch_keeps_frame_and_grants_paper_failure_budget():
-    task = _task(cross_probability=1.0)
-    task.dwell[:] = 4
+def test_each_successful_frame_advances_without_random_cross_switch():
+    task = _task()
     task._current_tips = lambda: torch.zeros((2, 5, 3))
     terminated, _ = Hand21PPOEnv._get_dones_teledexter(task)
     assert not terminated.any()
-    assert task.last_crossed.tolist() == [True, True]
-    assert task.motion_ids.tolist() == [1, 1]
-    assert task.goal_frame.tolist() == [10, 10]
-    assert task.fail_budget.tolist() == [300.0, 300.0]
+    assert task.last_crossed.tolist() == [False, False]
+    assert task.motion_ids.tolist() == [0, 0]
+    assert task.goal_frame.tolist() == [11, 11]
+    assert task.fail_budget.tolist() == [45.0, 45.0]
     assert torch.all(task._step_reward > 0)
-    assert torch.all((task.dwell_required >= 5) & (task.dwell_required <= 15))
+    assert task.dwell_required.tolist() == [1, 1]
 
 
-def test_sparse_reward_belongs_to_goal_completed_before_switch():
-    task = _task(cross_probability=1.0)
-    task.goal_span[:] = 4
-    task.dwell[:] = task.dwell_required - 1
+def test_sparse_reward_belongs_to_scored_frame_before_advance():
+    task = _task()
+    task.bank.fingertips = lambda ids, frames: torch.where(
+        (frames == 10)[:, None, None], torch.zeros((len(ids), 5, 3)), torch.full((len(ids), 5, 3), 0.03)
+    )
     task._current_tips = lambda: torch.zeros((2, 5, 3))
 
     Hand21PPOEnv._get_dones_teledexter(task)
-    torch.testing.assert_close(task._step_reward, torch.full((2,), 33.75))
-    assert task.last_crossed.tolist() == [True, True]
-    assert task.goal_span.tolist() == [0, 0]
+    torch.testing.assert_close(task._step_reward, torch.full((2,), 22.5))
+    assert task.goal_frame.tolist() == [11, 11]
+    assert task.goal_span.tolist() == [1, 1]
 
-    task.cfg.cross_trajectory_probability = 0.0
-    task.dwell[:] = task.dwell_required - 1
     Hand21PPOEnv._get_dones_teledexter(task)
-    torch.testing.assert_close(task._step_reward, torch.full((2,), 375.0))
-    assert task.last_crossed.tolist() == [False, False]
+    assert torch.all(task._step_reward < 22.5)
+    assert task.last_reached.tolist() == [False, False]

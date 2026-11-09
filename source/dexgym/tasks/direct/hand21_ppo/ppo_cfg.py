@@ -30,7 +30,7 @@ class WujiHand21TeleDexterPPOCfg(RslRlOnPolicyRunnerCfg):
         desired_kl=0.01,
         max_grad_norm=1.0,
     )
-    experiment_name = "dexgym_wuji_hand21_teledexter_15mm_tanh_std1_entropy005"
+    experiment_name = "dexgym_wuji_hand21_frame_tracking_15mm_tanh_std1_entropy005"
     max_iterations = 50000
     save_interval = 50
     actor.distribution_cfg = RslRlMLPModelCfg.GaussianDistributionCfg(init_std=1.0)

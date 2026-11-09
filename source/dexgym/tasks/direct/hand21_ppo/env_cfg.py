@@ -41,9 +41,9 @@ class WujiHand21TeleDexterCfg(DirectRLEnvCfg):
     scene: Hand21SceneCfg = Hand21SceneCfg(num_envs=16, env_spacing=2.0)
     library_path: str = str(REPO_ROOT / "data/processed/hand21_right_geometry_feasible/manifest.json")
     split: str = "train"
-    subgoal_stride: int = 4
+    subgoal_stride: int = 1
     goal_tolerance_m = 0.015
-    goal_dwell_steps: int = 2
+    goal_dwell_steps: int = 1
     max_goal_steps: int = 45
     action_delta_rad = 0.1
     action_deadzone = 0.1
@@ -53,13 +53,11 @@ class WujiHand21TeleDexterCfg(DirectRLEnvCfg):
     reward_time_cost = 0.1
     reward_action_rate_penalty = 0.0
     teledexter_style = True
-    curriculum_stride_min: int = 20
-    curriculum_stride_max: int = 40
-    curriculum_anneal_steps: int = 25600
+    curriculum_stride_min: int = 1
+    curriculum_stride_max: int = 1
+    curriculum_anneal_steps: int = 1
     curriculum_sigma_min: float = 0.7
     reference_start_fraction: float = 0.9
-    dwell_min_steps: int = 5
-    dwell_max_steps: int = 15
-    cross_trajectory_probability: float = 0.1
-    failure_tolerance_scale: float = 1.5
-    cross_trajectory_failure_budget: int = 300
+    dwell_min_steps: int = 1
+    dwell_max_steps: int = 1
+    cross_trajectory_probability: float = 0.0

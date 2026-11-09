@@ -35,7 +35,7 @@ def test_changes_to_ppo_rules_do_not_propagate_to_supermimic(monkeypatch):
     assert ppo_rules.advance_hand_goals is not sm_rules.advance_hand_goals
     assert ppo_logic.sample_goal_span is not sm_logic.sample_goal_span
     monkeypatch.setattr(ppo_env, "advance_hand_goals", None)
-    monkeypatch.setattr(ppo_rules, "sample_goal_span", None)
+    monkeypatch.setattr(ppo_rules, "teledexter_hand_dwell", None)
     assert sm_env.advance_hand_goals is sm_rules.advance_hand_goals
     assert sm_rules.sample_goal_span is sm_logic.sample_goal_span
 

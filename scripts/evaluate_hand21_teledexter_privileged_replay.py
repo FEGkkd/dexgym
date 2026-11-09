@@ -1,4 +1,4 @@
-"""Audit privileged q_ref control under the current Hand 2.1 TELEDEXTER task."""
+"""Historical dwell/span audit for the earlier Hand 2.1 TELEDEXTER task."""
 
 import argparse
 import csv
@@ -10,8 +10,8 @@ import gymnasium as gym
 import torch
 from dexgym.algorithms.goal_replay_audit import GoalReplayAudit
 from dexgym.tasks import HAND21_TELEDEXTER_ID
-from dexgym.tasks.direct.hand21_ppo.logic import action_toward_joint_target
 from dexgym.tasks.direct.hand21_ppo.env_cfg import WujiHand21TeleDexterCfg
+from dexgym.tasks.direct.hand21_ppo.logic import action_toward_joint_target
 from isaaclab.app import launch_simulation
 from isaaclab.cli import load_external_tasks
 
@@ -64,6 +64,11 @@ def main() -> None:
     torch.manual_seed(args.seed)
     load_external_tasks()
     cfg = WujiHand21TeleDexterCfg()
+    if cfg.curriculum_stride_min == cfg.curriculum_stride_max == 1:
+        parser.error(
+            "This historical dwell/span audit does not apply to per-frame tracking; "
+            "use evaluate_hand21_teledexter_policy.py --mode privileged instead"
+        )
     cfg.scene.num_envs = args.num_envs
     cfg.split = args.split
     cfg.seed = args.seed

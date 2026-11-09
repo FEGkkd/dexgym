@@ -21,7 +21,7 @@ algorithm capability, **not a claim that every task or policy has converged**.
 | `DexGym-Joint-Tracking-Direct-v0` | Cartpole joint target | Isaac Lab DirectRLEnv, RSL-RL PPO example. |
 | `DexGym-Joint-Tracking-Manager-v0` | Cartpole joint target | Isaac Lab ManagerBasedRLEnv, RSL-RL PPO example. |
 | `DexGym-Wuji-Right-Hand-Tracking-Direct-v0` | Right WujiHand2 five-fingertip sequence tracking | TeleDexter-inspired hand-only DirectRLEnv; GRAB retargeting and a bounded PPO workflow check passed. No convergence claim. |
-| `DexGym-Wuji-Hand21-TeleDexter-Direct-v0` | Official Wuji Hand 2.1 right-hand GRAB tracking | Current PPO task: 15 mm fingertips, paper-style curriculum, variable dwell, span-weighted reward, failure budget and cross-trajectory switching; Tanh Gaussian with latent Std 1.0, entropy 0.005 and deadzone residual control. |
+| `DexGym-Wuji-Hand21-TeleDexter-Direct-v0` | Official Wuji Hand 2.1 right-hand GRAB tracking | Current PPO task: one target per consecutive 30 Hz frame, 15 mm all-finger threshold, 45-frame consecutive miss budget; Tanh Gaussian with latent Std 1.0, entropy 0.005 and deadzone residual control. |
 
 | `DexGym-Wuji-Hand21-TeleDexter-SuperMimic-Direct-v0` | Standalone 20-DoF right hand, object-free GRAB fingertip goals | Registered Hand S0 task; WM8/BPTT32, 15 mm subgoals, bounded architecture validation. Policy accuracy remains unvalidated. |
 
@@ -92,8 +92,10 @@ remains available for historical comparisons. See the
 for the exact task IDs, compatibility note, and smoke results.
 The [deadzone action report](docs/experiments/hand21_deadzone_action_20261109.md)
 records the current action equation and its validation.
-The [current TELEDEXTER task report](docs/experiments/hand21_teledexter_task_20261109.md)
-records the full-library Joint Replay and the new training rules. The
+The [current frame-tracking task report](docs/experiments/hand21_frame_tracking_task_20261109.md)
+defines the active one-frame target schedule and Newton smoke check. The
+[historical TELEDEXTER task report](docs/experiments/hand21_teledexter_task_20261109.md)
+records the full-library Joint Replay and earlier random-span training rules. The
 [current-rule privileged replay](docs/experiments/hand21_teledexter_privileged_replay_current_rules_20261109.md)
 reports target timing and failure by exact goal span under the historical 20 mm setting. The
 [15 mm training record](docs/experiments/hand21_teledexter_15mm_4096_50k_run_20261109.md)
