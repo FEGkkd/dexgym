@@ -21,6 +21,7 @@ from dexgym.tasks.direct.hand21_supermimic.supermimic_collector import HandNewto
 
 from .supermimic_cfg import load_hand_configuration
 from .supermimic_runner import components, physics_contract, source_revision
+from .supermimic_schedule import HandSuperMimicTrainer, HandTrainerConfig
 
 
 def main():
@@ -47,7 +48,11 @@ def main():
             robot, task, modules = components(env, experiment)
             collector = HandNewtonCollector(env, robot, task, action_noise_std=experiment["action_noise_std"])
             replay = SchemaReplay(experiment["replay_capacity_steps"], env.num_envs, robot.spec, task.spec, env.device)
-            lr = experiment["lr"]
+            v3 = experiment["version"] == "hand21_s0_v3"
+            trainer_config = (
+                HandTrainerConfig(**experiment["trainer"]) if v3 else TrainerConfig(**experiment["trainer"])
+            )
+            lr = trainer_config.lr if v3 else experiment["lr"]
             optimizers = build_optimizers(
                 modules,
                 world_lr=lr,
@@ -56,7 +61,8 @@ def main():
                 termination_mode=task.termination_mode,
                 actor_betas=(0.9, 0.95),
             )
-            trainer = SuperMimicTrainer(
+            trainer_type = HandSuperMimicTrainer if v3 else SuperMimicTrainer
+            trainer = trainer_type(
                 collector=collector,
                 replay=replay,
                 robot=robot,
@@ -64,7 +70,7 @@ def main():
                 modules=modules,
                 optimizers=optimizers,
                 trust_evaluator=None,
-                config=TrainerConfig(**experiment["trainer"]),
+                config=trainer_config,
                 train_env_range=(0, env.num_envs),
                 validation_env_range=None,
             )
@@ -84,15 +90,17 @@ def main():
             iterations = experiment["iterations"] - trainer.iteration if args.iterations is None else args.iterations
             if iterations < 1 or trainer.iteration + iterations > experiment["iterations"]:
                 raise ValueError("Training segment exceeds configured budget")
+            prefill_steps = trainer.prefill() if v3 and (resume is None or resume["requires_fresh_collection"]) else 0
             with (args.output / "iterations.jsonl").open("a") as log:
                 for _ in range(iterations):
-                    fraction = trainer.iteration / experiment["iterations"]
-                    scale = experiment["cosine_floor"] + (1 - experiment["cosine_floor"]) * 0.5 * (
-                        1 + math.cos(math.pi * fraction)
-                    )
-                    for optimizer in optimizers.values():
-                        for group in optimizer.param_groups:
-                            group["lr"] = lr * scale
+                    if not v3:
+                        fraction = trainer.iteration / experiment["iterations"]
+                        scale = experiment["cosine_floor"] + (1 - experiment["cosine_floor"]) * 0.5 * (
+                            1 + math.cos(math.pi * fraction)
+                        )
+                        for optimizer in optimizers.values():
+                            for group in optimizer.param_groups:
+                                group["lr"] = lr * scale
                     result = trainer.run_iteration()
                     result.pop("trust")
                     result["imagination_horizon"] = result.pop("allowed_horizon")
@@ -102,7 +110,7 @@ def main():
                             "tracking": collector.last_metrics,
                             "event_model": modules.world_model.last_event_metrics,
                             "elapsed_seconds": time.monotonic() - started,
-                            "lr": lr * scale,
+                            "lr": result["lr"] if v3 else lr * scale,
                         }
                     )
                     log.write(json.dumps(result) + "\n")
@@ -128,6 +136,8 @@ def main():
                 "gym_task_id": args.task,
                 "iteration": trainer.iteration,
                 "counts": trainer.counts,
+                "prefill_steps": prefill_steps,
+                "experiment_version": experiment["version"],
                 "actor_update_schedule": trainer.config.actor_update_schedule,
                 "imagination_horizon": trainer.config.max_imagination_horizon,
                 "replay_bytes": replay.bytes_allocated,

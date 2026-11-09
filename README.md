@@ -41,8 +41,9 @@ The standalone hand has two independent task packages:
   its own `env.py`, `env_cfg.py`, `subgoals.py`, `logic.py`, plus model, collector,
   training and evaluation modules.
 
-The Hand S0 v2 trainer updates the Actor and Critic every iteration at a fixed
-32-step horizon, using all training environments and zero world-model warmup.
+The Hand S0 v3 trainer uses a Dex-style direct Actor, UTD=0.4 and fixed BPTT32.
+It collects 64 initial steps and runs 500 WM-only iterations before Actor/Critic
+updates. See the [alignment report](docs/supermimic/hand_s0_dex_alignment_20261109.md).
 
 Each package owns its executable environment and rules. The configurations
 independently inherit from Isaac Lab's `DirectRLEnvCfg`. Generic algorithm

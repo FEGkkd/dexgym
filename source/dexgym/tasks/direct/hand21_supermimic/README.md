@@ -38,16 +38,29 @@ and checkpoint machinery remain in `dexgym.algorithms.supermimic.core`.
 No task module imports implementation from `scripts` or a repository-root config
 directory. Scripts with the old Hand S0 names are thin compatibility launchers.
 
-Actor input is a ten-step history of 125-dimensional proprioception/current-goal
-observations plus the current five fingertip positions (15 values). It sees no
-reference joint angles or future reference frames. The Critic may use privileged
-reference landmarks. The world model learns from real pre-reset transitions;
-Actor and Critic update on fixed 32-step model rollouts each iteration after
-the world-model update.
-All environment lanes contribute to training. Validation subjects remain reserved
-for policy evaluation.
-The v2 hand experiment removes prediction-error gating, its thresholds and
-world-model warmup.
+The v3 direct Actor consumes ten 125-dimensional observation frames and the
+current 15-dimensional fingertip goal, concatenated into a 1265-dimensional input.
+It has no separate goal encoder and sees no future reference frames. Its hidden
+layers are ELU MLP (512, 256, 128), with output weights orthogonally initialized
+at gain 0.01 and zero bias. The adapter applies tanh exactly once in both physics
+and imagination. The Critic uses ELU MLP (512, 512, 256, 128) with its existing
+162-dimensional privileged features. The world model uses (2048, 2048, 2048)
+with LayerNorm/SiLU. Existing hand normalization and reward/termination heads remain.
+
+The hand-local `supermimic_schedule.py` owns v3 training scheduling. The packaged
+`agents/hand_s0.json` sets UTD=0.4 (2,3 physical steps alternating), 64 physical
+steps of initial replay collection, and 500 complete WM-only iterations. Each
+iteration performs 10 WM updates of 2048 windows. Iteration 501 starts Actor
+updates with 1024 imagined rollouts of 32 steps, followed by 5 Critic epochs of
+4 minibatches. The 500-iteration delay is fixed, never based on model error.
+All environment lanes contribute to training; GRAB validation subjects remain
+reserved for policy evaluation. The default number of environments remains 256.
+
+Learning-rate decay is independent of the segment and total training lengths:
+`trainer.lr_decay_iters=250000`, then a constant `trainer.lr_final_ratio=0.03`
+floor, starting from `trainer.lr=2e-4`. `trainer.wm_only_iters` counts optimizer
+iterations, whereas `trainer.warmup_steps` counts vectorized physical collection
+steps. Precollection does not advance the optimizer iteration counter.
 
 ## Entry points
 
@@ -96,8 +109,14 @@ and immediately resumes the fixed-horizon update schedule. It is not a bitwise
 continuation of physical trajectories.
 This integration establishes software readiness, not a converged policy or real-robot performance.
 
-Legacy v1 experiment JSON is migrated to v2 with a warning. Resuming a gated checkpoint
-records the schedule changes in `trainer_config_migration`; other configuration and model
-contracts remain strict. New logs use `imagination_horizon=32` and contain no trust-gate metrics.
+The changed architecture makes v3 checkpoints incompatible with v1/v2 weights;
+start v3 training from scratch. An explicit `--config` pointing to the packaged
+`agents/hand_s0_v2.json` retains the historical v2 architecture and no-warmup
+schedule for old checkpoint evaluation/resume. Legacy v1 JSON still migrates to
+v2 with a warning, not to v3. New v3 checkpoints bind the UTD, WM-only duration,
+precollection and learning-rate schedule in the strict trainer configuration.
+On fresh-physics resume, 64 new steps refill replay; the restored iteration
+preserves the 2/3-step collection phase and does not restart the 500-iteration wait.
 
-Current v2 checks are recorded in the [gate-removal report](../../../../../docs/supermimic/hand_s0_no_actor_gate_20261109.md).
+The bounded v3 checks and exact scope are recorded in the
+[Dex alignment report](../../../../../docs/supermimic/hand_s0_dex_alignment_20261109.md).

@@ -3,10 +3,12 @@
 import subprocess
 from pathlib import Path
 
-from dexgym.algorithms.supermimic.core.models import NetworkFactory
+from dexgym.algorithms.supermimic.core.dynamics_contract import world_model_dynamics_signature
+from dexgym.algorithms.supermimic.core.models import NetworkFactory, NetworkModules, TaskTerminationHead
 from dexgym.algorithms.supermimic.core.specs import NetworkSpec
 
 from .supermimic_model import HandWorldModel
+from .supermimic_networks import HandCritic, HandDirectActor
 from .supermimic_robot import Hand21DynamicsAdapter
 from .supermimic_task import Hand21Task
 
@@ -18,10 +20,20 @@ def components(env, experiment):
     for key in ("world_hidden", "goal_hidden", "actor_hidden", "critic_hidden", "termination_hidden"):
         network_fields[key] = tuple(network_fields[key])
     network = NetworkSpec(**network_fields)
-    modules = NetworkFactory.build(robot.spec, task.spec, network, robot_adapter=robot)
-    dynamics_signature = modules.world_model.dynamics_signature
-    modules.world_model = HandWorldModel(robot.spec, network, task)
-    modules.world_model.dynamics_signature = dynamics_signature
+    if experiment["version"] == "hand21_s0_v3":
+        world = HandWorldModel(robot.spec, network, task)
+        world.dynamics_signature = world_model_dynamics_signature(robot, network)
+        modules = NetworkModules(
+            world,
+            HandDirectActor(robot.spec, task.spec, network),
+            HandCritic(task.spec, network),
+            TaskTerminationHead(robot.spec, task.spec, network),
+        )
+    else:
+        modules = NetworkFactory.build(robot.spec, task.spec, network, robot_adapter=robot)
+        dynamics_signature = modules.world_model.dynamics_signature
+        modules.world_model = HandWorldModel(robot.spec, network, task)
+        modules.world_model.dynamics_signature = dynamics_signature
     for module in (modules.world_model, modules.actor, modules.critic, modules.termination):
         module.to(env.device)
     return robot, task, modules
