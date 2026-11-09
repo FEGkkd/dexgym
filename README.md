@@ -21,7 +21,7 @@ algorithm capability, **not a claim that every task or policy has converged**.
 | `DexGym-Joint-Tracking-Direct-v0` | Cartpole joint target | Isaac Lab DirectRLEnv, RSL-RL PPO example. |
 | `DexGym-Joint-Tracking-Manager-v0` | Cartpole joint target | Isaac Lab ManagerBasedRLEnv, RSL-RL PPO example. |
 | `DexGym-Wuji-Right-Hand-Tracking-Direct-v0` | Right WujiHand2 five-fingertip sequence tracking | TeleDexter-inspired hand-only DirectRLEnv; GRAB retargeting and a bounded PPO workflow check passed. No convergence claim. |
-| `DexGym-Wuji-Hand21-TeleDexter-Direct-v0` | Official Wuji Hand 2.1 right-hand GRAB tracking | Current PPO task: 20 mm fingertips, paper-style curriculum, variable dwell, span-weighted reward, failure budget and cross-trajectory switching. |
+| `DexGym-Wuji-Hand21-TeleDexter-Direct-v0` | Official Wuji Hand 2.1 right-hand GRAB tracking | Current PPO task: 20 mm fingertips, paper-style curriculum, variable dwell, span-weighted reward, failure budget and cross-trajectory switching; Tanh Gaussian with latent Std 1.0, entropy 0.005 and deadzone residual control. |
 
 The Cartpole examples use PPO. **SuperMimic does not use PPO.** The SuperMimic Marvin
 environment simulates all 54 DoF at 500 Hz, controls only 14 arm joints at

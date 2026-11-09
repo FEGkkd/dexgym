@@ -66,9 +66,11 @@ Clean task; the new task uses the cumulative failure budget above.
 
 ## PPO and validation status
 
-The active RSL-RL PPO config uses a Gaussian actor with `init_std=1.0`,
-`entropy_coef=0.005`, 32 rollout steps, and a separate
-`dexgym_wuji_hand21_teledexter_20mm` experiment directory. The old PPO
+The active RSL-RL PPO config uses a **Tanh Gaussian** actor with latent
+`init_std=1.0`, `entropy_coef=0.005`, 32 rollout steps, and the existing
+0.1-rad/0.1-threshold residual deadzone. Tanh bounds sampled actions within
+`[-1, 1]` before the environment's safety clamp. The experiment directory is
+`dexgym_wuji_hand21_teledexter_20mm_tanh_std1_entropy005`. The old PPO
 configs are no longer attached to Gym task IDs.
 
 The new task passed unit tests for the schedule, sampled span, variable
@@ -77,8 +79,10 @@ valid cross-trajectory indexing. Newton smoke runs reached 80 goals with
 the normal 0.1 switch probability in eight environments over 120 steps;
 with switch probability forced to one, 56/56 reached goals switched to a
 different segment at the same frame. A 4,096-environment one-step check
-passed, and a 16-environment one-iteration PPO workflow completed 512
-environment steps with initial action standard deviation 1.00. This is a
+passed. A 16-environment, one-iteration PPO check with the requested Tanh
+Gaussian configuration completed 512 environment steps; the reported latent
+action standard deviation was 1.00, and the entropy estimate was finite.
+This is a
 functional check; no large-scale PPO learning result is claimed.
 
 Local smoke and PPO logs are under `artifacts/hand21/` and are not committed.
@@ -89,7 +93,7 @@ The active task can be launched for a future 4,096-environment PPO run with:
 PYTHONPATH=source isaaclab train --rl_library rsl_rl \
   --task DexGym-Wuji-Hand21-TeleDexter-Direct-v0 \
   --num_envs 4096 --max_iterations 500 --seed 42 \
-  --run_name hand21_teledexter_20mm_s42 physics=newton_mjwarp
+  --run_name hand21_tanh_std1_entropy005_s42 physics=newton_mjwarp
 ```
 
 This command is documented for the next training stage; only the one-iteration

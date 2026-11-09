@@ -178,5 +178,6 @@ def test_current_hand21_teledexter_is_the_only_trainable_right_hand_task():
     assert (cfg.dwell_min_steps, cfg.dwell_max_steps) == (5, 15)
     assert (cfg.curriculum_stride_min, cfg.curriculum_stride_max) == (20, 40)
     assert (cfg.cross_trajectory_probability, cfg.failure_tolerance_scale) == (0.1, 1.5)
+    assert ppo.actor.distribution_cfg.class_name == "dexgym.algorithms.action_distributions:TanhGaussianDistribution"
     assert ppo.actor.distribution_cfg.init_std == 1.0
     assert ppo.algorithm.entropy_coef == 0.005

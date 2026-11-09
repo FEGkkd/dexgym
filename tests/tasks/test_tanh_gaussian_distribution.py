@@ -4,7 +4,11 @@ from dataclasses import asdict
 from importlib import import_module
 
 import torch
-from dexgym.tasks.ppo_cfg import RightHandCleanHybrid125BetaPPOCfg, RightHandCleanHybrid125TanhGaussianPPOCfg
+from dexgym.tasks.ppo_cfg import (
+    RightHandCleanHybrid125BetaPPOCfg,
+    RightHandCleanHybrid125TanhGaussianPPOCfg,
+    WujiHand21TeleDexterPPOCfg,
+)
 from rsl_rl.models import MLPModel
 from tensordict import TensorDict
 
@@ -68,3 +72,23 @@ def test_rsl_rl_actor_builds_and_samples_both_bounded_pilot_distributions():
         assert torch.isfinite(actor.output_entropy).all()
         if cfg_class is RightHandCleanHybrid125BetaPPOCfg:
             assert torch.allclose(actor.output_std.mean(), torch.tensor(0.3), atol=0.01)
+
+
+def test_current_hand21_actor_uses_tanh_actions_with_unit_latent_std_and_finite_entropy():
+    cfg = WujiHand21TeleDexterPPOCfg()
+    obs = TensorDict({"policy": torch.randn(128, 125)}, batch_size=[128])
+    actor = MLPModel(
+        obs,
+        {"actor": ["policy"]},
+        "actor",
+        20,
+        hidden_dims=[16],
+        activation="elu",
+        distribution_cfg=asdict(cfg.actor.distribution_cfg),
+    )
+    action = actor(obs, stochastic_output=True)
+    assert (action.abs() <= 1.0).all()
+    torch.testing.assert_close(actor.output_std.mean(), torch.tensor(1.0), atol=1e-6, rtol=0)
+    assert torch.isfinite(actor.get_output_log_prob(action)).all()
+    assert torch.isfinite(actor.output_entropy).all()
+    assert cfg.algorithm.entropy_coef == 0.005
