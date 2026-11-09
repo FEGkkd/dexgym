@@ -48,3 +48,26 @@ native learning remains unproven (one completed goal across 256 episodes at
 iteration 2000). Continue the scheduled 4000/8000 evaluations. If the run fails,
 these verified version differences are candidates for controlled comparison,
 not established causes of failure or permission to introduce new mechanisms.
+
+## Environment-count accounting
+
+The engine implements UTD 0.4 as alternating two and three vectorized simulator
+steps per iteration. Thus the mean number of individual real transitions is
+`num_envs / 0.4`, not a constant independent of environment count.
+
+| Nominal quantity after WM warmup | Reference 1024 envs | Native 4096 envs |
+| --- | ---: | ---: |
+| Real transitions collected per iteration | 2560 | 10240 |
+| WM sampled windows per iteration | 20480 | 20480 |
+| WM supervised timepoints / real transition | 64 | 16 |
+| Actor start states per policy update | 1024 | 1024 |
+| Imagined timepoints / real transition | 12.8 | 3.2 |
+
+These are configured sample counts before terminal/validity masks, with all
+collected environments in the denominator. They are not measurements of unique
+sample reuse; replay windows can overlap and the WM excludes held-out lanes.
+The fourfold relative difference remains. Retaining identical per-update batches
+and vector-step UTD therefore retains the source algorithm's scheduling but not
+its update density per individual transition. This is a known consequence of
+the requested 4096-environment setting, not proof that it caused poor learning.
+The current 8000-iteration run is unchanged so its complete outcome can be assessed.
