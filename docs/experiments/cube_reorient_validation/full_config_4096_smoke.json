@@ -1,0 +1,80 @@
+{
+  "passed": true,
+  "trained_policy": false,
+  "steps": 64,
+  "num_envs": 4096,
+  "timing_seconds": {
+    "collect": 5.5208040389698,
+    "wm": 8.646760833042208,
+    "policy": 24.416605495964177
+  },
+  "recipe": {
+    "seed": 42,
+    "max_iterations": 8000,
+    "buffer_steps": 1000,
+    "warmup_steps": 64,
+    "utd": 0.4,
+    "wm_only_iters": 500,
+    "wm_window": 8,
+    "wm_failure_frac": 0.25,
+    "wm_failure_horizon": 16,
+    "final_state_weight": 1.0,
+    "contact_weight": 0.1,
+    "wm_batches": 10,
+    "wm_batch": 2048,
+    "wm_hidden": [
+      2048,
+      2048,
+      2048
+    ],
+    "pi_batch": 1024,
+    "horizon": 32,
+    "critic_epochs": 5,
+    "critic_minibatches": 4,
+    "gamma": 0.99,
+    "lam": 0.95,
+    "lr": 0.0002,
+    "lr_decay_iters": 250000,
+    "lr_final_ratio": 0.03,
+    "action_noise": 0.1,
+    "failure_warmup_iters": 300,
+    "failure_head": true,
+    "failure_clip": 0.1,
+    "amp": true,
+    "compile": true,
+    "compile_policy": true,
+    "save_interval": 1000,
+    "log_interval": 50,
+    "holdout_fraction": 0.1
+  },
+  "stats": {
+    "reward": -0.08860298991203308,
+    "drop_rate": 0.00026702880859375,
+    "rot_error": 2.2063560485839844,
+    "wm_loss": 281.01568603515625,
+    "failure_loss": 0.6891515254974365,
+    "state_loss": 36.50417709350586,
+    "contact_digit_loss": 6.50126314163208,
+    "actor_loss": 88.29264831542969,
+    "critic_loss": 5258.4951171875,
+    "survival": 0.9840022325515747,
+    "holdout/wm_loss": 37.4098014831543,
+    "holdout/failure_loss": 0.645712673664093,
+    "holdout/state_loss": 3.9462056159973145,
+    "holdout/contact_digit_loss": 7.374521255493164
+  },
+  "gradients": {
+    "wm": 553.50146484375,
+    "fail_head": 0.7381062507629395,
+    "actor": 105.86512756347656,
+    "critic": 507.69842529296875
+  },
+  "dimensions": {
+    "state": 58,
+    "actor": 207,
+    "critic": 211,
+    "contact": 32,
+    "wm_input": 133
+  },
+  "peak_cuda_bytes": 12063504896
+}

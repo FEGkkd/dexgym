@@ -100,6 +100,10 @@ bash scripts/supermimic/hand_s0_host.sh -m dexgym.assets.wuji_hand2_cube.export_
 
 ## Evidence so far
 
+Machine-readable validation snapshots are committed in
+`docs/experiments/cube_reorient_validation/`. Registration and original hand-task
+regression checks: 7 passed.
+
 Host evidence directory: `/home/ubuntu/dexgym/artifacts/cube_reorient/`.
 
 - `native_contract_rebuilt.json`: 16 environments, 240 steps with reset and pushes;
