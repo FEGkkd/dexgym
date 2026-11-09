@@ -33,16 +33,16 @@ def test_packaged_default_is_not_shared_mutable_state():
     assert second["trainer"]["max_imagination_horizon"] == 32
 
 
-def test_json_override_and_invalid_lane_split(tmp_path):
+def test_json_override_and_invalid_environment_count(tmp_path):
     config = default_experiment()
     config["num_envs"] = 16
     path = tmp_path / "experiment.json"
     path.write_text(json.dumps(config))
     _, loaded = load_hand_configuration(override=path)
     assert loaded["num_envs"] == 16
-    config["train_env_fraction"] = 1.0
+    config["num_envs"] = 0
     path.write_text(json.dumps(config))
-    with pytest.raises(ValueError, match="lanes"):
+    with pytest.raises(ValueError, match="num_envs"):
         load_hand_configuration(override=path)
 
 

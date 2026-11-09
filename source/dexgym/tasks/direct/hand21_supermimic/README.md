@@ -28,12 +28,12 @@ establish exact human joint-angle reproduction or continuous teleoperation quali
 | Standalone robot state, controls and differentiable FK | `supermimic_robot.py`, `hand_kinematics.py` |
 | Actor/Critic inputs, reward and termination | `supermimic_task.py` |
 | World model and supervised reach event head | `supermimic_model.py` |
-| Pre-reset transition collection and model trust | `supermimic_collector.py`, `supermimic_trust.py` |
+| Pre-reset transition collection | `supermimic_collector.py` |
 | Registered experiment configuration | `supermimic_cfg.py`, `agents/hand_s0.json` |
 | Component construction and checkpoint physics contract | `supermimic_runner.py` |
 | Training, evaluation, smoke and data preflight | `supermimic_train.py`, `supermimic_evaluate.py`, `supermimic_smoke.py`, `supermimic_preflight.py` |
 
-The generic replay, WM8 optimizer, BPTT32 Actor, TD(lambda) Critic, trust gating
+The generic replay, WM8 optimizer, BPTT32 Actor, TD(lambda) Critic,
 and checkpoint machinery remain in `dexgym.algorithms.supermimic.core`.
 No task module imports implementation from `scripts` or a repository-root config
 directory. Scripts with the old Hand S0 names are thin compatibility launchers.
@@ -42,9 +42,12 @@ Actor input is a ten-step history of 125-dimensional proprioception/current-goal
 observations plus the current five fingertip positions (15 values). It sees no
 reference joint angles or future reference frames. The Critic may use privileged
 reference landmarks. The world model learns from real pre-reset transitions;
-Actor updates use model rollouts only after held-out model-validation lanes pass
-the trust gate. Those lanes use training subjects; policy evaluation uses separate
-validation subjects.
+Actor and Critic update on fixed 32-step model rollouts each iteration after
+the world-model update.
+All environment lanes contribute to training. Validation subjects remain reserved
+for policy evaluation.
+The v2 hand experiment removes prediction-error gating, its thresholds and
+world-model warmup.
 
 ## Entry points
 
@@ -89,5 +92,12 @@ and [integration checks](../../../../../docs/supermimic/hand_s0_task_integration
 
 Checkpoint module names and executable contracts are preserved. Resume restores
 model/optimizer state and curriculum progress, then starts fresh physics/replay
-and revalidates model trust. It is not a bitwise continuation of physical trajectories.
+and immediately resumes the fixed-horizon update schedule. It is not a bitwise
+continuation of physical trajectories.
 This integration establishes software readiness, not a converged policy or real-robot performance.
+
+Legacy v1 experiment JSON is migrated to v2 with a warning. Resuming a gated checkpoint
+records the schedule changes in `trainer_config_migration`; other configuration and model
+contracts remain strict. New logs use `imagination_horizon=32` and contain no trust-gate metrics.
+
+Current v2 checks are recorded in the [gate-removal report](../../../../../docs/supermimic/hand_s0_no_actor_gate_20261109.md).

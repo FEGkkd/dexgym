@@ -1,5 +1,8 @@
 # Hand S0 task-package integration — 2026-11-09
 
+> Historical v1 evidence below includes trust-gated updates. The current standalone
+> Hand S0 v2 removes this gate; see the [current checks](hand_s0_no_actor_gate_20261109.md).
+
 本次将已验证的独立单手 SuperMimic 链路正式整合进 DexGym 任务体系。
 验收范围是代码组织、任务注册、实际执行与 checkpoint 兼容性；未启动大规模训练，
 也不宣称策略已达到遥操作精度要求。

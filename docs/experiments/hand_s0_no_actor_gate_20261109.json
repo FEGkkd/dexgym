@@ -1,0 +1,176 @@
+{
+  "scope": "Hand S0 v2 removes Actor Trust Gating",
+  "regression": {
+    "passed": 285,
+    "warnings": 35,
+    "seconds": 19.89
+  },
+  "fresh": {
+    "gym_task_id": "DexGym-Wuji-Hand21-TeleDexter-SuperMimic-Direct-v0",
+    "iteration": 8,
+    "counts": {
+      "real_transitions": 2048,
+      "actor_transitions": 2048,
+      "reference_pd_transitions": 0,
+      "boundary_probe_transitions": 0,
+      "world_updates": 16,
+      "actor_updates": 8,
+      "critic_updates": 160,
+      "nonfinite_world": 0,
+      "nonfinite_actor": 0,
+      "nonfinite_critic": 0
+    },
+    "actor_update_schedule": "every_iteration",
+    "imagination_horizon": 32,
+    "replay_bytes": 1504266048,
+    "elapsed_seconds": 15.014127058966551,
+    "checkpoint": "/home/ubuntu/dexgym/artifacts/hand_s0/no_gate/fresh/model_8.pt",
+    "resume": null,
+    "policy_accuracy_passed": null,
+    "split": "train",
+    "robot": {
+      "robot_id": "wuji_hand21_standalone",
+      "state_dim": 60,
+      "action_dim": 20,
+      "delta_dim": 40,
+      "context_dim": 0,
+      "action_schema": "latent_tanh_deadzone01_delta01_hand21_v1",
+      "state_schema": "q20_qd20_qcmd20_v1",
+      "control_dt": 0.03333333333333333,
+      "physics_dt": 0.0020833333333333333,
+      "asset_sha256": "01bb56ab5144545b5cd9e9202381e7859f4e78a28dfe57132f67a31d753aeabd",
+      "command_dim": 20,
+      "joint_order": [
+        "r_thumb_cmc_flex",
+        "r_thumb_cmc_abd",
+        "r_thumb_mcp",
+        "r_thumb_ip",
+        "r_index_finger_mcp_flex",
+        "r_index_finger_mcp_abd",
+        "r_index_finger_pip",
+        "r_index_finger_dip",
+        "r_middle_finger_mcp_flex",
+        "r_middle_finger_mcp_abd",
+        "r_middle_finger_pip",
+        "r_middle_finger_dip",
+        "r_ring_finger_mcp_flex",
+        "r_ring_finger_mcp_abd",
+        "r_ring_finger_pip",
+        "r_ring_finger_dip",
+        "r_pinky_mcp_flex",
+        "r_pinky_mcp_abd",
+        "r_pinky_pip",
+        "r_pinky_dip"
+      ],
+      "context_evolution": "episode_constant"
+    },
+    "task": {
+      "task_id": "hand21_teledexter_s0_v1",
+      "observation_dim": 125,
+      "history_length": 10,
+      "goal_dim": 15,
+      "goal_horizon": 1,
+      "task_data_dim": 11,
+      "critic_dim": 162,
+      "goal_schema": "current_5_tip_xyz_wrist_v1",
+      "observation_schema": "ppo125_bounded_previous_action_v1",
+      "critic_schema": "state_landmarks_goal_landmarks_counters_clock_v1",
+      "termination_feature_dim": 26
+    }
+  },
+  "resume": {
+    "gym_task_id": "DexGym-Wuji-Hand21-TeleDexter-SuperMimic-Direct-v0",
+    "iteration": 502,
+    "counts": {
+      "real_transitions": 128512,
+      "actor_transitions": 128512,
+      "reference_pd_transitions": 0,
+      "boundary_probe_transitions": 0,
+      "world_updates": 1004,
+      "actor_updates": 352,
+      "critic_updates": 7040,
+      "nonfinite_world": 0,
+      "nonfinite_actor": 0,
+      "nonfinite_critic": 0
+    },
+    "actor_update_schedule": "every_iteration",
+    "imagination_horizon": 32,
+    "replay_bytes": 1504266048,
+    "elapsed_seconds": 6.583193824975751,
+    "checkpoint": "/home/ubuntu/dexgym/artifacts/hand_s0/no_gate/resume/model_502.pt",
+    "resume": {
+      "trainer_config_migration": {
+        "actor_update_schedule": {
+          "previous": "model_trust",
+          "current": "every_iteration"
+        },
+        "world_warmup_updates": {
+          "previous": 200,
+          "current": 0
+        },
+        "validation_batch": {
+          "previous": 128,
+          "current": 64
+        }
+      },
+      "replay_restored": false,
+      "requires_fresh_collection": true,
+      "resume_mode": "fresh_physics",
+      "git_commit": "3d521c127e711c6507d772c4913515ab7c185f04",
+      "schema": "supermimic_core_v2",
+      "restored_curriculum_steps": 500
+    },
+    "policy_accuracy_passed": null,
+    "split": "train",
+    "robot": {
+      "robot_id": "wuji_hand21_standalone",
+      "state_dim": 60,
+      "action_dim": 20,
+      "delta_dim": 40,
+      "context_dim": 0,
+      "action_schema": "latent_tanh_deadzone01_delta01_hand21_v1",
+      "state_schema": "q20_qd20_qcmd20_v1",
+      "control_dt": 0.03333333333333333,
+      "physics_dt": 0.0020833333333333333,
+      "asset_sha256": "01bb56ab5144545b5cd9e9202381e7859f4e78a28dfe57132f67a31d753aeabd",
+      "command_dim": 20,
+      "joint_order": [
+        "r_thumb_cmc_flex",
+        "r_thumb_cmc_abd",
+        "r_thumb_mcp",
+        "r_thumb_ip",
+        "r_index_finger_mcp_flex",
+        "r_index_finger_mcp_abd",
+        "r_index_finger_pip",
+        "r_index_finger_dip",
+        "r_middle_finger_mcp_flex",
+        "r_middle_finger_mcp_abd",
+        "r_middle_finger_pip",
+        "r_middle_finger_dip",
+        "r_ring_finger_mcp_flex",
+        "r_ring_finger_mcp_abd",
+        "r_ring_finger_pip",
+        "r_ring_finger_dip",
+        "r_pinky_mcp_flex",
+        "r_pinky_mcp_abd",
+        "r_pinky_pip",
+        "r_pinky_dip"
+      ],
+      "context_evolution": "episode_constant"
+    },
+    "task": {
+      "task_id": "hand21_teledexter_s0_v1",
+      "observation_dim": 125,
+      "history_length": 10,
+      "goal_dim": 15,
+      "goal_horizon": 1,
+      "task_data_dim": 11,
+      "critic_dim": 162,
+      "goal_schema": "current_5_tip_xyz_wrist_v1",
+      "observation_schema": "ppo125_bounded_previous_action_v1",
+      "critic_schema": "state_landmarks_goal_landmarks_counters_clock_v1",
+      "termination_feature_dim": 26
+    }
+  },
+  "large_scale_training_launched": false
+}
