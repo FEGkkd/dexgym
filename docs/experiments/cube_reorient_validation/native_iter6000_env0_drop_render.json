@@ -1,0 +1,33 @@
+{
+  "trace": "/home/ubuntu/dexgym/artifacts/cube_reorient/native_iter6000_scene_v2_trace.npz",
+  "output": "/home/ubuntu/dexgym/artifacts/cube_reorient/native_iter6000_env0_drop.mp4",
+  "frames": 174,
+  "fps": 25.0,
+  "recorded_env_index": 0,
+  "root_pose_max_error_m": 0.0,
+  "mode": "recorded native poses; no physics resimulation",
+  "checkpoint": {
+    "reference_sha": "2becb7380fed86171056f9bf4338b2a6a0c14b01",
+    "evaluated_scene_revision": 2,
+    "checkpoint": "/home/ubuntu/dexgym/artifacts/cube_reorient/train_seed42_scene_v2/model_6000.pt",
+    "checkpoint_sha256": "e6d16dec1f82d48e3ea15f47c50288f90cdf6f84df69aeec74377a177e04a9ce",
+    "checkpoint_kind": "native",
+    "actor_normalization": "EmpiricalNorm",
+    "checkpoint_iteration": 6000,
+    "seed": 123,
+    "num_envs": 4,
+    "episodes_per_env": 1,
+    "observation_noise": true,
+    "startup_randomization": true,
+    "reset_randomization": true,
+    "interval_pushes": true,
+    "disturbance_protocol": "fresh reference curriculum for every evaluation",
+    "episodes": 4,
+    "mean_successes": 0.25,
+    "fraction_at_least_one": 0.25,
+    "fraction_at_least_three": 0.0,
+    "drop_fraction": 0.5,
+    "mean_episode_seconds": 28.94,
+    "mean_angle_rad": 1.0030799778519455
+  }
+}

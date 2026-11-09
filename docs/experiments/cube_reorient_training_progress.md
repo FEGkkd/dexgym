@@ -18,6 +18,7 @@ with the same fresh reference curriculum. Every environment contributes four epi
 | Native iteration 1000 | 0.00390625 | 0.00390625 | 0 | 0.03515625 | 2.04405 |
 | Native iteration 2000 | 0.00390625 | 0.00390625 | 0 | 0.09375 | 1.88495 |
 | Native iteration 4000 | 0.03125 | 0.03125 | 0 | 0.08984375 | 1.73836 |
+| Native iteration 6000 | 0.71875 | 0.4296875 | 0.0703125 | 0.421875 | 1.22332 |
 | Published upstream actor, iteration 8000 | 6.50391 | 0.863281 | 0.644531 | 0.660156 | 0.834614 |
 
 At iteration 1000 the native actor has had 500 policy updates after WM warmup.
@@ -51,3 +52,25 @@ Mean orientation error was 1.73836 rad, and drop fraction was 0.08984375.
 This is a small improvement over iteration 2000, but it does not demonstrate
 continuous reorientation. The 4096-environment training run continues unchanged
 to iteration 8000; the checkpoint watcher is now waiting for that checkpoint.
+
+At iteration 6000, the same 256-episode protocol completed 184 goals: 110
+nonzero-success episodes (42.96875%), 18 episodes with at least three goals,
+and a maximum of five goals in one episode. Mean goals/episode rose from
+0.03125 at iteration 4000 to 0.71875. Mean orientation error fell to 1.22332 rad,
+but 108 episodes ended in a drop (42.1875%). This is evidence of emerging
+multi-goal reorientation, with substantial instability and a remaining gap to
+the published actor diagnostic (6.50391 goals/episode, 86.3281% with any goal).
+The native run remains active and unchanged; the 8000-iteration evaluation and
+pose recording are still queued. This intermediate result does not complete the
+full task-reproduction goal.
+
+A separate four-environment, one-episode recording at iteration 6000 completed
+one goal in environment 2; environments 0 and 1 dropped after 6.98 and 8.78 s.
+Environment 3 survived 50 s without a goal. Two videos accompany the raw trace:
+`native_iter6000_env0_drop.mp4` shows the predetermined environment 0 up to
+6.96 s (before its episode ends), and
+`native_iter6000_env2_selected_success.mp4` shows environment 2 for 50 s.
+The latter is explicitly selected after observing success and is not a
+representative success-rate estimate. Both reconstruct recorded native poses
+with zero root-position error; they do not re-simulate physics. The 256-episode
+result above remains the performance estimate, including failures.

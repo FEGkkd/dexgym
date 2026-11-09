@@ -1,0 +1,67 @@
+{
+  "reference_sha": "2becb7380fed86171056f9bf4338b2a6a0c14b01",
+  "evaluated_scene_revision": 2,
+  "checkpoint": "/home/ubuntu/dexgym/artifacts/cube_reorient/train_seed42_scene_v2/model_6000.pt",
+  "checkpoint_sha256": "e6d16dec1f82d48e3ea15f47c50288f90cdf6f84df69aeec74377a177e04a9ce",
+  "checkpoint_kind": "native",
+  "actor_normalization": "EmpiricalNorm",
+  "checkpoint_iteration": 6000,
+  "seed": 123,
+  "num_envs": 4,
+  "episodes_per_env": 1,
+  "observation_noise": true,
+  "startup_randomization": true,
+  "reset_randomization": true,
+  "interval_pushes": true,
+  "disturbance_protocol": "fresh reference curriculum for every evaluation",
+  "episodes": 4,
+  "mean_successes": 0.25,
+  "fraction_at_least_one": 0.25,
+  "fraction_at_least_three": 0.0,
+  "drop_fraction": 0.5,
+  "mean_episode_seconds": 28.94,
+  "mean_angle_rad": 1.0030799778519455,
+  "records": [
+    {
+      "env": 0,
+      "episode": 0,
+      "steps": 349,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.7619436979293823,
+      "episode_return": -533.3997802734375
+    },
+    {
+      "env": 1,
+      "episode": 0,
+      "steps": 439,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.193755626678467,
+      "episode_return": -541.5382080078125
+    },
+    {
+      "env": 2,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 1,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.1652687788009644,
+      "episode_return": 562.823486328125
+    },
+    {
+      "env": 3,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 0,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.5258711576461792,
+      "episode_return": 599.1527709960938
+    }
+  ],
+  "trace_path": "/home/ubuntu/dexgym/artifacts/cube_reorient/native_iter6000_scene_v2_trace.npz"
+}
