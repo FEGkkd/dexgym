@@ -33,4 +33,6 @@ reached stayed in roughly the same range (about 750–800 policy steps and
 25–26 goals). This is a fluctuating training plateau, not evidence of a
 verified optimum. The checkpoint has not yet been evaluated on a separate
 held-out rollout under the 15 mm rules, so no validation completion rate is
-claimed.
+claimed in this initial run record. A later
+[checkpoint diagnosis](hand21_15mm_training_diagnosis_20261109.md) compares
+held-out target throughput and failure counts for three checkpoints.
