@@ -24,6 +24,7 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--steps', type=int, default=64)
     parser.add_argument('--num-envs', type=int, default=16)
+    parser.add_argument('--replay-capacity', type=int, help='Allocate full replay without extending this short run')
     args = parser.parse_args()
     cfg = WujiHand21SuperMimicCfg()
     cfg.library_path, cfg.scene.num_envs, cfg.seed = args.library, args.num_envs, 42
@@ -42,7 +43,10 @@ def main():
             for module in (modules.world_model, modules.actor, modules.critic, modules.termination):
                 module.to(env.device)
             collector = HandNewtonCollector(env, robot, task, action_noise_std=.1)
-            replay = SchemaReplay(args.steps, args.num_envs, robot.spec, task.spec, env.device)
+            capacity = args.replay_capacity or args.steps
+            if capacity < args.steps:
+                raise ValueError('Smoke replay capacity must retain the complete short run')
+            replay = SchemaReplay(capacity, args.num_envs, robot.spec, task.spec, env.device)
             optimizers = build_optimizers(modules, world_lr=2e-4, actor_lr=2e-4, critic_lr=2e-4,
                                          termination_mode=task.termination_mode)
             max_fk_error = 0.
@@ -76,6 +80,9 @@ def main():
                            'pre_reset_state_difference': pre_reset_difference,
                            'world8_loss': float(loss.detach()), 'world_update': result,
                            'reach_head': modules.world_model.last_event_metrics, 'passed': True})
+            report.update({'replay_capacity': capacity, 'replay_bytes': replay.bytes_allocated,
+                           'torch_peak_allocated_bytes': torch.cuda.max_memory_allocated(),
+                           'torch_peak_reserved_bytes': torch.cuda.max_memory_reserved()})
         finally:
             env.close()
     args.output.parent.mkdir(parents=True, exist_ok=True)

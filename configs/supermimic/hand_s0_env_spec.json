@@ -7,5 +7,7 @@
   "mutation_policy": "no pip installs or edits to shared venv or PPO environment",
   "entry": "bash scripts/supermimic/hand_s0_host.sh",
   "witness": "bash scripts/supermimic/hand_s0_host.sh --witness",
-  "known_bad": "~/dexgym/.venv/bin/python imports torch but exits SIGBUS135"
+  "known_bad": "~/dexgym/.venv/bin/python imports torch but exits SIGBUS135",
+  "persistent_overlays": "/home/ubuntu/dexgym/artifacts/hand_s0/runtime_v1",
+  "physics_packages": "Newton1.6.1, MuJoCo3.12, Warp1.17; existing runtime_overrides"
 }

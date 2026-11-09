@@ -1,0 +1,63 @@
+{
+  "undeclared": [
+    {
+      "site": "/home/ubuntu/dexgym/worktrees/supermimic/source/dexgym/tasks/direct/right_hand_tracking/supermimic_task.py:40-47",
+      "decision": "Critic receives target fingertip and intermediate-knuckle geometry computed from q_ref, alongside physical state and task counters.",
+      "why_it_matters": "This is privileged reference-derived training information. Core uses the Critic for Actor terminal bootstrapping, so this input affects policy optimization. A07 permits q_ref only for RSI, reward geometry and privileged diagnostics; it does not declare this Critic input. Actor inputs themselves remain causal and contain no q_ref.",
+      "class": "interface"
+    },
+    {
+      "site": "/home/ubuntu/dexgym/worktrees/supermimic/scripts/supermimic/evaluate_hand_s0.py:138-150",
+      "decision": "Fixed-clock delay is the per-clip lag minimizing mean fingertip distance over integer lags 0–5, summarized by the median across clips. Each lag uses its remaining overlapping frames.",
+      "why_it_matters": "A03 requests delay without declaring this operational definition. This bounded offline alignment diagnostic cannot establish unrestricted tracking latency, especially beyond 166.7 ms. The output field names and lag_note correctly expose the restriction, but the assumption ledger does not.",
+      "class": "semantic"
+    }
+  ],
+  "stale_rows": [
+    {
+      "id": "A07",
+      "site": "/home/ubuntu/dexgym/worktrees/supermimic/implement-stage/ASSUMPTIONS.md:12",
+      "declared": "Ground-truth q_ref allowed only for RSI, reward geometry and privileged diagnostics; Critic may observe counters/budgets.",
+      "actual": "critic_features also includes goal_landmarks computed from bank.joints, hence q_ref-derived privileged geometry is used during optimization.",
+      "evidence": [
+        "/home/ubuntu/dexgym/worktrees/supermimic/source/dexgym/tasks/direct/right_hand_tracking/supermimic_task.py:40-47",
+        "/home/ubuntu/dexgym/worktrees/supermimic/source/dexgym/algorithms/supermimic/core/imagination.py"
+      ]
+    },
+    {
+      "id": "A03/A04 and current-stage acceptance",
+      "site": "/home/ubuntu/dexgym/worktrees/supermimic/implement-stage/ASSUMPTIONS.md:8-9,28-30",
+      "declared": "High-precision policy gates and full held-out evaluation remain necessary for completion.",
+      "actual": "The latest user instruction explicitly changes this stage to architecture, task-definition and model-based training readiness; trained-policy accuracy is diagnostic and large-scale training is outside this stage.",
+      "evidence": [
+        "/home/ubuntu/dexgym/worktrees/supermimic/implement-stage/SPEC.md:17-23",
+        "/home/ubuntu/dexgym/worktrees/supermimic/implement-stage/BUILD_NOTE.md",
+        "/home/ubuntu/dexgym/worktrees/supermimic/docs/supermimic/hand_s0_reproduction.md",
+        "Parent-relayed latest user scope instruction"
+      ],
+      "qualification": "These documents were still unchanged at the final remote read; subsequent parent edits may resolve this."
+    }
+  ],
+  "semantic_undeclared": 1,
+  "verdict": "gaps",
+  "correct": [
+    "Actor observations use current fingertip targets, physical hand state and bounded executed-action history; no reference-joint Actor input was found.",
+    "Latent replay actions and the single tanh before the physical deadzone/command map match A15.",
+    "Shared goal progression preserves score-before-switch, dwell, failure budgets, RSI and cross-reference changes without physical reset.",
+    "Training and normalization select training simulator lanes; held-out-subject evaluation uses the validation split.",
+    "Fixed-clock evaluation retains the failure-transition error and reports missing subsequent frames.",
+    "The knuckle geometry and mean-error kernel choices are explicitly declared in A14/A16."
+  ],
+  "review_snapshot": {
+    "head": "1e26e4657a45cf886480e28d9bcbe3068426feeb",
+    "base": "cf2cddeeddaee7551313ec03a88ee1c45c0a9bc5",
+    "reviewed": "Complete tracked base-to-HEAD diff, primary specification/ledger/build/report files, supporting Core/data code, and working-tree diff.",
+    "working_tree_at_final_read": "Only runtime-overlay location changes in hand_s0_env_spec.json, hand_s0_environment.md and hand_s0_host.sh; inspected. Untracked .aris directory present.",
+    "actions": "Read-only SSH audit; no tests, installations, training control, code edits or push. Own SSH session closed."
+  },
+  "model_identity": {
+    "actual_runtime_identity": "Not independently exposed to this reviewer.",
+    "requested_route": "codex / gpt-6-astra / xhigh / native / host-default",
+    "independence": "Same-family review; any eventual positive verdict is provisional, not independent acceptance."
+  }
+}

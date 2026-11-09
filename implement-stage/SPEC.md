@@ -14,10 +14,15 @@ with survival weighting and TD(lambda). No PPO updates, behavior cloning,
 reference-joint action supervision, future-goal input or expert warm start in
 the S0 model-based run. Existing PPO remains the baseline.
 
-Outputs: reproducible commands/configs, CPU and Newton checks, trained actor,
-independent held-out metrics, source-to-implementation fidelity table, complete
-reproduction report and commits pushed to `origin/supermimic`.
+Outputs for the current phase: reproducible commands/configs, CPU and Newton
+checks, a bounded actual-training/checkpoint/evaluation demonstration,
+source-to-implementation fidelity table, reproduction report and commits pushed
+to `origin/supermimic`.
 
-Success requires the full training and accuracy gates in ASSUMPTIONS.md, not
-merely a smoke test or a runnable framework. Hardware deployment, object
-interaction and tactile sensing are outside this requested S0 stage.
+User scope update, 2026-11-09: this phase must establish correctness of the
+architecture, task definition and model-based RL training method, and readiness
+to begin larger training later. It does NOT require a converged/high-accuracy
+policy. Do not continue large training to chase policy precision in this phase.
+Small physical tests and actual optimizer updates remain necessary evidence;
+a runnable stub does not pass. Hardware deployment, objects and tactile sensing
+remain outside S0. The original user PPO process must remain untouched.

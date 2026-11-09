@@ -94,6 +94,11 @@ def main():
             resume = checkpoint.load(args.resume, trainer) if args.resume else None
             if resume:
                 env.curriculum_steps[:] = trainer.counts['real_transitions'] // env.num_envs
+                # Sample fresh goals AFTER restoring curriculum progress; the
+                # collector built before checkpoint.load used the initial stage.
+                collector = HandNewtonCollector(env, robot, task, action_noise_std=experiment['action_noise_std'])
+                trainer.collector = collector
+                resume['restored_curriculum_steps'] = int(env.curriculum_steps[0])
             iterations = args.iterations or experiment['iterations'] - trainer.iteration
             if iterations < 1 or trainer.iteration + iterations > experiment['iterations']:
                 raise ValueError('Training segment exceeds configured budget')

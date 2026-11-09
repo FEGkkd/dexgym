@@ -1,1 +1,15 @@
-{"backend":"codex","host":"codex","source":"host-default","model":"gpt-6-astra","effort":"xhigh","transport":"native","review_independence":"same-family","acceptance_status":"pending"}
+{
+  "backend": "codex",
+  "host": "codex",
+  "source": "host-default",
+  "model": "gpt-6-astra",
+  "effort": "xhigh",
+  "transport": "native",
+  "review_independence": "unknown runtime identity; requested same-family native Codex",
+  "acceptance_status": "provisional; not independent acceptance",
+  "actual_model_identity": null,
+  "substantive_verdict": "clean",
+  "semantic_undeclared": 0,
+  "review_completed": true,
+  "review_session": "/root/hand_s0_assumption_sweep"
+}

@@ -1,8 +1,9 @@
 # Hand-only S0 reproduction — implementation record
 
-Status: **implementation and physical data-path validation passed; policy training
-and held-out precision acceptance remain pending**. A runnable smoke is not a
-trained policy. The active goal is specified in `implement-stage/SPEC.md`.
+Status: **task/architecture/model-based-training readiness validation**. The user
+explicitly removed converged-policy acceptance from this phase on 2026-11-09.
+Actual training and evaluation below are bounded diagnostics. See the final
+`hand_s0_readiness_20261109.md` report and updated `implement-stage/SPEC.md`.
 
 ## Scope and original code
 
@@ -70,9 +71,9 @@ These checks establish implementation consistency, not learned tracking precisio
 
 ## Open acceptance work
 
-Complete actual training; assess held-out model error, event calibration and
-Actor learning; evaluate deterministic physics tracking on all eligible held-out
-clips and three subgoal seeds. Report 5/10/15 mm coverage, P95 worst finger,
-delay, true success/failure and censored targets. Prespecified engineering
-targets remain in A03; do not lower them after observing results. Complete the
-source audit, silent-assumption review and final branch publication.
+The current phase validates actual optimizer updates, checkpoint/resume,
+deterministic evaluation, physical task consistency and scale feasibility.
+Converged policy training and three-seed quality acceptance are deferred by
+explicit user instruction. A03/A04 record this scope change; measured errors
+remain diagnostic. Final source audit, assumption-review status and publishing
+are recorded in `hand_s0_readiness_20261109.md`.

@@ -18,10 +18,12 @@ The launcher uses Isaac Sim6.0.1's Python3.12 and torch2.11.0+cu130. It appends
 the shared venv only after torch import, avoiding that venv's reproducible
 SIGBUS135 at process exit. The original venv and running PPO are untouched.
 It uses the existing process-local numpy/IsaacLab/scipy/omniclient/USD overlays
-under /tmp and the Newton1.6.1 / MuJoCo3.12 / Warp1.17 runtime overlay in
+under /home/ubuntu/dexgym/artifacts/hand_s0/runtime_v1 and the Newton1.6.1 / MuJoCo3.12 / Warp1.17 runtime overlay in
 ~/dexgym_data. These paths must exist; they are not silently installed.
 
 Executor validation: CUDA witness exit0; targeted25 tests pass; complete
 tests/supermimic suite230 passed in18.99s after adding repository root to
 the runtime sys.path so tests importing other test modules can resolve.
 Fresh independent agent-following-document validation passed: witness exit0 and 9 Core tests in0.24s, separate SSH session. Newton simulation also completed the F2 smoke with exit0.
+
+Persistent overlay update: copied the validated temporary overlays (preserving existing Isaac Sim USD symlinks) into artifacts/hand_s0/runtime_v1. No shared packages changed. Fresh independent doc validation of this persistent location passed: witness exit0 and9 Core tests in0.24s.

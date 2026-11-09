@@ -1,0 +1,323 @@
+{
+  "manifest_preflight": {
+    "artifact_kind": "data_preflight_not_training_result",
+    "manifest": "/home/ubuntu/dexgym/data/processed/hand21_right_geometry_feasible/manifest.json",
+    "fps": 30,
+    "joints": 20,
+    "fingertips": 5,
+    "eligible_clips": {
+      "train": 942,
+      "validation": 446
+    },
+    "eligible_frames": {
+      "train": 281793,
+      "validation": 122482
+    },
+    "train_subjects": [
+      "s1",
+      "s2",
+      "s3",
+      "s4",
+      "s5",
+      "s6",
+      "s7"
+    ],
+    "validation_subjects": [
+      "s8",
+      "s9",
+      "s10"
+    ],
+    "missing_files": [],
+    "policy_accuracy": null
+  },
+  "newton16": {
+    "physics": "standalone Hand21 Newton 480Hz/30Hz",
+    "trained_policy": false,
+    "fk_max_error_m": 6.055631160961639e-07,
+    "transitions": 1024,
+    "terminals": 30,
+    "reached": 21,
+    "pre_reset_state_difference": 1.2632805109024048,
+    "world8_loss": 1.1198794841766357,
+    "world_update": {
+      "updated": true,
+      "reason": null,
+      "grad_norm": 1.5522499084472656
+    },
+    "reach_head": {
+      "reach_bce": 0.12807215750217438,
+      "reach_label_rate": 0.0260869562625885,
+      "reach_prediction_rate": 0.011953952722251415
+    },
+    "passed": true
+  },
+  "newton1024_full_replay": {
+    "physics": "standalone Hand21 Newton 480Hz/30Hz",
+    "trained_policy": false,
+    "fk_max_error_m": 5.433942078525433e-06,
+    "transitions": 16384,
+    "terminals": 181,
+    "reached": 505,
+    "pre_reset_state_difference": 1.2632805109024048,
+    "world8_loss": 0.9909502267837524,
+    "world_update": {
+      "updated": true,
+      "reason": null,
+      "grad_norm": 1.370175838470459
+    },
+    "reach_head": {
+      "reach_bce": 0.13971766829490662,
+      "reach_label_rate": 0.02884615585207939,
+      "reach_prediction_rate": 0.011490091681480408
+    },
+    "passed": true,
+    "replay_capacity": 1000,
+    "replay_bytes": 6017040192,
+    "torch_peak_allocated_bytes": 6098866688,
+    "torch_peak_reserved_bytes": 6140461056
+  },
+  "bounded_training_stop": {
+    "reason": "User narrowed scope to architecture/task/algorithm readiness; no further policy convergence training in this phase",
+    "last_logged_iteration": 994,
+    "counts": {
+      "real_transitions": 254464,
+      "actor_transitions": 254464,
+      "reference_pd_transitions": 0,
+      "boundary_probe_transitions": 0,
+      "world_updates": 1988,
+      "actor_updates": 494,
+      "critic_updates": 9880,
+      "nonfinite_world": 0,
+      "nonfinite_actor": 0,
+      "nonfinite_critic": 0,
+      "trust_failures": 16
+    },
+    "last_tracking": {
+      "mean_tip_error_m": 0.01118874829262495,
+      "worst_tip_mean_m": 0.018369225785136223,
+      "reached": 22,
+      "action_abs_mean": 0.22930637001991272
+    },
+    "saved_checkpoints": [
+      "/home/ubuntu/dexgym/artifacts/hand_s0/pilot_v2/model_500.pt"
+    ],
+    "stopped_session": "hand_s0_pilot_v2",
+    "original_user_PPO_untouched": true
+  },
+  "subgoal_eval150": {
+    "sampled_frames": 128000,
+    "mean_tip_error_mm": 25.739826202392578,
+    "p95_worst_finger_mm": 83.41582489013672,
+    "per_finger_mean_mm": [
+      27.348676681518555,
+      25.099042892456055,
+      26.00196075439453,
+      22.130720138549805,
+      28.118709564208984
+    ],
+    "all_fingers_coverage": {
+      "5": 0.02011718787252903,
+      "10": 0.05829687416553497,
+      "15": 0.10563281178474426
+    },
+    "per_finger_coverage": {
+      "5": 0.08406718820333481,
+      "10": 0.2192171812057495,
+      "15": 0.36080312728881836
+    },
+    "completed_targets": 3287,
+    "outcomes": {
+      "reached": 1320,
+      "budget_timeout": 1967,
+      "other_termination": 0,
+      "episode_truncation": 0
+    },
+    "censored_at_stop": 256,
+    "success_over_settled_targets": 0.4015819896562215,
+    "median_first_within_steps_successes": 1.0,
+    "success_over_all_finalized_targets": 0.4015819896562215,
+    "mode": "subgoals",
+    "split": "validation",
+    "seed": 101,
+    "num_envs": 256,
+    "eligible_clips": 446,
+    "provenance": {
+      "schema": "supermimic_core_v2",
+      "contract_sha256": "f5f4ef57c8957deb84db3df97ac1ac74ab9480d45a04030bb4fe625c02e9f621",
+      "git_commit": "3d521c127e711c6507d772c4913515ab7c185f04",
+      "policy_source": "/home/ubuntu/dexgym/artifacts/hand_s0/pilot_v1/model_150.pt",
+      "evaluation_protocol": {
+        "num_envs": 256,
+        "seed": 101
+      },
+      "evaluation_overrides": {
+        "seed": 101
+      },
+      "target_source_override": null
+    },
+    "exploration_noise": 0.0,
+    "normalizers_updated": false
+  },
+  "fixed_clock_eval150": {
+    "sampled_frames": 122036,
+    "mean_tip_error_mm": 37.98476028442383,
+    "p95_worst_finger_mm": 101.31397247314453,
+    "per_finger_mean_mm": [
+      35.114051818847656,
+      35.70272445678711,
+      38.28296661376953,
+      36.37456130981445,
+      44.44951248168945
+    ],
+    "all_fingers_coverage": {
+      "5": 0.02411583438515663,
+      "10": 0.03988167271018028,
+      "15": 0.048223476856946945
+    },
+    "per_finger_coverage": {
+      "5": 0.04630928486585617,
+      "10": 0.0927906483411789,
+      "15": 0.1609492301940918
+    },
+    "clips": 446,
+    "expected_frames": 122036,
+    "unsafe_failed_clips": 0,
+    "median_best_alignment_lag_steps_0_to_5": 5.0,
+    "lag_note": "Offline alignment diagnostic only; primary errors are uncompensated at current target time",
+    "missing_frames_after_failure": 0,
+    "mode": "fixed_clock",
+    "split": "validation",
+    "seed": 101,
+    "num_envs": 256,
+    "eligible_clips": 446,
+    "provenance": {
+      "schema": "supermimic_core_v2",
+      "contract_sha256": "f5f4ef57c8957deb84db3df97ac1ac74ab9480d45a04030bb4fe625c02e9f621",
+      "git_commit": "3d521c127e711c6507d772c4913515ab7c185f04",
+      "policy_source": "/home/ubuntu/dexgym/artifacts/hand_s0/pilot_v1/model_150.pt",
+      "evaluation_protocol": {
+        "num_envs": 256,
+        "seed": 101
+      },
+      "evaluation_overrides": {
+        "seed": 101
+      },
+      "target_source_override": null
+    },
+    "exploration_noise": 0.0,
+    "normalizers_updated": false,
+    "policy": "learned"
+  },
+  "resume_check": {
+    "iteration": 502,
+    "counts": {
+      "real_transitions": 128512,
+      "actor_transitions": 128512,
+      "reference_pd_transitions": 0,
+      "boundary_probe_transitions": 0,
+      "world_updates": 1004,
+      "actor_updates": 350,
+      "critic_updates": 7000,
+      "nonfinite_world": 0,
+      "nonfinite_actor": 0,
+      "nonfinite_critic": 0,
+      "trust_failures": 3
+    },
+    "trust": {
+      "1": {
+        "evaluation_kind": "held_out_lane_action_conditioned_open_loop",
+        "horizon": 1,
+        "source_id": 0,
+        "distinct_start_count": 55,
+        "physical_delta_rmse": 0.09213057905435562,
+        "zero_delta_baseline_rmse": 0.23833179473876953,
+        "normalized_delta_rmse": 0.8295612931251526,
+        "normalized_zero_delta_baseline_rmse": 2.183138132095337,
+        "mean_tip_error_m": 0.0008567411568947136,
+        "p95_worst_tip_error_m": 0.0023092154879122972,
+        "real_state_reach_brier": 5.6054123120929944e-08,
+        "reach_label_rate": 0.0,
+        "reach_prediction_rate": 0.0002360098296776414
+      },
+      "8": {
+        "available": false,
+        "reason": "Replay has no full episode-safe windows"
+      },
+      "32": {
+        "available": false,
+        "reason": "Replay has no full episode-safe windows"
+      }
+    },
+    "allowed_horizon": 0,
+    "replay_bytes": 1504266048,
+    "elapsed_seconds": 4.291968771023676,
+    "checkpoint": "/home/ubuntu/dexgym/artifacts/hand_s0/resume_validation/model_502.pt",
+    "resume": {
+      "replay_restored": false,
+      "requires_fresh_collection": true,
+      "resume_mode": "fresh_physics",
+      "git_commit": "3d521c127e711c6507d772c4913515ab7c185f04",
+      "schema": "supermimic_core_v2",
+      "restored_curriculum_steps": 500
+    },
+    "policy_accuracy_passed": null,
+    "split": "train",
+    "robot": {
+      "robot_id": "wuji_hand21_standalone",
+      "state_dim": 60,
+      "action_dim": 20,
+      "delta_dim": 40,
+      "context_dim": 0,
+      "action_schema": "latent_tanh_deadzone01_delta01_hand21_v1",
+      "state_schema": "q20_qd20_qcmd20_v1",
+      "control_dt": 0.03333333333333333,
+      "physics_dt": 0.0020833333333333333,
+      "asset_sha256": "01bb56ab5144545b5cd9e9202381e7859f4e78a28dfe57132f67a31d753aeabd",
+      "command_dim": 20,
+      "joint_order": [
+        "r_thumb_cmc_flex",
+        "r_thumb_cmc_abd",
+        "r_thumb_mcp",
+        "r_thumb_ip",
+        "r_index_finger_mcp_flex",
+        "r_index_finger_mcp_abd",
+        "r_index_finger_pip",
+        "r_index_finger_dip",
+        "r_middle_finger_mcp_flex",
+        "r_middle_finger_mcp_abd",
+        "r_middle_finger_pip",
+        "r_middle_finger_dip",
+        "r_ring_finger_mcp_flex",
+        "r_ring_finger_mcp_abd",
+        "r_ring_finger_pip",
+        "r_ring_finger_dip",
+        "r_pinky_mcp_flex",
+        "r_pinky_mcp_abd",
+        "r_pinky_pip",
+        "r_pinky_dip"
+      ],
+      "context_evolution": "episode_constant"
+    },
+    "task": {
+      "task_id": "hand21_teledexter_s0_v1",
+      "observation_dim": 125,
+      "history_length": 10,
+      "goal_dim": 15,
+      "goal_horizon": 1,
+      "task_data_dim": 11,
+      "critic_dim": 162,
+      "goal_schema": "current_5_tip_xyz_wrist_v1",
+      "observation_schema": "ppo125_bounded_previous_action_v1",
+      "critic_schema": "state_landmarks_goal_landmarks_counters_clock_v1",
+      "termination_feature_dim": 26
+    }
+  },
+  "final_regression": {
+    "passed": 262,
+    "warnings": 35,
+    "seconds": 20.5,
+    "exit_code": 0,
+    "log": "/home/ubuntu/dexgym/artifacts/hand_s0/final_regression.log"
+  },
+  "acceptance_scope": "Architecture, task definition and model-based RL readiness only; policy convergence deferred by user."
+}

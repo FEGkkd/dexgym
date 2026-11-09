@@ -1,0 +1,75 @@
+{
+  "undeclared": [],
+  "stale_rows": [],
+  "semantic_undeclared": 0,
+  "verdict": "clean",
+  "resolved": [
+    {
+      "finding": "Privileged Critic information omitted from A07",
+      "resolution": "A07 now explicitly declares q_ref-derived target fingertip and intermediate-knuckle geometry for Critic training/bootstrap. This matches critic_features; Actor inputs remain causal.",
+      "evidence": [
+        "/home/ubuntu/dexgym/worktrees/supermimic/implement-stage/ASSUMPTIONS.md:A07",
+        "/home/ubuntu/dexgym/worktrees/supermimic/source/dexgym/tasks/direct/right_hand_tracking/supermimic_task.py:30-47"
+      ]
+    },
+    {
+      "finding": "Delay metric operational definition omitted",
+      "resolution": "A20 now accurately declares per-clip overlapping-frame error minimization over integer lags 0–5, followed by the median across clips. It explicitly limits interpretation and retains uncompensated primary errors.",
+      "evidence": [
+        "/home/ubuntu/dexgym/worktrees/supermimic/implement-stage/ASSUMPTIONS.md:A20",
+        "/home/ubuntu/dexgym/worktrees/supermimic/scripts/supermimic/evaluate_hand_s0.py:138-151"
+      ]
+    },
+    {
+      "finding": "Current-stage policy-precision completion requirements were stale",
+      "resolution": "SPEC, A03/A04, current build summary and final readiness report now reflect the user's architecture/task/model-based-training readiness scope. Convergence and high accuracy are not current acceptance requirements.",
+      "evidence": [
+        "/home/ubuntu/dexgym/worktrees/supermimic/implement-stage/SPEC.md",
+        "/home/ubuntu/dexgym/worktrees/supermimic/implement-stage/ASSUMPTIONS.md:A03-A04",
+        "/home/ubuntu/dexgym/worktrees/supermimic/implement-stage/BUILD_NOTE.md",
+        "/home/ubuntu/dexgym/worktrees/supermimic/docs/supermimic/hand_s0_readiness_20261109.md"
+      ]
+    }
+  ],
+  "additional_checks": [
+    {
+      "rows": "A21",
+      "result": "Correctly describes uniform-motion RSI within each clip's first 90%, consistent with the existing task configuration and MotionBank sampler.",
+      "evidence": [
+        "/home/ubuntu/dexgym/worktrees/supermimic/source/dexgym/tasks/direct/right_hand_tracking/env.py:231-243",
+        "/home/ubuntu/dexgym/worktrees/supermimic/source/dexgym/tasks/direct/right_hand_tracking/teledexter_env_cfg.py:20",
+        "/home/ubuntu/dexgym/worktrees/supermimic/source/dexgym/data/motion_bank.py:72-75"
+      ]
+    },
+    {
+      "rows": "A22",
+      "result": "Correctly describes nonfinite-state/joint-range guards and task failure/completion/time limits. No numeric velocity-magnitude safety limit is implemented or claimed.",
+      "evidence": [
+        "/home/ubuntu/dexgym/worktrees/supermimic/source/dexgym/tasks/direct/right_hand_tracking/subgoals.py:100-102",
+        "/home/ubuntu/dexgym/worktrees/supermimic/source/dexgym/tasks/direct/right_hand_tracking/env.py:207-209"
+      ]
+    },
+    {
+      "rows": "A23",
+      "result": "Correctly describes discrete imagined goal branches and the reach head's unweighted BCE on real arrival states and event labels. The report does not present this as an unbiased gradient of the original hybrid simulator.",
+      "evidence": [
+        "/home/ubuntu/dexgym/worktrees/supermimic/source/dexgym/tasks/direct/right_hand_tracking/subgoals.py:64-97",
+        "/home/ubuntu/dexgym/worktrees/supermimic/source/dexgym/tasks/direct/right_hand_tracking/supermimic_task.py:72-85",
+        "/home/ubuntu/dexgym/worktrees/supermimic/source/dexgym/tasks/direct/right_hand_tracking/supermimic_model.py:20-34"
+      ]
+    }
+  ],
+  "review_snapshot": {
+    "head": "1e26e4657a45cf886480e28d9bcbe3068426feeb",
+    "basis": "Same saved review session, with fresh direct reads of the authoritative remote ledger, scope, reports, corresponding source and current working-tree changes.",
+    "production_source_diff_since_previous_review": "None under source/dexgym.",
+    "other_changes_reviewed": "Persistent runtime paths, bounded smoke replay-capacity/memory reporting, unchanged production 15 mm tolerance reflected in its regression test, documentation and local-ledger ignore rule.",
+    "actions": "Read-only; no edits, tests, launches, process control or push. Own SSH session closed."
+  },
+  "limitations": {
+    "verdict_scope": "No remaining undeclared or stale meaning-changing assumptions found in the reviewed current scope. This is not a convergence result or a blanket correctness certification.",
+    "actual_model_identity": "Not exposed by the runtime.",
+    "requested_route": "codex / gpt-6-astra / xhigh / native / host-default",
+    "acceptance_status": "Positive same-family review remains provisional; requested routing metadata is not proof of independent acceptance."
+  }
+}
