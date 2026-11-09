@@ -69,7 +69,9 @@ class CoreCheckpoint:
                         "dimension": int(norm.mean.numel()) if hasattr(norm, "mean") else None,
                     }
             networks[name] = {
-                "class": type(module).__module__ + "." + type(module).__qualname__,
+                "class": getattr(
+                    module, "checkpoint_class_name", type(module).__module__ + "." + type(module).__qualname__
+                ),
                 "network_spec": asdict(spec),
                 "goal_latent_tanh": getattr(module, "goal_latent_tanh", None),
                 "normalizers": norms,
@@ -216,6 +218,10 @@ class CoreCheckpoint:
         if record["task_spec"] != asdict(trainer.task.spec):
             raise ValueError("Task schema differs")
         current_trainer_config = asdict(trainer.config)
+        if "actor_grad_value_clip" not in record["trainer_config"]:
+            if current_trainer_config["actor_grad_value_clip"] is not None:
+                raise ValueError("Trainer configuration differs")
+            current_trainer_config.pop("actor_grad_value_clip")
         if "actor_bootstrap_warmup_updates" not in record["trainer_config"]:
             # v2 checkpoints predate this optional schedule and used its
             # zero-warmup behavior. Do not infer a nonzero schedule on resume.

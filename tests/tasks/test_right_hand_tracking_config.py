@@ -165,7 +165,7 @@ def test_bounded_distribution_pilots_keep_the_hybrid_task_and_zero_entropy():
         assert "rsl_rl_cfg_entry_point" not in spec.kwargs
 
 
-def test_current_hand21_teledexter_is_the_only_trainable_right_hand_task():
+def test_current_hand21_teledexter_ppo_contract_uses_15mm():
     spec = gym.spec(HAND21_TELEDEXTER_ID)
     assert spec.kwargs["env_cfg_entry_point"].endswith(":WujiHand21TeleDexterCfg")
     assert spec.kwargs["rsl_rl_cfg_entry_point"].endswith(":WujiHand21TeleDexterPPOCfg")
@@ -173,7 +173,7 @@ def test_current_hand21_teledexter_is_the_only_trainable_right_hand_task():
     ppo = WujiHand21TeleDexterPPOCfg()
     assert cfg.scene.robot.spawn.usd_path == str(OFFICIAL_USD)
     assert cfg.library_path.endswith("hand21_right_geometry_feasible/manifest.json")
-    assert cfg.teledexter_style and cfg.goal_tolerance_m == 0.02
+    assert cfg.teledexter_style and cfg.goal_tolerance_m == 0.015
     assert (cfg.observation_space, cfg.action_space) == (125, 20)
     assert (cfg.dwell_min_steps, cfg.dwell_max_steps) == (5, 15)
     assert (cfg.curriculum_stride_min, cfg.curriculum_stride_max) == (20, 40)

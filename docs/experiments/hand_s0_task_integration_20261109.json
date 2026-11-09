@@ -1,0 +1,133 @@
+{
+  "date": "2026-11-09",
+  "gym_task_id": "DexGym-Wuji-Hand21-TeleDexter-SuperMimic-Direct-v0",
+  "scope": "task_package_integration_not_policy_convergence",
+  "regression": {
+    "passed": 273,
+    "exit_code": 0,
+    "warnings": "35 existing torch.jit deprecation warnings"
+  },
+  "smoke": {
+    "gym_task_id": "DexGym-Wuji-Hand21-TeleDexter-SuperMimic-Direct-v0",
+    "physics": "standalone Hand21 Newton 480Hz/30Hz",
+    "trained_policy": false,
+    "fk_max_error_m": 6.055631160961639e-07,
+    "transitions": 1024,
+    "terminals": 30,
+    "reached": 21,
+    "pre_reset_state_difference": 1.2632805109024048,
+    "world8_loss": 1.1198786497116089,
+    "world_update": {
+      "updated": true,
+      "reason": null,
+      "grad_norm": 1.5522496700286865
+    },
+    "reach_head": {
+      "reach_bce": 0.12807215750217438,
+      "reach_label_rate": 0.0260869562625885,
+      "reach_prediction_rate": 0.011953952722251415
+    },
+    "passed": true,
+    "replay_capacity": 64,
+    "replay_bytes": 6017664,
+    "torch_peak_allocated_bytes": 69131776,
+    "torch_peak_reserved_bytes": 90177536
+  },
+  "resume": {
+    "from_iteration": 500,
+    "to_iteration": 502,
+    "count_deltas": {
+      "real_transitions": 512,
+      "actor_transitions": 512,
+      "reference_pd_transitions": 0,
+      "boundary_probe_transitions": 0,
+      "world_updates": 4,
+      "actor_updates": 0,
+      "critic_updates": 0,
+      "nonfinite_world": 0,
+      "nonfinite_actor": 0,
+      "nonfinite_critic": 0,
+      "trust_failures": 1
+    },
+    "protocol": {
+      "replay_restored": false,
+      "requires_fresh_collection": true,
+      "resume_mode": "fresh_physics",
+      "git_commit": "3d521c127e711c6507d772c4913515ab7c185f04",
+      "schema": "supermimic_core_v2",
+      "restored_curriculum_steps": 500
+    },
+    "allowed_horizon": 0
+  },
+  "evaluation": {
+    "sampled_frames": 1024,
+    "mean_tip_error_mm": 14.232243537902832,
+    "p95_worst_finger_mm": 66.39376831054688,
+    "per_finger_mean_mm": [
+      12.237325668334961,
+      12.799942016601562,
+      15.697598457336426,
+      16.335716247558594,
+      14.090633392333984
+    ],
+    "all_fingers_coverage": {
+      "5": 0.1240234375,
+      "10": 0.3408203125,
+      "15": 0.4912109375
+    },
+    "per_finger_coverage": {
+      "5": 0.3505859375,
+      "10": 0.5669921636581421,
+      "15": 0.7056640386581421
+    },
+    "completed_targets": 46,
+    "outcomes": {
+      "reached": 45,
+      "budget_timeout": 1,
+      "other_termination": 0,
+      "episode_truncation": 0
+    },
+    "censored_at_stop": 16,
+    "success_over_settled_targets": 0.9782608695652174,
+    "median_first_within_steps_successes": 3.0,
+    "success_over_all_finalized_targets": 0.9782608695652174,
+    "gym_task_id": "DexGym-Wuji-Hand21-TeleDexter-SuperMimic-Direct-v0",
+    "mode": "subgoals",
+    "split": "validation",
+    "seed": 101,
+    "num_envs": 16,
+    "eligible_clips": 446,
+    "provenance": {
+      "schema": "supermimic_core_v2",
+      "contract_sha256": "f5f4ef57c8957deb84db3df97ac1ac74ab9480d45a04030bb4fe625c02e9f621",
+      "git_commit": "a184765fda56130b6a897eb2c5900b5338c5d6a9",
+      "policy_source": "/home/ubuntu/dexgym/artifacts/hand_s0/task_integration/resume/model_502.pt",
+      "evaluation_protocol": {
+        "num_envs": 16,
+        "seed": 101
+      },
+      "evaluation_overrides": {
+        "num_envs": 16,
+        "seed": 101
+      },
+      "target_source_override": null
+    },
+    "exploration_noise": 0.0,
+    "normalizers_updated": false,
+    "policy": "learned"
+  },
+  "wheel": {
+    "wheel": "dexgym-2.0.0-py3-none-any.whl",
+    "module_file": "/home/ubuntu/dexgym/artifacts/hand_s0/task_integration/wheel/unpacked/dexgym/tasks/direct/right_hand_tracking/supermimic_cfg.py",
+    "packaged_config": true,
+    "asset_exists": true,
+    "environment_registry_load": true,
+    "training_entrypoint": true,
+    "evaluation_entrypoint": true,
+    "source_revision": "unversioned-package",
+    "passed": true
+  },
+  "policy_accuracy_passed": null,
+  "large_training_started": false,
+  "raw_artifact_directory": "/home/ubuntu/dexgym/artifacts/hand_s0/task_integration"
+}
