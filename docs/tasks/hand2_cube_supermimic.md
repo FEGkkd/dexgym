@@ -133,3 +133,26 @@ no trained-policy result is claimed.
 
 Training and policy evaluations must be recorded before changing the status above
 or claiming the task has been trained successfully.
+
+## Published-actor diagnostic
+
+`evaluate --reference-checkpoint PATH` loads the upstream public Hand 2 actor
+without changing native training. Its released 8000-iteration weights predate the
+current reference code's EmpiricalNorm; the diagnostic retains the saved actor's
+RunningNorm computation with epsilon 0.01. It validates joint ordering and 50 Hz
+configuration and records checkpoint kind, normalization and SHA-256. Checkpoints
+are loaded with a restricted weights-only unpickler, including known NumPy RNG types.
+
+The public release at `pretrained-wuji-v2/model_hand2_reorient_8000.pt` has SHA-256
+`269144cc63858d04730f89a856ccadbc9a8a9a7a7961a21f993ff5aee03f1497`.
+Its metadata says weights are unchanged from the earlier `pretrained-wuji-v1` release.
+This diagnostic is not an evaluation of an actor trained by dexgym, nor an assertion
+that the older checkpoint was trained by the current pinned source revision.
+
+Under the same seed-123, 64-lane, four-episode protocol, the published actor achieves
+7.1211 goals per episode, 90.625% of episodes with at least one success, 69.53125%
+with at least three, mean angle error 0.8334 rad, and drop fraction 63.671875%.
+The untrained baseline achieves zero goals. This supports functional observation,
+action and physical-environment compatibility; differences from the upstream backend
+and the high drop rate still warrant evaluation. Native training remains separate.
+The full result is `docs/experiments/cube_reorient_validation/eval_reference8000_seed123.json`.

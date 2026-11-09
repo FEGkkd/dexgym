@@ -5,13 +5,16 @@ completions, drops, survival and orientation error, including zero-success runs.
 """
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 
 import gymnasium as gym
+import numpy as np
 import torch
 from isaaclab.app import launch_simulation
 
+from dexgym.algorithms.supermimic.dex_reference.common import RunningNorm
 from dexgym.algorithms.supermimic.dex_reference.networks import Actor
 from dexgym.assets.wuji_hand2_cube import REFERENCE_SHA
 from dexgym.tasks import HAND2_CUBE_SUPERMIMIC_ID
@@ -22,7 +25,9 @@ from .env_cfg import Hand2CubeSuperMimicCfg
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--checkpoint", type=Path)
+    weights = parser.add_mutually_exclusive_group()
+    weights.add_argument("--checkpoint", type=Path)
+    weights.add_argument("--reference-checkpoint", type=Path, help="Diagnostic only: upstream published actor")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--num-envs", type=int, default=64)
     parser.add_argument("--episodes-per-env", type=int, default=4)
@@ -42,12 +47,35 @@ def main():
         try:
             actor = Actor(207, 20).to(env.device).eval()
             checkpoint_iteration = None
-            if args.checkpoint:
-                payload = torch.load(args.checkpoint, map_location=env.device, weights_only=False)
-                if payload["task_id"] != "Wuji-Hand2-Cube-Reorientation" or payload["format_version"] != 1:
+            checkpoint_path = args.checkpoint or args.reference_checkpoint
+            checkpoint_hash = None
+            normalization = "EmpiricalNorm"
+            if checkpoint_path:
+                # Published checkpoints also contain NumPy RNG arrays; allow only
+                # their known reconstruction types, never arbitrary pickle globals.
+                with torch.serialization.safe_globals(
+                    [np.dtype, np.ndarray, np._core.multiarray._reconstruct, np.dtypes.UInt32DType]
+                ):
+                    payload = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
+                if args.reference_checkpoint:
+                    ref_cfg = payload["config"]
+                    if ref_cfg.get("task", "hand2-reorient") != "hand2-reorient" or ref_cfg["control_hz"] != 50:
+                        raise ValueError("Reference actor must be Hand 2 cube reorientation at 50 Hz")
+                    if payload["joint_names"] != env.physics.joint_names:
+                        raise ValueError("Reference joint ordering mismatch")
+                    if "norm.mean" in payload["modules"]["actor"]:
+                        # The public 8000-iteration release predates EmpiricalNorm.
+                        # Preserve its original sqrt(var + eps**2) computation.
+                        actor.norm = RunningNorm(207)
+                        normalization = "RunningNorm(eps=0.01)"
+                elif payload["task_id"] != "Wuji-Hand2-Cube-Reorientation" or payload["format_version"] != 1:
                     raise ValueError("Checkpoint task/schema mismatch")
                 actor.load_state_dict(payload["modules"]["actor"])
+                actor.to(env.device)
                 checkpoint_iteration = payload["iteration"]
+                with checkpoint_path.open("rb") as stream:
+                    checkpoint_hash = hashlib.file_digest(stream, "sha256").hexdigest()
+                del payload
             # Reset RNG after loading/initialization for matching evaluation seeds.
             obs = env.reset(seed=args.seed)[0]["policy"]
             task = CubeAdapter(env)
@@ -96,7 +124,14 @@ def main():
             total_steps = sum(r["steps"] for r in records)
             result = dict(
                 reference_sha=REFERENCE_SHA,
-                checkpoint=str(args.checkpoint) if args.checkpoint else None,
+                checkpoint=str(checkpoint_path) if checkpoint_path else None,
+                checkpoint_sha256=checkpoint_hash,
+                checkpoint_kind="upstream_diagnostic"
+                if args.reference_checkpoint
+                else "native"
+                if args.checkpoint
+                else "untrained",
+                actor_normalization=normalization,
                 checkpoint_iteration=checkpoint_iteration,
                 seed=args.seed,
                 num_envs=env.num_envs,
