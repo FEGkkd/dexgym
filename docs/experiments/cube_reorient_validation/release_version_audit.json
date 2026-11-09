@@ -1,0 +1,382 @@
+{
+  "reference_main": "2becb7380fed86171056f9bf4338b2a6a0c14b01",
+  "release_v1_tag": "1fe2d744892debd05f6eb8034509cb5873f14ff1",
+  "release_v2_tag": "9d70d45501b82ddf0a2d715c05e1d2f3db271979",
+  "published": {
+    "path": "/home/ubuntu/dexgym/artifacts/cube_reorient/reference_weights/model_hand2_reorient_8000.pt",
+    "sha256": "269144cc63858d04730f89a856ccadbc9a8a9a7a7961a21f993ff5aee03f1497",
+    "iteration": 8000,
+    "config": {
+      "seed": 42,
+      "logger": "wandb",
+      "wandb_project": "dex-supermimic",
+      "wandb_entity": "cumulusalpha",
+      "wandb_mode": null,
+      "device": "cuda:0",
+      "num_envs": 1024,
+      "control_hz": 50,
+      "max_iterations": 8000,
+      "buffer_steps": 1000,
+      "warmup_steps": 64,
+      "utd": 0.4,
+      "wm_only_iters": 500,
+      "wm_window": 8,
+      "wm_failure_frac": 0.25,
+      "wm_failure_horizon": 16,
+      "state_scales": [
+        0.003,
+        0.05,
+        0.001,
+        0.005,
+        0.02,
+        0.05
+      ],
+      "state_weights": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "final_state_weight": 1.0,
+      "contact_weight": 0.1,
+      "diagnostic_batch": 128,
+      "diagnostic_horizons": [
+        1,
+        4,
+        8,
+        16,
+        32
+      ],
+      "actor_validation_horizons": [
+        4
+      ],
+      "diagnostic_seed": 1729,
+      "diagnostic_dataset": null,
+      "model_checkpoint": null,
+      "reset_model_statistics": false,
+      "variant": "fixed",
+      "wm_batches": 10,
+      "wm_batch": 2048,
+      "wm_hidden": [
+        2048,
+        2048,
+        2048
+      ],
+      "pi_batch": 1024,
+      "horizon": 32,
+      "max_horizon": 32,
+      "horizon_ramp_iters": 1000,
+      "critic_epochs": 5,
+      "critic_minibatches": 4,
+      "gamma": 0.99,
+      "lam": 0.95,
+      "lr": 0.0002,
+      "lr_decay_iters": 250000,
+      "lr_final_ratio": 0.03,
+      "action_noise": 0.1,
+      "failure_warmup_iters": 300,
+      "failure_head": true,
+      "failure_clip": 0.1,
+      "amp": true,
+      "compile": true,
+      "compile_policy": true,
+      "compile_policy_dynamic": false,
+      "profile": false,
+      "save_interval": 2000,
+      "log_interval": 50,
+      "holdout_fraction": 0.1,
+      "log_dir": "logs/dex_supermimic",
+      "checkpoint": null,
+      "task": "hand2-reorient"
+    },
+    "modules": {
+      "actor": {
+        "linear_weights": {
+          "net.0.weight": [
+            512,
+            207
+          ],
+          "net.2.weight": [
+            256,
+            512
+          ],
+          "net.4.weight": [
+            128,
+            256
+          ],
+          "net.6.weight": [
+            20,
+            128
+          ]
+        },
+        "normalization_keys": [
+          "norm.mean",
+          "norm.var",
+          "norm.count"
+        ]
+      },
+      "wm": {
+        "linear_weights": {
+          "net.0.weight": [
+            2048,
+            193
+          ],
+          "net.3.weight": [
+            2048,
+            2048
+          ],
+          "net.6.weight": [
+            2048,
+            2048
+          ],
+          "net.9.weight": [
+            84,
+            2048
+          ]
+        },
+        "normalization_keys": [
+          "norm.mean",
+          "norm.var",
+          "norm.count"
+        ]
+      },
+      "fail_head": {
+        "linear_weights": {
+          "net.0.weight": [
+            256,
+            326
+          ],
+          "net.2.weight": [
+            128,
+            256
+          ],
+          "net.4.weight": [
+            1,
+            128
+          ]
+        },
+        "normalization_keys": [
+          "norm.mean",
+          "norm.var",
+          "norm.count"
+        ]
+      },
+      "critic": {
+        "linear_weights": {
+          "net.0.weight": [
+            512,
+            268
+          ],
+          "net.2.weight": [
+            256,
+            512
+          ],
+          "net.4.weight": [
+            128,
+            256
+          ],
+          "net.6.weight": [
+            1,
+            128
+          ]
+        },
+        "normalization_keys": [
+          "norm.mean",
+          "norm.var",
+          "norm.count"
+        ]
+      }
+    },
+    "context_names": [
+      [
+        "geom_friction",
+        66
+      ],
+      [
+        "actuator_kp_ratios",
+        20
+      ],
+      [
+        "actuator_kd_ratios",
+        20
+      ]
+    ],
+    "asset_source": "pretrained-wuji-v1/model_8000.pt"
+  },
+  "native": {
+    "path": "/home/ubuntu/dexgym/artifacts/cube_reorient/train_seed42_scene_v2/model_2000.pt",
+    "sha256": "a5488bcf70dccba1e611f9f88271d15e818e5a73f64db4c3ef147cd14a446358",
+    "iteration": 2000,
+    "config": {
+      "seed": 42,
+      "max_iterations": 8000,
+      "buffer_steps": 1000,
+      "warmup_steps": 64,
+      "utd": 0.4,
+      "wm_only_iters": 500,
+      "wm_window": 8,
+      "wm_failure_frac": 0.25,
+      "wm_failure_horizon": 16,
+      "final_state_weight": 1.0,
+      "contact_weight": 0.1,
+      "wm_batches": 10,
+      "wm_batch": 2048,
+      "wm_hidden": [
+        2048,
+        2048,
+        2048
+      ],
+      "pi_batch": 1024,
+      "horizon": 32,
+      "critic_epochs": 5,
+      "critic_minibatches": 4,
+      "gamma": 0.99,
+      "lam": 0.95,
+      "lr": 0.0002,
+      "lr_decay_iters": 250000,
+      "lr_final_ratio": 0.03,
+      "action_noise": 0.1,
+      "failure_warmup_iters": 300,
+      "failure_head": true,
+      "failure_clip": 0.1,
+      "amp": true,
+      "compile": true,
+      "compile_policy": true,
+      "save_interval": 1000,
+      "log_interval": 10,
+      "holdout_fraction": 0.1
+    },
+    "modules": {
+      "actor": {
+        "linear_weights": {
+          "net.0.weight": [
+            512,
+            207
+          ],
+          "net.2.weight": [
+            256,
+            512
+          ],
+          "net.4.weight": [
+            128,
+            256
+          ],
+          "net.6.weight": [
+            20,
+            128
+          ]
+        },
+        "normalization_keys": [
+          "norm._mean",
+          "norm._var",
+          "norm._std",
+          "norm.count"
+        ]
+      },
+      "wm": {
+        "linear_weights": {
+          "net.0.weight": [
+            2048,
+            133
+          ],
+          "net.3.weight": [
+            2048,
+            2048
+          ],
+          "net.6.weight": [
+            2048,
+            2048
+          ],
+          "net.9.weight": [
+            84,
+            2048
+          ]
+        },
+        "normalization_keys": [
+          "norm.mean",
+          "norm.var",
+          "norm.count"
+        ]
+      },
+      "fail_head": {
+        "linear_weights": {
+          "net.0.weight": [
+            256,
+            269
+          ],
+          "net.2.weight": [
+            128,
+            256
+          ],
+          "net.4.weight": [
+            1,
+            128
+          ]
+        },
+        "normalization_keys": [
+          "norm.mean",
+          "norm.var",
+          "norm.count"
+        ]
+      },
+      "critic": {
+        "linear_weights": {
+          "net.0.weight": [
+            512,
+            211
+          ],
+          "net.2.weight": [
+            512,
+            512
+          ],
+          "net.4.weight": [
+            256,
+            512
+          ],
+          "net.6.weight": [
+            128,
+            256
+          ],
+          "net.8.weight": [
+            1,
+            128
+          ]
+        },
+        "normalization_keys": [
+          "norm.mean",
+          "norm.var",
+          "norm.count"
+        ]
+      }
+    },
+    "context_names": null,
+    "asset_source": null,
+    "run_provenance": {
+      "task": "DexGym-Wuji-Hand2-Cube-Reorientation-SuperMimic-Direct-v0",
+      "reference_sha": "2becb7380fed86171056f9bf4338b2a6a0c14b01",
+      "scene_revision": 2,
+      "dexgym_commit": "2e238d5ec930ead065b3d90160c1e0caeec6c310",
+      "worktree_status": "?? MUJOCO_LOG.TXT\n?? build/",
+      "num_envs": 4096,
+      "backend": "Isaac Lab 3 / Newton MuJoCo Warp"
+    }
+  },
+  "shared_config_differences": {
+    "log_interval": {
+      "published": 50,
+      "native": 10
+    },
+    "save_interval": {
+      "published": 2000,
+      "native": 1000
+    }
+  },
+  "limitation": "Tag comparison establishes source evolution, not the exact training commit of the released weights; the checkpoint does not record a source commit.",
+  "environment_count": {
+    "published": 1024,
+    "native": 4096,
+    "reason": "Explicit user request; per-update training batches retained."
+  }
+}
