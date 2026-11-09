@@ -57,10 +57,13 @@ residual scale with a soft deadzone of 0.1 on each bounded action component.
 See the [action report](../docs/experiments/hand21_deadzone_action_20261109.md).
 
 The current trainable task ID is `DexGym-Wuji-Hand21-TeleDexter-Direct-v0`.
-It uses the same Hand 2.1 bank, 20 mm fingertip tolerance, a 30 Hz
+It uses the same Hand 2.1 bank, 15 mm fingertip tolerance, a 30 Hz
 subgoal-span curriculum, and cross-trajectory switches within each split.
 The earlier right-hand task IDs remain diagnostic environments without PPO
-registration. See the [task report](../docs/experiments/hand21_teledexter_task_20261109.md).
+registration. See the [task report](../docs/experiments/hand21_teledexter_task_20261109.md)
+for the original 20 mm design, the
+[15 mm training note](../docs/experiments/hand21_teledexter_15mm_4096_50k_live_20261109.md),
+and the [motion distribution report](../docs/experiments/hand21_motion_distribution_20261109.md).
 
 ## Earlier Beta 2 library and strict replay screen (historical)
 

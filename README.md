@@ -66,6 +66,8 @@ records the full-library Joint Replay and the new training rules. The
 reports target timing and failure by exact goal span under the historical 20 mm setting. The
 [15 mm live training note](docs/experiments/hand21_teledexter_15mm_4096_50k_live_20261109.md)
 records the active 4,096-environment, 50,000-iteration run. The
+[Hand 2.1 motion distribution report](docs/experiments/hand21_motion_distribution_20261109.md)
+summarizes joint coverage, fingertip speeds, and goal jumps by reference span. The
 [4096-environment action audit](docs/experiments/hand21_action_audit_4096_300_s42.md)
 records the 300-iteration PPO run, latent Gaussian limit rates, and executed
 action saturation by target span and cross-trajectory target. That run used
