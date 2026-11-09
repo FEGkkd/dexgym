@@ -32,3 +32,14 @@ Mean orientation error improved from 2.04405 to 1.88495 rad, while drop fraction
 increased from 0.03515625 to 0.09375. This remains insufficient learned behavior.
 Training continues with the same reference recipe; the next scheduled evaluation
 is iteration 4000. No mechanism or task simplification was added in response to this result.
+
+A separate behavior recording at iteration 2000 uses seed 123, four environments
+and one complete episode per environment. All four lasted 50 seconds without a
+drop and completed zero goals (mean angle 1.78154 rad). This small recording is
+not a replacement for the 256-episode evaluation above. The rendered video uses
+environment 0 selected before inspection, the first 30 seconds at 25 fps, and
+recorded native poses with no physics resimulation. Root-position reconstruction
+error is zero. Raw trace and video are under the host artifact directory as
+`native_iter2000_scene_v2_trace.npz` and `native_iter2000_scene_v2.mp4`.
+Reports are `native_iter2000_trace_eval.json` and
+`native_iter2000_trace_render.json` in the validation directory.
