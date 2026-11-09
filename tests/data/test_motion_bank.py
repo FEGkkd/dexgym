@@ -54,3 +54,28 @@ def test_motion_bank_can_skip_short_segments_without_changing_manifest(tmp_path)
     assert bank.motion_count == 1
     assert bank.records[0]["file"] == "usable.npz"
     assert bank.sample_starts(16, stride=4)[0].tolist() == [0] * 16
+
+
+def test_cross_trajectory_sampling_preserves_valid_frame_and_changes_motion(tmp_path):
+    rows = []
+    for index, length in enumerate((6, 8, 12)):
+        name = f"motion{index}.npz"
+        np.savez_compressed(
+            tmp_path / name,
+            q_ref=np.zeros((length, 20), dtype=np.float32),
+            tip_ref=np.zeros((length, 5, 3), dtype=np.float32),
+        )
+        rows.append({"file": name, "split": "train", "frames": length})
+    manifest = tmp_path / "manifest.json"
+    manifest.write_text(json.dumps({"motions": rows, "fps": 30.0}))
+    bank = MotionBank(manifest, split="train", device="cpu")
+
+    current = torch.tensor([0, 1, 2])
+    frames = torch.tensor([5, 7, 11])
+    next_ids, switched = bank.sample_other_at_frame(current, frames)
+    assert switched.tolist() == [True, True, False]
+    assert next_ids[0] in (1, 2) and next_ids[1] == 2 and next_ids[2] == 2
+    assert torch.all(bank.lengths[next_ids] > frames)
+    _, starts = bank.sample_reference_starts(500, first_fraction=0.9)
+    assert torch.all(starts >= 0)
+    assert starts.max() < 11

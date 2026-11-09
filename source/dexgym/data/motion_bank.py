@@ -44,6 +44,10 @@ class MotionBank:
             tip_parts.append(tips)
             lengths.append(len(q))
         self.lengths = torch.tensor(lengths, dtype=torch.long, device=device)
+        self._length_order = torch.argsort(self.lengths)
+        self._sorted_lengths = self.lengths[self._length_order].contiguous()
+        self._length_rank = torch.empty_like(self._length_order)
+        self._length_rank[self._length_order] = torch.arange(len(lengths), device=device)
         self.offsets = torch.tensor([0, *np.cumsum(lengths[:-1])], dtype=torch.long, device=device)
         self.q = torch.as_tensor(np.concatenate(q_parts), dtype=torch.float32, device=device)
         self.tip = torch.as_tensor(np.concatenate(tip_parts), dtype=torch.float32, device=device)
@@ -60,6 +64,31 @@ class MotionBank:
 
     def joints(self, motion_ids: torch.Tensor, frames: torch.Tensor) -> torch.Tensor:
         return self.q[self.offsets[motion_ids] + frames]
+
+    def sample_reference_starts(self, count: int, *, first_fraction: float = 0.9) -> tuple[torch.Tensor, torch.Tensor]:
+        """Sample RSI states from the initial fraction of each reference motion."""
+        if not 0 < first_fraction <= 1 or torch.any(self.lengths < 2):
+            raise ValueError("RSI requires motions with at least two frames and a fraction in (0,1]")
+        ids = torch.randint(self.motion_count, (count,), device=self.lengths.device)
+        choices = torch.minimum(torch.ceil(self.lengths[ids] * first_fraction).long(), self.lengths[ids] - 1)
+        frames = torch.floor(torch.rand(count, device=self.lengths.device) * choices).long()
+        return ids, frames
+
+    def sample_other_at_frame(
+        self, current_ids: torch.Tensor, frames: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        """Uniformly choose a different motion that contains each current frame."""
+        if current_ids.shape != frames.shape or current_ids.ndim != 1:
+            raise ValueError("Expected matching one-dimensional motion IDs and frame indices")
+        first = torch.searchsorted(self._sorted_lengths, frames, right=True)
+        eligible = self.motion_count - first
+        can_switch = eligible > 1
+        draw = torch.floor(torch.rand(len(frames), device=frames.device) * (eligible - 1).clamp_min(1)).long()
+        chosen_rank = first + draw
+        chosen_rank += (chosen_rank >= self._length_rank[current_ids]).long()
+        chosen_rank = chosen_rank.clamp_max(self.motion_count - 1)
+        candidates = self._length_order[chosen_rank]
+        return torch.where(can_switch, candidates, current_ids), can_switch
 
     def fingertips(self, motion_ids: torch.Tensor, frames: torch.Tensor) -> torch.Tensor:
         return self.tip[self.offsets[motion_ids] + frames]

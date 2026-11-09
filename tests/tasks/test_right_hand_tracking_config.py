@@ -7,6 +7,7 @@ import torch
 from dexgym.assets.marvin_wuji.robot_cfg import PACKAGED_USD
 from dexgym.assets.wuji_hand21 import OFFICIAL_USD
 from dexgym.tasks import (
+    HAND21_TELEDEXTER_ID,
     RIGHT_HAND_CLEAN_ID,
     RIGHT_HAND_HYBRID125_BETA_ID,
     RIGHT_HAND_HYBRID125_ENTROPY0_ID,
@@ -19,6 +20,7 @@ from dexgym.tasks.direct.right_hand_tracking.ablation_cfg import RightHandCleanH
 from dexgym.tasks.direct.right_hand_tracking.clean_env_cfg import RightHandCleanTrackingCfg
 from dexgym.tasks.direct.right_hand_tracking.env_cfg import RightHandTrackingDirectCfg
 from dexgym.tasks.direct.right_hand_tracking.logic import tracking_step
+from dexgym.tasks.direct.right_hand_tracking.teledexter_env_cfg import WujiHand21TeleDexterCfg
 from dexgym.tasks.ppo_cfg import (
     RightHandCleanHybrid125BetaPPOCfg,
     RightHandCleanHybrid125Entropy0PPOCfg,
@@ -27,6 +29,7 @@ from dexgym.tasks.ppo_cfg import (
     RightHandCleanObs125PPOCfg,
     RightHandCleanTrackingPPOCfg,
     RightHandTrackingPPOCfg,
+    WujiHand21TeleDexterPPOCfg,
 )
 
 
@@ -57,13 +60,10 @@ def test_default_goal_requires_precise_five_finger_tracking():
     assert reached.tolist() == [True, False]
 
 
-def test_right_hand_task_registers_its_own_ppo_configuration():
+def test_legacy_right_hand_environment_is_not_an_active_ppo_task():
     spec = gym.spec(RIGHT_HAND_ID)
     assert spec.kwargs["env_cfg_entry_point"].endswith(":RightHandTrackingDirectCfg")
-    assert spec.kwargs["rsl_rl_cfg_entry_point"].endswith(":RightHandTrackingPPOCfg")
-    ppo = RightHandTrackingPPOCfg()
-    assert ppo.num_steps_per_env > 0
-    assert ppo.max_iterations <= 20  # bounded workflow validation only
+    assert "rsl_rl_cfg_entry_point" not in spec.kwargs
 
 
 def test_clean_task_has_independent_30hz_full_contact_configuration():
@@ -84,17 +84,17 @@ def test_clean_task_has_independent_30hz_full_contact_configuration():
         clean.goal_tolerance_m,
         clean.goal_dwell_steps,
         clean.max_goal_steps,
-    ) == (4, 0.01, 2, 45)
+    ) == (4, 0.02, 2, 45)
     assert clean.episode_length_s == 30.0  # allow long clean clips to finish
     assert old.sim.dt == 1 / 120
     assert old.library_path != clean.library_path
     assert old.scene.robot.spawn.usd_path != clean.scene.robot.spawn.usd_path
 
 
-def test_clean_task_has_separate_gym_id_and_ppo_log_directory():
+def test_clean_baseline_is_diagnostic_only():
     spec = gym.spec(RIGHT_HAND_CLEAN_ID)
     assert spec.kwargs["env_cfg_entry_point"].endswith(":RightHandCleanTrackingCfg")
-    assert spec.kwargs["rsl_rl_cfg_entry_point"].endswith(":RightHandCleanTrackingPPOCfg")
+    assert "rsl_rl_cfg_entry_point" not in spec.kwargs
     assert RightHandCleanTrackingPPOCfg().experiment_name != RightHandTrackingPPOCfg().experiment_name
     assert "deadzone" in RightHandCleanTrackingPPOCfg().experiment_name
 
@@ -112,13 +112,13 @@ def test_observation_and_reward_ablations_are_isolated_from_clean_baseline():
     assert obs.library_path == hybrid.library_path == baseline.library_path
     assert obs.scene.robot.spawn.usd_path == hybrid.scene.robot.spawn.usd_path == baseline.scene.robot.spawn.usd_path
     assert obs.sim.dt == hybrid.sim.dt == baseline.sim.dt == 1 / 480
-    for task_id, cfg_name, ppo_name in (
-        (RIGHT_HAND_OBS125_ID, "RightHandCleanObs125Cfg", "RightHandCleanObs125PPOCfg"),
-        (RIGHT_HAND_HYBRID125_ID, "RightHandCleanHybrid125Cfg", "RightHandCleanHybrid125PPOCfg"),
+    for task_id, cfg_name in (
+        (RIGHT_HAND_OBS125_ID, "RightHandCleanObs125Cfg"),
+        (RIGHT_HAND_HYBRID125_ID, "RightHandCleanHybrid125Cfg"),
     ):
         spec = gym.spec(task_id)
         assert spec.kwargs["env_cfg_entry_point"].endswith(f":{cfg_name}")
-        assert spec.kwargs["rsl_rl_cfg_entry_point"].endswith(f":{ppo_name}")
+        assert "rsl_rl_cfg_entry_point" not in spec.kwargs
     names = {
         RightHandCleanTrackingPPOCfg().experiment_name,
         RightHandCleanObs125PPOCfg().experiment_name,
@@ -138,7 +138,7 @@ def test_entropy_zero_variant_changes_only_ppo_entropy_coefficient():
     assert no_entropy.experiment_name != baseline.experiment_name
     spec = gym.spec(RIGHT_HAND_HYBRID125_ENTROPY0_ID)
     assert spec.kwargs["env_cfg_entry_point"].endswith(":RightHandCleanHybrid125Cfg")
-    assert spec.kwargs["rsl_rl_cfg_entry_point"].endswith(":RightHandCleanHybrid125Entropy0PPOCfg")
+    assert "rsl_rl_cfg_entry_point" not in spec.kwargs
 
 
 def test_bounded_distribution_pilots_keep_the_hybrid_task_and_zero_entropy():
@@ -162,3 +162,21 @@ def test_bounded_distribution_pilots_keep_the_hybrid_task_and_zero_entropy():
         assert asdict(ppo.algorithm) == asdict(entropy0.algorithm)
         assert ppo.actor.distribution_cfg.class_name == class_name
         assert ppo.experiment_name != entropy0.experiment_name
+        assert "rsl_rl_cfg_entry_point" not in spec.kwargs
+
+
+def test_current_hand21_teledexter_is_the_only_trainable_right_hand_task():
+    spec = gym.spec(HAND21_TELEDEXTER_ID)
+    assert spec.kwargs["env_cfg_entry_point"].endswith(":WujiHand21TeleDexterCfg")
+    assert spec.kwargs["rsl_rl_cfg_entry_point"].endswith(":WujiHand21TeleDexterPPOCfg")
+    cfg = WujiHand21TeleDexterCfg()
+    ppo = WujiHand21TeleDexterPPOCfg()
+    assert cfg.scene.robot.spawn.usd_path == str(OFFICIAL_USD)
+    assert cfg.library_path.endswith("hand21_right_geometry_feasible/manifest.json")
+    assert cfg.teledexter_style and cfg.goal_tolerance_m == 0.02
+    assert (cfg.observation_space, cfg.action_space) == (125, 20)
+    assert (cfg.dwell_min_steps, cfg.dwell_max_steps) == (5, 15)
+    assert (cfg.curriculum_stride_min, cfg.curriculum_stride_max) == (20, 40)
+    assert (cfg.cross_trajectory_probability, cfg.failure_tolerance_scale) == (0.1, 1.5)
+    assert ppo.actor.distribution_cfg.init_std == 1.0
+    assert ppo.algorithm.entropy_coef == 0.005

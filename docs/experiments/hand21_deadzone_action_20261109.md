@@ -1,5 +1,10 @@
 # TELEDEXTER deadzone residual action on Hand 2.1 (2026-11-09)
 
+**Subsequent task update:** The current trainable task ID is
+`DexGym-Wuji-Hand21-TeleDexter-Direct-v0`; the Clean family described below
+remains available for diagnostics. See
+[the current task report](hand21_teledexter_task_20261109.md).
+
 The official Hand 2.1 Clean Tracking task and its Obs125, Hybrid125, and
 action-distribution variants now follow TELEDEXTER Appendix C.1's residual
 joint target equation. For the bounded policy output `a_t` and previous

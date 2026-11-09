@@ -124,3 +124,16 @@ class RightHandCleanHybrid125BetaPPOCfg(RightHandCleanHybrid125Entropy0PPOCfg):
     experiment_name = "dexgym_wuji_hand21_right_hand_deadzone_hybrid125_beta"
     actor = deepcopy(RightHandCleanHybrid125Entropy0PPOCfg().actor)
     actor.distribution_cfg = MatchedBetaDistributionCfg()
+
+
+@configclass
+class WujiHand21TeleDexterPPOCfg(RightHandTrackingPPOCfg):
+    """Current Hand 2.1 PPO: paper-style Gaussian std and entropy bonus."""
+
+    experiment_name = "dexgym_wuji_hand21_teledexter_20mm"
+    max_iterations = 1000
+    save_interval = 50
+    actor = deepcopy(RightHandTrackingPPOCfg().actor)
+    actor.distribution_cfg = RslRlMLPModelCfg.GaussianDistributionCfg(init_std=1.0)
+    algorithm = deepcopy(RightHandTrackingPPOCfg().algorithm)
+    algorithm.entropy_coef = 0.005

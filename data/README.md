@@ -46,15 +46,21 @@ fixed-pose holds with all five fingertips under 10 mm. One 170-frame GRAB
 clip was directly replayed through its position controller and rendered at
 `artifacts/hand21/hand21_grab_direct_replay_newton.mp4` (local, not pushed).
 
-The current `DexGym-Wuji-Right-Hand-Clean-Tracking-Direct-v0` task and its
+The diagnostic `DexGym-Wuji-Right-Hand-Clean-Tracking-Direct-v0` task and its
 Obs125, Hybrid125, and action-distribution variants use this Hand 2.1 library
 and the independent 20-DoF USD model. At stride 4, the task sampler uses
 segments with at least six frames: 942 train and 446 validation segments.
 Shorter segments stay in the library and audit. See the
 [RL model-switch report](../docs/experiments/hand21_rl_model_switch_20261109.md).
-Their current action mapping follows TELEDEXTER Appendix C.1: a 0.1-rad
+Their action mapping follows TELEDEXTER Appendix C.1: a 0.1-rad
 residual scale with a soft deadzone of 0.1 on each bounded action component.
 See the [action report](../docs/experiments/hand21_deadzone_action_20261109.md).
+
+The current trainable task ID is `DexGym-Wuji-Hand21-TeleDexter-Direct-v0`.
+It uses the same Hand 2.1 bank, 20 mm fingertip tolerance, a 30 Hz
+subgoal-span curriculum, and cross-trajectory switches within each split.
+The earlier right-hand task IDs remain diagnostic environments without PPO
+registration. See the [task report](../docs/experiments/hand21_teledexter_task_20261109.md).
 
 ## Earlier Beta 2 library and strict replay screen (historical)
 

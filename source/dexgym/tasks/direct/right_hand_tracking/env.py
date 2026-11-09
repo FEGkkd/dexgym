@@ -16,10 +16,15 @@ from dexgym.data.wuji_retarget import TIP_SITE_NAMES
 from .env_cfg import RightHandTrackingDirectCfg
 from .logic import (
     build_right_hand_observation,
+    curriculum_stride_upper,
     fingertips_in_wrist_frame,
     residual_joint_target,
     right_hand_joint_indices,
+    sample_goal_span,
+    teledexter_hand_dwell,
+    teledexter_hand_reward,
     tracking_step,
+    update_failure_count,
 )
 
 TIP_DISTAL_BODY_NAMES = (
@@ -77,6 +82,13 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         self.action_delta = torch.zeros_like(self.previous_action)
         self.goals_reached = torch.zeros(self.num_envs, dtype=torch.long, device=self.device)
         self._step_reward = torch.zeros(self.num_envs, device=self.device)
+        self.curriculum_steps = torch.zeros(self.num_envs, dtype=torch.long, device=self.device)
+        self.goal_span = torch.ones(self.num_envs, dtype=torch.long, device=self.device)
+        self.dwell_required = torch.full((self.num_envs,), cfg.goal_dwell_steps, dtype=torch.long, device=self.device)
+        self.fail_frames = torch.zeros(self.num_envs, dtype=torch.long, device=self.device)
+        self.fail_budget = torch.full((self.num_envs,), float(cfg.max_goal_steps), device=self.device)
+        self.last_reached = torch.zeros(self.num_envs, dtype=torch.bool, device=self.device)
+        self.last_crossed = torch.zeros(self.num_envs, dtype=torch.bool, device=self.device)
 
     def _current_tips(self) -> torch.Tensor:
         return fingertips_in_wrist_frame(
@@ -120,6 +132,8 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         return self._step_reward
 
     def _get_dones(self) -> tuple[torch.Tensor, torch.Tensor]:
+        if self.cfg.teledexter_style:
+            return self._get_dones_teledexter()
         # DirectRLEnv calls this hook before _get_rewards. Update the current
         # subgoal here so completion and stalled-goal termination occur on the
         # same transition that earns its reward.
@@ -135,6 +149,8 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
             action_rate_penalty=self.cfg.reward_action_rate_penalty,
             time_cost=self.cfg.reward_time_cost,
         )
+        self.last_reached = reached
+        self.last_crossed = torch.zeros_like(reached)
         self.goal_age += 1
         self.goals_reached += reached.long()
         next_frame, just_completed = advance_goal_frames(
@@ -163,12 +179,100 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         timeout = self.episode_length_buf >= self.max_episode_length
         return failed, timeout
 
+    def _get_dones_teledexter(self) -> tuple[torch.Tensor, torch.Tensor]:
+        """Reach, reward, and advance one hand-only TELEDEXTER subgoal on the current transition."""
+        cfg = self.cfg
+        errors, within, reached, next_dwell = teledexter_hand_dwell(
+            self._current_tips(), self.goal_tips, self.dwell, self.dwell_required, tolerance_m=cfg.goal_tolerance_m
+        )
+        upper = curriculum_stride_upper(
+            self.curriculum_steps,
+            minimum=cfg.curriculum_stride_min,
+            maximum=cfg.curriculum_stride_max,
+            anneal_steps=cfg.curriculum_anneal_steps,
+            sigma_min=cfg.curriculum_sigma_min,
+        )
+        self.curriculum_steps += 1
+        lengths = self.bank.lengths[self.motion_ids]
+        at_end = self.goal_frame >= lengths - 1
+        wants_switch = reached & (
+            (torch.rand(self.num_envs, device=self.device) < cfg.cross_trajectory_probability) | at_end
+        )
+        crossed = torch.zeros_like(reached)
+        next_motion = self.motion_ids.clone()
+        next_frame = self.goal_frame.clone()
+        next_span = self.goal_span.clone()
+        next_budget = self.fail_budget.clone()
+        if wants_switch.any():
+            candidates, available = self.bank.sample_other_at_frame(
+                self.motion_ids[wants_switch], self.goal_frame[wants_switch]
+            )
+            next_motion[wants_switch] = candidates
+            crossed[wants_switch] = available
+        if crossed.any():
+            next_span[crossed] = 0
+            next_budget[crossed] = cfg.cross_trajectory_failure_budget
+        in_trajectory = reached & ~crossed & ~at_end
+        if in_trajectory.any():
+            sampled = sample_goal_span(upper[in_trajectory])
+            future = torch.minimum(self.goal_frame[in_trajectory] + sampled, lengths[in_trajectory] - 1)
+            span = future - self.goal_frame[in_trajectory]
+            next_frame[in_trajectory] = future
+            next_span[in_trajectory] = span
+            next_budget[in_trajectory] = cfg.failure_tolerance_scale * span
+        self._step_reward = teledexter_hand_reward(
+            errors, reached, self.goal_span, crossed,
+            dense_scale=cfg.reward_dense_scale, time_cost=cfg.reward_time_cost,
+        )
+        self.last_reached = reached
+        self.last_crossed = crossed
+        self.fail_frames = update_failure_count(self.fail_frames, within, reached)
+        exceeded_budget = self.fail_frames > self.fail_budget
+        self.goal_age = torch.where(reached, torch.zeros_like(self.goal_age), self.goal_age + 1)
+        self.goals_reached += reached.long()
+        self.completed |= reached & at_end & ~crossed
+        self.motion_ids = next_motion
+        self.goal_frame = next_frame
+        self.goal_span = next_span
+        self.fail_budget = next_budget
+        self.goal_tips = self.bank.fingertips(self.motion_ids, self.goal_frame)
+        self.dwell = torch.where(reached, torch.zeros_like(next_dwell), next_dwell)
+        sampled_dwell = torch.randint(
+            cfg.dwell_min_steps, cfg.dwell_max_steps + 1, (self.num_envs,), device=self.device
+        )
+        self.dwell_required = torch.where(reached, sampled_dwell, self.dwell_required)
+        self.extras["log"] = {
+            "mean_tip_error_m": errors.mean(),
+            "goal_reach_fraction": reached.float().mean(),
+            "mean_goals_reached": self.goals_reached.float().mean(),
+            "cross_trajectory_fraction": crossed.float().mean(),
+            "mean_goal_span_frames": self.goal_span.float().mean(),
+            "curriculum_stride_upper": upper.float().mean(),
+            "mean_fail_frames": self.fail_frames.float().mean(),
+        }
+        q = self.robot.data.joint_pos.torch[:, self.right_ids]
+        qdot = self.robot.data.joint_vel.torch[:, self.right_ids]
+        unsafe = (
+            ~torch.isfinite(q).all(dim=-1)
+            | ~torch.isfinite(qdot).all(dim=-1)
+            | (q < self.joint_limits[:, 0] - 0.05).any(dim=-1)
+            | (q > self.joint_limits[:, 1] + 0.05).any(dim=-1)
+        )
+        failed = unsafe | exceeded_budget | self.completed
+        timeout = self.episode_length_buf >= self.max_episode_length
+        return failed, timeout
+
     def _reset_idx(self, env_ids: Sequence[int] | None) -> None:
         if env_ids is None:
             env_ids = self.robot._ALL_INDICES
         super()._reset_idx(env_ids)
         count = len(env_ids)
-        motion_ids, start = self.bank.sample_starts(count, stride=self.cfg.subgoal_stride)
+        if self.cfg.teledexter_style:
+            motion_ids, start = self.bank.sample_reference_starts(
+                count, first_fraction=self.cfg.reference_start_fraction
+            )
+        else:
+            motion_ids, start = self.bank.sample_starts(count, stride=self.cfg.subgoal_stride)
         q = self.home_q[None].repeat(count, 1)
         q[:, self.right_ids] = self.bank.joints(motion_ids, start)
         root_pose = self.robot.data.default_root_pose.torch[env_ids].clone()
@@ -183,7 +287,25 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         self.full_target[env_ids] = q
         self.target_q[env_ids] = q[:, self.right_ids]
         self.motion_ids[env_ids] = motion_ids
-        self.goal_frame[env_ids] = start + self.cfg.subgoal_stride
+        if self.cfg.teledexter_style:
+            upper = curriculum_stride_upper(
+                self.curriculum_steps[env_ids],
+                minimum=self.cfg.curriculum_stride_min,
+                maximum=self.cfg.curriculum_stride_max,
+                anneal_steps=self.cfg.curriculum_anneal_steps,
+                sigma_min=self.cfg.curriculum_sigma_min,
+            )
+            span = sample_goal_span(upper)
+            goal = torch.minimum(start + span, self.bank.lengths[motion_ids] - 1)
+            self.goal_span[env_ids] = goal - start
+            self.goal_frame[env_ids] = goal
+            self.fail_budget[env_ids] = self.cfg.failure_tolerance_scale * self.goal_span[env_ids]
+            self.fail_frames[env_ids] = 0
+            self.dwell_required[env_ids] = torch.randint(
+                self.cfg.dwell_min_steps, self.cfg.dwell_max_steps + 1, (count,), device=self.device
+            )
+        else:
+            self.goal_frame[env_ids] = start + self.cfg.subgoal_stride
         self.goal_tips[env_ids] = self.bank.fingertips(motion_ids, self.goal_frame[env_ids])
         self.dwell[env_ids] = 0
         self.goal_age[env_ids] = 0
@@ -191,3 +313,5 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         self.previous_action[env_ids] = 0.0
         self.action_delta[env_ids] = 0.0
         self.goals_reached[env_ids] = 0
+        self.last_reached[env_ids] = False
+        self.last_crossed[env_ids] = False

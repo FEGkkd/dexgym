@@ -21,7 +21,7 @@ algorithm capability, **not a claim that every task or policy has converged**.
 | `DexGym-Joint-Tracking-Direct-v0` | Cartpole joint target | Isaac Lab DirectRLEnv, RSL-RL PPO example. |
 | `DexGym-Joint-Tracking-Manager-v0` | Cartpole joint target | Isaac Lab ManagerBasedRLEnv, RSL-RL PPO example. |
 | `DexGym-Wuji-Right-Hand-Tracking-Direct-v0` | Right WujiHand2 five-fingertip sequence tracking | TeleDexter-inspired hand-only DirectRLEnv; GRAB retargeting and a bounded PPO workflow check passed. No convergence claim. |
-| `DexGym-Wuji-Right-Hand-Clean-Tracking-Direct-v0` and its 125D variants | Official Wuji Hand 2.1 right-hand GRAB tracking | Standalone 20-DoF USD, full collisions, 480 Hz Newton / 30 Hz policy, TELEDEXTER deadzone residual action. Environment smoke passed; PPO learning on this action mapping has not yet been evaluated. |
+| `DexGym-Wuji-Hand21-TeleDexter-Direct-v0` | Official Wuji Hand 2.1 right-hand GRAB tracking | Current PPO task: 20 mm fingertips, paper-style curriculum, variable dwell, span-weighted reward, failure budget and cross-trajectory switching. |
 
 The Cartpole examples use PPO. **SuperMimic does not use PPO.** The SuperMimic Marvin
 environment simulates all 54 DoF at 500 Hz, controls only 14 arm joints at
@@ -60,15 +60,17 @@ remains available for historical comparisons. See the
 for the exact task IDs, compatibility note, and smoke results.
 The [deadzone action report](docs/experiments/hand21_deadzone_action_20261109.md)
 records the current action equation and its validation.
+The [current TELEDEXTER task report](docs/experiments/hand21_teledexter_task_20261109.md)
+records the full-library Joint Replay and the new training rules. Earlier
+right-hand Gym IDs remain available for diagnostics but no longer register PPO
+training configurations.
 
 ```bash
-PYTHONPATH=source uv run python scripts/data/build_grab_right_hand_library.py \
-  --data-root data --output data/processed/hand_only_right
-PYTHONPATH=source uv run python scripts/smoke_right_hand_tracking.py \
+PYTHONPATH=source python scripts/smoke_hand21_teledexter.py \
   --num-envs 8 --steps 120 --split validation
-PYTHONPATH=source uv run isaaclab train --rl_library rsl_rl \
-  --task DexGym-Wuji-Right-Hand-Tracking-Direct-v0 \
-  --num_envs 16 --max_iterations 10 physics=newton_mjwarp
+PYTHONPATH=source isaaclab train --rl_library rsl_rl \
+  --task DexGym-Wuji-Hand21-TeleDexter-Direct-v0 \
+  --num_envs 4096 --max_iterations 500 physics=newton_mjwarp
 ```
 
 ## SuperMimic code

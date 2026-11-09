@@ -53,3 +53,4 @@ class RightHandTrackingDirectCfg(DirectRLEnvCfg):
     reward_dense_scale: float = 1.0
     reward_time_cost: float = 0.01
     reward_action_rate_penalty: float = 0.02
+    teledexter_style: bool = False

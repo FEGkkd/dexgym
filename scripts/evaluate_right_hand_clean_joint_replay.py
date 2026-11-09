@@ -138,7 +138,9 @@ def main() -> None:
                     observed_dwell = torch.where(within, observed_dwell + 1, torch.zeros_like(observed_dwell))
                     expected_reached = observed_dwell >= cfg.goal_dwell_steps
                     if not torch.equal(reached[active], expected_reached[active]):
-                        raise AssertionError("10 mm / two-step reach decision differs from observed fingertips")
+                        raise AssertionError(
+                            "Configured fingertip/dwell reach decision differs from observed fingertips"
+                        )
                     expected_next_dwell = torch.where(reached, torch.zeros_like(observed_dwell), observed_dwell)
                     if not torch.equal(decision["next_dwell"][active], expected_next_dwell[active]):
                         raise AssertionError("Task dwell did not reset or advance with the observed fingertips")

@@ -35,6 +35,78 @@ def action_toward_joint_target(
     return (needed.sign() * (needed.abs() + deadzone)).clamp(-1.0, 1.0)
 
 
+def curriculum_stride_upper(
+    steps: torch.Tensor,
+    *,
+    minimum: int = 20,
+    maximum: int = 40,
+    anneal_steps: int = 25600,
+    sigma_min: float = 0.7,
+) -> torch.Tensor:
+    """TELEDEXTER C.3 cubic stride schedule, scaled from 60-Hz to 30-Hz references."""
+    if minimum < 1 or maximum < minimum or anneal_steps < 1 or not 0 < sigma_min < 1:
+        raise ValueError("Invalid curriculum schedule")
+    fraction = (steps.float() / anneal_steps).clamp(0.0, 1.0)
+    sigma = 1.0 - (1.0 - sigma_min) * fraction
+    upper = minimum + (maximum - minimum) * (1.0 - sigma.pow(3)) / (1.0 - sigma_min**3)
+    return upper.floor().long().clamp(minimum, maximum)
+
+
+def sample_goal_span(upper: torch.Tensor) -> torch.Tensor:
+    """Sample each forward reference-frame jump uniformly from 1 through its current bound."""
+    if upper.ndim != 1 or torch.any(upper < 1):
+        raise ValueError("Expected positive per-environment stride upper bounds")
+    return torch.floor(torch.rand(upper.shape, device=upper.device) * upper).long() + 1
+
+
+def teledexter_hand_dwell(
+    current_tips: torch.Tensor,
+    goal_tips: torch.Tensor,
+    dwell: torch.Tensor,
+    required: torch.Tensor,
+    *,
+    tolerance_m: float,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Test the all-finger threshold for each environment's sampled hold duration."""
+    if current_tips.shape != goal_tips.shape or current_tips.shape[-2:] != (5, 3):
+        raise ValueError("Expected matching fingertip positions[N,5,3]")
+    if dwell.shape != required.shape or dwell.shape != (len(current_tips),) or tolerance_m <= 0:
+        raise ValueError("Expected dwell and required[N] with a positive tolerance")
+    errors = torch.linalg.vector_norm(current_tips - goal_tips, dim=-1)
+    within = (errors < tolerance_m).all(dim=-1)
+    next_dwell = torch.where(within, dwell + 1, torch.zeros_like(dwell))
+    reached = next_dwell >= required
+    return errors, within, reached, next_dwell
+
+
+def teledexter_hand_reward(
+    errors: torch.Tensor,
+    reached: torch.Tensor,
+    goal_span: torch.Tensor,
+    cross_switch: torch.Tensor,
+    *,
+    dense_scale: float = 0.1,
+    time_cost: float = 0.1,
+) -> torch.Tensor:
+    """Hand-only form of TELEDEXTER C.2's span-weighted sparse reward."""
+    if errors.ndim != 2 or errors.shape[1] != 5 or any(
+        item.shape != (len(errors),) for item in (reached, goal_span, cross_switch)
+    ):
+        raise ValueError("Expected finger errors[N,5] and per-environment reward inputs[N]")
+    decay = errors.new_tensor([100.0, 90.0, 90.0, 90.0, 90.0])
+    score = 1.5 * 0.5 * torch.exp(-errors * decay).sum(dim=-1)
+    step_weight = torch.where(cross_switch, 100.0, goal_span.float() + 5.0)
+    dense = torch.exp(-50.0 * errors).mean(dim=-1)
+    return reached.float() * step_weight * score + dense_scale * dense - time_cost
+
+
+def update_failure_count(failures: torch.Tensor, within: torch.Tensor, reached: torch.Tensor) -> torch.Tensor:
+    """Count out-of-tolerance policy frames until the next subgoal is hit."""
+    if failures.shape != within.shape or failures.shape != reached.shape:
+        raise ValueError("Expected matching failure, threshold, and reach arrays")
+    return torch.where(reached, torch.zeros_like(failures), failures + (~within).long())
+
+
 def right_hand_joint_indices(joint_names: tuple[str, ...] | list[str]) -> list[int]:
     """Map SDK firmware order to the corresponding 20 robot articulation joints."""
     names = list(joint_names)
