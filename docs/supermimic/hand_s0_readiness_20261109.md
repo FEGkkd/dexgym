@@ -1,5 +1,7 @@
 # 单手 S0：任务与 Model-based RL 链路验收
 
+> Historical report. Current default is v4; see [v4 alignment and the unresolved Actor deadzone](hand_s0_dex_v4_alignment_20261109.md). Do not infer current training readiness from this older report.
+
 > Historical v1 evidence below includes trust-gated updates. The current standalone
 > Hand S0 v3 has no error gate and uses a fixed WM-only phase; see the [current checks](hand_s0_dex_alignment_20261109.md).
 

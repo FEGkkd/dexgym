@@ -22,7 +22,7 @@ class HandWorldModel(StateDeltaWorldModel):
         self.last_event_metrics = {}
 
     def autoregressive_loss(self, window, robot_adapter, **kwargs):
-        loss, errors = super().autoregressive_loss(window, robot_adapter, **kwargs)
+        loss, errors = self.dynamics_loss(window, robot_adapter, **kwargs)
         active = window.mask.bool()
         arrival = window.next_state[active]
         old = window.task_state.index(active)
@@ -38,3 +38,6 @@ class HandWorldModel(StateDeltaWorldModel):
             "reach_prediction_rate": float(logits.detach().sigmoid().mean()),
         }
         return loss + event_loss, errors
+
+    def dynamics_loss(self, window, robot_adapter, **kwargs):
+        return super().autoregressive_loss(window, robot_adapter, **kwargs)

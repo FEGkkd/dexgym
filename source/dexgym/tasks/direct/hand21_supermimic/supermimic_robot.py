@@ -35,6 +35,9 @@ class Hand21DynamicsAdapter:
     def bounded_action(action):
         return action.tanh()
 
+    def exploration_action(self, action, noise):
+        return action + noise
+
     def executed_command(self, state, action):
         return residual_joint_target(
             state[:, 40:60], self.bounded_action(action), self.fk.limits, scale=0.1, deadzone=0.1
@@ -78,4 +81,30 @@ class Hand21DynamicsAdapter:
             "action_deadzone": 0.1,
             "action_tanh_count": 1,
             "joint_limits": self.fk.limits.tolist(),
+        }
+
+
+class HandDexDynamicsAdapter(Hand21DynamicsAdapter):
+    """v4 Actor actions are already tanh-bounded; WM conditions on executed u."""
+
+    def __init__(self, device="cpu", dtype=torch.float32):
+        super().__init__(device=device, dtype=dtype)
+        from dataclasses import replace
+
+        self.spec = replace(self.spec, action_schema="bounded_deadzone01_delta01_hand21_v2")
+
+    @staticmethod
+    def bounded_action(action):
+        return action.clamp(-1, 1)
+
+    def exploration_action(self, action, noise):
+        return (action + noise).clamp(-1, 1)
+
+    def checkpoint_contract(self):
+        return {
+            **super().checkpoint_contract(),
+            "adapter_version": "hand21_s0_v4",
+            "actor_output": "tanh_bounded",
+            "exploration": "post_tanh_gaussian_clamp",
+            "world_action_input": "executed_joint_target",
         }

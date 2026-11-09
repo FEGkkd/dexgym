@@ -93,7 +93,7 @@ def test_prefill_and_500_iteration_boundary_survive_resume(tmp_path):
 
 def test_dex_networks_use_current_goal_and_small_orthogonal_output():
     experiment = default_experiment()
-    assert experiment["version"] == "hand21_s0_v3"
+    assert experiment["version"] == "hand21_s0_v4"
     fields = experiment["network"].copy()
     for key in ("world_hidden", "goal_hidden", "actor_hidden", "critic_hidden", "termination_hidden"):
         fields[key] = tuple(fields[key])

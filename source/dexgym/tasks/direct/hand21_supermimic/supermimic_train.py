@@ -20,6 +20,7 @@ from dexgym.tasks import HAND21_SUPERMIMIC_ID
 from dexgym.tasks.direct.hand21_supermimic.supermimic_collector import HandNewtonCollector
 
 from .supermimic_cfg import load_hand_configuration
+from .supermimic_dex_trainer import HandDexTrainer
 from .supermimic_runner import components, physics_contract, source_revision
 from .supermimic_schedule import HandSuperMimicTrainer, HandTrainerConfig
 
@@ -46,13 +47,15 @@ def main():
         env = gym.make(args.task, cfg=cfg).unwrapped
         try:
             robot, task, modules = components(env, experiment)
-            collector = HandNewtonCollector(env, robot, task, action_noise_std=experiment["action_noise_std"])
-            replay = SchemaReplay(experiment["replay_capacity_steps"], env.num_envs, robot.spec, task.spec, env.device)
-            v3 = experiment["version"] == "hand21_s0_v3"
-            trainer_config = (
-                HandTrainerConfig(**experiment["trainer"]) if v3 else TrainerConfig(**experiment["trainer"])
+            collector = HandNewtonCollector(
+                env, robot, task, action_noise_std=experiment["action_noise_std"], update_actor_normalization=True
             )
-            lr = trainer_config.lr if v3 else experiment["lr"]
+            replay = SchemaReplay(experiment["replay_capacity_steps"], env.num_envs, robot.spec, task.spec, env.device)
+            dex_schedule = experiment["version"] in ("hand21_s0_v3", "hand21_s0_v4")
+            trainer_config = (
+                HandTrainerConfig(**experiment["trainer"]) if dex_schedule else TrainerConfig(**experiment["trainer"])
+            )
+            lr = trainer_config.lr if dex_schedule else experiment["lr"]
             optimizers = build_optimizers(
                 modules,
                 world_lr=lr,
@@ -61,7 +64,11 @@ def main():
                 termination_mode=task.termination_mode,
                 actor_betas=(0.9, 0.95),
             )
-            trainer_type = HandSuperMimicTrainer if v3 else SuperMimicTrainer
+            trainer_type = (
+                HandDexTrainer
+                if experiment["version"] == "hand21_s0_v4"
+                else (HandSuperMimicTrainer if dex_schedule else SuperMimicTrainer)
+            )
             trainer = trainer_type(
                 collector=collector,
                 replay=replay,
@@ -84,16 +91,20 @@ def main():
                 env.curriculum_steps[:] = trainer.counts["real_transitions"] // env.num_envs
                 # Sample fresh goals AFTER restoring curriculum progress; the
                 # collector built before checkpoint.load used the initial stage.
-                collector = HandNewtonCollector(env, robot, task, action_noise_std=experiment["action_noise_std"])
+                collector = HandNewtonCollector(
+                    env, robot, task, action_noise_std=experiment["action_noise_std"], update_actor_normalization=True
+                )
                 trainer.collector = collector
                 resume["restored_curriculum_steps"] = int(env.curriculum_steps[0])
             iterations = experiment["iterations"] - trainer.iteration if args.iterations is None else args.iterations
             if iterations < 1 or trainer.iteration + iterations > experiment["iterations"]:
                 raise ValueError("Training segment exceeds configured budget")
-            prefill_steps = trainer.prefill() if v3 and (resume is None or resume["requires_fresh_collection"]) else 0
+            prefill_steps = (
+                trainer.prefill() if dex_schedule and (resume is None or resume["requires_fresh_collection"]) else 0
+            )
             with (args.output / "iterations.jsonl").open("a") as log:
                 for _ in range(iterations):
-                    if not v3:
+                    if not dex_schedule:
                         fraction = trainer.iteration / experiment["iterations"]
                         scale = experiment["cosine_floor"] + (1 - experiment["cosine_floor"]) * 0.5 * (
                             1 + math.cos(math.pi * fraction)
@@ -110,7 +121,7 @@ def main():
                             "tracking": collector.last_metrics,
                             "event_model": modules.world_model.last_event_metrics,
                             "elapsed_seconds": time.monotonic() - started,
-                            "lr": result["lr"] if v3 else lr * scale,
+                            "lr": result["lr"] if dex_schedule else lr * scale,
                         }
                     )
                     log.write(json.dumps(result) + "\n")

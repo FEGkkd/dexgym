@@ -7,20 +7,31 @@ from dexgym.algorithms.supermimic.core.dynamics_contract import world_model_dyna
 from dexgym.algorithms.supermimic.core.models import NetworkFactory, NetworkModules, TaskTerminationHead
 from dexgym.algorithms.supermimic.core.specs import NetworkSpec
 
+from .supermimic_dex_model import HandDexTerminationHead, HandDexWorldModel
 from .supermimic_model import HandWorldModel
-from .supermimic_networks import HandCritic, HandDirectActor
-from .supermimic_robot import Hand21DynamicsAdapter
+from .supermimic_networks import HandCritic, HandDexActor, HandDexCritic, HandDirectActor
+from .supermimic_robot import Hand21DynamicsAdapter, HandDexDynamicsAdapter
 from .supermimic_task import Hand21Task
 
 
 def components(env, experiment):
-    robot = Hand21DynamicsAdapter(device=env.device)
+    robot_type = HandDexDynamicsAdapter if experiment["version"] == "hand21_s0_v4" else Hand21DynamicsAdapter
+    robot = robot_type(device=env.device)
     task = Hand21Task(robot, env.bank, env.cfg)
     network_fields = experiment["network"].copy()
     for key in ("world_hidden", "goal_hidden", "actor_hidden", "critic_hidden", "termination_hidden"):
         network_fields[key] = tuple(network_fields[key])
     network = NetworkSpec(**network_fields)
-    if experiment["version"] == "hand21_s0_v3":
+    if experiment["version"] == "hand21_s0_v4":
+        world = HandDexWorldModel(robot.spec, network, task)
+        world.dynamics_signature = world_model_dynamics_signature(robot, network)
+        modules = NetworkModules(
+            world,
+            HandDexActor(robot.spec, task.spec, network),
+            HandDexCritic(task.spec, network),
+            HandDexTerminationHead(robot.spec, task.spec, network),
+        )
+    elif experiment["version"] == "hand21_s0_v3":
         world = HandWorldModel(robot.spec, network, task)
         world.dynamics_signature = world_model_dynamics_signature(robot, network)
         modules = NetworkModules(

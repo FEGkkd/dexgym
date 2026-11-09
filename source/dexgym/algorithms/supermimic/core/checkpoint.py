@@ -68,6 +68,9 @@ class CoreCheckpoint:
                         "max_count": getattr(norm, "max_count", None),
                         "dimension": int(norm.mean.numel()) if hasattr(norm, "mean") else None,
                     }
+                    custom_norm_contract = getattr(norm, "checkpoint_contract", None)
+                    if callable(custom_norm_contract):
+                        norms[norm_name] = custom_norm_contract()
             networks[name] = {
                 "class": getattr(
                     module, "checkpoint_class_name", type(module).__module__ + "." + type(module).__qualname__
@@ -79,6 +82,8 @@ class CoreCheckpoint:
                 "output_activation": "linear_delta_v1" if name == "world_model" else
                                      "linear_action_v1" if name == "actor" else None,
             }
+            if hasattr(module, "checkpoint_output_activation"):
+                networks[name]["output_activation"] = module.checkpoint_output_activation
             if name == "actor" and getattr(module, "observation_noise_spec", None) is not None:
                 networks[name]["observation_noise"] = module.observation_noise_spec.manifest()
         manifest = {

@@ -6,10 +6,11 @@ from dexgym.algorithms.supermimic.core.transition import TaskState, TransitionBa
 
 
 class HandNewtonCollector:
-    def __init__(self, env, robot, task, *, action_noise_std=0.1):
+    def __init__(self, env, robot, task, *, action_noise_std=0.1, update_actor_normalization=False):
         self.env, self.native, self.robot, self.task = env, env.unwrapped, robot, task
         self.num_envs, self.action_noise_std = self.native.num_envs, action_noise_std
         self.observation_noise = None
+        self.update_actor_normalization = update_actor_normalization
         if not getattr(self.native.cfg, "capture_model_transitions", False):
             raise ValueError("Enable pre-reset snapshots for model learning")
         env.reset()
@@ -27,9 +28,12 @@ class HandNewtonCollector:
         old = task.physical_task_state(env)
         previous = self.previous_action.clone()
         history = self.history.clone()
-        action = actor(history, task.goal(state, old))
-        action = action + self.action_noise_std * torch.randn_like(action)
-        _, reward, terminated, truncated, _ = self.env.step(action.tanh().clone())
+        goal = task.goal(state, old)
+        if self.update_actor_normalization and getattr(actor, "normalize_before_collection", False):
+            actor.update_norms(history, goal)
+        action = actor(history, goal)
+        action = robot.exploration_action(action, self.action_noise_std * torch.randn_like(action))
+        _, reward, terminated, truncated, _ = self.env.step(robot.bounded_action(action).clone())
         arrival = TaskState(
             old.task_id, old.motion_id, env.last_hand_control_frame.clone(), env.last_hand_goal_data.clone()
         )
@@ -79,6 +83,6 @@ class HandNewtonCollector:
             "mean_tip_error_m": float(env.last_hand_errors.mean()),
             "worst_tip_mean_m": float(env.last_hand_errors.max(-1).values.mean()),
             "reached": int(env.last_hand_reached.sum()),
-            "action_abs_mean": float(action.tanh().abs().mean()),
+            "action_abs_mean": float(robot.bounded_action(action).abs().mean()),
         }
         return transition

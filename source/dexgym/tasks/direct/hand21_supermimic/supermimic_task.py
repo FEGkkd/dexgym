@@ -47,7 +47,7 @@ class Hand21Task:
             state[:, 20:40],
             self.robot.fk(state[:, :20]),
             self.goal(state, task_state).reshape(-1, 5, 3),
-            previous_action.tanh(),
+            self.robot.bounded_action(previous_action),
             command_q=state[:, 40:60],
         )
 

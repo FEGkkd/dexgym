@@ -144,7 +144,7 @@ def evaluate_fixed_clock(env, robot, task, actor, args):
             state = robot.physical_state(env)
             task_state = task.physical_task_state(env)
             action = actor(history, task.goal(state, task_state))
-            _, _, terminated, truncated, _ = env.step(action.tanh().clone())
+            _, _, terminated, truncated, _ = env.step(robot.bounded_action(action).clone())
             errors.append(env.fixed_clock_errors[active].cpu())
             actual_trace.append(env.fixed_clock_actual_tips.cpu())
             target_trace.append(env.fixed_clock_target_tips.cpu())

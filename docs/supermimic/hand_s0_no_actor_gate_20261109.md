@@ -1,5 +1,7 @@
 # Hand S0: removal of Actor Trust Gating (2026-11-09)
 
+> Historical report. Current default is v4; see [v4 alignment and the unresolved Actor deadzone](hand_s0_dex_v4_alignment_20261109.md). Do not infer current training readiness from this older report.
+
 > Historical v2 checks. The current v3 preset adds a user-requested fixed
 > 500-iteration WM-only phase, without an error gate. See [v3 alignment](hand_s0_dex_alignment_20261109.md).
 

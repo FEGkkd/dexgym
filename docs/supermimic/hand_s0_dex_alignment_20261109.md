@@ -1,5 +1,7 @@
 # Hand S0 v3: Dex-Supermimic alignment (2026-11-09)
 
+> Historical report. Current default is v4; see [v4 alignment and the unresolved Actor deadzone](hand_s0_dex_v4_alignment_20261109.md). Do not infer current training readiness from this older report.
+
 The user requested matching collection/update ratio, separate LR decay, network
 sizes, Actor initialization, model/policy batches, initial collection and a fixed
 500-iteration world-model-only phase. Reference:
