@@ -31,6 +31,7 @@ class TrainerConfig:
     validation_batch: int = 64
     value_bound: bool = False
     actor_bootstrap_warmup_updates: int = 0
+    actor_grad_value_clip: float | None = None
 
     def __post_init__(self):
         if self.mode not in ("pure_model_based", "teacher_bootstrap_model_based",
@@ -50,6 +51,8 @@ class TrainerConfig:
             raise ValueError("World warmup, bootstrap or termination weight is invalid")
         if self.actor_bootstrap_warmup_updates < 0:
             raise ValueError("actor_bootstrap_warmup_updates must be nonnegative")
+        if self.actor_grad_value_clip is not None and self.actor_grad_value_clip <= 0:
+            raise ValueError("Actor value clipping must be positive")
 
 
 class SuperMimicTrainer:
@@ -202,7 +205,8 @@ class SuperMimicTrainer:
                 termination_head=self.termination_head,
                 observation_noise=self.observation_noise)
             actor_result = safe_gradient_step(rollout.actor_loss, self.actor.parameters(),
-                                              self.optimizers["actor"])
+                                              self.optimizers["actor"],
+                                              grad_value_clip=self.config.actor_grad_value_clip)
         actor_finished = self._stamp()
         if not actor_result["updated"]:
             self.counts["nonfinite_actor"] += 1

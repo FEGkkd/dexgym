@@ -7,7 +7,7 @@ import torch
 
 
 def build_optimizers(modules, *, world_lr: float, actor_lr: float,
-                     critic_lr: float, termination_mode: str):
+                     critic_lr: float, termination_mode: str, actor_betas=(0.9, 0.999)):
     """The learned task head is fitted by the same real-transition loss as dynamics."""
     if termination_mode not in ("analytic", "learned"):
         raise ValueError("Unknown termination mode")
@@ -18,7 +18,7 @@ def build_optimizers(modules, *, world_lr: float, actor_lr: float,
         world.extend(modules.termination.parameters())
     return {
         "world_model": torch.optim.Adam(world, lr=world_lr),
-        "actor": torch.optim.Adam(modules.actor.parameters(), lr=actor_lr),
+        "actor": torch.optim.Adam(modules.actor.parameters(), lr=actor_lr, betas=actor_betas),
         "critic": torch.optim.Adam(modules.critic.parameters(), lr=critic_lr),
     }
 
@@ -95,12 +95,12 @@ def safe_gradient_step(loss, parameters, optimizer, *, grad_norm_clip=1.0,
            for parameter in parameters):
         optimizer.zero_grad(set_to_none=True)
         return {"updated": False, "reason": "nonfinite_gradient", "grad_norm": math.nan}
-    if grad_value_clip is not None:
-        torch.nn.utils.clip_grad_value_(parameters, grad_value_clip)
     norm = torch.nn.utils.clip_grad_norm_(parameters, grad_norm_clip, error_if_nonfinite=False)
     if not bool(torch.isfinite(norm)):
         optimizer.zero_grad(set_to_none=True)
         return {"updated": False, "reason": "nonfinite_norm", "grad_norm": math.nan}
+    if grad_value_clip is not None:
+        torch.nn.utils.clip_grad_value_(parameters, grad_value_clip)
     before = [parameter.detach().clone() for parameter in parameters]
     optimizer.step()
     if any(not bool(torch.isfinite(parameter).all()) for parameter in parameters):
