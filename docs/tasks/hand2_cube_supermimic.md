@@ -122,5 +122,14 @@ Host evidence directory: `/home/ubuntu/dexgym/artifacts/cube_reorient/`.
   chain; peak PyTorch allocated memory 12063504896 bytes. Compilation may fall back
   to eager reward evaluation after view-layout specialization; gradients still pass.
 
+- `eval_untrained_seed123.json`: 256 complete episodes, 0 successful goals,
+  drop fraction 0.03515625, mean duration 48.5354 s and mean orientation error
+  2.14859 rad. Holding the cube without rotating it is therefore not sufficient.
+
+The first production run uses code `70e4a6a`, 4096 environments, seed 42,
+8000 configured iterations and the reference 500-iteration WM warmup. Host output:
+`/home/ubuntu/dexgym/artifacts/cube_reorient/train_seed42/`. The run is in progress;
+no trained-policy result is claimed.
+
 Training and policy evaluations must be recorded before changing the status above
 or claiming the task has been trained successfully.
