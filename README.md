@@ -64,7 +64,9 @@ The [current TELEDEXTER task report](docs/experiments/hand21_teledexter_task_202
 records the full-library Joint Replay and the new training rules. The
 [4096-environment action audit](docs/experiments/hand21_action_audit_4096_300_s42.md)
 records the 300-iteration PPO run, latent Gaussian limit rates, and executed
-action saturation by target span and cross-trajectory target. Earlier
+action saturation by target span and cross-trajectory target. That run used
+the earlier switch-step reward timing and predates the completed-goal reward
+fix. Earlier
 right-hand Gym IDs remain available for diagnostics but no longer register PPO
 training configurations.
 

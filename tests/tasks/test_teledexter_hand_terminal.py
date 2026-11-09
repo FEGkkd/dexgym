@@ -70,3 +70,21 @@ def test_cross_switch_keeps_frame_and_grants_paper_failure_budget():
     assert task.fail_budget.tolist() == [300.0, 300.0]
     assert torch.all(task._step_reward > 0)
     assert torch.all((task.dwell_required >= 5) & (task.dwell_required <= 15))
+
+
+def test_sparse_reward_belongs_to_goal_completed_before_switch():
+    task = _task(cross_probability=1.0)
+    task.goal_span[:] = 4
+    task.dwell[:] = task.dwell_required - 1
+    task._current_tips = lambda: torch.zeros((2, 5, 3))
+
+    RightHandTrackingDirectEnv._get_dones_teledexter(task)
+    torch.testing.assert_close(task._step_reward, torch.full((2,), 33.75))
+    assert task.last_crossed.tolist() == [True, True]
+    assert task.goal_span.tolist() == [0, 0]
+
+    task.cfg.cross_trajectory_probability = 0.0
+    task.dwell[:] = task.dwell_required - 1
+    RightHandTrackingDirectEnv._get_dones_teledexter(task)
+    torch.testing.assert_close(task._step_reward, torch.full((2,), 375.0))
+    assert task.last_crossed.tolist() == [False, False]

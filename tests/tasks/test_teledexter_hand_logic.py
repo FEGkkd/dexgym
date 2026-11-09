@@ -38,12 +38,11 @@ def test_per_goal_hold_duration_and_out_of_tolerance_failure_count():
     assert update_failure_count(failures, within, reached).tolist() == [0, 3]
 
 
-def test_sparse_bonus_uses_actual_span_or_cross_trajectory_weight():
+def test_sparse_bonus_uses_completed_goal_span_or_cross_trajectory_weight():
     errors = torch.zeros((2, 5))
     reward = teledexter_hand_reward(
         errors,
         reached=torch.tensor([True, True]),
-        goal_span=torch.tensor([4, 4]),
-        cross_switch=torch.tensor([False, True]),
+        goal_span=torch.tensor([4, 0]),
     )
     torch.testing.assert_close(reward, torch.tensor([33.75, 375.0]))

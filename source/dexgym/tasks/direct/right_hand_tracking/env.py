@@ -185,6 +185,10 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         errors, within, reached, next_dwell = teledexter_hand_dwell(
             self._current_tips(), self.goal_tips, self.dwell, self.dwell_required, tolerance_m=cfg.goal_tolerance_m
         )
+        self._step_reward = teledexter_hand_reward(
+            errors, reached, self.goal_span,
+            dense_scale=cfg.reward_dense_scale, time_cost=cfg.reward_time_cost,
+        )
         upper = curriculum_stride_upper(
             self.curriculum_steps,
             minimum=cfg.curriculum_stride_min,
@@ -220,10 +224,6 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
             next_frame[in_trajectory] = future
             next_span[in_trajectory] = span
             next_budget[in_trajectory] = cfg.failure_tolerance_scale * span
-        self._step_reward = teledexter_hand_reward(
-            errors, reached, self.goal_span, crossed,
-            dense_scale=cfg.reward_dense_scale, time_cost=cfg.reward_time_cost,
-        )
         self.last_reached = reached
         self.last_crossed = crossed
         self.fail_frames = update_failure_count(self.fail_frames, within, reached)

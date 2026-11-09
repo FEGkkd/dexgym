@@ -8,6 +8,13 @@ The saved agent configuration confirms `TanhGaussianDistribution`, latent
 `init_std: 1.0`, and `entropy_coef: 0.005`. The task keeps the 20 mm fingertip
 threshold and the TELEDEXTER-style subgoal curriculum.
 
+**Historical reward caveat:** This run predates the cross-trajectory reward
+attribution fix. It assigned the weight-100 sparse bonus when a successful
+step selected a cross-trajectory target for the *next* step, rather than when
+that cross-trajectory target was actually reached. Its action statistics and
+checkpoint describe that earlier reward definition. They do not measure PPO
+learning under the corrected completed-goal reward.
+
 ## Measurement
 
 The audit observes each sampled PPO rollout action immediately before the

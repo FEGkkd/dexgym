@@ -51,8 +51,12 @@ object and a 30 Hz GRAB bank:
   valid destination exists, the episode completes.
 - For a reached in-trajectory goal, the sparse bonus is `(span + 5) × score`,
   where `score = 1.5 × 0.5 × Σ_f exp(-β_f e_f)`, with β = 100 for the thumb and
-  90 for each other finger. A step that performs a cross-trajectory switch
-  uses weight 100. The hand-only dense term stays the mean of
+  90 for each other finger. A reached cross-trajectory target uses weight
+  100, even if the next target is sampled from the same trajectory. The bonus
+  is assigned to the goal just completed; selecting a cross-trajectory target
+  for the next step does not change the current bonus. This timing follows
+  the hand-only completed-goal contract; the paper describes its large weight
+  on the switch step. The hand-only dense term stays the mean of
   `exp(-50 e_f)`, scaled by 0.1; the time cost is 0.1 per step. No object
   reward or action-change penalty is added.
 - An out-of-tolerance policy frame increments `n_fail`; success resets it.

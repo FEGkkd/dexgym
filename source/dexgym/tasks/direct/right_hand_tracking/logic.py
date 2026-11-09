@@ -83,19 +83,18 @@ def teledexter_hand_reward(
     errors: torch.Tensor,
     reached: torch.Tensor,
     goal_span: torch.Tensor,
-    cross_switch: torch.Tensor,
     *,
     dense_scale: float = 0.1,
     time_cost: float = 0.1,
 ) -> torch.Tensor:
-    """Hand-only form of TELEDEXTER C.2's span-weighted sparse reward."""
+    """Reward the completed active goal; span zero marks a cross-trajectory target."""
     if errors.ndim != 2 or errors.shape[1] != 5 or any(
-        item.shape != (len(errors),) for item in (reached, goal_span, cross_switch)
+        item.shape != (len(errors),) for item in (reached, goal_span)
     ):
         raise ValueError("Expected finger errors[N,5] and per-environment reward inputs[N]")
     decay = errors.new_tensor([100.0, 90.0, 90.0, 90.0, 90.0])
     score = 1.5 * 0.5 * torch.exp(-errors * decay).sum(dim=-1)
-    step_weight = torch.where(cross_switch, 100.0, goal_span.float() + 5.0)
+    step_weight = torch.where(goal_span == 0, 100.0, goal_span.float() + 5.0)
     dense = torch.exp(-50.0 * errors).mean(dim=-1)
     return reached.float() * step_weight * score + dense_scale * dense - time_cost
 
