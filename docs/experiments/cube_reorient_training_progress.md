@@ -17,6 +17,7 @@ with the same fresh reference curriculum. Every environment contributes four epi
 | Untrained | 0 | 0 | 0 | 0.0234375 | 2.22934 |
 | Native iteration 1000 | 0.00390625 | 0.00390625 | 0 | 0.03515625 | 2.04405 |
 | Native iteration 2000 | 0.00390625 | 0.00390625 | 0 | 0.09375 | 1.88495 |
+| Native iteration 4000 | 0.03125 | 0.03125 | 0 | 0.08984375 | 1.73836 |
 | Published upstream actor, iteration 8000 | 6.50391 | 0.863281 | 0.644531 | 0.660156 | 0.834614 |
 
 At iteration 1000 the native actor has had 500 policy updates after WM warmup.
@@ -43,3 +44,10 @@ error is zero. Raw trace and video are under the host artifact directory as
 `native_iter2000_scene_v2_trace.npz` and `native_iter2000_scene_v2.mp4`.
 Reports are `native_iter2000_trace_eval.json` and
 `native_iter2000_trace_render.json` in the validation directory.
+
+At iteration 4000, evaluation completed eight goals across 256 episodes, in eight
+distinct episodes (3.125% with any goal). No episode completed more than one goal.
+Mean orientation error was 1.73836 rad, and drop fraction was 0.08984375.
+This is a small improvement over iteration 2000, but it does not demonstrate
+continuous reorientation. The 4096-environment training run continues unchanged
+to iteration 8000; the checkpoint watcher is now waiting for that checkpoint.
