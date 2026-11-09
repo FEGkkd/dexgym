@@ -1,0 +1,52 @@
+{
+  "version": "hand21_s0_v2",
+  "seed": 42,
+  "num_envs": 256,
+  "iterations": 250000,
+  "replay_capacity_steps": 1000,
+  "checkpoint_interval": 500,
+  "action_noise_std": 0.1,
+  "lr": 0.0002,
+  "cosine_floor": 0.03,
+  "network": {
+    "world_hidden": [
+      512,
+      512,
+      512
+    ],
+    "goal_hidden": [
+      256,
+      128
+    ],
+    "actor_hidden": [
+      512,
+      256,
+      256
+    ],
+    "critic_hidden": [
+      256,
+      128
+    ],
+    "termination_hidden": [
+      128,
+      128
+    ],
+    "latent_dim": 32,
+    "normalize": true
+  },
+  "trainer": {
+    "mode": "pure_model_based",
+    "world_window": 8,
+    "world_batch": 256,
+    "world_updates_per_iteration": 2,
+    "world_warmup_updates": 0,
+    "imagination_batch": 128,
+    "max_imagination_horizon": 32,
+    "actor_grad_value_clip": 0.1,
+    "critic_epochs": 5,
+    "critic_minibatches": 4,
+    "gamma": 0.99,
+    "lam": 0.95,
+    "actor_update_schedule": "every_iteration"
+  }
+}

@@ -7,7 +7,7 @@ import pytest
 import torch
 from dexgym.algorithms.supermimic.core.checkpoint import CoreCheckpoint
 from dexgym.algorithms.supermimic.core.trainer import SuperMimicTrainer
-from dexgym.tasks.direct.hand21_supermimic.supermimic_cfg import default_experiment, load_hand_configuration
+from dexgym.tasks.direct.hand21_supermimic.supermimic_cfg import load_hand_configuration
 from dexgym.tasks.supermimic_toy import make_toy_trainer
 
 
@@ -89,8 +89,10 @@ def test_legacy_gate_checkpoint_migration_is_explicit_and_preserves_other_checks
 
 def test_hand_configuration_migrates_legacy_gate_and_rejects_new_gate_keys(tmp_path):
     import json
+    from importlib.resources import files
 
-    config = default_experiment()
+    config = json.loads(files("dexgym.tasks.direct.hand21_supermimic.agents").joinpath("hand_s0_v2.json").read_text())
+    expected = json.loads(json.dumps(config))
     assert config["version"] == "hand21_s0_v2"
     assert config["trainer"]["actor_update_schedule"] == "every_iteration"
     assert config["trainer"]["world_warmup_updates"] == 0
@@ -105,7 +107,7 @@ def test_hand_configuration_migrates_legacy_gate_and_rejects_new_gate_keys(tmp_p
     path.write_text(json.dumps(config))
     with pytest.warns(UserWarning, match="Migrated Hand S0 v1"):
         _, migrated = load_hand_configuration(override=path)
-    assert migrated == default_experiment()
+    assert migrated == expected
     migrated["trust"] = {}
     path.write_text(json.dumps(migrated))
     with pytest.raises(ValueError, match="no longer accepts"):

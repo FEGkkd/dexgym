@@ -1,7 +1,7 @@
 # 单手 S0：任务与 Model-based RL 链路验收
 
 > Historical v1 evidence below includes trust-gated updates. The current standalone
-> Hand S0 v2 removes this gate; see the [current checks](hand_s0_no_actor_gate_20261109.md).
+> Hand S0 v3 has no error gate and uses a fixed WM-only phase; see the [current checks](hand_s0_dex_alignment_20261109.md).
 
 ## 本阶段结论与范围
 

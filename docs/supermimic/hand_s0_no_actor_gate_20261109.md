@@ -1,5 +1,8 @@
 # Hand S0: removal of Actor Trust Gating (2026-11-09)
 
+> Historical v2 checks. The current v3 preset adds a user-requested fixed
+> 500-iteration WM-only phase, without an error gate. See [v3 alignment](hand_s0_dex_alignment_20261109.md).
+
 The standalone Hand21 SuperMimic task now uses the `hand21_s0_v2` experiment.
 Its Actor and Critic update every iteration on fixed 32-step model rollouts,
 after the world-model updates. Model prediction error does not permit, delay,

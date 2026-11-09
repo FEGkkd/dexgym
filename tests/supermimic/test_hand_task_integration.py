@@ -29,7 +29,7 @@ def test_packaged_default_is_not_shared_mutable_state():
     second = default_experiment()
     first["network"]["world_hidden"][0] = 1
     first["trainer"]["max_imagination_horizon"] = 1
-    assert second["network"]["world_hidden"] == [512, 512, 512]
+    assert second["network"]["world_hidden"] == [2048, 2048, 2048]
     assert second["trainer"]["max_imagination_horizon"] == 32
 
 

@@ -39,7 +39,7 @@ def load_hand_configuration(task_id: str = HAND21_SUPERMIMIC_ID, override: Path 
             UserWarning,
             stacklevel=2,
         )
-    if experiment["version"] != "hand21_s0_v2":
+    if experiment["version"] not in ("hand21_s0_v2", "hand21_s0_v3"):
         raise ValueError("Unknown hand experiment version")
     trainer = experiment["trainer"]
     if (
@@ -56,4 +56,10 @@ def load_hand_configuration(task_id: str = HAND21_SUPERMIMIC_ID, override: Path 
         raise ValueError("num_envs must be positive")
     if experiment["iterations"] < 1 or experiment["checkpoint_interval"] < 1:
         raise ValueError("Iterations and checkpoint interval must be positive")
+    if experiment["version"] == "hand21_s0_v3":
+        from .supermimic_schedule import HandTrainerConfig
+
+        HandTrainerConfig(**trainer)
+        if experiment["network"]["goal_hidden"]:
+            raise ValueError("Hand v3 uses a direct Actor without a goal encoder")
     return cfg, experiment
