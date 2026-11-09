@@ -7,6 +7,5 @@
   "mutation_policy": "no pip installs or edits to shared venv or PPO environment",
   "entry": "bash scripts/supermimic/hand_s0_host.sh",
   "witness": "bash scripts/supermimic/hand_s0_host.sh --witness",
-  "known_bad": "~/dexgym/.venv/bin/python imports torch but exits SIGBUS135",
-  "validation_status": "cpu torch witness exit0; cuda kernel and test suite pending"
+  "known_bad": "~/dexgym/.venv/bin/python imports torch but exits SIGBUS135"
 }

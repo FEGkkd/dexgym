@@ -25,3 +25,6 @@ Existing venv process-exit SIGBUS under diagnosis; stdlib preflight is independe
 - F0: preflight exited successfully; 942 train /446 validation clips, 281793 /122482 frames, zero missing files. Artifact /home/ubuntu/dexgym/artifacts/hand_s0/preflight.json.
 
 - F1: fixed nonfinite trust admission and normalize=False trust; added physical-state-dependent transition hook with score-before-switch test. Targeted25 /full230 tests passed. CUDA seeded witness exit0 using Isaac Python.
+
+## F2 physical task bridge — passed
+239 tests passed in 19.92 s. Newton smoke: 16x64=1024 transitions, 30 terminal, 21 goals, FK max6.055631160961639e-7 m; pre-reset capture, exact rewards/commands/termination and finite WM8 update passed. Raw artifacts /home/ubuntu/dexgym/artifacts/hand_s0/newton_smoke.json and f2_suite.log. F3 training and F4 precision pending.

@@ -24,4 +24,4 @@ under /tmp and the Newton1.6.1 / MuJoCo3.12 / Warp1.17 runtime overlay in
 Executor validation: CUDA witness exit0; targeted25 tests pass; complete
 tests/supermimic suite230 passed in18.99s after adding repository root to
 the runtime sys.path so tests importing other test modules can resolve.
-Fresh agent-following-document validation is pending until explicitly recorded.
+Fresh independent agent-following-document validation passed: witness exit0 and 9 Core tests in0.24s, separate SSH session. Newton simulation also completed the F2 smoke with exit0.

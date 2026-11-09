@@ -14,6 +14,7 @@ from dexgym.data.motion_bank import MotionBank, advance_goal_frames
 from dexgym.data.wuji_retarget import TIP_SITE_NAMES
 
 from .env_cfg import RightHandTrackingDirectCfg
+from .subgoals import HandGoals, advance_hand_goals, paper_hand_reward, unsafe_hand_state
 from .logic import (
     build_right_hand_observation,
     curriculum_stride_upper,
@@ -89,6 +90,11 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         self.fail_budget = torch.full((self.num_envs,), float(cfg.max_goal_steps), device=self.device)
         self.last_reached = torch.zeros(self.num_envs, dtype=torch.bool, device=self.device)
         self.last_crossed = torch.zeros(self.num_envs, dtype=torch.bool, device=self.device)
+        if getattr(cfg, "paper_hand_dense", False):
+            from .hand_kinematics import Hand21Kinematics
+            if not standalone_hand:
+                raise ValueError("Hand S0 requires the standalone 20-DoF model")
+            self.hand_fk = Hand21Kinematics(device=self.device)
 
     def _current_tips(self) -> torch.Tensor:
         return fingertips_in_wrist_frame(
@@ -180,86 +186,46 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         return failed, timeout
 
     def _get_dones_teledexter(self) -> tuple[torch.Tensor, torch.Tensor]:
-        """Reach, reward, and advance one hand-only TELEDEXTER subgoal on the current transition."""
+        """Shared exact transition; reward and terminal snapshots precede reset."""
         cfg = self.cfg
-        errors, within, reached, next_dwell = teledexter_hand_dwell(
-            self._current_tips(), self.goal_tips, self.dwell, self.dwell_required, tolerance_m=cfg.goal_tolerance_m
-        )
-        self._step_reward = teledexter_hand_reward(
-            errors, reached, self.goal_span,
-            dense_scale=cfg.reward_dense_scale, time_cost=cfg.reward_time_cost,
-        )
-        upper = curriculum_stride_upper(
-            self.curriculum_steps,
-            minimum=cfg.curriculum_stride_min,
-            maximum=cfg.curriculum_stride_max,
-            anneal_steps=cfg.curriculum_anneal_steps,
-            sigma_min=cfg.curriculum_sigma_min,
-        )
-        self.curriculum_steps += 1
-        lengths = self.bank.lengths[self.motion_ids]
-        at_end = self.goal_frame >= lengths - 1
-        wants_switch = reached & (
-            (torch.rand(self.num_envs, device=self.device) < cfg.cross_trajectory_probability) | at_end
-        )
-        crossed = torch.zeros_like(reached)
-        next_motion = self.motion_ids.clone()
-        next_frame = self.goal_frame.clone()
-        next_span = self.goal_span.clone()
-        next_budget = self.fail_budget.clone()
-        if wants_switch.any():
-            candidates, available = self.bank.sample_other_at_frame(
-                self.motion_ids[wants_switch], self.goal_frame[wants_switch]
-            )
-            next_motion[wants_switch] = candidates
-            crossed[wants_switch] = available
-        if crossed.any():
-            next_span[crossed] = 0
-            next_budget[crossed] = cfg.cross_trajectory_failure_budget
-        in_trajectory = reached & ~crossed & ~at_end
-        if in_trajectory.any():
-            sampled = sample_goal_span(upper[in_trajectory])
-            future = torch.minimum(self.goal_frame[in_trajectory] + sampled, lengths[in_trajectory] - 1)
-            span = future - self.goal_frame[in_trajectory]
-            next_frame[in_trajectory] = future
-            next_span[in_trajectory] = span
-            next_budget[in_trajectory] = cfg.failure_tolerance_scale * span
-        self.last_reached = reached
-        self.last_crossed = crossed
-        self.fail_frames = update_failure_count(self.fail_frames, within, reached)
-        exceeded_budget = self.fail_frames > self.fail_budget
-        self.goal_age = torch.where(reached, torch.zeros_like(self.goal_age), self.goal_age + 1)
-        self.goals_reached += reached.long()
-        self.completed |= reached & at_end & ~crossed
-        self.motion_ids = next_motion
-        self.goal_frame = next_frame
-        self.goal_span = next_span
-        self.fail_budget = next_budget
-        self.goal_tips = self.bank.fingertips(self.motion_ids, self.goal_frame)
-        self.dwell = torch.where(reached, torch.zeros_like(next_dwell), next_dwell)
-        sampled_dwell = torch.randint(
-            cfg.dwell_min_steps, cfg.dwell_max_steps + 1, (self.num_envs,), device=self.device
-        )
-        self.dwell_required = torch.where(reached, sampled_dwell, self.dwell_required)
-        self.extras["log"] = {
-            "mean_tip_error_m": errors.mean(),
-            "goal_reach_fraction": reached.float().mean(),
-            "mean_goals_reached": self.goals_reached.float().mean(),
-            "cross_trajectory_fraction": crossed.float().mean(),
-            "mean_goal_span_frames": self.goal_span.float().mean(),
-            "curriculum_stride_upper": upper.float().mean(),
-            "mean_fail_frames": self.fail_frames.float().mean(),
-        }
+        old = HandGoals.from_env(self)
+        result = advance_hand_goals(self._current_tips(), old, self.bank, cfg)
         q = self.robot.data.joint_pos.torch[:, self.right_ids]
         qdot = self.robot.data.joint_vel.torch[:, self.right_ids]
-        unsafe = (
-            ~torch.isfinite(q).all(dim=-1)
-            | ~torch.isfinite(qdot).all(dim=-1)
-            | (q < self.joint_limits[:, 0] - 0.05).any(dim=-1)
-            | (q > self.joint_limits[:, 1] + 0.05).any(dim=-1)
-        )
-        failed = unsafe | exceeded_budget | self.completed
+        if getattr(cfg, "paper_hand_dense", False):
+            self._step_reward = paper_hand_reward(
+                result.errors, result.reached, old.goal_span,
+                self.hand_fk.landmarks(q), self.hand_fk.landmarks(self.bank.joints(old.motion_ids, old.goal_frame)),
+                dense_scale=cfg.reward_dense_scale, time_cost=cfg.reward_time_cost)
+        else:
+            self._step_reward = teledexter_hand_reward(
+                result.errors, result.reached, old.goal_span,
+                dense_scale=cfg.reward_dense_scale, time_cost=cfg.reward_time_cost)
+        result.goals.apply(self)
+        self.goal_tips = self.bank.fingertips(self.motion_ids, self.goal_frame)
+        self.last_reached, self.last_crossed = result.reached, result.crossed
+        unsafe = unsafe_hand_state(q, qdot, self.joint_limits)
+        failed = unsafe | result.exceeded_budget | self.completed
         timeout = self.episode_length_buf >= self.max_episode_length
+        if getattr(cfg, "capture_model_transitions", False):
+            # These are deliberately NOT cleared by _reset_idx: DirectRLEnv
+            # auto-resets before returning env.step, but Replay needs arrival.
+            self.last_hand_state = torch.cat((q, qdot, self.target_q), -1).detach().clone()
+            self.last_hand_goal_data = result.goals.pack().detach().clone()
+            self.last_hand_control_frame = self.episode_length_buf.detach().clone().long()
+            self.last_hand_reached = result.reached.clone()
+            self.last_hand_errors = result.errors.detach().clone()
+            self.last_hand_failure_reason = (unsafe.int() + 2 * result.exceeded_budget.int()
+                                             + 4 * self.completed.int()).to(torch.int32)
+        self.extras["log"] = {
+            "mean_tip_error_m": result.errors.mean(),
+            "goal_reach_fraction": result.reached.float().mean(),
+            "mean_goals_reached": self.goals_reached.float().mean(),
+            "cross_trajectory_fraction": result.crossed.float().mean(),
+            "mean_goal_span_frames": self.goal_span.float().mean(),
+            "curriculum_stride_upper": result.stride_upper.float().mean(),
+            "mean_fail_frames": self.fail_frames.float().mean(),
+        }
         return failed, timeout
 
     def _reset_idx(self, env_ids: Sequence[int] | None) -> None:
