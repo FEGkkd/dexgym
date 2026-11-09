@@ -21,13 +21,37 @@ algorithm capability, **not a claim that every task or policy has converged**.
 | `DexGym-Joint-Tracking-Direct-v0` | Cartpole joint target | Isaac Lab DirectRLEnv, RSL-RL PPO example. |
 | `DexGym-Joint-Tracking-Manager-v0` | Cartpole joint target | Isaac Lab ManagerBasedRLEnv, RSL-RL PPO example. |
 | `DexGym-Wuji-Right-Hand-Tracking-Direct-v0` | Right WujiHand2 five-fingertip sequence tracking | TeleDexter-inspired hand-only DirectRLEnv; GRAB retargeting and a bounded PPO workflow check passed. No convergence claim. |
-| `DexGym-Wuji-Hand21-TeleDexter-Direct-v0` | Official Wuji Hand 2.1 right-hand GRAB tracking | Current PPO task: 20 mm fingertips, paper-style curriculum, variable dwell, span-weighted reward, failure budget and cross-trajectory switching; Tanh Gaussian with latent Std 1.0, entropy 0.005 and deadzone residual control. |
+| `DexGym-Wuji-Hand21-TeleDexter-Direct-v0` | Official Wuji Hand 2.1 right-hand GRAB tracking | Current PPO task: 15 mm fingertips, paper-style curriculum, variable dwell, span-weighted reward, failure budget and cross-trajectory switching; Tanh Gaussian with latent Std 1.0, entropy 0.005 and deadzone residual control. |
+
+| `DexGym-Wuji-Hand21-TeleDexter-SuperMimic-Direct-v0` | Standalone 20-DoF right hand, object-free GRAB fingertip goals | Registered Hand S0 task; WM8/BPTT32, 15 mm subgoals, bounded architecture validation. Policy accuracy remains unvalidated. |
 
 The Cartpole examples use PPO. **SuperMimic does not use PPO.** The SuperMimic Marvin
 environment simulates all 54 DoF at 500 Hz, controls only 14 arm joints at
-50 Hz, and commands the 40 hand joints to Home. Hand states and actions are
-absent from the SuperMimic policy and world model. The validated no-hand-contact
+50 Hz, and commands the 40 hand joints to Home. In these Marvin tasks, hand states and actions are
+absent from the policy and world model. The validated no-hand-contact
 configuration and controller parameters are unchanged.
+
+## Standalone hand SuperMimic
+
+The object-free Hand S0 implementation is part of
+[`dexgym.tasks.direct.right_hand_tracking`](source/dexgym/tasks/direct/right_hand_tracking/README.md).
+Its environment, adapters, world model, configuration, training, evaluation and
+validation logic live in this task package. `scripts/supermimic/*hand_s0*.py`
+provide compatible CLI launchers; the generic algorithm remains in
+`dexgym.algorithms.supermimic.core`.
+
+```bash
+# Bounded two-iteration workflow check; does not establish policy accuracy.
+uv run python -m dexgym.tasks.direct.right_hand_tracking.supermimic_train \
+  --task DexGym-Wuji-Hand21-TeleDexter-SuperMimic-Direct-v0 \
+  --library /absolute/path/to/hand21_right_geometry_feasible/manifest.json \
+  --iterations 2 --output /tmp/hand_s0_check
+```
+
+The registered default configuration is packaged with the task; no repository-relative
+config path is required. See the [architecture validation](docs/supermimic/hand_s0_readiness_20261109.md)
+and [main integration checks](docs/supermimic/hand_s0_task_integration_20261109.md)
+for the supported runtime and bounded evidence.
 
 ## Right-hand fingertip tracking
 

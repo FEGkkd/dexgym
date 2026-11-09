@@ -145,7 +145,7 @@ bash scripts/supermimic/hand_s0_host.sh scripts/supermimic/smoke_hand_s0.py \
 # 后续阶段手动启动；本阶段不执行这个长期命令
 bash scripts/supermimic/hand_s0_host.sh scripts/supermimic/train_hand_s0.py \
   --library /home/ubuntu/dexgym/data/processed/hand21_right_geometry_feasible/manifest.json \
-  --config configs/supermimic/hand_s0_train.json --iterations 50000 \
+  --iterations 50000 \
   --output /home/ubuntu/dexgym/artifacts/hand_s0/next_training
 ```
 
