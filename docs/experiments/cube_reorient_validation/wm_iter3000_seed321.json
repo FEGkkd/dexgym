@@ -1,0 +1,300 @@
+{
+  "checkpoint": "/home/ubuntu/dexgym/artifacts/cube_reorient/train_seed42_scene_v2/model_3000.pt",
+  "checkpoint_sha256": "5a79e377346071bc8f546f34775c0f3ae261d8fea88b0a5daf5d94fe22caa0c1",
+  "iteration": 3000,
+  "seed": 321,
+  "num_envs": 64,
+  "steps": 256,
+  "burn_in": 150,
+  "control_hz": 50,
+  "scene_revision": 2,
+  "horizons": {
+    "1": {
+      "samples": 512,
+      "excluded": 0,
+      "world_model": {
+        "joint_rmse_rad": {
+          "mean": 0.0020517604425549507,
+          "p95": 0.003398421686142683
+        },
+        "joint_velocity_rmse_rad_s": {
+          "mean": 0.12183113396167755,
+          "p95": 0.19798773527145386
+        },
+        "object_position_m": {
+          "mean": 0.00020297779701650143,
+          "p95": 0.0005001883255317807
+        },
+        "object_angle_rad": {
+          "mean": 0.005920922849327326,
+          "p95": 0.018581757321953773
+        },
+        "object_velocity_m_s": {
+          "mean": 0.0127730006352067,
+          "p95": 0.028502196073532104
+        },
+        "object_angular_velocity_rad_s": {
+          "mean": 0.39820432662963867,
+          "p95": 0.9994037747383118
+        }
+      },
+      "persistence": {
+        "joint_rmse_rad": {
+          "mean": 0.0035145205911248922,
+          "p95": 0.013957020826637745
+        },
+        "joint_velocity_rmse_rad_s": {
+          "mean": 0.0751190185546875,
+          "p95": 0.22792761027812958
+        },
+        "object_position_m": {
+          "mean": 0.0002461417461745441,
+          "p95": 0.0009077618597075343
+        },
+        "object_angle_rad": {
+          "mean": 0.007873835042119026,
+          "p95": 0.03271644189953804
+        },
+        "object_velocity_m_s": {
+          "mean": 0.008345347829163074,
+          "p95": 0.040151335299015045
+        },
+        "object_angular_velocity_rad_s": {
+          "mean": 0.31311315298080444,
+          "p95": 1.3731436729431152
+        }
+      }
+    },
+    "4": {
+      "samples": 511,
+      "excluded": 1,
+      "world_model": {
+        "joint_rmse_rad": {
+          "mean": 0.005913754925131798,
+          "p95": 0.009559975937008858
+        },
+        "joint_velocity_rmse_rad_s": {
+          "mean": 0.08637835085391998,
+          "p95": 0.12471527606248856
+        },
+        "object_position_m": {
+          "mean": 0.000751640647649765,
+          "p95": 0.0020129799377173185
+        },
+        "object_angle_rad": {
+          "mean": 0.021850809454917908,
+          "p95": 0.05460968241095543
+        },
+        "object_velocity_m_s": {
+          "mean": 0.01567428559064865,
+          "p95": 0.0349859893321991
+        },
+        "object_angular_velocity_rad_s": {
+          "mean": 0.508158266544342,
+          "p95": 1.4011199474334717
+        }
+      },
+      "persistence": {
+        "joint_rmse_rad": {
+          "mean": 0.012786424718797207,
+          "p95": 0.04845641925930977
+        },
+        "joint_velocity_rmse_rad_s": {
+          "mean": 0.19826754927635193,
+          "p95": 0.6366742849349976
+        },
+        "object_position_m": {
+          "mean": 0.0008626784547232091,
+          "p95": 0.0034014261327683926
+        },
+        "object_angle_rad": {
+          "mean": 0.026306945830583572,
+          "p95": 0.11492851376533508
+        },
+        "object_velocity_m_s": {
+          "mean": 0.01694488152861595,
+          "p95": 0.0652046650648117
+        },
+        "object_angular_velocity_rad_s": {
+          "mean": 0.5027066469192505,
+          "p95": 2.3509178161621094
+        }
+      }
+    },
+    "8": {
+      "samples": 511,
+      "excluded": 1,
+      "world_model": {
+        "joint_rmse_rad": {
+          "mean": 0.006845747586339712,
+          "p95": 0.01100984774529934
+        },
+        "joint_velocity_rmse_rad_s": {
+          "mean": 0.08025258779525757,
+          "p95": 0.12091340124607086
+        },
+        "object_position_m": {
+          "mean": 0.001375239691697061,
+          "p95": 0.0038483934476971626
+        },
+        "object_angle_rad": {
+          "mean": 0.04025853052735329,
+          "p95": 0.10557191073894501
+        },
+        "object_velocity_m_s": {
+          "mean": 0.016309509053826332,
+          "p95": 0.035298436880111694
+        },
+        "object_angular_velocity_rad_s": {
+          "mean": 0.5054227113723755,
+          "p95": 1.4360097646713257
+        }
+      },
+      "persistence": {
+        "joint_rmse_rad": {
+          "mean": 0.020949406549334526,
+          "p95": 0.08454473316669464
+        },
+        "joint_velocity_rmse_rad_s": {
+          "mean": 0.24936412274837494,
+          "p95": 0.9479280114173889
+        },
+        "object_position_m": {
+          "mean": 0.0014737556921318173,
+          "p95": 0.006646767258644104
+        },
+        "object_angle_rad": {
+          "mean": 0.04361805319786072,
+          "p95": 0.20633092522621155
+        },
+        "object_velocity_m_s": {
+          "mean": 0.02384762279689312,
+          "p95": 0.0742616057395935
+        },
+        "object_angular_velocity_rad_s": {
+          "mean": 0.5694308876991272,
+          "p95": 2.753509759902954
+        }
+      }
+    },
+    "16": {
+      "samples": 510,
+      "excluded": 2,
+      "world_model": {
+        "joint_rmse_rad": {
+          "mean": 0.007469980977475643,
+          "p95": 0.012528673745691776
+        },
+        "joint_velocity_rmse_rad_s": {
+          "mean": 0.07923763990402222,
+          "p95": 0.12373535335063934
+        },
+        "object_position_m": {
+          "mean": 0.0026874367613345385,
+          "p95": 0.0053625102154910564
+        },
+        "object_angle_rad": {
+          "mean": 0.07041509449481964,
+          "p95": 0.20884977281093597
+        },
+        "object_velocity_m_s": {
+          "mean": 0.01829354278743267,
+          "p95": 0.03790280595421791
+        },
+        "object_angular_velocity_rad_s": {
+          "mean": 0.5094322562217712,
+          "p95": 1.5002049207687378
+        }
+      },
+      "persistence": {
+        "joint_rmse_rad": {
+          "mean": 0.027895841747522354,
+          "p95": 0.13388343155384064
+        },
+        "joint_velocity_rmse_rad_s": {
+          "mean": 0.27412697672843933,
+          "p95": 1.179815649986267
+        },
+        "object_position_m": {
+          "mean": 0.0023193228989839554,
+          "p95": 0.010029375553131104
+        },
+        "object_angle_rad": {
+          "mean": 0.060539960861206055,
+          "p95": 0.26612600684165955
+        },
+        "object_velocity_m_s": {
+          "mean": 0.03069932758808136,
+          "p95": 0.09223417192697525
+        },
+        "object_angular_velocity_rad_s": {
+          "mean": 0.5943549275398254,
+          "p95": 2.8586151599884033
+        }
+      }
+    },
+    "32": {
+      "samples": 510,
+      "excluded": 2,
+      "world_model": {
+        "joint_rmse_rad": {
+          "mean": 0.007741448003798723,
+          "p95": 0.013296429067850113
+        },
+        "joint_velocity_rmse_rad_s": {
+          "mean": 0.078486368060112,
+          "p95": 0.11857423186302185
+        },
+        "object_position_m": {
+          "mean": 0.004005429334938526,
+          "p95": 0.007681085728108883
+        },
+        "object_angle_rad": {
+          "mean": 0.12221907824277878,
+          "p95": 0.2989468574523926
+        },
+        "object_velocity_m_s": {
+          "mean": 0.01487741805613041,
+          "p95": 0.036046188324689865
+        },
+        "object_angular_velocity_rad_s": {
+          "mean": 0.4981825351715088,
+          "p95": 1.4062268733978271
+        }
+      },
+      "persistence": {
+        "joint_rmse_rad": {
+          "mean": 0.024010248482227325,
+          "p95": 0.0906849279999733
+        },
+        "joint_velocity_rmse_rad_s": {
+          "mean": 0.2088504433631897,
+          "p95": 0.6950690150260925
+        },
+        "object_position_m": {
+          "mean": 0.0028070062398910522,
+          "p95": 0.0070409951731562614
+        },
+        "object_angle_rad": {
+          "mean": 0.0610068254172802,
+          "p95": 0.19884824752807617
+        },
+        "object_velocity_m_s": {
+          "mean": 0.03469984605908394,
+          "p95": 0.07379624992609024
+        },
+        "object_angular_velocity_rad_s": {
+          "mean": 0.5034326910972595,
+          "p95": 2.078935146331787
+        }
+      }
+    }
+  },
+  "frozen_parameters": true,
+  "frozen_normalization_verified": true,
+  "action_noise": false,
+  "observation_noise": true,
+  "interval_pushes": true,
+  "protocol": "Fresh seed; deterministic actor; nonoverlapping 32-step windows; reference replay push reconstruction; mask at terminal/reset boundaries",
+  "limitation": "Conditioned on recorded controls and pushes, not autonomous imagination; correlated samples; no claim of policy success or action-gradient validity"
+}

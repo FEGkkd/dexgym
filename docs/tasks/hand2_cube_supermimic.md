@@ -251,3 +251,24 @@ for completed-task evaluation. The collection drop fraction is per control step,
 while `eval/drop_fraction_per_episode` is per episode. Actor/Critic curves start
 after the 500-iteration WM warmup. Avoid launching multiple mirror writers into
 the same events directory simultaneously.
+
+## Frozen world-model prediction diagnostic
+
+```bash
+bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.evaluate_world_model --checkpoint /path/to/model.pt --output /tmp/wm_prediction.json
+```
+
+This diagnostic collects fresh seed-321 trajectories with a frozen actor and WM,
+64 environments, 150 burn-in steps, and 256 recorded control steps. It evaluates
+nonoverlapping windows at horizons 1/4/8/16/32, reports physical-unit mean/p95
+errors, and compares with a persistence baseline on the same states. Predictions
+receive recorded executed targets and the reference replay reconstruction of
+exogenous pushes. Future physical states are used only as error targets, never
+as WM inputs. Terminal transitions are included; subsequent transitions across
+reset boundaries are masked. Model parameters require no gradients and no
+optimizer is constructed; normalization buffers are checked unchanged afterward.
+
+These are correlated trajectory samples under the current deterministic policy,
+not a complete contact-mode benchmark. The diagnostic measures open-loop state
+prediction conditioned on recorded controls and pushes; it does not validate
+imagined action gradients or demonstrate successful task learning.
