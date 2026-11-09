@@ -26,3 +26,11 @@ class WujiHand21TeleDexterCfg(RightHandCleanTrackingCfg):
     reward_dense_scale = 0.1
     reward_time_cost = 0.1
     reward_action_rate_penalty = 0.0
+
+
+@configclass
+class WujiHand21SuperMimicCfg(WujiHand21TeleDexterCfg):
+    """Same standalone physics and subgoals, with complete hand dense terms."""
+
+    paper_hand_dense: bool = True
+    capture_model_transitions: bool = True

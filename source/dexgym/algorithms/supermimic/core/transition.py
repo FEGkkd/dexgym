@@ -30,6 +30,18 @@ class TaskState:
 
 
 @dataclass
+class TaskStep:
+    """State-dependent task transition, evaluated against the goal BEFORE switching.
+
+    frame is the monotonic control clock. Hybrid-task reference IDs/indices and
+    dwell/failure counters belong to data, independent of physical episode ID.
+    """
+
+    next_task_state: TaskState
+    reward: torch.Tensor
+
+
+@dataclass
 class TransitionBatch:
     state: torch.Tensor
     action: torch.Tensor

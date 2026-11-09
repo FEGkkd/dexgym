@@ -1,6 +1,7 @@
 """Held-out actor-data action-conditioned model prediction gate."""
 
 from dataclasses import dataclass
+import math
 
 import torch
 
@@ -14,7 +15,8 @@ class TrustConfig:
 
     def __post_init__(self):
         if (self.min_distinct_starts < 1 or len(self.max_rmse) != 3
-                or min(self.max_rmse) <= 0 or self.metric not in ("physical", "normalized")):
+                or any(not math.isfinite(x) or x <= 0 for x in self.max_rmse)
+                or self.metric not in ("physical", "normalized")):
             raise ValueError("Model trust thresholds must be positive for 1/8/32 steps")
 
 
@@ -34,7 +36,8 @@ class ModelTrustEvaluator:
         truth = window.next_state[:, -1]
         error = robot.physical_delta(truth, prediction)
         baseline = robot.physical_delta(truth, window.state[:, 0])
-        scale = model.delta_norm.std().detach()
+        scale = (model.delta_norm.std().detach() if hasattr(model.delta_norm, "std")
+                 else torch.ones_like(error))
         normalized = error / scale
         normalized_baseline = baseline / scale
         identity = torch.stack((window.absolute_timestamp[:, 0], window.env_id), dim=-1)
@@ -68,10 +71,13 @@ class ModelTrustEvaluator:
                         else "zero_delta_baseline_rmse")
         for index, horizon in enumerate((1, 8, 32)):
             sample = report.get(str(horizon), {})
+            error = sample.get(metric_key, float("inf"))
+            baseline = sample.get(baseline_key, float("inf"))
             if (sample.get("distinct_start_count", 0) < self.config.min_distinct_starts
-                    or sample.get(metric_key, float("inf")) > self.config.max_rmse[index]
+                    or not math.isfinite(error)
+                    or error > self.config.max_rmse[index]
                     or (self.config.require_baseline_improvement
-                        and sample.get(metric_key, float("inf")) >= sample.get(baseline_key, 0.0))):
+                        and (not math.isfinite(baseline) or error >= baseline))):
                 break
             result = horizon
         return result

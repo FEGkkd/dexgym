@@ -55,8 +55,15 @@ class ImaginationEngine:
             states.append(state.detach())
             action = actor(history, goal)
             next_state = world_model(state, action, context, robot)
-            next_task_state = task.advance(task_state)
-            reward = task.reward(state, next_state, action, next_task_state, previous_action)
+            transition = getattr(task, "transition", None)
+            if callable(transition):
+                # Hybrid subgoals depend on the predicted physical arrival.
+                # The task scores the old active goal before choosing the next.
+                result = transition(state, next_state, action, task_state, previous_action)
+                next_task_state, reward = result.next_task_state, result.reward
+            else:
+                next_task_state = task.advance(task_state)
+                reward = task.reward(state, next_state, action, next_task_state, previous_action)
             if task.termination_mode == "learned":
                 if termination_head is None:
                     raise ValueError("Learned termination needs a task-shaped head")
