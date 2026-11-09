@@ -1,6 +1,8 @@
 # Native cube reorientation training: scene revision 2
 
-The full task-reproduction goal remains incomplete. Published upstream weights are
+The native task port and from-scratch learned policy are now verified; see
+[final evaluation](cube_reorient_final_evaluation.md). The milestone notes below
+retain their historical interpretation. Published upstream weights are
 used only as a diagnostic; native training starts from random initialization.
 
 Run: `/home/ubuntu/dexgym/artifacts/cube_reorient/train_seed42_scene_v2`.
@@ -19,6 +21,7 @@ with the same fresh reference curriculum. Every environment contributes four epi
 | Native iteration 2000 | 0.00390625 | 0.00390625 | 0 | 0.09375 | 1.88495 |
 | Native iteration 4000 | 0.03125 | 0.03125 | 0 | 0.08984375 | 1.73836 |
 | Native iteration 6000 | 0.71875 | 0.4296875 | 0.0703125 | 0.421875 | 1.22332 |
+| Native iteration 8000 | 4.9765625 | 0.796875 | 0.58203125 | 0.6328125 | 0.97476 |
 | Published upstream actor, iteration 8000 | 6.50391 | 0.863281 | 0.644531 | 0.660156 | 0.834614 |
 
 At iteration 1000 the native actor has had 500 policy updates after WM warmup.
@@ -74,3 +77,10 @@ The latter is explicitly selected after observing success and is not a
 representative success-rate estimate. Both reconstruct recorded native poses
 with zero root-position error; they do not re-simulate physics. The 256-episode
 result above remains the performance estimate, including failures.
+
+The 8000-iteration run has now finished normally. Its final policy was evaluated
+on both seeds 123 and 456: 2387 total goals across 512 episodes, including 292
+episodes with at least three goals. The native policy is trained and performs
+continuous reorientation, with a remaining mean-goal gap to the public actor.
+Full results, model hashes, update counters, reproduction commands and scope
+limitations are in the final evaluation and completion-audit documents.

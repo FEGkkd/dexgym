@@ -1,6 +1,9 @@
 # Wuji Hand 2 cube reorientation: native SuperMimic reproduction
 
-Status: scene revision 2 is validated; learned-policy reproduction is not yet established.
+Status: native task port and from-scratch training are verified. A 4096-environment,
+8000-iteration run completed 2387 goals across 512 evaluation episodes. Mean goals
+per episode remains below the public reference model. See the
+[final evaluation report](../experiments/cube_reorient_final_evaluation.md).
 
 The initial port omitted the upstream ground plane. The first training run was
 stopped after preserving its 1000-iteration checkpoint. The corrected scene adds
@@ -85,7 +88,7 @@ the shared virtual environment. From the dexgym checkout:
 bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.validate_native --output /tmp/cube_native.json
 bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.validate_algorithm --reference /home/ubuntu/dexgym/artifacts/dex_supermimic_reference --output /tmp/cube_algorithm.json
 bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.smoke --full-config --num-envs 4096 --output /tmp/cube_capacity.json
-bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.train --num-envs 4096 --output /home/ubuntu/dexgym/artifacts/cube_reorient/train_seed42_scene_v2
+bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.train --num-envs 4096 --output /path/to/new_cube_training_run
 bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.evaluate --checkpoint /path/to/model.pt --output /tmp/cube_evaluation.json
 ```
 
@@ -211,7 +214,8 @@ Under identical seed-123, 64-environment, four-episode evaluation settings:
 
 These scene-v2 results supersede the earlier diagnostic numbers. They demonstrate
 that the native environment supports the reference actor's continuous reorientation;
-they are not results of the native training run, which remains in progress.
+they are not results of the native training run. Its completed results are in the
+[final evaluation report](../experiments/cube_reorient_final_evaluation.md).
 
 ## Record and render native policy behavior
 

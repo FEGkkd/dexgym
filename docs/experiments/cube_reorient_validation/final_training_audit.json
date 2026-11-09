@@ -1,0 +1,40 @@
+{
+  "iteration": 8000,
+  "sim_steps": 82182144,
+  "wall_seconds": 9426.009341296041,
+  "checkpoint_8000_sha256": "f42b5338c4f33b43272da36c05d31c2bc9e37cb261e12566c11d353796e58bda",
+  "checkpoint_final_sha256": "7aceba2b59208393d0568bfc9f3aed86854142df4a5edbd89d303eff63642f97",
+  "module_state_equal": {
+    "actor": true,
+    "wm": true,
+    "fail_head": true,
+    "critic": true
+  },
+  "optimizer_steps": {
+    "actor": [
+      7500.0
+    ],
+    "wm": [
+      80000.0
+    ],
+    "fail_head": [
+      80000.0
+    ],
+    "critic": [
+      150000.0
+    ]
+  },
+  "logged_rows": 800,
+  "last_logged_iteration": 7990,
+  "nonfinite_logged_scalars": 0,
+  "provenance": {
+    "task": "DexGym-Wuji-Hand2-Cube-Reorientation-SuperMimic-Direct-v0",
+    "reference_sha": "2becb7380fed86171056f9bf4338b2a6a0c14b01",
+    "scene_revision": 2,
+    "dexgym_commit": "2e238d5ec930ead065b3d90160c1e0caeec6c310",
+    "worktree_status": "?? MUJOCO_LOG.TXT\n?? build/",
+    "num_envs": 4096,
+    "backend": "Isaac Lab 3 / Newton MuJoCo Warp"
+  },
+  "limitation": "Logged scalars are sampled every 10 iterations; optimizer counters verify completed update counts, not task success."
+}

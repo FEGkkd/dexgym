@@ -1,0 +1,2586 @@
+{
+  "reference_sha": "2becb7380fed86171056f9bf4338b2a6a0c14b01",
+  "evaluated_scene_revision": 2,
+  "checkpoint": "/home/ubuntu/dexgym/artifacts/cube_reorient/train_seed42_scene_v2/model_8000.pt",
+  "checkpoint_sha256": "f42b5338c4f33b43272da36c05d31c2bc9e37cb261e12566c11d353796e58bda",
+  "checkpoint_kind": "native",
+  "actor_normalization": "EmpiricalNorm",
+  "checkpoint_iteration": 8000,
+  "seed": 456,
+  "num_envs": 64,
+  "episodes_per_env": 4,
+  "observation_noise": true,
+  "startup_randomization": true,
+  "reset_randomization": true,
+  "interval_pushes": true,
+  "disturbance_protocol": "fresh reference curriculum for every evaluation",
+  "episodes": 256,
+  "mean_successes": 4.34765625,
+  "fraction_at_least_one": 0.76171875,
+  "fraction_at_least_three": 0.55859375,
+  "drop_fraction": 0.62890625,
+  "mean_episode_seconds": 27.342734375,
+  "mean_angle_rad": 0.9796090034890196,
+  "records": [
+    {
+      "env": 37,
+      "episode": 0,
+      "steps": 57,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.316777467727661,
+      "episode_return": -558.8812866210938
+    },
+    {
+      "env": 46,
+      "episode": 0,
+      "steps": 69,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.2224557399749756,
+      "episode_return": -559.3070068359375
+    },
+    {
+      "env": 10,
+      "episode": 0,
+      "steps": 78,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.6284974813461304,
+      "episode_return": -553.9370727539062
+    },
+    {
+      "env": 19,
+      "episode": 0,
+      "steps": 80,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.894945740699768,
+      "episode_return": -555.976318359375
+    },
+    {
+      "env": 13,
+      "episode": 0,
+      "steps": 81,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.8919295072555542,
+      "episode_return": -564.3275756835938
+    },
+    {
+      "env": 21,
+      "episode": 0,
+      "steps": 91,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.6214814186096191,
+      "episode_return": -558.9510498046875
+    },
+    {
+      "env": 32,
+      "episode": 0,
+      "steps": 106,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.5479001998901367,
+      "episode_return": -554.0838623046875
+    },
+    {
+      "env": 53,
+      "episode": 0,
+      "steps": 109,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.3712761402130127,
+      "episode_return": -557.1886596679688
+    },
+    {
+      "env": 60,
+      "episode": 0,
+      "steps": 111,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.9889752864837646,
+      "episode_return": -607.7738647460938
+    },
+    {
+      "env": 8,
+      "episode": 0,
+      "steps": 130,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.2560361623764038,
+      "episode_return": -546.2626342773438
+    },
+    {
+      "env": 14,
+      "episode": 0,
+      "steps": 133,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.5482797622680664,
+      "episode_return": -550.48486328125
+    },
+    {
+      "env": 58,
+      "episode": 0,
+      "steps": 149,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.9258527755737305,
+      "episode_return": -562.0498657226562
+    },
+    {
+      "env": 7,
+      "episode": 0,
+      "steps": 162,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.0362757444381714,
+      "episode_return": -431.8202209472656
+    },
+    {
+      "env": 60,
+      "episode": 1,
+      "steps": 61,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.766271948814392,
+      "episode_return": -555.9232788085938
+    },
+    {
+      "env": 18,
+      "episode": 0,
+      "steps": 197,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.002195119857788,
+      "episode_return": -556.689697265625
+    },
+    {
+      "env": 24,
+      "episode": 0,
+      "steps": 214,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.166333556175232,
+      "episode_return": -452.30780029296875
+    },
+    {
+      "env": 47,
+      "episode": 0,
+      "steps": 219,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.8211320638656616,
+      "episode_return": -552.96484375
+    },
+    {
+      "env": 58,
+      "episode": 1,
+      "steps": 73,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.241621732711792,
+      "episode_return": -564.0310668945312
+    },
+    {
+      "env": 50,
+      "episode": 0,
+      "steps": 257,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.5198619365692139,
+      "episode_return": -543.8788452148438
+    },
+    {
+      "env": 18,
+      "episode": 1,
+      "steps": 65,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.3615663051605225,
+      "episode_return": -561.4639282226562
+    },
+    {
+      "env": 51,
+      "episode": 0,
+      "steps": 263,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.4275152683258057,
+      "episode_return": -437.95953369140625
+    },
+    {
+      "env": 60,
+      "episode": 2,
+      "steps": 103,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.810854434967041,
+      "episode_return": -556.3180541992188
+    },
+    {
+      "env": 2,
+      "episode": 0,
+      "steps": 280,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.7256581783294678,
+      "episode_return": -545.54150390625
+    },
+    {
+      "env": 31,
+      "episode": 0,
+      "steps": 286,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.2037091255187988,
+      "episode_return": -439.16845703125
+    },
+    {
+      "env": 24,
+      "episode": 1,
+      "steps": 86,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.0146987438201904,
+      "episode_return": -558.7178955078125
+    },
+    {
+      "env": 56,
+      "episode": 0,
+      "steps": 302,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8570274710655212,
+      "episode_return": -478.0948791503906
+    },
+    {
+      "env": 57,
+      "episode": 0,
+      "steps": 309,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.5042582750320435,
+      "episode_return": -468.06610107421875
+    },
+    {
+      "env": 50,
+      "episode": 1,
+      "steps": 57,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.5360368490219116,
+      "episode_return": -554.6932373046875
+    },
+    {
+      "env": 58,
+      "episode": 2,
+      "steps": 95,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.7856082916259766,
+      "episode_return": -561.72412109375
+    },
+    {
+      "env": 63,
+      "episode": 0,
+      "steps": 337,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1974139213562012,
+      "episode_return": -459.60943603515625
+    },
+    {
+      "env": 60,
+      "episode": 3,
+      "steps": 83,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.0268213748931885,
+      "episode_return": -559.959716796875
+    },
+    {
+      "env": 18,
+      "episode": 2,
+      "steps": 161,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.6397430896759033,
+      "episode_return": -566.7371215820312
+    },
+    {
+      "env": 2,
+      "episode": 1,
+      "steps": 199,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.4213169813156128,
+      "episode_return": -545.1867065429688
+    },
+    {
+      "env": 11,
+      "episode": 0,
+      "steps": 510,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9556887745857239,
+      "episode_return": -469.6064453125
+    },
+    {
+      "env": 29,
+      "episode": 0,
+      "steps": 536,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1619144678115845,
+      "episode_return": -423.7012939453125
+    },
+    {
+      "env": 2,
+      "episode": 2,
+      "steps": 67,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.3909823894500732,
+      "episode_return": -554.611083984375
+    },
+    {
+      "env": 29,
+      "episode": 1,
+      "steps": 68,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.5396242141723633,
+      "episode_return": -555.7296752929688
+    },
+    {
+      "env": 36,
+      "episode": 0,
+      "steps": 643,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.3096880912780762,
+      "episode_return": -328.86273193359375
+    },
+    {
+      "env": 2,
+      "episode": 3,
+      "steps": 122,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.993972659111023,
+      "episode_return": -558.6270751953125
+    },
+    {
+      "env": 28,
+      "episode": 0,
+      "steps": 767,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1041899919509888,
+      "episode_return": -381.84814453125
+    },
+    {
+      "env": 11,
+      "episode": 1,
+      "steps": 261,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9068796038627625,
+      "episode_return": -452.9395446777344
+    },
+    {
+      "env": 50,
+      "episode": 2,
+      "steps": 492,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.2547341585159302,
+      "episode_return": -423.994140625
+    },
+    {
+      "env": 48,
+      "episode": 0,
+      "steps": 830,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.622401237487793,
+      "episode_return": -474.48199462890625
+    },
+    {
+      "env": 11,
+      "episode": 2,
+      "steps": 69,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.3614273071289062,
+      "episode_return": -562.1884765625
+    },
+    {
+      "env": 47,
+      "episode": 1,
+      "steps": 647,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.0631654262542725,
+      "episode_return": -176.59381103515625
+    },
+    {
+      "env": 29,
+      "episode": 2,
+      "steps": 278,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.2679370641708374,
+      "episode_return": -433.9777526855469
+    },
+    {
+      "env": 32,
+      "episode": 1,
+      "steps": 794,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.006590485572815,
+      "episode_return": -228.33995056152344
+    },
+    {
+      "env": 32,
+      "episode": 2,
+      "steps": 37,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.6061604022979736,
+      "episode_return": -557.2865600585938
+    },
+    {
+      "env": 50,
+      "episode": 3,
+      "steps": 191,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.8228275775909424,
+      "episode_return": -557.0109252929688
+    },
+    {
+      "env": 37,
+      "episode": 1,
+      "steps": 944,
+      "successes": 3,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8560343980789185,
+      "episode_return": -161.08609008789062
+    },
+    {
+      "env": 3,
+      "episode": 0,
+      "steps": 1008,
+      "successes": 5,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9248005747795105,
+      "episode_return": -71.8005142211914
+    },
+    {
+      "env": 32,
+      "episode": 3,
+      "steps": 75,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.4438419342041016,
+      "episode_return": -560.4993896484375
+    },
+    {
+      "env": 11,
+      "episode": 3,
+      "steps": 191,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1890262365341187,
+      "episode_return": -475.7696838378906
+    },
+    {
+      "env": 56,
+      "episode": 1,
+      "steps": 754,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.2792227268218994,
+      "episode_return": -430.4410705566406
+    },
+    {
+      "env": 45,
+      "episode": 0,
+      "steps": 1057,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8576900362968445,
+      "episode_return": -108.24464416503906
+    },
+    {
+      "env": 4,
+      "episode": 0,
+      "steps": 1058,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.0055712461471558,
+      "episode_return": -45.6817626953125
+    },
+    {
+      "env": 8,
+      "episode": 1,
+      "steps": 959,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9869239330291748,
+      "episode_return": -378.1535949707031
+    },
+    {
+      "env": 48,
+      "episode": 1,
+      "steps": 263,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.0474348068237305,
+      "episode_return": -448.8067321777344
+    },
+    {
+      "env": 21,
+      "episode": 1,
+      "steps": 1008,
+      "successes": 3,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.4193754196166992,
+      "episode_return": -305.5381164550781
+    },
+    {
+      "env": 13,
+      "episode": 1,
+      "steps": 1067,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1195224523544312,
+      "episode_return": -182.6422119140625
+    },
+    {
+      "env": 44,
+      "episode": 0,
+      "steps": 1153,
+      "successes": 5,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1461907625198364,
+      "episode_return": -28.38265609741211
+    },
+    {
+      "env": 59,
+      "episode": 0,
+      "steps": 1160,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8560317158699036,
+      "episode_return": -145.37091064453125
+    },
+    {
+      "env": 16,
+      "episode": 0,
+      "steps": 1169,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9459218382835388,
+      "episode_return": -137.8927764892578
+    },
+    {
+      "env": 16,
+      "episode": 1,
+      "steps": 88,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.1657795906066895,
+      "episode_return": -560.8900756835938
+    },
+    {
+      "env": 14,
+      "episode": 1,
+      "steps": 1140,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8477633595466614,
+      "episode_return": -85.7490005493164
+    },
+    {
+      "env": 3,
+      "episode": 1,
+      "steps": 335,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.3031320571899414,
+      "episode_return": -460.6118469238281
+    },
+    {
+      "env": 49,
+      "episode": 0,
+      "steps": 1360,
+      "successes": 5,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8365786671638489,
+      "episode_return": 111.86660766601562
+    },
+    {
+      "env": 56,
+      "episode": 2,
+      "steps": 381,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8989481329917908,
+      "episode_return": -363.16912841796875
+    },
+    {
+      "env": 37,
+      "episode": 2,
+      "steps": 443,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.2032076120376587,
+      "episode_return": -300.334716796875
+    },
+    {
+      "env": 25,
+      "episode": 0,
+      "steps": 1453,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9020203948020935,
+      "episode_return": -190.9861297607422
+    },
+    {
+      "env": 21,
+      "episode": 2,
+      "steps": 423,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8131673336029053,
+      "episode_return": -499.135009765625
+    },
+    {
+      "env": 53,
+      "episode": 1,
+      "steps": 1414,
+      "successes": 6,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.77140873670578,
+      "episode_return": 92.85088348388672
+    },
+    {
+      "env": 52,
+      "episode": 0,
+      "steps": 1584,
+      "successes": 6,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.0344263315200806,
+      "episode_return": 195.15158081054688
+    },
+    {
+      "env": 24,
+      "episode": 2,
+      "steps": 1313,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.5964149236679077,
+      "episode_return": -395.3379821777344
+    },
+    {
+      "env": 18,
+      "episode": 3,
+      "steps": 1211,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9104076623916626,
+      "episode_return": -81.40171813964844
+    },
+    {
+      "env": 54,
+      "episode": 0,
+      "steps": 1655,
+      "successes": 6,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.2730833292007446,
+      "episode_return": 264.0448303222656
+    },
+    {
+      "env": 24,
+      "episode": 3,
+      "steps": 63,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.8535358905792236,
+      "episode_return": -589.7320556640625
+    },
+    {
+      "env": 3,
+      "episode": 2,
+      "steps": 377,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8895678520202637,
+      "episode_return": -353.3139953613281
+    },
+    {
+      "env": 48,
+      "episode": 2,
+      "steps": 635,
+      "successes": 3,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9586108326911926,
+      "episode_return": -430.9093322753906
+    },
+    {
+      "env": 40,
+      "episode": 0,
+      "steps": 1751,
+      "successes": 5,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.0713926553726196,
+      "episode_return": 30.568401336669922
+    },
+    {
+      "env": 29,
+      "episode": 3,
+      "steps": 891,
+      "successes": 3,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9275065660476685,
+      "episode_return": -350.50164794921875
+    },
+    {
+      "env": 58,
+      "episode": 3,
+      "steps": 1462,
+      "successes": 6,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8426885008811951,
+      "episode_return": 60.03367614746094
+    },
+    {
+      "env": 48,
+      "episode": 3,
+      "steps": 67,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.6102092266082764,
+      "episode_return": -561.6840209960938
+    },
+    {
+      "env": 28,
+      "episode": 1,
+      "steps": 1095,
+      "successes": 3,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8789606690406799,
+      "episode_return": -216.10800170898438
+    },
+    {
+      "env": 46,
+      "episode": 1,
+      "steps": 1826,
+      "successes": 6,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8255907893180847,
+      "episode_return": 241.2900848388672
+    },
+    {
+      "env": 46,
+      "episode": 2,
+      "steps": 94,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.5413894653320312,
+      "episode_return": -567.5333251953125
+    },
+    {
+      "env": 47,
+      "episode": 2,
+      "steps": 1151,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.2631431818008423,
+      "episode_return": -369.7105407714844
+    },
+    {
+      "env": 8,
+      "episode": 2,
+      "steps": 1155,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9621484875679016,
+      "episode_return": -119.99894714355469
+    },
+    {
+      "env": 19,
+      "episode": 1,
+      "steps": 2208,
+      "successes": 8,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9798579812049866,
+      "episode_return": 269.1828308105469
+    },
+    {
+      "env": 8,
+      "episode": 3,
+      "steps": 61,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1863784790039062,
+      "episode_return": -553.7744750976562
+    },
+    {
+      "env": 52,
+      "episode": 1,
+      "steps": 740,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1230477094650269,
+      "episode_return": -258.51739501953125
+    },
+    {
+      "env": 19,
+      "episode": 2,
+      "steps": 84,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.9657179117202759,
+      "episode_return": -555.471435546875
+    },
+    {
+      "env": 37,
+      "episode": 3,
+      "steps": 1023,
+      "successes": 6,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8163777589797974,
+      "episode_return": 175.97735595703125
+    },
+    {
+      "env": 21,
+      "episode": 3,
+      "steps": 968,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.0217262506484985,
+      "episode_return": -383.4901428222656
+    },
+    {
+      "env": 0,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 12,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9330503940582275,
+      "episode_return": 1081.0980224609375
+    },
+    {
+      "env": 1,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 6,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.0089467763900757,
+      "episode_return": 748.8200073242188
+    },
+    {
+      "env": 5,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 2,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8412183523178101,
+      "episode_return": 495.20574951171875
+    },
+    {
+      "env": 6,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 11,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8337671756744385,
+      "episode_return": 1164.6280517578125
+    },
+    {
+      "env": 9,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 4,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.1572667360305786,
+      "episode_return": 399.5108642578125
+    },
+    {
+      "env": 12,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 14,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.7135496735572815,
+      "episode_return": 1664.0272216796875
+    },
+    {
+      "env": 15,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 7,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9008035063743591,
+      "episode_return": 1027.7550048828125
+    },
+    {
+      "env": 17,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 12,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9513502717018127,
+      "episode_return": 1216.5849609375
+    },
+    {
+      "env": 20,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9601014256477356,
+      "episode_return": 941.9120483398438
+    },
+    {
+      "env": 22,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 10,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8522652387619019,
+      "episode_return": 1230.501953125
+    },
+    {
+      "env": 23,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 6,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.0559049844741821,
+      "episode_return": 573.7468872070312
+    },
+    {
+      "env": 26,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 1,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.9390019178390503,
+      "episode_return": -100.79985046386719
+    },
+    {
+      "env": 27,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 6,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.7157337069511414,
+      "episode_return": 744.625
+    },
+    {
+      "env": 30,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 11,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.805953860282898,
+      "episode_return": 1266.9869384765625
+    },
+    {
+      "env": 33,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 7,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9114822149276733,
+      "episode_return": 821.7660522460938
+    },
+    {
+      "env": 34,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 11,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8726047873497009,
+      "episode_return": 953.1285400390625
+    },
+    {
+      "env": 35,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 7,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.0708246231079102,
+      "episode_return": 934.8021240234375
+    },
+    {
+      "env": 38,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.7927927374839783,
+      "episode_return": 1082.804443359375
+    },
+    {
+      "env": 39,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 11,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.7402849197387695,
+      "episode_return": 1111.7022705078125
+    },
+    {
+      "env": 41,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 11,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.7512032985687256,
+      "episode_return": 1145.7763671875
+    },
+    {
+      "env": 42,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9926226139068604,
+      "episode_return": 804.6541137695312
+    },
+    {
+      "env": 43,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 6,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.2006621360778809,
+      "episode_return": 838.343505859375
+    },
+    {
+      "env": 55,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9796648025512695,
+      "episode_return": 472.179443359375
+    },
+    {
+      "env": 61,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 11,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8589510321617126,
+      "episode_return": 1344.552001953125
+    },
+    {
+      "env": 62,
+      "episode": 0,
+      "steps": 2500,
+      "successes": 9,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8621866106987,
+      "episode_return": 1266.0125732421875
+    },
+    {
+      "env": 3,
+      "episode": 3,
+      "steps": 799,
+      "successes": 3,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.3191577196121216,
+      "episode_return": -315.1103210449219
+    },
+    {
+      "env": 10,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9180746674537659,
+      "episode_return": 586.814697265625
+    },
+    {
+      "env": 1,
+      "episode": 1,
+      "steps": 93,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.3141833543777466,
+      "episode_return": -554.1839599609375
+    },
+    {
+      "env": 6,
+      "episode": 1,
+      "steps": 105,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.103785991668701,
+      "episode_return": -559.0125122070312
+    },
+    {
+      "env": 0,
+      "episode": 1,
+      "steps": 117,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.0360782146453857,
+      "episode_return": -563.5146484375
+    },
+    {
+      "env": 7,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8910741209983826,
+      "episode_return": 924.5733642578125
+    },
+    {
+      "env": 12,
+      "episode": 1,
+      "steps": 197,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.9938833713531494,
+      "episode_return": -565.3092041015625
+    },
+    {
+      "env": 23,
+      "episode": 1,
+      "steps": 208,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9085224866867065,
+      "episode_return": -538.4052734375
+    },
+    {
+      "env": 33,
+      "episode": 1,
+      "steps": 223,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.0973927974700928,
+      "episode_return": -561.6121215820312
+    },
+    {
+      "env": 0,
+      "episode": 2,
+      "steps": 108,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.074639320373535,
+      "episode_return": -560.3958740234375
+    },
+    {
+      "env": 51,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 11,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8161329030990601,
+      "episode_return": 1140.0450439453125
+    },
+    {
+      "env": 31,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 11,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.788307249546051,
+      "episode_return": 1303.508544921875
+    },
+    {
+      "env": 57,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.0744717121124268,
+      "episode_return": 623.0662841796875
+    },
+    {
+      "env": 16,
+      "episode": 2,
+      "steps": 1575,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8245114684104919,
+      "episode_return": -233.25234985351562
+    },
+    {
+      "env": 23,
+      "episode": 2,
+      "steps": 129,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.4856555461883545,
+      "episode_return": -552.4627685546875
+    },
+    {
+      "env": 63,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 9,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9281638264656067,
+      "episode_return": 962.2904052734375
+    },
+    {
+      "env": 43,
+      "episode": 1,
+      "steps": 342,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1025110483169556,
+      "episode_return": -524.8772583007812
+    },
+    {
+      "env": 56,
+      "episode": 3,
+      "steps": 1409,
+      "successes": 5,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.7880408763885498,
+      "episode_return": -28.32329559326172
+    },
+    {
+      "env": 0,
+      "episode": 3,
+      "steps": 143,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.8660829067230225,
+      "episode_return": -572.6266479492188
+    },
+    {
+      "env": 7,
+      "episode": 2,
+      "steps": 217,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1766185760498047,
+      "episode_return": -440.5391845703125
+    },
+    {
+      "env": 61,
+      "episode": 1,
+      "steps": 447,
+      "successes": 3,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.7564714550971985,
+      "episode_return": -215.55490112304688
+    },
+    {
+      "env": 12,
+      "episode": 2,
+      "steps": 326,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.7987270951271057,
+      "episode_return": -296.5086669921875
+    },
+    {
+      "env": 61,
+      "episode": 2,
+      "steps": 78,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.357296943664551,
+      "episode_return": -564.3612670898438
+    },
+    {
+      "env": 36,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.768306314945221,
+      "episode_return": 938.522216796875
+    },
+    {
+      "env": 17,
+      "episode": 1,
+      "steps": 652,
+      "successes": 3,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1164641380310059,
+      "episode_return": -358.44012451171875
+    },
+    {
+      "env": 17,
+      "episode": 2,
+      "steps": 69,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.889749765396118,
+      "episode_return": -564.3529052734375
+    },
+    {
+      "env": 57,
+      "episode": 2,
+      "steps": 515,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.4859243631362915,
+      "episode_return": -521.9339599609375
+    },
+    {
+      "env": 12,
+      "episode": 3,
+      "steps": 317,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.2937146425247192,
+      "episode_return": -543.0850219726562
+    },
+    {
+      "env": 19,
+      "episode": 3,
+      "steps": 988,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.089930772781372,
+      "episode_return": -431.2407531738281
+    },
+    {
+      "env": 42,
+      "episode": 1,
+      "steps": 907,
+      "successes": 3,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.0488287210464478,
+      "episode_return": -342.88824462890625
+    },
+    {
+      "env": 7,
+      "episode": 3,
+      "steps": 532,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.4203815460205078,
+      "episode_return": -414.725830078125
+    },
+    {
+      "env": 47,
+      "episode": 3,
+      "steps": 1401,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.344698190689087,
+      "episode_return": -146.7548828125
+    },
+    {
+      "env": 10,
+      "episode": 2,
+      "steps": 859,
+      "successes": 3,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1891026496887207,
+      "episode_return": -218.89805603027344
+    },
+    {
+      "env": 51,
+      "episode": 2,
+      "steps": 706,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9869976043701172,
+      "episode_return": -394.526611328125
+    },
+    {
+      "env": 59,
+      "episode": 1,
+      "steps": 2369,
+      "successes": 11,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.7256770730018616,
+      "episode_return": 727.861083984375
+    },
+    {
+      "env": 45,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 12,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8315643072128296,
+      "episode_return": 1316.407958984375
+    },
+    {
+      "env": 4,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 1,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.5236177444458008,
+      "episode_return": 358.5093078613281
+    },
+    {
+      "env": 20,
+      "episode": 1,
+      "steps": 1095,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.005525827407837,
+      "episode_return": -414.4976806640625
+    },
+    {
+      "env": 13,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 5,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.07948899269104,
+      "episode_return": 741.9126586914062
+    },
+    {
+      "env": 44,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 9,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9555454850196838,
+      "episode_return": 936.4874267578125
+    },
+    {
+      "env": 34,
+      "episode": 1,
+      "steps": 1263,
+      "successes": 7,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9554135799407959,
+      "episode_return": 179.63723754882812
+    },
+    {
+      "env": 14,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 10,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8336601257324219,
+      "episode_return": 1022.1255493164062
+    },
+    {
+      "env": 59,
+      "episode": 2,
+      "steps": 274,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.2820243835449219,
+      "episode_return": -425.91021728515625
+    },
+    {
+      "env": 14,
+      "episode": 3,
+      "steps": 68,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.782522439956665,
+      "episode_return": -555.83935546875
+    },
+    {
+      "env": 49,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 3,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.3510868549346924,
+      "episode_return": 362.9538269042969
+    },
+    {
+      "env": 36,
+      "episode": 2,
+      "steps": 749,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.4374315738677979,
+      "episode_return": -528.765380859375
+    },
+    {
+      "env": 25,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 7,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.0359240770339966,
+      "episode_return": 803.2962036132812
+    },
+    {
+      "env": 53,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 11,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.0245180130004883,
+      "episode_return": 1017.9181518554688
+    },
+    {
+      "env": 53,
+      "episode": 3,
+      "steps": 52,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.489393711090088,
+      "episode_return": -560.2890014648438
+    },
+    {
+      "env": 46,
+      "episode": 3,
+      "steps": 2089,
+      "successes": 6,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8764445781707764,
+      "episode_return": -11.459213256835938
+    },
+    {
+      "env": 30,
+      "episode": 1,
+      "steps": 1623,
+      "successes": 7,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9926798343658447,
+      "episode_return": 309.6173095703125
+    },
+    {
+      "env": 63,
+      "episode": 2,
+      "steps": 1294,
+      "successes": 5,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.7903594374656677,
+      "episode_return": 13.42544174194336
+    },
+    {
+      "env": 54,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 3,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.3596299886703491,
+      "episode_return": 537.7341918945312
+    },
+    {
+      "env": 40,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 5,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.6794159412384033,
+      "episode_return": 816.470947265625
+    },
+    {
+      "env": 28,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 10,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8987299799919128,
+      "episode_return": 1107.352294921875
+    },
+    {
+      "env": 40,
+      "episode": 2,
+      "steps": 182,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.09661865234375,
+      "episode_return": -563.2833251953125
+    },
+    {
+      "env": 63,
+      "episode": 3,
+      "steps": 327,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8395936489105225,
+      "episode_return": -513.4432373046875
+    },
+    {
+      "env": 23,
+      "episode": 3,
+      "steps": 1773,
+      "successes": 8,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9317367076873779,
+      "episode_return": 380.2449035644531
+    },
+    {
+      "env": 52,
+      "episode": 2,
+      "steps": 2420,
+      "successes": 5,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9568091034889221,
+      "episode_return": 95.55799865722656
+    },
+    {
+      "env": 13,
+      "episode": 3,
+      "steps": 1109,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.843646228313446,
+      "episode_return": -242.94876098632812
+    },
+    {
+      "env": 41,
+      "episode": 1,
+      "steps": 2322,
+      "successes": 10,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8608726263046265,
+      "episode_return": 691.0120239257812
+    },
+    {
+      "env": 40,
+      "episode": 3,
+      "steps": 431,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.051290512084961,
+      "episode_return": -312.4236755371094
+    },
+    {
+      "env": 5,
+      "episode": 1,
+      "steps": 2370,
+      "successes": 7,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8611544966697693,
+      "episode_return": 171.0416717529297
+    },
+    {
+      "env": 9,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 7,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9733117818832397,
+      "episode_return": 771.468994140625
+    },
+    {
+      "env": 15,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 11,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9558089375495911,
+      "episode_return": 1386.060791015625
+    },
+    {
+      "env": 22,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.893510639667511,
+      "episode_return": 851.4904174804688
+    },
+    {
+      "env": 26,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 6,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8192238211631775,
+      "episode_return": 771.5137939453125
+    },
+    {
+      "env": 27,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 7,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.0393069982528687,
+      "episode_return": 775.7340698242188
+    },
+    {
+      "env": 35,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 7,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8625351190567017,
+      "episode_return": 834.730712890625
+    },
+    {
+      "env": 38,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 7,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.024865746498108,
+      "episode_return": 748.8267822265625
+    },
+    {
+      "env": 39,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 10,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9127461910247803,
+      "episode_return": 995.406494140625
+    },
+    {
+      "env": 55,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9111307263374329,
+      "episode_return": 864.55517578125
+    },
+    {
+      "env": 62,
+      "episode": 1,
+      "steps": 2500,
+      "successes": 1,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.6028611660003662,
+      "episode_return": 249.30433654785156
+    },
+    {
+      "env": 55,
+      "episode": 2,
+      "steps": 68,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.091895580291748,
+      "episode_return": -558.2496948242188
+    },
+    {
+      "env": 1,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 12,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.0995984077453613,
+      "episode_return": 1228.3363037109375
+    },
+    {
+      "env": 34,
+      "episode": 2,
+      "steps": 1341,
+      "successes": 7,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8451981544494629,
+      "episode_return": 8.867374420166016
+    },
+    {
+      "env": 6,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8823211789131165,
+      "episode_return": 906.4108276367188
+    },
+    {
+      "env": 33,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 10,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.0706124305725098,
+      "episode_return": 1021.2923583984375
+    },
+    {
+      "env": 31,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 12,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9477989077568054,
+      "episode_return": 1519.066650390625
+    },
+    {
+      "env": 16,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 14,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.776948094367981,
+      "episode_return": 1490.787353515625
+    },
+    {
+      "env": 43,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 5,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.0446281433105469,
+      "episode_return": 448.06402587890625
+    },
+    {
+      "env": 10,
+      "episode": 3,
+      "steps": 2025,
+      "successes": 6,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8634470701217651,
+      "episode_return": 40.47526168823242
+    },
+    {
+      "env": 34,
+      "episode": 3,
+      "steps": 378,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1950247287750244,
+      "episode_return": -408.85528564453125
+    },
+    {
+      "env": 61,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 6,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9938757419586182,
+      "episode_return": 768.5223388671875
+    },
+    {
+      "env": 28,
+      "episode": 3,
+      "steps": 1283,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1943130493164062,
+      "episode_return": -203.9251708984375
+    },
+    {
+      "env": 51,
+      "episode": 3,
+      "steps": 2230,
+      "successes": 9,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8350676894187927,
+      "episode_return": 612.5328979492188
+    },
+    {
+      "env": 17,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 14,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9035179615020752,
+      "episode_return": 1570.84228515625
+    },
+    {
+      "env": 57,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 4,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.0124282836914062,
+      "episode_return": 610.2633666992188
+    },
+    {
+      "env": 6,
+      "episode": 3,
+      "steps": 729,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.6979078650474548,
+      "episode_return": -290.9316101074219
+    },
+    {
+      "env": 42,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 9,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8355725407600403,
+      "episode_return": 1162.48291015625
+    },
+    {
+      "env": 45,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.7699003219604492,
+      "episode_return": 964.0515747070312
+    },
+    {
+      "env": 4,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 6,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.813021183013916,
+      "episode_return": 832.5234985351562
+    },
+    {
+      "env": 20,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 1,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.5071682929992676,
+      "episode_return": 513.14111328125
+    },
+    {
+      "env": 44,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 0,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.8890008926391602,
+      "episode_return": -138.970703125
+    },
+    {
+      "env": 38,
+      "episode": 2,
+      "steps": 1193,
+      "successes": 3,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1891368627548218,
+      "episode_return": -147.9245147705078
+    },
+    {
+      "env": 59,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 9,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8117578029632568,
+      "episode_return": 1057.39208984375
+    },
+    {
+      "env": 49,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9734777808189392,
+      "episode_return": 839.8703002929688
+    },
+    {
+      "env": 52,
+      "episode": 3,
+      "steps": 1639,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9179149866104126,
+      "episode_return": -23.554759979248047
+    },
+    {
+      "env": 36,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 14,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.761593759059906,
+      "episode_return": 1285.8463134765625
+    },
+    {
+      "env": 42,
+      "episode": 3,
+      "steps": 491,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.4057661294937134,
+      "episode_return": -414.68133544921875
+    },
+    {
+      "env": 25,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 3,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.1476171016693115,
+      "episode_return": 497.22021484375
+    },
+    {
+      "env": 44,
+      "episode": 3,
+      "steps": 411,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.995599091053009,
+      "episode_return": -419.16412353515625
+    },
+    {
+      "env": 25,
+      "episode": 3,
+      "steps": 158,
+      "successes": 0,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 2.0276379585266113,
+      "episode_return": -553.9469604492188
+    },
+    {
+      "env": 30,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 13,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.7496089935302734,
+      "episode_return": 1158.4954833984375
+    },
+    {
+      "env": 54,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 9,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9242725372314453,
+      "episode_return": 1146.6376953125
+    },
+    {
+      "env": 20,
+      "episode": 3,
+      "steps": 736,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.3308920860290527,
+      "episode_return": -358.2989807128906
+    },
+    {
+      "env": 30,
+      "episode": 3,
+      "steps": 246,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1044161319732666,
+      "episode_return": -533.0001220703125
+    },
+    {
+      "env": 54,
+      "episode": 3,
+      "steps": 226,
+      "successes": 1,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8674451112747192,
+      "episode_return": -426.5091552734375
+    },
+    {
+      "env": 41,
+      "episode": 2,
+      "steps": 2188,
+      "successes": 11,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8872590065002441,
+      "episode_return": 603.5071411132812
+    },
+    {
+      "env": 62,
+      "episode": 2,
+      "steps": 2154,
+      "successes": 3,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9867110848426819,
+      "episode_return": -56.299137115478516
+    },
+    {
+      "env": 5,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 5,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.931383490562439,
+      "episode_return": 434.4212951660156
+    },
+    {
+      "env": 39,
+      "episode": 2,
+      "steps": 2464,
+      "successes": 9,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.8531367182731628,
+      "episode_return": 235.25689697265625
+    },
+    {
+      "env": 9,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8012377023696899,
+      "episode_return": 1066.0255126953125
+    },
+    {
+      "env": 15,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 4,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9030846357345581,
+      "episode_return": 509.45916748046875
+    },
+    {
+      "env": 22,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 9,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.7563517689704895,
+      "episode_return": 808.0894775390625
+    },
+    {
+      "env": 26,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 10,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.0244539976119995,
+      "episode_return": 1053.02685546875
+    },
+    {
+      "env": 27,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 9,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9078912734985352,
+      "episode_return": 990.7808837890625
+    },
+    {
+      "env": 35,
+      "episode": 2,
+      "steps": 2500,
+      "successes": 7,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.7671811580657959,
+      "episode_return": 876.4736328125
+    },
+    {
+      "env": 38,
+      "episode": 3,
+      "steps": 1373,
+      "successes": 4,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9891812801361084,
+      "episode_return": -34.68028259277344
+    },
+    {
+      "env": 55,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 10,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8314963579177856,
+      "episode_return": 1048.8330078125
+    },
+    {
+      "env": 1,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 10,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9090794920921326,
+      "episode_return": 1072.7685546875
+    },
+    {
+      "env": 62,
+      "episode": 3,
+      "steps": 528,
+      "successes": 2,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.1707454919815063,
+      "episode_return": -312.83758544921875
+    },
+    {
+      "env": 33,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 14,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.907209038734436,
+      "episode_return": 1560.1650390625
+    },
+    {
+      "env": 31,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 9,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.7808430790901184,
+      "episode_return": 920.6177978515625
+    },
+    {
+      "env": 43,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 8,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.9564983248710632,
+      "episode_return": 1010.5972900390625
+    },
+    {
+      "env": 45,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 13,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8448967337608337,
+      "episode_return": 1507.924072265625
+    },
+    {
+      "env": 4,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 6,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.2861664295196533,
+      "episode_return": 552.2741088867188
+    },
+    {
+      "env": 49,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 6,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.3218772411346436,
+      "episode_return": 588.0169067382812
+    },
+    {
+      "env": 9,
+      "episode": 3,
+      "steps": 1425,
+      "successes": 3,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 1.0419491529464722,
+      "episode_return": -223.37960815429688
+    },
+    {
+      "env": 41,
+      "episode": 3,
+      "steps": 2297,
+      "successes": 10,
+      "drop": true,
+      "timeout": false,
+      "mean_angle_rad": 0.9170209169387817,
+      "episode_return": 455.5343017578125
+    },
+    {
+      "env": 5,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 9,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.180080771446228,
+      "episode_return": 1083.4871826171875
+    },
+    {
+      "env": 39,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 10,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8797310590744019,
+      "episode_return": 918.07080078125
+    },
+    {
+      "env": 15,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 2,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.3952983617782593,
+      "episode_return": 254.62579345703125
+    },
+    {
+      "env": 22,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 12,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.7433621287345886,
+      "episode_return": 1315.8406982421875
+    },
+    {
+      "env": 26,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 10,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 0.8106149435043335,
+      "episode_return": 759.4093017578125
+    },
+    {
+      "env": 27,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 1,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.5608652830123901,
+      "episode_return": 24.609630584716797
+    },
+    {
+      "env": 35,
+      "episode": 3,
+      "steps": 2500,
+      "successes": 7,
+      "drop": false,
+      "timeout": true,
+      "mean_angle_rad": 1.0424526929855347,
+      "episode_return": 776.8897094726562
+    }
+  ]
+}
