@@ -2,7 +2,7 @@
 
 This report records the original 20 mm task and its diagnostics. The active
 task now uses a 15 mm fingertip threshold for the
-[50,000-iteration training run](hand21_teledexter_15mm_4096_50k_live_20261109.md).
+[training run stopped at iteration 3812](hand21_teledexter_15mm_4096_50k_run_20261109.md).
 
 ## Active task and data gate
 

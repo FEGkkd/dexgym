@@ -62,7 +62,7 @@ subgoal-span curriculum, and cross-trajectory switches within each split.
 The earlier right-hand task IDs remain diagnostic environments without PPO
 registration. See the [task report](../docs/experiments/hand21_teledexter_task_20261109.md)
 for the original 20 mm design, the
-[15 mm training note](../docs/experiments/hand21_teledexter_15mm_4096_50k_live_20261109.md),
+[15 mm training record](../docs/experiments/hand21_teledexter_15mm_4096_50k_run_20261109.md),
 and the [motion distribution report](../docs/experiments/hand21_motion_distribution_20261109.md).
 
 ## Earlier Beta 2 library and strict replay screen (historical)

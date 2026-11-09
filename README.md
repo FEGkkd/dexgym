@@ -64,8 +64,8 @@ The [current TELEDEXTER task report](docs/experiments/hand21_teledexter_task_202
 records the full-library Joint Replay and the new training rules. The
 [current-rule privileged replay](docs/experiments/hand21_teledexter_privileged_replay_current_rules_20261109.md)
 reports target timing and failure by exact goal span under the historical 20 mm setting. The
-[15 mm live training note](docs/experiments/hand21_teledexter_15mm_4096_50k_live_20261109.md)
-records the active 4,096-environment, 50,000-iteration run. The
+[15 mm training record](docs/experiments/hand21_teledexter_15mm_4096_50k_run_20261109.md)
+records the 4,096-environment run stopped at iteration 3812. The
 [Hand 2.1 motion distribution report](docs/experiments/hand21_motion_distribution_20261109.md)
 summarizes joint coverage, fingertip speeds, and goal jumps by reference span. The
 [4096-environment action audit](docs/experiments/hand21_action_audit_4096_300_s42.md)
