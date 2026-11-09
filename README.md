@@ -62,6 +62,8 @@ The [deadzone action report](docs/experiments/hand21_deadzone_action_20261109.md
 records the current action equation and its validation.
 The [current TELEDEXTER task report](docs/experiments/hand21_teledexter_task_20261109.md)
 records the full-library Joint Replay and the new training rules. The
+[current-rule privileged replay](docs/experiments/hand21_teledexter_privileged_replay_current_rules_20261109.md)
+reports target timing and failure by exact goal span under the active task. The
 [4096-environment action audit](docs/experiments/hand21_action_audit_4096_300_s42.md)
 records the 300-iteration PPO run, latent Gaussian limit rates, and executed
 action saturation by target span and cross-trajectory target. That run used

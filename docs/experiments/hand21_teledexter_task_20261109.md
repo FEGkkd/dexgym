@@ -29,6 +29,9 @@ eventually reached within the task rules, not that every intermediate frame
 was inside 20 mm. The privileged controller receives reference joint angles;
 these numbers measure data and controller feasibility, not PPO performance.
 The local JSON records are `artifacts/hand21/joint_replay_20mm_{train,validation}_full.json`.
+The [current-rule privileged replay](hand21_teledexter_privileged_replay_current_rules_20261109.md)
+separately evaluates random span, 5–15-step dwell, and cross-trajectory goals,
+including time to reach and timeout by exact span.
 
 ## Paper-style hand-only task rules
 
