@@ -16,6 +16,7 @@ with the same fresh reference curriculum. Every environment contributes four epi
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Untrained | 0 | 0 | 0 | 0.0234375 | 2.22934 |
 | Native iteration 1000 | 0.00390625 | 0.00390625 | 0 | 0.03515625 | 2.04405 |
+| Native iteration 2000 | 0.00390625 | 0.00390625 | 0 | 0.09375 | 1.88495 |
 | Published upstream actor, iteration 8000 | 6.50391 | 0.863281 | 0.644531 | 0.660156 | 0.834614 |
 
 At iteration 1000 the native actor has had 500 policy updates after WM warmup.
@@ -25,3 +26,9 @@ The run continues unchanged. Independent evaluations at iterations 2000, 4000 an
 also records native poses for behavior playback.
 
 Machine-readable per-episode results are in `cube_reorient_validation/`.
+
+At iteration 2000 the native actor still completed only one goal across 256 episodes.
+Mean orientation error improved from 2.04405 to 1.88495 rad, while drop fraction
+increased from 0.03515625 to 0.09375. This remains insufficient learned behavior.
+Training continues with the same reference recipe; the next scheduled evaluation
+is iteration 4000. No mechanism or task simplification was added in response to this result.
