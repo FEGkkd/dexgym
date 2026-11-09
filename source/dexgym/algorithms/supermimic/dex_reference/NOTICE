@@ -1,0 +1,7 @@
+Algorithm components are adapted from CumulusAlpha/Dex-Supermimic
+https://github.com/CumulusAlpha/Dex-Supermimic
+Pinned revision: 2becb7380fed86171056f9bf4338b2a6a0c14b01
+
+MLP / normalization originate from SuperMimic, Copyright (c) 2026
+ETH Zurich, Chong Zhang (MIT). See LICENSE-SuperMimic.
+Task-specific dimensions and simulator access were moved to injected adapters.

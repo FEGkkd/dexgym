@@ -1,0 +1,47 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "MuJoCo USD Converter v0.2.0"
+    }
+    defaultPrim = "tn__MuJoCoModel_nB"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+over "tn__MuJoCoModel_nB" (
+    delete apiSchemas = ["PhysicsArticulationRootAPI", "NewtonArticulationRootAPI"]
+)
+{
+    bool newton:selfCollisionEnabled = 0
+
+    over "Geometry"
+    {
+        over "cube" (
+            prepend apiSchemas = ["PhysicsRigidBodyAPI"]
+        )
+        {
+            over "cube" (
+                prepend apiSchemas = ["NewtonCollisionAPI", "PhysicsMassAPI"]
+            )
+            {
+                float newton:contactGap = 0
+                float physics:density = 1000
+                float physics:mass = 0.12
+            }
+        }
+    }
+
+    over "Physics"
+    {
+        over "PhysicsMaterial" (
+            prepend apiSchemas = ["PhysicsMaterialAPI", "NewtonMaterialAPI"]
+        )
+        {
+            float newton:rollingFriction = 0.0001
+            float newton:torsionalFriction = 0.005
+            float physics:dynamicFriction = 0.3
+        }
+    }
+}
+

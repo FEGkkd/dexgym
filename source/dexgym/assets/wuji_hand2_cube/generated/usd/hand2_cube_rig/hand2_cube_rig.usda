@@ -1,0 +1,616 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "MuJoCo USD Converter v0.2.0"
+    }
+    defaultPrim = "tn__wujihand2rightmjlab_fSF"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "tn__wujihand2rightmjlab_fSF" (
+    prepend references = @./payloads/base.usda@
+    variants = {
+        string Physics = "mujoco"
+    }
+    append variantSets = "Physics"
+)
+{
+    over "Geometry"
+    {
+        over "right_palm_link"
+        {
+            over "right_finger1_link1"
+            {
+                over "right_finger1_link2"
+                {
+                    over "right_finger1_link3"
+                    {
+                        over "right_finger1_link4"
+                        {
+                            over "right_finger1_tip_sensor"
+                            {
+                                over "r_thumb_tip_sensor_frame" (
+                                    instanceable = false
+                                )
+                                {
+                                }
+
+                                over "right_finger1_tip_sensor_col" (
+                                    instanceable = false
+                                )
+                                {
+                                    over "right_finger1_tip_sensor_col" (
+                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                    )
+                                    {
+                                        uniform int newton:maxHullVertices = 32768
+                                    }
+                                }
+                            }
+
+                            over "r_thumb_distal" (
+                                instanceable = false
+                            )
+                            {
+                            }
+
+                            over "right_finger1_link4_col" (
+                                instanceable = false
+                            )
+                            {
+                                over "right_finger1_link4_col" (
+                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                )
+                                {
+                                    uniform int newton:maxHullVertices = 32768
+                                }
+                            }
+                        }
+
+                        over "r_thumb_middle" (
+                            instanceable = false
+                        )
+                        {
+                        }
+
+                        over "right_finger1_link3_col_mesh_disabled" (
+                            instanceable = false
+                        )
+                        {
+                            over "right_finger1_link3_col_mesh_disabled" (
+                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                            )
+                            {
+                                uniform int newton:maxHullVertices = 32768
+                            }
+                        }
+                    }
+
+                    over "r_thumb_proximal_abd" (
+                        instanceable = false
+                    )
+                    {
+                    }
+
+                    over "right_finger1_link2_col_mesh_disabled" (
+                        instanceable = false
+                    )
+                    {
+                        over "right_finger1_link2_col_mesh_disabled" (
+                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                        )
+                        {
+                            uniform int newton:maxHullVertices = 32768
+                        }
+                    }
+                }
+
+                over "r_thumb_proximal" (
+                    instanceable = false
+                )
+                {
+                }
+
+                over "right_finger1_link1_col_mesh_disabled" (
+                    instanceable = false
+                )
+                {
+                    over "right_finger1_link1_col_mesh_disabled" (
+                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                    )
+                    {
+                        uniform int newton:maxHullVertices = 32768
+                    }
+                }
+            }
+
+            over "right_finger2_link1"
+            {
+                over "right_finger2_link2"
+                {
+                    over "right_finger2_link3"
+                    {
+                        over "right_finger2_link4"
+                        {
+                            over "right_finger2_tip_sensor"
+                            {
+                                over "r_index_finger_tip_sensor_frame" (
+                                    instanceable = false
+                                )
+                                {
+                                }
+
+                                over "right_finger2_tip_sensor_col" (
+                                    instanceable = false
+                                )
+                                {
+                                    over "right_finger2_tip_sensor_col" (
+                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                    )
+                                    {
+                                        uniform int newton:maxHullVertices = 32768
+                                    }
+                                }
+                            }
+
+                            over "r_index_finger_distal" (
+                                instanceable = false
+                            )
+                            {
+                            }
+
+                            over "right_finger2_link4_col" (
+                                instanceable = false
+                            )
+                            {
+                                over "right_finger2_link4_col" (
+                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                )
+                                {
+                                    uniform int newton:maxHullVertices = 32768
+                                }
+                            }
+                        }
+
+                        over "r_index_finger_middle" (
+                            instanceable = false
+                        )
+                        {
+                        }
+
+                        over "right_finger2_link3_col_mesh_disabled" (
+                            instanceable = false
+                        )
+                        {
+                            over "right_finger2_link3_col_mesh_disabled" (
+                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                            )
+                            {
+                                uniform int newton:maxHullVertices = 32768
+                            }
+                        }
+                    }
+
+                    over "r_index_finger_proximal_abd" (
+                        instanceable = false
+                    )
+                    {
+                    }
+
+                    over "right_finger2_link2_col_mesh_disabled" (
+                        instanceable = false
+                    )
+                    {
+                        over "right_finger2_link2_col_mesh_disabled" (
+                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                        )
+                        {
+                            uniform int newton:maxHullVertices = 32768
+                        }
+                    }
+                }
+
+                over "r_index_finger_proximal" (
+                    instanceable = false
+                )
+                {
+                }
+
+                over "right_finger2_link1_col_mesh_disabled" (
+                    instanceable = false
+                )
+                {
+                    over "right_finger2_link1_col_mesh_disabled" (
+                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                    )
+                    {
+                        uniform int newton:maxHullVertices = 32768
+                    }
+                }
+            }
+
+            over "right_finger3_link1"
+            {
+                over "right_finger3_link2"
+                {
+                    over "right_finger3_link3"
+                    {
+                        over "right_finger3_link4"
+                        {
+                            over "right_finger3_tip_sensor"
+                            {
+                                over "r_middle_finger_tip_sensor_frame" (
+                                    instanceable = false
+                                )
+                                {
+                                }
+
+                                over "right_finger3_tip_sensor_col" (
+                                    instanceable = false
+                                )
+                                {
+                                    over "right_finger2_tip_sensor_col" (
+                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                    )
+                                    {
+                                        uniform int newton:maxHullVertices = 32768
+                                    }
+                                }
+                            }
+
+                            over "r_middle_finger_distal" (
+                                instanceable = false
+                            )
+                            {
+                            }
+
+                            over "right_finger3_link4_col" (
+                                instanceable = false
+                            )
+                            {
+                                over "right_finger2_link4_col" (
+                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                )
+                                {
+                                    uniform int newton:maxHullVertices = 32768
+                                }
+                            }
+                        }
+
+                        over "r_middle_finger_middle" (
+                            instanceable = false
+                        )
+                        {
+                        }
+
+                        over "right_finger3_link3_col_mesh_disabled" (
+                            instanceable = false
+                        )
+                        {
+                            over "right_finger2_link3_col_mesh_disabled" (
+                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                            )
+                            {
+                                uniform int newton:maxHullVertices = 32768
+                            }
+                        }
+                    }
+
+                    over "r_middle_finger_proximal_abd" (
+                        instanceable = false
+                    )
+                    {
+                    }
+
+                    over "right_finger3_link2_col_mesh_disabled" (
+                        instanceable = false
+                    )
+                    {
+                        over "right_finger2_link2_col_mesh_disabled" (
+                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                        )
+                        {
+                            uniform int newton:maxHullVertices = 32768
+                        }
+                    }
+                }
+
+                over "r_middle_finger_proximal" (
+                    instanceable = false
+                )
+                {
+                }
+
+                over "right_finger3_link1_col_mesh_disabled" (
+                    instanceable = false
+                )
+                {
+                    over "right_finger3_link1_col_mesh_disabled" (
+                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                    )
+                    {
+                        uniform int newton:maxHullVertices = 32768
+                    }
+                }
+            }
+
+            over "right_finger4_link1"
+            {
+                over "right_finger4_link2"
+                {
+                    over "right_finger4_link3"
+                    {
+                        over "right_finger4_link4"
+                        {
+                            over "right_finger4_tip_sensor"
+                            {
+                                over "r_ring_finger_tip_sensor_frame" (
+                                    instanceable = false
+                                )
+                                {
+                                }
+
+                                over "right_finger4_tip_sensor_col" (
+                                    instanceable = false
+                                )
+                                {
+                                    over "right_finger2_tip_sensor_col" (
+                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                    )
+                                    {
+                                        uniform int newton:maxHullVertices = 32768
+                                    }
+                                }
+                            }
+
+                            over "r_ring_finger_distal" (
+                                instanceable = false
+                            )
+                            {
+                            }
+
+                            over "right_finger4_link4_col" (
+                                instanceable = false
+                            )
+                            {
+                                over "right_finger2_link4_col" (
+                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                )
+                                {
+                                    uniform int newton:maxHullVertices = 32768
+                                }
+                            }
+                        }
+
+                        over "r_ring_finger_middle" (
+                            instanceable = false
+                        )
+                        {
+                        }
+
+                        over "right_finger4_link3_col_mesh_disabled" (
+                            instanceable = false
+                        )
+                        {
+                            over "right_finger2_link3_col_mesh_disabled" (
+                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                            )
+                            {
+                                uniform int newton:maxHullVertices = 32768
+                            }
+                        }
+                    }
+
+                    over "r_ring_finger_proximal_abd" (
+                        instanceable = false
+                    )
+                    {
+                    }
+
+                    over "right_finger4_link2_col_mesh_disabled" (
+                        instanceable = false
+                    )
+                    {
+                        over "right_finger2_link2_col_mesh_disabled" (
+                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                        )
+                        {
+                            uniform int newton:maxHullVertices = 32768
+                        }
+                    }
+                }
+
+                over "r_ring_finger_proximal" (
+                    instanceable = false
+                )
+                {
+                }
+
+                over "right_finger4_link1_col_mesh_disabled" (
+                    instanceable = false
+                )
+                {
+                    over "right_finger4_link1_col_mesh_disabled" (
+                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                    )
+                    {
+                        uniform int newton:maxHullVertices = 32768
+                    }
+                }
+            }
+
+            over "right_finger5_link1"
+            {
+                over "right_finger5_link2"
+                {
+                    over "right_finger5_link3"
+                    {
+                        over "right_finger5_link4"
+                        {
+                            over "right_finger5_tip_sensor"
+                            {
+                                over "r_pinky_tip_sensor_frame" (
+                                    instanceable = false
+                                )
+                                {
+                                }
+
+                                over "right_finger5_tip_sensor_col" (
+                                    instanceable = false
+                                )
+                                {
+                                    over "right_finger5_tip_sensor_col" (
+                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                    )
+                                    {
+                                        uniform int newton:maxHullVertices = 32768
+                                    }
+                                }
+                            }
+
+                            over "r_pinky_distal" (
+                                instanceable = false
+                            )
+                            {
+                            }
+
+                            over "right_finger5_link4_col" (
+                                instanceable = false
+                            )
+                            {
+                                over "right_finger5_link4_col" (
+                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                )
+                                {
+                                    uniform int newton:maxHullVertices = 32768
+                                }
+                            }
+                        }
+
+                        over "r_pinky_middle" (
+                            instanceable = false
+                        )
+                        {
+                        }
+
+                        over "right_finger5_link3_col_mesh_disabled" (
+                            instanceable = false
+                        )
+                        {
+                            over "right_finger5_link3_col_mesh_disabled" (
+                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                            )
+                            {
+                                uniform int newton:maxHullVertices = 32768
+                            }
+                        }
+                    }
+
+                    over "r_pinky_proximal_abd" (
+                        instanceable = false
+                    )
+                    {
+                    }
+
+                    over "right_finger5_link2_col_mesh_disabled" (
+                        instanceable = false
+                    )
+                    {
+                        over "right_finger5_link2_col_mesh_disabled" (
+                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                        )
+                        {
+                            uniform int newton:maxHullVertices = 32768
+                        }
+                    }
+                }
+
+                over "r_pinky_proximal" (
+                    instanceable = false
+                )
+                {
+                }
+
+                over "right_finger5_link1_col_mesh_disabled" (
+                    instanceable = false
+                )
+                {
+                    over "right_finger5_link1_col_mesh_disabled" (
+                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                    )
+                    {
+                        uniform int newton:maxHullVertices = 32768
+                    }
+                }
+            }
+
+            over "right_mount"
+            {
+                over "r_mount" (
+                    instanceable = false
+                )
+                {
+                }
+
+                over "right_mount_collision" (
+                    instanceable = false
+                )
+                {
+                    over "right_mount_collision" (
+                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                    )
+                    {
+                        uniform int newton:maxHullVertices = 32768
+                    }
+                }
+
+                over "jig_table_visual" (
+                    instanceable = false
+                )
+                {
+                }
+            }
+
+            over "r_wrist" (
+                instanceable = false
+            )
+            {
+            }
+
+            over "right_palm_collision" (
+                instanceable = false
+            )
+            {
+                over "right_palm_collision" (
+                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                )
+                {
+                    uniform int newton:maxHullVertices = 32768
+                }
+            }
+        }
+    }
+    variantSet "Physics" = {
+        "mujoco" (
+            prepend payload = @./payloads/Physics/mujoco.usda@
+        ) {
+
+        }
+        "none" {
+
+        }
+        "physics" (
+            prepend payload = @./payloads/Physics/physics.usda@
+        ) {
+
+        }
+        "physx" (
+            prepend payload = @./payloads/Physics/physx.usda@
+        ) {
+
+        }
+    }
+}
+

@@ -1,0 +1,1717 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "MuJoCo USD Converter v0.2.0"
+    }
+    defaultPrim = "tn__wujihand2rightmjlab_fSF"
+    doc = """Generated from Composed Stage of root layer /tmp/cube_export_ww0f1zln/usd/hand2_cube_rig/.asset-transformer-k4rocbx1/payloads/base.usd
+"""
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    subLayers = [
+        @./robot.usda@
+    ]
+    upAxis = "Z"
+)
+
+def Xform "tn__wujihand2rightmjlab_fSF" (
+    prepend apiSchemas = ["GeomModelAPI", "IsaacRobotAPI"]
+    assetInfo = {
+        string name = "wujihand2-right-mjlab"
+    }
+    displayName = "wujihand2-right-mjlab"
+    kind = "component"
+    uiHints = {
+        string displayName = "wujihand2-right-mjlab"
+    }
+)
+{
+    float3[] extentsHint = [(-0.06642793, -0.11284569, -0.18176742), (0.11549253, 0.09715785, 0.123237), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (3.4028235e38, 3.4028235e38, 3.4028235e38), (-3.4028235e38, -3.4028235e38, -3.4028235e38), (-0.062606186, -0.020258812, -0.1820297), (0.11272688, 0.037757847, 0.088437)]
+    custom rel isaac:physics:robotJoints
+    custom rel isaac:physics:robotLinks
+    custom token isaac:robotType = "Default"
+
+    def Scope "Geometry"
+    {
+        def Xform "right_palm_link" (
+            prepend apiSchemas = ["IsaacLinkAPI"]
+        )
+        {
+            quatf xformOp:orient = (1, 0, 0, 0)
+            float3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+            def Xform "r_wrist" (
+                instanceable = true
+                prepend references = @./instances.usda@</Instances/r_wrist>
+            )
+            {
+                quatd xformOp:orient = (1, 0, 0, 0)
+                double3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Xform "right_palm_collision" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+                displayName = ""
+                instanceable = true
+                prepend references = @./instances.usda@</Instances/right_palm_collision>
+                uiHints = {
+                    string displayName = ""
+                }
+            )
+            {
+                rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                    bindMaterialAs = "weakerThanDescendants"
+                )
+                quatd xformOp:orient = (1, 0, 0, 0)
+                double3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0, 0, 0)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Sphere "right_wrist_imu_frame"
+            {
+                float3[] extent = [(-0.002, -0.002, -0.002), (0.002, 0.002, 0.002)]
+                color3f[] primvars:displayColor = [(0, 1, 0)] (
+                    interpolation = "constant"
+                )
+                int[] primvars:displayColor:indices = None
+                float[] primvars:displayOpacity = [1] (
+                    interpolation = "constant"
+                )
+                int[] primvars:displayOpacity:indices = None
+                uniform token purpose = "guide"
+                double radius = 0.002
+                quatf xformOp:orient = (-0.5583792, -0.41085714, 0.57462317, -0.43499115)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (-0.0132114, -0.00915809, -0.0308059)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+            }
+
+            def Xform "right_finger1_link1" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+                quatf xformOp:orient = (-0.61767435, 0.065263435, 0.73022044, -0.28460014)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0.0177344, 0.00843768, -0.0158922)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Xform "r_thumb_proximal" (
+                    instanceable = true
+                    prepend references = @./instances.usda@</Instances/r_thumb_proximal>
+                )
+                {
+                    quatd xformOp:orient = (1, 0, 0, 0)
+                    double3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "right_finger1_link1_col_mesh_disabled" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = ""
+                    instanceable = true
+                    prepend references = @./instances.usda@</Instances/right_finger1_link1_col_mesh_disabled>
+                    uiHints = {
+                        string displayName = ""
+                    }
+                )
+                {
+                    rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    quatd xformOp:orient = (1, 0, 0, 0)
+                    double3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Capsule "right_finger1_link1_col"
+                {
+                    uniform token axis = "Z"
+                    float3[] extent = [(-0.0083266, -0.0083266, -0.01498129), (0.0083266, 0.0083266, 0.01498129)]
+                    double height = 0.01330938
+                    color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                        interpolation = "constant"
+                    )
+                    int[] primvars:displayColor:indices = None
+                    float[] primvars:displayOpacity = [1] (
+                        interpolation = "constant"
+                    )
+                    int[] primvars:displayOpacity:indices = None
+                    uniform token purpose = "guide"
+                    double radius = 0.0083266
+                    quatf xformOp:orient = (0.99384034, 0.1059131, -0.032615934, 3.0545813e-18)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0.000591523, -0.00118085, -0.00751665)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "right_finger1_link2" (
+                    prepend apiSchemas = ["IsaacLinkAPI"]
+                )
+                {
+                    quatf xformOp:orient = (0.93471086, 0.09192977, 0.34251788, -0.023366993)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0.000247878, -0.000536583, -0.0147535)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                    def Xform "r_thumb_proximal_abd" (
+                        instanceable = true
+                        prepend references = @./instances.usda@</Instances/r_thumb_proximal_abd>
+                    )
+                    {
+                        quatd xformOp:orient = (1, 0, 0, 0)
+                        double3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "right_finger1_link2_col_mesh_disabled" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                        displayName = ""
+                        instanceable = true
+                        prepend references = @./instances.usda@</Instances/right_finger1_link2_col_mesh_disabled>
+                        uiHints = {
+                            string displayName = ""
+                        }
+                    )
+                    {
+                        rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        quatd xformOp:orient = (1, 0, 0, 0)
+                        double3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Capsule "right_finger1_link2_col" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        uniform token axis = "Z"
+                        float3[] extent = [(-0.00874906, -0.00874906, -0.02206286), (0.00874906, 0.00874906, 0.02206286)]
+                        double height = 0.0266276
+                        rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial>
+                        color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayColor:indices = None
+                        float[] primvars:displayOpacity = [1] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayOpacity:indices = None
+                        uniform token purpose = "guide"
+                        double radius = 0.00874906
+                        quatf xformOp:orient = (-1.5486607e-7, -0.63680327, 0.7710264, 3.6579624e-17)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0.00000155284, -0.00000315083, -0.0181194)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "right_finger1_link3" (
+                        prepend apiSchemas = ["IsaacLinkAPI"]
+                    )
+                    {
+                        quatf xformOp:orient = (0.959136, -0.012205999, 0.041876797, 0.27956298)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-0.0000420091, -0.0000267627, -0.0324956)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                        def Xform "r_thumb_middle" (
+                            instanceable = true
+                            prepend references = @./instances.usda@</Instances/r_thumb_middle>
+                        )
+                        {
+                            quatd xformOp:orient = (1, 0, 0, 0)
+                            double3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "right_finger1_link3_col_mesh_disabled" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                            displayName = ""
+                            instanceable = true
+                            prepend references = @./instances.usda@</Instances/right_finger1_link3_col_mesh_disabled>
+                            uiHints = {
+                                string displayName = ""
+                            }
+                        )
+                        {
+                            rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                bindMaterialAs = "weakerThanDescendants"
+                            )
+                            quatd xformOp:orient = (1, 0, 0, 0)
+                            double3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Capsule "right_finger1_link3_col" (
+                            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                        )
+                        {
+                            uniform token axis = "Z"
+                            float3[] extent = [(-0.0087685, -0.0087685, -0.0257023), (0.0087685, 0.0087685, 0.0257023)]
+                            double height = 0.0338676
+                            rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial>
+                            color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                                interpolation = "constant"
+                            )
+                            int[] primvars:displayColor:indices = None
+                            float[] primvars:displayOpacity = [1] (
+                                interpolation = "constant"
+                            )
+                            int[] primvars:displayOpacity:indices = None
+                            uniform token purpose = "guide"
+                            double radius = 0.0087685
+                            quatf xformOp:orient = (6.123234e-17, 1, 0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (-0.0000516751, -9.01484e-7, -0.0174677)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "right_finger1_link4" (
+                            prepend apiSchemas = ["IsaacLinkAPI"]
+                        )
+                        {
+                            quatf xformOp:orient = (1, 0, 0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0.00005, 0, -0.035)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                            def Xform "r_thumb_distal" (
+                                instanceable = true
+                                prepend references = @./instances.usda@</Instances/r_thumb_distal>
+                            )
+                            {
+                                quatd xformOp:orient = (1, 0, 0, 0)
+                                double3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "right_finger1_link4_col" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                displayName = ""
+                                instanceable = true
+                                prepend references = @./instances.usda@</Instances/right_finger1_link4_col>
+                                uiHints = {
+                                    string displayName = ""
+                                }
+                            )
+                            {
+                                rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                    bindMaterialAs = "weakerThanDescendants"
+                                )
+                                quatd xformOp:orient = (1, 0, 0, 0)
+                                double3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Sphere "right_finger1_tip"
+                            {
+                                float3[] extent = [(-0.002, -0.002, -0.002), (0.002, 0.002, 0.002)]
+                                color3f[] primvars:displayColor = [(1, 0, 0)] (
+                                    interpolation = "constant"
+                                )
+                                int[] primvars:displayColor:indices = None
+                                float[] primvars:displayOpacity = [1] (
+                                    interpolation = "constant"
+                                )
+                                int[] primvars:displayOpacity:indices = None
+                                uniform token purpose = "guide"
+                                double radius = 0.002
+                                quatf xformOp:orient = (1, 0, 0, 0)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0.000441886, -0.00147203, -0.0298672)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "right_finger1_tip_sensor" (
+                                prepend apiSchemas = ["IsaacLinkAPI"]
+                            )
+                            {
+                                quatf xformOp:orient = (1, 0, 0, 0)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                def Xform "r_thumb_tip_sensor_frame" (
+                                    instanceable = true
+                                    prepend references = @./instances.usda@</Instances/r_thumb_tip_sensor_frame>
+                                )
+                                {
+                                    quatd xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, 0, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+
+                                def Xform "right_finger1_tip_sensor_col" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                    displayName = ""
+                                    instanceable = true
+                                    prepend references = @./instances.usda@</Instances/right_finger1_tip_sensor_col>
+                                    uiHints = {
+                                        string displayName = ""
+                                    }
+                                )
+                                {
+                                    rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                        bindMaterialAs = "weakerThanDescendants"
+                                    )
+                                    quatd xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, 0, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            def Xform "right_finger2_link1" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+                quatf xformOp:orient = (0.99501204, -0.017175704, -0.08551142, 0.04841303)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0.0249179, -0.00302555, -0.069205)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Xform "r_index_finger_proximal" (
+                    instanceable = true
+                    prepend references = @./instances.usda@</Instances/r_index_finger_proximal>
+                )
+                {
+                    quatd xformOp:orient = (1, 0, 0, 0)
+                    double3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "right_finger2_link1_col_mesh_disabled" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = ""
+                    instanceable = true
+                    prepend references = @./instances.usda@</Instances/right_finger2_link1_col_mesh_disabled>
+                    uiHints = {
+                        string displayName = ""
+                    }
+                )
+                {
+                    rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    quatd xformOp:orient = (1, 0, 0, 0)
+                    double3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Capsule "right_finger2_link1_col"
+                {
+                    uniform token axis = "Z"
+                    float3[] extent = [(-0.00938889, -0.00938889, -0.01572448), (0.00938889, 0.00938889, 0.01572448)]
+                    double height = 0.01267118
+                    color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                        interpolation = "constant"
+                    )
+                    int[] primvars:displayColor:indices = None
+                    float[] primvars:displayOpacity = [1] (
+                        interpolation = "constant"
+                    )
+                    int[] primvars:displayOpacity:indices = None
+                    uniform token purpose = "guide"
+                    double radius = 0.00938889
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, -0.0012, -0.0072089)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "right_finger2_link2" (
+                    prepend apiSchemas = ["IsaacLinkAPI"]
+                )
+                {
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, -0.0012, -0.0145)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                    def Xform "r_index_finger_proximal_abd" (
+                        instanceable = true
+                        prepend references = @./instances.usda@</Instances/r_index_finger_proximal_abd>
+                    )
+                    {
+                        quatd xformOp:orient = (1, 0, 0, 0)
+                        double3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "right_finger2_link2_col_mesh_disabled" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                        displayName = ""
+                        instanceable = true
+                        prepend references = @./instances.usda@</Instances/right_finger2_link2_col_mesh_disabled>
+                        uiHints = {
+                            string displayName = ""
+                        }
+                    )
+                    {
+                        rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        quatd xformOp:orient = (1, 0, 0, 0)
+                        double3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Capsule "right_finger2_link2_col" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        uniform token axis = "Z"
+                        float3[] extent = [(-0.00750726, -0.00750726, -0.02430876), (0.00750726, 0.00750726, 0.02430876)]
+                        double height = 0.033603
+                        rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial>
+                        color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayColor:indices = None
+                        float[] primvars:displayOpacity = [1] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayOpacity:indices = None
+                        uniform token purpose = "guide"
+                        double radius = 0.00750726
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0.00000555597, 1.68479e-7, -0.0203015)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "right_finger2_link3" (
+                        prepend apiSchemas = ["IsaacLinkAPI"]
+                    )
+                    {
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, -0.0376)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                        def Xform "r_index_finger_middle" (
+                            instanceable = true
+                            prepend references = @./instances.usda@</Instances/r_index_finger_middle>
+                        )
+                        {
+                            quatd xformOp:orient = (1, 0, 0, 0)
+                            double3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "right_finger2_link3_col_mesh_disabled" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                            displayName = ""
+                            instanceable = true
+                            prepend references = @./instances.usda@</Instances/right_finger2_link3_col_mesh_disabled>
+                            uiHints = {
+                                string displayName = ""
+                            }
+                        )
+                        {
+                            rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                bindMaterialAs = "weakerThanDescendants"
+                            )
+                            quatd xformOp:orient = (1, 0, 0, 0)
+                            double3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Capsule "right_finger2_link3_col" (
+                            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                        )
+                        {
+                            uniform token axis = "Z"
+                            float3[] extent = [(-0.00801817, -0.00801817, -0.02277467), (0.00801817, 0.00801817, 0.02277467)]
+                            double height = 0.029513
+                            rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial>
+                            color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                                interpolation = "constant"
+                            )
+                            int[] primvars:displayColor:indices = None
+                            float[] primvars:displayOpacity = [1] (
+                                interpolation = "constant"
+                            )
+                            int[] primvars:displayOpacity:indices = None
+                            uniform token purpose = "guide"
+                            double radius = 0.00801817
+                            quatf xformOp:orient = (6.123234e-17, 1, 0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, -0.0147218)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "right_finger2_link4" (
+                            prepend apiSchemas = ["IsaacLinkAPI"]
+                        )
+                        {
+                            quatf xformOp:orient = (1, 0, 0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, -0.0295)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                            def Xform "r_index_finger_distal" (
+                                instanceable = true
+                                prepend references = @./instances.usda@</Instances/r_index_finger_distal>
+                            )
+                            {
+                                quatd xformOp:orient = (1, 0, 0, 0)
+                                double3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "right_finger2_link4_col" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                displayName = ""
+                                instanceable = true
+                                prepend references = @./instances.usda@</Instances/right_finger2_link4_col>
+                                uiHints = {
+                                    string displayName = ""
+                                }
+                            )
+                            {
+                                rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                    bindMaterialAs = "weakerThanDescendants"
+                                )
+                                quatd xformOp:orient = (1, 0, 0, 0)
+                                double3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Sphere "right_finger2_tip"
+                            {
+                                float3[] extent = [(-0.002, -0.002, -0.002), (0.002, 0.002, 0.002)]
+                                color3f[] primvars:displayColor = [(1, 0, 0)] (
+                                    interpolation = "constant"
+                                )
+                                int[] primvars:displayColor:indices = None
+                                float[] primvars:displayOpacity = [1] (
+                                    interpolation = "constant"
+                                )
+                                int[] primvars:displayOpacity:indices = None
+                                uniform token purpose = "guide"
+                                double radius = 0.002
+                                quatf xformOp:orient = (1, 0, 0, 0)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0000335366, 0.000137601, -0.0245946)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "right_finger2_tip_sensor" (
+                                prepend apiSchemas = ["IsaacLinkAPI"]
+                            )
+                            {
+                                quatf xformOp:orient = (1, 0, 0, 0)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                def Xform "r_index_finger_tip_sensor_frame" (
+                                    instanceable = true
+                                    prepend references = @./instances.usda@</Instances/r_index_finger_tip_sensor_frame>
+                                )
+                                {
+                                    quatd xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, 0, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+
+                                def Xform "right_finger2_tip_sensor_col" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                    displayName = ""
+                                    instanceable = true
+                                    prepend references = @./instances.usda@</Instances/right_finger2_tip_sensor_col>
+                                    uiHints = {
+                                        string displayName = ""
+                                    }
+                                )
+                                {
+                                    rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                        bindMaterialAs = "weakerThanDescendants"
+                                    )
+                                    quatd xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, 0, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            def Xform "right_finger3_link1" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+                quatf xformOp:orient = (0.99979913, -0.016945977, -0.010687828, -0.0005469625)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (0.00334816, -0.00800304, -0.0738467)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Xform "r_middle_finger_proximal" (
+                    instanceable = true
+                    prepend references = @./instances.usda@</Instances/r_middle_finger_proximal>
+                )
+                {
+                    quatd xformOp:orient = (1, 0, 0, 0)
+                    double3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "right_finger3_link1_col_mesh_disabled" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = ""
+                    instanceable = true
+                    prepend references = @./instances.usda@</Instances/right_finger3_link1_col_mesh_disabled>
+                    uiHints = {
+                        string displayName = ""
+                    }
+                )
+                {
+                    rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    quatd xformOp:orient = (1, 0, 0, 0)
+                    double3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Capsule "right_finger3_link1_col"
+                {
+                    uniform token axis = "Z"
+                    float3[] extent = [(-0.00938889, -0.00938889, -0.01572448), (0.00938889, 0.00938889, 0.01572448)]
+                    double height = 0.01267118
+                    color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                        interpolation = "constant"
+                    )
+                    int[] primvars:displayColor:indices = None
+                    float[] primvars:displayOpacity = [1] (
+                        interpolation = "constant"
+                    )
+                    int[] primvars:displayOpacity:indices = None
+                    uniform token purpose = "guide"
+                    double radius = 0.00938889
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, -0.0012, -0.0072089)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "right_finger3_link2" (
+                    prepend apiSchemas = ["IsaacLinkAPI"]
+                )
+                {
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, -0.0012, -0.0145)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                    def Xform "r_middle_finger_proximal_abd" (
+                        instanceable = true
+                        prepend references = @./instances.usda@</Instances/r_index_finger_proximal_abd>
+                    )
+                    {
+                        quatd xformOp:orient = (1, 0, 0, 0)
+                        double3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "right_finger3_link2_col_mesh_disabled" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                        displayName = ""
+                        instanceable = true
+                        prepend references = @./instances.usda@</Instances/right_finger2_link2_col_mesh_disabled>
+                        uiHints = {
+                            string displayName = ""
+                        }
+                    )
+                    {
+                        rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        quatd xformOp:orient = (1, 0, 0, 0)
+                        double3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Capsule "right_finger3_link2_col" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        uniform token axis = "Z"
+                        float3[] extent = [(-0.00750726, -0.00750726, -0.02430876), (0.00750726, 0.00750726, 0.02430876)]
+                        double height = 0.033603
+                        rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial>
+                        color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayColor:indices = None
+                        float[] primvars:displayOpacity = [1] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayOpacity:indices = None
+                        uniform token purpose = "guide"
+                        double radius = 0.00750726
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0.00000555597, 1.68479e-7, -0.0203015)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "right_finger3_link3" (
+                        prepend apiSchemas = ["IsaacLinkAPI"]
+                    )
+                    {
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, -0.0376)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                        def Xform "r_middle_finger_middle" (
+                            instanceable = true
+                            prepend references = @./instances.usda@</Instances/r_index_finger_middle>
+                        )
+                        {
+                            quatd xformOp:orient = (1, 0, 0, 0)
+                            double3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "right_finger3_link3_col_mesh_disabled" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                            displayName = ""
+                            instanceable = true
+                            prepend references = @./instances.usda@</Instances/right_finger2_link3_col_mesh_disabled>
+                            uiHints = {
+                                string displayName = ""
+                            }
+                        )
+                        {
+                            rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                bindMaterialAs = "weakerThanDescendants"
+                            )
+                            quatd xformOp:orient = (1, 0, 0, 0)
+                            double3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Capsule "right_finger3_link3_col" (
+                            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                        )
+                        {
+                            uniform token axis = "Z"
+                            float3[] extent = [(-0.00801817, -0.00801817, -0.02277467), (0.00801817, 0.00801817, 0.02277467)]
+                            double height = 0.029513
+                            rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial>
+                            color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                                interpolation = "constant"
+                            )
+                            int[] primvars:displayColor:indices = None
+                            float[] primvars:displayOpacity = [1] (
+                                interpolation = "constant"
+                            )
+                            int[] primvars:displayOpacity:indices = None
+                            uniform token purpose = "guide"
+                            double radius = 0.00801817
+                            quatf xformOp:orient = (6.123234e-17, 1, 0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, -0.0147218)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "right_finger3_link4" (
+                            prepend apiSchemas = ["IsaacLinkAPI"]
+                        )
+                        {
+                            quatf xformOp:orient = (1, 0, 0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, -0.0295)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                            def Xform "r_middle_finger_distal" (
+                                instanceable = true
+                                prepend references = @./instances.usda@</Instances/r_index_finger_distal>
+                            )
+                            {
+                                quatd xformOp:orient = (1, 0, 0, 0)
+                                double3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "right_finger3_link4_col" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                displayName = ""
+                                instanceable = true
+                                prepend references = @./instances.usda@</Instances/right_finger2_link4_col>
+                                uiHints = {
+                                    string displayName = ""
+                                }
+                            )
+                            {
+                                rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                    bindMaterialAs = "weakerThanDescendants"
+                                )
+                                quatd xformOp:orient = (1, 0, 0, 0)
+                                double3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Sphere "right_finger3_tip"
+                            {
+                                float3[] extent = [(-0.002, -0.002, -0.002), (0.002, 0.002, 0.002)]
+                                color3f[] primvars:displayColor = [(1, 0, 0)] (
+                                    interpolation = "constant"
+                                )
+                                int[] primvars:displayColor:indices = None
+                                float[] primvars:displayOpacity = [1] (
+                                    interpolation = "constant"
+                                )
+                                int[] primvars:displayOpacity:indices = None
+                                uniform token purpose = "guide"
+                                double radius = 0.002
+                                quatf xformOp:orient = (1, 0, 0, 0)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0000335366, 0.000137601, -0.0245946)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "right_finger3_tip_sensor" (
+                                prepend apiSchemas = ["IsaacLinkAPI"]
+                            )
+                            {
+                                quatf xformOp:orient = (1, 0, 0, 0)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                def Xform "r_middle_finger_tip_sensor_frame" (
+                                    instanceable = true
+                                    prepend references = @./instances.usda@</Instances/r_index_finger_tip_sensor_frame>
+                                )
+                                {
+                                    quatd xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, 0, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+
+                                def Xform "right_finger3_tip_sensor_col" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                    displayName = ""
+                                    instanceable = true
+                                    prepend references = @./instances.usda@</Instances/right_finger2_tip_sensor_col>
+                                    uiHints = {
+                                        string displayName = ""
+                                    }
+                                )
+                                {
+                                    rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                        bindMaterialAs = "weakerThanDescendants"
+                                    )
+                                    quatd xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, 0, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            def Xform "right_finger4_link1" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+                quatf xformOp:orient = (0.99791706, -0.00534077, 0.054823786, -0.033576448)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (-0.0176129, -0.00529262, -0.066007)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Xform "r_ring_finger_proximal" (
+                    instanceable = true
+                    prepend references = @./instances.usda@</Instances/r_ring_finger_proximal>
+                )
+                {
+                    quatd xformOp:orient = (1, 0, 0, 0)
+                    double3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "right_finger4_link1_col_mesh_disabled" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = ""
+                    instanceable = true
+                    prepend references = @./instances.usda@</Instances/right_finger4_link1_col_mesh_disabled>
+                    uiHints = {
+                        string displayName = ""
+                    }
+                )
+                {
+                    rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    quatd xformOp:orient = (1, 0, 0, 0)
+                    double3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Capsule "right_finger4_link1_col"
+                {
+                    uniform token axis = "Z"
+                    float3[] extent = [(-0.00938889, -0.00938889, -0.01572448), (0.00938889, 0.00938889, 0.01572448)]
+                    double height = 0.01267118
+                    color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                        interpolation = "constant"
+                    )
+                    int[] primvars:displayColor:indices = None
+                    float[] primvars:displayOpacity = [1] (
+                        interpolation = "constant"
+                    )
+                    int[] primvars:displayOpacity:indices = None
+                    uniform token purpose = "guide"
+                    double radius = 0.00938889
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, -0.0012, -0.0072089)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "right_finger4_link2" (
+                    prepend apiSchemas = ["IsaacLinkAPI"]
+                )
+                {
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, -0.0012, -0.0145)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                    def Xform "r_ring_finger_proximal_abd" (
+                        instanceable = true
+                        prepend references = @./instances.usda@</Instances/r_index_finger_proximal_abd>
+                    )
+                    {
+                        quatd xformOp:orient = (1, 0, 0, 0)
+                        double3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "right_finger4_link2_col_mesh_disabled" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                        displayName = ""
+                        instanceable = true
+                        prepend references = @./instances.usda@</Instances/right_finger2_link2_col_mesh_disabled>
+                        uiHints = {
+                            string displayName = ""
+                        }
+                    )
+                    {
+                        rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        quatd xformOp:orient = (1, 0, 0, 0)
+                        double3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Capsule "right_finger4_link2_col" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        uniform token axis = "Z"
+                        float3[] extent = [(-0.00750726, -0.00750726, -0.02430876), (0.00750726, 0.00750726, 0.02430876)]
+                        double height = 0.033603
+                        rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial>
+                        color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayColor:indices = None
+                        float[] primvars:displayOpacity = [1] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayOpacity:indices = None
+                        uniform token purpose = "guide"
+                        double radius = 0.00750726
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0.00000555597, 1.68479e-7, -0.0203015)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "right_finger4_link3" (
+                        prepend apiSchemas = ["IsaacLinkAPI"]
+                    )
+                    {
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, -0.0376)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                        def Xform "r_ring_finger_middle" (
+                            instanceable = true
+                            prepend references = @./instances.usda@</Instances/r_index_finger_middle>
+                        )
+                        {
+                            quatd xformOp:orient = (1, 0, 0, 0)
+                            double3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "right_finger4_link3_col_mesh_disabled" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                            displayName = ""
+                            instanceable = true
+                            prepend references = @./instances.usda@</Instances/right_finger2_link3_col_mesh_disabled>
+                            uiHints = {
+                                string displayName = ""
+                            }
+                        )
+                        {
+                            rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                bindMaterialAs = "weakerThanDescendants"
+                            )
+                            quatd xformOp:orient = (1, 0, 0, 0)
+                            double3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Capsule "right_finger4_link3_col" (
+                            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                        )
+                        {
+                            uniform token axis = "Z"
+                            float3[] extent = [(-0.00801817, -0.00801817, -0.02277467), (0.00801817, 0.00801817, 0.02277467)]
+                            double height = 0.029513
+                            rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial>
+                            color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                                interpolation = "constant"
+                            )
+                            int[] primvars:displayColor:indices = None
+                            float[] primvars:displayOpacity = [1] (
+                                interpolation = "constant"
+                            )
+                            int[] primvars:displayOpacity:indices = None
+                            uniform token purpose = "guide"
+                            double radius = 0.00801817
+                            quatf xformOp:orient = (6.123234e-17, 1, 0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, -0.0147218)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "right_finger4_link4" (
+                            prepend apiSchemas = ["IsaacLinkAPI"]
+                        )
+                        {
+                            quatf xformOp:orient = (1, 0, 0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, -0.0295)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                            def Xform "r_ring_finger_distal" (
+                                instanceable = true
+                                prepend references = @./instances.usda@</Instances/r_index_finger_distal>
+                            )
+                            {
+                                quatd xformOp:orient = (1, 0, 0, 0)
+                                double3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "right_finger4_link4_col" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                displayName = ""
+                                instanceable = true
+                                prepend references = @./instances.usda@</Instances/right_finger2_link4_col>
+                                uiHints = {
+                                    string displayName = ""
+                                }
+                            )
+                            {
+                                rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                    bindMaterialAs = "weakerThanDescendants"
+                                )
+                                quatd xformOp:orient = (1, 0, 0, 0)
+                                double3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Sphere "right_finger4_tip"
+                            {
+                                float3[] extent = [(-0.002, -0.002, -0.002), (0.002, 0.002, 0.002)]
+                                color3f[] primvars:displayColor = [(1, 0, 0)] (
+                                    interpolation = "constant"
+                                )
+                                int[] primvars:displayColor:indices = None
+                                float[] primvars:displayOpacity = [1] (
+                                    interpolation = "constant"
+                                )
+                                int[] primvars:displayOpacity:indices = None
+                                uniform token purpose = "guide"
+                                double radius = 0.002
+                                quatf xformOp:orient = (1, 0, 0, 0)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0000335366, 0.000137601, -0.0245946)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "right_finger4_tip_sensor" (
+                                prepend apiSchemas = ["IsaacLinkAPI"]
+                            )
+                            {
+                                quatf xformOp:orient = (1, 0, 0, 0)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                def Xform "r_ring_finger_tip_sensor_frame" (
+                                    instanceable = true
+                                    prepend references = @./instances.usda@</Instances/r_index_finger_tip_sensor_frame>
+                                )
+                                {
+                                    quatd xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, 0, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+
+                                def Xform "right_finger4_tip_sensor_col" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                    displayName = ""
+                                    instanceable = true
+                                    prepend references = @./instances.usda@</Instances/right_finger2_tip_sensor_col>
+                                    uiHints = {
+                                        string displayName = ""
+                                    }
+                                )
+                                {
+                                    rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                        bindMaterialAs = "weakerThanDescendants"
+                                    )
+                                    quatd xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, 0, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            def Xform "right_finger5_link1" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+                quatf xformOp:orient = (0.9918835, -0.005287144, 0.108745076, -0.06567834)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (-0.035538, -0.000433166, -0.0564795)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Xform "r_pinky_proximal" (
+                    instanceable = true
+                    prepend references = @./instances.usda@</Instances/r_pinky_proximal>
+                )
+                {
+                    quatd xformOp:orient = (1, 0, 0, 0)
+                    double3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "right_finger5_link1_col_mesh_disabled" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = ""
+                    instanceable = true
+                    prepend references = @./instances.usda@</Instances/right_finger5_link1_col_mesh_disabled>
+                    uiHints = {
+                        string displayName = ""
+                    }
+                )
+                {
+                    rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    quatd xformOp:orient = (1, 0, 0, 0)
+                    double3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Capsule "right_finger5_link1_col"
+                {
+                    uniform token axis = "Z"
+                    float3[] extent = [(-0.00940777, -0.00940777, -0.01574336), (0.00940777, 0.00940777, 0.01574336)]
+                    double height = 0.01267118
+                    color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                        interpolation = "constant"
+                    )
+                    int[] primvars:displayColor:indices = None
+                    float[] primvars:displayOpacity = [1] (
+                        interpolation = "constant"
+                    )
+                    int[] primvars:displayOpacity:indices = None
+                    uniform token purpose = "guide"
+                    double radius = 0.00940777
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, -0.0012, -0.0072089)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "right_finger5_link2" (
+                    prepend apiSchemas = ["IsaacLinkAPI"]
+                )
+                {
+                    quatf xformOp:orient = (1, 0, 0, 0)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, -0.0012, -0.0145)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                    def Xform "r_pinky_proximal_abd" (
+                        instanceable = true
+                        prepend references = @./instances.usda@</Instances/r_pinky_proximal_abd>
+                    )
+                    {
+                        quatd xformOp:orient = (1, 0, 0, 0)
+                        double3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "right_finger5_link2_col_mesh_disabled" (
+                        prepend apiSchemas = ["MaterialBindingAPI"]
+                        displayName = ""
+                        instanceable = true
+                        prepend references = @./instances.usda@</Instances/right_finger5_link2_col_mesh_disabled>
+                        uiHints = {
+                            string displayName = ""
+                        }
+                    )
+                    {
+                        rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                            bindMaterialAs = "weakerThanDescendants"
+                        )
+                        quatd xformOp:orient = (1, 0, 0, 0)
+                        double3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Capsule "right_finger5_link2_col" (
+                        prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                    )
+                    {
+                        uniform token axis = "Z"
+                        float3[] extent = [(-0.00750002, -0.00750002, -0.02253652), (0.00750002, 0.00750002, 0.02253652)]
+                        double height = 0.030073
+                        rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial>
+                        color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayColor:indices = None
+                        float[] primvars:displayOpacity = [1] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayOpacity:indices = None
+                        uniform token purpose = "guide"
+                        double radius = 0.00750002
+                        quatf xformOp:orient = (6.123234e-17, 1, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (-2.47933e-8, 9.7873e-7, -0.0183)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Xform "right_finger5_link3" (
+                        prepend apiSchemas = ["IsaacLinkAPI"]
+                    )
+                    {
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, -0.0336)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                        def Xform "r_pinky_middle" (
+                            instanceable = true
+                            prepend references = @./instances.usda@</Instances/r_pinky_middle>
+                        )
+                        {
+                            quatd xformOp:orient = (1, 0, 0, 0)
+                            double3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "right_finger5_link3_col_mesh_disabled" (
+                            prepend apiSchemas = ["MaterialBindingAPI"]
+                            displayName = ""
+                            instanceable = true
+                            prepend references = @./instances.usda@</Instances/right_finger5_link3_col_mesh_disabled>
+                            uiHints = {
+                                string displayName = ""
+                            }
+                        )
+                        {
+                            rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                bindMaterialAs = "weakerThanDescendants"
+                            )
+                            quatd xformOp:orient = (1, 0, 0, 0)
+                            double3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, 0)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Capsule "right_finger5_link3_col" (
+                            prepend apiSchemas = ["PhysicsCollisionAPI", "MaterialBindingAPI"]
+                        )
+                        {
+                            uniform token axis = "Z"
+                            float3[] extent = [(-0.00804991, -0.00804991, -0.02173621), (0.00804991, 0.00804991, 0.02173621)]
+                            double height = 0.0273726
+                            rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial>
+                            color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)] (
+                                interpolation = "constant"
+                            )
+                            int[] primvars:displayColor:indices = None
+                            float[] primvars:displayOpacity = [1] (
+                                interpolation = "constant"
+                            )
+                            int[] primvars:displayOpacity:indices = None
+                            uniform token purpose = "guide"
+                            double radius = 0.00804991
+                            quatf xformOp:orient = (6.123234e-17, 1, 0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, -0.0137218)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                        }
+
+                        def Xform "right_finger5_link4" (
+                            prepend apiSchemas = ["IsaacLinkAPI"]
+                        )
+                        {
+                            quatf xformOp:orient = (1, 0, 0, 0)
+                            float3 xformOp:scale = (1, 1, 1)
+                            double3 xformOp:translate = (0, 0, -0.0275)
+                            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                            def Xform "r_pinky_distal" (
+                                instanceable = true
+                                prepend references = @./instances.usda@</Instances/r_pinky_distal>
+                            )
+                            {
+                                quatd xformOp:orient = (1, 0, 0, 0)
+                                double3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "right_finger5_link4_col" (
+                                prepend apiSchemas = ["MaterialBindingAPI"]
+                                displayName = ""
+                                instanceable = true
+                                prepend references = @./instances.usda@</Instances/right_finger5_link4_col>
+                                uiHints = {
+                                    string displayName = ""
+                                }
+                            )
+                            {
+                                rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                    bindMaterialAs = "weakerThanDescendants"
+                                )
+                                quatd xformOp:orient = (1, 0, 0, 0)
+                                double3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Sphere "right_finger5_tip"
+                            {
+                                float3[] extent = [(-0.002, -0.002, -0.002), (0.002, 0.002, 0.002)]
+                                color3f[] primvars:displayColor = [(1, 0, 0)] (
+                                    interpolation = "constant"
+                                )
+                                int[] primvars:displayColor:indices = None
+                                float[] primvars:displayOpacity = [1] (
+                                    interpolation = "constant"
+                                )
+                                int[] primvars:displayOpacity:indices = None
+                                uniform token purpose = "guide"
+                                double radius = 0.002
+                                quatf xformOp:orient = (1, 0, 0, 0)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (-0.0000335366, -0.000495058, -0.02459)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                            }
+
+                            def Xform "right_finger5_tip_sensor" (
+                                prepend apiSchemas = ["IsaacLinkAPI"]
+                            )
+                            {
+                                quatf xformOp:orient = (1, 0, 0, 0)
+                                float3 xformOp:scale = (1, 1, 1)
+                                double3 xformOp:translate = (0, 0, 0)
+                                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                                def Xform "r_pinky_tip_sensor_frame" (
+                                    instanceable = true
+                                    prepend references = @./instances.usda@</Instances/r_pinky_tip_sensor_frame>
+                                )
+                                {
+                                    quatd xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, 0, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+
+                                def Xform "right_finger5_tip_sensor_col" (
+                                    prepend apiSchemas = ["MaterialBindingAPI"]
+                                    displayName = ""
+                                    instanceable = true
+                                    prepend references = @./instances.usda@</Instances/right_finger5_tip_sensor_col>
+                                    uiHints = {
+                                        string displayName = ""
+                                    }
+                                )
+                                {
+                                    rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                                        bindMaterialAs = "weakerThanDescendants"
+                                    )
+                                    quatd xformOp:orient = (1, 0, 0, 0)
+                                    double3 xformOp:scale = (1, 1, 1)
+                                    double3 xformOp:translate = (0, 0, 0)
+                                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            def Xform "right_mount" (
+                prepend apiSchemas = ["IsaacLinkAPI"]
+            )
+            {
+                quatf xformOp:orient = (1, 0, 0, 0)
+                float3 xformOp:scale = (1, 1, 1)
+                double3 xformOp:translate = (-0.00300045, 4.90225e-8, 0.0284983)
+                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                def Xform "r_mount" (
+                    instanceable = true
+                    prepend references = @./instances.usda@</Instances/r_mount>
+                )
+                {
+                    quatd xformOp:orient = (1, 0, 0, 0)
+                    double3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "right_mount_collision" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                    displayName = ""
+                    instanceable = true
+                    prepend references = @./instances.usda@</Instances/right_mount_collision>
+                    uiHints = {
+                        string displayName = ""
+                    }
+                )
+                {
+                    rel material:binding:physics = </tn__wujihand2rightmjlab_fSF/Physics/PhysicsMaterial> (
+                        bindMaterialAs = "weakerThanDescendants"
+                    )
+                    quatd xformOp:orient = (1, 0, 0, 0)
+                    double3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (0, 0, 0)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "jig_table_visual" (
+                    displayName = ""
+                    instanceable = true
+                    prepend references = @./instances.usda@</Instances/jig_table_visual>
+                    uiHints = {
+                        string displayName = ""
+                    }
+                )
+                {
+                    quatd xformOp:orient = (0.5416689515, -0.454526931, 0.454526931, 0.5416689515)
+                    double3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (4.45445e-7, -0.106459, 0.0178326)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                }
+
+                def Xform "right_wrist_tag_frame" (
+                    prepend apiSchemas = ["IsaacLinkAPI"]
+                )
+                {
+                    quatf xformOp:orient = (-0.5, 0.5, 0.5, 0.5)
+                    float3 xformOp:scale = (1, 1, 1)
+                    double3 xformOp:translate = (4.54154e-7, 0.0371578, 0.0347387)
+                    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+                    def Sphere "Sphere"
+                    {
+                        float3[] extent = [(-0.0035, -0.0035, -0.0035), (0.0035, 0.0035, 0.0035)]
+                        color3f[] primvars:displayColor = [(1, 1, 0)] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayColor:indices = None
+                        float[] primvars:displayOpacity = [1] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayOpacity:indices = None
+                        double radius = 0.0035
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (1, 1, 1)
+                        double3 xformOp:translate = (0, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Cube "Box"
+                    {
+                        float3[] extent = [(-1, -1, -1), (1, 1, 1)]
+                        color3f[] primvars:displayColor = [(1, 0, 0)] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayColor:indices = None
+                        float[] primvars:displayOpacity = [1] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayOpacity:indices = None
+                        double size = 2
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (0.03, 0.0015, 0.0015)
+                        double3 xformOp:translate = (0.03, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Cube "Box_1" (
+                        displayName = "Box"
+                        uiHints = {
+                            string displayName = "Box"
+                        }
+                    )
+                    {
+                        float3[] extent = [(-1, -1, -1), (1, 1, 1)]
+                        color3f[] primvars:displayColor = [(0, 1, 0)] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayColor:indices = None
+                        float[] primvars:displayOpacity = [1] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayOpacity:indices = None
+                        double size = 2
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (0.0015, 0.03, 0.0015)
+                        double3 xformOp:translate = (0, 0.03, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Cube "Box_2" (
+                        displayName = "Box"
+                        uiHints = {
+                            string displayName = "Box"
+                        }
+                    )
+                    {
+                        float3[] extent = [(-1, -1, -1), (1, 1, 1)]
+                        color3f[] primvars:displayColor = [(0, 0, 1)] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayColor:indices = None
+                        float[] primvars:displayOpacity = [1] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayOpacity:indices = None
+                        double size = 2
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (0.0015, 0.0015, 0.03)
+                        double3 xformOp:translate = (0, 0, 0.03)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+
+                    def Cube "right_wrist_tag"
+                    {
+                        float3[] extent = [(-1, -1, -1), (1, 1, 1)]
+                        color3f[] primvars:displayColor = [(1, 0.9, 0)] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayColor:indices = None
+                        float[] primvars:displayOpacity = [0.5] (
+                            interpolation = "constant"
+                        )
+                        int[] primvars:displayOpacity:indices = None
+                        uniform token purpose = "guide"
+                        double size = 2
+                        quatf xformOp:orient = (1, 0, 0, 0)
+                        float3 xformOp:scale = (0.0252, 0.0252, 0.0006)
+                        double3 xformOp:translate = (0, 0, 0)
+                        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+                    }
+                }
+            }
+        }
+    }
+
+    def Scope "Materials"
+    {
+    }
+
+    def Scope "Physics"
+    {
+        def Material "PhysicsMaterial"
+        {
+        }
+    }
+
+    def Scope "VisualMaterials"
+    {
+    }
+}
+

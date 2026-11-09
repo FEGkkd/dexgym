@@ -1,0 +1,43 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "MuJoCo USD Converter v0.2.0"
+    }
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Scope "Materials"
+{
+    def Material "arucocube"
+    {
+        color3f inputs:diffuseColor = (0.99999994, 1, 0.9999999)
+        float inputs:metallic = 0
+        float inputs:opacity = 1
+        float inputs:roughness = 0.5
+        token outputs:displacement (
+            displayGroup = "Outputs"
+        )
+        token outputs:surface (
+            displayGroup = "Outputs"
+        )
+        prepend token outputs:surface.connect = </Materials/arucocube/PreviewSurface.outputs:surface>
+        token outputs:volume (
+            displayGroup = "Outputs"
+        )
+
+        def Shader "PreviewSurface" (
+            apiSchemas = ["NodeDefAPI"]
+        )
+        {
+            token info:id = "UsdPreviewSurface"
+            prepend color3f inputs:diffuseColor.connect = </Materials/arucocube.inputs:diffuseColor>
+            prepend float inputs:metallic.connect = </Materials/arucocube.inputs:metallic>
+            prepend float inputs:opacity.connect = </Materials/arucocube.inputs:opacity>
+            prepend float inputs:roughness.connect = </Materials/arucocube.inputs:roughness>
+            token outputs:surface
+        }
+    }
+}
+

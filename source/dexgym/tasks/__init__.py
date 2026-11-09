@@ -14,6 +14,7 @@ RIGHT_HAND_HYBRID125_TANH_GAUSSIAN_ID = "DexGym-Wuji-Right-Hand-Clean-Hybrid125-
 RIGHT_HAND_HYBRID125_BETA_ID = "DexGym-Wuji-Right-Hand-Clean-Hybrid125-Beta-Direct-v0"
 HAND21_TELEDEXTER_ID = "DexGym-Wuji-Hand21-TeleDexter-Direct-v0"
 HAND21_SUPERMIMIC_ID = "DexGym-Wuji-Hand21-TeleDexter-SuperMimic-Direct-v0"
+HAND2_CUBE_SUPERMIMIC_ID = "DexGym-Wuji-Hand2-Cube-Reorientation-SuperMimic-Direct-v0"
 CARTPOLE_TASK_IDS = (DIRECT_ID, MANAGER_ID)
 
 
@@ -122,6 +123,16 @@ gym.register(
     },
 )
 
+gym.register(
+    id=HAND2_CUBE_SUPERMIMIC_ID,
+    entry_point="dexgym.tasks.direct.hand2_cube_supermimic.env:Hand2CubeSuperMimicEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": "dexgym.tasks.direct.hand2_cube_supermimic.env_cfg:Hand2CubeSuperMimicCfg",
+        "supermimic_cfg_entry_point": "dexgym.tasks.direct.hand2_cube_supermimic.supermimic_cfg:default_experiment",
+    },
+)
+
 from . import marvin_supermimic as _marvin_supermimic  # noqa: E402, F401
 
 TASK_IDS = CARTPOLE_TASK_IDS + (
@@ -134,6 +145,7 @@ TASK_IDS = CARTPOLE_TASK_IDS + (
     RIGHT_HAND_HYBRID125_BETA_ID,
     HAND21_TELEDEXTER_ID,
     HAND21_SUPERMIMIC_ID,
+    HAND2_CUBE_SUPERMIMIC_ID,
     _marvin_supermimic.TASK_ID,
     _marvin_supermimic.REACH_TASK_ID,
     _marvin_supermimic.SE3_REACH_HOLD_TASK_ID,

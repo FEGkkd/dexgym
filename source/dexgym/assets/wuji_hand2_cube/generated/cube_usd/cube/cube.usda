@@ -1,0 +1,75 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "MuJoCo USD Converter v0.2.0"
+    }
+    defaultPrim = "tn__MuJoCoModel_nB"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "tn__MuJoCoModel_nB" (
+    prepend references = @./payloads/base.usda@
+    variants = {
+        string Physics = "physics"
+    }
+    append variantSets = "Physics"
+)
+{
+    variantSet "Physics" = {
+        "mujoco" (
+            prepend payload = @./payloads/Physics/mujoco.usda@
+        ) {
+
+        }
+        "none" {
+
+        }
+        "physics" (
+            prepend payload = @./payloads/Physics/physics.usda@
+        ) {
+
+        }
+    }
+}
+
+over "Flattened_Prototype_3"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_3.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_3.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_3.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_3.inputs:roughness>
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_2"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_2.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_2.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_2.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_2.inputs:roughness>
+        token outputs:surface
+    }
+}
+
+over "Flattened_Prototype_1"
+{
+    def Shader "PreviewSurface"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </Flattened_Prototype_1.inputs:diffuseColor>
+        float inputs:metallic.connect = </Flattened_Prototype_1.inputs:metallic>
+        float inputs:opacity.connect = </Flattened_Prototype_1.inputs:opacity>
+        float inputs:roughness.connect = </Flattened_Prototype_1.inputs:roughness>
+        token outputs:surface
+    }
+}
+

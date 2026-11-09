@@ -1,0 +1,223 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "MuJoCo USD Converter v0.2.0"
+    }
+    defaultPrim = "tn__wujihand2rightmjlab_fSF"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    subLayers = [
+        @./physics.usda@
+    ]
+    upAxis = "Z"
+)
+
+over "tn__wujihand2rightmjlab_fSF"
+{
+    over "Geometry"
+    {
+        over "right_palm_link"
+        {
+            over "right_finger1_link1"
+            {
+                over "right_finger1_link2"
+                {
+                    over "right_finger1_link3"
+                    {
+                        over "right_finger1_link4"
+                        {
+                            over "right_finger1_joint4" (
+                                prepend apiSchemas = ["PhysxJointAPI"]
+                            )
+                            {
+                                float physxJoint:armature = 0.0002
+                            }
+                        }
+
+                        over "right_finger1_joint3" (
+                            prepend apiSchemas = ["PhysxJointAPI"]
+                        )
+                        {
+                            float physxJoint:armature = 0.0002
+                        }
+                    }
+
+                    over "right_finger1_joint2" (
+                        prepend apiSchemas = ["PhysxJointAPI"]
+                    )
+                    {
+                        float physxJoint:armature = 0.0005
+                    }
+                }
+
+                over "right_finger1_joint1" (
+                    prepend apiSchemas = ["PhysxJointAPI"]
+                )
+                {
+                    float physxJoint:armature = 0.0005
+                }
+            }
+
+            over "right_finger2_link1"
+            {
+                over "right_finger2_link2"
+                {
+                    over "right_finger2_link3"
+                    {
+                        over "right_finger2_link4"
+                        {
+                            over "right_finger2_joint4" (
+                                prepend apiSchemas = ["PhysxJointAPI"]
+                            )
+                            {
+                                float physxJoint:armature = 0.0002
+                            }
+                        }
+
+                        over "right_finger2_joint3" (
+                            prepend apiSchemas = ["PhysxJointAPI"]
+                        )
+                        {
+                            float physxJoint:armature = 0.0002
+                        }
+                    }
+
+                    over "right_finger2_joint2" (
+                        prepend apiSchemas = ["PhysxJointAPI"]
+                    )
+                    {
+                        float physxJoint:armature = 0.0002
+                    }
+                }
+
+                over "right_finger2_joint1" (
+                    prepend apiSchemas = ["PhysxJointAPI"]
+                )
+                {
+                    float physxJoint:armature = 0.0005
+                }
+            }
+
+            over "right_finger3_link1"
+            {
+                over "right_finger3_link2"
+                {
+                    over "right_finger3_link3"
+                    {
+                        over "right_finger3_link4"
+                        {
+                            over "right_finger3_joint4" (
+                                prepend apiSchemas = ["PhysxJointAPI"]
+                            )
+                            {
+                                float physxJoint:armature = 0.0002
+                            }
+                        }
+
+                        over "right_finger3_joint3" (
+                            prepend apiSchemas = ["PhysxJointAPI"]
+                        )
+                        {
+                            float physxJoint:armature = 0.0002
+                        }
+                    }
+
+                    over "right_finger3_joint2" (
+                        prepend apiSchemas = ["PhysxJointAPI"]
+                    )
+                    {
+                        float physxJoint:armature = 0.0002
+                    }
+                }
+
+                over "right_finger3_joint1" (
+                    prepend apiSchemas = ["PhysxJointAPI"]
+                )
+                {
+                    float physxJoint:armature = 0.0005
+                }
+            }
+
+            over "right_finger4_link1"
+            {
+                over "right_finger4_link2"
+                {
+                    over "right_finger4_link3"
+                    {
+                        over "right_finger4_link4"
+                        {
+                            over "right_finger4_joint4" (
+                                prepend apiSchemas = ["PhysxJointAPI"]
+                            )
+                            {
+                                float physxJoint:armature = 0.0002
+                            }
+                        }
+
+                        over "right_finger4_joint3" (
+                            prepend apiSchemas = ["PhysxJointAPI"]
+                        )
+                        {
+                            float physxJoint:armature = 0.0002
+                        }
+                    }
+
+                    over "right_finger4_joint2" (
+                        prepend apiSchemas = ["PhysxJointAPI"]
+                    )
+                    {
+                        float physxJoint:armature = 0.0002
+                    }
+                }
+
+                over "right_finger4_joint1" (
+                    prepend apiSchemas = ["PhysxJointAPI"]
+                )
+                {
+                    float physxJoint:armature = 0.0005
+                }
+            }
+
+            over "right_finger5_link1"
+            {
+                over "right_finger5_link2"
+                {
+                    over "right_finger5_link3"
+                    {
+                        over "right_finger5_link4"
+                        {
+                            over "right_finger5_joint4" (
+                                prepend apiSchemas = ["PhysxJointAPI"]
+                            )
+                            {
+                                float physxJoint:armature = 0.0002
+                            }
+                        }
+
+                        over "right_finger5_joint3" (
+                            prepend apiSchemas = ["PhysxJointAPI"]
+                        )
+                        {
+                            float physxJoint:armature = 0.0002
+                        }
+                    }
+
+                    over "right_finger5_joint2" (
+                        prepend apiSchemas = ["PhysxJointAPI"]
+                    )
+                    {
+                        float physxJoint:armature = 0.0002
+                    }
+                }
+
+                over "right_finger5_joint1" (
+                    prepend apiSchemas = ["PhysxJointAPI"]
+                )
+                {
+                    float physxJoint:armature = 0.0005
+                }
+            }
+        }
+    }
+}
+

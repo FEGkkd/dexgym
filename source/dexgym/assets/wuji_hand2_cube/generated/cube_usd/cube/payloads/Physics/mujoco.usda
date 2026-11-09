@@ -1,0 +1,55 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "MuJoCo USD Converter v0.2.0"
+    }
+    defaultPrim = "tn__MuJoCoModel_nB"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    subLayers = [
+        @./physics.usda@
+    ]
+    upAxis = "Z"
+)
+
+over "tn__MuJoCoModel_nB"
+{
+    over "Geometry"
+    {
+        over "cube"
+        {
+            over "cube_visual" (
+                prepend apiSchemas = ["MjcImageableAPI"]
+            )
+            {
+                uniform int mjc:group = 2
+            }
+
+            over "cube" (
+                prepend apiSchemas = ["MjcCollisionAPI"]
+            )
+            {
+                uniform int mjc:group = 3
+                uniform double[] mjc:solimp = [0.85, 0.85, 0.001, 0.5, 2]
+                uniform double[] mjc:solref = [0.015, 1]
+            }
+
+            over "cube_center" (
+                prepend apiSchemas = ["MjcSiteAPI"]
+            )
+            {
+                uniform int mjc:group = 4
+            }
+        }
+    }
+
+    over "Physics"
+    {
+        over "PhysicsMaterial" (
+            prepend apiSchemas = ["MjcMaterialAPI"]
+        )
+        {
+        }
+    }
+}
+

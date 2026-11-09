@@ -50,3 +50,7 @@ select = ["E", "F", "I"]
 "dexgym.assets.marvin_wuji" = ["calibration_status.json", "source_keyframes.json", "usd/*.usda", "usd/payloads/*.usda", "usd/payloads/*.usd", "usd/payloads/Physics/*.usda", "source_model/dual_arm_marvin.xml", "source_model/LICENSE.*", "source_model/NOTICE.md", "source_model/assets/left/*.STL", "source_model/assets/right/*.STL", "source_model/assets/wujihand2/left/*.STL", "source_model/assets/wujihand2/right/*.STL"]
 "dexgym.assets.supermimic" = ["references/*.npz", "references/*.json", "references/reports/*.json"]
 "dexgym.assets.wuji_hand21" = ["README.md", "official/LICENSE", "official/mjcf/right.xml", "official/meshes/right/*.STL", "official/meshes/right/visual_nails/*.STL", "official/usd/right/*.usd", "official/usd/right/configuration/*.usd", "official/usd/right/textures/*.png", "official/usd/right/config.yaml", "official/usd/right/.asset_hash"]
+
+"dexgym.assets.wuji_hand2_cube" = ["LICENSE", "NOTICE", "*.STL", "official/LICENSE", "official/**/*.xml", "official/**/*.STL", "cube/**/*.xml", "cube/**/*.png", "cube/**/*.obj", "generated/**/*.json", "generated/**/*.yaml", "generated/*.xml", "generated/**/*.STL", "generated/**/*.usda", "generated/**/*.usd", "generated/**/*.usdc", "generated/**/*.png"]
+"dexgym.tasks.direct.hand2_cube_supermimic" = ["LICENSE", "NOTICE"]
+"dexgym.algorithms.supermimic.dex_reference" = ["LICENSE-SuperMimic", "NOTICE"]

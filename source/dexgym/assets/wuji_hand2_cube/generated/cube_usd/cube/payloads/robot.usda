@@ -1,0 +1,28 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "MuJoCo USD Converter v0.2.0"
+    }
+    defaultPrim = "tn__MuJoCoModel_nB"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+over "tn__MuJoCoModel_nB" (
+    prepend apiSchemas = ["IsaacRobotAPI"]
+)
+{
+    custom rel isaac:physics:robotJoints
+    custom rel isaac:physics:robotLinks
+
+    over "Geometry"
+    {
+        over "cube" (
+            prepend apiSchemas = ["IsaacLinkAPI"]
+        )
+        {
+        }
+    }
+}
+

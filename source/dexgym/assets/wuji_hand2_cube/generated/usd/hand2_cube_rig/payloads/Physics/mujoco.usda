@@ -1,0 +1,800 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "MuJoCo USD Converter v0.2.0"
+    }
+    defaultPrim = "tn__wujihand2rightmjlab_fSF"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    subLayers = [
+        @./physics.usda@
+    ]
+    upAxis = "Z"
+)
+
+over "tn__wujihand2rightmjlab_fSF"
+{
+    over "Geometry"
+    {
+        over "right_palm_link"
+        {
+            over "right_wrist_imu_frame" (
+                prepend apiSchemas = ["MjcSiteAPI"]
+            )
+            {
+                uniform int mjc:group = 4
+            }
+
+            over "right_finger1_link1"
+            {
+                over "right_finger1_link1_col" (
+                    prepend apiSchemas = ["MjcImageableAPI"]
+                )
+                {
+                    uniform int mjc:group = 3
+                }
+
+                over "right_finger1_link2"
+                {
+                    over "right_finger1_link2_col" (
+                        prepend apiSchemas = ["MjcCollisionAPI"]
+                    )
+                    {
+                        uniform int mjc:group = 3
+                        uniform int mjc:priority = 1
+                        uniform double[] mjc:solref = [0.02, 1.5]
+                    }
+
+                    over "right_finger1_link3"
+                    {
+                        over "right_finger1_link3_col" (
+                            prepend apiSchemas = ["MjcCollisionAPI"]
+                        )
+                        {
+                            uniform int mjc:group = 3
+                            uniform int mjc:priority = 1
+                            uniform double[] mjc:solref = [0.02, 1.5]
+                        }
+
+                        over "right_finger1_link4"
+                        {
+                            over "right_finger1_tip" (
+                                prepend apiSchemas = ["MjcSiteAPI"]
+                            )
+                            {
+                                uniform int mjc:group = 4
+                            }
+
+                            over "right_finger1_joint4" (
+                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                prepend apiSchemas = ["MjcJointAPI"]
+                            )
+                            {
+                                uniform token mjc:actuatorfrclimited = "true"
+                                uniform double mjc:actuatorfrcrange:max = 0.21
+                                uniform double mjc:actuatorfrcrange:min = -0.21
+                                uniform double mjc:armature = 0.0002
+                            }
+                        }
+
+                        over "right_finger1_joint3" (
+                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                            prepend apiSchemas = ["MjcJointAPI"]
+                        )
+                        {
+                            uniform token mjc:actuatorfrclimited = "true"
+                            uniform double mjc:actuatorfrcrange:max = 0.35
+                            uniform double mjc:actuatorfrcrange:min = -0.35
+                            uniform double mjc:armature = 0.0002
+                        }
+                    }
+
+                    over "right_finger1_joint2" (
+                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                        prepend apiSchemas = ["MjcJointAPI"]
+                    )
+                    {
+                        uniform token mjc:actuatorfrclimited = "true"
+                        uniform double mjc:actuatorfrcrange:max = 0.83
+                        uniform double mjc:actuatorfrcrange:min = -0.83
+                        uniform double mjc:armature = 0.0005
+                    }
+                }
+
+                over "right_finger1_joint1" (
+                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                    prepend apiSchemas = ["MjcJointAPI"]
+                )
+                {
+                    uniform token mjc:actuatorfrclimited = "true"
+                    uniform double mjc:actuatorfrcrange:max = 1.02
+                    uniform double mjc:actuatorfrcrange:min = -1.02
+                    uniform double mjc:armature = 0.0005
+                }
+            }
+
+            over "right_finger2_link1"
+            {
+                over "right_finger2_link1_col" (
+                    prepend apiSchemas = ["MjcImageableAPI"]
+                )
+                {
+                    uniform int mjc:group = 3
+                }
+
+                over "right_finger2_link2"
+                {
+                    over "right_finger2_link2_col" (
+                        prepend apiSchemas = ["MjcCollisionAPI"]
+                    )
+                    {
+                        uniform int mjc:group = 3
+                        uniform int mjc:priority = 1
+                        uniform double[] mjc:solref = [0.02, 1.5]
+                    }
+
+                    over "right_finger2_link3"
+                    {
+                        over "right_finger2_link3_col" (
+                            prepend apiSchemas = ["MjcCollisionAPI"]
+                        )
+                        {
+                            uniform int mjc:group = 3
+                            uniform int mjc:priority = 1
+                            uniform double[] mjc:solref = [0.02, 1.5]
+                        }
+
+                        over "right_finger2_link4"
+                        {
+                            over "right_finger2_tip" (
+                                prepend apiSchemas = ["MjcSiteAPI"]
+                            )
+                            {
+                                uniform int mjc:group = 4
+                            }
+
+                            over "right_finger2_joint4" (
+                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                prepend apiSchemas = ["MjcJointAPI"]
+                            )
+                            {
+                                uniform token mjc:actuatorfrclimited = "true"
+                                uniform double mjc:actuatorfrcrange:max = 0.3
+                                uniform double mjc:actuatorfrcrange:min = -0.3
+                                uniform double mjc:armature = 0.0002
+                            }
+                        }
+
+                        over "right_finger2_joint3" (
+                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                            prepend apiSchemas = ["MjcJointAPI"]
+                        )
+                        {
+                            uniform token mjc:actuatorfrclimited = "true"
+                            uniform double mjc:actuatorfrcrange:max = 0.31
+                            uniform double mjc:actuatorfrcrange:min = -0.31
+                            uniform double mjc:armature = 0.0002
+                        }
+                    }
+
+                    over "right_finger2_joint2" (
+                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                        prepend apiSchemas = ["MjcJointAPI"]
+                    )
+                    {
+                        uniform token mjc:actuatorfrclimited = "true"
+                        uniform double mjc:actuatorfrcrange:max = 0.38
+                        uniform double mjc:actuatorfrcrange:min = -0.38
+                        uniform double mjc:armature = 0.0002
+                    }
+                }
+
+                over "right_finger2_joint1" (
+                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                    prepend apiSchemas = ["MjcJointAPI"]
+                )
+                {
+                    uniform token mjc:actuatorfrclimited = "true"
+                    uniform double mjc:actuatorfrcrange:max = 1.05
+                    uniform double mjc:actuatorfrcrange:min = -1.05
+                    uniform double mjc:armature = 0.0005
+                }
+            }
+
+            over "right_finger3_link1"
+            {
+                over "right_finger3_link1_col" (
+                    prepend apiSchemas = ["MjcImageableAPI"]
+                )
+                {
+                    uniform int mjc:group = 3
+                }
+
+                over "right_finger3_link2"
+                {
+                    over "right_finger3_link2_col" (
+                        prepend apiSchemas = ["MjcCollisionAPI"]
+                    )
+                    {
+                        uniform int mjc:group = 3
+                        uniform int mjc:priority = 1
+                        uniform double[] mjc:solref = [0.02, 1.5]
+                    }
+
+                    over "right_finger3_link3"
+                    {
+                        over "right_finger3_link3_col" (
+                            prepend apiSchemas = ["MjcCollisionAPI"]
+                        )
+                        {
+                            uniform int mjc:group = 3
+                            uniform int mjc:priority = 1
+                            uniform double[] mjc:solref = [0.02, 1.5]
+                        }
+
+                        over "right_finger3_link4"
+                        {
+                            over "right_finger3_tip" (
+                                prepend apiSchemas = ["MjcSiteAPI"]
+                            )
+                            {
+                                uniform int mjc:group = 4
+                            }
+
+                            over "right_finger3_joint4" (
+                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                prepend apiSchemas = ["MjcJointAPI"]
+                            )
+                            {
+                                uniform token mjc:actuatorfrclimited = "true"
+                                uniform double mjc:actuatorfrcrange:max = 0.29
+                                uniform double mjc:actuatorfrcrange:min = -0.29
+                                uniform double mjc:armature = 0.0002
+                            }
+                        }
+
+                        over "right_finger3_joint3" (
+                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                            prepend apiSchemas = ["MjcJointAPI"]
+                        )
+                        {
+                            uniform token mjc:actuatorfrclimited = "true"
+                            uniform double mjc:actuatorfrcrange:max = 0.32
+                            uniform double mjc:actuatorfrcrange:min = -0.32
+                            uniform double mjc:armature = 0.0002
+                        }
+                    }
+
+                    over "right_finger3_joint2" (
+                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                        prepend apiSchemas = ["MjcJointAPI"]
+                    )
+                    {
+                        uniform token mjc:actuatorfrclimited = "true"
+                        uniform double mjc:actuatorfrcrange:max = 0.39
+                        uniform double mjc:actuatorfrcrange:min = -0.39
+                        uniform double mjc:armature = 0.0002
+                    }
+                }
+
+                over "right_finger3_joint1" (
+                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                    prepend apiSchemas = ["MjcJointAPI"]
+                )
+                {
+                    uniform token mjc:actuatorfrclimited = "true"
+                    uniform double mjc:actuatorfrcrange:max = 1.06
+                    uniform double mjc:actuatorfrcrange:min = -1.06
+                    uniform double mjc:armature = 0.0005
+                }
+            }
+
+            over "right_finger4_link1"
+            {
+                over "right_finger4_link1_col" (
+                    prepend apiSchemas = ["MjcImageableAPI"]
+                )
+                {
+                    uniform int mjc:group = 3
+                }
+
+                over "right_finger4_link2"
+                {
+                    over "right_finger4_link2_col" (
+                        prepend apiSchemas = ["MjcCollisionAPI"]
+                    )
+                    {
+                        uniform int mjc:group = 3
+                        uniform int mjc:priority = 1
+                        uniform double[] mjc:solref = [0.02, 1.5]
+                    }
+
+                    over "right_finger4_link3"
+                    {
+                        over "right_finger4_link3_col" (
+                            prepend apiSchemas = ["MjcCollisionAPI"]
+                        )
+                        {
+                            uniform int mjc:group = 3
+                            uniform int mjc:priority = 1
+                            uniform double[] mjc:solref = [0.02, 1.5]
+                        }
+
+                        over "right_finger4_link4"
+                        {
+                            over "right_finger4_tip" (
+                                prepend apiSchemas = ["MjcSiteAPI"]
+                            )
+                            {
+                                uniform int mjc:group = 4
+                            }
+
+                            over "right_finger4_joint4" (
+                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                prepend apiSchemas = ["MjcJointAPI"]
+                            )
+                            {
+                                uniform token mjc:actuatorfrclimited = "true"
+                                uniform double mjc:actuatorfrcrange:max = 0.3
+                                uniform double mjc:actuatorfrcrange:min = -0.3
+                                uniform double mjc:armature = 0.0002
+                            }
+                        }
+
+                        over "right_finger4_joint3" (
+                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                            prepend apiSchemas = ["MjcJointAPI"]
+                        )
+                        {
+                            uniform token mjc:actuatorfrclimited = "true"
+                            uniform double mjc:actuatorfrcrange:max = 0.28
+                            uniform double mjc:actuatorfrcrange:min = -0.28
+                            uniform double mjc:armature = 0.0002
+                        }
+                    }
+
+                    over "right_finger4_joint2" (
+                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                        prepend apiSchemas = ["MjcJointAPI"]
+                    )
+                    {
+                        uniform token mjc:actuatorfrclimited = "true"
+                        uniform double mjc:actuatorfrcrange:max = 0.41
+                        uniform double mjc:actuatorfrcrange:min = -0.41
+                        uniform double mjc:armature = 0.0002
+                    }
+                }
+
+                over "right_finger4_joint1" (
+                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                    prepend apiSchemas = ["MjcJointAPI"]
+                )
+                {
+                    uniform token mjc:actuatorfrclimited = "true"
+                    uniform double mjc:actuatorfrcrange:max = 1.02
+                    uniform double mjc:actuatorfrcrange:min = -1.02
+                    uniform double mjc:armature = 0.0005
+                }
+            }
+
+            over "right_finger5_link1"
+            {
+                over "right_finger5_link1_col" (
+                    prepend apiSchemas = ["MjcImageableAPI"]
+                )
+                {
+                    uniform int mjc:group = 3
+                }
+
+                over "right_finger5_link2"
+                {
+                    over "right_finger5_link2_col" (
+                        prepend apiSchemas = ["MjcCollisionAPI"]
+                    )
+                    {
+                        uniform int mjc:group = 3
+                        uniform int mjc:priority = 1
+                        uniform double[] mjc:solref = [0.02, 1.5]
+                    }
+
+                    over "right_finger5_link3"
+                    {
+                        over "right_finger5_link3_col" (
+                            prepend apiSchemas = ["MjcCollisionAPI"]
+                        )
+                        {
+                            uniform int mjc:group = 3
+                            uniform int mjc:priority = 1
+                            uniform double[] mjc:solref = [0.02, 1.5]
+                        }
+
+                        over "right_finger5_link4"
+                        {
+                            over "right_finger5_tip" (
+                                prepend apiSchemas = ["MjcSiteAPI"]
+                            )
+                            {
+                                uniform int mjc:group = 4
+                            }
+
+                            over "right_finger5_joint4" (
+                                delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                                prepend apiSchemas = ["MjcJointAPI"]
+                            )
+                            {
+                                uniform token mjc:actuatorfrclimited = "true"
+                                uniform double mjc:actuatorfrcrange:max = 0.3
+                                uniform double mjc:actuatorfrcrange:min = -0.3
+                                uniform double mjc:armature = 0.0002
+                            }
+                        }
+
+                        over "right_finger5_joint3" (
+                            delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                            prepend apiSchemas = ["MjcJointAPI"]
+                        )
+                        {
+                            uniform token mjc:actuatorfrclimited = "true"
+                            uniform double mjc:actuatorfrcrange:max = 0.28
+                            uniform double mjc:actuatorfrcrange:min = -0.28
+                            uniform double mjc:armature = 0.0002
+                        }
+                    }
+
+                    over "right_finger5_joint2" (
+                        delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                        prepend apiSchemas = ["MjcJointAPI"]
+                    )
+                    {
+                        uniform token mjc:actuatorfrclimited = "true"
+                        uniform double mjc:actuatorfrcrange:max = 0.36
+                        uniform double mjc:actuatorfrcrange:min = -0.36
+                        uniform double mjc:armature = 0.0002
+                    }
+                }
+
+                over "right_finger5_joint1" (
+                    delete apiSchemas = ["PhysicsDriveAPI:angular", "PhysicsJointStateAPI:angular"]
+                    prepend apiSchemas = ["MjcJointAPI"]
+                )
+                {
+                    uniform token mjc:actuatorfrclimited = "true"
+                    uniform double mjc:actuatorfrcrange:max = 0.87
+                    uniform double mjc:actuatorfrcrange:min = -0.87
+                    uniform double mjc:armature = 0.0005
+                }
+            }
+
+            over "right_mount"
+            {
+                over "right_wrist_tag_frame"
+                {
+                    over "Sphere" (
+                        prepend apiSchemas = ["MjcImageableAPI"]
+                    )
+                    {
+                        uniform int mjc:group = 1
+                    }
+
+                    over "Box" (
+                        prepend apiSchemas = ["MjcImageableAPI"]
+                    )
+                    {
+                        uniform int mjc:group = 1
+                    }
+
+                    over "Box_1" (
+                        prepend apiSchemas = ["MjcImageableAPI"]
+                    )
+                    {
+                        uniform int mjc:group = 1
+                    }
+
+                    over "Box_2" (
+                        prepend apiSchemas = ["MjcImageableAPI"]
+                    )
+                    {
+                        uniform int mjc:group = 1
+                    }
+
+                    over "right_wrist_tag" (
+                        prepend apiSchemas = ["MjcSiteAPI"]
+                    )
+                    {
+                        uniform int mjc:group = 1
+                    }
+                }
+            }
+        }
+    }
+
+    over "Physics"
+    {
+        over "PhysicsMaterial" (
+            prepend apiSchemas = ["MjcMaterialAPI"]
+        )
+        {
+        }
+
+        def MjcActuator "right_finger1_joint1_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -1.35499, -0.04769, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.291
+            uniform double mjc:ctrlRange:min = -1.187
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 1.02
+            uniform double mjc:forceRange:min = -1.02
+            uniform double[] mjc:gainPrm = [1.35499, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger1_link1/right_finger1_joint1>
+        }
+
+        def MjcActuator "right_finger1_joint2_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -2.19882, -0.062838, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -1.484
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.83
+            uniform double mjc:forceRange:min = -0.83
+            uniform double[] mjc:gainPrm = [2.19882, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger1_link1/right_finger1_link2/right_finger1_joint2>
+        }
+
+        def MjcActuator "right_finger1_joint3_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.886467, -0.027982, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.35
+            uniform double mjc:forceRange:min = -0.35
+            uniform double[] mjc:gainPrm = [0.886467, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger1_link1/right_finger1_link2/right_finger1_link3/right_finger1_joint3>
+        }
+
+        def MjcActuator "right_finger1_joint4_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.654026, -0.020457, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.21
+            uniform double mjc:forceRange:min = -0.21
+            uniform double[] mjc:gainPrm = [0.654026, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger1_link1/right_finger1_link2/right_finger1_link3/right_finger1_link4/right_finger1_joint4>
+        }
+
+        def MjcActuator "right_finger2_joint1_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -1.34521, -0.047402, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 1.05
+            uniform double mjc:forceRange:min = -1.05
+            uniform double[] mjc:gainPrm = [1.34521, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger2_link1/right_finger2_joint1>
+        }
+
+        def MjcActuator "right_finger2_joint2_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.88946, -0.027239, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -0.698
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.38
+            uniform double mjc:forceRange:min = -0.38
+            uniform double[] mjc:gainPrm = [0.88946, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger2_link1/right_finger2_link2/right_finger2_joint2>
+        }
+
+        def MjcActuator "right_finger2_joint3_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.779361, -0.024489, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.094
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.31
+            uniform double mjc:forceRange:min = -0.31
+            uniform double[] mjc:gainPrm = [0.779361, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger2_link1/right_finger2_link2/right_finger2_link3/right_finger2_joint3>
+        }
+
+        def MjcActuator "right_finger2_joint4_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.656424, -0.020508, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.656424, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger2_link1/right_finger2_link2/right_finger2_link3/right_finger2_link4/right_finger2_joint4>
+        }
+
+        def MjcActuator "right_finger3_joint1_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -1.29931, -0.045699, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 1.06
+            uniform double mjc:forceRange:min = -1.06
+            uniform double[] mjc:gainPrm = [1.29931, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger3_link1/right_finger3_joint1>
+        }
+
+        def MjcActuator "right_finger3_joint2_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.942641, -0.027846, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -0.698
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.39
+            uniform double mjc:forceRange:min = -0.39
+            uniform double[] mjc:gainPrm = [0.942641, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger3_link1/right_finger3_link2/right_finger3_joint2>
+        }
+
+        def MjcActuator "right_finger3_joint3_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.73725, -0.023408, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.094
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.32
+            uniform double mjc:forceRange:min = -0.32
+            uniform double[] mjc:gainPrm = [0.73725, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger3_link1/right_finger3_link2/right_finger3_link3/right_finger3_joint3>
+        }
+
+        def MjcActuator "right_finger3_joint4_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.710314, -0.022366, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.29
+            uniform double mjc:forceRange:min = -0.29
+            uniform double[] mjc:gainPrm = [0.710314, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger3_link1/right_finger3_link2/right_finger3_link3/right_finger3_link4/right_finger3_joint4>
+        }
+
+        def MjcActuator "right_finger4_joint1_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -1.27689, -0.046209, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 1.02
+            uniform double mjc:forceRange:min = -1.02
+            uniform double[] mjc:gainPrm = [1.27689, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger4_link1/right_finger4_joint1>
+        }
+
+        def MjcActuator "right_finger4_joint2_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -1.01333, -0.028704, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -0.698
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.41
+            uniform double mjc:forceRange:min = -0.41
+            uniform double[] mjc:gainPrm = [1.01333, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger4_link1/right_finger4_link2/right_finger4_joint2>
+        }
+
+        def MjcActuator "right_finger4_joint3_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.859159, -0.027436, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.094
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.28
+            uniform double mjc:forceRange:min = -0.28
+            uniform double[] mjc:gainPrm = [0.859159, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger4_link1/right_finger4_link2/right_finger4_link3/right_finger4_joint3>
+        }
+
+        def MjcActuator "right_finger4_joint4_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.648064, -0.020448, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.648064, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger4_link1/right_finger4_link2/right_finger4_link3/right_finger4_link4/right_finger4_joint4>
+        }
+
+        def MjcActuator "right_finger5_joint1_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -1.10292, -0.043816, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.87
+            uniform double mjc:forceRange:min = -0.87
+            uniform double[] mjc:gainPrm = [1.10292, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger5_link1/right_finger5_joint1>
+        }
+
+        def MjcActuator "right_finger5_joint2_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.910201, -0.026593, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 0.698
+            uniform double mjc:ctrlRange:min = -0.698
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.36
+            uniform double mjc:forceRange:min = -0.36
+            uniform double[] mjc:gainPrm = [0.910201, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger5_link1/right_finger5_link2/right_finger5_joint2>
+        }
+
+        def MjcActuator "right_finger5_joint3_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.861968, -0.027476, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 2.094
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.28
+            uniform double mjc:forceRange:min = -0.28
+            uniform double[] mjc:gainPrm = [0.861968, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger5_link1/right_finger5_link2/right_finger5_link3/right_finger5_joint3>
+        }
+
+        def MjcActuator "right_finger5_joint4_actuator"
+        {
+            uniform double[] mjc:biasPrm = [0, -0.656704, -0.020611, 0, 0, 0, 0, 0, 0, 0]
+            uniform token mjc:biasType = "affine"
+            uniform double mjc:ctrlRange:max = 1.57
+            uniform double mjc:ctrlRange:min = -1.047
+            uniform token mjc:forceLimited = "true"
+            uniform double mjc:forceRange:max = 0.3
+            uniform double mjc:forceRange:min = -0.3
+            uniform double[] mjc:gainPrm = [0.656704, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            custom rel mjc:target
+            append rel mjc:target = </tn__wujihand2rightmjlab_fSF/Geometry/right_palm_link/right_finger5_link1/right_finger5_link2/right_finger5_link3/right_finger5_link4/right_finger5_joint4>
+        }
+    }
+}
+
