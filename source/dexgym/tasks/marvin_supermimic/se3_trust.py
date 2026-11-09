@@ -1,6 +1,7 @@
 """SE(3) task trust: held-out action response plus current-policy geometry."""
 
 from dataclasses import dataclass
+import math
 
 import torch
 
@@ -20,7 +21,7 @@ class SE3GeometryTrustConfig:
         for name in ("max_tcp_position_p95_m", "max_tcp_so3_p95_rad",
                      "max_joint_velocity_rmse_rad_s"):
             values = getattr(self, name)
-            if len(values) != 3 or any(value <= 0 for value in values):
+            if len(values) != 3 or any(not math.isfinite(value) or value <= 0 for value in values):
                 raise ValueError(f"Invalid SE(3) geometry trust thresholds: {name}")
 
 
@@ -94,6 +95,9 @@ class SE3DualDistributionTrustEvaluator:
         for index, horizon in enumerate((1, 8, 32)):
             sample = deterministic.get(str(horizon), {})
             if (sample.get("distinct_start_count", 0) < self.noisy.config.min_distinct_starts
+                    or any(not math.isfinite(sample.get(key, float("inf"))) for key in (
+                        "normalized_delta_rmse", "tcp_position_p95_max_m",
+                        "tcp_so3_p95_max_rad", "joint_velocity_rmse_rad_s"))
                     or sample.get("normalized_delta_rmse", float("inf"))
                         > self.noisy.config.max_rmse[index]
                     or sample.get("tcp_position_p95_max_m", float("inf"))
