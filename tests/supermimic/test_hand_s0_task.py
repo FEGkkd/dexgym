@@ -6,10 +6,10 @@ import torch
 from dexgym.algorithms.supermimic.core.models import NetworkFactory
 from dexgym.algorithms.supermimic.core.specs import NetworkSpec
 from dexgym.algorithms.supermimic.core.transition import TaskState
-from dexgym.tasks.direct.right_hand_tracking.supermimic_robot import Hand21DynamicsAdapter
-from dexgym.tasks.direct.right_hand_tracking.supermimic_task import Hand21Task
-from dexgym.tasks.direct.right_hand_tracking.supermimic_model import HandWorldModel
-from dexgym.tasks.direct.right_hand_tracking.subgoals import HandGoals, advance_hand_goals, paper_hand_reward
+from dexgym.tasks.direct.hand21_supermimic.supermimic_robot import Hand21DynamicsAdapter
+from dexgym.tasks.direct.hand21_supermimic.supermimic_task import Hand21Task
+from dexgym.tasks.direct.hand21_supermimic.supermimic_model import HandWorldModel
+from dexgym.tasks.direct.hand21_supermimic.subgoals import HandGoals, advance_hand_goals, paper_hand_reward
 
 
 def setup():

@@ -5,8 +5,8 @@ import argparse
 import gymnasium as gym
 import torch
 from dexgym.tasks import HAND21_TELEDEXTER_ID
-from dexgym.tasks.direct.right_hand_tracking.logic import action_toward_joint_target
-from dexgym.tasks.direct.right_hand_tracking.teledexter_env_cfg import WujiHand21TeleDexterCfg
+from dexgym.tasks.direct.hand21_ppo.logic import action_toward_joint_target
+from dexgym.tasks.direct.hand21_ppo.env_cfg import WujiHand21TeleDexterCfg
 from isaaclab.app import launch_simulation
 from isaaclab.cli import load_external_tasks
 

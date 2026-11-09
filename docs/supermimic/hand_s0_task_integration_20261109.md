@@ -67,3 +67,20 @@ bash scripts/supermimic/hand_s0_host.sh \
 `/home/ubuntu/dexgym/artifacts/hand_s0/task_integration/`；回归日志为同级
 `task_integration_regression.log`。这些大文件未纳入 Git。
 `policy_accuracy_passed` 保持为 `null`，未启动后续长期训练。
+
+
+## 后续任务拆分
+
+PPO 与 SuperMimic 现已分别定义在 `source/dexgym/tasks/direct/hand21_ppo/`
+和 `source/dexgym/tasks/direct/hand21_supermimic/`。
+两个任务分别拥有独立的 `env.py`、`env_cfg.py`、`logic.py`、`subgoals.py`。
+配置直接继承 Isaac Lab 的 `DirectRLEnvCfg`，两个任务之间没有继承或实现导入。
+PPO 的训练配置也移至自己的 `ppo_cfg.py`。
+
+旧路径保留导入转发，任务注册直接指向新目录。SuperMimic 世界模型声明稳定的
+checkpoint 类型标识，其他模型、参数与任务契约仍执行原有严格检查。
+
+拆分后验证通过 281 项测试（35 条既有弃用警告）。两套环境与 PPO 训练配置的全部有效字段与拆分前 aa88be2 一致。
+PPO 与 SuperMimic 各完成 16 环境 × 64 步物理短测；PPO 强制跨轨迹测试完成 52 次切换，SuperMimic 的终止前采集与 WM8 更新通过。
+旧 model_500.pt 经新入口恢复到 502，新增 512 条真实 transition、4 次世界模型更新，非有限计数为 0。新 checkpoint 的验证集评估与 wheel 构建/解包加载通过。
+原始结果保留于 `/home/ubuntu/dexgym/artifacts/hand_s0/task_split/`，回归日志为同级 `task_split_regression.log`。

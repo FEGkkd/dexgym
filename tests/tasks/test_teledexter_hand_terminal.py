@@ -3,8 +3,8 @@
 from types import SimpleNamespace
 
 import torch
-from dexgym.tasks.direct.right_hand_tracking.env import RightHandTrackingDirectEnv
-from dexgym.tasks.direct.right_hand_tracking.teledexter_env_cfg import WujiHand21TeleDexterCfg
+from dexgym.tasks.direct.hand21_ppo.env import Hand21PPOEnv
+from dexgym.tasks.direct.hand21_ppo.env_cfg import WujiHand21TeleDexterCfg
 
 
 def _task(*, cross_probability: float) -> SimpleNamespace:
@@ -52,7 +52,7 @@ def test_failure_budget_terminates_on_the_frame_that_exceeds_it():
     current = torch.zeros((2, 5, 3))
     current[0, 0, 0] = 0.03
     task._current_tips = lambda: current
-    terminated, truncated = RightHandTrackingDirectEnv._get_dones_teledexter(task)
+    terminated, truncated = Hand21PPOEnv._get_dones_teledexter(task)
     assert terminated.tolist() == [True, False]
     assert not truncated.any()
     assert task.fail_frames.tolist() == [2, 0]
@@ -62,7 +62,7 @@ def test_cross_switch_keeps_frame_and_grants_paper_failure_budget():
     task = _task(cross_probability=1.0)
     task.dwell[:] = 4
     task._current_tips = lambda: torch.zeros((2, 5, 3))
-    terminated, _ = RightHandTrackingDirectEnv._get_dones_teledexter(task)
+    terminated, _ = Hand21PPOEnv._get_dones_teledexter(task)
     assert not terminated.any()
     assert task.last_crossed.tolist() == [True, True]
     assert task.motion_ids.tolist() == [1, 1]
@@ -78,13 +78,13 @@ def test_sparse_reward_belongs_to_goal_completed_before_switch():
     task.dwell[:] = task.dwell_required - 1
     task._current_tips = lambda: torch.zeros((2, 5, 3))
 
-    RightHandTrackingDirectEnv._get_dones_teledexter(task)
+    Hand21PPOEnv._get_dones_teledexter(task)
     torch.testing.assert_close(task._step_reward, torch.full((2,), 33.75))
     assert task.last_crossed.tolist() == [True, True]
     assert task.goal_span.tolist() == [0, 0]
 
     task.cfg.cross_trajectory_probability = 0.0
     task.dwell[:] = task.dwell_required - 1
-    RightHandTrackingDirectEnv._get_dones_teledexter(task)
+    Hand21PPOEnv._get_dones_teledexter(task)
     torch.testing.assert_close(task._step_reward, torch.full((2,), 375.0))
     assert task.last_crossed.tolist() == [False, False]

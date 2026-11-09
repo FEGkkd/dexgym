@@ -69,7 +69,9 @@ class CoreCheckpoint:
                         "dimension": int(norm.mean.numel()) if hasattr(norm, "mean") else None,
                     }
             networks[name] = {
-                "class": type(module).__module__ + "." + type(module).__qualname__,
+                "class": getattr(
+                    module, "checkpoint_class_name", type(module).__module__ + "." + type(module).__qualname__
+                ),
                 "network_spec": asdict(spec),
                 "goal_latent_tanh": getattr(module, "goal_latent_tanh", None),
                 "normalizers": norms,

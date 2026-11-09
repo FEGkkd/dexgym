@@ -103,22 +103,22 @@ gym.register(
 
 gym.register(
     id=HAND21_TELEDEXTER_ID,
-    entry_point="dexgym.tasks.direct.right_hand_tracking.env:RightHandTrackingDirectEnv",
+    entry_point="dexgym.tasks.direct.hand21_ppo.env:Hand21PPOEnv",
     disable_env_checker=True,
     kwargs={
-        "env_cfg_entry_point": "dexgym.tasks.direct.right_hand_tracking.teledexter_env_cfg:WujiHand21TeleDexterCfg",
-        "rsl_rl_cfg_entry_point": "dexgym.tasks.ppo_cfg:WujiHand21TeleDexterPPOCfg",
+        "env_cfg_entry_point": "dexgym.tasks.direct.hand21_ppo.env_cfg:WujiHand21TeleDexterCfg",
+        "rsl_rl_cfg_entry_point": "dexgym.tasks.direct.hand21_ppo.ppo_cfg:WujiHand21TeleDexterPPOCfg",
         "default_agent": "rsl_rl",
     },
 )
 
 gym.register(
     id=HAND21_SUPERMIMIC_ID,
-    entry_point="dexgym.tasks.direct.right_hand_tracking.env:RightHandTrackingDirectEnv",
+    entry_point="dexgym.tasks.direct.hand21_supermimic.env:Hand21SuperMimicEnv",
     disable_env_checker=True,
     kwargs={
-        "env_cfg_entry_point": "dexgym.tasks.direct.right_hand_tracking.teledexter_env_cfg:WujiHand21SuperMimicCfg",
-        "supermimic_cfg_entry_point": "dexgym.tasks.direct.right_hand_tracking.supermimic_cfg:default_experiment",
+        "env_cfg_entry_point": "dexgym.tasks.direct.hand21_supermimic.env_cfg:WujiHand21SuperMimicCfg",
+        "supermimic_cfg_entry_point": "dexgym.tasks.direct.hand21_supermimic.supermimic_cfg:default_experiment",
     },
 )
 

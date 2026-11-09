@@ -1,7 +1,7 @@
 """TELEDEXTER's hand-only curriculum, hold, sparse reward, and failure budget."""
 
 import torch
-from dexgym.tasks.direct.right_hand_tracking.logic import (
+from dexgym.tasks.direct.hand21_ppo.logic import (
     curriculum_stride_upper,
     sample_goal_span,
     teledexter_hand_dwell,

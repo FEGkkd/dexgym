@@ -7,7 +7,7 @@ from pathlib import Path
 import gymnasium as gym
 import pytest
 from dexgym.tasks import HAND21_SUPERMIMIC_ID, HAND21_TELEDEXTER_ID
-from dexgym.tasks.direct.right_hand_tracking.supermimic_cfg import default_experiment, load_hand_configuration
+from dexgym.tasks.direct.hand21_supermimic.supermimic_cfg import default_experiment, load_hand_configuration
 
 
 def test_registered_hand_configuration_from_another_directory(tmp_path, monkeypatch):
@@ -21,7 +21,7 @@ def test_registered_hand_configuration_from_another_directory(tmp_path, monkeypa
     assert cfg.scene.robot.prim_path.endswith("/RightHand")
     assert "wuji_hand21" in str(cfg.scene.robot.spawn.usd_path)
     assert cfg.decimation == 16 and cfg.sim.dt == 1 / 480
-    assert gym.spec(HAND21_SUPERMIMIC_ID).entry_point.endswith(":RightHandTrackingDirectEnv")
+    assert gym.spec(HAND21_SUPERMIMIC_ID).entry_point.endswith(":Hand21SuperMimicEnv")
 
 
 def test_packaged_default_is_not_shared_mutable_state():
@@ -54,16 +54,16 @@ def test_supermimic_runner_rejects_ppo_task():
 @pytest.mark.parametrize("module", ["train", "evaluate", "smoke", "preflight"])
 def test_task_entrypoints_import_from_another_directory(module, tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
-    entrypoint = importlib.import_module(f"dexgym.tasks.direct.right_hand_tracking.supermimic_{module}")
+    entrypoint = importlib.import_module(f"dexgym.tasks.direct.hand21_supermimic.supermimic_{module}")
     assert callable(entrypoint.main)
     # Task code must not import implementation from the repository's CLI wrappers.
     assert "from scripts." not in Path(entrypoint.__file__).read_text()
 
 
 def test_installed_package_does_not_claim_an_unrelated_parent_repository(tmp_path, monkeypatch):
-    from dexgym.tasks.direct.right_hand_tracking import supermimic_runner
+    from dexgym.tasks.direct.hand21_supermimic import supermimic_runner
 
-    installed = tmp_path / "site-packages/dexgym/tasks/direct/right_hand_tracking/supermimic_runner.py"
+    installed = tmp_path / "site-packages/dexgym/tasks/direct/hand21_supermimic/supermimic_runner.py"
     monkeypatch.setattr(supermimic_runner, "__file__", str(installed))
     monkeypatch.setattr(
         supermimic_runner.subprocess,

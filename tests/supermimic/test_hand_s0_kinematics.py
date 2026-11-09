@@ -3,9 +3,9 @@ import mujoco
 import numpy as np
 import torch
 
-from dexgym.tasks.direct.right_hand_tracking.hand_kinematics import Hand21Kinematics
-from dexgym.tasks.direct.right_hand_tracking.supermimic_robot import Hand21DynamicsAdapter
-from dexgym.tasks.direct.right_hand_tracking.logic import residual_joint_target
+from dexgym.tasks.direct.hand21_supermimic.hand_kinematics import Hand21Kinematics
+from dexgym.tasks.direct.hand21_supermimic.supermimic_robot import Hand21DynamicsAdapter
+from dexgym.tasks.direct.hand21_supermimic.logic import residual_joint_target
 
 
 def test_standalone_fk_matches_mujoco_and_has_correct_directional_derivative():

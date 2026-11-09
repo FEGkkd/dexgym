@@ -33,16 +33,21 @@ configuration and controller parameters are unchanged.
 
 ## Standalone hand SuperMimic
 
-The object-free Hand S0 implementation is part of
-[`dexgym.tasks.direct.right_hand_tracking`](source/dexgym/tasks/direct/right_hand_tracking/README.md).
-Its environment, adapters, world model, configuration, training, evaluation and
-validation logic live in this task package. `scripts/supermimic/*hand_s0*.py`
-provide compatible CLI launchers; the generic algorithm remains in
-`dexgym.algorithms.supermimic.core`.
+The standalone hand has two independent task packages:
+
+- [PPO task](source/dexgym/tasks/direct/hand21_ppo/README.md):
+  `hand21_ppo/env.py`, `env_cfg.py`, `subgoals.py`, `logic.py`, `ppo_cfg.py`.
+- [SuperMimic task](source/dexgym/tasks/direct/hand21_supermimic/README.md):
+  its own `env.py`, `env_cfg.py`, `subgoals.py`, `logic.py`, plus model, collector,
+  training and evaluation modules.
+
+Each package owns its executable environment and rules. The configurations
+independently inherit from Isaac Lab's `DirectRLEnvCfg`. Generic algorithm
+code remains in `dexgym.algorithms.supermimic.core`.
 
 ```bash
 # Bounded two-iteration workflow check; does not establish policy accuracy.
-uv run python -m dexgym.tasks.direct.right_hand_tracking.supermimic_train \
+uv run python -m dexgym.tasks.direct.hand21_supermimic.supermimic_train \
   --task DexGym-Wuji-Hand21-TeleDexter-SuperMimic-Direct-v0 \
   --library /absolute/path/to/hand21_right_geometry_feasible/manifest.json \
   --iterations 2 --output /tmp/hand_s0_check
