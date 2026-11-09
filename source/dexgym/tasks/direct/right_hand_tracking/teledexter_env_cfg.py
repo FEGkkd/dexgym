@@ -9,6 +9,7 @@ from .clean_env_cfg import RightHandCleanTrackingCfg
 class WujiHand21TeleDexterCfg(RightHandCleanTrackingCfg):
     """Use paper-style subgoal curriculum and reset logic at 30 Hz."""
 
+    goal_tolerance_m = 0.015
     observation_space = 125
     include_command_error = True
     teledexter_style = True

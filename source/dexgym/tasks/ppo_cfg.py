@@ -130,8 +130,8 @@ class RightHandCleanHybrid125BetaPPOCfg(RightHandCleanHybrid125Entropy0PPOCfg):
 class WujiHand21TeleDexterPPOCfg(RightHandTrackingPPOCfg):
     """Current Hand 2.1 PPO with bounded tanh actions and a latent Gaussian std of one."""
 
-    experiment_name = "dexgym_wuji_hand21_teledexter_20mm_tanh_std1_entropy005"
-    max_iterations = 1000
+    experiment_name = "dexgym_wuji_hand21_teledexter_15mm_tanh_std1_entropy005"
+    max_iterations = 50000
     save_interval = 50
     actor = deepcopy(RightHandTrackingPPOCfg().actor)
     actor.distribution_cfg = RslRlMLPModelCfg.GaussianDistributionCfg(init_std=1.0)
