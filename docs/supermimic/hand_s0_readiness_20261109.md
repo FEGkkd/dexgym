@@ -1,5 +1,8 @@
 # 单手 S0：任务与 Model-based RL 链路验收
 
+> Historical v1 evidence below includes trust-gated updates. The current standalone
+> Hand S0 v2 removes this gate; see the [current checks](hand_s0_no_actor_gate_20261109.md).
+
 ## 本阶段结论与范围
 
 本阶段按用户最新要求验证任务定义、训练架构及扩大训练前的工程条件，

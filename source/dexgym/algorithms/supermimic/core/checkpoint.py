@@ -208,7 +208,8 @@ class CoreCheckpoint:
             temporary.unlink(missing_ok=True)
         return destination
 
-    def load(self, path: str | Path, trainer, *, schedulers: dict | None = None) -> dict:
+    def load(self, path: str | Path, trainer, *, schedulers: dict | None = None,
+             allow_actor_schedule_migration: bool = False) -> dict:
         record = torch.load(path, map_location="cpu", weights_only=False)
         modules = self._modules(trainer)
         if record.get("schema") != self.schema_version:
@@ -218,6 +219,19 @@ class CoreCheckpoint:
         if record["task_spec"] != asdict(trainer.task.spec):
             raise ValueError("Task schema differs")
         current_trainer_config = asdict(trainer.config)
+        saved_trainer_config = record["trainer_config"].copy()
+        saved_trainer_config.setdefault("actor_update_schedule", "model_trust")
+        schedule_migration = {}
+        if (allow_actor_schedule_migration
+                and saved_trainer_config["actor_update_schedule"] == "model_trust"
+                and current_trainer_config["actor_update_schedule"] == "every_iteration"):
+            # Only the removed gate's scheduling fields may change on migration.
+            # Robot, task, networks, optimizers and all other trainer fields remain strict.
+            for key in ("actor_update_schedule", "world_warmup_updates", "trust_interval", "validation_batch"):
+                before, after = saved_trainer_config[key], current_trainer_config[key]
+                if before != after:
+                    schedule_migration[key] = {"previous": before, "current": after}
+                    saved_trainer_config[key] = after
         if "actor_grad_value_clip" not in record["trainer_config"]:
             if current_trainer_config["actor_grad_value_clip"] is not None:
                 raise ValueError("Trainer configuration differs")
@@ -228,7 +242,7 @@ class CoreCheckpoint:
             if current_trainer_config["actor_bootstrap_warmup_updates"] != 0:
                 raise ValueError("Trainer configuration differs")
             current_trainer_config.pop("actor_bootstrap_warmup_updates")
-        if record["trainer_config"] != current_trainer_config:
+        if saved_trainer_config != current_trainer_config:
             raise ValueError("Trainer configuration differs")
         if record["termination_mode"] != trainer.task.termination_mode:
             raise ValueError("Termination schema differs")
@@ -267,10 +281,10 @@ class CoreCheckpoint:
         for name, scheduler in (schedulers or {}).items():
             scheduler.load_state_dict(record["schedulers"][name])
         trainer.iteration = int(record["training"]["iteration"])
-        trainer.counts = record["training"]["counts"].copy()
-        # Trust is tied to the current actor distribution and held-out real
-        # transitions. A resumed process must revalidate it before BPTT.
-        trainer.allowed_horizon = 0
+        trainer.counts = {key: record["training"]["counts"][key] for key in trainer.counts}
+        # Only legacy model-trust schedules revalidate on fresh physics.
+        trainer.allowed_horizon = (trainer.config.max_imagination_horizon
+                                   if trainer.config.actor_update_schedule == "every_iteration" else 0)
         trainer.trust_report = {}
         if record["replay"] is not None:
             trainer.replay.load_state_dict(record["replay"],
@@ -284,7 +298,8 @@ class CoreCheckpoint:
         random.setstate(record["rng"]["python"])
         if record["rng"]["cuda"] is not None and torch.cuda.is_available():
             torch.cuda.set_rng_state_all(record["rng"]["cuda"])
-        return {"replay_restored": record["replay"] is not None,
+        return {"trainer_config_migration": schedule_migration,
+                "replay_restored": record["replay"] is not None,
                 "requires_fresh_collection": record["resume_mode"] != "full",
                 "resume_mode": record["resume_mode"],
                 "git_commit": record["git_commit"], "schema": record["schema"]}

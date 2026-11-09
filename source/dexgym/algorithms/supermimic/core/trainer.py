@@ -12,6 +12,7 @@ from .optimization import frozen_parameters, optimize_critic, safe_gradient_step
 @dataclass(frozen=True)
 class TrainerConfig:
     mode: str = "pure_model_based"
+    actor_update_schedule: str = "model_trust"
     physics_steps_per_iteration: int = 1
     world_window: int = 8
     world_updates_per_iteration: int = 1
@@ -34,13 +35,17 @@ class TrainerConfig:
     actor_grad_value_clip: float | None = None
 
     def __post_init__(self):
+        if self.actor_update_schedule not in ("model_trust", "every_iteration"):
+            raise ValueError("Unknown Actor update schedule")
+        if self.actor_update_schedule == "every_iteration" and self.world_warmup_updates:
+            raise ValueError("Every-iteration Actor updates require zero world-model warmup")
         if self.mode not in ("pure_model_based", "teacher_bootstrap_model_based",
                              "supervised_init_model_based"):
             raise ValueError("Unknown SuperMimic training mode")
         if self.mode == "pure_model_based" and self.reference_pd_bootstrap_steps:
             raise ValueError("Strict Pure mode cannot collect teacher dynamics data")
         if self.world_window != 8 or self.max_imagination_horizon not in (1, 8, 32):
-            raise ValueError("Current algorithm uses WM8 and a 1/8/32 imagination curriculum")
+            raise ValueError("Current algorithm uses WM8 and an imagination horizon of 1, 8 or 32")
         for name in ("physics_steps_per_iteration", "world_updates_per_iteration", "world_batch",
                      "imagination_batch", "actor_updates_per_iteration", "critic_epochs",
                      "critic_minibatches", "trust_interval", "validation_batch"):
@@ -64,8 +69,15 @@ class SuperMimicTrainer:
             raise ValueError("Collector, Replay, Robot and Task contracts differ")
         if set(optimizers) != {"world_model", "actor", "critic"}:
             raise ValueError("Trainer requires world, Actor and Critic optimizers")
-        if not (0 <= train_env_range[0] < train_env_range[1] <= validation_env_range[0]
-                < validation_env_range[1] <= replay.num_envs):
+        if not 0 <= train_env_range[0] < train_env_range[1] <= replay.num_envs:
+            raise ValueError("Invalid training environment range")
+        if config.actor_update_schedule == "every_iteration":
+            if trust_evaluator is not None:
+                raise ValueError("Every-iteration Actor updates do not accept a trust evaluator")
+        elif trust_evaluator is None or validation_env_range is None:
+            raise ValueError("Model-trust scheduling requires an evaluator and validation environments")
+        if validation_env_range is not None and not (
+                train_env_range[1] <= validation_env_range[0] < validation_env_range[1] <= replay.num_envs):
             raise ValueError("Training and held-out validation environment ranges overlap")
         if config.mode == "supervised_init_model_based" and supervised_initializer is None:
             raise ValueError("Supervised mode needs a task-supplied Actor initializer")
@@ -98,13 +110,16 @@ class SuperMimicTrainer:
         self.engine = ImaginationEngine(gamma=config.gamma, lam=config.lam,
                                         value_upper_bound=self.value_upper_bound)
         self.iteration = 0
-        self.allowed_horizon = 0
+        self.allowed_horizon = (config.max_imagination_horizon
+                                if config.actor_update_schedule == "every_iteration" else 0)
         self.trust_report = {}
         self.counts = {"real_transitions": 0, "actor_transitions": 0,
                        "reference_pd_transitions": 0, "boundary_probe_transitions": 0,
                        "world_updates": 0, "actor_updates": 0, "critic_updates": 0,
                        "nonfinite_world": 0, "nonfinite_actor": 0,
-                       "nonfinite_critic": 0, "trust_failures": 0}
+                       "nonfinite_critic": 0}
+        if config.actor_update_schedule == "model_trust":
+            self.counts["trust_failures"] = 0
         if supervised_initializer is not None and config.mode == "supervised_init_model_based":
             supervised_initializer(self.actor, self.optimizers["actor"])
 
@@ -166,6 +181,8 @@ class SuperMimicTrainer:
                 "positive_termination_count": int((window.terminated & window.mask.bool()).sum())}
 
     def validate_world_model(self):
+        if self.trust_evaluator is None:
+            return {}
         self.trust_report = self.trust_evaluator.evaluate_available(
             self.world_model, self.replay, self.robot,
             batch=self.config.validation_batch, env_range=self.validation_env_range,
@@ -186,11 +203,15 @@ class SuperMimicTrainer:
         return min(1.0, self.counts["actor_updates"] / warmup) if warmup else 1.0
 
     def update_actor_critic(self):
-        if self.counts["world_updates"] < self.config.world_warmup_updates or not self.allowed_horizon:
-            return {"updated": False, "reason": "world_warmup_or_trust"}
+        if self.config.actor_update_schedule == "every_iteration":
+            horizon = self.config.max_imagination_horizon
+        else:
+            horizon = self.allowed_horizon
+            if self.counts["world_updates"] < self.config.world_warmup_updates or not horizon:
+                return {"updated": False, "reason": "world_warmup_or_trust"}
         try:
             start = self.replay.sample_starts(
-                self.config.imagination_batch, horizon=self.allowed_horizon,
+                self.config.imagination_batch, horizon=horizon,
                 valid_start=self.task.valid_imagination_start,
                 env_range=self.train_env_range, source_id=0)
         except ValueError as error:
@@ -200,7 +221,7 @@ class SuperMimicTrainer:
         with frozen_parameters(self.world_model, self.critic, self.termination_head):
             rollout = self.engine.rollout(
                 start, self.actor, self.world_model, self.critic, self.robot, self.task,
-                horizon=self.allowed_horizon,
+                horizon=horizon,
                 bootstrap_weight=bootstrap_weight,
                 termination_head=self.termination_head,
                 observation_noise=self.observation_noise)
@@ -222,7 +243,7 @@ class SuperMimicTrainer:
         critic_finished = self._stamp()
         self.counts["critic_updates"] += critic_result["updates"]
         self.counts["nonfinite_critic"] += critic_result["skipped_nonfinite"]
-        return {"updated": True, "horizon": self.allowed_horizon,
+        return {"updated": True, "horizon": horizon,
                 "actor_bootstrap_weight": bootstrap_weight,
                 "actor_loss": float(rollout.actor_loss.detach()),
                 "actor_grad_norm": actor_result["grad_norm"],
@@ -237,7 +258,8 @@ class SuperMimicTrainer:
         world = [self.update_world_model() for _ in range(self.config.world_updates_per_iteration)]
         t_world = self._stamp()
         validated = False
-        if (self.counts["world_updates"] >= self.config.world_warmup_updates
+        if (self.trust_evaluator is not None
+                and self.counts["world_updates"] >= self.config.world_warmup_updates
                 and self.iteration % self.config.trust_interval == 0):
             self.validate_world_model()
             validated = True

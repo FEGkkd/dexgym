@@ -1,11 +1,10 @@
 {
-  "version": "hand21_s0_v1",
+  "version": "hand21_s0_v2",
   "seed": 42,
   "num_envs": 256,
   "iterations": 250000,
   "replay_capacity_steps": 1000,
   "checkpoint_interval": 500,
-  "train_env_fraction": 0.75,
   "action_noise_std": 0.1,
   "lr": 0.0002,
   "cosine_floor": 0.03,
@@ -23,7 +22,7 @@
     "world_window": 8,
     "world_batch": 256,
     "world_updates_per_iteration": 2,
-    "world_warmup_updates": 200,
+    "world_warmup_updates": 0,
     "imagination_batch": 128,
     "max_imagination_horizon": 32,
     "actor_grad_value_clip": 0.1,
@@ -31,14 +30,6 @@
     "critic_minibatches": 4,
     "gamma": 0.99,
     "lam": 0.95,
-    "trust_interval": 25,
-    "validation_batch": 128
-  },
-  "trust": {
-    "min_distinct_starts": 32,
-    "max_rmse": [1.0, 2.0, 3.0],
-    "require_baseline_improvement": true,
-    "metric": "normalized"
-  },
-  "tip_mean_error_limits_m": [0.0015, 0.004, 0.0075]
+    "actor_update_schedule": "every_iteration"
+  }
 }

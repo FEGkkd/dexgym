@@ -16,10 +16,8 @@ from dexgym.algorithms.supermimic.core.checkpoint import CoreCheckpoint
 from dexgym.algorithms.supermimic.core.optimization import build_optimizers
 from dexgym.algorithms.supermimic.core.replay_buffer import SchemaReplay
 from dexgym.algorithms.supermimic.core.trainer import SuperMimicTrainer, TrainerConfig
-from dexgym.algorithms.supermimic.core.trust_evaluator import TrustConfig
 from dexgym.tasks import HAND21_SUPERMIMIC_ID
 from dexgym.tasks.direct.hand21_supermimic.supermimic_collector import HandNewtonCollector
-from dexgym.tasks.direct.hand21_supermimic.supermimic_trust import HandModelTrust
 
 from .supermimic_cfg import load_hand_configuration
 from .supermimic_runner import components, physics_contract, source_revision
@@ -58,9 +56,6 @@ def main():
                 termination_mode=task.termination_mode,
                 actor_betas=(0.9, 0.95),
             )
-            trust = experiment["trust"].copy()
-            trust["max_rmse"] = tuple(trust["max_rmse"])
-            train_count = int(env.num_envs * experiment["train_env_fraction"])
             trainer = SuperMimicTrainer(
                 collector=collector,
                 replay=replay,
@@ -68,17 +63,17 @@ def main():
                 task=task,
                 modules=modules,
                 optimizers=optimizers,
-                trust_evaluator=HandModelTrust(TrustConfig(**trust), experiment["tip_mean_error_limits_m"]),
+                trust_evaluator=None,
                 config=TrainerConfig(**experiment["trainer"]),
-                train_env_range=(0, train_count),
-                validation_env_range=(train_count, env.num_envs),
+                train_env_range=(0, env.num_envs),
+                validation_env_range=None,
             )
             checkpoint = CoreCheckpoint(
                 git_commit=source_revision(),
                 reference_hashes={"manifest": hashlib.sha256(args.library.read_bytes()).hexdigest()},
                 physics_config=physics_contract(cfg, robot),
             )
-            resume = checkpoint.load(args.resume, trainer) if args.resume else None
+            resume = checkpoint.load(args.resume, trainer, allow_actor_schedule_migration=True) if args.resume else None
             if resume:
                 env.curriculum_steps[:] = trainer.counts["real_transitions"] // env.num_envs
                 # Sample fresh goals AFTER restoring curriculum progress; the
@@ -99,6 +94,9 @@ def main():
                         for group in optimizer.param_groups:
                             group["lr"] = lr * scale
                     result = trainer.run_iteration()
+                    result.pop("trust")
+                    result["imagination_horizon"] = result.pop("allowed_horizon")
+                    result["phase_seconds"].pop("trust")
                     result.update(
                         {
                             "tracking": collector.last_metrics,
@@ -130,8 +128,8 @@ def main():
                 "gym_task_id": args.task,
                 "iteration": trainer.iteration,
                 "counts": trainer.counts,
-                "trust": trainer.trust_report,
-                "allowed_horizon": trainer.allowed_horizon,
+                "actor_update_schedule": trainer.config.actor_update_schedule,
+                "imagination_horizon": trainer.config.max_imagination_horizon,
                 "replay_bytes": replay.bytes_allocated,
                 "elapsed_seconds": time.monotonic() - started,
                 "checkpoint": str(saved),

@@ -3,7 +3,7 @@
 DexGym contains Newton MJWarp robot environments for Isaac Lab 3.0 and a
 **complete, usable SuperMimic model-based RL framework**. The SuperMimic Core
 collects real physical transitions, fits an eight-step masked autoregressive
-world model, checks model trust, optimizes an Actor through differentiable
+world model, optimizes an Actor through differentiable
 imagination and BPTT, and fits a TD(λ) Critic with survival-weighted returns.
 Robot dynamics and task MDPs are separate plugins; the same Core trainer runs
 different observation, goal and reward schemas. This is a software and
@@ -40,6 +40,9 @@ The standalone hand has two independent task packages:
 - [SuperMimic task](source/dexgym/tasks/direct/hand21_supermimic/README.md):
   its own `env.py`, `env_cfg.py`, `subgoals.py`, `logic.py`, plus model, collector,
   training and evaluation modules.
+
+The Hand S0 v2 trainer updates the Actor and Critic every iteration at a fixed
+32-step horizon, using all training environments and zero world-model warmup.
 
 Each package owns its executable environment and rules. The configurations
 independently inherit from Isaac Lab's `DirectRLEnvCfg`. Generic algorithm
