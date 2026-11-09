@@ -65,6 +65,15 @@ for the original 20 mm design, the
 [15 mm training record](../docs/experiments/hand21_teledexter_15mm_4096_50k_run_20261109.md),
 and the [motion distribution report](../docs/experiments/hand21_motion_distribution_20261109.md).
 
+For object-relative motion analysis, see the
+[GRAB in-hand selection report](../docs/experiments/grab_inhand_motion_selection_20261109.md)
+and its [object-focused selection](../docs/experiments/grab_inhand_object_focus_20261109.csv).
+It prioritizes camera, toothpaste, game controller, and elephant recordings,
+with flashlight, mouse, and stapler as supplements. The metadata indexes
+right-hand rotation, translation, and alternating finger-contact candidates
+in both the raw recordings and Hand 2.1 MotionBank. The raw recordings and
+generated full candidate catalog remain local and ignored by Git.
+
 ## Earlier Beta 2 library and strict replay screen (historical)
 
 The GRAB recordings and generated right-hand motion library stay local. Git
