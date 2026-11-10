@@ -22,5 +22,5 @@ frames also terminate because the failure budget is 45.
 
 Use the existing Isaac Lab RSL-RL training entry with this Gym ID.
 Changing this task's files does not change the separate
-[SuperMimic task](../hand21_supermimic/README.md).
+[Cube SuperMimic task](../../../../../docs/tasks/hand2_cube_supermimic.md).
 Robot asset files, motion-data loaders and generic algorithms remain shared infrastructure.

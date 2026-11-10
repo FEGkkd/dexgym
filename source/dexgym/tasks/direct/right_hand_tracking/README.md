@@ -1,11 +1,8 @@
-# Historical right-hand tracking tasks and import compatibility
+# Historical right-hand tracking environments
 
-The two current Hand21 tasks have separate implementations:
+These PPO tracking and ablation environments remain available. The independent
+current [Hand21 PPO task](../hand21_ppo/README.md) owns its environment and rules.
+`teledexter_env_cfg.py` preserves the PPO configuration import alias.
 
-- [PPO](../hand21_ppo/README.md): `hand21_ppo/env.py` and `hand21_ppo/env_cfg.py`.
-- [SuperMimic](../hand21_supermimic/README.md): `hand21_supermimic/env.py` and `hand21_supermimic/env_cfg.py`.
-
-This directory retains historical tracking/ablation environments. Its old
-`teledexter_env_cfg.py` and `supermimic_*.py` import paths forward to the new
-packages for existing callers. Edit the new task directories to change either
-current registered task.
+Old object-free SuperMimic forwarding modules have been removed. The supported
+SuperMimic task is [Cube Reorientation](../../../../../docs/tasks/hand2_cube_supermimic.md).

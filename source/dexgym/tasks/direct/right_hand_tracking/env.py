@@ -14,7 +14,7 @@ from dexgym.data.motion_bank import MotionBank, advance_goal_frames
 from dexgym.data.wuji_retarget import TIP_SITE_NAMES
 
 from .env_cfg import RightHandTrackingDirectCfg
-from .subgoals import HandGoals, advance_hand_goals, paper_hand_reward, unsafe_hand_state
+from .subgoals import HandGoals, advance_hand_goals, unsafe_hand_state
 from .logic import (
     build_right_hand_observation,
     curriculum_stride_upper,
@@ -22,10 +22,8 @@ from .logic import (
     residual_joint_target,
     right_hand_joint_indices,
     sample_goal_span,
-    teledexter_hand_dwell,
     teledexter_hand_reward,
     tracking_step,
-    update_failure_count,
 )
 
 TIP_DISTAL_BODY_NAMES = (
@@ -90,11 +88,6 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         self.fail_budget = torch.full((self.num_envs,), float(cfg.max_goal_steps), device=self.device)
         self.last_reached = torch.zeros(self.num_envs, dtype=torch.bool, device=self.device)
         self.last_crossed = torch.zeros(self.num_envs, dtype=torch.bool, device=self.device)
-        if getattr(cfg, "paper_hand_dense", False):
-            from .hand_kinematics import Hand21Kinematics
-            if not standalone_hand:
-                raise ValueError("Hand S0 requires the standalone 20-DoF model")
-            self.hand_fk = Hand21Kinematics(device=self.device)
 
     def _current_tips(self) -> torch.Tensor:
         return fingertips_in_wrist_frame(
@@ -192,15 +185,9 @@ class RightHandTrackingDirectEnv(DirectRLEnv):
         result = advance_hand_goals(self._current_tips(), old, self.bank, cfg)
         q = self.robot.data.joint_pos.torch[:, self.right_ids]
         qdot = self.robot.data.joint_vel.torch[:, self.right_ids]
-        if getattr(cfg, "paper_hand_dense", False):
-            self._step_reward = paper_hand_reward(
-                result.errors, result.reached, old.goal_span,
-                self.hand_fk.landmarks(q), self.hand_fk.landmarks(self.bank.joints(old.motion_ids, old.goal_frame)),
-                dense_scale=cfg.reward_dense_scale, time_cost=cfg.reward_time_cost)
-        else:
-            self._step_reward = teledexter_hand_reward(
-                result.errors, result.reached, old.goal_span,
-                dense_scale=cfg.reward_dense_scale, time_cost=cfg.reward_time_cost)
+        self._step_reward = teledexter_hand_reward(
+            result.errors, result.reached, old.goal_span,
+            dense_scale=cfg.reward_dense_scale, time_cost=cfg.reward_time_cost)
         result.goals.apply(self)
         self.goal_tips = self.bank.fingertips(self.motion_ids, self.goal_frame)
         self.last_reached, self.last_crossed = result.reached, result.crossed

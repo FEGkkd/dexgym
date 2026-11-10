@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "num_envs": 16,
+  "control_steps": 240,
+  "fk_max_error_m": 6.590063321709749e-07,
+  "startup_errors": {
+    "kp": 0.0,
+    "kd": 0.0,
+    "cube_mass": 0.0,
+    "cube_size": 0.0
+  },
+  "post_step_reset_errors": {
+    "kp": 0.0,
+    "kd": 0.0,
+    "cube_mass": 0.0,
+    "cube_size": 0.0
+  },
+  "push_observations": 1064,
+  "pre_reset_capture_preserved": true,
+  "partial_reset_preserves_other_histories": true
+}

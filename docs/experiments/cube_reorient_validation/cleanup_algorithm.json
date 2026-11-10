@@ -1,0 +1,30 @@
+{
+  "reference_sha": "2becb7380fed86171056f9bf4338b2a6a0c14b01",
+  "world_update": {
+    "metric_max_abs_error": {
+      "wm_loss": 0.0,
+      "failure_loss": 0.0,
+      "state_loss": 0.0,
+      "contact_digit_loss": 0.0
+    },
+    "parameter_max_abs_error": {
+      "actor": 0.0,
+      "wm": 0.0,
+      "fail_head": 0.0,
+      "critic": 0.0
+    }
+  },
+  "policy_update": {
+    "metric_max_abs_error": {
+      "actor_loss": 0.0,
+      "critic_loss": 0.0,
+      "survival": 0.0
+    },
+    "parameter_max_abs_error": {
+      "actor": 0.0,
+      "wm": 0.0,
+      "fail_head": 0.0,
+      "critic": 0.0
+    }
+  }
+}

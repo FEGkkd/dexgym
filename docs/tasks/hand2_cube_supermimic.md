@@ -12,8 +12,8 @@ run uses `train_seed42_scene_v2`. Historical results below are explicitly qualif
 
 The reference is CumulusAlpha/Dex-Supermimic at commit
 `2becb7380fed86171056f9bf4338b2a6a0c14b01`. The task uses the reference
-Hand 2.2 asset, despite the upstream display name "Wuji Hand 2". Existing
-Hand 2.1 PPO and no-object SuperMimic tasks are separate and unchanged.
+Hand 2.2 asset, despite the upstream display name "Wuji Hand 2". Independent Hand 2.1 PPO remains available. The older object-free SuperMimic
+and Marvin tasks were removed; Cube is the sole supported SuperMimic task.
 
 ## Code ownership
 
@@ -85,11 +85,11 @@ The existing host wrapper selects the installed working runtime without changing
 the shared virtual environment. From the dexgym checkout:
 
 ```bash
-bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.validate_native --output /tmp/cube_native.json
-bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.validate_algorithm --reference /home/ubuntu/dexgym/artifacts/dex_supermimic_reference --output /tmp/cube_algorithm.json
-bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.smoke --full-config --num-envs 4096 --output /tmp/cube_capacity.json
-bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.train --num-envs 4096 --output /path/to/new_cube_training_run
-bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.evaluate --checkpoint /path/to/model.pt --output /tmp/cube_evaluation.json
+bash scripts/supermimic/host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.validate_native --output /tmp/cube_native.json
+bash scripts/supermimic/host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.validate_algorithm --reference /home/ubuntu/dexgym/artifacts/dex_supermimic_reference --output /tmp/cube_algorithm.json
+bash scripts/supermimic/host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.smoke --full-config --num-envs 4096 --output /tmp/cube_capacity.json
+bash scripts/supermimic/host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.train --num-envs 4096 --output /path/to/new_cube_training_run
+bash scripts/supermimic/host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.evaluate --checkpoint /path/to/model.pt --output /tmp/cube_evaluation.json
 ```
 
 Omit `--checkpoint` for an untrained baseline. Evaluation uses deterministic actor
@@ -103,7 +103,7 @@ insufficient evidence of successful reproduction.
 To regenerate bundled MJCF/USD (optional):
 
 ```bash
-bash scripts/supermimic/hand_s0_host.sh -m dexgym.assets.wuji_hand2_cube.export_assets --importer-root /home/ubuntu/dexgym/.venv/lib/python3.12/site-packages/isaacsim
+bash scripts/supermimic/host.sh -m dexgym.assets.wuji_hand2_cube.export_assets --importer-root /home/ubuntu/dexgym/.venv/lib/python3.12/site-packages/isaacsim
 ```
 
 ## Validation and historical evidence
@@ -197,7 +197,7 @@ python -m dexgym.tasks.direct.hand2_cube_supermimic.probe_reference_scene --refe
 Then in the native runtime:
 
 ```bash
-bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.validate_scene --reference-scene /tmp/reference_scene.json --output /tmp/scene_parity.json
+bash scripts/supermimic/host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.validate_scene --reference-scene /tmp/reference_scene.json --output /tmp/scene_parity.json
 ```
 
 The stored probe used MuJoCo Warp 3.12, as did the native runtime. It resolves the
@@ -226,8 +226,8 @@ without running another physics rollout. Overlay text identifies checkpoint type
 scene revision, time, environment, episode, goals and target error.
 
 ```bash
-bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.evaluate --checkpoint /path/to/model.pt --output /tmp/eval.json --trace-output /tmp/trace.npz
-bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.render_trace --trace /tmp/trace.npz --output /tmp/rollout.mp4 --env-index 0 --seconds 30
+bash scripts/supermimic/host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.evaluate --checkpoint /path/to/model.pt --output /tmp/eval.json --trace-output /tmp/trace.npz
+bash scripts/supermimic/host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.render_trace --trace /tmp/trace.npz --output /tmp/rollout.mp4 --env-index 0 --seconds 30
 ```
 
 Rendering requires EGL, Pillow and an `ffmpeg` executable. It produces an MP4,
@@ -244,7 +244,7 @@ it also imports native checkpoint evaluation results. This does not change the
 optimizer or require restarting training.
 
 ```bash
-bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.tensorboard --run-dir /path/to/run --evaluations /path/to/evaluation-root --follow
+bash scripts/supermimic/host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.tensorboard --run-dir /path/to/run --evaluations /path/to/evaluation-root --follow
 tensorboard --logdir /path/to/run/tensorboard --port 6007 --reload_interval 5
 ```
 
@@ -259,7 +259,7 @@ the same events directory simultaneously.
 ## Frozen world-model prediction diagnostic
 
 ```bash
-bash scripts/supermimic/hand_s0_host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.evaluate_world_model --checkpoint /path/to/model.pt --output /tmp/wm_prediction.json
+bash scripts/supermimic/host.sh -m dexgym.tasks.direct.hand2_cube_supermimic.evaluate_world_model --checkpoint /path/to/model.pt --output /tmp/wm_prediction.json
 ```
 
 This diagnostic collects fresh seed-321 trajectories with a frozen actor and WM,

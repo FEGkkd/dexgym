@@ -3,9 +3,9 @@
 The Cartpole Newton tasks use the **official Isaac Lab v3.0.0 Cartpole** via
 `isaaclab_assets.robots.cartpole.CARTPOLE_CFG`. Its USD is supplied through
 Isaac Lab's asset source. The task changes only its actuator configuration in
-memory; it does not edit the USD. Marvin SuperMimic tasks additionally use
-the packaged 54 DoF Marvin/Wuji source MJCF, meshes and no-hand-contact USD.
-Their physical gates are recorded in [SuperMimic validation](../supermimic/core_architecture.md).
+memory; it does not edit the USD. The original right-hand PPO environment uses
+the packaged 54 DoF Marvin/Wuji assets. The supported SuperMimic task has its own
+[Hand 2 cube assets and validation](../tasks/hand2_cube_supermimic.md).
 
 `source/dexgym/assets/manifest.json` records local file hashes and external
 source contracts. The local bottle and cap USDA layers, generated parameters,

@@ -1,1 +1,1 @@
-"""Offline human motion parsing and quality gates for Marvin references."""
+"""Offline human motion parsing and quality checks."""
