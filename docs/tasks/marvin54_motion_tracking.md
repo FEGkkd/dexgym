@@ -90,7 +90,7 @@ Newton wrist position difference from differentiable FK was 0.000813 mm.
 | Mean wrist orientation error (deg) | 2.16 | 2.85 |
 | Mean fingertip orientation error (deg) | 2.48 | 3.80 |
 | Mean relative wrist vector error (mm) | 7.95 | 13.22 |
-| Steps with penetration over 0.5 mm | 4 | 8 |
+| Steps with penetration over 0.5 mm | 4 | 7 |
 | Maximum penetration (mm) | 1.17 | 0.74 |
 
 Both completed the clip without triggering safety termination. The learned
