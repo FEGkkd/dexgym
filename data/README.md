@@ -1,6 +1,6 @@
-# Data layout for right-hand fingertip tracking
+# GRAB right-hand motion data
 
-## Wuji Hand 2.1 rebuild (current)
+## Wuji Hand 2.1 rebuild
 
 The current independent right-hand model is the official Wuji Hand 2.1 USD
 under `source/dexgym/assets/wuji_hand21/`. Local GRAB recordings now cover all
@@ -38,32 +38,12 @@ libraries stay separate so optimization and filtering can be audited.
 The local 2026-11-09 rebuild produced 1,335 SDK motions (406,264 frames).
 Geometry filtering removed 1,953 severe-collision frames and retained 1,404
 segments (404,311 frames) spanning all 1,335 original motions. Sixteen very
-short segments are preserved as data; the current RL sampler skips them for
-stride-four subgoals. See
+short segments are preserved as data. See
 [the model and data report](../docs/experiments/wuji_hand21_model_data_20261109.md).
 The independent Newton Hand 2.1 model passed 100 sampled 1.5-second
 fixed-pose holds with all five fingertips under 10 mm. One 170-frame GRAB
 clip was directly replayed through its position controller and rendered at
 `artifacts/hand21/hand21_grab_direct_replay_newton.mp4` (local, not pushed).
-
-The diagnostic `DexGym-Wuji-Right-Hand-Clean-Tracking-Direct-v0` task and its
-Obs125, Hybrid125, and action-distribution variants use this Hand 2.1 library
-and the independent 20-DoF USD model. At stride 4, the task sampler uses
-segments with at least six frames: 942 train and 446 validation segments.
-Shorter segments stay in the library and audit. See the
-[RL model-switch report](../docs/experiments/hand21_rl_model_switch_20261109.md).
-Their action mapping follows TELEDEXTER Appendix C.1: a 0.1-rad
-residual scale with a soft deadzone of 0.1 on each bounded action component.
-See the [action report](../docs/experiments/hand21_deadzone_action_20261109.md).
-
-The current trainable task ID is `DexGym-Wuji-Hand21-TeleDexter-Direct-v0`.
-It uses the same Hand 2.1 bank, 15 mm fingertip tolerance, a 30 Hz
-subgoal-span curriculum, and cross-trajectory switches within each split.
-The earlier right-hand task IDs remain diagnostic environments without PPO
-registration. See the [task report](../docs/experiments/hand21_teledexter_task_20261109.md)
-for the original 20 mm design, the
-[15 mm training record](../docs/experiments/hand21_teledexter_15mm_4096_50k_run_20261109.md),
-and the [motion distribution report](../docs/experiments/hand21_motion_distribution_20261109.md).
 
 For object-relative motion analysis, see the
 [GRAB in-hand selection report](../docs/experiments/grab_inhand_motion_selection_20261109.md)
@@ -128,83 +108,10 @@ fingertip-change metrics. Motions with worse maximum penetration or over
 manifest. A separate output directory is required. Use
 `--split validation` for a smaller first pass.
 
-For a strict clean bank, screen every optimized motion with full hand
-collision, the isolated `hand_x2` controller, a 1/500 s physics step, and
-direct 30 Hz joint-reference replay. Then copy only motions whose **every
-frame** has all five fingertip errors below 10 mm and that did not fall back
-to the SDK result:
-
-```bash
-PYTHONPATH=source uv run python scripts/data/screen_grab_right_hand_library.py \
-  --library-path data/processed/hand_only_right_collision_aware/manifest.json \
-  --split train --batch-size 64 --output-dir artifacts/hand_only_postopt/screen_train
-PYTHONPATH=source uv run python scripts/data/screen_grab_right_hand_library.py \
-  --library-path data/processed/hand_only_right_collision_aware/manifest.json \
-  --split validation --batch-size 64 --output-dir artifacts/hand_only_postopt/screen_validation
-PYTHONPATH=source uv run python scripts/data/build_clean_grab_right_hand_library.py \
-  --input data/processed/hand_only_right_collision_aware \
-  --train-screen artifacts/hand_only_postopt/screen_train/screen.json \
-  --validation-screen artifacts/hand_only_postopt/screen_validation/screen.json \
-  --output data/processed/hand_only_right_collision_clean
-```
-
-The clean directory contains only selected motion files plus `manifest.json`
-and `excluded.json`. The original GRAB and both intermediate banks remain
-available for provenance. This screen checks direct position-controller
-replay; it does not certify PPO tracking. The screen records each input motion
-file's SHA-256, and the clean-bank builder rechecks it before copying.
-
-In the current local run, the strict clean bank contains 140 motions and
-37,768 frames (51 train motions, 89 validation motions). The two validation
-clips `s8/flashlight_on_1.npz` and `s8/fryingpan_cook_2.npz` are excluded.
-The exact results and limitations are recorded in the
-[post-optimization report](../docs/experiments/hand_only_collision_postopt_20261108.md).
-
-Before the Hand 2.1 switch, the independent clean tracking task used
-this strict clean manifest and the full-contact
-`hand_only_drive_corrected_hand_x2.usda` at 480 Hz. The commands below
-document that earlier experiment; the current Clean task ID now selects
-the Hand 2.1 model and new library. For the historical controller experiment,
-the exact 178-pair validation CSV was used. Check out commit `3c57d1e` to
-reproduce the old task-ID behavior with these commands:
-
-```bash
-PYTHONPATH=source uv run python scripts/probe_right_hand_position_hold.py \
-  --corrected-drive --drive-profile hand_x2 --dt-denominator 480 \
-  --library-path data/processed/hand_only_right_collision_clean/manifest.json \
-  --sample-pairs-csv artifacts/hand_only_corrected_grab/final_hand_x2_contacts_on/per_sample.csv \
-  --output-dir artifacts/hand_only_clean_480/hold
-PYTHONPATH=source uv run python scripts/evaluate_right_hand_clean_joint_replay.py \
-  --split train --output artifacts/hand_only_clean_480/joint_replay_train.json
-PYTHONPATH=source uv run python scripts/evaluate_right_hand_clean_joint_replay.py \
-  --split validation --output artifacts/hand_only_clean_480/joint_replay_validation.json
-```
-
-The historical replay checked actual `env.step()` subgoal progression, the 10 mm
-all-finger rule, and two-step dwell. The clean task has a 30-second episode cap
-so long clips can finish; each subgoal still has a 45-policy-step (1.5-second)
-cap.
-
-The 480 Hz controller checks, full-library Joint Replay, and PPO comparison
-are in the [clean tracking report](../docs/experiments/hand_only_clean_480_4096_500_s42.md).
-
-Two isolated PPO ablations originally used this same strict clean bank:
-`DexGym-Wuji-Right-Hand-Clean-Obs125-Direct-v0` adds the 20D accumulated
-position-command error to the observation; and
-`DexGym-Wuji-Right-Hand-Clean-Hybrid125-Direct-v0` additionally reduces the
-dense reward coefficient and raises the per-step time cost. Neither variant
-changes the source GRAB files or the clean-bank contents. Their 4096-env,
-500-iteration comparison is in the
-[observation and reward ablation report](../docs/experiments/hand_only_obs_reward_ablation_20261108.md).
-
-Action-distribution diagnostic task IDs originally reused that Hybrid125 environment
-and strict clean bank: `DexGym-Wuji-Right-Hand-Clean-Hybrid125-Entropy0-Direct-v0`,
-`DexGym-Wuji-Right-Hand-Clean-Hybrid125-TanhGaussian-Direct-v0`, and
-`DexGym-Wuji-Right-Hand-Clean-Hybrid125-Beta-Direct-v0`. They vary PPO entropy
-and action distribution while keeping the environment and clean bank fixed.
-See the [action-distribution report](../docs/experiments/hand_only_action_distribution_20261108.md)
-for clipping audits and held-out policy results. These task IDs do not alter
-GRAB files or the generated motion banks.
+The historical strict replay screen depended on the retired right-hand task.
+See the [post-optimization report](../docs/experiments/hand_only_collision_postopt_20261108.md)
+and [the previous revision](https://github.com/FEGkkd/dexgym/blob/f2f416e/data/README.md)
+for its results and reproduction commands.
 
 On the current local dataset, conversion produced 797 motions and 252,679
 frames with no rejected motions. See the

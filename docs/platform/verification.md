@@ -1,5 +1,7 @@
 # DexGym 2.0 host verification — 2026-11-04
 
+> Historical verification. Reproduction uses the [pre-removal revision](https://github.com/FEGkkd/dexgym/tree/f2f416e). Current task commands are in the [Cube guide](../tasks/hand2_cube_supermimic.md).
+
 ## Final cleanup rerun — 2026-11-04
 
 This section records the rerun after removing obsolete Isaac Lab 2.x launchers

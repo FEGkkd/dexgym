@@ -36,5 +36,4 @@ angular-gain scale error; no high-gain legacy controller profile is applied.
 See [Hand2.2 validation](../../../../docs/robots/marvin_hand22_upgrade_20261111.md)
 for measured results and the distinction between simulator consistency and
 real hardware calibration. Existing policies trained on the old full robot
-must not be assumed compatible with these changed hand dynamics. The standalone
-Cube and Hand21 PPO assets/tasks are unchanged.
+must not be assumed compatible with these changed hand dynamics.

@@ -511,7 +511,7 @@ name = "dexgym"
 version = "2.0.0"
 source = { editable = "." }
 dependencies = [
-    { name = "isaaclab", extra = ["rsl-rl"] },
+    { name = "isaaclab" },
 ]
 
 [package.optional-dependencies]
@@ -529,7 +529,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "isaaclab", extras = ["rsl-rl"], specifier = "==3.0.0", index = "https://pypi.nvidia.com/" },
+    { name = "isaaclab", specifier = "==3.0.0", index = "https://pypi.nvidia.com/" },
     { name = "matplotlib", marker = "extra == 'motion'", specifier = ">=3.11,<4" },
     { name = "numpy", marker = "extra == 'motion'", specifier = ">=2.5,<3" },
     { name = "scipy", marker = "extra == 'motion'", specifier = ">=1.18,<2" },
@@ -1031,11 +1031,6 @@ dependencies = [
 ]
 wheels = [
     { url = "https://pypi.nvidia.com/isaaclab/isaaclab-3.0.0-py3-none-any.whl", hash = "sha256:625f752c7dd912eb8efade85daeb7a8119d620266852380d17d8f9e701b80bca" },
-]
-
-[package.optional-dependencies]
-rsl-rl = [
-    { name = "rsl-rl-lib" },
 ]
 
 [[package]]

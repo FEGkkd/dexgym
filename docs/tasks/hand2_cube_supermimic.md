@@ -12,8 +12,8 @@ run uses `train_seed42_scene_v2`. Historical results below are explicitly qualif
 
 The reference is CumulusAlpha/Dex-Supermimic at commit
 `2becb7380fed86171056f9bf4338b2a6a0c14b01`. The task uses the reference
-Hand 2.2 asset, despite the upstream display name "Wuji Hand 2". Independent Hand 2.1 PPO remains available. The older object-free SuperMimic
-and Marvin tasks were removed; Cube is the sole supported SuperMimic task.
+Hand 2.2 asset, despite the upstream display name "Wuji Hand 2". Cube
+is the sole task registered by DexGym.
 
 ## Code ownership
 

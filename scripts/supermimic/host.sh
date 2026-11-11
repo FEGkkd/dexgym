@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Process-local environment; never changes the shared venv or the PPO job.
+# Process-local environment; uses the host runtime overlays.
 set -euo pipefail
 repo="$(cd "$(dirname "$0")/../.." && pwd)"
 export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6

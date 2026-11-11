@@ -7,7 +7,7 @@ name = "dexgym"
 version = "2.0.0"
 description = "Isaac Lab Newton tasks and a reusable SuperMimic model-based RL framework"
 requires-python = "==3.12.*"
-dependencies = ["isaaclab[rsl-rl]==3.0.0"]
+dependencies = ["isaaclab==3.0.0"]
 
 [project.optional-dependencies]
 motion = ["numpy>=2.5,<3", "scipy>=1.18,<2", "matplotlib>=3.11,<4"]

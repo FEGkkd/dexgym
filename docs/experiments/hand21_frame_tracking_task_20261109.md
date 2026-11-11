@@ -1,5 +1,7 @@
 # Hand 2.1 PPO frame tracking (2026-11-09)
 
+> Historical verification. Reproduction uses the [pre-removal revision](https://github.com/FEGkkd/dexgym/tree/f2f416e). Current task commands are in the [Cube guide](../tasks/hand2_cube_supermimic.md).
+
 The active `DexGym-Wuji-Hand21-TeleDexter-Direct-v0` task uses the official
 standalone right-hand model and the existing 30 Hz GRAB motion bank. This
 revision replaces the former goal-triggered random-span schedule with a
