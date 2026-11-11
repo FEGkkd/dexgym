@@ -36,7 +36,7 @@ def simulation_cfg():
 
 
 class NewtonTrackingEnv:
-    def __init__(self, cfg, num_envs, model, library, nominal, policy_arch="flat", contact_model="legacy",
+    def __init__(self, cfg, num_envs, model, library, nominal, policy_arch="flat", termination_model="legacy-state",
                  reward_profile="precision"):
         self.sim = SimulationContext(cfg)
         self.scene = InteractiveScene(TrackingSceneCfg(num_envs=num_envs, env_spacing=3.0))
@@ -56,7 +56,7 @@ class NewtonTrackingEnv:
                 raise ValueError(f"Cannot uniquely map Newton force channel {name}")
             addresses[name] = native.jnt_dofadr[matches[0]]
         self.dof_ids = torch.tensor(list(addresses.values()), device=self.device)
-        self.task = TrackingTask(self, model, library, nominal, policy_arch, contact_model, reward_profile)
+        self.task = TrackingTask(self, model, library, nominal, policy_arch, termination_model, reward_profile)
         self.memory = {
             "frame": torch.zeros(num_envs, dtype=torch.long, device=self.device),
             "action": torch.zeros(num_envs, JOINTS, device=self.device),

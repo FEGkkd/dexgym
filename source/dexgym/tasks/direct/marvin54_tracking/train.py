@@ -175,7 +175,7 @@ def main():
     parser.add_argument("--clip-index", type=int, default=0)
     parser.add_argument("--nominal", choices=("home", "reference", "feedforward"))
     parser.add_argument("--policy-arch", choices=("motion-encoder", "flat"))
-    parser.add_argument("--contact-model", choices=("hard-contact", "legacy"))
+    parser.add_argument("--termination-model", choices=("transition", "legacy-state"))
     parser.add_argument("--reward-profile", choices=("multiscale", "precision"))
     parser.add_argument("--matmul-precision", choices=("highest", "high"))
     args = parser.parse_args()
@@ -198,11 +198,13 @@ def main():
     if not 0 <= args.clip_index < len(args.reference):
         parser.error("Clip index is outside the Motion Library")
     original = None
-    defaults = {"nominal": "home", "policy_arch": "motion-encoder", "contact_model": "hard-contact",
+    defaults = {"nominal": "home", "policy_arch": "motion-encoder", "termination_model": "transition",
                 "reward_profile": "multiscale", "matmul_precision": "high"}
     if args.evaluate:
         original = json.loads((args.evaluate.parent / "provenance.json").read_text())
-        legacy = {"nominal": "reference", "policy_arch": "flat", "contact_model": "legacy",
+        if original.get("contact_model") == "hard-contact":
+            parser.error("The experimental three-contact checkpoint requires DexGym commit 3147228")
+        legacy = {"nominal": "reference", "policy_arch": "flat", "termination_model": "legacy-state",
                   "reward_profile": "precision", "matmul_precision": "highest"}
         for key, value in legacy.items():
             original.setdefault(key, value)
@@ -222,14 +224,14 @@ def main():
                   "joint_names": lib.names, "seed": args.seed, "backend": "Isaac Lab 3 / Newton MJWarp",
                   "nominal": args.nominal, "num_envs": 2 if args.evaluate else args.num_envs,
                   "policy_arch": args.policy_arch, "matmul_precision": args.matmul_precision,
-                  "contact_model": args.contact_model, "reward_profile": args.reward_profile}
+                  "termination_model": args.termination_model, "reward_profile": args.reward_profile}
     args.output.mkdir(parents=True, exist_ok=True)
     if not args.evaluate and not args.check_only and (args.output / "metrics.jsonl").exists():
         parser.error("Select a fresh output directory for training")
     with launch_simulation(cfg):
         env = NewtonTrackingEnv(
             cfg, 2 if args.evaluate else args.num_envs, model, lib, args.nominal,
-            args.policy_arch, args.contact_model, args.reward_profile,
+            args.policy_arch, args.termination_model, args.reward_profile,
         )
         provenance.update(history_frames=env.task.history_steps, policy_dim=env.task.policy_dim,
                           future_frames=FUTURE_FRAMES if env.task.goal_dim else 0,
@@ -248,7 +250,7 @@ def main():
         if original is not None:
             if any(original[k] != provenance[k]
                    for k in ("task_id", "model_sha256", "motion_sha256", "joint_names", "nominal", "policy_arch",
-                             "contact_model", "reward_profile")):
+                             "termination_model", "reward_profile")):
                 raise ValueError("Checkpoint reference or asset provenance mismatch")
             if original.get("action_mapping") != provenance.get("action_mapping"):
                 raise ValueError("Checkpoint action mapping mismatch")
@@ -265,7 +267,7 @@ def main():
                 "clip_sha256": lib.sha256[args.clip_index],
                 "nominal": args.nominal,
                 "policy_arch": args.policy_arch,
-                "contact_model": args.contact_model,
+                "termination_model": args.termination_model,
                 "reward_profile": args.reward_profile,
                 "matmul_precision": args.matmul_precision,
                 "wm_hidden": payload["config"]["wm_hidden"],
@@ -290,7 +292,9 @@ def main():
             wm_hidden=(args.wm_width,) * 3, isolate_wm_init=True, pi_batch=args.pi_batch,
             horizon=IMAGINATION_STEPS, critic_epochs=5,
             action_noise=default_noise if args.action_noise is None else args.action_noise,
-            failure_warmup_iters=10, amp=False, compile=False, compile_policy=False,
+            failure_warmup_iters=0 if env.task.transition_termination else 10,
+            failure_clip=1.0 if env.task.transition_termination else 0.1,
+            amp=False, compile=False, compile_policy=False,
             save_interval=args.save_interval, log_interval=args.log_interval,
         )
         engine = SuperMimicEngine(env.task, recipe, args.output)

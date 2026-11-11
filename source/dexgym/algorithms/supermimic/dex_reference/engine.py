@@ -41,7 +41,9 @@ class SuperMimicEngine:
                 task.dynamics_dim, task.contact_dim, task.codec, task.action_dim,
                 task.error_floor, cfg.wm_hidden, cfg.amp,
             ).to(self.device)
-        self.fail_head = FailureHead(task.context_dim, task.state_dim).to(self.device)
+        self.transition_termination = getattr(task, "transition_termination", False)
+        termination_context_dim = getattr(task, "termination_context_dim", task.context_dim)
+        self.fail_head = FailureHead(termination_context_dim, task.state_dim).to(self.device)
         self.critic = Critic(task.context_dim, cfg.amp).to(self.device)
         self.torque_norm = RunningNorm(task.action_dim, eps=1e-3).to(self.device)
         self.optimizers = {k: torch.optim.Adam(v.parameters(), lr=cfg.lr) for k, v in self.modules().items()}
@@ -104,26 +106,22 @@ class SuperMimicEngine:
             dyn = self.task.dynamics(x[train_valid], sim[train_valid], aux[train_valid])
             self.wm.norm.update(self.wm.inputs(dyn, u[train_valid]))
             self.wm.delta_norm.update(self.task.codec.difference(x[train_valid], cap["x1"][train_valid]))
-            selected = {k: v[train_valid] for k, v in m.items()}
-            _, cage, _ = self.task.reward(
-                cap["x1"][train_valid],
-                selected,
-                action[train_valid],
-                c[train_valid],
-                cap["contact"][train_valid],
-                cap["torque"][train_valid],
-            )
-            next_m = self.task.advance_memory(
-                cap["x1"][train_valid],
-                selected,
-                action[train_valid],
-                c[train_valid],
-                cage,
-                self.task.current_goal(selected),
-                soft=False,
-            )
-            next_context = self.task.context(cap["x1"][train_valid], next_m, aux[train_valid], sim[train_valid])
-            self.fail_head.norm.update(self.fail_head.features(cap["x1"][train_valid], next_context))
+            if self.transition_termination:
+                features = self.fail_head.features(x[train_valid], u[train_valid])
+            else:
+                measured = cap["x1"][train_valid]
+                selected = {k: v[train_valid] for k, v in m.items()}
+                _, cage, _ = self.task.reward(
+                    measured, selected, action[train_valid], c[train_valid],
+                    cap["contact"][train_valid], cap["torque"][train_valid],
+                )
+                next_m = self.task.advance_memory(
+                    measured, selected, action[train_valid], c[train_valid], cage,
+                    self.task.current_goal(selected), soft=False,
+                )
+                next_context = self.task.context(measured, next_m, aux[train_valid], sim[train_valid])
+                features = self.fail_head.features(measured, next_context)
+            self.fail_head.norm.update(features)
             transition = dict(
                 x=x,
                 x1=cap["x1"],
@@ -174,7 +172,8 @@ class SuperMimicEngine:
             failure_frac=0.0 if holdout else c.wm_failure_frac,
             failure_horizon=c.wm_failure_horizon,
         )
-        memory = t.decode_memory(w["m"][:, 0])
+        if not self.transition_termination:
+            memory = t.decode_memory(w["m"][:, 0])
         aux = w["aux"][:, 0]
         sim = t.simulator_context[w["env"]]
         x = w["x"][:, 0]
@@ -182,22 +181,26 @@ class SuperMimicEngine:
         state_losses = []
         contact_losses = []
         features = []
-        contact_loss = getattr(t, "world_model_contact_loss", None)
         std = torch.maximum(self.wm.delta_norm.std(), self.wm.error_floor)
         for j in range(c.wm_window):
-            x1, contact = self.step_wm(x, w["u"][:, j], self.wm_features(x, sim, aux))
+            u = w["u"][:, j]
+            x1, contact = self.step_wm(x, u, self.wm_features(x, sim, aux))
             sl = (t.codec.difference(x1, w["x1"][:, j]) / std).square().mean(-1)
-            per_channel = F.binary_cross_entropy_with_logits(contact, w["contact"][:, j], reduction="none")
-            cl = per_channel.sum(-1) if contact_loss is None else contact_loss(per_channel, w["importance"][:, j])
+            cl = F.binary_cross_entropy_with_logits(contact, w["contact"][:, j], reduction="none").sum(-1)
             losses.append(c.final_state_weight * sl + c.contact_weight * cl)
             state_losses.append(sl)
             contact_losses.append(cl)
-            torque = t.torque(x, w["u"][:, j], sim)
-            _, cage, _ = self.reward_step(
-                x1, memory, w["action"][:, j], w["c"][:, j], contact.sigmoid(), torque, soft=True
-            )
-            memory = t.advance_memory(x1, memory, w["action"][:, j], w["c"][:, j], cage, t.current_goal(memory))
-            features.append(self.fail_head.features(x1.detach(), t.context(x1.detach(), memory, aux, sim)))
+            if self.transition_termination:
+                features.append(self.fail_head.features(x.detach(), u))
+            else:
+                torque = t.torque(x, u, sim)
+                _, cage, _ = self.reward_step(
+                    x1, memory, w["action"][:, j], w["c"][:, j], contact.sigmoid(), torque, soft=True
+                )
+                memory = t.advance_memory(
+                    x1, memory, w["action"][:, j], w["c"][:, j], cage, t.current_goal(memory)
+                )
+                features.append(self.fail_head.features(x1.detach(), t.context(x1.detach(), memory, aux, sim)))
             x, aux = t.replay_push(x1, w["push"][:, j], aux)
         mask = w["mask"]
         denom = mask.sum().clamp_min(1)
@@ -226,6 +229,8 @@ class SuperMimicEngine:
 
     @torch.no_grad()
     def replay_failure_features(self, w, sim):
+        if self.transition_termination:
+            return self.fail_head.features(w["x"], w["u"])
         batch, window = w["x1"].shape[:2]
         x = w["x1"].flatten(0, 1)
         memory = self.task.decode_memory(w["m"].flatten(0, 1))
@@ -282,7 +287,6 @@ class SuperMimicEngine:
         m = t.decode_memory(w["m"])
         history = t.history_from_obs(w["obs"])
         observation_from_history = getattr(t, "observation_from_history", None)
-        contact_failure = getattr(t, "imagined_contact_failure", None)
         aux = w["aux"]
         sim = w["sim_context"]
         bias = t.encoder_bias[w["env"]]
@@ -310,12 +314,13 @@ class SuperMimicEngine:
                 reward, cage, _ = self.reward_step(x1, m, action, target, contact_probability, torque, soft=True)
                 done = t.termination(x1, m)
                 next_m = t.advance_memory(x1, m, action, target, cage, t.sample_goal(x.shape[0]))
-                failure = contact_failure(contact_probability) if contact_failure is not None else None
                 if c.failure_head and self.iteration >= c.wm_only_iters + c.failure_warmup_iters:
-                    next_context = self.task_features(x1, next_m, aux, sim)
-                    fail = self.fail_head(self.fail_head.features(x1, next_context)).sigmoid().clamp(max=c.failure_clip)
-                    failure = fail if failure is None else torch.maximum(failure, fail)
-                if failure is not None:
+                    if self.transition_termination:
+                        features = self.fail_head.features(x, u)
+                    else:
+                        next_context = self.task_features(x1, next_m, aux, sim)
+                        features = self.fail_head.features(x1, next_context)
+                    failure = self.fail_head(features).sigmoid().clamp(max=c.failure_clip)
                     done = 1 - (1 - done) * (1 - failure)
                 objective = objective + c.gamma**step * survival * reward
                 survival = survival * (1 - done)

@@ -28,7 +28,7 @@ def diagnose_model(env, actor, checkpoint, clip_index):
     cfg = checkpoint["config"]
     wm = WorldModel(task.dynamics_dim, task.contact_dim, task.codec, task.action_dim, task.error_floor,
                     tuple(cfg["wm_hidden"]), False).to(env.device)
-    failure_head = FailureHead(task.context_dim, task.state_dim).to(env.device)
+    failure_head = FailureHead(task.termination_context_dim, task.state_dim).to(env.device)
     wm.load_state_dict(checkpoint["modules"]["wm"])
     failure_head.load_state_dict(checkpoint["modules"]["fail_head"])
     wm.eval()
@@ -46,14 +46,15 @@ def diagnose_model(env, actor, checkpoint, clip_index):
         action[0] = task.baseline_action(memory)[0]
         _, u = task.control_target(action, memory, task.encoder_bias)
         sim = task.simulator_context
-        predicted, contact = wm(x, u, task.dynamics(x, sim, aux))
-        next_memory = task.replay_failure_memory(memory, action)
-        context = task.context(predicted, next_memory, aux, sim)
-        generic = failure_head(failure_head.features(predicted, context)).sigmoid()
-        hard_contact = task.imagined_contact_failure(contact.sigmoid())
-        risk = generic.clamp(max=cfg["failure_clip"]) if failure_active else torch.zeros_like(generic)
-        if hard_contact is not None:
-            risk = torch.maximum(risk, hard_contact)
+        predicted, _ = wm(x, u, task.dynamics(x, sim, aux))
+        if task.transition_termination:
+            features = failure_head.features(x, u)
+        else:
+            next_memory = task.replay_failure_memory(memory, action)
+            context = task.context(predicted, next_memory, aux, sim)
+            features = failure_head.features(predicted, context)
+        probability = failure_head(features).sigmoid()
+        risk = probability.clamp(max=cfg["failure_clip"]) if failure_active else torch.zeros_like(probability)
         terminated_probability = 1 - (1 - task.termination(predicted, memory)) * (1 - risk)
         _, _, done, _, _ = env.step(action)
         measured = env.transition["x1"]
@@ -68,8 +69,7 @@ def diagnose_model(env, actor, checkpoint, clip_index):
                 "max_real_penetration_mm": float(1000 * depth[i]),
                 "hard_contact": bool(depth[i] > HARD_CONTACT_DEPTH_M),
                 "physical_terminated": bool(done[i]),
-                "generic_failure_probability": float(generic[i]),
-                "hard_contact_probability": float(hard_contact[i]) if hard_contact is not None else None,
+                "termination_probability": float(probability[i]),
                 "imagined_termination_probability": float(terminated_probability[i]),
                 "wrist_prediction_error_mm": float(wrist_mm[i]),
                 "tip_prediction_error_mm": float(tip_mm[i]),
@@ -79,23 +79,20 @@ def diagnose_model(env, actor, checkpoint, clip_index):
         records.append(row)
     return {
         "threshold": 0.5,
-        "label_depth_mm": HARD_CONTACT_DEPTH_M * 1000,
+        "hard_contact_threshold_mm": HARD_CONTACT_DEPTH_M * 1000,
         "counts": {name: summarize([row[name] for row in records]) for name in policies},
         "samples": records,
     }
 
 
 def summarize(rows):
-    positives = sum(row["hard_contact"] for row in rows)
-    # Old checkpoints use the generic termination head as the collision proxy.
-    probabilities = [
-        row["generic_failure_probability"] if row["hard_contact_probability"] is None
-        else row["hard_contact_probability"] for row in rows
-    ]
-    false_negatives = sum(row["hard_contact"] and p < 0.5 for row, p in zip(rows, probabilities, strict=True))
-    false_positives = sum(not row["hard_contact"] and p >= 0.5 for row, p in zip(rows, probabilities, strict=True))
+    positives = sum(row["physical_terminated"] for row in rows)
+    hard_contacts = sum(row["hard_contact"] for row in rows)
+    false_negatives = sum(row["physical_terminated"] and row["termination_probability"] < 0.5 for row in rows)
+    false_positives = sum(not row["physical_terminated"] and row["termination_probability"] >= 0.5 for row in rows)
     return {
-        "samples": len(rows), "hard_contacts": positives,
+        "samples": len(rows), "physical_terminations": positives, "hard_contacts": hard_contacts,
+        "missed_hard_contacts": sum(row["hard_contact"] and row["termination_probability"] < 0.5 for row in rows),
         "false_negatives": false_negatives, "false_positives": false_positives,
         "false_negative_rate": false_negatives / positives if positives else None,
         "false_positive_rate": false_positives / (len(rows) - positives) if positives < len(rows) else None,

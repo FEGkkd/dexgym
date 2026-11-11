@@ -6,6 +6,7 @@ import torch
 
 from dexgym.algorithms.supermimic.dex_reference.buffer import ReplayBuffer
 from dexgym.algorithms.supermimic.dex_reference.engine import SuperMimicEngine
+from dexgym.algorithms.supermimic.dex_reference.networks import FailureHead
 from dexgym.tasks.direct.marvin54_tracking.policy import MotionTrackingActor
 from dexgym.tasks.direct.marvin54_tracking.task import MotionLibrary, TrackingTask
 
@@ -80,6 +81,7 @@ def test_replay_failure_features_use_the_post_transition_phase():
     task.library = library
     engine = SuperMimicEngine.__new__(SuperMimicEngine)
     engine.task = task
+    engine.transition_termination = False
     engine.fail_head = SimpleNamespace(features=lambda x, context: context)
     memory = {"frame": torch.tensor([2]), "action": torch.full((1, 54), -0.25)}
     action = torch.full((1, 1, 54), 0.5)
@@ -123,14 +125,24 @@ def test_motion_encoder_and_decoder_both_receive_actor_gradients():
         assert module[0].weight.grad.abs().sum() > 0
 
 
-def test_hard_contact_label_and_uncapped_imagination_probability():
-    task = TrackingTask.__new__(TrackingTask)
-    task.contact_dim = 3
+def test_termination_head_uses_state_and_executed_servo_target():
+    engine = SuperMimicEngine.__new__(SuperMimicEngine)
+    engine.transition_termination = True
+    engine.fail_head = FailureHead(context_dim=54, state_dim=108)
+    x = torch.randn(2, 3, 108)
+    u = torch.randn(2, 3, 54)
+    features = engine.replay_failure_features({"x": x, "u": u}, None)
+    assert torch.equal(features[..., :108], x)
+    assert torch.equal(features[..., 108:], u)
+    assert engine.fail_head(features).shape == (2, 3)
+
+
+def test_contact_reward_labels_and_clip_end():
     depth = torch.tensor([0.0, 0.0006, 0.003, 0.004])
-    labels = task.contact_labels(depth)
-    assert labels.tolist() == [[0, 0, 0], [1, 1, 0], [1, 1, 0], [1, 1, 1]]
-    assert torch.equal(task.imagined_contact_failure(labels * 0.75), labels[:, 2] * 0.75)
-    per_channel = torch.tensor([[1.0, 2.0, 4.0], [1.0, 2.0, 4.0]])
-    assert task.world_model_contact_loss(per_channel, torch.tensor([0.25, 1.0])).tolist() == [4.0, 7.0]
-    task.contact_dim = 2
-    assert task.imagined_contact_failure(task.contact_labels(depth)) is None
+    assert TrackingTask.contact_labels(depth).tolist() == [[0, 0], [1, 1], [1, 1], [1, 1]]
+    task = TrackingTask.__new__(TrackingTask)
+    task.transition_termination = True
+    task.library = MotionLibrary.__new__(MotionLibrary)
+    task.library.end = torch.tensor([2, 2, 2])
+    memory = {"frame": torch.tensor([0, 1])}
+    assert task.termination(torch.zeros(2, 108), memory).tolist() == [0.0, 1.0]

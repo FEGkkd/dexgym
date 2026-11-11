@@ -50,12 +50,7 @@ class WorldModel(nn.Module):
 
 
 class FailureHead(nn.Module):
-    """Dreamer-style continue head: P(real termination entering this imagined state).
-
-    It consumes the same privileged task/critic features built from either true
-    simulator state or the world model's predicted ``x1``; no simulator state is
-    queried inside imagination.
-    """
+    """Predict physical termination from task-defined state and context features."""
 
     def __init__(self, context_dim, state_dim):
         super().__init__()
@@ -63,8 +58,8 @@ class FailureHead(nn.Module):
         self.norm = RunningNorm(dim)
         self.net = mlp(dim, [256, 128], 1)
 
-    def features(self, x1, context):
-        return torch.cat((x1, context), -1)
+    def features(self, x, context):
+        return torch.cat((x, context), -1)
 
     def forward(self, features):
         return self.net(self.norm(features)).squeeze(-1)

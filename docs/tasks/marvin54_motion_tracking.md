@@ -10,10 +10,10 @@ collector and 8-step World Model / 32-step Actor training loop.
 | --- | --- |
 | Encode ten consecutive future reference frames as a 32-dimensional latent. Each frame contributes its 54 joint angles and 54 joint velocities. Repeat the last reference frame at a clip boundary. | User direction and SuperMimic Appendix C. Per-frame feature choice is local. |
 | The decoder uses ten chronological samples of joint angles relative to Home, joint velocities and previous bounded policy-space actions before servo mapping. Repeat the initial observation at reset. Rebuild deterministic future goals from the replay phase and preserve history through imagination. | User direction. History fields and reset padding are local choices. |
-| Use the paper widths 2048, 1024, 512, 256 for encoder and decoder, with tanh on the latent and 54 action outputs. Preserve the existing Critic and failure-head inputs for this comparison. | Paper and local choice. |
-| Compare World Model widths 384 and 2048 at 4,096 physical environments, using the same encoder, action mapping, multiscale reward, contact model, seed, replay and optimization budget. Isolate World Model initialization RNG to keep the other initial networks identical across widths. Run the 384-wide precision reward as a separate control. These tests use the one available clip. | User direction. Identical budget and the single-clip scope are local. |
-| Compare Newton and learned one-step predictions from identical reference states and executed commands. Sample the first frame and up to 16 other frames ranked by the minimum inter-hand tip distance, with at least five frames between selected samples. Each sampled phase starts with reset-padded history. Use a probability threshold of 0.5 to count missed hard contacts and false alarms within this selected sample. | User direction. The diagnostic design is local. |
-| The new World Model learns a third contact logit for measured penetration over 3 mm. Importance-weight its binary loss to correct the failure-enriched replay sampling. Use its unclipped probability in imagined continuation. Combine it with the capped generic failure probability by taking their maximum to avoid counting the same event twice. Keep legacy two-logit checkpoints loadable. | Local adaptation based on the old first-step diagnostic and review. The final old checkpoint predicted 0.575 generic failure for an 8.47 mm penetration. Imagination clipped the probability to 0.1. The safe PD action had a 0.945 generic false alarm. |
+| Use the paper widths 2048, 1024, 512, 256 for encoder and decoder, with tanh on the latent and 54 action outputs. Preserve the existing Critic inputs. | Paper and local choice. |
+| Compare World Model widths 384 and 2048 at 4,096 physical environments, using the same encoder, action mapping, multiscale reward, Termination Head, seed, replay and optimization budget. Isolate World Model initialization RNG to keep the other initial networks identical across widths. Run the 384-wide precision reward as a separate control. These tests use the one available clip. | User direction. Identical budget and the single-clip scope are local. |
+| Compare Newton and learned one-step predictions from identical reference states and executed commands. Sample the first frame and up to 16 other frames ranked by the minimum inter-hand tip distance, with at least five frames between selected samples. Each sampled phase starts with reset-padded history. Use a probability threshold of 0.5 to count missed terminations, missed hard contacts and false alarms within this selected sample. | User direction. The diagnostic design is local. |
+| Train one Termination Head on Newton's physical `terminated` signal using finite replay transitions and the existing importance-weighted binary loss. It takes current joint angles and velocities and the 54 executed servo targets. Use the full sigmoid probability from the first Actor update after World Model warmup. | User direction to include collision termination in the same head. State and executed target are local inputs chosen to predict failure over the whole control interval. |
 | The multiscale reward retains the peak weight of each tracking term. Blend 75% of the existing exponential term and 25% of a wider exponential term for pose, joint angle and relative wrist error. Use the original reward as a named control. | Local choice based on measured Home-to-reference errors. |
 
 Base commit `b7749f3eae84ddf820d9fde913eb6ab411a8decc`. Task-specific choices below are
@@ -62,18 +62,21 @@ local implementation defaults unless specified by the user.
   steps, including the case where frame zero is the only valid reset. The
   phase sampler clamps draws beyond the latest allowable reset to that phase.
   The flat-policy five-frame preview clamps to the last clip frame.
-- Physical contact labels use any penetration and depth above 0.5 mm. Joint
-  and nonfinite checks use the end-of-control-step state. Imagined continuation
-  uses a smooth joint-limit threshold, exact clip-end termination and a
-  learned, capped failure probability after warmup. Imagination starts leave
-  a full 32-step window. World model holdout is by environment, on the same
-  motion library. The reward uses position and matrix errors and penalizes
+- The World Model's two contact labels report any penetration and depth above
+  0.5 mm for reward shaping. Newton assigns the physical termination label from
+  peak penetration across ten substeps and joint-limit or nonfinite checks at
+  the control boundary. Nonfinite transitions are masked out of the training
+  losses. Imagined continuation multiplies the probability of surviving
+  physical termination by the deterministic clip-end mask. Imagination starts
+  leave a full 32-step window. World Model holdout is by environment, on the same
+  Motion Library. The reward uses position and matrix errors and penalizes
   changes in action. The previous residual modes also penalize residual magnitude.
-- Replay features used by the failure head advance to the post-transition
-  reference phase and include the executed action. Actor imagination starts
-  and observation normalization use the training environments. Evaluation
-  reports both complete episode statistics and means over the shared prefix,
-  and identifies the checkpoint, evaluated clip and nominal mode.
+- Actor imagination starts and observation normalization use the training
+  environments. Evaluation reports both complete episode statistics and means
+  over the shared prefix, and identifies the checkpoint, evaluated clip and
+  nominal mode. Earlier flat checkpoints load the legacy state-based failure
+  head from their provenance. The experimental three-contact checkpoints use
+  their original commit `3147228` for evaluation.
 
 ## Run on the Ubuntu training host
 
@@ -127,4 +130,4 @@ Keep `feedforward_seed42/model_final.pt` and
 `feedforward_seed42/provenance.json` together. The physical replay statistics
 are stored under `eval_feedforward_seed42_release/evaluation.json`.
 
-[SuperMimic paper](https://arxiv.org/abs/2610.28480) 路 [Official SuperMimic](https://github.com/HybridRobotics/supermimic) 路 [Dex-Supermimic](https://github.com/CumulusAlpha/Dex-Supermimic) 路 [TrackerLab SuperMimic](https://github.com/Renforce-Dynamics/trackerlab-supermimic)
+[SuperMimic paper](https://arxiv.org/abs/2610.28480) · [Official SuperMimic](https://github.com/HybridRobotics/supermimic) · [Dex-Supermimic](https://github.com/CumulusAlpha/Dex-Supermimic) · [TrackerLab SuperMimic](https://github.com/Renforce-Dynamics/trackerlab-supermimic)

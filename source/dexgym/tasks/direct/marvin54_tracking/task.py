@@ -125,14 +125,15 @@ class TrackingTask:
     error_floor = [0.002] * 54 + [0.05] * 54
     codec = JointCodec
 
-    def __init__(self, env, model, library, nominal, policy_arch="flat", contact_model="legacy",
+    def __init__(self, env, model, library, nominal, policy_arch="flat", termination_model="legacy-state",
                  reward_profile="precision"):
         self.env = self.reader = env
         self.device = env.device
         self.library = library
         self.geometry = TrackingGeometry(model, library, self.device)
         self.policy_arch = policy_arch
-        self.contact_dim = 3 if contact_model == "hard-contact" else 2
+        self.transition_termination = termination_model == "transition"
+        self.termination_context_dim = self.action_dim if self.transition_termination else self.context_dim
         self.reward_profile = reward_profile
         self.history_steps = HISTORY_FRAMES if policy_arch == "motion-encoder" else 1
         self.history_frame_dim = 3 * JOINTS if policy_arch == "motion-encoder" else self.context_dim
@@ -281,22 +282,17 @@ class TrackingTask:
         q = x[:, :JOINTS]
         return torch.maximum(q - self.joint_hi, self.joint_lo - q).amax(-1)
 
-    def contact_labels(self, depth):
-        thresholds = (0.0, 0.0005, HARD_CONTACT_DEPTH_M)[:self.contact_dim]
-        return torch.stack([depth > threshold for threshold in thresholds], dim=-1).float()
-
-    def imagined_contact_failure(self, probability):
-        return probability[..., 2] if self.contact_dim == 3 else None
-
-    def world_model_contact_loss(self, per_channel_loss, importance):
-        if self.contact_dim == 3:
-            return per_channel_loss[..., :2].sum(-1) + importance * per_channel_loss[..., 2]
-        return per_channel_loss.sum(-1)
+    @staticmethod
+    def contact_labels(depth):
+        return torch.stack((depth > 0.0, depth > 0.0005), dim=-1).float()
 
     def termination(self, x1, m):
+        end = self.current_goal(m) == self.library.end[m["frame"]]
+        if self.transition_termination:
+            # The learned head covers physical failures. Clip end is deterministic.
+            return end.to(x1.dtype)
         overflow = self.position_violation(x1)
         limit = torch.sigmoid((overflow - 0.05) / 0.007)
-        end = self.current_goal(m) == self.library.end[m["frame"]]
         return torch.where(end, 1.0, limit)
 
     def geometric_errors(self, x, m):
