@@ -23,7 +23,9 @@ class ReplayBuffer:
                 for k, v in transition.items()
             }
         for k, v in transition.items():
-            self.data[k][self.ptr].copy_(torch.nan_to_num(v) if v.is_floating_point() else v)
+            # Losses are formed before the validity mask is applied.
+            finite = v.nan_to_num(nan=0.0, posinf=0.0, neginf=0.0) if v.is_floating_point() else v
+            self.data[k][self.ptr].copy_(finite)
         self.ptr = (self.ptr + 1) % self.capacity
         self.size = min(self.capacity, self.size + 1)
 

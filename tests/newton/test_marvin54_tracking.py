@@ -237,3 +237,14 @@ def test_partial_safety_event_remains_a_positive_replay_sample():
     assert sampled["safety_failure"].all()
     assert not sampled["full_step"].any()
     assert sampled["mask"].all()
+
+
+def test_invalid_terminal_state_is_safe_to_mask_after_squaring():
+    buffer = ReplayBuffer(capacity=1, num_envs=1, device="cpu", holdout_fraction=0)
+    buffer.add({
+        "x1": torch.tensor([[float("inf"), -float("inf"), float("nan")]]),
+        "valid": torch.tensor([False]), "done": torch.tensor([True]), "terminated": torch.tensor([True]),
+    })
+    sampled = buffer.sample(batch=1)
+    assert sampled["x1"].square().sum().item() == 0.0
+    assert (sampled["x1"].square().mean(-1) * sampled["mask"]).sum().item() == 0.0

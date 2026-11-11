@@ -107,6 +107,8 @@ def evaluate(env, actor, clip_index, steps):
         key: torch.zeros_like(end_step)
         for key in ("failure_bits", "safety_substep", "reference_complete", "time_limit")
     }
+    failure_state = torch.zeros_like(env.state())
+    failure_wrist = failure_state.new_zeros((2, 2))
     records = {}
     baseline_name = task.baseline_name
     for i in range(count):
@@ -132,6 +134,9 @@ def evaluate(env, actor, clip_index, steps):
             records.setdefault(key, []).append(value.masked_fill(~sample[:, None], float("nan")))
         complete_intervals += active & events["full_step"]
         ended = active & (terminated | truncated)
+        failed = ended & (events["failure_bits"] != 0)
+        failure_state = torch.where(failed[:, None], env.state(), failure_state)
+        failure_wrist = torch.where(failed[:, None], values["wrist_mm"], failure_wrist)
         end_step = torch.where(ended, i + 1, end_step)
         for key, previous in endings.items():
             endings[key] = torch.where(ended, events[key], previous)
@@ -146,11 +151,13 @@ def evaluate(env, actor, clip_index, steps):
     for index, name in enumerate((baseline_name, "policy")):
         bits = int(endings["failure_bits"][index])
         failed = bits != 0
+        completed = bool(endings["reference_complete"][index])
         event_substep = int(endings["safety_substep"][index])
         event_step = int(end_step[index])
         entry = {
             "requested_steps": count, "full_clip_steps": max_steps, "terminated": failed,
-            "reference_complete": bool(endings["reference_complete"][index]),
+            "failed": failed, "episode_terminated": failed or (task.first_event and completed),
+            "reference_complete": completed,
             "time_limit": bool(endings["time_limit"][index]),
             "failure_causes": [cause for bit, cause in FAILURE_CAUSES.items() if bits & bit],
             "failure_control_step": event_step if failed else None,
@@ -159,6 +166,12 @@ def evaluate(env, actor, clip_index, steps):
             if failed else None,
             "complete_control_steps": int(complete_intervals[index]),
         }
+        if failed and torch.isfinite(failure_state[index]).all():
+            entry["failure_state"] = {
+                "joint_position_rad": failure_state[index, :JOINTS].tolist(),
+                "joint_velocity_rad_s": failure_state[index, JOINTS:].tolist(),
+            }
+            entry["failure_wrist_error_mm"] = failure_wrist[index].tolist()
         for key, frames in arrays.items():
             values = frames[:, index]
             valid = np.isfinite(values).all(axis=-1)

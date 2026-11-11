@@ -1,6 +1,7 @@
 """Compare model and physics responses to identical commands near hand contact."""
 
 import math
+
 import torch
 
 from dexgym.algorithms.supermimic.dex_reference.networks import FailureHead, WorldModel
@@ -91,20 +92,23 @@ def diagnose_model(env, actor, checkpoint, clip_index):
     }
     if task.first_event:
         result["continuation_probe"] = continuation_probe(env, actor, failure_head, clip_index, cfg["gamma"])
+        result["reference_perturbation_probe"] = reference_perturbation_probe(env, failure_head, clip_index)
     return result
 
 
 @torch.no_grad()
 def continuation_probe(env, actor, failure_head, clip_index, gamma):
-    """Reweight measured rewards to isolate the learned safety probability."""
+    """Compare safety-only and combined continuation on measured rewards."""
     task, library = env.task, env.task.library
     frame = library.start[clip_index]
     horizon = min(32, int(library.end[frame] - frame))
     obs, _ = env.reset(frame=frame.repeat(2))
     alive = torch.ones(2, dtype=torch.bool, device=env.device)
     survival = torch.ones(2, dtype=torch.float64, device=env.device)
+    combined_survival = survival.clone()
     real_return = torch.zeros_like(survival)
     weighted_return = torch.zeros_like(survival)
+    combined_return = torch.zeros_like(survival)
     executed = torch.zeros(2, dtype=torch.long, device=env.device)
     for step in range(horizon):
         x, memory, _ = task.read()
@@ -116,7 +120,10 @@ def continuation_probe(env, actor, failure_head, clip_index, gamma):
         discounted = gamma**step * torch.where(alive, reward, 0.0)
         real_return += discounted
         weighted_return += survival * discounted
+        combined_return += combined_survival * discounted
+        analytic = task.termination(env.state().nan_to_num(nan=0.0, posinf=0.0, neginf=0.0), memory).double()
         survival *= torch.where(alive, 1 - probability, 1.0)
+        combined_survival *= torch.where(alive, (1 - probability) * (1 - analytic), 1.0)
         executed += alive
         alive &= ~(terminated | truncated)
         if not alive.any():
@@ -129,8 +136,39 @@ def continuation_probe(env, actor, failure_head, clip_index, gamma):
             "executed_steps": int(executed[i]),
             "physical_discounted_reward": float(real_return[i]),
             "physical_reward_weighted_by_head": float(weighted_return[i]),
+            "physical_reward_weighted_by_combined_continuation": float(combined_return[i]),
         }
         for i, name in enumerate((task.baseline_name, "policy"))
+    }
+
+
+@torch.no_grad()
+def reference_perturbation_probe(env, failure_head, clip_index):
+    task = env.task
+    scales = (0.12, 0.24)
+    sigma = torch.tensor(scales, device=env.device)[:, None]
+    generator = torch.Generator(device=env.device).manual_seed(2026)
+    records = [[], []]
+    for frame, _ in probe_frames(task.library, clip_index):
+        frames = torch.full((2,), frame, dtype=torch.long, device=env.device)
+        for _ in range(4):
+            env.reset(frame=frames)
+            x, memory, _ = task.read()
+            reference = task.baseline_action(memory)
+            noise = torch.randn(reference.shape, generator=generator, device=env.device)
+            action = (reference + sigma * noise).clamp(-1, 1)
+            _, u = task.control_target(action, memory, task.encoder_bias)
+            p = failure_head(failure_head.features(x, u)).sigmoid()
+            _, _, _, _, events = env.step(action)
+            for i, rows in enumerate(records):
+                rows.append({
+                    "hard_contact": bool(env.transition["depth"][i] > HARD_CONTACT_DEPTH_M),
+                    "physical_terminated": bool(events["safety_failure"][i]),
+                    "termination_probability": float(p[i]),
+                })
+    return {
+        str(scale): summarize(rows)
+        for scale, rows in zip(scales, records, strict=True)
     }
 
 

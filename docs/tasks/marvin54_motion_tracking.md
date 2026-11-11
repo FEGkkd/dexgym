@@ -13,11 +13,17 @@ the control-boundary contract through their original provenance.
 | Check maximum left/right wrist position error at the control boundary. Use 0.25 m as a configurable first candidate and 0.02 m for the analytic sigmoid width in imagination. Report elbow and fingertip tracking in physical evaluation. | OpenArm §4.6 and local choice. The previous PD wrist maximum was 97.7 mm on Adjust Shelf Labels. |
 | Treat clip completion as a normal task terminal state and an optional training step cap as external truncation. Report failure, completion and truncation independently. A safety event takes precedence when several endings coincide. | User direction and local API choice. |
 | Fit fixed-duration dynamics and contact targets only on complete control intervals. A finite partial interval can supervise the one physical Termination Head. Combine its continuation with analytic tracking and clip-end continuation. | User direction. |
+| Evaluate the terminal step reward once at the latched state against the commanded reference frame. Geometry summaries use complete intervals. Retain the finite terminal state and wrist error separately for failure inspection. | Local evaluation convention. |
 | Scale each of the 54 normalized actions by the available travel on its side of fixed Home. Record both travel vectors in provenance. Use the same servo targets for physics and learned rollouts. | User direction. |
 | Allocate one eighth of each 4,096-environment batch to reference PD and one eighth to reference PD with Gaussian exploration of 0.12 in normalized action units. Use policy exploration in the rest. Keep those assignments across resets. | Local choice to maintain coverage of safe and near-contact transitions in the rolling replay. |
-| Use the original single-clip PD and checkpoint evaluations as comparators. Check the first-event contract, paired 32-step continuation-weighted returns and complete Newton rollouts before a longer run. | User direction. |
+| Use the original single-clip PD and checkpoint evaluations as comparators. The 32-step probe reweights measured rewards with safety alone and with safety plus analytic continuation. It uses measured states and ends at the short horizon. Check these diagnostics and full Newton rollouts before a longer run. | User direction and local diagnostic choice. |
+| Probe safety on separately generated reference perturbations at the diagnostic phases. Draw four pairs per phase using seed 2026 and normalized action standard deviations 0.12 and 0.24. Report error counts at probability 0.5 for both perturbation levels. | Local validation choice. |
 
-## Motion Encoder upgrade
+The evaluation artifact exposes `failed` and `episode_terminated` alongside
+`reference_complete` and `time_limit`. The historical `terminated` metric
+also reports failure for compatibility with existing reports.
+
+## Earlier control-boundary configuration
 
 Upgrade base `74dbe367956e068ceed45548011e3ee0172e2ce3`. Keep the fixed-Home
 54-joint target mapping and the Newton MJWarp task. Reuse the real-physics
