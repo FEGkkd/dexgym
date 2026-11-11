@@ -1,5 +1,43 @@
 # Marvin M6 and dual Wuji Hand2.2 motion tracking
 
+## Adjust Shelf Labels single-clip training and deployment
+
+The aligned experiment builds a separate MJCF from the packaged Hand2.2 asset
+and the 14 arm position servos in the updated teleoperation XML. The hand
+geometry, joints, actuators and contacts come from the packaged asset. Newton
+reads the same compiled gains and effort limits into its position drives.
+The reference NPZ keeps the identity of the original retargeting model.
+
+The Actor predicts 54 absolute joint targets through the asymmetric Home
+mapping. Its initialization uses a teacher fit with native MuJoCo inverse
+dynamics and repeated tracking rollouts. Newton then supplies transitions
+for the differentiable World Model, Termination Head, Actor and Critic.
+The compact deployment checkpoint contains the trained Actor. Closed-loop
+inference consumes simulated joint state, recent commands and the reference
+window at 50 Hz.
+
+On the training host, run from the Marvin tracking worktree:
+
+```bash
+run="$HOME/dexgym_data/marvin54_aris_single_clip_20261112"
+base="$PWD/source/dexgym/assets/marvin_wuji/hand2_2/generated/dual_arm_marvin.xml"
+bash scripts/supermimic/host.sh -m dexgym.tasks.direct.marvin54_tracking.sim_to_sim \
+  --reference-model "$base" \
+  --reference "$run/deploy/reference_54dof.npz" \
+  --model "$run/deploy/dual_arm_marvin.xml" \
+  --checkpoint "$run/deploy/policy.pt" \
+  --output "$run/replay"
+```
+
+The native evaluator records the reference PD and policy traces and stops a
+failed rollout at the first physical substep that crosses a safety threshold.
+The full-clip comparison uses the reset at the start of the retargeted clip.
+For matched perturbed starts in either backend, pass `--perturb-seed`.
+The evaluator adds independent Gaussian initial offsets to the 54 joint angles
+and velocities with standard deviations of 0.01 rad and 0.05 rad/s.
+See the experiment's `train.sh`, `local.sh` and checkpoint comparison for the
+exact optimization and selection settings.
+
 ## First-event task contract
 
 Base commit `fd2cfb3b94876ba4f38d51a68a63c1423254998d`. The training

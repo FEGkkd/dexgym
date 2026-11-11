@@ -1,1 +1,36 @@
-{"undeclared":[{"site":"teacher.py; train.py","decision":"Teacher optimization uses native MuJoCo inverse dynamics and repeated physical rollouts before Newton fine-tuning.","class":"semantic","resolution":"A-003 now names both backends and the exact run schedule."},{"site":"sim_to_sim.py; native.py; train.py","decision":"Perturbed-start noise and backend coverage affect robustness interpretation.","class":"semantic","resolution":"A-004 records magnitudes, clipping and matched initial-state evaluations. Newton now accepts the same seeds."}],"stale_rows":[],"semantic_undeclared":2,"verdict":"gaps","reviewer":"gpt-6-astra","review_independence":"same-family","acceptance_status":"provisional"}
+{
+  "undeclared": [
+    {
+      "site": "teacher.py; train.py",
+      "decision": "Teacher optimization uses native MuJoCo inverse dynamics and repeated physical rollouts before Newton fine-tuning.",
+      "class": "semantic",
+      "resolution": "A-003 now names both backends and the exact run schedule."
+    },
+    {
+      "site": "sim_to_sim.py; native.py; train.py",
+      "decision": "Perturbed-start noise and backend coverage affect robustness interpretation.",
+      "class": "semantic",
+      "resolution": "A-004 records magnitudes, clipping and matched initial-state evaluations. Newton now accepts the same seeds."
+    }
+  ],
+  "stale_rows": [],
+  "semantic_undeclared": 2,
+  "verdict": "gaps",
+  "reviewer": "gpt-6-astra",
+  "review_independence": "same-family",
+  "acceptance_status": "provisional",
+  "resweep": {
+    "stale_rows": [],
+    "undeclared": [
+      {
+        "decision": "Reference-window anchor uses full discounted horizon scaling without survival weighting.",
+        "class": "semantic",
+        "why_it_matters": "The convention keeps the physical teacher anchor active even when imagined survival is low.",
+        "site": "engine.py:355-358; imitation.py:94-97"
+      }
+    ],
+    "resolution": "Documented in A-006 and checked against the executor implementation.",
+    "semantic_undeclared": 1,
+    "verdict": "gaps"
+  }
+}
