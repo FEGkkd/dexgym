@@ -97,7 +97,7 @@ class NewtonTrackingEnv:
     def _physics_state(self):
         return torch.cat((self.robot.data.joint_pos.torch, self.robot.data.joint_vel.torch), -1)
 
-    def reset(self, env_ids=None, frame=None):
+    def reset(self, env_ids=None, frame=None, *, position_noise=None, velocity_noise=None):
         if env_ids is None:
             env_ids = torch.arange(self.num_envs, device=self.device)
         lib = self.task.library
@@ -106,8 +106,13 @@ class NewtonTrackingEnv:
         if frame.shape != env_ids.shape or ((frame < 0) | (frame >= lib.frames)).any():
             raise ValueError("One valid reference frame is required per resetting environment")
         self.scene.reset(env_ids)
-        self.robot.write_joint_position_to_sim_index(position=lib.qpos[frame], env_ids=env_ids)
-        self.robot.write_joint_velocity_to_sim_index(velocity=lib.qvel[frame], env_ids=env_ids)
+        q, qd = lib.qpos[frame], lib.qvel[frame]
+        if position_noise is not None:
+            q = (q + self.task.tensor(position_noise)).clamp(self.task.joint_lo, self.task.joint_hi)
+        if velocity_noise is not None:
+            qd = qd + self.task.tensor(velocity_noise)
+        self.robot.write_joint_position_to_sim_index(position=q, env_ids=env_ids)
+        self.robot.write_joint_velocity_to_sim_index(velocity=qd, env_ids=env_ids)
         self.command[env_ids] = lib.qpos[frame]
         self.robot.actuators.target_command.set_position_index(value=self.command, full_data=True)
         self.memory = {k: v.clone() for k, v in self.memory.items()}

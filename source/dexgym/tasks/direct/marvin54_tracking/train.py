@@ -16,7 +16,7 @@ from dexgym.assets.marvin_wuji.robot_cfg import PACKAGED_MJCF
 
 from .diagnostics import diagnose_model
 from .imitation import PhysicalTeacher
-from .model import sha256, validate_drive_only_model
+from .model import initial_perturbation, sha256, validate_drive_only_model
 from .native import FAILURE_CAUSES, PHYSICS_DT, NewtonTrackingEnv, simulation_cfg
 from .task import DT, FUTURE_FRAMES, IMAGINATION_STEPS, JOINTS, MOTION_LATENT_DIM, TASK_ID, MotionLibrary
 
@@ -94,14 +94,14 @@ def check_contract(env):
 
 
 @torch.no_grad()
-def evaluate(env, actor, clip_index, steps):
+def evaluate(env, actor, clip_index, steps, *, perturb_seed=None, trace_dir=None):
     if env.num_envs != 2:
         raise ValueError("Evaluation requires two environments for a matched rollout")
     task, lib = env.task, env.task.library
     frame = lib.start[clip_index]
     max_steps = int(lib.end[frame] - frame)
     count = max_steps if steps is None else min(max_steps, steps)
-    obs, _ = env.reset(frame=frame.repeat(2))
+    obs, _ = env.reset(frame=frame.repeat(2), **initial_perturbation(perturb_seed, JOINTS))
     active = torch.ones(2, dtype=torch.bool, device=env.device)
     end_step = torch.zeros(2, dtype=torch.long, device=env.device)
     complete_intervals = torch.zeros_like(end_step)
@@ -112,6 +112,8 @@ def evaluate(env, actor, clip_index, steps):
     failure_state = torch.zeros_like(env.state())
     failure_wrist = failure_state.new_zeros((2, 2))
     records = {}
+    if trace_dir is not None:
+        trace = {"state": [env.state().clone()], "target": [], "action": [], "depth_m": [], "substep": []}
     baseline_name = task.baseline_name
     for i in range(count):
         m = env.memory
@@ -119,6 +121,12 @@ def evaluate(env, actor, clip_index, steps):
         action[~active] = 0.0
         action[0] = task.baseline_action(m)[0]
         obs, reward, terminated, truncated, events = env.step(action)
+        if trace_dir is not None:
+            trace["state"].append(env.state().clone())
+            trace["target"].append(env.transition["u"].clone())
+            trace["action"].append(action.clone())
+            trace["depth_m"].append(env.transition["depth"].clone())
+            trace["substep"].append(events["safety_substep"].clone())
         e = task.geometric_errors(env.state(), m)
         values = {
             "wrist_mm": e["wrist"].norm(dim=-1) * 1000,
@@ -207,6 +215,18 @@ def evaluate(env, actor, clip_index, steps):
                 if valid.any():
                     shared[key] = float(values[valid, i].mean())
             result[name]["matched_mean"] = shared
+    if trace_dir is not None:
+        trace = {key: torch.stack(value).cpu().numpy() for key, value in trace.items()}
+        for i, name in enumerate((baseline_name, "policy")):
+            n = result[name]["executed_steps"]
+            time_s = np.arange(n + 1, dtype=float) * DT
+            if trace["substep"][n - 1, i]:
+                time_s[-1] = (n - 1) * DT + trace["substep"][n - 1, i] * PHYSICS_DT
+            np.savez_compressed(
+                trace_dir / f"{name}.npz", qpos=trace["state"][:n + 1, i, :JOINTS],
+                qvel=trace["state"][:n + 1, i, JOINTS:], time_s=time_s,
+                **{k: trace[k][:n, i] for k in ("target", "action", "depth_m")},
+            )
     return result
 
 
@@ -263,6 +283,8 @@ def main():
     parser.add_argument("--teacher-weight", type=float, default=1.0)
     parser.add_argument("--model-probe-only", action="store_true")
     parser.add_argument("--eval-steps", type=int)
+    parser.add_argument("--perturb-seed", type=int, help="Match the native MuJoCo evaluation reset perturbations")
+    parser.add_argument("--save-eval-trace", action="store_true")
     parser.add_argument("--clip-index", type=int, default=0)
     parser.add_argument("--nominal", choices=("home", "reference", "feedforward"))
     parser.add_argument("--policy-arch", choices=("motion-encoder", "flat"))
@@ -291,6 +313,8 @@ def main():
         parser.error("--model-probe-only requires --evaluate")
     if args.model_probe_only and args.skip_model_probe:
         parser.error("Cannot skip the model probe in probe-only mode")
+    if (args.perturb_seed is not None or args.save_eval_trace) and not args.evaluate:
+        parser.error("Evaluation reset perturbation and tracing require --evaluate")
     if args.teacher and (args.evaluate or args.check_only or args.bc_steps <= 0):
         parser.error("--teacher requires training with positive --bc-steps")
     if not np.isfinite(args.teacher_weight) or args.teacher_weight < 0:
@@ -402,6 +426,7 @@ def main():
                 "action_mapping": provenance.get("action_mapping"),
                 "residual_scale_rad": env.task.scale.tolist(),
                 "seed": args.seed,
+                "perturb_seed": args.perturb_seed,
             }
             if not args.skip_model_probe:
                 probe = diagnose_model(env, actor, payload, args.clip_index)
@@ -409,7 +434,8 @@ def main():
                 print("TRACKING_MODEL_PROBE", json.dumps(probe["counts"]), flush=True)
             if args.model_probe_only:
                 return
-            result = evaluate(env, actor, args.clip_index, args.eval_steps)
+            result = evaluate(env, actor, args.clip_index, args.eval_steps, perturb_seed=args.perturb_seed,
+                              trace_dir=args.output if args.save_eval_trace else None)
             write_json(args.output / "evaluation.json", {**metadata, "metrics": result})
             print("TRACKING_EVALUATION", json.dumps(result), flush=True)
             return

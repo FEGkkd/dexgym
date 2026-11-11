@@ -9,7 +9,7 @@ import mujoco
 import numpy as np
 import torch
 
-from .model import drive_parameters, sha256, validate_drive_only_model
+from .model import drive_parameters, initial_perturbation, sha256, validate_drive_only_model
 from .task import DT, HARD_CONTACT_DEPTH_M, JOINT_OVERFLOW_RAD, JOINTS, TASK_ID, MotionLibrary, TrackingTask
 
 
@@ -169,10 +169,7 @@ def main():
             raise ValueError("Checkpoint task or format mismatch")
         actor = env.task.make_actor().eval()
         actor.load_state_dict(payload["modules"]["actor"])
-    perturb = {}
-    if args.perturb_seed is not None:
-        rng = np.random.default_rng(args.perturb_seed)
-        perturb = dict(position_noise=rng.normal(0, 0.01, JOINTS), velocity_noise=rng.normal(0, 0.05, JOINTS))
+    perturb = initial_perturbation(args.perturb_seed, JOINTS)
     args.output.mkdir(parents=True, exist_ok=True)
     result = {
         "backend": "native MuJoCo", "model_sha256": model_hash, "motion_sha256": library.sha256,

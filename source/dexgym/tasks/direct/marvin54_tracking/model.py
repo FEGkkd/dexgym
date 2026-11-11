@@ -13,6 +13,13 @@ import numpy as np
 ARM_JOINTS = tuple(f"Joint{i}_{side}" for side in ("L", "R") for i in range(1, 8))
 
 
+def initial_perturbation(seed, joints=54):
+    if seed is None:
+        return {}
+    rng = np.random.default_rng(seed)
+    return dict(position_noise=rng.normal(0, 0.01, joints), velocity_noise=rng.normal(0, 0.05, joints))
+
+
 def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
