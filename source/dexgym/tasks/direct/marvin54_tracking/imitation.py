@@ -90,3 +90,8 @@ class PhysicalTeacher:
                 losses.append(dict(step=step + 1, target_loss=loss.item()))
                 print("ACTOR_INITIALIZATION", json.dumps(losses[-1]), flush=True)
         return losses
+
+    def anchor(self, actor, batch_size=256):
+        obs, state, memory = self.batch(batch_size)
+        _, target = self.task.control_target(actor(obs), memory, None)
+        return self.penalty(state, memory, target).mean()

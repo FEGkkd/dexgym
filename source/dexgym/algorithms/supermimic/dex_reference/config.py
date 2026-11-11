@@ -20,6 +20,7 @@ class SuperMimicConfig:
     wm_batch: int = 2048
     wm_hidden: tuple = (2048, 2048, 2048)
     isolate_wm_init: bool = False
+    control_error_features: bool = False
     pi_batch: int = 1024
     horizon: int = 32
     critic_epochs: int = 5

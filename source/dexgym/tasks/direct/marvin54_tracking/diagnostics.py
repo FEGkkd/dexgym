@@ -28,9 +28,11 @@ def probe_frames(library, clip_index, count=16):
 def diagnose_model(env, actor, checkpoint, clip_index):
     task, lib = env.task, env.task.library
     cfg = checkpoint["config"]
+    control_error = cfg.get("control_error_features", False)
     wm = WorldModel(task.dynamics_dim, task.contact_dim, task.codec, task.action_dim, task.error_floor,
-                    tuple(cfg["wm_hidden"]), False).to(env.device)
-    failure_head = FailureHead(task.termination_context_dim, task.state_dim).to(env.device)
+                    tuple(cfg["wm_hidden"]), False, control_error_features=control_error).to(env.device)
+    failure_head = FailureHead(task.termination_context_dim, task.state_dim,
+                               control_error_features=control_error).to(env.device)
     wm.load_state_dict(checkpoint["modules"]["wm"])
     failure_head.load_state_dict(checkpoint["modules"]["fail_head"])
     wm.eval()
@@ -162,12 +164,14 @@ def reference_perturbation_probe(env, failure_head, clip_index):
             _, _, _, _, events = env.step(action)
             for i, rows in enumerate(records):
                 rows.append({
+                    "frame": frame - int(task.library.start[clip_index]),
+                    "max_real_penetration_mm": float(env.transition["depth"][i] * 1000),
                     "hard_contact": bool(env.transition["depth"][i] > HARD_CONTACT_DEPTH_M),
                     "physical_terminated": bool(events["safety_failure"][i]),
                     "termination_probability": float(p[i]),
                 })
     return {
-        str(scale): summarize(rows)
+        str(scale): {**summarize(rows), "samples_detail": rows}
         for scale, rows in zip(scales, records, strict=True)
     }
 
@@ -177,10 +181,17 @@ def summarize(rows):
     hard_contacts = sum(row["hard_contact"] for row in rows)
     false_negatives = sum(row["physical_terminated"] and row["termination_probability"] < 0.5 for row in rows)
     false_positives = sum(not row["physical_terminated"] and row["termination_probability"] >= 0.5 for row in rows)
+    positive_p = [row["termination_probability"] for row in rows if row["physical_terminated"]]
+    negative_p = [row["termination_probability"] for row in rows if not row["physical_terminated"]]
+    auc = (sum((p > n) + 0.5 * (p == n) for p in positive_p for n in negative_p)
+           / (len(positive_p) * len(negative_p))) if positive_p and negative_p else None
     return {
         "samples": len(rows), "physical_terminations": positives, "hard_contacts": hard_contacts,
         "missed_hard_contacts": sum(row["hard_contact"] and row["termination_probability"] < 0.5 for row in rows),
         "false_negatives": false_negatives, "false_positives": false_positives,
         "false_negative_rate": false_negatives / positives if positives else None,
         "false_positive_rate": false_positives / (len(rows) - positives) if positives < len(rows) else None,
+        "roc_auc": auc,
+        "positive_probability_range": [min(positive_p), max(positive_p)] if positive_p else None,
+        "negative_probability_range": [min(negative_p), max(negative_p)] if negative_p else None,
     }

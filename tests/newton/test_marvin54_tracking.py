@@ -7,9 +7,23 @@ import torch
 
 from dexgym.algorithms.supermimic.dex_reference.buffer import ReplayBuffer
 from dexgym.algorithms.supermimic.dex_reference.engine import SuperMimicEngine
-from dexgym.algorithms.supermimic.dex_reference.networks import FailureHead
+from dexgym.algorithms.supermimic.dex_reference.networks import FailureHead, WorldModel
 from dexgym.tasks.direct.marvin54_tracking.policy import MotionTrackingActor
 from dexgym.tasks.direct.marvin54_tracking.task import MotionLibrary, TrackingTask
+
+
+def test_servo_error_features_keep_the_executed_target_gradient():
+    state = torch.tensor([[0.4, -0.1, 0.5, 0.9]])
+    target = torch.tensor([[0.2, 0.3]], requires_grad=True)
+    wm = WorldModel(4, 2, TrackingTask.codec, 2, [0.01] * 4, (8,), False, control_error_features=True)
+    failure = FailureHead(2, 4, control_error_features=True)
+    expected = torch.tensor([[0.4, -0.1, 0.5, 0.9, -0.2, 0.4]])
+    wm_features = wm.inputs(state, target)
+    safety_features = failure.features(state, target)
+    torch.testing.assert_close(wm_features, expected)
+    torch.testing.assert_close(safety_features, expected)
+    (wm_features.sum() + safety_features.sum()).backward()
+    torch.testing.assert_close(target.grad, torch.full_like(target, 2))
 
 
 def test_home_action_does_not_depend_on_reference_phase():

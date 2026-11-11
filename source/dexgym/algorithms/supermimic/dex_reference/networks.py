@@ -8,12 +8,14 @@ from .common import EmpiricalNorm, RunningNorm, mlp
 
 
 class WorldModel(nn.Module):
-    def __init__(self, dynamics_dim, contact_dim, codec, action_dim, error_floor, hidden=(2048, 2048, 2048), amp=True):
+    def __init__(self, dynamics_dim, contact_dim, codec, action_dim, error_floor, hidden=(2048, 2048, 2048),
+                 amp=True, *, control_error_features=False):
         super().__init__()
         self.codec = codec
         self.delta_dim = len(error_floor)
         self.contact_dim = contact_dim
         self.amp = amp
+        self.control_error_features = control_error_features
         # Dynamics context contains physical state, startup simulator parameters
         # and the measured/sampled transition disturbance. Task command state is
         # deliberately absent: it is recursively derived after each WM step.
@@ -34,6 +36,8 @@ class WorldModel(nn.Module):
         self.register_buffer("error_floor", torch.as_tensor(error_floor, dtype=torch.float32))
 
     def inputs(self, dynamics, u):
+        if self.control_error_features:
+            u = u - dynamics[..., :u.shape[-1]]
         return torch.cat((dynamics, u), -1)
 
     def forward(self, x, u, dynamics):
@@ -52,13 +56,16 @@ class WorldModel(nn.Module):
 class FailureHead(nn.Module):
     """Predict physical termination from task-defined state and context features."""
 
-    def __init__(self, context_dim, state_dim):
+    def __init__(self, context_dim, state_dim, *, control_error_features=False):
         super().__init__()
         dim = state_dim + context_dim
         self.norm = RunningNorm(dim)
         self.net = mlp(dim, [256, 128], 1)
+        self.control_error_features = control_error_features
 
     def features(self, x, context):
+        if self.control_error_features:
+            context = context - x[..., :context.shape[-1]]
         return torch.cat((x, context), -1)
 
     def forward(self, features):

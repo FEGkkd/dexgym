@@ -279,8 +279,14 @@ def main():
     parser.add_argument("--skip-model-probe", action="store_true")
     parser.add_argument("--teacher", type=Path, help="Single-clip teaching trajectory used during training")
     parser.add_argument("--bc-steps", type=int, default=5000)
+    parser.add_argument("--init-actor", type=Path, help="Reuse Actor initialization from the same task and motion")
     parser.add_argument("--actor-lr", type=float)
     parser.add_argument("--teacher-weight", type=float, default=1.0)
+    parser.add_argument("--teacher-anchor", choices=("imagined", "reference"), default="imagined")
+    parser.add_argument("--actor-output-only", action="store_true")
+    parser.add_argument("--control-error-features", action="store_true")
+    parser.add_argument("--collection-noise-mix", action="store_true")
+    parser.add_argument("--imagination-steps", type=int, default=IMAGINATION_STEPS)
     parser.add_argument("--model-probe-only", action="store_true")
     parser.add_argument("--eval-steps", type=int)
     parser.add_argument("--perturb-seed", type=int, help="Match the native MuJoCo evaluation reset perturbations")
@@ -315,8 +321,12 @@ def main():
         parser.error("Cannot skip the model probe in probe-only mode")
     if (args.perturb_seed is not None or args.save_eval_trace) and not args.evaluate:
         parser.error("Evaluation reset perturbation and tracing require --evaluate")
-    if args.teacher and (args.evaluate or args.check_only or args.bc_steps <= 0):
-        parser.error("--teacher requires training with positive --bc-steps")
+    if args.teacher and (args.evaluate or args.check_only or (not args.init_actor and args.bc_steps <= 0)):
+        parser.error("--teacher requires training with Actor initialization")
+    if (args.init_actor or args.actor_output_only) and not args.teacher:
+        parser.error("These Actor initialization options require --teacher")
+    if not 1 <= args.imagination_steps <= IMAGINATION_STEPS:
+        parser.error(f"--imagination-steps must be in [1, {IMAGINATION_STEPS}]")
     if not np.isfinite(args.teacher_weight) or args.teacher_weight < 0:
         parser.error("--teacher-weight must be finite and nonnegative")
     if args.actor_lr is not None and (not np.isfinite(args.actor_lr) or args.actor_lr <= 0):
@@ -348,6 +358,8 @@ def main():
         or not np.isfinite(args.tracking_failure_m) or args.tracking_failure_m <= 0
     ):
         parser.error("First-event tracking requires transition termination and a positive finite wrist threshold")
+    if (args.control_error_features or args.collection_noise_mix) and not first_event:
+        parser.error("Control-error features and mixed exploration require first-event transition semantics")
     tracking_failure_m = args.tracking_failure_m if first_event else None
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -442,16 +454,20 @@ def main():
         if args.teacher:
             provenance["actor_initialization"] = dict(
                 teacher=str(args.teacher.resolve()), teacher_sha256=sha256(args.teacher),
-                bc_steps=args.bc_steps, regularization_weight=args.teacher_weight,
+                bc_steps=0 if args.init_actor else args.bc_steps, regularization_weight=args.teacher_weight,
+                checkpoint=str(args.init_actor.resolve()) if args.init_actor else None,
+                teacher_anchor=args.teacher_anchor, output_layer_only=args.actor_output_only,
                 freeze_observation_norm=True,
             )
+        provenance["collection_noise_mix"] = args.collection_noise_mix
+        env.task.collection_noise_mix = args.collection_noise_mix
         write_json(args.output / "provenance.json", provenance)
         default_noise = 0.045 if args.nominal == "home" else 0.12
         recipe = SuperMimicConfig(
             seed=args.seed, max_iterations=args.iterations, buffer_steps=args.buffer_steps, warmup_steps=args.warmup_steps,
             wm_only_iters=args.wm_only_iters, wm_window=8, wm_batches=args.wm_batches, wm_batch=args.wm_batch,
             wm_hidden=(args.wm_width,) * 3, isolate_wm_init=True, pi_batch=args.pi_batch,
-            horizon=IMAGINATION_STEPS, critic_epochs=5,
+            horizon=args.imagination_steps, critic_epochs=5, control_error_features=args.control_error_features,
             actor_lr=args.actor_lr,
             action_noise=default_noise if args.action_noise is None else args.action_noise,
             failure_warmup_iters=0 if env.task.transition_termination else 10,
@@ -462,11 +478,30 @@ def main():
         engine = SuperMimicEngine(env.task, recipe, args.output)
         if args.teacher:
             teacher = PhysicalTeacher(env.task, args.teacher, provenance["model_sha256"])
-            losses = teacher.initialize(engine.actor, args.bc_steps)
-            write_json(args.output / "actor_initialization.json", losses)
+            if args.init_actor:
+                origin = json.loads((args.init_actor.parent / "provenance.json").read_text())
+                if any(origin.get(k) != provenance[k] for k in (
+                    "task_id", "model_sha256", "motion_sha256", "joint_names", "action_mapping",
+                    "policy_arch", "task_contract",
+                )):
+                    raise ValueError("Actor initialization provenance differs from this task")
+                initial = torch.load(args.init_actor, map_location=env.device, weights_only=False)
+                if initial["format_version"] != 1 or initial["task_id"] != TASK_ID:
+                    raise ValueError("Actor initialization task or format mismatch")
+                engine.actor.load_state_dict(initial["modules"]["actor"])
+                del initial
+            else:
+                losses = teacher.initialize(engine.actor, args.bc_steps)
+                write_json(args.output / "actor_initialization.json", losses)
+            if args.actor_output_only:
+                engine.actor.requires_grad_(False)
+                engine.actor.decoder[-1].requires_grad_(True)
             env.task.freeze_actor_norm = True
             if args.teacher_weight:
-                env.task.actor_regularization = lambda x, m, u: args.teacher_weight * teacher.penalty(x, m, u)
+                if args.teacher_anchor == "reference":
+                    env.task.actor_reference_anchor = lambda actor: args.teacher_weight * teacher.anchor(actor)
+                else:
+                    env.task.actor_regularization = lambda x, m, u: args.teacher_weight * teacher.penalty(x, m, u)
             engine.save(args.output / "model_bc.pt")
         engine.learn()
         proof = {"sim_transitions": engine.sim_steps, "optimizer_steps": optimizer_steps(engine),

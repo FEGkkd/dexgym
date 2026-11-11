@@ -127,6 +127,7 @@ class TrackingTask:
     error_floor = [0.002] * 54 + [0.05] * 54
     codec = JointCodec
     first_event = False
+    collection_noise_mix = False
 
     def __init__(self, env, model, library, nominal, policy_arch="flat", termination_model="legacy-state",
                  reward_profile="precision", *, first_event=False, tracking_failure_m=0.25):
@@ -292,7 +293,11 @@ class TrackingTask:
         if self.collection_roles is None:
             return policy_action
         reference = self.baseline_action(memory)
-        perturbed = (reference + 0.12 * torch.randn_like(reference)).clamp(-1, 1)
+        scale = 0.12
+        if self.collection_noise_mix:
+            scales = reference.new_tensor([0.015, 0.05, 0.12, 0.24])
+            scale = scales[torch.randint(len(scales), (len(reference), 1), device=reference.device)]
+        perturbed = (reference + scale * torch.randn_like(reference)).clamp(-1, 1)
         action = torch.where(self.collection_roles[:, None] == 1, reference, perturbed)
         return torch.where(self.collection_roles[:, None] == 0, policy_action, action)
 

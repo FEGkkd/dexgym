@@ -40,10 +40,12 @@ class SuperMimicEngine:
             self.wm = WorldModel(
                 task.dynamics_dim, task.contact_dim, task.codec, task.action_dim,
                 task.error_floor, cfg.wm_hidden, cfg.amp,
+                control_error_features=cfg.control_error_features,
             ).to(self.device)
         self.transition_termination = getattr(task, "transition_termination", False)
         termination_context_dim = getattr(task, "termination_context_dim", task.context_dim)
-        self.fail_head = FailureHead(termination_context_dim, task.state_dim).to(self.device)
+        self.fail_head = FailureHead(termination_context_dim, task.state_dim,
+                                     control_error_features=cfg.control_error_features).to(self.device)
         self.critic = Critic(task.context_dim, cfg.amp).to(self.device)
         self.torque_norm = RunningNorm(task.action_dim, eps=1e-3).to(self.device)
         self.optimizers = {k: torch.optim.Adam(v.parameters(), lr=cfg.lr) for k, v in self.modules().items()}
@@ -312,6 +314,7 @@ class SuperMimicEngine:
         objective = x.new_zeros(x.shape[0])
         behavior_penalty = x.new_zeros(x.shape[0])
         regularize = getattr(t, "actor_regularization", None)
+        reference_anchor = getattr(t, "actor_reference_anchor", None)
         try:
             for step in range(c.horizon):
                 context = self.task_features(x, m, aux, sim)
@@ -349,6 +352,10 @@ class SuperMimicEngine:
             final = t.critic(self.task_features(x, m, aux, sim))
             inputs.append(final)
             objective = objective + c.gamma**c.horizon * survival * self.critic(final)
+            if reference_anchor is not None:
+                behavior_penalty = behavior_penalty + sum(c.gamma ** step for step in range(c.horizon)) * (
+                    reference_anchor(self.step_actor)
+                )
             actor_loss = (behavior_penalty - objective).mean()
             self.optimize("actor", actor_loss)
         finally:
