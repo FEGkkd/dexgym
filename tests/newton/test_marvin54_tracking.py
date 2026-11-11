@@ -6,6 +6,7 @@ import torch
 
 from dexgym.algorithms.supermimic.dex_reference.buffer import ReplayBuffer
 from dexgym.algorithms.supermimic.dex_reference.engine import SuperMimicEngine
+from dexgym.tasks.direct.marvin54_tracking.policy import MotionTrackingActor
 from dexgym.tasks.direct.marvin54_tracking.task import MotionLibrary, TrackingTask
 
 
@@ -89,3 +90,47 @@ def test_replay_failure_features_use_the_post_transition_phase():
     features = engine.replay_failure_features(replay, torch.zeros(1, 1))
     assert features[0, 0, 108].item() == 4
     assert features[0, 0, -1].item() == 0.5
+
+
+def test_motion_actor_reconstructs_the_same_goals_from_replay_phase():
+    library = MotionLibrary.__new__(MotionLibrary)
+    library.end = torch.tensor([2, 2, 2, 5, 5, 5])
+    library.qpos = torch.arange(6).float()[:, None].expand(6, 54)
+    library.qvel = library.qpos + 100
+    task = TrackingTask.__new__(TrackingTask)
+    task.policy_arch = "motion-encoder"
+    task.library = library
+    task.history_steps, task.history_frame_dim, task.history_dim = 10, 162, 1620
+    task.future_offsets = torch.arange(1, 11)
+    history = torch.arange(1620).float().expand(2, -1).reshape(2, 10, 162)
+    memory = {"frame": torch.tensor([0, 4])}
+    actor_input = task.observation_from_history(history, memory)
+    assert actor_input.shape == (2, 2700)
+    goals = actor_input[:, 1620:].reshape(2, 10, 108)
+    assert goals[0, :, 0].tolist() == [1.0] + [2.0] * 9
+    assert goals[1, :, 54].tolist() == [105.0] * 10
+    saved = task.replay_observation(actor_input)
+    assert torch.equal(task.observation_from_history(task.history_from_obs(saved), memory), actor_input)
+
+
+def test_motion_encoder_and_decoder_both_receive_actor_gradients():
+    actor = MotionTrackingActor(1620, 1080, 54)
+    obs = torch.randn(2, 2700)
+    action = actor(obs)
+    assert action.shape == (2, 54) and action.abs().max() <= 1
+    action.square().sum().backward()
+    for module in (actor.encoder, actor.decoder):
+        assert module[0].weight.grad.abs().sum() > 0
+
+
+def test_hard_contact_label_and_uncapped_imagination_probability():
+    task = TrackingTask.__new__(TrackingTask)
+    task.contact_dim = 3
+    depth = torch.tensor([0.0, 0.0006, 0.003, 0.004])
+    labels = task.contact_labels(depth)
+    assert labels.tolist() == [[0, 0, 0], [1, 1, 0], [1, 1, 0], [1, 1, 1]]
+    assert torch.equal(task.imagined_contact_failure(labels * 0.75), labels[:, 2] * 0.75)
+    per_channel = torch.tensor([[1.0, 2.0, 4.0], [1.0, 2.0, 4.0]])
+    assert task.world_model_contact_loss(per_channel, torch.tensor([0.25, 1.0])).tolist() == [4.0, 7.0]
+    task.contact_dim = 2
+    assert task.imagined_contact_failure(task.contact_labels(depth)) is None

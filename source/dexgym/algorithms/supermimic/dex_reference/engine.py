@@ -30,10 +30,17 @@ class SuperMimicEngine:
         self.log_dir.mkdir(parents=True, exist_ok=True)
         self.obs = self.env.reset()[0]["policy"]
         self.env.max_common_steps = cfg.warmup_steps + int(cfg.max_iterations / cfg.utd)
-        self.actor = Actor(task.policy_dim, task.action_dim).to(self.device)
-        self.wm = WorldModel(
-            task.dynamics_dim, task.contact_dim, task.codec, task.action_dim, task.error_floor, cfg.wm_hidden, cfg.amp
-        ).to(self.device)
+        actor_factory = getattr(task, "make_actor", None)
+        self.actor = (actor_factory() if actor_factory is not None else Actor(task.policy_dim, task.action_dim))
+        self.actor.to(self.device)
+        # Keep the initialization of the other networks comparable across WM widths.
+        with torch.random.fork_rng(devices=[], enabled=cfg.isolate_wm_init):
+            if cfg.isolate_wm_init:
+                torch.random.default_generator.manual_seed(cfg.seed + 1)
+            self.wm = WorldModel(
+                task.dynamics_dim, task.contact_dim, task.codec, task.action_dim,
+                task.error_floor, cfg.wm_hidden, cfg.amp,
+            ).to(self.device)
         self.fail_head = FailureHead(task.context_dim, task.state_dim).to(self.device)
         self.critic = Critic(task.context_dim, cfg.amp).to(self.device)
         self.torque_norm = RunningNorm(task.action_dim, eps=1e-3).to(self.device)
@@ -60,6 +67,7 @@ class SuperMimicEngine:
     @torch.no_grad()
     def collect(self, steps):
         stats = []
+        replay_obs = getattr(self.task, "replay_observation", None)
         for _ in range(steps):
             x, m, aux = self.task.read()
             sim = self.task.simulator_context
@@ -124,7 +132,7 @@ class SuperMimicEngine:
                 c=c,
                 action=action,
                 m=self.task.encode_memory(m),
-                obs=self.obs,
+                obs=self.obs if replay_obs is None else replay_obs(self.obs),
                 aux=aux,
                 contact=cap["contact"],
                 torque=cap["torque"],
@@ -174,11 +182,13 @@ class SuperMimicEngine:
         state_losses = []
         contact_losses = []
         features = []
+        contact_loss = getattr(t, "world_model_contact_loss", None)
         std = torch.maximum(self.wm.delta_norm.std(), self.wm.error_floor)
         for j in range(c.wm_window):
             x1, contact = self.step_wm(x, w["u"][:, j], self.wm_features(x, sim, aux))
             sl = (t.codec.difference(x1, w["x1"][:, j]) / std).square().mean(-1)
-            cl = F.binary_cross_entropy_with_logits(contact, w["contact"][:, j], reduction="none").sum(-1)
+            per_channel = F.binary_cross_entropy_with_logits(contact, w["contact"][:, j], reduction="none")
+            cl = per_channel.sum(-1) if contact_loss is None else contact_loss(per_channel, w["importance"][:, j])
             losses.append(c.final_state_weight * sl + c.contact_weight * cl)
             state_losses.append(sl)
             contact_losses.append(cl)
@@ -271,6 +281,8 @@ class SuperMimicEngine:
         x = w["x"]
         m = t.decode_memory(w["m"])
         history = t.history_from_obs(w["obs"])
+        observation_from_history = getattr(t, "observation_from_history", None)
+        contact_failure = getattr(t, "imagined_contact_failure", None)
         aux = w["aux"]
         sim = w["sim_context"]
         bias = t.encoder_bias[w["env"]]
@@ -286,17 +298,25 @@ class SuperMimicEngine:
             for step in range(c.horizon):
                 context = self.task_features(x, m, aux, sim)
                 inputs.append(t.critic(context))
-                action = self.step_actor(t.flatten_history(history))
+                observation = (
+                    t.flatten_history(history) if observation_from_history is None
+                    else observation_from_history(history, m)
+                )
+                action = self.step_actor(observation)
                 target, u = t.control_target(action, m, bias)
                 x1, contact = self.step_wm(x, u, self.wm_features(x, sim, aux))
                 torque = t.torque(x, u, sim)
-                reward, cage, _ = self.reward_step(x1, m, action, target, contact.sigmoid(), torque, soft=True)
+                contact_probability = contact.sigmoid()
+                reward, cage, _ = self.reward_step(x1, m, action, target, contact_probability, torque, soft=True)
                 done = t.termination(x1, m)
                 next_m = t.advance_memory(x1, m, action, target, cage, t.sample_goal(x.shape[0]))
+                failure = contact_failure(contact_probability) if contact_failure is not None else None
                 if c.failure_head and self.iteration >= c.wm_only_iters + c.failure_warmup_iters:
                     next_context = self.task_features(x1, next_m, aux, sim)
                     fail = self.fail_head(self.fail_head.features(x1, next_context)).sigmoid().clamp(max=c.failure_clip)
-                    done = 1 - (1 - done) * (1 - fail)
+                    failure = fail if failure is None else torch.maximum(failure, fail)
+                if failure is not None:
+                    done = 1 - (1 - done) * (1 - failure)
                 objective = objective + c.gamma**step * survival * reward
                 survival = survival * (1 - done)
                 rewards.append(reward.detach())

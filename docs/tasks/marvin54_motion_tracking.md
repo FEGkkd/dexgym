@@ -1,5 +1,21 @@
 # Marvin M6 and dual Wuji Hand2.2 motion tracking
 
+## Motion Encoder upgrade
+
+Upgrade base `74dbe367956e068ceed45548011e3ee0172e2ce3`. Keep the fixed-Home
+54-joint target mapping and the Newton MJWarp task. Reuse the real-physics
+collector and 8-step World Model / 32-step Actor training loop.
+
+| Choice | Source |
+| --- | --- |
+| Encode ten consecutive future reference frames as a 32-dimensional latent. Each frame contributes its 54 joint angles and 54 joint velocities. Repeat the last reference frame at a clip boundary. | User direction and SuperMimic Appendix C. Per-frame feature choice is local. |
+| The decoder uses ten chronological samples of joint angles relative to Home, joint velocities and previous bounded policy-space actions before servo mapping. Repeat the initial observation at reset. Rebuild deterministic future goals from the replay phase and preserve history through imagination. | User direction. History fields and reset padding are local choices. |
+| Use the paper widths 2048, 1024, 512, 256 for encoder and decoder, with tanh on the latent and 54 action outputs. Preserve the existing Critic and failure-head inputs for this comparison. | Paper and local choice. |
+| Compare World Model widths 384 and 2048 at 4,096 physical environments, using the same encoder, action mapping, multiscale reward, contact model, seed, replay and optimization budget. Isolate World Model initialization RNG to keep the other initial networks identical across widths. Run the 384-wide precision reward as a separate control. These tests use the one available clip. | User direction. Identical budget and the single-clip scope are local. |
+| Compare Newton and learned one-step predictions from identical reference states and executed commands. Sample the first frame and up to 16 other frames ranked by the minimum inter-hand tip distance, with at least five frames between selected samples. Each sampled phase starts with reset-padded history. Use a probability threshold of 0.5 to count missed hard contacts and false alarms within this selected sample. | User direction. The diagnostic design is local. |
+| The new World Model learns a third contact logit for measured penetration over 3 mm. Importance-weight its binary loss to correct the failure-enriched replay sampling. Use its unclipped probability in imagined continuation. Combine it with the capped generic failure probability by taking their maximum to avoid counting the same event twice. Keep legacy two-logit checkpoints loadable. | Local adaptation based on the old first-step diagnostic and review. The final old checkpoint predicted 0.575 generic failure for an 8.47 mm penetration. Imagination clipped the probability to 0.1. The safe PD action had a 0.945 generic false alarm. |
+| The multiscale reward retains the peak weight of each tracking term. Blend 75% of the existing exponential term and 25% of a wider exponential term for pose, joint angle and relative wrist error. Use the original reward as a named control. | Local choice based on measured Home-to-reference errors. |
+
 Base commit `b7749f3eae84ddf820d9fde913eb6ab411a8decc`. Task-specific choices below are
 local implementation defaults unless specified by the user.
 
@@ -24,9 +40,10 @@ local implementation defaults unless specified by the user.
   which records the nominal controller and Motion Library hashes. The nominal
   target holds for 20 ms and excludes acceleration compensation. The earlier
   offline replay used interpolated compensation at 2 ms.
-- The actor observes joint position and velocity, the next reference joint pose
-  and velocity, a further preview pose, and its previous action. The World Model
-  observes joint position, joint velocity, and the executed 54 servo targets.
+- The legacy flat actor observes joint position and velocity, the next
+  reference joint pose and velocity, a further preview pose, and its previous
+  action. The World Model observes joint position, joint velocity, and the
+  executed 54 servo targets.
 - A differentiable FK reward uses both wrists and ten tip poses in the robot base
   frame, both elbow positions, joint and velocity tracking, relative wrist
   separation, action smoothness and deep contact. Physical contact is measured
@@ -43,7 +60,8 @@ local implementation defaults unless specified by the user.
   qvel with zero previous action. The latest allowable reset is the penultimate
   frame for clips longer than 64 frames. Shorter clips reserve all 32 imagination
   steps, including the case where frame zero is the only valid reset. The
-  five-frame preview clamps to the last clip frame.
+  phase sampler clamps draws beyond the latest allowable reset to that phase.
+  The flat-policy five-frame preview clamps to the last clip frame.
 - Physical contact labels use any penetration and depth above 0.5 mm. Joint
   and nonfinite checks use the end-of-control-step state. Imagined continuation
   uses a smooth joint-limit threshold, exact clip-end termination and a
@@ -109,4 +127,4 @@ Keep `feedforward_seed42/model_final.pt` and
 `feedforward_seed42/provenance.json` together. The physical replay statistics
 are stored under `eval_feedforward_seed42_release/evaluation.json`.
 
-[SuperMimic paper](https://arxiv.org/abs/2610.28480) · [Official SuperMimic](https://github.com/HybridRobotics/supermimic) · [Dex-Supermimic](https://github.com/CumulusAlpha/Dex-Supermimic) · [TrackerLab SuperMimic](https://github.com/Renforce-Dynamics/trackerlab-supermimic)
+[SuperMimic paper](https://arxiv.org/abs/2610.28480) 路 [Official SuperMimic](https://github.com/HybridRobotics/supermimic) 路 [Dex-Supermimic](https://github.com/CumulusAlpha/Dex-Supermimic) 路 [TrackerLab SuperMimic](https://github.com/Renforce-Dynamics/trackerlab-supermimic)

@@ -11,7 +11,7 @@ from isaaclab_newton.physics import MJWarpSolverCfg, NewtonCfg, NewtonManager
 
 from dexgym.assets.marvin_wuji.robot_cfg import make_robot_cfg
 
-from .task import DT, JOINTS, TrackingTask
+from .task import DT, HARD_CONTACT_DEPTH_M, JOINTS, TrackingTask
 
 PHYSICS_DT = 0.002
 SUBSTEPS = round(DT / PHYSICS_DT)
@@ -36,7 +36,8 @@ def simulation_cfg():
 
 
 class NewtonTrackingEnv:
-    def __init__(self, cfg, num_envs, model, library, nominal):
+    def __init__(self, cfg, num_envs, model, library, nominal, policy_arch="flat", contact_model="legacy",
+                 reward_profile="precision"):
         self.sim = SimulationContext(cfg)
         self.scene = InteractiveScene(TrackingSceneCfg(num_envs=num_envs, env_spacing=3.0))
         self.sim.reset()
@@ -55,12 +56,13 @@ class NewtonTrackingEnv:
                 raise ValueError(f"Cannot uniquely map Newton force channel {name}")
             addresses[name] = native.jnt_dofadr[matches[0]]
         self.dof_ids = torch.tensor(list(addresses.values()), device=self.device)
-        self.task = TrackingTask(self, model, library, nominal)
+        self.task = TrackingTask(self, model, library, nominal, policy_arch, contact_model, reward_profile)
         self.memory = {
             "frame": torch.zeros(num_envs, dtype=torch.long, device=self.device),
             "action": torch.zeros(num_envs, JOINTS, device=self.device),
         }
         self.command = library.qpos[self.memory["frame"]].clone()
+        self.history = torch.zeros(num_envs, self.task.history_steps, self.task.history_frame_dim, device=self.device)
         self.transition = None
         self.common_step_counter = 0
         # The shared checkpoint format carries these fields. No disturbances are injected.
@@ -88,10 +90,12 @@ class NewtonTrackingEnv:
         self.scene.write_data_to_sim()
         self.sim.forward()
         self.scene.update(0.0)
+        frame_obs = self.task.policy_observation(self.state(), self.memory, None)
+        self.history[env_ids] = frame_obs[env_ids, None]
         return self.observation(), {}
 
     def observation(self):
-        return {"policy": self.task.policy_observation(self.state(), self.memory, None)}
+        return {"policy": self.task.observation_from_history(self.history, self.memory)}
 
     def contact_depth(self):
         d = self.solver.mjw_data
@@ -116,11 +120,13 @@ class NewtonTrackingEnv:
             depth = torch.maximum(depth, self.contact_depth())
         x = self.state()
         nan = ~torch.isfinite(x).all(-1) | ~torch.isfinite(depth)
-        contact = torch.stack((depth > 0, depth > 0.0005), dim=-1).float()
+        contact = self.task.contact_labels(depth)
         torque = wp.to_torch(self.solver.mjw_data.qfrc_actuator)[:, self.dof_ids].clone()
-        unsafe = (depth > 0.003) | (self.task.position_violation(x) > 0.05)
+        unsafe = (depth > HARD_CONTACT_DEPTH_M) | (self.task.position_violation(x) > 0.05)
         terminated = unsafe | nan
         self.memory = self.task.advance_memory(x, before, action, target, None, None, soft=False)
+        frame_obs = self.task.policy_observation(x, self.memory, None)
+        self.history = torch.cat((self.history[:, 1:], frame_obs[:, None]), dim=1)
         frame = self.memory["frame"]
         truncated = (frame == self.task.library.end[frame]) & ~terminated
         reward, _, _ = self.task.reward(x.nan_to_num(), before, action, target, contact, torque)

@@ -6,13 +6,20 @@ import mujoco
 import numpy as np
 import torch
 
+from dexgym.algorithms.supermimic.dex_reference.networks import Actor
+
 from ..hand2_cube_supermimic.kinematics import HandKinematics
 from ..hand2_cube_supermimic.rotations import mm, quat_to_mat
+from .policy import MotionTrackingActor
 
 TASK_ID = "DexGym-MarvinM6-WujiHand22-MotionTracking-SuperMimic-v0"
 JOINTS = 54
 DT = 0.02
 IMAGINATION_STEPS = 32
+HISTORY_FRAMES = 10
+FUTURE_FRAMES = 10
+MOTION_LATENT_DIM = 32
+HARD_CONTACT_DEPTH_M = 0.003
 FINGERS = ("thumb", "index_finger", "middle_finger", "ring_finger", "pinky")
 
 
@@ -71,6 +78,9 @@ class MotionLibrary:
     def at(self, frame, delta=1):
         return torch.minimum(frame + delta, self.end[frame])
 
+    def future(self, frame, offsets):
+        return torch.minimum(frame[:, None] + offsets, self.end[frame, None])
+
     def sample(self, n):
         # Short clips reserve a complete imagination window at every reset.
         frame = torch.randint(self.frames, (n,), device=self.end.device)
@@ -111,15 +121,25 @@ class TrackingTask:
     state_dim = dynamics_dim = 108
     action_dim = 54
     contact_dim = 2
-    policy_dim = context_dim = 324
+    context_dim = 324
     error_floor = [0.002] * 54 + [0.05] * 54
     codec = JointCodec
 
-    def __init__(self, env, model, library, nominal):
+    def __init__(self, env, model, library, nominal, policy_arch="flat", contact_model="legacy",
+                 reward_profile="precision"):
         self.env = self.reader = env
         self.device = env.device
         self.library = library
         self.geometry = TrackingGeometry(model, library, self.device)
+        self.policy_arch = policy_arch
+        self.contact_dim = 3 if contact_model == "hard-contact" else 2
+        self.reward_profile = reward_profile
+        self.history_steps = HISTORY_FRAMES if policy_arch == "motion-encoder" else 1
+        self.history_frame_dim = 3 * JOINTS if policy_arch == "motion-encoder" else self.context_dim
+        self.history_dim = self.history_steps * self.history_frame_dim
+        self.goal_dim = FUTURE_FRAMES * 2 * JOINTS if policy_arch == "motion-encoder" else 0
+        self.policy_dim = self.history_dim + self.goal_dim
+        self.future_offsets = torch.arange(1, FUTURE_FRAMES + 1, device=self.device)
         self.simulator_context = torch.zeros(env.num_envs, 1, device=self.device)
         self.encoder_bias = torch.zeros(env.num_envs, 54, device=self.device)
         joint_ids = [model.joint(name).id for name in library.names]
@@ -165,6 +185,11 @@ class TrackingTask:
     def read(self):
         return self.reader.state(), self.env.memory, self.simulator_context
 
+    def make_actor(self):
+        if self.policy_arch == "motion-encoder":
+            return MotionTrackingActor(self.history_dim, self.goal_dim, self.action_dim, MOTION_LATENT_DIM)
+        return Actor(self.policy_dim, self.action_dim)
+
     def current_goal(self, m):
         return self.library.at(m["frame"])
 
@@ -191,25 +216,35 @@ class TrackingTask:
         return {"frame": encoded[:, 0].long(), "action": encoded[:, 1:].float()}
 
     def policy_observation(self, x, m, aux):
+        if self.policy_arch == "flat":
+            return self.context(x, m, aux, None)
+        q, qd = x.split(JOINTS, dim=-1)
+        return torch.cat((q - self.home, qd, m["action"]), dim=-1)
+
+    def context(self, x, m, aux, sim):
         lib = self.library
         goal = self.current_goal(m)
         preview = lib.at(m["frame"], 5)
         return torch.cat((x, lib.qpos[goal], lib.qvel[goal], lib.qpos[preview], m["action"]), dim=-1)
 
-    def context(self, x, m, aux, sim):
-        return self.policy_observation(x, m, aux)
-
     @staticmethod
     def critic(context):
         return context
 
-    @staticmethod
-    def history_from_obs(obs):
-        return obs[:, None]
+    def replay_observation(self, obs):
+        # The clip and phase in replay identify the future goals exactly.
+        return obs[..., : self.history_dim]
 
-    @staticmethod
-    def flatten_history(history):
-        return history[:, -1]
+    def history_from_obs(self, obs):
+        return obs.reshape(-1, self.history_steps, self.history_frame_dim)
+
+    def observation_from_history(self, history, memory):
+        flat = history.flatten(1)
+        if self.policy_arch == "flat":
+            return flat
+        ids = self.library.future(memory["frame"], self.future_offsets)
+        goal = torch.cat((self.library.qpos[ids], self.library.qvel[ids]), dim=-1)
+        return torch.cat((flat, goal.flatten(1)), dim=-1)
 
     @staticmethod
     def dynamics(x, sim, aux):
@@ -234,6 +269,10 @@ class TrackingTask:
             return (target - self.home) / self.scale
         return torch.zeros_like(memory["action"])
 
+    @property
+    def baseline_name(self):
+        return "reference_pd" if self.action_mode == "home" else "zero_residual"
+
     def torque(self, x, u, sim):
         q, qd = x.split(JOINTS, dim=-1)
         return (self.kp * (u - q) - self.kd * qd).clamp(-self.effort, self.effort)
@@ -241,6 +280,18 @@ class TrackingTask:
     def position_violation(self, x):
         q = x[:, :JOINTS]
         return torch.maximum(q - self.joint_hi, self.joint_lo - q).amax(-1)
+
+    def contact_labels(self, depth):
+        thresholds = (0.0, 0.0005, HARD_CONTACT_DEPTH_M)[:self.contact_dim]
+        return torch.stack([depth > threshold for threshold in thresholds], dim=-1).float()
+
+    def imagined_contact_failure(self, probability):
+        return probability[..., 2] if self.contact_dim == 3 else None
+
+    def world_model_contact_loss(self, per_channel_loss, importance):
+        if self.contact_dim == 3:
+            return per_channel_loss[..., :2].sum(-1) + importance * per_channel_loss[..., 2]
+        return per_channel_loss.sum(-1)
 
     def termination(self, x1, m):
         overflow = self.position_violation(x1)
@@ -276,6 +327,13 @@ class TrackingTask:
             "q": (0.8, 0.12), "qd": (0.15, 2.0),
         }
         terms = {k: w * torch.exp(-mse(error[k] / scale)) for k, (w, scale) in weights.items()}
+        if self.reward_profile == "multiscale":
+            coarse = {
+                "wrist": 0.25, "wrist_rot": 0.75, "elbow": 0.25, "tip": 0.25, "tip_rot": 0.75,
+                "relative_wrist": 0.20, "q": 0.70,
+            }
+            for k, scale in coarse.items():
+                terms[k] = 0.75 * terms[k] + 0.25 * weights[k][0] * torch.exp(-mse(error[k] / scale))
         terms["smooth"] = -0.08 * mse(a - m["action"])
         if self.action_mode != "home":
             terms["residual"] = -0.02 * mse(a)

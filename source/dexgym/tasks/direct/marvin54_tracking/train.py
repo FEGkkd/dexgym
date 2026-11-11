@@ -12,11 +12,11 @@ from isaaclab.app import launch_simulation
 
 from dexgym.algorithms.supermimic.dex_reference.config import SuperMimicConfig
 from dexgym.algorithms.supermimic.dex_reference.engine import SuperMimicEngine
-from dexgym.algorithms.supermimic.dex_reference.networks import Actor
 from dexgym.assets.marvin_wuji.robot_cfg import PACKAGED_MJCF
 
+from .diagnostics import diagnose_model
 from .native import NewtonTrackingEnv, simulation_cfg
-from .task import IMAGINATION_STEPS, JOINTS, TASK_ID, MotionLibrary
+from .task import FUTURE_FRAMES, IMAGINATION_STEPS, JOINTS, MOTION_LATENT_DIM, TASK_ID, MotionLibrary
 
 
 def write_json(path, value):
@@ -29,6 +29,7 @@ def check_contract(env):
     ids = torch.arange(env.num_envs, device=env.device)
     frames = torch.linspace(0, lib.frames - 2, env.num_envs, device=env.device).long()
     obs, _ = env.reset(frame=frames)
+    initial_history = task.history_from_obs(task.replay_observation(obs["policy"]))
     q = env.state()[:, :JOINTS]
     wp, wr, ep, fp, fr = task.geometry.pose(q)
     errors = {
@@ -45,6 +46,8 @@ def check_contract(env):
     errors = {k: float(v) for k, v in errors.items()}
     if max(errors.values()) > 2e-4 or obs["policy"].shape != (env.num_envs, task.policy_dim):
         raise ValueError(f"Reference and Newton/FK contract mismatch: {errors}")
+    if not torch.equal(initial_history, initial_history[:, -1:].expand_as(initial_history)):
+        raise RuntimeError("Reset history must contain copies of the initial observation")
     memory = env.memory
     action = torch.zeros(env.num_envs, JOINTS, device=env.device)
     if task.action_mode == "home":
@@ -55,12 +58,17 @@ def check_contract(env):
         errors["reference_pd_target_rad"] = float((target - lib.qpos[lib.at(memory["frame"])]).abs().max())
         if max(errors["home_target_rad"], errors["reference_pd_target_rad"]) > 1e-6:
             raise RuntimeError(f"Fixed Home target mapping mismatch: {errors}")
-    _, reward, terminated, _, _ = env.step(action)
+    obs, reward, terminated, _, _ = env.step(action)
     if not reward.isfinite().all() or terminated.any():
         raise RuntimeError("Reference phase test failed during the first physical step")
     if not torch.equal(env.memory["frame"], lib.at(memory["frame"])):
         raise RuntimeError("Physical phase failed to advance by one reference frame")
+    stepped_history = task.history_from_obs(task.replay_observation(obs["policy"]))
+    if not torch.equal(stepped_history[:, :-1], initial_history[:, 1:]):
+        raise RuntimeError("Physical observation history failed to advance by one frame")
     env.reset(ids[-1:], frame=lib.end[frames[-1:]] - 1)
+    if not torch.equal(env.history[:-1], stepped_history[:-1]):
+        raise RuntimeError("A partial reset changed another environment's observation history")
     action = task.baseline_action(env.memory)
     _, _, terminated, truncated, _ = env.step(action)
     if terminated[-1] or not truncated[-1]:
@@ -80,7 +88,7 @@ def evaluate(env, actor, clip_index, steps):
     active = torch.ones(2, dtype=torch.bool, device=env.device)
     terminations = torch.zeros_like(active)
     records = {}
-    baseline_name = "reference_pd" if task.action_mode == "home" else "zero_residual"
+    baseline_name = task.baseline_name
     for i in range(count):
         m = env.memory
         action = actor(obs["policy"])
@@ -153,6 +161,7 @@ def main():
     parser.add_argument("--wm-only-iters", type=int, default=30)
     parser.add_argument("--wm-batches", type=int, default=2)
     parser.add_argument("--wm-batch", type=int, default=192)
+    parser.add_argument("--wm-width", type=int, default=2048)
     parser.add_argument("--pi-batch", type=int, default=32)
     parser.add_argument("--buffer-steps", type=int, default=256)
     parser.add_argument("--warmup-steps", type=int, default=64)
@@ -161,13 +170,20 @@ def main():
     parser.add_argument("--save-interval", type=int, default=50)
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--evaluate", type=Path)
+    parser.add_argument("--model-probe-only", action="store_true")
     parser.add_argument("--eval-steps", type=int)
     parser.add_argument("--clip-index", type=int, default=0)
-    parser.add_argument("--nominal", choices=("home", "reference", "feedforward"), default="home")
+    parser.add_argument("--nominal", choices=("home", "reference", "feedforward"))
+    parser.add_argument("--policy-arch", choices=("motion-encoder", "flat"))
+    parser.add_argument("--contact-model", choices=("hard-contact", "legacy"))
+    parser.add_argument("--reward-profile", choices=("multiscale", "precision"))
+    parser.add_argument("--matmul-precision", choices=("highest", "high"))
     args = parser.parse_args()
     if args.num_envs < 2 or not 0 <= args.wm_only_iters < args.iterations:
         parser.error("Need at least two environments and at least one Actor iteration")
-    if min(args.wm_batches, args.wm_batch, args.pi_batch) < 1 or (args.eval_steps is not None and args.eval_steps < 1):
+    if min(args.wm_batches, args.wm_batch, args.pi_batch, args.wm_width) < 1 or (
+        args.eval_steps is not None and args.eval_steps < 1
+    ):
         parser.error("Batch sizes and evaluation steps must be positive")
     if min(args.warmup_steps, args.buffer_steps) < IMAGINATION_STEPS:
         parser.error(f"Warmup and replay capacity need at least {IMAGINATION_STEPS} steps")
@@ -177,23 +193,47 @@ def main():
         parser.error("Action noise must be finite and nonnegative")
     if args.check_only and args.evaluate:
         parser.error("Choose check-only or evaluate")
+    if args.model_probe_only and not args.evaluate:
+        parser.error("--model-probe-only requires --evaluate")
     if not 0 <= args.clip_index < len(args.reference):
         parser.error("Clip index is outside the Motion Library")
+    original = None
+    defaults = {"nominal": "home", "policy_arch": "motion-encoder", "contact_model": "hard-contact",
+                "reward_profile": "multiscale", "matmul_precision": "high"}
+    if args.evaluate:
+        original = json.loads((args.evaluate.parent / "provenance.json").read_text())
+        legacy = {"nominal": "reference", "policy_arch": "flat", "contact_model": "legacy",
+                  "reward_profile": "precision", "matmul_precision": "highest"}
+        for key, value in legacy.items():
+            original.setdefault(key, value)
+        defaults.update({key: original[key] for key in defaults})
+    for key, value in defaults.items():
+        if getattr(args, key) is None:
+            setattr(args, key, value)
     random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
+    torch.set_float32_matmul_precision(args.matmul_precision)
     cfg = simulation_cfg()
     model = mujoco.MjModel.from_xml_path(str(PACKAGED_MJCF))
     lib = MotionLibrary(args.reference, model, PACKAGED_MJCF, cfg.device)
     provenance = {"task_id": TASK_ID, "model_sha256": lib.model_sha256, "motion_sha256": lib.sha256,
                   "motion_files": [str(path.resolve()) for path in args.reference], "frames": lib.frames,
                   "joint_names": lib.names, "seed": args.seed, "backend": "Isaac Lab 3 / Newton MJWarp",
-                  "nominal": args.nominal, "num_envs": 2 if args.evaluate else args.num_envs}
+                  "nominal": args.nominal, "num_envs": 2 if args.evaluate else args.num_envs,
+                  "policy_arch": args.policy_arch, "matmul_precision": args.matmul_precision,
+                  "contact_model": args.contact_model, "reward_profile": args.reward_profile}
     args.output.mkdir(parents=True, exist_ok=True)
     if not args.evaluate and not args.check_only and (args.output / "metrics.jsonl").exists():
         parser.error("Select a fresh output directory for training")
     with launch_simulation(cfg):
-        env = NewtonTrackingEnv(cfg, 2 if args.evaluate else args.num_envs, model, lib, args.nominal)
+        env = NewtonTrackingEnv(
+            cfg, 2 if args.evaluate else args.num_envs, model, lib, args.nominal,
+            args.policy_arch, args.contact_model, args.reward_profile,
+        )
+        provenance.update(history_frames=env.task.history_steps, policy_dim=env.task.policy_dim,
+                          future_frames=FUTURE_FRAMES if env.task.goal_dim else 0,
+                          motion_latent_dim=MOTION_LATENT_DIM if env.task.goal_dim else 0)
         if args.nominal == "home":
             provenance["action_mapping"] = {
                 "name": "fixed_home_joint_position",
@@ -205,30 +245,40 @@ def main():
         print("TRACKING_CONTRACT", json.dumps(contract), flush=True)
         if args.check_only:
             return
-        if args.evaluate:
-            original = json.loads((args.evaluate.parent / "provenance.json").read_text())
-            original.setdefault("nominal", "reference")
+        if original is not None:
             if any(original[k] != provenance[k]
-                   for k in ("task_id", "model_sha256", "motion_sha256", "joint_names", "nominal")):
+                   for k in ("task_id", "model_sha256", "motion_sha256", "joint_names", "nominal", "policy_arch",
+                             "contact_model", "reward_profile")):
                 raise ValueError("Checkpoint reference or asset provenance mismatch")
             if original.get("action_mapping") != provenance.get("action_mapping"):
                 raise ValueError("Checkpoint action mapping mismatch")
             payload = torch.load(args.evaluate, map_location=env.device, weights_only=False)
             if payload["format_version"] != 1 or payload["task_id"] != TASK_ID:
                 raise ValueError("Checkpoint task or format mismatch")
-            actor = Actor(env.task.policy_dim, JOINTS).to(env.device)
+            actor = env.task.make_actor().to(env.device)
             actor.load_state_dict(payload["modules"]["actor"])
-            result = evaluate(env, actor.eval(), args.clip_index, args.eval_steps)
+            actor.eval()
             metadata = {
                 "checkpoint": str(args.evaluate.resolve()),
                 "clip_index": args.clip_index,
                 "clip": provenance["motion_files"][args.clip_index],
                 "clip_sha256": lib.sha256[args.clip_index],
                 "nominal": args.nominal,
+                "policy_arch": args.policy_arch,
+                "contact_model": args.contact_model,
+                "reward_profile": args.reward_profile,
+                "matmul_precision": args.matmul_precision,
+                "wm_hidden": payload["config"]["wm_hidden"],
                 "action_mapping": provenance.get("action_mapping"),
                 "residual_scale_rad": env.task.scale.tolist(),
                 "seed": args.seed,
             }
+            probe = diagnose_model(env, actor, payload, args.clip_index)
+            write_json(args.output / "model_probe.json", {**metadata, **probe})
+            print("TRACKING_MODEL_PROBE", json.dumps(probe["counts"]), flush=True)
+            if args.model_probe_only:
+                return
+            result = evaluate(env, actor, args.clip_index, args.eval_steps)
             write_json(args.output / "evaluation.json", {**metadata, "metrics": result})
             print("TRACKING_EVALUATION", json.dumps(result), flush=True)
             return
@@ -237,7 +287,8 @@ def main():
         recipe = SuperMimicConfig(
             seed=args.seed, max_iterations=args.iterations, buffer_steps=args.buffer_steps, warmup_steps=args.warmup_steps,
             wm_only_iters=args.wm_only_iters, wm_window=8, wm_batches=args.wm_batches, wm_batch=args.wm_batch,
-            wm_hidden=(384, 384, 384), pi_batch=args.pi_batch, horizon=IMAGINATION_STEPS, critic_epochs=5,
+            wm_hidden=(args.wm_width,) * 3, isolate_wm_init=True, pi_batch=args.pi_batch,
+            horizon=IMAGINATION_STEPS, critic_epochs=5,
             action_noise=default_noise if args.action_noise is None else args.action_noise,
             failure_warmup_iters=10, amp=False, compile=False, compile_policy=False,
             save_interval=args.save_interval, log_interval=args.log_interval,

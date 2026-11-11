@@ -19,6 +19,7 @@ class SuperMimicConfig:
     wm_batches: int = 10
     wm_batch: int = 2048
     wm_hidden: tuple = (2048, 2048, 2048)
+    isolate_wm_init: bool = False
     pi_batch: int = 1024
     horizon: int = 32
     critic_epochs: int = 5
