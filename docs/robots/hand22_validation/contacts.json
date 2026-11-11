@@ -1,0 +1,30 @@
+{
+  "random_samples_searched": 68,
+  "candidates": [
+    {
+      "pose": "home",
+      "source_contacts": 0,
+      "newton_contacts": 0,
+      "source_target_kind_contacts": 0,
+      "newton_target_kind_contacts": 0,
+      "pass": true
+    },
+    {
+      "pose": "hand_support",
+      "source_contacts": 46,
+      "newton_contacts": 27,
+      "source_target_kind_contacts": 46,
+      "newton_target_kind_contacts": 27,
+      "pass": true
+    },
+    {
+      "pose": "arms_cross",
+      "source_contacts": 66,
+      "newton_contacts": 18,
+      "source_target_kind_contacts": 56,
+      "newton_target_kind_contacts": 12,
+      "pass": true
+    }
+  ],
+  "pass": true
+}

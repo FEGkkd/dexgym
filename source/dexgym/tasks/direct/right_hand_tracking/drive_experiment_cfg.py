@@ -1,7 +1,5 @@
 """Isolated right-hand drive diagnostics; never used by the PPO task registry."""
 
-from pathlib import Path
-
 from isaaclab.assets import ArticulationCfg
 from isaaclab.scene import InteractiveSceneCfg
 from isaaclab.utils import configclass
@@ -10,16 +8,10 @@ from dexgym.assets.marvin_wuji.robot_cfg import make_robot_cfg
 
 from .env_cfg import RightHandTrackingDirectCfg
 
-USD_DIR = Path(__file__).resolve().parents[3] / "assets/marvin_wuji/usd"
-FULL_CONTACT_USD = USD_DIR / "hand_only_drive_corrected.usda"
-NO_HAND_CONTACT_USD = USD_DIR / "hand_only_drive_corrected_no_hand_contacts.usda"
-TUNED_FULL_CONTACT_USD = USD_DIR / "hand_only_drive_corrected_hand_x2.usda"
-TUNED_NO_HAND_CONTACT_USD = USD_DIR / "hand_only_drive_corrected_hand_x2_no_hand_contacts.usda"
-
 
 @configclass
 class HandOnlyDriveSceneCfg(InteractiveSceneCfg):
-    robot: ArticulationCfg = make_robot_cfg(usd_path=FULL_CONTACT_USD)
+    robot: ArticulationCfg = make_robot_cfg()
 
 
 @configclass
@@ -38,11 +30,13 @@ def make_drive_experiment_cfg(
     cfg = HandOnlyDriveExperimentCfg()
     cfg.sim.dt = physics_dt
     cfg.scene.num_envs = num_envs
-    usd = {
-        ("source", True): FULL_CONTACT_USD,
-        ("source", False): NO_HAND_CONTACT_USD,
-        ("hand_x2", True): TUNED_FULL_CONTACT_USD,
-        ("hand_x2", False): TUNED_NO_HAND_CONTACT_USD,
-    }[(profile, hand_contacts)]
-    cfg.scene.robot = make_robot_cfg(usd_path=usd)
+    cfg.scene.robot = make_robot_cfg(hand_contacts=hand_contacts)
+    if profile == "hand_x2":
+        actuator = cfg.scene.robot.actuators["all"]
+        actuator.stiffness = {
+            name: gain * (2.0 if name.startswith(("l_", "r_")) else 1.0) for name, gain in actuator.stiffness.items()
+        }
+        actuator.damping = {
+            name: gain * (2.0 if name.startswith(("l_", "r_")) else 1.0) for name, gain in actuator.damping.items()
+        }
     return cfg

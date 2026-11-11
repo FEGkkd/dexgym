@@ -1,4 +1,4 @@
-"""Opt-in Newton MJWarp arm position-drive profile for TCP tracking experiments.
+"""Legacy Beta2-only controller experiment; not used by the Hand2.2 asset.
 
 The pinned MJCF remains authoritative. This profile changes only runtime arm
 drive damping; it does not edit the MJCF, USD, effort limits, or robot hardware.
@@ -40,7 +40,7 @@ def apply_newton_arm_tracking_profile(robot, *, damping_scale_source: float = 0.
     if not torch.allclose(
         stiffness_before[:, joint_ids], expected_kp[None, :].expand(robot.num_instances, -1), rtol=1e-3, atol=1e-3
     ):
-        raise ValueError("Imported arm Kp differs from the pinned MJCF conversion; refusing profile")
+        raise ValueError("Legacy Beta2 high-gain profile is incompatible with Hand2.2 SI drives; use its default controller")
     if not (
         torch.allclose(damping_before, imported_kd[None, :].expand(robot.num_instances, -1), rtol=1e-3, atol=1e-3)
         or torch.allclose(damping_before, tuned_kd[None, :].expand(robot.num_instances, -1), rtol=1e-3, atol=1e-3)

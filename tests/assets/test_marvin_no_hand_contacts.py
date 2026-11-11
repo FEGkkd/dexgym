@@ -34,7 +34,7 @@ def test_packaged_no_hand_asset_preserves_mass_inertia_and_mounts(tmp_path):
     report = json.loads(output.read_text())
     assert report["pass"]
     assert (report["rigid_bodies"], report["revolute_joints"], report["fixed_joints"]) == (74, 54, 20)
-    assert (report["hand_collision_shapes_disabled"], report["arm_collision_shapes_enabled"]) == (54, 33)
+    assert (report["hand_collision_shapes_disabled"], report["arm_collision_shapes_enabled"]) == (74, 33)
 
 
 def test_no_hand_override_can_be_regenerated(tmp_path):

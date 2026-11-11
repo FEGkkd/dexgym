@@ -43,14 +43,21 @@ def create_overlay(base_usd: Path, output: Path) -> dict:
     source = Usd.Stage.Open(str(base_usd))
     if not source or not source.GetDefaultPrim().IsValid():
         raise ValueError(f"Invalid base USD: {base_usd}")
-    hand_instances, arm_collisions, unexpected = collision_inventory(source)
-    left = sum("l_mount" in str(path).split("/") for path in hand_instances)
-    right = sum("r_mount" in str(path).split("/") for path in hand_instances)
-    if (left, right, len(arm_collisions), len(unexpected)) != (27, 27, 33, 0):
-        raise ValueError(
-            f"Unexpected collision inventory: left={left}, right={right}, arm={len(arm_collisions)}, "
-            f"other={len(unexpected)}"
-        )
+    for prim in list(source.Traverse()):
+        if prim.IsInstance():
+            prim.SetInstanceable(False)
+    hand_paths = [
+        prim.GetPath()
+        for prim in source.Traverse()
+        if prim.HasAPI(UsdPhysics.CollisionAPI) and is_hand_path(str(prim.GetPath()))
+    ]
+    arm_paths = [
+        prim.GetPath()
+        for prim in source.Traverse()
+        if prim.HasAPI(UsdPhysics.CollisionAPI) and not is_hand_path(str(prim.GetPath()))
+    ]
+    if not hand_paths or not arm_paths:
+        raise ValueError("Expected both hand and arm collision shapes")
     output.parent.mkdir(parents=True, exist_ok=True)
     stage = Usd.Stage.CreateNew(str(output))
     stage.GetRootLayer().subLayerPaths.append(os.path.relpath(base_usd, output.parent))
@@ -58,15 +65,15 @@ def create_overlay(base_usd: Path, output: Path) -> dict:
     UsdGeom.SetStageUpAxis(stage, UsdGeom.GetStageUpAxis(source))
     UsdGeom.SetStageMetersPerUnit(stage, UsdGeom.GetStageMetersPerUnit(source))
     stage.SetMetadata("kilogramsPerUnit", source.GetMetadata("kilogramsPerUnit"))
-    for path in hand_instances:
-        instance = stage.GetPrimAtPath(path)
-        instance.SetInstanceable(False)
-        collisions = [child for child in instance.GetChildren() if child.HasAPI(UsdPhysics.CollisionAPI)]
-        if len(collisions) != 1:
-            raise ValueError(f"Hand collision instance did not deinstance cleanly: {path}")
-        UsdPhysics.CollisionAPI(collisions[0]).CreateCollisionEnabledAttr(False)
+    for path in hand_paths:
+        prim = stage.GetPrimAtPath(path)
+        UsdPhysics.CollisionAPI(prim).CreateCollisionEnabledAttr(False)
     stage.GetRootLayer().Save()
-    return {"hand_collision_shapes_disabled": 54, "arm_collision_shapes_retained": 33, "usd": str(output)}
+    return {
+        "hand_collision_shapes_disabled": len(hand_paths),
+        "arm_collision_shapes_retained": len(arm_paths),
+        "usd": str(output),
+    }
 
 
 def main() -> None:

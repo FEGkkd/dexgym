@@ -1,5 +1,6 @@
 """Isaac Lab 3.0 articulation configuration for a locally converted MJCF."""
 
+import json
 import os
 from pathlib import Path
 
@@ -7,13 +8,18 @@ from isaaclab.actuators import ImplicitActuatorCfg
 from isaaclab.assets import ArticulationCfg
 from isaaclab.sim import UsdFileCfg
 
-SOURCE_SHA256 = "6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce"
-SOURCE_COMMIT = "5d4c345842f197bffeae7d7e08c4c3718230f9e0"
+ASSET_ROOT = Path(__file__).parent
+GENERATED = ASSET_ROOT / "hand2_2" / "generated"
+_METADATA = json.loads((GENERATED / "metadata.json").read_text())
+SOURCE_SHA256 = _METADATA["source_sha256"]
+SOURCE_COMMIT = "5d4c345842f197bffeae7d7e08c4c3718230f9e0"  # Arm source only.
 SOURCE_RELATIVE_PATH = "src/whole_body_mujoco_driver/model/dual_arm_marvin.xml"
-PACKAGED_USD = Path(__file__).parent / "usd" / "dual_arm_marvin.usda"
-NO_HAND_CONTACT_USD = Path(__file__).parent / "usd" / "dual_arm_marvin_no_hand_contacts.usda"
-PACKAGED_KEYFRAMES = Path(__file__).parent / "source_keyframes.json"
-PACKAGED_MJCF = Path(__file__).parent / "source_model" / "dual_arm_marvin.xml"
+PACKAGED_USD = GENERATED / "usd" / "dual_arm_marvin.usda"
+NO_HAND_CONTACT_USD = GENERATED / "usd" / "dual_arm_marvin_no_hand_contacts.usda"
+PACKAGED_KEYFRAMES = GENERATED / "metadata.json"
+PACKAGED_MJCF = GENERATED / "dual_arm_marvin.xml"
+LEGACY_MJCF = ASSET_ROOT / "source_model" / "dual_arm_marvin.xml"
+LEGACY_USD = ASSET_ROOT / "usd" / "dual_arm_marvin.usda"
 
 
 def _hand_joint_order(side: str) -> tuple[str, ...]:
@@ -52,22 +58,26 @@ def make_robot_cfg(
     usd_path: str | Path | None = None,
     prim_path: str = "{ENV_REGEX_NS}/Robot",
     *,
-    hand_contacts: bool = False,
+    hand_contacts: bool = True,
 ) -> ArticulationCfg:
-    """Load the no-hand-contact Newton asset by default, retaining all 54 joints.
+    """Load Hand2.2 on Marvin arms, with explicit SI position-drive parameters.
 
-    Isaac Lab 3.0 resolves ``None`` stiffness/damping from the imported USD;
-    every named joint is covered by one implicit actuator group for MJWarp.
-    Pass ``hand_contacts=True`` for the original full-contact packaged asset,
-    or ``usd_path`` to load a specific validated USD.
-    Source: https://isaac-sim.github.io/IsaacLab/v3.0.0/source/how-to/import_new_asset.html
+    All 54 drives come from the composed MJCF, avoiding legacy USD degree/radian
+    gain scaling. Hand contact is enabled; callers can explicitly disable it.
     """
     usd = Path(usd_path or (PACKAGED_USD if hand_contacts else NO_HAND_CONTACT_USD)).expanduser().resolve()
     if not usd.is_file():
         raise FileNotFoundError(usd)
     return ArticulationCfg(
         prim_path=prim_path,
-        spawn=UsdFileCfg(usd_path=str(usd), variants={"Physics": "physics"}),
+        spawn=UsdFileCfg(usd_path=str(usd), variants={"Physics": "mujoco"}),
         joint_ordering=JOINT_ORDER,
-        actuators={"all": ImplicitActuatorCfg(joint_names_expr=[".*"], stiffness=None, damping=None)},
+        actuators={
+            "all": ImplicitActuatorCfg(
+                joint_names_expr=[".*"],
+                stiffness={name: values["kp"] for name, values in _METADATA["drives"].items()},
+                damping={name: values["kd"] for name, values in _METADATA["drives"].items()},
+                joint_effort_limit={name: values["effort"] for name, values in _METADATA["drives"].items()},
+            )
+        },
     )

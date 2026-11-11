@@ -1,0 +1,34 @@
+{
+  "source_mjcf_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+  "samples": 1000,
+  "parallel_environments": 16,
+  "body_count": 74,
+  "rejected_samples": 0,
+  "tcp_position_error_mm": {
+    "max": 0.0009498176426355481,
+    "mean": 0.00027380104009396087,
+    "p95": 0.0005966927803917535
+  },
+  "tcp_orientation_error_deg": {
+    "max": 3.674203751958424e-05,
+    "mean": 1.2693608529253423e-05,
+    "p95": 2.220139370404291e-05
+  },
+  "all_body_position_error_mm": {
+    "max": 0.0030492996285539603,
+    "mean": 0.0005807553879180992,
+    "p95": 0.0013979216427189264
+  },
+  "all_body_orientation_error_deg": {
+    "max": 0.0010077755484215636,
+    "mean": 0.000663268315759198,
+    "p95": 0.0009717069389987675
+  },
+  "thresholds": {
+    "tcp_position_mm": 1.0,
+    "tcp_orientation_deg": 0.1
+  },
+  "failed_tcp_comparisons": 0,
+  "failures": [],
+  "pass": true
+}

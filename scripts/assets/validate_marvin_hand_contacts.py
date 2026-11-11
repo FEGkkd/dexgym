@@ -51,22 +51,26 @@ def inspect(full_usd: Path, no_hand_usd: Path) -> dict:
             if full_physics.get(path) != no_hand_physics.get(path)
         ]
         raise ValueError(f"Rigid body or joint physics changed: {changed[:10]}")
-    full_hand_instances = [
-        prim
-        for prim in full.Traverse()
-        if prim.IsInstance()
-        and hand_path(str(prim.GetPath()))
-        and any(child.HasAPI(UsdPhysics.CollisionAPI) for child in prim.GetPrototype().GetChildren())
+    full_hand_shapes = [
+        prim for prim in full.Traverse() if prim.HasAPI(UsdPhysics.CollisionAPI) and hand_path(str(prim.GetPath()))
     ]
     no_hand_collisions = [prim for prim in no_hand.Traverse() if prim.HasAPI(UsdPhysics.CollisionAPI)]
     hand_collisions = [prim for prim in no_hand_collisions if hand_path(str(prim.GetPath()))]
     arm_collisions = [prim for prim in no_hand_collisions if not hand_path(str(prim.GetPath()))]
-    if len(full_hand_instances) != 54 or len(hand_collisions) != 54 or len(arm_collisions) != 33:
-        raise ValueError("The expected 54 hand and 33 arm collision geometries were not preserved")
+    if len(full_hand_shapes) != 74 or len(hand_collisions) != 74 or len(arm_collisions) != 53:
+        raise ValueError("The expected 74 hand and 53 arm/visual collision geometries were not preserved")
     if any(prim.GetAttribute("physics:collisionEnabled").Get() is not False for prim in hand_collisions):
         raise ValueError("A hand collision mesh is still enabled")
-    if any(prim.GetAttribute("physics:collisionEnabled").Get() is False for prim in arm_collisions):
-        raise ValueError("An arm or support collision mesh was disabled")
+    for prim in arm_collisions:
+        original = full.GetPrimAtPath(prim.GetPath())
+        if (
+            prim.GetAttribute("physics:collisionEnabled").Get()
+            != original.GetAttribute("physics:collisionEnabled").Get()
+        ):
+            raise ValueError("An arm/support collision flag changed")
+    enabled_arms = sum(prim.GetAttribute("physics:collisionEnabled").Get() is not False for prim in arm_collisions)
+    if enabled_arms != 33:
+        raise ValueError("Expected 33 enabled arm/support collision shapes")
     rigid_count = sum(prim.HasAPI(UsdPhysics.RigidBodyAPI) for prim in no_hand.Traverse())
     revolute_count = sum(prim.IsA(UsdPhysics.RevoluteJoint) for prim in no_hand.Traverse())
     fixed_count = sum(prim.IsA(UsdPhysics.FixedJoint) for prim in no_hand.Traverse())
@@ -79,7 +83,7 @@ def inspect(full_usd: Path, no_hand_usd: Path) -> dict:
         "revolute_joints": revolute_count,
         "fixed_joints": fixed_count,
         "hand_collision_shapes_disabled": len(hand_collisions),
-        "arm_collision_shapes_enabled": len(arm_collisions),
+        "arm_collision_shapes_enabled": enabled_arms,
         "rigid_mass_inertia_and_joint_properties_identical": True,
         "pass": True,
     }

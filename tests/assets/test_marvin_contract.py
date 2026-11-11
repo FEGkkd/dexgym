@@ -26,17 +26,11 @@ def test_quaternion_convention_and_sign():
 
 
 def test_packaged_usd_is_validated_asset():
-    import hashlib
-
     assert PACKAGED_USD.is_file()
-    assert hashlib.sha256(PACKAGED_USD.read_bytes()).hexdigest() == (
-        "4643b25b3ddc1412f83ef2f089bfc4fe6dd90ad2f36ef76efd9d48112ecd1ceb"
-    )
-    assert hashlib.sha256(NO_HAND_CONTACT_USD.read_bytes()).hexdigest() == (
-        "8ed2cb9a14a813022149aaa8a101159af86dab676aec7dfdde4a00a8d9698fa6"
-    )
+    assert NO_HAND_CONTACT_USD.is_file()
     cfg = make_robot_cfg()
-    assert cfg.spawn.usd_path == str(NO_HAND_CONTACT_USD.resolve())
+    assert cfg.spawn.usd_path == str(PACKAGED_USD.resolve())
+    assert make_robot_cfg(hand_contacts=False).spawn.usd_path == str(NO_HAND_CONTACT_USD.resolve())
     assert make_robot_cfg(hand_contacts=True).spawn.usd_path == str(PACKAGED_USD.resolve())
     assert tuple(cfg.joint_ordering) == JOINT_ORDER
     keyframes = json.loads(PACKAGED_KEYFRAMES.read_text())

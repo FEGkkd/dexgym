@@ -1,0 +1,26 @@
+{
+  "joint_stiffness_max_error": 1.141357421907685e-07,
+  "joint_damping_max_error": 3.0393600414235777e-09,
+  "joint_effort_limits_max_error": 5.7220459037665705e-08,
+  "solver_gain_max_error": 0.0,
+  "solver_total_force_limit_max_error": 5.7220459037665705e-08,
+  "physical_parameter_max_errors": {
+    "dof_armature": 1.7881393449270533e-09,
+    "dof_damping": 2.384185793236071e-08,
+    "dof_frictionloss": 1.4901161138336505e-09,
+    "body_mass": 8.28898613747242e-07,
+    "body_ipos": 5.740063979686738e-09,
+    "body_inertia_tensor": 2.1320278031922157e-06,
+    "geom_friction": 1.1920928910669204e-08,
+    "geom_solref": 4.470348362317633e-10,
+    "geom_solimp": 2.384185793236071e-08,
+    "geom_condim": 0.0,
+    "geom_priority": 0.0
+  },
+  "pass_runtime": true,
+  "num_envs": 4,
+  "resets": 3,
+  "steps_per_reset": 300,
+  "max_reset_error_rad": 0.0,
+  "max_summed_effort_fraction": 1.00000003973643
+}

@@ -1,0 +1,231 @@
+{
+  "num_envs": 16,
+  "joint_count": 54,
+  "steps_per_batch": 150,
+  "min_opposed_response_rad": 0.17288318276405334,
+  "max_joint_jump_rad_per_step": 0.004870731383562088,
+  "failed_joints": [],
+  "responses": [
+    {
+      "joint": "Joint1_L",
+      "positive_minus_negative_rad": 0.1818692684173584
+    },
+    {
+      "joint": "Joint2_L",
+      "positive_minus_negative_rad": 0.17873096466064453
+    },
+    {
+      "joint": "Joint3_L",
+      "positive_minus_negative_rad": 0.1937556266784668
+    },
+    {
+      "joint": "Joint4_L",
+      "positive_minus_negative_rad": 0.19084703922271729
+    },
+    {
+      "joint": "Joint5_L",
+      "positive_minus_negative_rad": 0.18275690078735352
+    },
+    {
+      "joint": "Joint6_L",
+      "positive_minus_negative_rad": 0.17611469328403473
+    },
+    {
+      "joint": "Joint7_L",
+      "positive_minus_negative_rad": 0.17288459837436676
+    },
+    {
+      "joint": "l_thumb_cmc_flex",
+      "positive_minus_negative_rad": 0.19746585190296173
+    },
+    {
+      "joint": "l_thumb_cmc_abd",
+      "positive_minus_negative_rad": 0.1995251178741455
+    },
+    {
+      "joint": "l_thumb_mcp",
+      "positive_minus_negative_rad": 0.19973716139793396
+    },
+    {
+      "joint": "l_thumb_ip",
+      "positive_minus_negative_rad": 0.1999654769897461
+    },
+    {
+      "joint": "l_index_finger_mcp_flex",
+      "positive_minus_negative_rad": 0.19980227947235107
+    },
+    {
+      "joint": "l_index_finger_mcp_abd",
+      "positive_minus_negative_rad": 0.19962525367736816
+    },
+    {
+      "joint": "l_index_finger_pip",
+      "positive_minus_negative_rad": 0.1998966634273529
+    },
+    {
+      "joint": "l_index_finger_dip",
+      "positive_minus_negative_rad": 0.20001232624053955
+    },
+    {
+      "joint": "l_middle_finger_mcp_flex",
+      "positive_minus_negative_rad": 0.19982291758060455
+    },
+    {
+      "joint": "l_middle_finger_mcp_abd",
+      "positive_minus_negative_rad": 0.19967488944530487
+    },
+    {
+      "joint": "l_middle_finger_pip",
+      "positive_minus_negative_rad": 0.19990089535713196
+    },
+    {
+      "joint": "l_middle_finger_dip",
+      "positive_minus_negative_rad": 0.2000126838684082
+    },
+    {
+      "joint": "l_ring_finger_mcp_flex",
+      "positive_minus_negative_rad": 0.1996736228466034
+    },
+    {
+      "joint": "l_ring_finger_mcp_abd",
+      "positive_minus_negative_rad": 0.19956573843955994
+    },
+    {
+      "joint": "l_ring_finger_pip",
+      "positive_minus_negative_rad": 0.1998717188835144
+    },
+    {
+      "joint": "l_ring_finger_dip",
+      "positive_minus_negative_rad": 0.20000752806663513
+    },
+    {
+      "joint": "l_pinky_mcp_flex",
+      "positive_minus_negative_rad": 0.1996532678604126
+    },
+    {
+      "joint": "l_pinky_mcp_abd",
+      "positive_minus_negative_rad": 0.19955745339393616
+    },
+    {
+      "joint": "l_pinky_pip",
+      "positive_minus_negative_rad": 0.19988340139389038
+    },
+    {
+      "joint": "l_pinky_dip",
+      "positive_minus_negative_rad": 0.20001162588596344
+    },
+    {
+      "joint": "Joint1_R",
+      "positive_minus_negative_rad": 0.18187320232391357
+    },
+    {
+      "joint": "Joint2_R",
+      "positive_minus_negative_rad": 0.178733229637146
+    },
+    {
+      "joint": "Joint3_R",
+      "positive_minus_negative_rad": 0.19375669956207275
+    },
+    {
+      "joint": "Joint4_R",
+      "positive_minus_negative_rad": 0.19084739685058594
+    },
+    {
+      "joint": "Joint5_R",
+      "positive_minus_negative_rad": 0.1827552318572998
+    },
+    {
+      "joint": "Joint6_R",
+      "positive_minus_negative_rad": 0.1761149764060974
+    },
+    {
+      "joint": "Joint7_R",
+      "positive_minus_negative_rad": 0.17288318276405334
+    },
+    {
+      "joint": "r_thumb_cmc_flex",
+      "positive_minus_negative_rad": 0.19746717810630798
+    },
+    {
+      "joint": "r_thumb_cmc_abd",
+      "positive_minus_negative_rad": 0.19952607154846191
+    },
+    {
+      "joint": "r_thumb_mcp",
+      "positive_minus_negative_rad": 0.1997380554676056
+    },
+    {
+      "joint": "r_thumb_ip",
+      "positive_minus_negative_rad": 0.19996562600135803
+    },
+    {
+      "joint": "r_index_finger_mcp_flex",
+      "positive_minus_negative_rad": 0.19980394840240479
+    },
+    {
+      "joint": "r_index_finger_mcp_abd",
+      "positive_minus_negative_rad": 0.1996270716190338
+    },
+    {
+      "joint": "r_index_finger_pip",
+      "positive_minus_negative_rad": 0.19989731907844543
+    },
+    {
+      "joint": "r_index_finger_dip",
+      "positive_minus_negative_rad": 0.2000124156475067
+    },
+    {
+      "joint": "r_middle_finger_mcp_flex",
+      "positive_minus_negative_rad": 0.19982457160949707
+    },
+    {
+      "joint": "r_middle_finger_mcp_abd",
+      "positive_minus_negative_rad": 0.19967657327651978
+    },
+    {
+      "joint": "r_middle_finger_pip",
+      "positive_minus_negative_rad": 0.1999015212059021
+    },
+    {
+      "joint": "r_middle_finger_dip",
+      "positive_minus_negative_rad": 0.20001277327537537
+    },
+    {
+      "joint": "r_ring_finger_mcp_flex",
+      "positive_minus_negative_rad": 0.19967533648014069
+    },
+    {
+      "joint": "r_ring_finger_mcp_abd",
+      "positive_minus_negative_rad": 0.19956722855567932
+    },
+    {
+      "joint": "r_ring_finger_pip",
+      "positive_minus_negative_rad": 0.19987228512763977
+    },
+    {
+      "joint": "r_ring_finger_dip",
+      "positive_minus_negative_rad": 0.2000076025724411
+    },
+    {
+      "joint": "r_pinky_mcp_flex",
+      "positive_minus_negative_rad": 0.19965487718582153
+    },
+    {
+      "joint": "r_pinky_mcp_abd",
+      "positive_minus_negative_rad": 0.1995588093996048
+    },
+    {
+      "joint": "r_pinky_pip",
+      "positive_minus_negative_rad": 0.1998838484287262
+    },
+    {
+      "joint": "r_pinky_dip",
+      "positive_minus_negative_rad": 0.20001168549060822
+    }
+  ],
+  "pass": true,
+  "mujoco_controller": {
+    "profile": "source_xml"
+  },
+  "newton_damping_scale_source": null
+}

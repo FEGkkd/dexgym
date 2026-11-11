@@ -25,18 +25,23 @@
       "path": "archive/isaaclab2/source/dexteroushands_lab/assets/bottle/generated/pco1881_reference/cap.usda",
       "sha256": "91a733b81ecd0397c2e8cb66de8276034f33e7b50bc7ab530f9b9f230f92e9ce",
       "newton": "unverified"
+    },
+    {
+      "path": "source/dexgym/assets/marvin_wuji/hand2_2/generated/dual_arm_marvin.xml",
+      "sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+      "newton": "Hand2.2 composite; see docs/robots/marvin_hand22_upgrade_20261111.md"
     }
   ],
   "external": [
     {
-      "name": "Marvin M6 dual arms + WujiHand2 Beta 2 dual hands",
+      "name": "Historical Marvin M6 + Wuji Beta2 input (arms retained in Hand2.2 composition)",
       "source": "FEGkkd/whole-body-teleop",
       "commit": "5d4c345842f197bffeae7d7e08c4c3718230f9e0",
       "env": "DEXGYM_MARVIN_MJCF",
       "path": "src/whole_body_mujoco_driver/model/dual_arm_marvin.xml",
       "sha256": "6e0d569ec28c8ac26a84bfc9a48652b7a11a2f113193c2d3ea4191621280b3ce",
       "newton": "54-DoF structure, FK and independent control validated; physical wrist tracking needs calibration",
-      "publication": "external only; do not commit raw or converted asset"
+      "publication": "Pinned licensed input already packaged; current composite provenance is marvin_wuji/hand2_2/provenance.json"
     },
     {
       "name": "Isaac Lab Cartpole",

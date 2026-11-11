@@ -1,0 +1,287 @@
+{
+  "scenarios": [
+    {
+      "scenario": "static_hold",
+      "controlled_joints": [
+        "Joint1_L"
+      ],
+      "mode": "hold",
+      "newton_final_position_rad": 1.6039870977401733,
+      "mujoco_final_position_rad": 1.6039989755391548,
+      "final_position_difference_rad": 1.1877798981485554e-05,
+      "newton_tail_tracking_error_rad": 0.03318929672241211,
+      "mujoco_tail_tracking_error_rad": 0.033201807194790496,
+      "newton_step_overshoot_rad": null,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.0008316505700349808,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.0005501470456390906
+    },
+    {
+      "scenario": "left_arm_step",
+      "controlled_joints": [
+        "Joint1_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 1.6981194019317627,
+      "mujoco_final_position_rad": 1.6981328494632262,
+      "final_position_difference_rad": 1.3447531463484097e-05,
+      "newton_tail_tracking_error_rad": 0.027315402030944826,
+      "mujoco_tail_tracking_error_rad": 0.027329794050607596,
+      "newton_step_overshoot_rad": 0.027323126792907715,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.0015791654586791992,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.0009856371101330356
+    },
+    {
+      "scenario": "right_arm_step",
+      "controlled_joints": [
+        "Joint1_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": -1.6976450681686401,
+      "mujoco_final_position_rad": -1.6976585455552464,
+      "final_position_difference_rad": 1.3477386606286501e-05,
+      "newton_tail_tracking_error_rad": 0.026841068267822267,
+      "mujoco_tail_tracking_error_rad": 0.026855501258900336,
+      "newton_step_overshoot_rad": 0.026848793029785156,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.001573801040649414,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.0009827346688979083
+    },
+    {
+      "scenario": "both_arms_step",
+      "controlled_joints": [
+        "Joint1_L",
+        "Joint1_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 1.6981194019317627,
+      "mujoco_final_position_rad": 1.6981328494632262,
+      "final_position_difference_rad": 1.3447531463484097e-05,
+      "newton_tail_tracking_error_rad": 0.027315402030944826,
+      "mujoco_tail_tracking_error_rad": 0.027329794050607596,
+      "newton_step_overshoot_rad": 0.027323126792907715,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.0017737336456775665,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.0016940122163013258
+    },
+    {
+      "scenario": "left_hand_step",
+      "controlled_joints": [
+        "l_thumb_cmc_flex"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.21925561130046844,
+      "mujoco_final_position_rad": 0.21925577893373308,
+      "final_position_difference_rad": 1.6763326463054007e-07,
+      "newton_tail_tracking_error_rad": 0.019255250692367554,
+      "mujoco_tail_tracking_error_rad": 0.019255446902962194,
+      "newton_step_overshoot_rad": 0.0244675874710083,
+      "newton_settling_time_s_at_0_02_rad": 0.27,
+      "max_joint_jump_rad_per_step": 0.008228473365306854,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.005097393072832385
+    },
+    {
+      "scenario": "right_hand_step",
+      "controlled_joints": [
+        "r_thumb_cmc_flex"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.21925139427185059,
+      "mujoco_final_position_rad": 0.2192514572010601,
+      "final_position_difference_rad": 6.29292095100098e-08,
+      "newton_tail_tracking_error_rad": 0.019251087307929994,
+      "mujoco_tail_tracking_error_rad": 0.019251162185094074,
+      "newton_step_overshoot_rad": 0.02445627748966217,
+      "newton_settling_time_s_at_0_02_rad": 0.268,
+      "max_joint_jump_rad_per_step": 0.008227668702602386,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.005098074732411653
+    },
+    {
+      "scenario": "left_wrist_j5",
+      "controlled_joints": [
+        "Joint5_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 1.720556616783142,
+      "mujoco_final_position_rad": 1.7206136483475234,
+      "final_position_difference_rad": 5.7031564381304634e-05,
+      "newton_tail_tracking_error_rad": 0.00027618885040283205,
+      "mujoco_tail_tracking_error_rad": 0.00021436231228846303,
+      "newton_step_overshoot_rad": 0.0,
+      "newton_settling_time_s_at_0_02_rad": 0.302,
+      "max_joint_jump_rad_per_step": 0.0027080774307250977,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.014310758158488923
+    },
+    {
+      "scenario": "left_wrist_j6",
+      "controlled_joints": [
+        "Joint6_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.1490924060344696,
+      "mujoco_final_position_rad": 0.1491225482055022,
+      "final_position_difference_rad": 3.014217103258776e-05,
+      "newton_tail_tracking_error_rad": 0.0009633922576904297,
+      "mujoco_tail_tracking_error_rad": 0.0009323927581615866,
+      "newton_step_overshoot_rad": 0.0,
+      "newton_settling_time_s_at_0_02_rad": 0.322,
+      "max_joint_jump_rad_per_step": 0.003078271634876728,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.0024340230329223996
+    },
+    {
+      "scenario": "left_wrist_j7",
+      "controlled_joints": [
+        "Joint7_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.13145622611045837,
+      "mujoco_final_position_rad": 0.13148556494831956,
+      "final_position_difference_rad": 2.933883786118696e-05,
+      "newton_tail_tracking_error_rad": 0.018605045676231384,
+      "mujoco_tail_tracking_error_rad": 0.018575282504094855,
+      "newton_step_overshoot_rad": 0.0,
+      "newton_settling_time_s_at_0_02_rad": 0.692,
+      "max_joint_jump_rad_per_step": 0.002390027977526188,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.0016889305235435088
+    },
+    {
+      "scenario": "right_wrist_j5",
+      "controlled_joints": [
+        "Joint5_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": -1.4208989143371582,
+      "mujoco_final_position_rad": -1.4208419748694068,
+      "final_position_difference_rad": 5.6939467751426776e-05,
+      "newton_tail_tracking_error_rad": 0.00013909816741943358,
+      "mujoco_tail_tracking_error_rad": 7.736967610394885e-05,
+      "newton_step_overshoot_rad": 0.0,
+      "newton_settling_time_s_at_0_02_rad": 0.302,
+      "max_joint_jump_rad_per_step": 0.0027123689651489258,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.014290279601378186
+    },
+    {
+      "scenario": "right_wrist_j6",
+      "controlled_joints": [
+        "Joint6_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.14905011653900146,
+      "mujoco_final_position_rad": 0.14908406136003582,
+      "final_position_difference_rad": 3.3944821034359585e-05,
+      "newton_tail_tracking_error_rad": 0.0010056912899017334,
+      "mujoco_tail_tracking_error_rad": 0.0009705729668448404,
+      "newton_step_overshoot_rad": 0.0,
+      "newton_settling_time_s_at_0_02_rad": 0.322,
+      "max_joint_jump_rad_per_step": 0.0030800597742199898,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.0008086927722921683
+    },
+    {
+      "scenario": "right_wrist_j7",
+      "controlled_joints": [
+        "Joint7_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 0.16559094190597534,
+      "mujoco_final_position_rad": 0.16562173353089185,
+      "final_position_difference_rad": 3.079162491650966e-05,
+      "newton_tail_tracking_error_rad": 0.015528416633605957,
+      "mujoco_tail_tracking_error_rad": 0.015559748223471477,
+      "newton_step_overshoot_rad": 0.015590935945510864,
+      "newton_settling_time_s_at_0_02_rad": 0.256,
+      "max_joint_jump_rad_per_step": 0.0022169514559209347,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.0017359366897081695
+    },
+    {
+      "scenario": "left_wrist_combo",
+      "controlled_joints": [
+        "Joint5_L",
+        "Joint6_L",
+        "Joint7_L"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": 1.6501318216323853,
+      "mujoco_final_position_rad": 1.6501545662161234,
+      "final_position_difference_rad": 2.2744583738187885e-05,
+      "newton_tail_tracking_error_rad": 0.000687708854675293,
+      "mujoco_tail_tracking_error_rad": 0.0006635569856484747,
+      "newton_step_overshoot_rad": 0.0,
+      "newton_settling_time_s_at_0_02_rad": 0.21,
+      "max_joint_jump_rad_per_step": 0.0024033784866333008,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.0015222750053036638
+    },
+    {
+      "scenario": "right_wrist_combo",
+      "controlled_joints": [
+        "Joint5_R",
+        "Joint6_R",
+        "Joint7_R"
+      ],
+      "mode": "step",
+      "newton_final_position_rad": -1.490270733833313,
+      "mujoco_final_position_rad": -1.490247118173581,
+      "final_position_difference_rad": 2.3615659731968108e-05,
+      "newton_tail_tracking_error_rad": 0.0005007410049438477,
+      "mujoco_tail_tracking_error_rad": 0.0005258398042436507,
+      "newton_step_overshoot_rad": 0.0005255937576293945,
+      "newton_settling_time_s_at_0_02_rad": 0.206,
+      "max_joint_jump_rad_per_step": 0.0024253129959106445,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.00153929008228193
+    },
+    {
+      "scenario": "left_arm_ramp",
+      "controlled_joints": [
+        "Joint2_L"
+      ],
+      "mode": "ramp",
+      "newton_final_position_rad": -1.4872629642486572,
+      "mujoco_final_position_rad": -1.4872633071969885,
+      "final_position_difference_rad": 3.429483312888948e-07,
+      "newton_tail_tracking_error_rad": 0.01633620262145996,
+      "mujoco_tail_tracking_error_rad": 0.016335897842904207,
+      "newton_step_overshoot_rad": null,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.0008313329890370369,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.0005500550434993333
+    },
+    {
+      "scenario": "right_wrist_sine",
+      "controlled_joints": [
+        "Joint6_R"
+      ],
+      "mode": "sine",
+      "newton_final_position_rad": -0.026754219084978104,
+      "mujoco_final_position_rad": -0.027334587986869257,
+      "final_position_difference_rad": 0.0005803689018911533,
+      "newton_tail_tracking_error_rad": 0.037783342022448776,
+      "mujoco_tail_tracking_error_rad": 0.03817786155684981,
+      "newton_step_overshoot_rad": null,
+      "newton_settling_time_s_at_0_02_rad": null,
+      "max_joint_jump_rad_per_step": 0.0014944463036954403,
+      "max_joint_limit_violation_rad": 0.0,
+      "max_all_joint_backend_difference_rad": 0.0014234683525191985
+    }
+  ],
+  "pass": true,
+  "csv": "/home/ubuntu/dexgym/artifacts/dual_response_audit_20261111/hand22_dynamics_final.csv",
+  "mujoco_controller": {
+    "profile": "source_xml"
+  },
+  "newton_damping_scale_source": null
+}

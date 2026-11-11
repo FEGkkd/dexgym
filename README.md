@@ -106,3 +106,5 @@ PYTHONPATH=source python scripts/train_hand21_action_audit.py \
   --task DexGym-Wuji-Hand21-TeleDexter-Direct-v0 \
   --num_envs 4096 --max_iterations 300 physics=newton_mjwarp
 ```
+
+当前双臂双手模型已升级为与 Cube 任务同源的 Hand2.2，使用显式 SI 驱动并默认开启手部接触。详见[资产升级与 Newton 验证](docs/robots/marvin_hand22_upgrade_20261111.md)。

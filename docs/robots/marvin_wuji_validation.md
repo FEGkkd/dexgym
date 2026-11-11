@@ -1,3 +1,5 @@
+> Historical Beta2 report. The current default asset is Hand2.2; see [the 2026-11-11 upgrade](marvin_hand22_upgrade_20261111.md). These controller/asset measurements do not describe the new default.
+
 # Marvin M6 + WujiHand2 Beta 2: external asset validation
 
 **Status (2026-11-04):** the complete 54 DoF articulation loads in Isaac Lab

@@ -1,3 +1,5 @@
+> Historical Beta2 report. The current default asset is Hand2.2; see [the 2026-11-11 upgrade](marvin_hand22_upgrade_20261111.md). These controller/asset measurements do not describe the new default.
+
 # Marvin/Wuji: Newton asset without hand contacts
 
 **2026-11-04.** `make_robot_cfg()` now selects a packaged USD override that

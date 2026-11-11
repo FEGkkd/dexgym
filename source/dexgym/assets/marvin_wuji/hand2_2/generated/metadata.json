@@ -1,0 +1,557 @@
+{
+  "source_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+  "joint_order": [
+    "Joint1_L",
+    "Joint2_L",
+    "Joint3_L",
+    "Joint4_L",
+    "Joint5_L",
+    "Joint6_L",
+    "Joint7_L",
+    "l_thumb_cmc_flex",
+    "l_thumb_cmc_abd",
+    "l_thumb_mcp",
+    "l_thumb_ip",
+    "l_index_finger_mcp_flex",
+    "l_index_finger_mcp_abd",
+    "l_index_finger_pip",
+    "l_index_finger_dip",
+    "l_middle_finger_mcp_flex",
+    "l_middle_finger_mcp_abd",
+    "l_middle_finger_pip",
+    "l_middle_finger_dip",
+    "l_ring_finger_mcp_flex",
+    "l_ring_finger_mcp_abd",
+    "l_ring_finger_pip",
+    "l_ring_finger_dip",
+    "l_pinky_mcp_flex",
+    "l_pinky_mcp_abd",
+    "l_pinky_pip",
+    "l_pinky_dip",
+    "Joint1_R",
+    "Joint2_R",
+    "Joint3_R",
+    "Joint4_R",
+    "Joint5_R",
+    "Joint6_R",
+    "Joint7_R",
+    "r_thumb_cmc_flex",
+    "r_thumb_cmc_abd",
+    "r_thumb_mcp",
+    "r_thumb_ip",
+    "r_index_finger_mcp_flex",
+    "r_index_finger_mcp_abd",
+    "r_index_finger_pip",
+    "r_index_finger_dip",
+    "r_middle_finger_mcp_flex",
+    "r_middle_finger_mcp_abd",
+    "r_middle_finger_pip",
+    "r_middle_finger_dip",
+    "r_ring_finger_mcp_flex",
+    "r_ring_finger_mcp_abd",
+    "r_ring_finger_pip",
+    "r_ring_finger_dip",
+    "r_pinky_mcp_flex",
+    "r_pinky_mcp_abd",
+    "r_pinky_pip",
+    "r_pinky_dip"
+  ],
+  "keyframes": {
+    "home": [
+      1.57079633,
+      -1.57079633,
+      -1.57079633,
+      -1.57079633,
+      1.57079633,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -1.57079633,
+      -1.57079633,
+      1.57079633,
+      -1.57079633,
+      -1.57079633,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "hardware_zero": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "measured_j5_zero": [
+      0.0,
+      1.57079633,
+      -1.57079633,
+      -1.57079633,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.57079633,
+      1.57079633,
+      -1.57079633,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "forward_pose": [
+      1.57079633,
+      -1.57079633,
+      -1.57079633,
+      -1.57079633,
+      1.57079633,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      -1.57079633,
+      -1.57079633,
+      1.57079633,
+      -1.57079633,
+      -1.57079633,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "drives": {
+    "Joint1_L": {
+      "kp": 400.0,
+      "kd": 45.0,
+      "effort": 108.0
+    },
+    "Joint2_L": {
+      "kp": 400.0,
+      "kd": 45.0,
+      "effort": 108.0
+    },
+    "Joint3_L": {
+      "kp": 440.0,
+      "kd": 40.0,
+      "effort": 66.0
+    },
+    "Joint4_L": {
+      "kp": 340.0,
+      "kd": 34.0,
+      "effort": 66.0
+    },
+    "Joint5_L": {
+      "kp": 200.0,
+      "kd": 23.0,
+      "effort": 18.0
+    },
+    "Joint6_L": {
+      "kp": 120.0,
+      "kd": 16.0,
+      "effort": 18.0
+    },
+    "Joint7_L": {
+      "kp": 85.0,
+      "kd": 12.0,
+      "effort": 18.0
+    },
+    "Joint1_R": {
+      "kp": 400.0,
+      "kd": 45.0,
+      "effort": 108.0
+    },
+    "Joint2_R": {
+      "kp": 400.0,
+      "kd": 45.0,
+      "effort": 108.0
+    },
+    "Joint3_R": {
+      "kp": 440.0,
+      "kd": 40.0,
+      "effort": 66.0
+    },
+    "Joint4_R": {
+      "kp": 340.0,
+      "kd": 34.0,
+      "effort": 66.0
+    },
+    "Joint5_R": {
+      "kp": 200.0,
+      "kd": 23.0,
+      "effort": 18.0
+    },
+    "Joint6_R": {
+      "kp": 120.0,
+      "kd": 16.0,
+      "effort": 18.0
+    },
+    "Joint7_R": {
+      "kp": 85.0,
+      "kd": 12.0,
+      "effort": 18.0
+    },
+    "l_thumb_cmc_flex": {
+      "kp": 1.35499,
+      "kd": 0.04769,
+      "effort": 1.02
+    },
+    "l_thumb_cmc_abd": {
+      "kp": 2.19882,
+      "kd": 0.062838,
+      "effort": 0.83
+    },
+    "l_thumb_mcp": {
+      "kp": 0.886467,
+      "kd": 0.027982,
+      "effort": 0.35
+    },
+    "l_thumb_ip": {
+      "kp": 0.654026,
+      "kd": 0.020457,
+      "effort": 0.21
+    },
+    "l_index_finger_mcp_flex": {
+      "kp": 1.34521,
+      "kd": 0.047402,
+      "effort": 1.05
+    },
+    "l_index_finger_mcp_abd": {
+      "kp": 0.88946,
+      "kd": 0.027239,
+      "effort": 0.38
+    },
+    "l_index_finger_pip": {
+      "kp": 0.779361,
+      "kd": 0.024489,
+      "effort": 0.31
+    },
+    "l_index_finger_dip": {
+      "kp": 0.656424,
+      "kd": 0.020508,
+      "effort": 0.3
+    },
+    "l_middle_finger_mcp_flex": {
+      "kp": 1.29931,
+      "kd": 0.045699,
+      "effort": 1.06
+    },
+    "l_middle_finger_mcp_abd": {
+      "kp": 0.942641,
+      "kd": 0.027846,
+      "effort": 0.39
+    },
+    "l_middle_finger_pip": {
+      "kp": 0.73725,
+      "kd": 0.023408,
+      "effort": 0.32
+    },
+    "l_middle_finger_dip": {
+      "kp": 0.710314,
+      "kd": 0.022366,
+      "effort": 0.29
+    },
+    "l_ring_finger_mcp_flex": {
+      "kp": 1.27689,
+      "kd": 0.046209,
+      "effort": 1.02
+    },
+    "l_ring_finger_mcp_abd": {
+      "kp": 1.01333,
+      "kd": 0.028704,
+      "effort": 0.41
+    },
+    "l_ring_finger_pip": {
+      "kp": 0.859159,
+      "kd": 0.027436,
+      "effort": 0.28
+    },
+    "l_ring_finger_dip": {
+      "kp": 0.648064,
+      "kd": 0.020448,
+      "effort": 0.3
+    },
+    "l_pinky_mcp_flex": {
+      "kp": 1.10292,
+      "kd": 0.043816,
+      "effort": 0.87
+    },
+    "l_pinky_mcp_abd": {
+      "kp": 0.910201,
+      "kd": 0.026593,
+      "effort": 0.36
+    },
+    "l_pinky_pip": {
+      "kp": 0.861968,
+      "kd": 0.027476,
+      "effort": 0.28
+    },
+    "l_pinky_dip": {
+      "kp": 0.656704,
+      "kd": 0.020611,
+      "effort": 0.3
+    },
+    "r_thumb_cmc_flex": {
+      "kp": 1.35499,
+      "kd": 0.04769,
+      "effort": 1.02
+    },
+    "r_thumb_cmc_abd": {
+      "kp": 2.19882,
+      "kd": 0.062838,
+      "effort": 0.83
+    },
+    "r_thumb_mcp": {
+      "kp": 0.886467,
+      "kd": 0.027982,
+      "effort": 0.35
+    },
+    "r_thumb_ip": {
+      "kp": 0.654026,
+      "kd": 0.020457,
+      "effort": 0.21
+    },
+    "r_index_finger_mcp_flex": {
+      "kp": 1.34521,
+      "kd": 0.047402,
+      "effort": 1.05
+    },
+    "r_index_finger_mcp_abd": {
+      "kp": 0.88946,
+      "kd": 0.027239,
+      "effort": 0.38
+    },
+    "r_index_finger_pip": {
+      "kp": 0.779361,
+      "kd": 0.024489,
+      "effort": 0.31
+    },
+    "r_index_finger_dip": {
+      "kp": 0.656424,
+      "kd": 0.020508,
+      "effort": 0.3
+    },
+    "r_middle_finger_mcp_flex": {
+      "kp": 1.29931,
+      "kd": 0.045699,
+      "effort": 1.06
+    },
+    "r_middle_finger_mcp_abd": {
+      "kp": 0.942641,
+      "kd": 0.027846,
+      "effort": 0.39
+    },
+    "r_middle_finger_pip": {
+      "kp": 0.73725,
+      "kd": 0.023408,
+      "effort": 0.32
+    },
+    "r_middle_finger_dip": {
+      "kp": 0.710314,
+      "kd": 0.022366,
+      "effort": 0.29
+    },
+    "r_ring_finger_mcp_flex": {
+      "kp": 1.27689,
+      "kd": 0.046209,
+      "effort": 1.02
+    },
+    "r_ring_finger_mcp_abd": {
+      "kp": 1.01333,
+      "kd": 0.028704,
+      "effort": 0.41
+    },
+    "r_ring_finger_pip": {
+      "kp": 0.859159,
+      "kd": 0.027436,
+      "effort": 0.28
+    },
+    "r_ring_finger_dip": {
+      "kp": 0.648064,
+      "kd": 0.020448,
+      "effort": 0.3
+    },
+    "r_pinky_mcp_flex": {
+      "kp": 1.10292,
+      "kd": 0.043816,
+      "effort": 0.87
+    },
+    "r_pinky_mcp_abd": {
+      "kp": 0.910201,
+      "kd": 0.026593,
+      "effort": 0.36
+    },
+    "r_pinky_pip": {
+      "kp": 0.861968,
+      "kd": 0.027476,
+      "effort": 0.28
+    },
+    "r_pinky_dip": {
+      "kp": 0.656704,
+      "kd": 0.020611,
+      "effort": 0.3
+    }
+  }
+}
