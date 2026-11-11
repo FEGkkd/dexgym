@@ -11,6 +11,7 @@ from isaaclab_newton.physics import MJWarpSolverCfg, NewtonCfg, NewtonManager
 
 from dexgym.assets.marvin_wuji.robot_cfg import make_robot_cfg
 
+from .model import drive_parameters
 from .task import DT, HARD_CONTACT_DEPTH_M, JOINT_OVERFLOW_RAD, JOINTS, TrackingTask
 
 PHYSICS_DT = 0.002
@@ -42,7 +43,13 @@ class NewtonTrackingEnv:
                  reward_profile="precision", *, first_event=False, tracking_failure_m=0.25,
                  max_episode_steps=None):
         self.sim = SimulationContext(cfg)
-        self.scene = InteractiveScene(TrackingSceneCfg(num_envs=num_envs, env_spacing=3.0))
+        scene_cfg = TrackingSceneCfg(num_envs=num_envs, env_spacing=3.0)
+        drives = drive_parameters(model, library.names)
+        actuator = scene_cfg.robot.actuators["all"]
+        actuator.stiffness = {name: drive["kp"] for name, drive in drives.items()}
+        actuator.damping = {name: drive["kd"] for name, drive in drives.items()}
+        actuator.joint_effort_limit = {name: drive["effort"] for name, drive in drives.items()}
+        self.scene = InteractiveScene(scene_cfg)
         self.sim.reset()
         self.robot = self.scene["robot"]
         self.num_envs = num_envs
@@ -63,6 +70,13 @@ class NewtonTrackingEnv:
             self, model, library, nominal, policy_arch, termination_model, reward_profile,
             first_event=first_event, tracking_failure_m=tracking_failure_m,
         )
+        for field, desired in (
+            ("joint_stiffness", self.task.kp), ("joint_damping", self.task.kd),
+            ("joint_effort_limits", self.task.effort),
+        ):
+            actual = getattr(self.robot.data, field).torch
+            if not torch.allclose(actual, desired.expand_as(actual), atol=1e-5, rtol=1e-5):
+                raise ValueError(f"Newton {field} does not match the composed MuJoCo model")
         self.max_episode_steps = max_episode_steps
         self.elapsed = torch.zeros(num_envs, dtype=torch.long, device=self.device)
         self._state = self._physics_state()

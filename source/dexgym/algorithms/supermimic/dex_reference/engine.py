@@ -76,7 +76,8 @@ class SuperMimicEngine:
             sim = self.task.simulator_context
             context = self.task.context(x, m, aux, sim)
             training_obs = self.obs[: self.buffer.train_end]
-            self.actor.norm.update(training_obs[torch.isfinite(training_obs).all(-1)])
+            if not getattr(self.task, "freeze_actor_norm", False):
+                self.actor.norm.update(training_obs[torch.isfinite(training_obs).all(-1)])
             action = (
                 self.actor(self.obs)
                 + self.cfg.action_noise * torch.randn(self.env.num_envs, self.task.action_dim, device=self.device)
@@ -309,6 +310,8 @@ class SuperMimicEngine:
         continues = []
         survival = x.new_ones(x.shape[0])
         objective = x.new_zeros(x.shape[0])
+        behavior_penalty = x.new_zeros(x.shape[0])
+        regularize = getattr(t, "actor_regularization", None)
         try:
             for step in range(c.horizon):
                 context = self.task_features(x, m, aux, sim)
@@ -334,6 +337,8 @@ class SuperMimicEngine:
                     failure = self.fail_head(features).sigmoid().clamp(max=c.failure_clip)
                     done = 1 - (1 - done) * (1 - failure)
                 objective = objective + c.gamma**step * survival * reward
+                if regularize is not None:
+                    behavior_penalty = behavior_penalty + c.gamma**step * survival.detach() * regularize(x, m, u)
                 survival = survival * (1 - done)
                 rewards.append(reward.detach())
                 continues.append((1 - done).detach())
@@ -344,7 +349,7 @@ class SuperMimicEngine:
             final = t.critic(self.task_features(x, m, aux, sim))
             inputs.append(final)
             objective = objective + c.gamma**c.horizon * survival * self.critic(final)
-            actor_loss = -objective.mean()
+            actor_loss = (behavior_penalty - objective).mean()
             self.optimize("actor", actor_loss)
         finally:
             for module in frozen:
@@ -370,7 +375,8 @@ class SuperMimicEngine:
                 ids = permutation[i * batch : (i + 1) * batch]
                 critic_loss = (self.critic(features[ids]) - targets[ids]).square().mean()
                 self.optimize("critic", critic_loss)
-        return dict(actor_loss=actor_loss.detach(), critic_loss=critic_loss.detach(), survival=survival.detach().mean())
+        return dict(actor_loss=actor_loss.detach(), critic_loss=critic_loss.detach(), survival=survival.detach().mean(),
+                    actor_behavior_penalty=behavior_penalty.detach().mean())
 
     def save(self, path, next_iteration=None):
         e = self.env
@@ -425,9 +431,12 @@ class SuperMimicEngine:
             for it in range(self.iteration, self.cfg.max_iterations):
                 self.iteration = it
                 lr = self.lr_at(it)
-                for opt in self.optimizers.values():
+                for name, opt in self.optimizers.items():
+                    update_lr = lr
+                    if name == "actor" and self.cfg.actor_lr is not None:
+                        update_lr = self.cfg.actor_lr * lr / self.cfg.lr
                     for group in opt.param_groups:
-                        group["lr"] = lr
+                        group["lr"] = update_lr
                 acc += 1 / self.cfg.utd
                 steps = int(acc)
                 acc -= steps

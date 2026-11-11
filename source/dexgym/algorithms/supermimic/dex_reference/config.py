@@ -27,6 +27,7 @@ class SuperMimicConfig:
     gamma: float = 0.99
     lam: float = 0.95
     lr: float = 2e-4
+    actor_lr: float | None = None
     lr_decay_iters: int = 250000
     lr_final_ratio: float = 0.03
     action_noise: float = 0.1

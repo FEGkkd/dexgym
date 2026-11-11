@@ -15,6 +15,8 @@ from dexgym.algorithms.supermimic.dex_reference.engine import SuperMimicEngine
 from dexgym.assets.marvin_wuji.robot_cfg import PACKAGED_MJCF
 
 from .diagnostics import diagnose_model
+from .imitation import PhysicalTeacher
+from .model import sha256, validate_drive_only_model
 from .native import FAILURE_CAUSES, PHYSICS_DT, NewtonTrackingEnv, simulation_cfg
 from .task import DT, FUTURE_FRAMES, IMAGINATION_STEPS, JOINTS, MOTION_LATENT_DIM, TASK_ID, MotionLibrary
 
@@ -237,6 +239,7 @@ def replay_coverage(engine):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--reference", required=True, action="append", type=Path)
+    parser.add_argument("--model-xml", type=Path, help="Packaged Hand2.2 with updated Marvin arm position servos")
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--num-envs", type=int, default=32)
     parser.add_argument("--seed", type=int, default=42)
@@ -253,6 +256,11 @@ def main():
     parser.add_argument("--save-interval", type=int, default=50)
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--evaluate", type=Path)
+    parser.add_argument("--skip-model-probe", action="store_true")
+    parser.add_argument("--teacher", type=Path, help="Single-clip teaching trajectory used during training")
+    parser.add_argument("--bc-steps", type=int, default=5000)
+    parser.add_argument("--actor-lr", type=float)
+    parser.add_argument("--teacher-weight", type=float, default=1.0)
     parser.add_argument("--model-probe-only", action="store_true")
     parser.add_argument("--eval-steps", type=int)
     parser.add_argument("--clip-index", type=int, default=0)
@@ -281,6 +289,14 @@ def main():
         parser.error("Choose check-only or evaluate")
     if args.model_probe_only and not args.evaluate:
         parser.error("--model-probe-only requires --evaluate")
+    if args.model_probe_only and args.skip_model_probe:
+        parser.error("Cannot skip the model probe in probe-only mode")
+    if args.teacher and (args.evaluate or args.check_only or args.bc_steps <= 0):
+        parser.error("--teacher requires training with positive --bc-steps")
+    if not np.isfinite(args.teacher_weight) or args.teacher_weight < 0:
+        parser.error("--teacher-weight must be finite and nonnegative")
+    if args.actor_lr is not None and (not np.isfinite(args.actor_lr) or args.actor_lr <= 0):
+        parser.error("--actor-lr must be positive and finite")
     if not 0 <= args.clip_index < len(args.reference):
         parser.error("Clip index is outside the Motion Library")
     if args.max_episode_steps is not None and args.max_episode_steps < 1:
@@ -314,9 +330,13 @@ def main():
     torch.manual_seed(args.seed)
     torch.set_float32_matmul_precision(args.matmul_precision)
     cfg = simulation_cfg()
-    model = mujoco.MjModel.from_xml_path(str(PACKAGED_MJCF))
+    xml = args.model_xml or PACKAGED_MJCF
+    if args.model_xml:
+        validate_drive_only_model(PACKAGED_MJCF, xml)
+    model = mujoco.MjModel.from_xml_path(str(xml))
     lib = MotionLibrary(args.reference, model, PACKAGED_MJCF, cfg.device)
-    provenance = {"task_id": TASK_ID, "model_sha256": lib.model_sha256, "motion_sha256": lib.sha256,
+    provenance = {"task_id": TASK_ID, "model_sha256": sha256(xml), "motion_sha256": lib.sha256,
+                  "reference_model_sha256": lib.model_sha256, "model_xml": str(xml.resolve()),
                   "motion_files": [str(path.resolve()) for path in args.reference], "frames": lib.frames,
                   "joint_names": lib.names, "seed": args.seed, "backend": "Isaac Lab 3 / Newton MJWarp",
                   "nominal": args.nominal, "num_envs": 2 if args.evaluate else args.num_envs,
@@ -383,15 +403,22 @@ def main():
                 "residual_scale_rad": env.task.scale.tolist(),
                 "seed": args.seed,
             }
-            probe = diagnose_model(env, actor, payload, args.clip_index)
-            write_json(args.output / "model_probe.json", {**metadata, **probe})
-            print("TRACKING_MODEL_PROBE", json.dumps(probe["counts"]), flush=True)
+            if not args.skip_model_probe:
+                probe = diagnose_model(env, actor, payload, args.clip_index)
+                write_json(args.output / "model_probe.json", {**metadata, **probe})
+                print("TRACKING_MODEL_PROBE", json.dumps(probe["counts"]), flush=True)
             if args.model_probe_only:
                 return
             result = evaluate(env, actor, args.clip_index, args.eval_steps)
             write_json(args.output / "evaluation.json", {**metadata, "metrics": result})
             print("TRACKING_EVALUATION", json.dumps(result), flush=True)
             return
+        if args.teacher:
+            provenance["actor_initialization"] = dict(
+                teacher=str(args.teacher.resolve()), teacher_sha256=sha256(args.teacher),
+                bc_steps=args.bc_steps, regularization_weight=args.teacher_weight,
+                freeze_observation_norm=True,
+            )
         write_json(args.output / "provenance.json", provenance)
         default_noise = 0.045 if args.nominal == "home" else 0.12
         recipe = SuperMimicConfig(
@@ -399,6 +426,7 @@ def main():
             wm_only_iters=args.wm_only_iters, wm_window=8, wm_batches=args.wm_batches, wm_batch=args.wm_batch,
             wm_hidden=(args.wm_width,) * 3, isolate_wm_init=True, pi_batch=args.pi_batch,
             horizon=IMAGINATION_STEPS, critic_epochs=5,
+            actor_lr=args.actor_lr,
             action_noise=default_noise if args.action_noise is None else args.action_noise,
             failure_warmup_iters=0 if env.task.transition_termination else 10,
             failure_clip=1.0 if env.task.transition_termination else 0.1,
@@ -406,6 +434,14 @@ def main():
             save_interval=args.save_interval, log_interval=args.log_interval,
         )
         engine = SuperMimicEngine(env.task, recipe, args.output)
+        if args.teacher:
+            teacher = PhysicalTeacher(env.task, args.teacher, provenance["model_sha256"])
+            losses = teacher.initialize(engine.actor, args.bc_steps)
+            write_json(args.output / "actor_initialization.json", losses)
+            env.task.freeze_actor_norm = True
+            if args.teacher_weight:
+                env.task.actor_regularization = lambda x, m, u: args.teacher_weight * teacher.penalty(x, m, u)
+            engine.save(args.output / "model_bc.pt")
         engine.learn()
         proof = {"sim_transitions": engine.sim_steps, "optimizer_steps": optimizer_steps(engine),
                  "gradients": engine.last_gradients, "train_envs": engine.buffer.train_end,
