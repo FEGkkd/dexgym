@@ -15,8 +15,8 @@ from dexgym.algorithms.supermimic.dex_reference.engine import SuperMimicEngine
 from dexgym.assets.marvin_wuji.robot_cfg import PACKAGED_MJCF
 
 from .diagnostics import diagnose_model
-from .native import NewtonTrackingEnv, simulation_cfg
-from .task import FUTURE_FRAMES, IMAGINATION_STEPS, JOINTS, MOTION_LATENT_DIM, TASK_ID, MotionLibrary
+from .native import FAILURE_CAUSES, PHYSICS_DT, NewtonTrackingEnv, simulation_cfg
+from .task import DT, FUTURE_FRAMES, IMAGINATION_STEPS, JOINTS, MOTION_LATENT_DIM, TASK_ID, MotionLibrary
 
 
 def write_json(path, value):
@@ -56,10 +56,14 @@ def check_contract(env):
         action = task.baseline_action(memory)
         target, _ = task.control_target(action, memory, task.encoder_bias)
         errors["reference_pd_target_rad"] = float((target - lib.qpos[lib.at(memory["frame"])]).abs().max())
-        if max(errors["home_target_rad"], errors["reference_pd_target_rad"]) > 1e-6:
+        upper, _ = task.control_target(torch.ones_like(action), memory, task.encoder_bias)
+        lower, _ = task.control_target(-torch.ones_like(action), memory, task.encoder_bias)
+        errors["upper_target_rad"] = float((upper - task.hi).abs().max())
+        errors["lower_target_rad"] = float((lower - task.lo).abs().max())
+        if max(errors[k] for k in ("home_target_rad", "reference_pd_target_rad", "upper_target_rad", "lower_target_rad")) > 1e-6:
             raise RuntimeError(f"Fixed Home target mapping mismatch: {errors}")
-    obs, reward, terminated, _, _ = env.step(action)
-    if not reward.isfinite().all() or terminated.any():
+    obs, reward, _, _, events = env.step(action)
+    if not reward.isfinite().all() or (events["failure_bits"] != 0).any():
         raise RuntimeError("Reference phase test failed during the first physical step")
     if not torch.equal(env.memory["frame"], lib.at(memory["frame"])):
         raise RuntimeError("Physical phase failed to advance by one reference frame")
@@ -69,10 +73,21 @@ def check_contract(env):
     env.reset(ids[-1:], frame=lib.end[frames[-1:]] - 1)
     if not torch.equal(env.history[:-1], stepped_history[:-1]):
         raise RuntimeError("A partial reset changed another environment's observation history")
-    action = task.baseline_action(env.memory)
-    _, _, terminated, truncated, _ = env.step(action)
-    if terminated[-1] or not truncated[-1]:
-        raise RuntimeError("The final reference step must truncate independently of safety termination")
+    step_limit = env.max_episode_steps
+    try:
+        if task.first_event:
+            env.reset(ids[:1], frame=lib.start[:1])
+            env.max_episode_steps = 1
+        action = task.baseline_action(env.memory)
+        _, _, terminated, truncated, events = env.step(action)
+        if not events["reference_complete"][-1] or bool(terminated[-1]) != task.first_event:
+            raise RuntimeError("The final reference step must complete independently of safety failure")
+        if task.first_event and (terminated[0] or not truncated[0] or not events["time_limit"][0] or truncated[-1]):
+            raise RuntimeError("A training cap must truncate without replacing clip completion")
+        if not task.first_event and not truncated[-1]:
+            raise RuntimeError("The legacy contract must truncate at the final reference step")
+    finally:
+        env.max_episode_steps = step_limit
     return errors
 
 
@@ -86,7 +101,12 @@ def evaluate(env, actor, clip_index, steps):
     count = max_steps if steps is None else min(max_steps, steps)
     obs, _ = env.reset(frame=frame.repeat(2))
     active = torch.ones(2, dtype=torch.bool, device=env.device)
-    terminations = torch.zeros_like(active)
+    end_step = torch.zeros(2, dtype=torch.long, device=env.device)
+    complete_intervals = torch.zeros_like(end_step)
+    endings = {
+        key: torch.zeros_like(end_step)
+        for key in ("failure_bits", "safety_substep", "reference_complete", "time_limit")
+    }
     records = {}
     baseline_name = task.baseline_name
     for i in range(count):
@@ -94,7 +114,7 @@ def evaluate(env, actor, clip_index, steps):
         action = actor(obs["policy"])
         action[~active] = 0.0
         action[0] = task.baseline_action(m)[0]
-        obs, reward, terminated, truncated, _ = env.step(action)
+        obs, reward, terminated, truncated, events = env.step(action)
         e = task.geometric_errors(env.state(), m)
         values = {
             "wrist_mm": e["wrist"].norm(dim=-1) * 1000,
@@ -108,8 +128,13 @@ def evaluate(env, actor, clip_index, steps):
             "reward": reward[:, None],
         }
         for key, value in values.items():
-            records.setdefault(key, []).append(value.masked_fill(~active[:, None], float("nan")))
-        terminations |= active & terminated
+            sample = active if key in ("penetration_mm", "reward") else active & events["full_step"]
+            records.setdefault(key, []).append(value.masked_fill(~sample[:, None], float("nan")))
+        complete_intervals += active & events["full_step"]
+        ended = active & (terminated | truncated)
+        end_step = torch.where(ended, i + 1, end_step)
+        for key, previous in endings.items():
+            endings[key] = torch.where(ended, events[key], previous)
         active &= ~(terminated | truncated)
         if not active.any():
             break
@@ -119,7 +144,21 @@ def evaluate(env, actor, clip_index, steps):
     result = {}
     arrays = {k: torch.stack(v).cpu().numpy() for k, v in records.items()}
     for index, name in enumerate((baseline_name, "policy")):
-        entry = {"requested_steps": count, "full_clip_steps": max_steps, "terminated": bool(terminations[index])}
+        bits = int(endings["failure_bits"][index])
+        failed = bits != 0
+        event_substep = int(endings["safety_substep"][index])
+        event_step = int(end_step[index])
+        entry = {
+            "requested_steps": count, "full_clip_steps": max_steps, "terminated": failed,
+            "reference_complete": bool(endings["reference_complete"][index]),
+            "time_limit": bool(endings["time_limit"][index]),
+            "failure_causes": [cause for bit, cause in FAILURE_CAUSES.items() if bits & bit],
+            "failure_control_step": event_step if failed else None,
+            "failure_substep": event_substep or None,
+            "failure_time_s": ((event_step - 1) * DT + (event_substep * PHYSICS_DT if event_substep else DT))
+            if failed else None,
+            "complete_control_steps": int(complete_intervals[index]),
+        }
         for key, frames in arrays.items():
             values = frames[:, index]
             valid = np.isfinite(values).all(axis=-1)
@@ -132,15 +171,27 @@ def evaluate(env, actor, clip_index, steps):
             entry[key] = {"mean": float(values.mean()), "p95": float(np.percentile(values, 95)), "max": float(values.max())}
             if key == "penetration_mm":
                 entry["control_steps_penetration_gt_0_5mm"] = int((values > 0.5).sum())
+        entry["per_side"] = {}
+        for side, label in enumerate(("left", "right")):
+            group = {}
+            for key in ("wrist_mm", "wrist_deg", "elbow_mm", "tip_mm", "tip_deg"):
+                values = arrays[key][:, index]
+                values = values[np.isfinite(values).all(axis=-1)]
+                if values.size:
+                    part = np.split(values, 2, axis=1)[side]
+                    group[key] = {"mean": float(part.mean()), "p95": float(np.percentile(part, 95))}
+            entry["per_side"][label] = group
         result[name] = entry
     matched = np.isfinite(arrays["reward"]).all(axis=(1, 2))
     if matched.any():
         result["matched_steps"] = int(matched.sum())
         for i, name in enumerate((baseline_name, "policy")):
-            result[name]["matched_mean"] = {
-                key: float(values[matched, i].mean())
-                for key, values in arrays.items() if np.isfinite(values[matched, i]).all()
-            }
+            shared = {}
+            for key, values in arrays.items():
+                valid = matched & np.isfinite(values).all(axis=(1, 2))
+                if valid.any():
+                    shared[key] = float(values[valid, i].mean())
+            result[name]["matched_mean"] = shared
     return result
 
 
@@ -149,6 +200,25 @@ def optimizer_steps(engine):
         name: max((int(state["step"]) for state in opt.state.values() if "step" in state), default=0)
         for name, opt in engine.optimizers.items()
     }
+
+
+def replay_coverage(engine):
+    buffer = engine.buffer
+    data = buffer.data
+    train_roles = engine.task.collection_roles[:buffer.train_end]
+    valid = data["valid"][:buffer.size, :buffer.train_end]
+    failure = data["safety_failure"][:buffer.size, :buffer.train_end]
+    full = data["full_step"][:buffer.size, :buffer.train_end]
+    result = {}
+    for i, name in enumerate(("policy", "reference_pd", "perturbed_reference_pd")):
+        selected = valid & (train_roles == i)
+        result[name] = {
+            "environments": int((train_roles == i).sum()),
+            "valid_transitions": int(selected.sum()),
+            "safety_failures": int((selected & failure).sum()),
+            "partial_intervals": int((selected & ~full).sum()),
+        }
+    return result
 
 
 def main():
@@ -176,6 +246,9 @@ def main():
     parser.add_argument("--nominal", choices=("home", "reference", "feedforward"))
     parser.add_argument("--policy-arch", choices=("motion-encoder", "flat"))
     parser.add_argument("--termination-model", choices=("transition", "legacy-state"))
+    parser.add_argument("--task-contract", choices=("first-event", "control-boundary"))
+    parser.add_argument("--tracking-failure-m", type=float)
+    parser.add_argument("--max-episode-steps", type=int)
     parser.add_argument("--reward-profile", choices=("multiscale", "precision"))
     parser.add_argument("--matmul-precision", choices=("highest", "high"))
     args = parser.parse_args()
@@ -197,21 +270,32 @@ def main():
         parser.error("--model-probe-only requires --evaluate")
     if not 0 <= args.clip_index < len(args.reference):
         parser.error("Clip index is outside the Motion Library")
+    if args.max_episode_steps is not None and args.max_episode_steps < 1:
+        parser.error("A training episode cap must be positive")
     original = None
     defaults = {"nominal": "home", "policy_arch": "motion-encoder", "termination_model": "transition",
-                "reward_profile": "multiscale", "matmul_precision": "high"}
+                "reward_profile": "multiscale", "matmul_precision": "high", "task_contract": "first-event",
+                "tracking_failure_m": 0.25}
     if args.evaluate:
         original = json.loads((args.evaluate.parent / "provenance.json").read_text())
         if original.get("contact_model") == "hard-contact":
             parser.error("The experimental three-contact checkpoint requires DexGym commit 3147228")
         legacy = {"nominal": "reference", "policy_arch": "flat", "termination_model": "legacy-state",
-                  "reward_profile": "precision", "matmul_precision": "highest"}
+                  "reward_profile": "precision", "matmul_precision": "highest", "task_contract": "control-boundary",
+                  "tracking_failure_m": None}
         for key, value in legacy.items():
             original.setdefault(key, value)
         defaults.update({key: original[key] for key in defaults})
     for key, value in defaults.items():
         if getattr(args, key) is None:
             setattr(args, key, value)
+    first_event = args.task_contract == "first-event"
+    if first_event and (
+        args.termination_model != "transition" or args.tracking_failure_m is None
+        or not np.isfinite(args.tracking_failure_m) or args.tracking_failure_m <= 0
+    ):
+        parser.error("First-event tracking requires transition termination and a positive finite wrist threshold")
+    tracking_failure_m = args.tracking_failure_m if first_event else None
     random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -224,24 +308,33 @@ def main():
                   "joint_names": lib.names, "seed": args.seed, "backend": "Isaac Lab 3 / Newton MJWarp",
                   "nominal": args.nominal, "num_envs": 2 if args.evaluate else args.num_envs,
                   "policy_arch": args.policy_arch, "matmul_precision": args.matmul_precision,
-                  "termination_model": args.termination_model, "reward_profile": args.reward_profile}
+                  "termination_model": args.termination_model, "reward_profile": args.reward_profile,
+                  "task_contract": args.task_contract, "tracking_failure_m": tracking_failure_m,
+                  "training_episode_steps": args.max_episode_steps if not args.evaluate else None}
     args.output.mkdir(parents=True, exist_ok=True)
     if not args.evaluate and not args.check_only and (args.output / "metrics.jsonl").exists():
         parser.error("Select a fresh output directory for training")
     with launch_simulation(cfg):
         env = NewtonTrackingEnv(
             cfg, 2 if args.evaluate else args.num_envs, model, lib, args.nominal,
-            args.policy_arch, args.termination_model, args.reward_profile,
+            args.policy_arch, args.termination_model, args.reward_profile, first_event=first_event,
+            tracking_failure_m=tracking_failure_m, max_episode_steps=None if args.evaluate else args.max_episode_steps,
         )
         provenance.update(history_frames=env.task.history_steps, policy_dim=env.task.policy_dim,
                           future_frames=FUTURE_FRAMES if env.task.goal_dim else 0,
                           motion_latent_dim=MOTION_LATENT_DIM if env.task.goal_dim else 0)
         if args.nominal == "home":
-            provenance["action_mapping"] = {
-                "name": "fixed_home_joint_position",
-                "home_rad": env.task.home.tolist(), "scale_rad": env.task.scale.tolist(),
+            mapping = {
+                "name": "fixed_home_asymmetric_joint_position" if first_event else "fixed_home_joint_position",
+                "home_rad": env.task.home.tolist(),
                 "lower_rad": env.task.lo.tolist(), "upper_rad": env.task.hi.tolist(),
             }
+            if first_event:
+                mapping.update(lower_travel_rad=env.task.lower_travel.tolist(),
+                               upper_travel_rad=env.task.upper_travel.tolist())
+            else:
+                mapping["scale_rad"] = env.task.scale.tolist()
+            provenance["action_mapping"] = mapping
         contract = check_contract(env)
         write_json(args.output / "contract.json", contract)
         print("TRACKING_CONTRACT", json.dumps(contract), flush=True)
@@ -250,7 +343,7 @@ def main():
         if original is not None:
             if any(original[k] != provenance[k]
                    for k in ("task_id", "model_sha256", "motion_sha256", "joint_names", "nominal", "policy_arch",
-                             "termination_model", "reward_profile")):
+                             "termination_model", "reward_profile", "task_contract", "tracking_failure_m")):
                 raise ValueError("Checkpoint reference or asset provenance mismatch")
             if original.get("action_mapping") != provenance.get("action_mapping"):
                 raise ValueError("Checkpoint action mapping mismatch")
@@ -268,6 +361,8 @@ def main():
                 "nominal": args.nominal,
                 "policy_arch": args.policy_arch,
                 "termination_model": args.termination_model,
+                "task_contract": args.task_contract,
+                "tracking_failure_m": tracking_failure_m,
                 "reward_profile": args.reward_profile,
                 "matmul_precision": args.matmul_precision,
                 "wm_hidden": payload["config"]["wm_hidden"],
@@ -303,6 +398,8 @@ def main():
                  "gradients": engine.last_gradients, "train_envs": engine.buffer.train_end,
                  "holdout_envs": env.num_envs - engine.buffer.train_end,
                  "peak_torch_memory_bytes": torch.cuda.max_memory_allocated(env.device)}
+        if env.task.collection_roles is not None:
+            proof["final_replay_coverage"] = replay_coverage(engine)
         write_json(args.output / "training_proof.json", proof)
         if not all(proof["optimizer_steps"].values()) or engine.last_gradients["actor"] <= 0:
             raise RuntimeError(f"Incomplete World Model / Actor / Critic updates: {proof}")

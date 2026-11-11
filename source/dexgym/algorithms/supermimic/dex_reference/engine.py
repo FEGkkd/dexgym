@@ -70,6 +70,7 @@ class SuperMimicEngine:
     def collect(self, steps):
         stats = []
         replay_obs = getattr(self.task, "replay_observation", None)
+        collection_action = getattr(self.task, "collection_action", None)
         for _ in range(steps):
             x, m, aux = self.task.read()
             sim = self.task.simulator_context
@@ -80,6 +81,8 @@ class SuperMimicEngine:
                 self.actor(self.obs)
                 + self.cfg.action_noise * torch.randn(self.env.num_envs, self.task.action_dim, device=self.device)
             ).clamp(-1, 1)
+            if collection_action is not None:
+                action = collection_action(action, m)
             obs, reward, terminated, truncated, _ = self.env.step(action)
             cap = self.env.transition
             c = cap["c"]
@@ -105,7 +108,9 @@ class SuperMimicEngine:
             self.torque_norm.update(cap["torque"][train_valid])
             dyn = self.task.dynamics(x[train_valid], sim[train_valid], aux[train_valid])
             self.wm.norm.update(self.wm.inputs(dyn, u[train_valid]))
-            self.wm.delta_norm.update(self.task.codec.difference(x[train_valid], cap["x1"][train_valid]))
+            full_step = cap.get("full_step")
+            delta_valid = train_valid if full_step is None else train_valid & full_step
+            self.wm.delta_norm.update(self.task.codec.difference(x[delta_valid], cap["x1"][delta_valid]))
             if self.transition_termination:
                 features = self.fail_head.features(x[train_valid], u[train_valid])
             else:
@@ -139,6 +144,10 @@ class SuperMimicEngine:
                 terminated=terminated,
                 valid=valid,
             )
+            if full_step is not None:
+                transition["full_step"] = full_step
+            if "safety_failure" in cap:
+                transition["safety_failure"] = cap["safety_failure"]
             eligible_start = getattr(self.task, "imagination_start_mask", None)
             if eligible_start is not None:
                 transition["imagination_valid"] = valid & eligible_start(m, self.cfg.horizon)
@@ -204,12 +213,14 @@ class SuperMimicEngine:
             x, aux = t.replay_push(x1, w["push"][:, j], aux)
         mask = w["mask"]
         denom = mask.sum().clamp_min(1)
-        wm_loss = (torch.stack(losses, 1) * mask).sum() / mask.shape[0]
+        dynamics_mask = mask * w["full_step"] if "full_step" in w else mask
+        dynamics_denom = dynamics_mask.sum().clamp_min(1)
+        wm_loss = (torch.stack(losses, 1) * dynamics_mask).sum() / mask.shape[0]
         if not holdout:
             self.optimize("wm", wm_loss)
         true = self.replay_failure_features(w, sim)
         predicted = torch.stack(features, 1).detach()
-        label = w["terminated"].float()
+        label = w.get("safety_failure", w["terminated"]).float()
         failure_loss = (
             (
                 F.binary_cross_entropy_with_logits(self.fail_head(true), label, reduction="none")
@@ -223,8 +234,8 @@ class SuperMimicEngine:
         return dict(
             wm_loss=wm_loss.detach(),
             failure_loss=failure_loss.detach(),
-            state_loss=(torch.stack(state_losses, 1) * mask).sum().detach() / denom,
-            contact_digit_loss=(torch.stack(contact_losses, 1) * mask).sum().detach() / denom,
+            state_loss=(torch.stack(state_losses, 1) * dynamics_mask).sum().detach() / dynamics_denom,
+            contact_digit_loss=(torch.stack(contact_losses, 1) * dynamics_mask).sum().detach() / dynamics_denom,
         )
 
     @torch.no_grad()

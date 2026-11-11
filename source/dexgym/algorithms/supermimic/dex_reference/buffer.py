@@ -42,7 +42,7 @@ class ReplayBuffer:
             key = (window, holdout, failure_horizon)
             if key not in self._failure_pools:
                 chronological = (self.ptr - self.size + torch.arange(self.size, device=self.device)) % self.capacity
-                term = self.data["terminated"][chronological, lo:hi].int()
+                term = self.data.get("safety_failure", self.data["terminated"])[chronological, lo:hi].int()
                 cumulative = torch.nn.functional.pad(term.cumsum(0), (0, 0, 1, 0))
                 starts = torch.arange(count, device=self.device)
                 ends = (starts + failure_horizon).clamp(max=self.size)

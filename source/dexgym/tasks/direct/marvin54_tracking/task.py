@@ -20,6 +20,8 @@ HISTORY_FRAMES = 10
 FUTURE_FRAMES = 10
 MOTION_LATENT_DIM = 32
 HARD_CONTACT_DEPTH_M = 0.003
+JOINT_OVERFLOW_RAD = 0.05
+TRACKING_WIDTH_M = 0.02
 FINGERS = ("thumb", "index_finger", "middle_finger", "ring_finger", "pinky")
 
 
@@ -124,9 +126,10 @@ class TrackingTask:
     context_dim = 324
     error_floor = [0.002] * 54 + [0.05] * 54
     codec = JointCodec
+    first_event = False
 
     def __init__(self, env, model, library, nominal, policy_arch="flat", termination_model="legacy-state",
-                 reward_profile="precision"):
+                 reward_profile="precision", *, first_event=False, tracking_failure_m=0.25):
         self.env = self.reader = env
         self.device = env.device
         self.library = library
@@ -135,6 +138,8 @@ class TrackingTask:
         self.transition_termination = termination_model == "transition"
         self.termination_context_dim = self.action_dim if self.transition_termination else self.context_dim
         self.reward_profile = reward_profile
+        self.first_event = first_event
+        self.tracking_failure_m = tracking_failure_m
         self.history_steps = HISTORY_FRAMES if policy_arch == "motion-encoder" else 1
         self.history_frame_dim = 3 * JOINTS if policy_arch == "motion-encoder" else self.context_dim
         self.history_dim = self.history_steps * self.history_frame_dim
@@ -160,11 +165,17 @@ class TrackingTask:
             raise ValueError("The fixed Home posture or native position limits are invalid")
         if nominal == "home":
             self.nominal = self.home
-            self.scale = torch.maximum(self.home - self.lo, self.hi - self.home)
+            self.lower_travel = self.home - self.lo
+            self.upper_travel = self.hi - self.home
+            self.scale = torch.maximum(self.lower_travel, self.upper_travel)
         else:
             arm_scale, hand_scale = (0.008, 0.025) if nominal == "feedforward" else (0.18, 0.25)
             self.scale = self.tensor([arm_scale if name.startswith("Joint") else hand_scale for name in library.names])
             self.nominal = self.feedforward_targets(model) if nominal == "feedforward" else library.qpos
+        self.collection_roles = None
+        if first_event and nominal == "home":
+            group = torch.arange(env.num_envs, device=self.device) % 8
+            self.collection_roles = (group == 6).int() + 2 * (group == 7).int()
 
     def feedforward_targets(self, model):
         data = mujoco.MjData(model)
@@ -261,14 +272,29 @@ class TrackingTask:
 
     def control_target(self, action, m, bias):
         nominal = self.nominal if self.action_mode == "home" else self.nominal[self.current_goal(m)]
-        u = (nominal + self.scale * action).clamp(self.lo, self.hi)
+        scale = self.scale
+        if self.first_event and self.action_mode == "home":
+            scale = torch.where(action >= 0, self.upper_travel, self.lower_travel)
+        u = (nominal + scale * action).clamp(self.lo, self.hi)
         return u, u
 
     def baseline_action(self, memory):
         if self.action_mode == "home":
-            target = self.library.qpos[self.current_goal(memory)]
-            return (target - self.home) / self.scale
+            offset = self.library.qpos[self.current_goal(memory)] - self.home
+            if self.first_event:
+                travel = torch.where(offset >= 0, self.upper_travel, self.lower_travel)
+                # Zero travel is possible when Home is exactly at one of the limits.
+                return offset / torch.where(travel > 0, travel, 1.0)
+            return offset / self.scale
         return torch.zeros_like(memory["action"])
+
+    def collection_action(self, policy_action, memory):
+        if self.collection_roles is None:
+            return policy_action
+        reference = self.baseline_action(memory)
+        perturbed = (reference + 0.12 * torch.randn_like(reference)).clamp(-1, 1)
+        action = torch.where(self.collection_roles[:, None] == 1, reference, perturbed)
+        return torch.where(self.collection_roles[:, None] == 0, policy_action, action)
 
     @property
     def baseline_name(self):
@@ -286,13 +312,21 @@ class TrackingTask:
     def contact_labels(depth):
         return torch.stack((depth > 0.0, depth > 0.0005), dim=-1).float()
 
+    def wrist_tracking_error(self, x, m):
+        wrist, _, _, _, _ = self.geometry.pose(x[:, :JOINTS])
+        return (wrist - self.library.ref_wrist_pos[self.current_goal(m)]).norm(dim=-1).amax(-1)
+
     def termination(self, x1, m):
         end = self.current_goal(m) == self.library.end[m["frame"]]
+        if self.first_event:
+            error = self.wrist_tracking_error(x1, m)
+            tracking = torch.sigmoid((error - self.tracking_failure_m) / TRACKING_WIDTH_M)
+            return torch.where(end, 1.0, tracking)
         if self.transition_termination:
             # The learned head covers physical failures. Clip end is deterministic.
             return end.to(x1.dtype)
         overflow = self.position_violation(x1)
-        limit = torch.sigmoid((overflow - 0.05) / 0.007)
+        limit = torch.sigmoid((overflow - JOINT_OVERFLOW_RAD) / 0.007)
         return torch.where(end, 1.0, limit)
 
     def geometric_errors(self, x, m):

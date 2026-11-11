@@ -1,5 +1,22 @@
 # Marvin M6 and dual Wuji Hand2.2 motion tracking
 
+## First-event task contract
+
+Base commit `fd2cfb3b94876ba4f38d51a68a63c1423254998d`. The training
+entry point defaults to the first-event contract. Older checkpoints record
+the control-boundary contract through their original provenance.
+
+| Decision | Source |
+| --- | --- |
+| Hold each command for a 20 ms control period. Check safety every 2 ms and latch the first failing state, actuator effort, depth and cause for each environment. Newton keeps its synchronized batch clock. The failed episode ends at its captured state and that environment resets at the control boundary. | User direction. Logical per-environment stopping is the local choice for the batch solver. |
+| Apply the existing 3 mm limit to all active Newton contact pairs. Check actual joint overflow above 0.05 rad and nonfinite state at the same rate. Record simultaneous causes at the first event. | Existing model contract and user direction. |
+| Check maximum left/right wrist position error at the control boundary. Use 0.25 m as a configurable first candidate and 0.02 m for the analytic sigmoid width in imagination. Report elbow and fingertip tracking in physical evaluation. | OpenArm §4.6 and local choice. The previous PD wrist maximum was 97.7 mm on Adjust Shelf Labels. |
+| Treat clip completion as a normal task terminal state and an optional training step cap as external truncation. Report failure, completion and truncation independently. A safety event takes precedence when several endings coincide. | User direction and local API choice. |
+| Fit fixed-duration dynamics and contact targets only on complete control intervals. A finite partial interval can supervise the one physical Termination Head. Combine its continuation with analytic tracking and clip-end continuation. | User direction. |
+| Scale each of the 54 normalized actions by the available travel on its side of fixed Home. Record both travel vectors in provenance. Use the same servo targets for physics and learned rollouts. | User direction. |
+| Allocate one eighth of each 4,096-environment batch to reference PD and one eighth to reference PD with Gaussian exploration of 0.12 in normalized action units. Use policy exploration in the rest. Keep those assignments across resets. | Local choice to maintain coverage of safe and near-contact transitions in the rolling replay. |
+| Use the original single-clip PD and checkpoint evaluations as comparators. Check the first-event contract, paired 32-step continuation-weighted returns and complete Newton rollouts before a longer run. | User direction. |
+
 ## Motion Encoder upgrade
 
 Upgrade base `74dbe367956e068ceed45548011e3ee0172e2ce3`. Keep the fixed-Home

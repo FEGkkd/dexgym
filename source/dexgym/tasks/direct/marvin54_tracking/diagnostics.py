@@ -1,5 +1,6 @@
 """Compare model and physics responses to identical commands near hand contact."""
 
+import math
 import torch
 
 from dexgym.algorithms.supermimic.dex_reference.networks import FailureHead, WorldModel
@@ -56,7 +57,7 @@ def diagnose_model(env, actor, checkpoint, clip_index):
         probability = failure_head(features).sigmoid()
         risk = probability.clamp(max=cfg["failure_clip"]) if failure_active else torch.zeros_like(probability)
         terminated_probability = 1 - (1 - task.termination(predicted, memory)) * (1 - risk)
-        _, _, done, _, _ = env.step(action)
+        _, _, _, _, events = env.step(action)
         measured = env.transition["x1"]
         pred_pose = task.geometry.pose(predicted[:, :JOINTS])
         real_pose = task.geometry.pose(measured[:, :JOINTS])
@@ -65,23 +66,71 @@ def diagnose_model(env, actor, checkpoint, clip_index):
         depth = env.transition["depth"]
         row = {"frame": frame - int(lib.start[clip_index]), "reference_interhand_tip_gap_mm": 1000 * distance}
         for i, name in enumerate(policies):
+            penetration = float(1000 * depth[i])
+            at_control_boundary = bool(events["full_step"][i])
             row[name] = {
-                "max_real_penetration_mm": float(1000 * depth[i]),
+                "max_real_penetration_mm": penetration if math.isfinite(penetration) else None,
                 "hard_contact": bool(depth[i] > HARD_CONTACT_DEPTH_M),
-                "physical_terminated": bool(done[i]),
+                "physical_terminated": bool(events["safety_failure"][i]),
+                "failure_substep": int(events["safety_substep"][i]) or None,
                 "termination_probability": float(probability[i]),
                 "imagined_termination_probability": float(terminated_probability[i]),
-                "wrist_prediction_error_mm": float(wrist_mm[i]),
-                "tip_prediction_error_mm": float(tip_mm[i]),
+                "wrist_prediction_error_mm": float(wrist_mm[i])
+                if at_control_boundary and torch.isfinite(wrist_mm[i]) else None,
+                "tip_prediction_error_mm": float(tip_mm[i])
+                if at_control_boundary and torch.isfinite(tip_mm[i]) else None,
             }
             if not records:
                 row[name]["executed_target_rad"] = u[i].tolist()
         records.append(row)
-    return {
+    result = {
         "threshold": 0.5,
         "hard_contact_threshold_mm": HARD_CONTACT_DEPTH_M * 1000,
         "counts": {name: summarize([row[name] for row in records]) for name in policies},
         "samples": records,
+    }
+    if task.first_event:
+        result["continuation_probe"] = continuation_probe(env, actor, failure_head, clip_index, cfg["gamma"])
+    return result
+
+
+@torch.no_grad()
+def continuation_probe(env, actor, failure_head, clip_index, gamma):
+    """Reweight measured rewards to isolate the learned safety probability."""
+    task, library = env.task, env.task.library
+    frame = library.start[clip_index]
+    horizon = min(32, int(library.end[frame] - frame))
+    obs, _ = env.reset(frame=frame.repeat(2))
+    alive = torch.ones(2, dtype=torch.bool, device=env.device)
+    survival = torch.ones(2, dtype=torch.float64, device=env.device)
+    real_return = torch.zeros_like(survival)
+    weighted_return = torch.zeros_like(survival)
+    executed = torch.zeros(2, dtype=torch.long, device=env.device)
+    for step in range(horizon):
+        x, memory, _ = task.read()
+        action = actor(obs["policy"])
+        action[0] = task.baseline_action(memory)[0]
+        _, u = task.control_target(action, memory, task.encoder_bias)
+        probability = failure_head(failure_head.features(x, u)).sigmoid().double()
+        obs, reward, terminated, truncated, _ = env.step(action)
+        discounted = gamma**step * torch.where(alive, reward, 0.0)
+        real_return += discounted
+        weighted_return += survival * discounted
+        survival *= torch.where(alive, 1 - probability, 1.0)
+        executed += alive
+        alive &= ~(terminated | truncated)
+        if not alive.any():
+            break
+        inactive = (~alive).nonzero().flatten()
+        if len(inactive):
+            obs, _ = env.reset(inactive, frame=library.at(frame.repeat(len(inactive)), step + 1))
+    return {
+        name: {
+            "executed_steps": int(executed[i]),
+            "physical_discounted_reward": float(real_return[i]),
+            "physical_reward_weighted_by_head": float(weighted_return[i]),
+        }
+        for i, name in enumerate((task.baseline_name, "policy"))
     }
 
 

@@ -2,6 +2,7 @@
 
 from types import SimpleNamespace
 
+import pytest
 import torch
 
 from dexgym.algorithms.supermimic.dex_reference.buffer import ReplayBuffer
@@ -28,6 +29,27 @@ def test_home_action_does_not_depend_on_reference_phase():
     target, _ = task.control_target(action, memory, None)
     assert torch.allclose(target[0], task.hi)
     assert torch.allclose(target[1], task.lo)
+
+
+def test_first_event_action_has_gradient_on_both_sides_of_home():
+    task = TrackingTask.__new__(TrackingTask)
+    task.action_mode = "home"
+    task.first_event = True
+    task.home = task.nominal = torch.full((54,), 0.8)
+    task.lo, task.hi = torch.full((54,), -1.0), torch.full((54,), 1.0)
+    task.lower_travel, task.upper_travel = task.home - task.lo, task.hi - task.home
+    task.scale = torch.maximum(task.lower_travel, task.upper_travel)
+    action = torch.stack((torch.full_like(task.home, -0.8), torch.full_like(task.home, 0.8))).requires_grad_()
+    target, _ = task.control_target(action, None, None)
+    target.sum().backward()
+    assert torch.allclose(action.grad[0], task.lower_travel)
+    assert torch.allclose(action.grad[1], task.upper_travel)
+    task.library = MotionLibrary.__new__(MotionLibrary)
+    task.library.end = torch.tensor([1, 1])
+    task.library.qpos = target.detach()
+    memory = {"frame": torch.tensor([0])}
+    inverse = task.baseline_action(memory)
+    assert torch.allclose(task.control_target(inverse, memory, None)[0], target[1:2])
 
 
 def test_reference_preview_and_step_stay_inside_the_clip():
@@ -146,3 +168,72 @@ def test_contact_reward_labels_and_clip_end():
     task.library.end = torch.tensor([2, 2, 2])
     memory = {"frame": torch.tensor([0, 1])}
     assert task.termination(torch.zeros(2, 108), memory).tolist() == [0.0, 1.0]
+
+
+def test_tracking_termination_uses_worst_wrist_and_known_clip_end():
+    task = TrackingTask.__new__(TrackingTask)
+    task.first_event = True
+    task.tracking_failure_m = 0.25
+    task.library = MotionLibrary.__new__(MotionLibrary)
+    task.library.end = torch.tensor([2, 2, 2])
+    task.library.ref_wrist_pos = torch.zeros(3, 2, 3)
+    task.geometry = SimpleNamespace(pose=lambda q: (q[:, :6].reshape(-1, 2, 3), None, None, None, None))
+    x = torch.zeros(2, 108)
+    x[0, 3] = 0.25
+    memory = {"frame": torch.tensor([0, 1])}
+    assert task.wrist_tracking_error(x, memory).tolist() == [0.25, 0.0]
+    assert task.termination(x, memory).tolist() == [0.5, 1.0]
+
+
+def test_first_safety_substep_latches_each_environment():
+    pytest.importorskip("isaaclab")
+    from dexgym.tasks.direct.marvin54_tracking.native import (
+        COLLISION, JOINT_LIMIT, NONFINITE, SUBSTEPS, NewtonTrackingEnv,
+    )
+
+    task = TrackingTask.__new__(TrackingTask)
+    task.first_event = True
+    task.joint_lo, task.joint_hi = torch.full((54,), -0.5), torch.full((54,), 0.5)
+    env = NewtonTrackingEnv.__new__(NewtonTrackingEnv)
+    env.task, env.device, env.num_envs = task, "cpu", 4
+    env._state = torch.zeros(4, 108)
+    tick = 0
+
+    def step(render):
+        nonlocal tick
+        tick += 1
+
+    def physical_state():
+        q = torch.full((4, 108), tick / 100)
+        if tick == 3:
+            q[2, 0] = 0.6
+        if tick == 1:
+            q[3, 0] = float("nan")
+        return q
+
+    env.sim = SimpleNamespace(step=step)
+    env.scene = SimpleNamespace(write_data_to_sim=lambda: None, update=lambda dt: None)
+    env._physics_state = physical_state
+    env._actuator_effort = lambda: torch.full((4, 54), float(tick))
+    env.contact_depth = lambda: torch.tensor([0.004 if tick == 2 else 0.005 if tick > 2 else 0.0,
+                                             0.003, 0.0, 0.0])
+    state, torque, depth, substeps, flags = env._physics_interval()
+    assert tick == SUBSTEPS
+    assert substeps.tolist() == [2, 0, 3, 1]
+    assert flags.tolist() == [COLLISION, 0, JOINT_LIMIT, NONFINITE]
+    assert torch.allclose(depth, torch.tensor([0.004, 0.003, 0.0, 0.0]))
+    assert torch.allclose(state[:3, 1], torch.tensor([0.02, SUBSTEPS / 100, 0.03]))
+    assert torque[:, 0].tolist() == [2.0, float(SUBSTEPS), 3.0, 1.0]
+
+
+def test_partial_safety_event_remains_a_positive_replay_sample():
+    buffer = ReplayBuffer(capacity=3, num_envs=1, device="cpu", holdout_fraction=0)
+    for safety, full_step in ((True, False), (False, True)):
+        buffer.add({
+            "valid": torch.tensor([True]), "done": torch.tensor([True]), "terminated": torch.tensor([True]),
+            "safety_failure": torch.tensor([safety]), "full_step": torch.tensor([full_step]),
+        })
+    sampled = buffer.sample(batch=8, failure_frac=1.0, failure_horizon=1)
+    assert sampled["safety_failure"].all()
+    assert not sampled["full_step"].any()
+    assert sampled["mask"].all()
