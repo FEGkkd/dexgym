@@ -64,7 +64,8 @@ class SuperMimicEngine:
             x, m, aux = self.task.read()
             sim = self.task.simulator_context
             context = self.task.context(x, m, aux, sim)
-            self.actor.norm.update(self.obs[torch.isfinite(self.obs).all(-1)])
+            training_obs = self.obs[: self.buffer.train_end]
+            self.actor.norm.update(training_obs[torch.isfinite(training_obs).all(-1)])
             action = (
                 self.actor(self.obs)
                 + self.cfg.action_noise * torch.randn(self.env.num_envs, self.task.action_dim, device=self.device)
@@ -215,9 +216,13 @@ class SuperMimicEngine:
     def replay_failure_features(self, w, sim):
         batch, window = w["x1"].shape[:2]
         x = w["x1"].flatten(0, 1)
+        memory = self.task.decode_memory(w["m"].flatten(0, 1))
+        next_memory = getattr(self.task, "replay_failure_memory", None)
+        if next_memory is not None:
+            memory = next_memory(memory, w["action"].flatten(0, 1))
         context = self.task.context(
             x,
-            self.task.decode_memory(w["m"].flatten(0, 1)),
+            memory,
             w["aux"].flatten(0, 1),
             sim[:, None].expand(-1, window, -1).reshape(batch * window, -1),
         )
@@ -247,7 +252,12 @@ class SuperMimicEngine:
     def sample_starts(self):
         b = self.buffer
         rows = (b.ptr - b.size + torch.arange(b.size, device=self.device)) % b.capacity
-        eligible = b.data["valid"][rows].nonzero()
+        eligible = b.data["valid"][rows, : b.train_end].nonzero()
+        eligible_start = getattr(self.task, "imagination_start_mask", None)
+        if eligible_start is not None:
+            row, env = rows[eligible[:, 0]], eligible[:, 1]
+            memory = self.task.decode_memory(b.data["m"][row, env])
+            eligible = eligible[eligible_start(memory, self.cfg.horizon)]
         if not len(eligible):
             raise RuntimeError("Replay contains no finite imagination starts")
         chosen = eligible[torch.randint(len(eligible), (self.cfg.pi_batch,), device=self.device)]

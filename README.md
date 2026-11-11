@@ -29,6 +29,9 @@ The earlier PPO task implementations are available in
 The [dual-arm Hand2.2 assets](docs/robots/marvin_hand22_upgrade_20261111.md)
 and [motion data tools](data/README.md) remain available independently.
 
+The [Marvin M6 and dual Wuji Hand2.2 tracking task](docs/tasks/marvin54_motion_tracking.md)
+uses a separate SuperMimic entry point and accepts validated 54 DoF motion files.
+
 ## Install and verify
 
 Use Python 3.12 and the Isaac Lab 3.0 / Isaac Sim 6 / Newton GPU environment.
