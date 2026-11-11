@@ -116,25 +116,27 @@ class SuperMimicEngine:
             )
             next_context = self.task.context(cap["x1"][train_valid], next_m, aux[train_valid], sim[train_valid])
             self.fail_head.norm.update(self.fail_head.features(cap["x1"][train_valid], next_context))
-            self.buffer.add(
-                dict(
-                    x=x,
-                    x1=cap["x1"],
-                    push=next_x - cap["x1"],
-                    u=u,
-                    c=c,
-                    action=action,
-                    m=self.task.encode_memory(m),
-                    obs=self.obs,
-                    aux=aux,
-                    contact=cap["contact"],
-                    torque=cap["torque"],
-                    reward=reward,
-                    done=terminated | truncated,
-                    terminated=terminated,
-                    valid=valid,
-                )
+            transition = dict(
+                x=x,
+                x1=cap["x1"],
+                push=next_x - cap["x1"],
+                u=u,
+                c=c,
+                action=action,
+                m=self.task.encode_memory(m),
+                obs=self.obs,
+                aux=aux,
+                contact=cap["contact"],
+                torque=cap["torque"],
+                reward=reward,
+                done=terminated | truncated,
+                terminated=terminated,
+                valid=valid,
             )
+            eligible_start = getattr(self.task, "imagination_start_mask", None)
+            if eligible_start is not None:
+                transition["imagination_valid"] = valid & eligible_start(m, self.cfg.horizon)
+            self.buffer.add(transition)
             denom = valid.float().sum().clamp_min(1)
             stats.append(
                 torch.stack(
@@ -252,12 +254,8 @@ class SuperMimicEngine:
     def sample_starts(self):
         b = self.buffer
         rows = (b.ptr - b.size + torch.arange(b.size, device=self.device)) % b.capacity
-        eligible = b.data["valid"][rows, : b.train_end].nonzero()
-        eligible_start = getattr(self.task, "imagination_start_mask", None)
-        if eligible_start is not None:
-            row, env = rows[eligible[:, 0]], eligible[:, 1]
-            memory = self.task.decode_memory(b.data["m"][row, env])
-            eligible = eligible[eligible_start(memory, self.cfg.horizon)]
+        mask = b.data.get("imagination_valid", b.data["valid"])
+        eligible = mask[rows, : b.train_end].nonzero()
         if not len(eligible):
             raise RuntimeError("Replay contains no finite imagination starts")
         chosen = eligible[torch.randint(len(eligible), (self.cfg.pi_batch,), device=self.device)]

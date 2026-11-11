@@ -133,11 +133,17 @@ class TrackingTask:
         self.hi = torch.minimum(self.joint_hi, ctrl_hi)
         if ((library.qpos < self.lo - 1e-6) | (library.qpos > self.hi + 1e-6)).any():
             raise ValueError("Motion Library poses exceed model limits")
-        arm_scale, hand_scale = (0.008, 0.025) if nominal == "feedforward" else (0.18, 0.25)
-        self.scale = self.tensor([arm_scale if name.startswith("Joint") else hand_scale for name in library.names])
-        self.nominal = library.qpos
-        if nominal == "feedforward":
-            self.nominal = self.feedforward_targets(model)
+        self.action_mode = nominal
+        self.home = self.tensor(model.key("home").qpos.copy())
+        if ((self.home < self.lo) | (self.home > self.hi) | (self.lo >= self.hi)).any():
+            raise ValueError("The fixed Home posture or native position limits are invalid")
+        if nominal == "home":
+            self.nominal = self.home
+            self.scale = torch.maximum(self.home - self.lo, self.hi - self.home)
+        else:
+            arm_scale, hand_scale = (0.008, 0.025) if nominal == "feedforward" else (0.18, 0.25)
+            self.scale = self.tensor([arm_scale if name.startswith("Joint") else hand_scale for name in library.names])
+            self.nominal = self.feedforward_targets(model) if nominal == "feedforward" else library.qpos
 
     def feedforward_targets(self, model):
         data = mujoco.MjData(model)
@@ -218,8 +224,15 @@ class TrackingTask:
         return x1, aux
 
     def control_target(self, action, m, bias):
-        u = (self.nominal[self.current_goal(m)] + self.scale * action).clamp(self.lo, self.hi)
+        nominal = self.nominal if self.action_mode == "home" else self.nominal[self.current_goal(m)]
+        u = (nominal + self.scale * action).clamp(self.lo, self.hi)
         return u, u
+
+    def baseline_action(self, memory):
+        if self.action_mode == "home":
+            target = self.library.qpos[self.current_goal(memory)]
+            return (target - self.home) / self.scale
+        return torch.zeros_like(memory["action"])
 
     def torque(self, x, u, sim):
         q, qd = x.split(JOINTS, dim=-1)
@@ -264,7 +277,8 @@ class TrackingTask:
         }
         terms = {k: w * torch.exp(-mse(error[k] / scale)) for k, (w, scale) in weights.items()}
         terms["smooth"] = -0.08 * mse(a - m["action"])
-        terms["residual"] = -0.02 * mse(a)
+        if self.action_mode != "home":
+            terms["residual"] = -0.02 * mse(a)
         terms["contact"] = -0.25 * contact[:, 1]
         return sum(terms.values()), contact[:, 1], terms
 

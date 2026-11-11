@@ -47,12 +47,21 @@ def check_contract(env):
         raise ValueError(f"Reference and Newton/FK contract mismatch: {errors}")
     memory = env.memory
     action = torch.zeros(env.num_envs, JOINTS, device=env.device)
+    if task.action_mode == "home":
+        home_target, _ = task.control_target(action, memory, task.encoder_bias)
+        errors["home_target_rad"] = float((home_target - task.home).abs().max())
+        action = task.baseline_action(memory)
+        target, _ = task.control_target(action, memory, task.encoder_bias)
+        errors["reference_pd_target_rad"] = float((target - lib.qpos[lib.at(memory["frame"])]).abs().max())
+        if max(errors["home_target_rad"], errors["reference_pd_target_rad"]) > 1e-6:
+            raise RuntimeError(f"Fixed Home target mapping mismatch: {errors}")
     _, reward, terminated, _, _ = env.step(action)
     if not reward.isfinite().all() or terminated.any():
         raise RuntimeError("Reference phase test failed during the first physical step")
     if not torch.equal(env.memory["frame"], lib.at(memory["frame"])):
         raise RuntimeError("Physical phase failed to advance by one reference frame")
     env.reset(ids[-1:], frame=lib.end[frames[-1:]] - 1)
+    action = task.baseline_action(env.memory)
     _, _, terminated, truncated, _ = env.step(action)
     if terminated[-1] or not truncated[-1]:
         raise RuntimeError("The final reference step must truncate independently of safety termination")
@@ -71,11 +80,12 @@ def evaluate(env, actor, clip_index, steps):
     active = torch.ones(2, dtype=torch.bool, device=env.device)
     terminations = torch.zeros_like(active)
     records = {}
+    baseline_name = "reference_pd" if task.action_mode == "home" else "zero_residual"
     for i in range(count):
         m = env.memory
         action = actor(obs["policy"])
-        action[0] = 0.0
         action[~active] = 0.0
+        action[0] = task.baseline_action(m)[0]
         obs, reward, terminated, truncated, _ = env.step(action)
         e = task.geometric_errors(env.state(), m)
         values = {
@@ -100,7 +110,7 @@ def evaluate(env, actor, clip_index, steps):
             obs, _ = env.reset(ids, frame=lib.at(frame.repeat(len(ids)), i + 1))
     result = {}
     arrays = {k: torch.stack(v).cpu().numpy() for k, v in records.items()}
-    for index, name in enumerate(("zero_residual", "policy")):
+    for index, name in enumerate((baseline_name, "policy")):
         entry = {"requested_steps": count, "full_clip_steps": max_steps, "terminated": bool(terminations[index])}
         for key, frames in arrays.items():
             values = frames[:, index]
@@ -118,7 +128,7 @@ def evaluate(env, actor, clip_index, steps):
     matched = np.isfinite(arrays["reward"]).all(axis=(1, 2))
     if matched.any():
         result["matched_steps"] = int(matched.sum())
-        for i, name in enumerate(("zero_residual", "policy")):
+        for i, name in enumerate((baseline_name, "policy")):
             result[name]["matched_mean"] = {
                 key: float(values[matched, i].mean())
                 for key, values in arrays.items() if np.isfinite(values[matched, i]).all()
@@ -144,16 +154,27 @@ def main():
     parser.add_argument("--wm-batches", type=int, default=2)
     parser.add_argument("--wm-batch", type=int, default=192)
     parser.add_argument("--pi-batch", type=int, default=32)
+    parser.add_argument("--buffer-steps", type=int, default=256)
+    parser.add_argument("--warmup-steps", type=int, default=64)
+    parser.add_argument("--action-noise", type=float)
+    parser.add_argument("--log-interval", type=int, default=1)
+    parser.add_argument("--save-interval", type=int, default=50)
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--evaluate", type=Path)
     parser.add_argument("--eval-steps", type=int)
     parser.add_argument("--clip-index", type=int, default=0)
-    parser.add_argument("--nominal", choices=("reference", "feedforward"), default="feedforward")
+    parser.add_argument("--nominal", choices=("home", "reference", "feedforward"), default="home")
     args = parser.parse_args()
     if args.num_envs < 2 or not 0 <= args.wm_only_iters < args.iterations:
         parser.error("Need at least two environments and at least one Actor iteration")
     if min(args.wm_batches, args.wm_batch, args.pi_batch) < 1 or (args.eval_steps is not None and args.eval_steps < 1):
         parser.error("Batch sizes and evaluation steps must be positive")
+    if min(args.warmup_steps, args.buffer_steps) < IMAGINATION_STEPS:
+        parser.error(f"Warmup and replay capacity need at least {IMAGINATION_STEPS} steps")
+    if min(args.log_interval, args.save_interval) < 1:
+        parser.error("Log and checkpoint intervals must be positive")
+    if args.action_noise is not None and (not np.isfinite(args.action_noise) or args.action_noise < 0):
+        parser.error("Action noise must be finite and nonnegative")
     if args.check_only and args.evaluate:
         parser.error("Choose check-only or evaluate")
     if not 0 <= args.clip_index < len(args.reference):
@@ -167,12 +188,18 @@ def main():
     provenance = {"task_id": TASK_ID, "model_sha256": lib.model_sha256, "motion_sha256": lib.sha256,
                   "motion_files": [str(path.resolve()) for path in args.reference], "frames": lib.frames,
                   "joint_names": lib.names, "seed": args.seed, "backend": "Isaac Lab 3 / Newton MJWarp",
-                  "nominal": args.nominal}
+                  "nominal": args.nominal, "num_envs": 2 if args.evaluate else args.num_envs}
     args.output.mkdir(parents=True, exist_ok=True)
     if not args.evaluate and not args.check_only and (args.output / "metrics.jsonl").exists():
         parser.error("Select a fresh output directory for training")
     with launch_simulation(cfg):
         env = NewtonTrackingEnv(cfg, 2 if args.evaluate else args.num_envs, model, lib, args.nominal)
+        if args.nominal == "home":
+            provenance["action_mapping"] = {
+                "name": "fixed_home_joint_position",
+                "home_rad": env.task.home.tolist(), "scale_rad": env.task.scale.tolist(),
+                "lower_rad": env.task.lo.tolist(), "upper_rad": env.task.hi.tolist(),
+            }
         contract = check_contract(env)
         write_json(args.output / "contract.json", contract)
         print("TRACKING_CONTRACT", json.dumps(contract), flush=True)
@@ -184,6 +211,8 @@ def main():
             if any(original[k] != provenance[k]
                    for k in ("task_id", "model_sha256", "motion_sha256", "joint_names", "nominal")):
                 raise ValueError("Checkpoint reference or asset provenance mismatch")
+            if original.get("action_mapping") != provenance.get("action_mapping"):
+                raise ValueError("Checkpoint action mapping mismatch")
             payload = torch.load(args.evaluate, map_location=env.device, weights_only=False)
             if payload["format_version"] != 1 or payload["task_id"] != TASK_ID:
                 raise ValueError("Checkpoint task or format mismatch")
@@ -196,6 +225,7 @@ def main():
                 "clip": provenance["motion_files"][args.clip_index],
                 "clip_sha256": lib.sha256[args.clip_index],
                 "nominal": args.nominal,
+                "action_mapping": provenance.get("action_mapping"),
                 "residual_scale_rad": env.task.scale.tolist(),
                 "seed": args.seed,
             }
@@ -203,18 +233,21 @@ def main():
             print("TRACKING_EVALUATION", json.dumps(result), flush=True)
             return
         write_json(args.output / "provenance.json", provenance)
+        default_noise = 0.045 if args.nominal == "home" else 0.12
         recipe = SuperMimicConfig(
-            seed=args.seed, max_iterations=args.iterations, buffer_steps=256, warmup_steps=64,
+            seed=args.seed, max_iterations=args.iterations, buffer_steps=args.buffer_steps, warmup_steps=args.warmup_steps,
             wm_only_iters=args.wm_only_iters, wm_window=8, wm_batches=args.wm_batches, wm_batch=args.wm_batch,
             wm_hidden=(384, 384, 384), pi_batch=args.pi_batch, horizon=IMAGINATION_STEPS, critic_epochs=5,
-            action_noise=0.12, failure_warmup_iters=10, amp=False, compile=False, compile_policy=False,
-            save_interval=max(1, min(50, args.iterations)), log_interval=1,
+            action_noise=default_noise if args.action_noise is None else args.action_noise,
+            failure_warmup_iters=10, amp=False, compile=False, compile_policy=False,
+            save_interval=args.save_interval, log_interval=args.log_interval,
         )
         engine = SuperMimicEngine(env.task, recipe, args.output)
         engine.learn()
         proof = {"sim_transitions": engine.sim_steps, "optimizer_steps": optimizer_steps(engine),
                  "gradients": engine.last_gradients, "train_envs": engine.buffer.train_end,
-                 "holdout_envs": env.num_envs - engine.buffer.train_end}
+                 "holdout_envs": env.num_envs - engine.buffer.train_end,
+                 "peak_torch_memory_bytes": torch.cuda.max_memory_allocated(env.device)}
         write_json(args.output / "training_proof.json", proof)
         if not all(proof["optimizer_steps"].values()) or engine.last_gradients["actor"] <= 0:
             raise RuntimeError(f"Incomplete World Model / Actor / Critic updates: {proof}")

@@ -9,6 +9,25 @@ from dexgym.algorithms.supermimic.dex_reference.engine import SuperMimicEngine
 from dexgym.tasks.direct.marvin54_tracking.task import MotionLibrary, TrackingTask
 
 
+def test_home_action_does_not_depend_on_reference_phase():
+    task = TrackingTask.__new__(TrackingTask)
+    task.action_mode = "home"
+    task.home = torch.linspace(-0.5, 0.5, 54)
+    task.nominal = task.home
+    task.lo, task.hi = torch.full((54,), -1.0), torch.full((54,), 1.0)
+    task.scale = torch.maximum(task.home - task.lo, task.hi - task.home)
+    memory = {"frame": torch.tensor([7, 19]), "action": torch.zeros(2, 54)}
+    action = torch.zeros(2, 54)
+    target, executed = task.control_target(action, memory, None)
+    assert torch.equal(target, task.home.expand_as(target))
+    assert torch.equal(executed, target)
+    action[0] = 1.0
+    action[1] = -1.0
+    target, _ = task.control_target(action, memory, None)
+    assert torch.allclose(target[0], task.hi)
+    assert torch.allclose(target[1], task.lo)
+
+
 def test_reference_preview_and_step_stay_inside_the_clip():
     library = MotionLibrary.__new__(MotionLibrary)
     library.end = torch.tensor([2, 2, 2, 5, 5, 5])

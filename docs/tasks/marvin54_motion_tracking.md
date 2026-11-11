@@ -8,10 +8,14 @@ local implementation defaults unless specified by the user.
   step, sample reset frames, and truncate at its end. The first pilot uses the
   single Adjust Shelf Labels clip, so full-clip replay measures in-clip tracking.
 - Real transitions use full-contact Newton MJWarp at 500 Hz. One 50 Hz action
-  holds 54 position targets over ten substeps. The actor outputs a bounded
-  residual around the next reference pose, scaled to 0.18 rad for arms and
-  0.25 rad for hands. A zero-residual policy is the matched physical baseline.
-- The default `feedforward` nominal controller derives position offsets at
+  holds 54 position targets over ten substeps. The default `home` action mapping
+  is `clip(q_home + scale * actor_output, lower, upper)`. The fixed Home posture
+  comes from the MJCF home keyframe. Scale is the greater of the two distances
+  from Home to the combined joint and actuator limit. Evaluation compares the
+  learned policy with direct reference-position PD replay.
+- The previous `reference` mode centers a bounded residual on the next
+  reference pose, scaled to 0.18 rad for arms and 0.25 rad for hands.
+  The previous `feedforward` mode derives position offsets at
   each reference state from MuJoCo bias and passive forces, PD velocity
   compensation, and the original actuator gains. It uses residual bounds of
   0.008 rad per arm joint and 0.025 rad per hand joint. The same hard physical
@@ -46,7 +50,7 @@ local implementation defaults unless specified by the user.
   learned, capped failure probability after warmup. Imagination starts leave
   a full 32-step window. World model holdout is by environment, on the same
   motion library. The reward uses position and matrix errors and penalizes
-  residual magnitude and changes in residual, with no torque term.
+  changes in action. The previous residual modes also penalize residual magnitude.
 - Replay features used by the failure head advance to the post-transition
   reference phase and include the executed action. Actor imagination starts
   and observation normalization use the training environments. Evaluation
@@ -59,19 +63,20 @@ local implementation defaults unless specified by the user.
 cd ~/dexgym/worktrees/marvin54-motion-tracking
 reference="$HOME/dexgym_data/egopro_adjust_shelf_54dof/clearance_7mm/reference_54dof.npz"
 task=dexgym.tasks.direct.marvin54_tracking.train
-run="$HOME/dexgym_data/marvin54_tracking_pilot/feedforward_new"
+run="$HOME/dexgym_data/marvin54_home4096_new"
 bash scripts/supermimic/host.sh -m "$task" --reference "$reference" --check-only \
-  --num-envs 4 --output "$run/contract"
+  --nominal home --num-envs 4096 --output "$run/contract"
 bash scripts/supermimic/host.sh -m "$task" --reference "$reference" \
-  --nominal feedforward --num-envs 32 --iterations 80 --wm-only-iters 30 \
-  --wm-batch 192 --pi-batch 32 --output "$run/train"
+  --nominal home --num-envs 4096 --iterations 1000 --wm-only-iters 40 \
+  --warmup-steps 32 --buffer-steps 128 --wm-batches 4 --wm-batch 1024 \
+  --pi-batch 192 --save-interval 50 --log-interval 10 --output "$run/train"
 bash scripts/supermimic/host.sh -m "$task" --reference "$reference" \
-  --nominal feedforward --evaluate "$run/train/model_final.pt" --output "$run/eval"
+  --nominal home --evaluate "$run/train/model_final.pt" --output "$run/eval"
 ```
 
 The entry point uses DexGym's existing SuperMimic engine and the host runtime
 wrapper. Add additional `--reference` files to the same Motion Library.
-Use `--clip-index` for matched zero-residual and policy evaluation.
+Use `--clip-index` for matched reference PD and policy evaluation in Home mode.
 
 ## Adjust Shelf Labels pilot
 
