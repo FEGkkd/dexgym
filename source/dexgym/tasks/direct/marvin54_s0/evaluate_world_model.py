@@ -66,7 +66,8 @@ def measure(wm, failure, geometry, traces, device):
             if flags is not None:
                 failure_probability.append(failure(failure.features(x, u)).sigmoid().cpu().numpy())
                 failure_label.append(((flags[valid] & (COLLISION | JOINT_LIMIT)) != 0).cpu().numpy())
-        bad = torch.where(~valid[:steps])[0]
+        full_valid = valid[:steps] & torch.isfinite(states[1:steps + 1]).all(-1)
+        bad = torch.where(~full_valid)[0]
         steps = int(bad[0]) if len(bad) else steps
         if not steps:
             continue

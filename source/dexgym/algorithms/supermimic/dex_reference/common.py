@@ -51,8 +51,8 @@ class RunningNorm(nn.Module):
         tot = self.count + n
         delta = m - self.mean
         self.mean += delta * n / tot
-        self.var = (self.var * self.count + v * n + delta**2 * self.count * n / tot) / tot
-        self.count = tot
+        self.var.copy_((self.var * self.count + v * n + delta**2 * self.count * n / tot) / tot)
+        self.count.copy_(tot)
 
     def forward(self, x):
         return (x - self.mean) / torch.sqrt(self.var + self.eps**2)
@@ -83,7 +83,7 @@ class EmpiricalNorm(nn.Module):
         delta_mean = mean_x - self._mean
         self._mean += rate * delta_mean
         self._var += rate * (var_x - self._var + delta_mean * (mean_x - self._mean))
-        self._std = torch.sqrt(self._var)
+        torch.sqrt(self._var, out=self._std)
 
     def forward(self, x):
         return (x - self._mean) / (self._std + self.eps)

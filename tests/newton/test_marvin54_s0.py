@@ -2,6 +2,7 @@ from types import SimpleNamespace
 
 import torch
 
+from dexgym.algorithms.supermimic.dex_reference.common import EmpiricalNorm, RunningNorm
 from dexgym.algorithms.supermimic.dex_reference.config import SuperMimicConfig
 from dexgym.algorithms.supermimic.dex_reference.engine import SuperMimicEngine
 from dexgym.algorithms.supermimic.dex_reference.networks import FailureHead, WorldModel
@@ -116,3 +117,14 @@ def test_fingertip_velocity_stops_at_clip_boundary():
 
     torch.testing.assert_close(velocities[0, :, 0], torch.tensor([1., 0., 1., 1., 0.]))
     torch.testing.assert_close(velocities[..., 30:], torch.zeros_like(velocities[..., 30:]))
+
+
+def test_learner_normalizers_keep_buffer_addresses_across_updates():
+    data = torch.tensor([[1., 2.], [2., 4.], [4., 8.], [8., 16.]])
+    for norm in (RunningNorm(2), EmpiricalNorm(2)):
+        addresses = {name: value.data_ptr() for name, value in norm.named_buffers()}
+        norm.update(data[:2])
+        norm.update(data[2:])
+        assert {name: value.data_ptr() for name, value in norm.named_buffers()} == addresses
+        torch.testing.assert_close(norm(data).mean(0), torch.zeros(2), atol=1e-6, rtol=0.)
+        torch.testing.assert_close(norm.count, torch.tensor(4, dtype=norm.count.dtype))
