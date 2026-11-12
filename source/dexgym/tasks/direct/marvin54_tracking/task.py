@@ -28,6 +28,8 @@ FINGERS = ("thumb", "index_finger", "middle_finger", "ring_finger", "pinky")
 class MotionLibrary:
     """Concatenate clips with explicit ends. Indices can never cross a clip."""
 
+    extra_fields = {}
+
     def __init__(self, paths, model, xml, device):
         self.names = [model.joint(i).name for i in np.argsort(model.jnt_qposadr)]
         if len(self.names) != JOINTS or model.nq != JOINTS or model.nv != JOINTS:
@@ -37,6 +39,7 @@ class MotionLibrary:
             "qpos": (54,), "qvel": (54,), "ref_wrist_pos": (2, 3),
             "ref_wrist_quat_wxyz": (2, 4), "ref_elbow_pos": (2, 3),
             "ref_tip_pos": (2, 5, 3), "ref_tip_quat_wxyz": (2, 5, 4),
+            **self.extra_fields,
         }
         parts = {k: [] for k in fields}
         ends, starts, reset_limits = [], [], []
@@ -126,6 +129,7 @@ class TrackingTask:
     context_dim = 324
     error_floor = [0.002] * 54 + [0.05] * 54
     codec = JointCodec
+    geometry_type = TrackingGeometry
     first_event = False
     collection_noise_mix = False
 
@@ -134,7 +138,7 @@ class TrackingTask:
         self.env = self.reader = env
         self.device = env.device
         self.library = library
-        self.geometry = TrackingGeometry(model, library, self.device)
+        self.geometry = self.geometry_type(model, library, self.device)
         self.policy_arch = policy_arch
         self.transition_termination = termination_model == "transition"
         self.termination_context_dim = self.action_dim if self.transition_termination else self.context_dim
