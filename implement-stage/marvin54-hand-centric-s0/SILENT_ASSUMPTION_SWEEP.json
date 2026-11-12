@@ -1,0 +1,84 @@
+{
+  "route": {
+    "backend": "codex",
+    "model": "gpt-6-astra",
+    "effort": "xhigh",
+    "review_independence": "same-family",
+    "acceptance_status": "provisional"
+  },
+  "first_round": {
+    "undeclared": [
+      {
+        "site": "source/dexgym/data/egopro_poses.py:18,71-83,91-100,114-115",
+        "decision": "Corpus inclusion additionally requires quaternion norms within 0.05 of unity, bounded shoulder width and finger-bone lengths, a nondegenerate palm, and at least 101 resampled frames. Positions and quaternion components receive Gaussian smoothing with sigma 0.8.",
+        "why_it_matters": "A-002 declares annotation filtering and interpolation but not these additional rejection and smoothing rules. They change which motions survive and the motion represented by a reference.",
+        "class": "semantic"
+      },
+      {
+        "site": "source/dexgym/data/egopro_handcentric.py:108-137,151-153",
+        "decision": "Workspace mapping assumes global Z is up, derives torso yaw from horizontally projected shoulders, removes shoulder-midpoint translation independently at every frame, and scales fingertip-center and wrist displacement by a fixed factor of 1.12.",
+        "why_it_matters": "These choices define the mapped target and its reachability. A-004 describes torso anchoring and robot-scaled fingers without declaring this workspace scaling or removal of torso motion.",
+        "class": "semantic"
+      },
+      {
+        "site": "source/dexgym/data/egopro_handcentric.py:139-148",
+        "decision": "Each extracted segment calibrates fingertip orientation using its first frame: mapped rotation includes source_rot(t) @ source_rot(0).T @ human_distal(0) @ site_frame.",
+        "why_it_matters": "The orientation target preserves source rotation changes after a segment-specific alignment. Its initial absolute orientation is reconstructed from bone geometry and robot site frames. This affects the meaning and comparability of mapped-to-projected orientation errors.",
+        "class": "semantic"
+      },
+      {
+        "site": "source/dexgym/tasks/direct/marvin54_tracking/task.py:89-92; source/dexgym/tasks/direct/marvin54_s0/env.py:38-51",
+        "decision": "Training resets sample uniformly over concatenated reference frames, initialize both reference q and qdot at the sampled phase, and ramp reset noise over 6,000 environment control steps.",
+        "why_it_matters": "Longer retained motions receive more sampling weight, and training teaches recovery from reference-phase states rather than always tracking complete clips from their starts. A-005 permits reference initialization but does not declare this distribution or curriculum.",
+        "class": "semantic"
+      },
+      {
+        "site": "source/dexgym/tasks/direct/marvin54_s0/task.py:15-16,113-121; source/dexgym/tasks/direct/marvin54_s0/env.py:75-86",
+        "decision": "Tracking failure uses the worst hand's fingertip-centroid displacement exceeding 0.20 m; completion means reaching the reference end without failure flags. Individual tip, orientation and shape errors do not independently prevent completion.",
+        "why_it_matters": "Completion is a survival-to-end measure, not a thresholded full-hand tracking success measure. Centroid averaging can cancel individual fingertip errors. These semantics are absent from A-007/A-010.",
+        "class": "semantic"
+      },
+      {
+        "site": "source/dexgym/data/egopro_handcentric.py:293-296; source/dexgym/data/egopro_handcentric_clearance.py:74-78; source/dexgym/tasks/direct/marvin54_s0/evaluate.py:198-201",
+        "decision": "Reference admission computes fingertip P95 over per-frame means across ten fingertips, whereas policy evaluation computes P95 over pooled time-by-fingertip errors.",
+        "why_it_matters": "The two identically named P95 statistics have different statistical units. A-008's 85 mm admission threshold cannot be interpreted as the same percentile reported by evaluation.",
+        "class": "semantic"
+      },
+      {
+        "site": "source/dexgym/tasks/direct/marvin54_s0/evaluate.py:84-104,165-167,198-232",
+        "decision": "Unavailable perturbed/alternate starts are excluded from completion denominators. Alternate eligibility requires at least 10 mm displacement of the more displaced elbow while retaining wrist tolerances. Error summaries exclude partial safety-failure intervals and report completed clips or observed prefixes; episode_macro_tip_mm uses only completed clips, including completed subsets of otherwise incomplete episodes.",
+        "why_it_matters": "Conditions can have different eligible populations and observed durations. The episode macro tip statistic is conditional on completion and is not an error over all attempted episode motion. A-007 does not declare these selection and censoring rules.",
+        "class": "semantic"
+      },
+      {
+        "site": "source/dexgym/algorithms/supermimic/dex_reference/config.py:44; source/dexgym/algorithms/supermimic/dex_reference/buffer.py:12,35; source/dexgym/algorithms/supermimic/dex_reference/engine.py:459-461",
+        "decision": "Training's holdout/* diagnostics reserve simulator environment indices while all environments draw references from the same supplied training library.",
+        "why_it_matters": "These are transition holdout diagnostics within the training motion corpus, distinct from the episode-disjoint validation/test split in A-001. Their names must not be interpreted as held-out source-episode performance.",
+        "class": "semantic"
+      }
+    ],
+    "stale_rows": [
+      {
+        "id": "A-007",
+        "site": "implement-stage/marvin54-hand-centric-s0/ASSUMPTIONS.md:12; source/dexgym/tasks/direct/marvin54_s0/evaluate.py:209-232",
+        "declared": "Evaluate complete and failed clips and aggregate by source episode.",
+        "actual": "Episode counts and a completed-clip fingertip macro mean are provided, but completion, reward, orientation, cross-tip geometry, shape and observed-prefix summaries remain clip-weighted. Failed-clip errors are not aggregated by episode.",
+        "why_it_matters": "Episodes contributing more retained clips still receive greater weight in most reported outcomes. Either complete the stated episode aggregation or narrow the ledger claim explicitly."
+      }
+    ],
+    "semantic_undeclared": 8,
+    "verdict": "gaps"
+  },
+  "resweep": {
+    "undeclared": [],
+    "stale_rows": [],
+    "semantic_undeclared": 0,
+    "verdict": "clean",
+    "resolved_previous_semantic_findings": 8,
+    "resolved_previous_stale_rows": ["A-007"],
+    "operational_mismatches": [],
+    "review_independence": "same-family",
+    "acceptance_status": "provisional",
+    "scope": "Read-only review of the current local sources and ledger; no runtime, GPU, or physics-parity validation."
+  }
+}

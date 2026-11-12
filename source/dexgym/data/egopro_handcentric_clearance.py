@@ -80,11 +80,11 @@ def audit(robot, q, qd, tip_ref, *, directions=False):
     ), changes
 
 
-def window_correction(q, changes, arm):
+def window_correction(q, changes, arm, lead):
     delta, weights = np.zeros_like(q), np.zeros(len(q))
     limit = np.where(arm, 0.065, 0.105)
     for frame, change in changes:
-        center = max(0, frame - 2)
+        center = max(0, frame - lead)
         ids = np.arange(max(0, center - 12), min(len(q), center + 13))
         w = np.exp(-0.5 * ((ids - center) / 4.5)**2)
         delta[ids] += w[:, None] * np.clip(change, -limit, limit)
@@ -92,7 +92,7 @@ def window_correction(q, changes, arm):
     return delta / np.maximum(weights[:, None], 1.0)
 
 
-def repair(data, xml):
+def repair(data, xml, leads=(2,)):
     robot = Robot(xml)
     goal = unpack(data)
     q = data["qpos"].astype(np.float64)
@@ -108,8 +108,8 @@ def repair(data, xml):
     for _ in range(5):
         if not changes:
             break
-        delta = window_correction(q, changes, robot.arm)
-        for multiplier in (2., 1., 0.5, 0.25):
+        deltas = [window_correction(q, changes, robot.arm, lead) for lead in leads]
+        for delta, multiplier in ((d, m) for d in deltas for m in (2., 1., 0.5, 0.25, 4.)):
             candidate = np.clip(q + multiplier * delta, robot.lo, robot.hi)
             for frame in range(1, len(candidate)):
                 np.clip(candidate[frame], candidate[frame - 1] - speed, candidate[frame - 1] + speed,
@@ -146,8 +146,8 @@ def repair(data, xml):
     return output, record
 
 
-def work(path, xml, destination):
-    result, report = repair(load(path), xml)
+def work(path, xml, destination, leads=(2,)):
+    result, report = repair(load(path), xml, leads)
     if report["after"]["complete"]:
         if report["accepted_updates"]:
             np.savez_compressed(destination, **result)
@@ -165,6 +165,7 @@ def main():
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--witness", type=Path)
     source.add_argument("--library", type=Path)
+    source.add_argument("--previous-audit", type=Path)
     parser.add_argument("--workers", type=int, default=16)
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
@@ -174,23 +175,41 @@ def main():
         (args.output / "witness.json").write_text(json.dumps(report, indent=2) + "\n")
         print(json.dumps(report), flush=True)
         return
-    paths = {}
-    for split in ("train", "val", "test"):
-        paths[split] = [Path(p) for p in json.loads((args.library / f"{split}.json").read_text())]
+    splits = ("train", "val", "test")
+    for split in splits:
         (args.output / split).mkdir(exist_ok=True)
-    reports = []
+    if args.previous_audit:
+        previous = json.loads(args.previous_audit.read_text())
+        todo = [row for row in previous if row["path"] and row["after"]["deep_substeps"]]
+        reports = [row for row in previous if not row["path"] or not row["after"]["deep_substeps"]]
+        leads = (4, 0, 6, 2)
+    else:
+        todo = [{"split": split, "path": p} for split in splits
+                for p in json.loads((args.library / f"{split}.json").read_text())]
+        reports = []
+        leads = (2,)
     with ProcessPoolExecutor(max_workers=args.workers) as pool, (args.output / "progress.jsonl").open("w") as log:
-        pending = {pool.submit(work, p, args.model, args.output / split / p.name): split
-                   for split, group in paths.items() for p in group}
+        pending = {}
+        for row in todo:
+            p, split = Path(row["path"]), row["split"]
+            pending[pool.submit(work, p, args.model, args.output / split / p.name, leads)] = row
         for job in as_completed(pending):
-            entry = {**job.result(), "split": pending[job]}
+            row = pending[job]
+            entry = {**job.result(), "split": row["split"]}
+            if args.previous_audit:
+                if entry["accepted_updates"] or not entry["path"]:
+                    entry = {**row, "path": entry["path"], "after": entry["after"],
+                             "after_mapped": entry["after_mapped"],
+                             "accepted_updates": row["accepted_updates"] + entry["accepted_updates"]}
+                else:
+                    entry = row
             reports.append(entry)
             print(json.dumps(entry), file=log, flush=True)
             if len(reports) % 50 == 0:
-                print(f"Audited {len(reports)}/{len(pending)} references", flush=True)
+                print(f"Audited {len(reports)} references", flush=True)
     reports.sort(key=lambda row: row["source"])
     (args.output / "collision_audit.json").write_text(json.dumps(reports, indent=2) + "\n")
-    for split in paths:
+    for split in splits:
         kept = [r["path"] for r in reports if r["split"] == split and r["path"]]
         (args.output / f"{split}.json").write_text(json.dumps(kept, indent=2) + "\n")
         if not kept:
