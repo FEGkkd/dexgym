@@ -71,6 +71,7 @@ class SuperMimicEngine:
     @torch.no_grad()
     def collect(self, steps):
         stats = []
+        names = ("reward", "drop_rate", "rot_error")
         replay_obs = getattr(self.task, "replay_observation", None)
         collection_action = getattr(self.task, "collection_action", None)
         for _ in range(steps):
@@ -156,12 +157,14 @@ class SuperMimicEngine:
                 transition["imagination_valid"] = valid & eligible_start(m, self.cfg.horizon)
             self.buffer.add(transition)
             denom = valid.float().sum().clamp_min(1)
+            extra = cap.get("rollout_stats", {})
             stats.append(
                 torch.stack(
                     (
                         (reward * valid).sum() / denom,
                         cap["drop"].float().mean(),
                         torch.where(valid, self.task.rotation_error(cap["x1"], m), 0.0).sum() / denom,
+                        *(torch.where(valid, value, 0.0).sum() / denom for value in extra.values()),
                     )
                 )
             )
@@ -172,7 +175,7 @@ class SuperMimicEngine:
                 self.obs = torch.where((terminated | truncated)[:, None], post["policy"], self.obs)
             self.sim_steps += self.env.num_envs
         values = torch.stack(stats).mean(0)
-        return dict(zip(("reward", "drop_rate", "rot_error"), values))
+        return dict(zip((*names, *extra), values, strict=True))
 
     def fit_world_model(self, holdout=False):
         c = self.cfg
@@ -351,7 +354,7 @@ class SuperMimicEngine:
                 history = torch.cat((history[:, 1:], obs[:, None]), 1)
             final = t.critic(self.task_features(x, m, aux, sim))
             inputs.append(final)
-            objective = objective + c.gamma**c.horizon * survival * self.critic(final)
+            objective = objective + c.actor_bootstrap_weight * c.gamma**c.horizon * survival * self.critic(final)
             if reference_anchor is not None:
                 behavior_penalty = behavior_penalty + sum(c.gamma ** step for step in range(c.horizon)) * (
                     reference_anchor(self.step_actor)

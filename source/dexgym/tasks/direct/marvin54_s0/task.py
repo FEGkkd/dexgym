@@ -153,6 +153,9 @@ class HandCentricTask(TrackingTask):
 
         near_pairs = e["cross_weights"]
         relative = (e["cross_tip"].square().sum(-1) * near_pairs).sum((1, 2)) / near_pairs.sum((1, 2))
+        goal_gap = cross_tip_vectors(self.library.ref_tip_pos[self.current_goal(m)]).norm(dim=-1)
+        measured_gap = cross_tip_vectors(pose["tip"]).norm(dim=-1)
+        clearance = ((0.85 * goal_gap).clamp(max=0.014) - measured_gap).clamp_min(0.) / 0.014
         margin = (0.035 - torch.minimum(q - self.joint_lo, self.joint_hi - q)).clamp_min(0.0) / 0.035
         terms = {
             "tip_pos": 3.6 * term("tip_pos", 0.025), "tip_rot": 1.05 * term("tip_rot", 0.30),
@@ -162,7 +165,8 @@ class HandCentricTask(TrackingTask):
             "smoothness": -0.16 * (a - m["action"]).square().mean(-1),
             "action": -0.04 * a.square().mean(-1),
             "limit": -0.07 * margin.square().mean(-1),
-            "contact": -0.25 * contact[:, 1],
+            "clearance": -0.35 * clearance.square().amax(dim=(1, 2)),
+            "contact": -0.60 * contact[:, 1],
         }
         return sum(terms.values()), pose["tip"].flatten(1), terms
 

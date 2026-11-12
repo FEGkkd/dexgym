@@ -30,7 +30,8 @@ def main():
     parser.add_argument("--wm-batches", type=int, default=4)
     parser.add_argument("--wm-batch", type=int, default=1024)
     parser.add_argument("--actor-batch", type=int, default=192)
-    parser.add_argument("--actor-lr", type=float, default=0.00010)
+    parser.add_argument("--actor-lr", type=float, default=0.000025)
+    parser.add_argument("--actor-bootstrap-weight", type=float, default=0.15)
     parser.add_argument("--exploration", type=float, default=0.22)
     parser.add_argument("--horizon", type=int, default=16)
     parser.add_argument("--buffer-steps", type=int, default=192)
@@ -45,7 +46,8 @@ def main():
     if min(args.num_envs, args.wm_width, args.wm_batches, args.wm_batch, args.actor_batch,
            args.log_interval, args.save_interval) <= 0 or args.buffer_steps < 64:
         parser.error("Invalid batch size, replay capacity or logging interval")
-    if args.actor_lr <= 0 or not 0 <= args.exploration <= 1:
+    if (not np.isfinite(args.actor_lr) or args.actor_lr <= 0 or not 0 <= args.exploration <= 1
+            or not 0 <= args.actor_bootstrap_weight <= 1):
         parser.error("Invalid Actor learning rate or exploration scale")
     if (args.output / "metrics.jsonl").exists():
         parser.error("Select a fresh run directory")
@@ -83,6 +85,7 @@ def main():
         wm_only_iters=args.wm_only_iters, wm_window=8, wm_batches=args.wm_batches, wm_batch=args.wm_batch,
         wm_hidden=(args.wm_width,) * 3, isolate_wm_init=True, control_error_features=True,
         pi_batch=args.actor_batch, horizon=args.horizon, critic_epochs=4,
+        actor_bootstrap_weight=args.actor_bootstrap_weight,
         actor_lr=args.actor_lr, action_noise=args.exploration,
         failure_warmup_iters=100, failure_clip=1.0, amp=False, compile=False, compile_policy=False,
         save_interval=args.save_interval, log_interval=args.log_interval,
@@ -90,8 +93,8 @@ def main():
     engine = SuperMimicEngine(task, config, args.output)
     if args.resume:
         payload = torch.load(args.resume, map_location="cpu", weights_only=False)
-        for key in ("wm_hidden", "control_error_features", "horizon"):
-            if payload["config"][key] != config.to_dict()[key]:
+        for key in ("wm_hidden", "control_error_features", "horizon", "actor_bootstrap_weight"):
+            if payload["config"].get(key, 1.0) != config.to_dict()[key]:
                 raise ValueError(f"Checkpoint training configuration differs in {key}")
         if payload["iteration"] >= args.iterations:
             raise ValueError("--iterations must exceed the checkpoint iteration when resuming")

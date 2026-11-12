@@ -6,7 +6,7 @@ import torch
 
 from ..marvin54_tracking.task import JOINTS
 from .physics import COLLISION, JOINT_LIMIT, NONFINITE, OVERFLOW, SUBSTEPS, TRACKING
-from .task import HandCentricTask, TRACKING_LIMIT_M
+from .task import HandCentricTask, TRACKING_LIMIT_M, cross_tip_vectors
 
 
 class HandCentricEnv:
@@ -84,11 +84,19 @@ class HandCentricEnv:
         frame = self.memory["frame"]
         complete = (frame == task.library.end[frame]) & (flags == 0)
         terminated = (flags != 0) | complete
+        tip_delta = pose["tip"] - task.library.ref_tip_pos[frame]
+        stats = {
+            "tip_mm": tip_delta.norm(dim=-1).mean((1, 2)) * 1000,
+            "cross_tip_mm": cross_tip_vectors(tip_delta).norm(dim=-1).mean((1, 2)) * 1000,
+            "deep_contact_rate": (depth > 0.0005).float(),
+            "lost_tracking_rate": ((flags & TRACKING) != 0).float(),
+            "natural_completion_rate": complete.float(),
+        }
         events = dict(failure_bits=flags, safety_failure=safety, safety_substep=first, reference_complete=complete,
                       full_step=full_step)
         self.transition = dict(
             x1=x, contact=contact, torque=torque, drop=(flags & (COLLISION | JOINT_LIMIT | OVERFLOW)) != 0,
-            nan=invalid, c=target, u=target, depth=depth, **events
+            nan=invalid, c=target, u=target, depth=depth, rollout_stats=stats, **events
         )
         self.common_step_counter += 1
         return self.observation(), reward, terminated, torch.zeros_like(terminated), events

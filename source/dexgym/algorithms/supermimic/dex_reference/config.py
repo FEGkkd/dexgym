@@ -23,6 +23,7 @@ class SuperMimicConfig:
     control_error_features: bool = False
     pi_batch: int = 1024
     horizon: int = 32
+    actor_bootstrap_weight: float = 1.0
     critic_epochs: int = 5
     critic_minibatches: int = 4
     gamma: float = 0.99
@@ -46,6 +47,8 @@ class SuperMimicConfig:
         return asdict(self)
 
     def __post_init__(self):
+        if not 0 <= self.actor_bootstrap_weight <= 1:
+            raise ValueError("Actor bootstrap weight must be in [0,1]")
         if not 0 < self.utd <= 1:
             raise ValueError("UTD must be in (0,1]")
         if self.warmup_steps < max(self.horizon, self.wm_window):
