@@ -92,6 +92,17 @@ def window_correction(q, changes, arm, lead):
     return delta / np.maximum(weights[:, None], 1.0)
 
 
+def event_windows(changes, events):
+    """Separate contact bursts so one stalled burst cannot block other repairs."""
+    groups = []
+    for change, event in zip(changes, events, strict=True):
+        if not groups or change[0] - groups[-1][-1][0][0] > 6:
+            groups.append([])
+        groups[-1].append((change, event["depth_mm"]))
+    groups.sort(key=lambda group: sum((depth - 1000 * DEEP_M)**2 for _, depth in group), reverse=True)
+    return [[change for change, _ in group] for group in groups[:4]]
+
+
 def repair(data, xml, leads=(2,)):
     robot = Robot(xml)
     goal = unpack(data)
@@ -105,15 +116,18 @@ def repair(data, xml, leads=(2,)):
     original_q = q.copy()
     accepted = 0
     speed = np.where(robot.arm, 0.063, 0.115)
-    for _ in range(5):
+    for _ in range(8):
         if not changes:
             break
-        deltas = [window_correction(q, changes, robot.arm, lead) for lead in leads]
+        bursts = event_windows(changes, after["events"])
+        proposals = [changes, *bursts] if len(bursts) > 1 else [changes]
+        deltas = (window_correction(q, group, robot.arm, lead) for group in proposals for lead in leads)
         for delta, multiplier in ((d, m) for d in deltas for m in (2., 1., 0.5, 0.25, 4.)):
             candidate = np.clip(q + multiplier * delta, robot.lo, robot.hi)
             for frame in range(1, len(candidate)):
                 np.clip(candidate[frame], candidate[frame - 1] - speed, candidate[frame - 1] + speed,
                         out=candidate[frame])
+            candidate = candidate.astype(np.float32).astype(np.float64)
             candidate_fk, error = measure(robot, candidate, goal)
             if (error["geometric_depth_mm"] > IK_DEPTH_M * 1000
                     or error["tip_mm"] > original_error["tip_mm"] + 0.35
@@ -121,10 +135,13 @@ def repair(data, xml, leads=(2,)):
                     or error["shape_mm"] > original_error["shape_mm"] + 0.6
                     or error["tip_deg"] > original_error["tip_deg"] + 0.5):
                 continue
-            candidate_vel = np.gradient(candidate, DT, axis=0)
+            candidate_vel = np.gradient(candidate, DT, axis=0).astype(np.float32)
             result, _ = audit(robot, candidate, candidate_vel, candidate_fk["tip_pos"])
+            peak_improved = result["peak_mm"] < after["peak_mm"] - 0.001
+            count_improved = result["deep_substeps"] < after["deep_substeps"]
             if (result["complete"] and result["tip_p95_mm"] <= min(85., (before["tip_p95_mm"] or 85.) + 3.)
-                    and result["peak_mm"] < after["peak_mm"]
+                    and (peak_improved or count_improved)
+                    and result["peak_mm"] <= after["peak_mm"] + 1e-5
                     and result["deep_substeps"] <= after["deep_substeps"]):
                 q, qd, fk = candidate, candidate_vel, candidate_fk
                 after, changes = audit(robot, q, qd, fk["tip_pos"], directions=True)
