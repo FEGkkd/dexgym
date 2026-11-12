@@ -10,6 +10,7 @@ from ..marvin54_tracking.task import DT, HARD_CONTACT_DEPTH_M, JOINT_OVERFLOW_RA
 
 PHYSICS_DT = 0.002
 SUBSTEPS = round(DT / PHYSICS_DT)
+AUDIT_DEPTH_M = 0.0005
 COLLISION, JOINT_LIMIT, NONFINITE, TRACKING, OVERFLOW = 1, 2, 4, 8, 16
 FAILURES = {COLLISION: "collision", JOINT_LIMIT: "joint_limit", NONFINITE: "nonfinite",
             TRACKING: "tracking", OVERFLOW: "buffer_overflow"}
@@ -51,6 +52,7 @@ class CpuPhysics(Physics):
     def interval(self, target, task):
         m = self.model
         peak = torch.zeros(self.num_envs)
+        deep_substeps = torch.zeros(self.num_envs, dtype=torch.int32)
         substeps = torch.zeros(self.num_envs, dtype=torch.int32)
         flags = torch.zeros_like(substeps)
         torque = []
@@ -62,6 +64,7 @@ class CpuPhysics(Physics):
                 mujoco.mj_fwdPosition(m, d)
                 depth = max(0.0, -float(np.min(d.contact.dist, initial=0.0)))
                 peak[i] = max(peak[i], depth)
+                deep_substeps[i] += depth > AUDIT_DEPTH_M
                 state = torch.as_tensor(np.r_[d.qpos, d.qvel], dtype=torch.float32)[None]
                 event = int(self.flags(task, state, peak[i:i + 1]))
                 if d.time <= previous_time:
@@ -70,4 +73,4 @@ class CpuPhysics(Physics):
                     flags[i], substeps[i] = event, j
                     break
             torque.append(d.qfrc_actuator.copy())
-        return self.state(), torch.as_tensor(np.stack(torque), dtype=torch.float32), peak, substeps, flags
+        return self.state(), torch.as_tensor(np.stack(torque), dtype=torch.float32), peak, substeps, flags, deep_substeps

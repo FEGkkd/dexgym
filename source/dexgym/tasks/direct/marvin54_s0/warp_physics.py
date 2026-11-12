@@ -6,7 +6,7 @@ import mujoco_warp as mjw
 import torch
 import warp as wp
 
-from .physics import OVERFLOW, SUBSTEPS, Physics
+from .physics import AUDIT_DEPTH_M, OVERFLOW, SUBSTEPS, Physics
 
 
 @wp.kernel
@@ -78,6 +78,7 @@ class WarpPhysics(Physics):
             peak = target.new_zeros(self.num_envs)
             first = torch.zeros(self.num_envs, dtype=torch.int32, device=self.device)
             flags = torch.zeros_like(first)
+            deep_substeps = torch.zeros_like(first)
             for j in range(1, SUBSTEPS + 1):
                 if self.graph is None:
                     self.substep()
@@ -93,6 +94,7 @@ class WarpPhysics(Physics):
                 state = torch.where(live[:, None], measured, state)
                 torque = torch.where(live[:, None], self.force, torque)
                 peak = torch.where(live, torch.maximum(peak, depth), peak)
-            for value in (state, torque, peak, first, flags):
+                deep_substeps += (live & (depth > AUDIT_DEPTH_M)).int()
+            for value in (state, torque, peak, first, flags, deep_substeps):
                 value.record_stream(caller)
-        return state, torque, peak, first, flags
+        return state, torque, peak, first, flags, deep_substeps

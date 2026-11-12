@@ -5,7 +5,7 @@ from types import SimpleNamespace
 import torch
 
 from ..marvin54_tracking.task import JOINTS
-from .physics import COLLISION, JOINT_LIMIT, NONFINITE, OVERFLOW, SUBSTEPS, TRACKING
+from .physics import AUDIT_DEPTH_M, COLLISION, JOINT_LIMIT, NONFINITE, OVERFLOW, SUBSTEPS, TRACKING
 from .task import HandCentricTask, TRACKING_LIMIT_M, cross_tip_vectors
 
 
@@ -66,7 +66,7 @@ class HandCentricEnv:
         if target_override is not None:
             target = target_override.clamp(task.lo, task.hi)
             action = ((target - before["control_center"]) / task.action_step).clamp(-1, 1)
-        x, torque, depth, first, flags = self.backend.interval(target, task)
+        x, torque, depth, first, flags, deep_substeps = self.backend.interval(target, task)
         self._state = x
         safety = flags != 0
         invalid = (flags & (NONFINITE | OVERFLOW)) != 0
@@ -88,7 +88,7 @@ class HandCentricEnv:
         stats = {
             "tip_mm": tip_delta.norm(dim=-1).mean((1, 2)) * 1000,
             "cross_tip_mm": cross_tip_vectors(tip_delta).norm(dim=-1).mean((1, 2)) * 1000,
-            "deep_contact_rate": (depth > 0.0005).float(),
+            "deep_contact_rate": (depth > AUDIT_DEPTH_M).float(),
             "lost_tracking_rate": ((flags & TRACKING) != 0).float(),
             "natural_completion_rate": complete.float(),
         }
@@ -96,7 +96,7 @@ class HandCentricEnv:
                       full_step=full_step)
         self.transition = dict(
             x1=x, contact=contact, torque=torque, drop=(flags & (COLLISION | JOINT_LIMIT | OVERFLOW)) != 0,
-            nan=invalid, c=target, u=target, depth=depth, rollout_stats=stats, **events
+            nan=invalid, c=target, u=target, depth=depth, deep_substeps=deep_substeps, rollout_stats=stats, **events
         )
         self.common_step_counter += 1
         return self.observation(), reward, terminated, torch.zeros_like(terminated), events

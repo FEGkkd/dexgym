@@ -13,7 +13,7 @@ import torch
 from ..marvin54_tracking.task import DT, JOINTS
 from .env import HandCentricEnv
 from .io import clip_paths, source_episode, write_json
-from .physics import CpuPhysics, FAILURES, PHYSICS_DT
+from .physics import CpuPhysics, FAILURES, PHYSICS_DT, SUBSTEPS
 from .task import HandGoalLibrary, TASK_ID, cross_tip_vectors
 
 
@@ -145,9 +145,11 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
     total_reward = torch.zeros_like(peak)
     saturation = torch.zeros_like(peak)
     deep_steps = torch.zeros_like(starts)
+    physics_steps = torch.zeros_like(starts)
+    deep_substeps = torch.zeros_like(starts)
     records = defaultdict(list)
     if trace_dir:
-        trace = dict(qpos=[env.state()[:, :JOINTS].clone()], target=[], depth=[], substep=[])
+        trace = dict(qpos=[env.state()[:, :JOINTS].clone()], target=[], depth=[], substep=[], deep_substeps=[])
     for _ in range(int(lengths.max())):
         if not active.any():
             break
@@ -165,16 +167,21 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
         mask = active & event["full_step"]
         for key, values in errors.items():
             records[key].append(values.masked_fill(~mask[:, None], float("nan")))
+        deep = env.transition["deep_substeps"]
+        substep = event["safety_substep"]
         if trace_dir:
             trace["qpos"].append(env.state()[:, :JOINTS].clone())
             trace["target"].append(env.transition["u"].clone())
             trace["depth"].append(env.transition["depth"].clone())
-            trace["substep"].append(event["safety_substep"].clone())
+            trace["substep"].append(substep.clone())
+            trace["deep_substeps"].append(deep.clone())
         done |= active & event["reference_complete"]
         failure_bits = torch.where(active, event["failure_bits"], failure_bits)
         steps += active
         peak = torch.where(active, torch.maximum(peak, env.transition["depth"]), peak)
-        deep_steps += active & (env.transition["depth"] > 0.0005)
+        deep_steps += active & (deep > 0)
+        physics_steps += torch.where(active, torch.where(substep == 0, SUBSTEPS, substep), 0)
+        deep_substeps += torch.where(active, deep, 0)
         total_reward += torch.where(active, reward, 0.)
         saturation += torch.where(active, (action.abs() > 0.98).float().mean(-1), 0.)
         active &= ~terminal
@@ -192,6 +199,7 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
                    initial_shift=float(shift[i]), executed_steps=n, required_steps=int(lengths[i]),
                    depth_mm=float(peak[i] * 1000), reward_per_required_step=float(total_reward[i] / lengths[i]),
                    control_steps_depth_gt_0_5mm=int(deep_steps[i]),
+                   physics_substeps=int(physics_steps[i]), physics_substeps_depth_gt_0_5mm=int(deep_substeps[i]),
                    actor_output_saturated_fraction=None if mode.startswith("reference_pd")
                    else float(saturation[i] / max(1, n)),
                    failure_causes=[name for bit, name in FAILURES.items() if bits & bit])
@@ -205,7 +213,8 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
             if trace["substep"][n - 1, i]:
                 time[-1] = time[-2] + trace["substep"][n - 1, i] * PHYSICS_DT
             np.savez_compressed(trace_dir / f"{i:03d}.npz", time_s=time, qpos=trace["qpos"][:n + 1, i],
-                                target=trace["target"][:n, i], depth_m=trace["depth"][:n, i])
+                                target=trace["target"][:n, i], depth_m=trace["depth"][:n, i],
+                                deep_substeps=trace["deep_substeps"][:n, i])
     eligible_rows = [r for r in rows if r["eligible"]]
     completed = [r for r in eligible_rows if r["complete"]]
     by_episode = defaultdict(list)
@@ -228,6 +237,8 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
             "completed_means": means([r for r in group if r["complete"]]),
             "observed_prefix_means": means(group),
             "control_steps_depth_gt_0_5mm": sum(r["control_steps_depth_gt_0_5mm"] for r in group),
+            "physics_substeps": sum(r["physics_substeps"] for r in group),
+            "physics_substeps_depth_gt_0_5mm": sum(r["physics_substeps_depth_gt_0_5mm"] for r in group),
             "max_depth_mm": max(r["depth_mm"] for r in group),
         }
         for episode, group in by_episode.items()
@@ -238,6 +249,8 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
             key: float(np.mean([row[field][key] for row in per_episode.values() if row[field][key] is not None]))
             if any(row[field][key] is not None for row in per_episode.values()) else None for key in errors
         }
+    total_substeps = sum(r["physics_substeps"] for r in eligible_rows)
+    total_deep_substeps = sum(r["physics_substeps_depth_gt_0_5mm"] for r in eligible_rows)
     return {
         "eligible": len(eligible_rows), "completed": len(completed),
         "completion": len(completed) / max(1, len(eligible_rows)),
@@ -256,6 +269,9 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
         "observed_prefix_means": means(eligible_rows),
         "max_depth_mm": max((r["depth_mm"] for r in eligible_rows), default=0.),
         "control_steps_depth_gt_0_5mm": sum(r["control_steps_depth_gt_0_5mm"] for r in eligible_rows),
+        "physics_substeps": total_substeps,
+        "physics_substeps_depth_gt_0_5mm": total_deep_substeps,
+        "physics_substep_depth_gt_0_5mm_rate": total_deep_substeps / max(1, total_substeps),
         "initial_shift_unit": {"alternate": "max_elbow_displacement_m", "perturbed": "joint_l2_rad"}.get(reset_mode),
         "per_episode": per_episode,
         "rows": rows,
