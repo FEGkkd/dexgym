@@ -282,12 +282,14 @@ def native_replay(robot, q, qd, goal):
     for frame in range(1, len(q)):
         d.ctrl[:] = q[frame, robot.actuator_qpos]
         for _ in range(10):
+            previous_time = d.time
             mujoco.mj_step(m, d)
+            mujoco.mj_fwdPosition(m, d)
             peak = max(peak, robot.depth())
-            if (peak > PHYSICAL_DEPTH_M or not np.isfinite(d.qpos).all()
+            if (peak > PHYSICAL_DEPTH_M or d.time <= previous_time
+                    or not (np.isfinite(d.qpos).all() and np.isfinite(d.qvel).all())
                     or np.any(d.qpos < robot.limits[:, 0] - 0.05) or np.any(d.qpos > robot.limits[:, 1] + 0.05)):
                 return dict(complete=False, steps=frame, depth_mm=peak * 1000)
-        mujoco.mj_kinematics(m, d)
         tip = d.site_xpos[robot.tips]
         errors.append(np.linalg.norm(tip - goal[frame], axis=-1).mean())
     return dict(complete=True, steps=len(q) - 1, depth_mm=peak * 1000,

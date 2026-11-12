@@ -3,6 +3,8 @@
 import json
 from pathlib import Path
 
+import numpy as np
+
 
 def clip_paths(manifest):
     paths = [Path(path) for path in json.loads(manifest.read_text())]
@@ -15,3 +17,8 @@ def write_json(path, value):
     temp = path.with_suffix(".tmp")
     temp.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n")
     temp.replace(path)
+
+
+def source_episode(path):
+    with np.load(path, allow_pickle=False) as clip:
+        return str(clip["source_episode"].item())

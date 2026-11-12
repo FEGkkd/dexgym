@@ -51,7 +51,7 @@ class HandCentricTask(TrackingTask):
     geometry_type = HandGeometry
     context_dim = 3 * JOINTS + GOAL_FRAME_DIM
 
-    def __init__(self, env, model, library):
+    def __init__(self, env, model, library, target_memory=0.0):
         super().__init__(env, model, library, "home", "motion-encoder", "transition",
                          first_event=True, tracking_failure_m=TRACKING_LIMIT_M)
         # All training transitions come from exploration around the current Actor.
@@ -62,7 +62,11 @@ class HandCentricTask(TrackingTask):
         self.future_offsets = torch.tensor(FUTURE_OFFSETS, device=self.device)
         self.goal_dim = len(FUTURE_OFFSETS) * GOAL_FRAME_DIM
         self.policy_dim = self.history_dim + self.goal_dim
-        self.action_step = self.tensor([0.095 if name.startswith("Joint") else 0.14 for name in library.names])
+        if not 0 <= target_memory <= 1:
+            raise ValueError("target_memory must be in [0,1]")
+        self.target_memory = target_memory
+        arm_step, hand_step = (0.05, 0.075) if target_memory else (0.095, 0.14)
+        self.action_step = self.tensor([arm_step if name.startswith("Joint") else hand_step for name in library.names])
 
     def goal_features(self, frame):
         lib = self.library
@@ -89,25 +93,30 @@ class HandCentricTask(TrackingTask):
 
     def policy_observation(self, x, m, aux):
         q, qd = x.split(JOINTS, dim=-1)
-        return torch.cat((q - self.home, qd, m["action"], m["tip"]), dim=-1)
+        control = (m["control_center"] - q) / self.action_step if self.target_memory else m["action"]
+        return torch.cat((q - self.home, qd, control, m["tip"]), dim=-1)
 
     def context(self, x, m, aux, sim):
-        return torch.cat((x, m["action"], self.goal_features(self.current_goal(m))), dim=-1)
+        control = (m["control_center"] - x[:, :JOINTS]) / self.action_step if self.target_memory else m["action"]
+        return torch.cat((x, control, self.goal_features(self.current_goal(m))), dim=-1)
 
     @staticmethod
     def encode_memory(m):
         # Integer phase is exactly representable at the size of this motion library.
-        return torch.cat((m["frame"][:, None].float(), m["action"], m["q"]), dim=-1)
+        return torch.cat((m["frame"][:, None].float(), m["action"], m["control_center"]), dim=-1)
 
     @staticmethod
     def decode_memory(encoded):
-        return {"frame": encoded[:, 0].long(), "action": encoded[:, 1:1 + JOINTS], "q": encoded[:, 1 + JOINTS:]}
+        return {"frame": encoded[:, 0].long(), "action": encoded[:, 1:1 + JOINTS],
+                "control_center": encoded[:, 1 + JOINTS:]}
 
     def advance_memory(self, x1, m, a, target, tip, next_goal, soft=True):
-        return {"frame": self.current_goal(m), "action": a, "q": x1[:, :JOINTS], "tip": tip}
+        q = x1[:, :JOINTS]
+        center = torch.lerp(q, target, self.target_memory)
+        return {"frame": self.current_goal(m), "action": a, "control_center": center, "tip": tip}
 
     def control_target(self, action, m, bias):
-        u = (m["q"] + self.action_step * action).clamp(self.lo, self.hi)
+        u = (m["control_center"] + self.action_step * action).clamp(self.lo, self.hi)
         return u, u
 
     def tracking_error(self, pose, memory):

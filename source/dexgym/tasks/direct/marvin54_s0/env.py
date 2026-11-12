@@ -10,10 +10,10 @@ from .task import HandCentricTask, TRACKING_LIMIT_M, cross_tip_vectors
 
 
 class HandCentricEnv:
-    def __init__(self, backend, library, *, reset_noise=True):
+    def __init__(self, backend, library, *, reset_noise=True, target_memory=0.0):
         self.backend = backend
         self.num_envs, self.device = backend.num_envs, backend.device
-        self.task = HandCentricTask(self, backend.model, library)
+        self.task = HandCentricTask(self, backend.model, library, target_memory=target_memory)
         self.reset_noise = reset_noise
         self.history = torch.zeros(
             self.num_envs, self.task.history_steps, self.task.history_frame_dim, device=self.device
@@ -22,7 +22,7 @@ class HandCentricEnv:
         self.memory = {
             "frame": torch.zeros(self.num_envs, dtype=torch.long, device=self.device),
             "action": torch.zeros(self.num_envs, JOINTS, device=self.device),
-            "q": self._state[:, :JOINTS],
+            "control_center": self._state[:, :JOINTS],
             "tip": torch.zeros(self.num_envs, 30, device=self.device),
         }
         self.transition = None
@@ -54,7 +54,7 @@ class HandCentricEnv:
         self.memory = {key: value.clone() for key, value in self.memory.items()}
         self.memory["frame"][env_ids] = frame
         self.memory["action"][env_ids] = 0
-        self.memory["q"][env_ids] = q
+        self.memory["control_center"][env_ids] = q
         self.memory["tip"][env_ids] = task.geometry.hand_pose(q)["tip"].flatten(1)
         obs = task.policy_observation(self._state, self.memory, None)
         self.history[env_ids] = obs[env_ids, None]
@@ -65,7 +65,7 @@ class HandCentricEnv:
         _, target = task.control_target(action, before, None)
         if target_override is not None:
             target = target_override.clamp(task.lo, task.hi)
-            action = ((target - before["q"]) / task.action_step).clamp(-1, 1)
+            action = ((target - before["control_center"]) / task.action_step).clamp(-1, 1)
         x, torque, depth, first, flags = self.backend.interval(target, task)
         self._state = x
         safety = flags != 0

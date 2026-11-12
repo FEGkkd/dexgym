@@ -13,7 +13,7 @@ from dexgym.algorithms.supermimic.dex_reference.config import SuperMimicConfig
 from dexgym.algorithms.supermimic.dex_reference.engine import SuperMimicEngine
 
 from .env import HandCentricEnv
-from .io import clip_paths, write_json
+from .io import clip_paths, source_episode, write_json
 from .task import HandGoalLibrary, TASK_ID
 from .warp_physics import WarpPhysics
 
@@ -32,6 +32,7 @@ def main():
     parser.add_argument("--actor-batch", type=int, default=192)
     parser.add_argument("--actor-lr", type=float, default=0.000025)
     parser.add_argument("--actor-bootstrap-weight", type=float, default=0.15)
+    parser.add_argument("--target-memory", type=float, default=0.0)
     parser.add_argument("--exploration", type=float, default=0.22)
     parser.add_argument("--horizon", type=int, default=16)
     parser.add_argument("--buffer-steps", type=int, default=192)
@@ -61,22 +62,25 @@ def main():
     paths = clip_paths(args.library)
     library = HandGoalLibrary(paths, model, args.model, device)
     backend = WarpPhysics(model, library.names, args.num_envs, device, graph=not args.no_cuda_graph)
-    env = HandCentricEnv(backend, library)
+    env = HandCentricEnv(backend, library, target_memory=args.target_memory)
     task = env.task
     metadata = dict(
         task_id=TASK_ID, model=str(args.model.resolve()), model_sha256=library.model_sha256,
         joint_names=library.names, library=str(args.library.resolve()), clips=len(paths),
         frames=library.frames, motion_sha256=library.sha256, num_envs=args.num_envs, seed=args.seed,
+        training_episodes=sorted({source_episode(path) for path in paths}),
         initialization="random", actor_objective="imagined_tracking_return",
-        collection="policy_exploration", action_mode="measured_joint_position_centered",
+        collection="policy_exploration", action_mode="position_target",
+        target_memory=args.target_memory,
         action_scale=task.action_step.tolist(), policy_dim=task.policy_dim,
         resume=str(args.resume.resolve()) if args.resume else None,
         backend="MuJoCo Warp", mujoco_version=mujoco.__version__,
     )
     if args.resume:
         saved = json.loads((args.resume.parent / "provenance.json").read_text())
-        for key in ("task_id", "model_sha256", "motion_sha256", "joint_names", "action_scale", "policy_dim"):
-            if saved.get(key) != metadata[key]:
+        for key in ("task_id", "model_sha256", "motion_sha256", "joint_names", "action_scale",
+                    "policy_dim", "target_memory"):
+            if saved.get(key, 0.0) != metadata[key]:
                 raise ValueError(f"Checkpoint provenance differs in {key}")
     args.output.mkdir(parents=True, exist_ok=True)
     write_json(args.output / "provenance.json", metadata)
@@ -103,7 +107,8 @@ def main():
         engine.obs = env.reset()[0]["policy"]
     else:
         engine.save(args.output / "model_0.pt", 0)
-    print("S0_TRAINING", json.dumps({k: v for k, v in metadata.items() if k != "motion_sha256"}), flush=True)
+    print("S0_TRAINING", json.dumps({k: v for k, v in metadata.items()
+                                    if k not in ("motion_sha256", "training_episodes")}), flush=True)
     engine.learn()
     optimizer_steps = {
         name: max((int(state["step"]) for state in opt.state.values() if "step" in state), default=0)

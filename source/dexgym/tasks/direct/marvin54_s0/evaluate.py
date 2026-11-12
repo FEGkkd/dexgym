@@ -12,12 +12,13 @@ import torch
 
 from ..marvin54_tracking.task import DT, JOINTS
 from .env import HandCentricEnv
-from .io import clip_paths, write_json
+from .io import clip_paths, source_episode, write_json
 from .physics import CpuPhysics, FAILURES, PHYSICS_DT
 from .task import HandGoalLibrary, TASK_ID, cross_tip_vectors
 
 
-MODES = ("nominal", "perturbed", "alternate", "reference_pd", "arms_fixed")
+DEFAULT_MODES = ("nominal", "perturbed", "alternate", "reference_pd", "arms_fixed")
+MODES = (*DEFAULT_MODES, "reference_pd_perturbed", "reference_pd_alternate", "left_arm_hold", "right_arm_hold")
 
 
 def select_paths(paths, limit):
@@ -111,6 +112,8 @@ def get_errors(task, state, memory):
     cross_distance = cross_tip_vectors(pose["tip"]).norm(dim=-1) - cross_tip_vectors(goal).norm(dim=-1)
     return {
         "tip_mm": e["tip_pos"].norm(dim=-1).flatten(1) * 1000,
+        "left_tip_mm": e["tip_pos"][:, 0].norm(dim=-1) * 1000,
+        "right_tip_mm": e["tip_pos"][:, 1].norm(dim=-1) * 1000,
         "tip_deg": task.angle(e["tip_rot"]).flatten(1).rad2deg(),
         "cross_tip_vector_mm": e["cross_tip"].norm(dim=-1).flatten(1) * 1000,
         "cross_tip_distance_mm": cross_distance.abs().flatten(1) * 1000,
@@ -127,10 +130,13 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
     task, library = env.task, env.task.library
     starts = library.start
     lengths = library.end[starts] - starts
-    q, qd, eligible, shift = initial_states(env.backend.model, library, mode, seed)
+    reset_mode = mode.removeprefix("reference_pd_")
+    q, qd, eligible, shift = initial_states(env.backend.model, library, reset_mode, seed)
     obs, _ = env.reset(frame=starts, q=task.tensor(q), qd=task.tensor(qd))
     active = torch.as_tensor(eligible, device=env.device).clone()
-    arm = torch.tensor([name.startswith("Joint") for name in library.names], device=env.device)
+    held_side = {"left_arm_hold": "_L", "right_arm_hold": "_R"}.get(mode, "")
+    arm = torch.tensor([name.startswith("Joint") and name.endswith(held_side) for name in library.names],
+                       device=env.device)
     fixed_arm = env.state()[:, :JOINTS].clone()
     done = torch.zeros_like(active)
     failure_bits = torch.zeros_like(starts)
@@ -138,6 +144,7 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
     peak = torch.zeros_like(starts, dtype=torch.float32)
     total_reward = torch.zeros_like(peak)
     saturation = torch.zeros_like(peak)
+    deep_steps = torch.zeros_like(starts)
     records = defaultdict(list)
     if trace_dir:
         trace = dict(qpos=[env.state()[:, :JOINTS].clone()], target=[], depth=[], substep=[])
@@ -147,9 +154,9 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
         before = env.memory
         action = actor(obs["policy"])
         override = None
-        if mode == "reference_pd":
+        if mode.startswith("reference_pd"):
             override = library.qpos[task.current_goal(before)]
-        elif mode == "arms_fixed":
+        elif mode in ("arms_fixed", "left_arm_hold", "right_arm_hold"):
             override = task.control_target(action, before, None)[1]
             override[:, arm] = fixed_arm[:, arm]
         obs, reward, terminal, _, event = env.step(action, target_override=override)
@@ -167,6 +174,7 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
         failure_bits = torch.where(active, event["failure_bits"], failure_bits)
         steps += active
         peak = torch.where(active, torch.maximum(peak, env.transition["depth"]), peak)
+        deep_steps += active & (env.transition["depth"] > 0.0005)
         total_reward += torch.where(active, reward, 0.)
         saturation += torch.where(active, (action.abs() > 0.98).float().mean(-1), 0.)
         active &= ~terminal
@@ -180,10 +188,12 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
     rows = []
     for i, path in enumerate(paths):
         n, bits = int(steps[i]), int(failure_bits[i])
-        row = dict(clip=str(path), eligible=bool(eligible[i]), complete=bool(done[i]),
+        row = dict(clip=str(path), source_episode=source_episode(path), eligible=bool(eligible[i]), complete=bool(done[i]),
                    initial_shift=float(shift[i]), executed_steps=n, required_steps=int(lengths[i]),
                    depth_mm=float(peak[i] * 1000), reward_per_required_step=float(total_reward[i] / lengths[i]),
-                   saturated_action_fraction=float(saturation[i] / max(1, n)),
+                   control_steps_depth_gt_0_5mm=int(deep_steps[i]),
+                   actor_output_saturated_fraction=None if mode.startswith("reference_pd")
+                   else float(saturation[i] / max(1, n)),
                    failure_causes=[name for bit, name in FAILURES.items() if bits & bit])
         for key, values in errors.items():
             values = values[:, i]
@@ -198,21 +208,56 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
                                 target=trace["target"][:n, i], depth_m=trace["depth"][:n, i])
     eligible_rows = [r for r in rows if r["eligible"]]
     completed = [r for r in eligible_rows if r["complete"]]
+    by_episode = defaultdict(list)
+    for row in eligible_rows:
+        by_episode[row["source_episode"]].append(row)
+    complete_episodes = sum(all(r["complete"] for r in group) for group in by_episode.values())
+
+    def means(group):
+        return {
+            key: float(np.mean([row[key]["mean"] for row in group if row[key] is not None]))
+            if any(row[key] is not None for row in group) else None for key in errors
+        }
+
+    per_episode = {
+        episode: {
+            "complete": all(r["complete"] for r in group),
+            "clips": len(group),
+            "step_coverage": sum(r["executed_steps"] for r in group) / sum(r["required_steps"] for r in group),
+            "reward_per_required_step": float(np.mean([r["reward_per_required_step"] for r in group])),
+            "completed_means": means([r for r in group if r["complete"]]),
+            "observed_prefix_means": means(group),
+            "control_steps_depth_gt_0_5mm": sum(r["control_steps_depth_gt_0_5mm"] for r in group),
+            "max_depth_mm": max(r["depth_mm"] for r in group),
+        }
+        for episode, group in by_episode.items()
+    }
+
+    def macro(field):
+        return {
+            key: float(np.mean([row[field][key] for row in per_episode.values() if row[field][key] is not None]))
+            if any(row[field][key] is not None for row in per_episode.values()) else None for key in errors
+        }
     return {
         "eligible": len(eligible_rows), "completed": len(completed),
         "completion": len(completed) / max(1, len(eligible_rows)),
+        "episodes": len(by_episode), "completed_episodes": complete_episodes,
+        "episode_completion": complete_episodes / max(1, len(by_episode)),
+        "episode_macro": {
+            "completed_means": macro("completed_means"), "observed_prefix_means": macro("observed_prefix_means"),
+            "reward_per_required_step": float(np.mean([r["reward_per_required_step"] for r in per_episode.values()]))
+            if per_episode else None,
+        },
         "step_coverage": sum(r["executed_steps"] for r in eligible_rows)
                          / max(1, sum(r["required_steps"] for r in eligible_rows)),
         "reward_per_required_step": float(np.mean([r["reward_per_required_step"] for r in eligible_rows]))
                                     if eligible_rows else None,
-        "completed_means": {key: float(np.mean([r[key]["mean"] for r in completed])) if completed else None
-                            for key in errors},
-        "observed_prefix_means": {
-            key: float(np.mean([r[key]["mean"] for r in eligible_rows if r[key] is not None]))
-            if any(r[key] is not None for r in eligible_rows) else None for key in errors
-        },
+        "completed_means": means(completed),
+        "observed_prefix_means": means(eligible_rows),
         "max_depth_mm": max((r["depth_mm"] for r in eligible_rows), default=0.),
-        "initial_shift_unit": {"alternate": "max_elbow_displacement_m", "perturbed": "joint_l2_rad"}.get(mode),
+        "control_steps_depth_gt_0_5mm": sum(r["control_steps_depth_gt_0_5mm"] for r in eligible_rows),
+        "initial_shift_unit": {"alternate": "max_elbow_displacement_m", "perturbed": "joint_l2_rad"}.get(reset_mode),
+        "per_episode": per_episode,
         "rows": rows,
     }
 
@@ -225,9 +270,10 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--backend", choices=("cpu", "warp"), default="cpu")
     parser.add_argument("--max-clips", type=int)
-    parser.add_argument("--modes", nargs="+", choices=MODES, default=list(MODES))
+    parser.add_argument("--modes", nargs="+", choices=MODES, default=list(DEFAULT_MODES))
     parser.add_argument("--seed", type=int, default=614)
     parser.add_argument("--trace", action="store_true")
+    parser.add_argument("--require-heldout", action="store_true")
     args = parser.parse_args()
     if args.max_clips is not None and args.max_clips < 1:
         parser.error("--max-clips must be positive")
@@ -242,26 +288,33 @@ def main():
     prov = json.loads((args.checkpoint.parent / "provenance.json").read_text())
     if (prov["task_id"], prov["model_sha256"], prov["joint_names"]) != (TASK_ID, library.model_sha256, library.names):
         raise ValueError("Checkpoint task, asset or joint order differs")
+    training = set(prov.get("training_episodes") or (
+        source_episode(path) for path in clip_paths(Path(prov["library"]))
+    ))
+    overlap = sorted(training & {source_episode(path) for path in paths})
+    if args.require_heldout and overlap:
+        raise ValueError(f"The evaluation includes {len(overlap)} training episodes")
     if args.backend == "warp":
         from .warp_physics import WarpPhysics
 
         backend = WarpPhysics(model, library.names, len(paths), device)
     else:
         backend = CpuPhysics(model, library.names, len(paths))
-    env = HandCentricEnv(backend, library, reset_noise=False)
+    env = HandCentricEnv(backend, library, reset_noise=False, target_memory=prov.get("target_memory", 0.0))
     actor = env.task.make_actor().to(device).eval()
     payload = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
     if payload["task_id"] != TASK_ID or payload["format_version"] != 1:
         raise ValueError("Unsupported checkpoint task or format")
     actor.load_state_dict(payload["modules"]["actor"])
     report = dict(checkpoint=str(args.checkpoint), iteration=payload["iteration"], backend=args.backend,
-                  initial_seed=args.seed, clips=len(paths), metrics={})
+                  initial_seed=args.seed, clips=len(paths), heldout=not overlap,
+                  overlap_source_episodes=overlap, metrics={})
     del payload
     args.output.mkdir(parents=True, exist_ok=True)
     for mode in args.modes:
         result = evaluate(env, actor, mode, args.seed, paths, args.output / mode if args.trace else None)
         report["metrics"][mode] = result
-        print(mode, json.dumps({k: v for k, v in result.items() if k != "rows"}), flush=True)
+        print(mode, json.dumps({k: v for k, v in result.items() if k not in ("rows", "per_episode")}), flush=True)
         write_json(args.output / "evaluation.json", report)
 
 
