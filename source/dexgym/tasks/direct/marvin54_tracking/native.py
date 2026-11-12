@@ -38,45 +38,51 @@ def simulation_cfg():
     )
 
 
+def create_tracking_scene(cfg, num_envs, model, names):
+    sim = SimulationContext(cfg)
+    scene_cfg = TrackingSceneCfg(num_envs=num_envs, env_spacing=3.0)
+    drives = drive_parameters(model, names)
+    actuator = scene_cfg.robot.actuators["all"]
+    actuator.stiffness = {name: drive["kp"] for name, drive in drives.items()}
+    actuator.damping = {name: drive["kd"] for name, drive in drives.items()}
+    actuator.joint_effort_limit = {name: drive["effort"] for name, drive in drives.items()}
+    scene = InteractiveScene(scene_cfg)
+    sim.reset()
+    robot = scene["robot"]
+    if list(robot.joint_names) != names:
+        raise ValueError("Newton/MJCF joint ordering differs")
+    for field, key in (("joint_stiffness", "kp"), ("joint_damping", "kd"), ("joint_effort_limits", "effort")):
+        actual = getattr(robot.data, field).torch
+        expected = actual.new_tensor([drives[name][key] for name in names])
+        if not torch.allclose(actual, expected.expand_as(actual), atol=1e-5, rtol=1e-5):
+            raise ValueError(f"Newton {field} does not match the composed MuJoCo model")
+    return sim, scene, robot
+
+
+def solver_dof_indices(solver, names, device):
+    native = solver.mj_model
+    indices = []
+    for name in names:
+        matches = [j for j in range(native.njnt) if native.joint(j).name.endswith("_" + name)]
+        if len(matches) != 1:
+            raise ValueError(f"Cannot uniquely map Newton force channel {name}")
+        indices.append(native.jnt_dofadr[matches[0]])
+    return torch.tensor(indices, device=device)
+
+
 class NewtonTrackingEnv:
     def __init__(self, cfg, num_envs, model, library, nominal, policy_arch="flat", termination_model="legacy-state",
                  reward_profile="precision", *, first_event=False, tracking_failure_m=0.25,
                  max_episode_steps=None):
-        self.sim = SimulationContext(cfg)
-        scene_cfg = TrackingSceneCfg(num_envs=num_envs, env_spacing=3.0)
-        drives = drive_parameters(model, library.names)
-        actuator = scene_cfg.robot.actuators["all"]
-        actuator.stiffness = {name: drive["kp"] for name, drive in drives.items()}
-        actuator.damping = {name: drive["kd"] for name, drive in drives.items()}
-        actuator.joint_effort_limit = {name: drive["effort"] for name, drive in drives.items()}
-        self.scene = InteractiveScene(scene_cfg)
-        self.sim.reset()
-        self.robot = self.scene["robot"]
+        self.sim, self.scene, self.robot = create_tracking_scene(cfg, num_envs, model, library.names)
         self.num_envs = num_envs
         self.device = self.robot.device
-        if list(self.robot.joint_names) != library.names:
-            raise ValueError("Newton/MJCF joint ordering differs")
         self.solver = NewtonManager._solver
-        native = self.solver.mj_model
-        addresses = {}
-        for name in library.names:
-            suffix = "_" + name
-            matches = [j for j in range(native.njnt) if native.joint(j).name.endswith(suffix)]
-            if len(matches) != 1:
-                raise ValueError(f"Cannot uniquely map Newton force channel {name}")
-            addresses[name] = native.jnt_dofadr[matches[0]]
-        self.dof_ids = torch.tensor(list(addresses.values()), device=self.device)
+        self.dof_ids = solver_dof_indices(self.solver, library.names, self.device)
         self.task = TrackingTask(
             self, model, library, nominal, policy_arch, termination_model, reward_profile,
             first_event=first_event, tracking_failure_m=tracking_failure_m,
         )
-        for field, desired in (
-            ("joint_stiffness", self.task.kp), ("joint_damping", self.task.kd),
-            ("joint_effort_limits", self.task.effort),
-        ):
-            actual = getattr(self.robot.data, field).torch
-            if not torch.allclose(actual, desired.expand_as(actual), atol=1e-5, rtol=1e-5):
-                raise ValueError(f"Newton {field} does not match the composed MuJoCo model")
         self.max_episode_steps = max_episode_steps
         self.elapsed = torch.zeros(num_envs, dtype=torch.long, device=self.device)
         self._state = self._physics_state()

@@ -14,7 +14,9 @@ def contact_depth(count: wp.array(dtype=wp.int32), world: wp.array(dtype=wp.int3
                   dist: wp.array(dtype=wp.float32), result: wp.array(dtype=wp.float32)):
     i = wp.tid()
     if i < count[0]:
-        wp.atomic_max(result, world[i], wp.max(0.0, -dist[i]))
+        env = world[i]
+        if 0 <= env and env < result.shape[0]:
+            wp.atomic_max(result, env, wp.max(0.0, -dist[i]))
 
 
 class WarpPhysics(Physics):

@@ -13,7 +13,7 @@ import torch
 from ..marvin54_tracking.task import DT, JOINTS
 from .env import HandCentricEnv
 from .io import clip_paths, source_episode, write_json
-from .physics import CpuPhysics, FAILURES, PHYSICS_DT, SUBSTEPS
+from .physics import FAILURES, PHYSICS_DT, SUBSTEPS, open_physics
 from .task import HandGoalLibrary, TASK_ID, cross_tip_vectors
 
 
@@ -288,7 +288,7 @@ def main():
     parser.add_argument("--library", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--backend", choices=("cpu", "warp"), default="cpu")
+    parser.add_argument("--backend", choices=("cpu", "newton", "warp"), default="cpu")
     parser.add_argument("--max-clips", type=int)
     parser.add_argument("--modes", nargs="+", choices=MODES, default=list(DEFAULT_MODES))
     parser.add_argument("--seed", type=int, default=614)
@@ -299,7 +299,7 @@ def main():
         parser.error("--max-clips must be positive")
     torch.set_num_threads(1)
     torch.set_float32_matmul_precision("high")
-    device = "cuda:0" if args.backend == "warp" else "cpu"
+    device = "cpu" if args.backend == "cpu" else "cuda:0"
     model = mujoco.MjModel.from_xml_path(str(args.model))
     paths = clip_paths(args.library)
     if args.max_clips:
@@ -314,21 +314,21 @@ def main():
     overlap = sorted(training & {source_episode(path) for path in paths})
     if args.require_heldout and overlap:
         raise ValueError(f"The evaluation includes {len(overlap)} training episodes")
-    if args.backend == "warp":
-        from .warp_physics import WarpPhysics
+    with open_physics(args.backend, model, library.names, len(paths)) as backend:
+        run_evaluation(args, backend, library, prov, paths, overlap)
 
-        backend = WarpPhysics(model, library.names, len(paths), device)
-    else:
-        backend = CpuPhysics(model, library.names, len(paths))
+
+def run_evaluation(args, backend, library, prov, paths, overlap):
     env = HandCentricEnv(backend, library, reset_noise=False, target_memory=prov.get("target_memory", 0.0),
                          direct_tip_feedback=prov.get("direct_tip_feedback", False),
                          jacobian_feedback=prov.get("jacobian_feedback", False))
-    actor = env.task.make_actor().to(device).eval()
+    actor = env.task.make_actor().to(env.device).eval()
     payload = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
     if payload["task_id"] != TASK_ID or payload["format_version"] != 1:
         raise ValueError("Unsupported checkpoint task or format")
     actor.load_state_dict(payload["modules"]["actor"])
     report = dict(checkpoint=str(args.checkpoint), iteration=payload["iteration"], backend=args.backend,
+                  training_backend=prov.get("backend"),
                   initial_seed=args.seed, clips=len(paths), heldout=not overlap,
                   overlap_source_episodes=overlap, metrics={})
     del payload

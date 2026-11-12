@@ -1,4 +1,4 @@
-"""Train the Hand-centric Bimanual S0 Actor by model-based RL in MuJoCo Warp."""
+"""Train the Hand-centric Bimanual S0 Actor in Isaac Lab with Newton."""
 
 import argparse
 import json
@@ -14,8 +14,8 @@ from dexgym.algorithms.supermimic.dex_reference.engine import SuperMimicEngine
 
 from .env import HandCentricEnv
 from .io import clip_paths, source_episode, write_json
+from .physics import BACKEND_NAMES, open_physics
 from .task import HandGoalLibrary, TASK_ID
-from .warp_physics import WarpPhysics
 
 
 def main():
@@ -23,6 +23,7 @@ def main():
     parser.add_argument("--model", type=Path, required=True)
     parser.add_argument("--library", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--backend", choices=("newton", "warp"), default="newton")
     parser.add_argument("--num-envs", type=int, default=4096)
     parser.add_argument("--iterations", type=int, default=10000)
     parser.add_argument("--wm-only-iters", type=int, default=400)
@@ -63,10 +64,20 @@ def main():
     torch.set_num_threads(1)
     torch.set_float32_matmul_precision("high")
     device = "cuda:0"
+    if args.backend == "newton":
+        from dexgym.assets.marvin_wuji.robot_cfg import PACKAGED_MJCF
+
+        from ..marvin54_tracking.model import validate_drive_only_model
+
+        validate_drive_only_model(PACKAGED_MJCF, args.model)
     model = mujoco.MjModel.from_xml_path(str(args.model))
     paths = clip_paths(args.library)
     library = HandGoalLibrary(paths, model, args.model, device)
-    backend = WarpPhysics(model, library.names, args.num_envs, device, graph=not args.no_cuda_graph)
+    with open_physics(args.backend, model, library.names, args.num_envs, graph=not args.no_cuda_graph) as backend:
+        train(args, backend, library, paths)
+
+
+def train(args, backend, library, paths):
     env = HandCentricEnv(backend, library, target_memory=args.target_memory,
                          direct_tip_feedback=args.direct_tip_feedback, jacobian_feedback=args.jacobian_feedback,
                          contact_cost=args.contact_cost)
@@ -84,15 +95,19 @@ def main():
         training_contact_cost=args.contact_cost,
         action_scale=task.action_step.tolist(), policy_dim=task.policy_dim,
         resume=str(args.resume.resolve()) if args.resume else None,
-        backend="MuJoCo Warp", mujoco_version=mujoco.__version__,
+        backend=BACKEND_NAMES[args.backend], mujoco_version=mujoco.__version__,
     )
     if args.resume:
         saved = json.loads((args.resume.parent / "provenance.json").read_text())
         for key in ("task_id", "model_sha256", "motion_sha256", "joint_names", "action_scale",
-                    "policy_dim", "target_memory", "direct_tip_feedback", "jacobian_feedback"):
+                    "policy_dim", "target_memory", "direct_tip_feedback", "jacobian_feedback", "backend"):
             if saved.get(key, 0.0) != metadata[key]:
                 raise ValueError(f"Checkpoint provenance differs in {key}")
     args.output.mkdir(parents=True, exist_ok=True)
+    if args.backend == "newton":
+        contract = backend.contract(env)
+        write_json(args.output / "newton_contract.json", contract)
+        print("S0_NEWTON_CONTRACT", json.dumps(contract), flush=True)
     write_json(args.output / "provenance.json", metadata)
     config = SuperMimicConfig(
         seed=args.seed, max_iterations=args.iterations, buffer_steps=args.buffer_steps, warmup_steps=64,

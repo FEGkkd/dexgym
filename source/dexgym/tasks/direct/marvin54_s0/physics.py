@@ -1,4 +1,6 @@
-"""Physics adapters that load the same MJCF in MuJoCo Warp and native MuJoCo."""
+"""Shared transition contract for Isaac Lab Newton and native MuJoCo."""
+
+from contextlib import contextmanager
 
 import mujoco
 import numpy as np
@@ -74,3 +76,31 @@ class CpuPhysics(Physics):
                     break
             torque.append(d.qfrc_actuator.copy())
         return self.state(), torch.as_tensor(np.stack(torque), dtype=torch.float32), peak, substeps, flags, deep_substeps
+
+
+BACKEND_NAMES = {
+    "cpu": "native MuJoCo",
+    "newton": "Isaac Lab 3 / Newton MJWarp",
+    "warp": "MuJoCo Warp",
+}
+
+
+@contextmanager
+def open_physics(backend, model, names, num_envs, *, graph=True):
+    if backend == "cpu":
+        yield CpuPhysics(model, names, num_envs)
+    elif backend == "newton":
+        from isaaclab.app import launch_simulation
+
+        from ..marvin54_tracking.native import simulation_cfg
+        from .newton_physics import NewtonPhysics
+
+        cfg = simulation_cfg()
+        with launch_simulation(cfg):
+            yield NewtonPhysics(cfg, model, names, num_envs)
+    elif backend == "warp":
+        from .warp_physics import WarpPhysics
+
+        yield WarpPhysics(model, names, num_envs, graph=graph)
+    else:
+        raise ValueError(f"Unknown simulator backend {backend}")
