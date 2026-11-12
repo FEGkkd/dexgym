@@ -180,5 +180,30 @@ fingertip tracking error. The standard command uses the preview Critic
 with uniform resets. The 5000-iteration replay metrics above come from the
 previous trained checkpoint.
 
+## Dynamics comparison and runtime limits
+
+Three 120-iteration runs used the same Newton environment count and training
+budget. Forecast evaluation uses the same recorded Newton actuator targets and
+measured initial states for each model. The integrated branch and the physical
+delta branch use the same physical loss and contact targets.
+
+| Dynamics branch | 1-step tip error | 16-step tip error | 32-step tip error | Native nominal step coverage |
+| --- | ---: | ---: | ---: | ---: |
+| Delta and adaptive loss | 2.87 mm | 29.10 mm | 43.16 mm | 27.82% |
+| Delta and physical loss | 2.52 mm | 23.10 mm | 32.87 mm | 31.58% |
+| Integrated velocity and physical loss | 0.84 mm | 6.07 mm | 6.16 mm | 11.94% |
+
+The early native closed-loop comparison favors the delta models for coverage.
+Contact probabilities at threshold 0.5 missed almost all measured penetration
+events. The nominal trace set contains 160 intervals above 0.5 mm and one hard
+physical failure. Newton enforces the first-event safety rule.
+
+The 4096-world capacity checks completed Actor batches 192, 512 and 1024,
+16- and 32-step imagination, bootstrap weights 0.15 and 1.0, and nominal
+replay ratios 3.2, 8 and 16. These are short runtime checks. Peak allocated
+PyTorch memory for Actor batch 192 and 1024 was 4.61 and 7.68 GiB in the
+16-step cases. The 32-step case took about twice the Actor update time at
+batch 192.
+
 The logs, traces and stage commands on the training host are under
 `/home/ubuntu/dexgym_data/marvin54_hand_centric_s0_20261112/supermimic_standard_20261112`.
