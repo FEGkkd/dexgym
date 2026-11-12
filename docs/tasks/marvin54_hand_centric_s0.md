@@ -38,11 +38,11 @@ Example commands from the training worktree:
 root="$HOME/dexgym_data/marvin54_hand_centric_s0_20261112"
 model="$HOME/dexgym_data/marvin54_aris_single_clip_20261112/deploy/dual_arm_marvin.xml"
 bash scripts/supermimic/host.sh -m dexgym.tasks.direct.marvin54_s0.train \
-  --model "$model" --library "$root/audited_library/train.json" \
-  --output "$root/s0_run" --num-envs 4096 --iterations 5000
+  --model "$model" --library "$root/final_library/train.json" \
+  --output "$root/s0_run" --num-envs 4096 --iterations 5000 --direct-tip-feedback
 
 bash scripts/supermimic/host.sh -m dexgym.tasks.direct.marvin54_s0.evaluate \
-  --model "$model" --library "$root/audited_library/test.json" \
+  --model "$model" --library "$root/final_library/test.json" \
   --checkpoint "$root/s0_run/model_final.pt" --output "$root/s0_test" \
   --backend cpu --require-heldout --max-clips 20 --trace
 ```

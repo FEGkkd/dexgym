@@ -3,6 +3,7 @@
 import torch
 
 from ..hand2_cube_supermimic.rotations import mm
+from ..marvin54_tracking.policy import MotionTrackingActor
 from ..marvin54_tracking.task import (
     FINGERS, JOINTS, MotionLibrary, TrackingGeometry, TrackingTask,
 )
@@ -51,7 +52,7 @@ class HandCentricTask(TrackingTask):
     geometry_type = HandGeometry
     context_dim = 3 * JOINTS + GOAL_FRAME_DIM
 
-    def __init__(self, env, model, library, target_memory=0.0):
+    def __init__(self, env, model, library, target_memory=0.0, direct_tip_feedback=False):
         super().__init__(env, model, library, "home", "motion-encoder", "transition",
                          first_event=True, tracking_failure_m=TRACKING_LIMIT_M)
         # All training transitions come from exploration around the current Actor.
@@ -65,8 +66,13 @@ class HandCentricTask(TrackingTask):
         if not 0 <= target_memory <= 1:
             raise ValueError("target_memory must be in [0,1]")
         self.target_memory = target_memory
+        self.direct_tip_feedback = direct_tip_feedback
         arm_step, hand_step = (0.05, 0.075) if target_memory else (0.095, 0.14)
         self.action_step = self.tensor([arm_step if name.startswith("Joint") else hand_step for name in library.names])
+
+    def make_actor(self):
+        return MotionTrackingActor(self.history_dim, self.goal_dim, JOINTS,
+                                   direct_goal_dim=30 if self.direct_tip_feedback else 0)
 
     def goal_features(self, frame):
         lib = self.library

@@ -300,7 +300,8 @@ def main():
         backend = WarpPhysics(model, library.names, len(paths), device)
     else:
         backend = CpuPhysics(model, library.names, len(paths))
-    env = HandCentricEnv(backend, library, reset_noise=False, target_memory=prov.get("target_memory", 0.0))
+    env = HandCentricEnv(backend, library, reset_noise=False, target_memory=prov.get("target_memory", 0.0),
+                         direct_tip_feedback=prov.get("direct_tip_feedback", False))
     actor = env.task.make_actor().to(device).eval()
     payload = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
     if payload["task_id"] != TASK_ID or payload["format_version"] != 1:
