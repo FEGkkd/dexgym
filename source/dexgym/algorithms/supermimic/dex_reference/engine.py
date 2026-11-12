@@ -158,6 +158,7 @@ class SuperMimicEngine:
             self.buffer.add(transition)
             denom = valid.float().sum().clamp_min(1)
             extra = cap.get("rollout_stats", {})
+            events = cap.get("rollout_event_flags", {})
             stats.append(
                 torch.stack(
                     (
@@ -165,6 +166,7 @@ class SuperMimicEngine:
                         cap["drop"].float().mean(),
                         torch.where(valid, self.task.rotation_error(cap["x1"], m), 0.0).sum() / denom,
                         *(torch.where(valid, value, 0.0).sum() / denom for value in extra.values()),
+                        *(value.float().mean() for value in events.values()),
                     )
                 )
             )
@@ -175,7 +177,7 @@ class SuperMimicEngine:
                 self.obs = torch.where((terminated | truncated)[:, None], post["policy"], self.obs)
             self.sim_steps += self.env.num_envs
         values = torch.stack(stats).mean(0)
-        return dict(zip((*names, *extra), values, strict=True))
+        return dict(zip((*names, *extra, *events), values, strict=True))
 
     def fit_world_model(self, holdout=False):
         c = self.cfg

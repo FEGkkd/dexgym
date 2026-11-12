@@ -91,15 +91,20 @@ class HandCentricEnv:
             "tip_mm": tip_delta.norm(dim=-1).mean((1, 2)) * 1000,
             "cross_tip_mm": cross_tip_vectors(tip_delta).norm(dim=-1).mean((1, 2)) * 1000,
             "deep_contact_rate": (depth > AUDIT_DEPTH_M).float(),
-            "overflow_rate": ((flags & OVERFLOW) != 0).float(),
             "lost_tracking_rate": ((flags & TRACKING) != 0).float(),
             "natural_completion_rate": complete.float(),
         }
         events = dict(failure_bits=flags, safety_failure=safety, safety_substep=first, reference_complete=complete,
                       full_step=full_step)
+        event_flags = {
+            "overflow_rate": (flags & OVERFLOW) != 0,
+            "collision_terminal_rate": (flags & COLLISION) != 0,
+            "nonfinite_rate": (flags & NONFINITE) != 0,
+        }
         self.transition = dict(
             x1=x, contact=contact, torque=torque, drop=(flags & (COLLISION | JOINT_LIMIT | OVERFLOW)) != 0,
-            nan=invalid, c=target, u=target, depth=depth, deep_substeps=deep_substeps, rollout_stats=stats, **events
+            nan=invalid, c=target, u=target, depth=depth, deep_substeps=deep_substeps,
+            rollout_stats=stats, rollout_event_flags=event_flags, **events
         )
         self.common_step_counter += 1
         return self.observation(), reward, terminated, torch.zeros_like(terminated), events
