@@ -160,8 +160,9 @@ def rotation_error(desired, measured):
 
 
 class Solver:
-    def __init__(self, robot):
+    def __init__(self, robot, tip_priority=1.0):
         self.robot = robot
+        self.tip_priority = tip_priority
         # Expanding proximity detection supplies a clearance gradient before contact.
         robot.model.geom_margin[:] += CLEARANCE_M + 0.002
         robot.model.pair_margin[:] += CLEARANCE_M + 0.002
@@ -190,15 +191,16 @@ class Solver:
         if jacobian:
             tip_pj = np.array([[pair[0] for pair in row] for row in tip_j])
             tip_rj = np.array([[pair[1] for pair in row] for row in tip_j])
-        put(goal["tip_pos"] - actual["tip_pos"], 1 / 0.021, tip_pj if jacobian else None, weak=wrists_first)
+        put(goal["tip_pos"] - actual["tip_pos"], self.tip_priority / 0.021,
+            tip_pj if jacobian else None, weak=wrists_first)
         put(rotation_error(goal["tip_rot"], actual["tip_rot"]), 0.65, tip_rj if jacobian else None,
             weak=wrists_first)
         rel = goal["tip_pos"][0, :, None] - goal["tip_pos"][1, None]
         measured = actual["tip_pos"][0, :, None] - actual["tip_pos"][1, None]
-        weights = (0.20 + 0.46 * np.exp(-(np.linalg.norm(rel, axis=-1) / 0.10) ** 2)) / 0.035
-        for i, j in np.ndindex(5, 5):
-            put(rel[i, j] - measured[i, j], weights[i, j],
-                tip_pj[0, i] - tip_pj[1, j] if jacobian else None, weak=wrists_first)
+        weights = self.tip_priority * (0.20 + 0.46 * np.exp(-(np.linalg.norm(rel, axis=-1) / 0.10) ** 2)) / 0.035
+        cross_jac = tip_pj[0, :, None] - tip_pj[1, None] if jacobian else None
+        put(weights[..., None] * (rel - measured), 1.,
+            weights[..., None, None] * cross_jac if jacobian else None, weak=wrists_first)
         relative_r = goal["wrist_rot"][0].T @ goal["wrist_rot"][1]
         put(rotation_error(actual["wrist_rot"][0] @ relative_r, actual["wrist_rot"][1]), 0.5,
             wrist_j[1][1] - wrist_j[0][1] if jacobian else None, weak=wrists_first)
@@ -297,7 +299,7 @@ def contiguous(mask):
     return zip(bounds[::2], bounds[1::2], strict=True)
 
 
-def fit_segment(arms, left, right, solver, wrists_first):
+def fit_segment(arms, left, right, solver, wrists_first, frame_iterations):
     r = solver.robot
     goals = hand_goals(r, arms, left, right)
     q = [np.clip(r.home, r.lo, r.hi)]
@@ -308,7 +310,7 @@ def fit_segment(arms, left, right, solver, wrists_first):
         target = {k: v[i] for k, v in goals.items()}
         prior = previous if i < 2 else previous + 0.55 * (previous - q[-2])
         lo, hi = (r.lo, r.hi) if i == 0 else (np.maximum(r.lo, previous - speed), np.minimum(r.hi, previous + speed))
-        candidate = solver.solve(previous, target, prior, lo, hi, 48 if i == 0 else 4, wrists_first)
+        candidate = solver.solve(previous, target, prior, lo, hi, 48 if i == 0 else frame_iterations, wrists_first)
         # Check the interpolation midpoint when two safe endpoints approach closely.
         if i and r.depth() <= IK_DEPTH_M:
             r.forward(0.5 * (candidate + previous))
@@ -325,13 +327,13 @@ def fit_segment(arms, left, right, solver, wrists_first):
     return np.stack(q[1:]), fk, goals, tips.mean(axis=(1, 2)), relative, np.asarray(safe)
 
 
-def retarget(path, xml, output, episode, *, wrists_first=False):
+def retarget(path, xml, output, episode, *, wrists_first=False, tip_priority=1.0, frame_iterations=4):
     r = Robot(xml)
     native = Robot(xml)
-    solver = Solver(r)
+    solver = Solver(r, tip_priority)
     model_sha = hashlib.sha256(xml.read_bytes()).hexdigest()
     rows, total_frames, good_frames, kept = [], 0, 0, 0
-    tip_sum, rel_sum = 0., 0.
+    tip_sum, rel_sum, shape_sum, rotation_sum = 0., 0., 0., 0.
     with np.load(path, allow_pickle=False) as source:
         offsets, clock = source["offsets"], source["header_start_ns"]
         arrays = [source[key] for key in ("arms", "left", "right")]
@@ -339,11 +341,17 @@ def retarget(path, xml, output, episode, *, wrists_first=False):
             raise ValueError(f"Invalid synchronized episode {path}")
         for segment, (start, end) in enumerate(zip(offsets[:-1], offsets[1:], strict=True)):
             q, fk, mapped, tip, relative, safe = fit_segment(
-                *(data[start:end] for data in arrays), solver, wrists_first
+                *(data[start:end] for data in arrays), solver, wrists_first, frame_iterations
             )
             total_frames += len(q)
             tip_sum += tip.sum()
             rel_sum += relative.sum()
+            shape_sum += np.linalg.norm(fk["shape"][..., 1:, :] - mapped["shape"][..., 1:, :], axis=-1).mean(
+                axis=(1, 2, 3)
+            ).sum()
+            rotation_sum += np.linalg.norm(rotation_error(mapped["tip_rot"], fk["tip_rot"]), axis=-1).mean(
+                axis=(1, 2)
+            ).sum()
             valid = safe & (tip < 0.055) & (relative < 0.065)
             good_frames += int(valid.sum())
             for begin, stop in contiguous(valid):
@@ -380,12 +388,16 @@ def retarget(path, xml, output, episode, *, wrists_first=False):
                     row["path"] = str(dest)
                     kept += int(b - a - 1)
     return dict(episode=episode, attempted_frames=total_frames, quality_frames=good_frames, kept_steps=kept,
+                tip_priority=tip_priority, frame_iterations=frame_iterations,
                 mapped_tip_mean_mm=float(1000 * tip_sum / max(1, total_frames)),
-                mapped_cross_tip_mean_mm=float(1000 * rel_sum / max(1, total_frames)), clips=rows)
+                mapped_cross_tip_mean_mm=float(1000 * rel_sum / max(1, total_frames)),
+                mapped_shape_mean_mm=float(1000 * shape_sum / max(1, total_frames)),
+                mapped_tip_mean_deg=float(np.rad2deg(rotation_sum / max(1, total_frames))), clips=rows)
 
 
-def work(row, xml, output):
-    return {**retarget(Path(row["path"]), xml, output / row["split"], row["episode"]),
+def work(row, xml, output, tip_priority, frame_iterations):
+    return {**retarget(Path(row["path"]), xml, output / row["split"], row["episode"],
+                       tip_priority=tip_priority, frame_iterations=frame_iterations),
             **{k: row[k] for k in ("episode", "split", "task")}}
 
 
@@ -398,10 +410,15 @@ def main():
     source.add_argument("--witness", type=Path)
     parser.add_argument("--workers", type=int, default=16)
     parser.add_argument("--wrists-first", action="store_true", help="Matched retargeting ablation for the witness")
+    parser.add_argument("--tip-priority", type=float, default=1.0)
+    parser.add_argument("--frame-iterations", type=int, default=4)
     args = parser.parse_args()
+    if args.frame_iterations < 1 or not np.isfinite(args.tip_priority) or args.tip_priority <= 0:
+        parser.error("Need a positive iteration count and finite positive tip priority")
     args.output.mkdir(parents=True, exist_ok=True)
     if args.witness:
-        report = retarget(args.witness, args.model, args.output, "witness", wrists_first=args.wrists_first)
+        report = retarget(args.witness, args.model, args.output, "witness", wrists_first=args.wrists_first,
+                          tip_priority=args.tip_priority, frame_iterations=args.frame_iterations)
         (args.output / "witness.json").write_text(json.dumps(report, indent=2) + "\n")
         print(json.dumps({key: value for key, value in report.items() if key != "clips"}), flush=True)
         if not report["kept_steps"]:
@@ -410,7 +427,8 @@ def main():
     rows = [r for r in json.loads(args.manifest.read_text()) if r["status"] == "ok"]
     results = []
     with ProcessPoolExecutor(max_workers=args.workers) as pool, (args.output / "progress.jsonl").open("w") as log:
-        jobs = [pool.submit(work, row, args.model, args.output) for row in rows]
+        jobs = [pool.submit(work, row, args.model, args.output, args.tip_priority, args.frame_iterations)
+                for row in rows]
         for job in as_completed(jobs):
             result = job.result()
             results.append(result)
