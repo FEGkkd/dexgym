@@ -96,11 +96,13 @@ def train(args, backend, library, paths):
         action_scale=task.action_step.tolist(), policy_dim=task.policy_dim,
         resume=str(args.resume.resolve()) if args.resume else None,
         backend=BACKEND_NAMES[args.backend], mujoco_version=mujoco.__version__,
+        physics_contract=getattr(backend, "physics_contract", "direct_mjcf"),
     )
     if args.resume:
         saved = json.loads((args.resume.parent / "provenance.json").read_text())
         for key in ("task_id", "model_sha256", "motion_sha256", "joint_names", "action_scale",
-                    "policy_dim", "target_memory", "direct_tip_feedback", "jacobian_feedback", "backend"):
+                    "policy_dim", "target_memory", "direct_tip_feedback", "jacobian_feedback", "backend",
+                    "physics_contract"):
             if saved.get(key, 0.0) != metadata[key]:
                 raise ValueError(f"Checkpoint provenance differs in {key}")
     args.output.mkdir(parents=True, exist_ok=True)

@@ -1,18 +1,36 @@
 """Isaac Lab scene stepping through the installed Newton MJWarp solver."""
 
 from contextlib import contextmanager
+from math import isfinite
 
 from isaaclab_newton.physics import NewtonManager
+import mujoco
 import mujoco_warp as mjw
+import numpy as np
 import torch
 import warp as wp
 
-from ..marvin54_tracking.native import create_tracking_scene, solver_dof_indices
+from ..marvin54_tracking.native import create_tracking_scene, simulation_cfg, solver_dof_indices
 from .physics import AUDIT_DEPTH_M, OVERFLOW, PHYSICS_DT, SUBSTEPS, Physics
 from .warp_physics import contact_depth
 
 
+PHYSICS_CONTRACT = "newton_mjcf_position_servo"
+
+
+def aligned_simulation_cfg(model):
+    cfg = simulation_cfg()
+    solver = cfg.physics.solver_cfg
+    opt = model.opt
+    solver.cone = "elliptic" if opt.cone == mujoco.mjtCone.mjCONE_ELLIPTIC else "pyramidal"
+    for key in ("impratio", "iterations", "ls_iterations", "tolerance", "ccd_iterations"):
+        setattr(solver, key, getattr(opt, key))
+    return cfg
+
+
 class NewtonPhysics(Physics):
+    physics_contract = PHYSICS_CONTRACT
+
     def __init__(self, cfg, model, names, num_envs):
         super().__init__(model, names, num_envs, cfg.device)
         self.sim, self.scene, self.robot = create_tracking_scene(cfg, num_envs, model, names)
@@ -22,11 +40,59 @@ class NewtonPhysics(Physics):
         self.stream = wp.get_stream(self.device)
         self.torch_stream = wp.stream_to_torch(self.stream)
         with self.simulation_stream():
+            self.align_position_servos(names)
+            self.servo_parameters = []
+            for name in ("actuator_gainprm", "actuator_biasprm"):
+                values = wp.to_torch(getattr(self.mjw_model, name))
+                self.servo_parameters.append((values, values[:1].clone()))
             self.depth = wp.zeros(num_envs, dtype=wp.float32)
             self.depth_tensor = wp.to_torch(self.depth)
             self.force = wp.to_torch(self.mjw_data.qfrc_actuator)
             self.overflow = wp.to_torch(self.mjw_data.overflow)
             self.target = self.robot.data.joint_pos.torch.clone()
+        NewtonManager.register_post_actuator_callback(self.restore_servo_parameters)
+
+    def restore_servo_parameters(self):
+        # Newton can refresh its split drive gains at the start of a physics step.
+        # Apply the combined gains after that refresh and before the solver integrates.
+        for parameters, reference in self.servo_parameters:
+            parameters.copy_(reference)
+
+    def align_position_servos(self, names):
+        """Match the MJCF's combined PD actuator and its implicit force clamp."""
+        source = self.model
+        native = self.solver.mj_model
+        source_joints = np.array([source.joint(name).id for name in names])
+        joint_at_dof = {dof: j for j, dof in enumerate(native.jnt_dofadr)}
+        joints = [joint_at_dof[dof] for dof in self.dof_ids.tolist()]
+        position_ids, velocity_ids = [], []
+        for joint in joints:
+            actuator_ids = np.flatnonzero(native.actuator_trnid[:, 0] == joint)
+            position = actuator_ids[native.actuator_biasprm[actuator_ids, 1] < 0]
+            if len(position) != 1 or len(actuator_ids) > 2:
+                raise ValueError(f"Expected one position drive on Newton joint {native.joint(joint).name}")
+            position_ids.append(int(position[0]))
+            velocity_ids.extend(int(i) for i in actuator_ids if i != position[0])
+
+        def copy(field, ids, values):
+            cpu = getattr(native, field)
+            gpu = wp.to_torch(getattr(self.mjw_model, field))
+            cpu[ids] = values
+            tensor = torch.as_tensor(cpu[ids], dtype=gpu.dtype, device=gpu.device)
+            if cpu.ndim == 1:
+                gpu[..., ids] = tensor
+            else:
+                gpu[..., ids, :] = tensor
+
+        for field in ("actuator_gainprm", "actuator_biasprm", "actuator_forcelimited", "actuator_forcerange",
+                      "actuator_ctrllimited", "actuator_ctrlrange"):
+            copy(field, position_ids, getattr(source, field)[self.actuator_ids])
+        # Newton still routes the velocity commands through their original slots.
+        # The position servo now contains the damping and the force limit.
+        for field in ("actuator_gainprm", "actuator_biasprm"):
+            copy(field, velocity_ids, np.zeros_like(getattr(native, field)[velocity_ids]))
+        for field in ("jnt_actfrclimited", "jnt_actfrcrange"):
+            copy(field, joints, getattr(source, field)[source_joints])
 
     @contextmanager
     def simulation_stream(self):
@@ -108,7 +174,7 @@ class NewtonPhysics(Physics):
             "newton_wrist_m": float((measured_wrist - pose["wrist"]).abs().max()),
             "reference_tip_m": float((lib.ref_tip_pos[frames] - pose["tip"]).abs().max()),
         }
-        if max(errors.values()) > 2e-4 or not all(torch.isfinite(torch.tensor(list(errors.values())))):
+        if any(not isfinite(value) or value > 2e-4 for value in errors.values()):
             raise RuntimeError(f"Isaac Lab Newton reference contract failed: {errors}")
         return {
             "simulation": type(self.sim).__module__ + "." + type(self.sim).__name__,
@@ -116,4 +182,7 @@ class NewtonPhysics(Physics):
             "solver": type(self.solver).__module__ + "." + type(self.solver).__name__,
             "device": str(self.device), "envs": self.num_envs,
             "physics_dt_s": PHYSICS_DT, "control_substeps": SUBSTEPS, "errors": errors,
+            "physics_contract": self.physics_contract,
+            "solver_options": {key: getattr(self.solver.mj_model.opt, key)
+                               for key in ("cone", "impratio", "iterations", "tolerance")},
         }

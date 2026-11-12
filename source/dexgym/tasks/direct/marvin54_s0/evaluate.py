@@ -137,7 +137,7 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
     held_side = {"left_arm_hold": "_L", "right_arm_hold": "_R"}.get(mode, "")
     arm = torch.tensor([name.startswith("Joint") and name.endswith(held_side) for name in library.names],
                        device=env.device)
-    fixed_arm = env.state()[:, :JOINTS].clone()
+    initial_target = env.state()[:, :JOINTS].clone()
     done = torch.zeros_like(active)
     failure_bits = torch.zeros_like(starts)
     steps = torch.zeros_like(starts)
@@ -160,7 +160,11 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
             override = library.qpos[task.current_goal(before)]
         elif mode in ("arms_fixed", "left_arm_hold", "right_arm_hold"):
             override = task.control_target(action, before, None)[1]
-            override[:, arm] = fixed_arm[:, arm]
+            override[:, arm] = initial_target[:, arm]
+        if not active.all():
+            if override is None:
+                override = task.control_target(action, before, None)[1]
+            override[~active] = initial_target[~active]
         obs, reward, terminal, _, event = env.step(action, target_override=override)
         state = env.state().nan_to_num(nan=0., posinf=0., neginf=0.)
         errors = get_errors(task, state, before)
@@ -184,8 +188,8 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
         deep_substeps += torch.where(active, deep, 0)
         total_reward += torch.where(active, reward, 0.)
         saturation += torch.where(active, (action.abs() > 0.98).float().mean(-1), 0.)
+        inactive = (active & terminal).nonzero().flatten()
         active &= ~terminal
-        inactive = (~active).nonzero().flatten()
         if len(inactive) and active.any():
             obs, _ = env.reset(inactive, starts[inactive])
     errors = {key: torch.stack(values).cpu().numpy() for key, values in records.items()}
@@ -329,6 +333,7 @@ def run_evaluation(args, backend, library, prov, paths, overlap):
     actor.load_state_dict(payload["modules"]["actor"])
     report = dict(checkpoint=str(args.checkpoint), iteration=payload["iteration"], backend=args.backend,
                   training_backend=prov.get("backend"),
+                  training_physics_contract=prov.get("physics_contract"),
                   initial_seed=args.seed, clips=len(paths), heldout=not overlap,
                   overlap_source_episodes=overlap, metrics={})
     del payload

@@ -92,10 +92,9 @@ def open_physics(backend, model, names, num_envs, *, graph=True):
     elif backend == "newton":
         from isaaclab.app import launch_simulation
 
-        from ..marvin54_tracking.native import simulation_cfg
-        from .newton_physics import NewtonPhysics
+        from .newton_physics import NewtonPhysics, aligned_simulation_cfg
 
-        cfg = simulation_cfg()
+        cfg = aligned_simulation_cfg(model)
         with launch_simulation(cfg):
             yield NewtonPhysics(cfg, model, names, num_envs)
     elif backend == "warp":
