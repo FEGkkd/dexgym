@@ -8,12 +8,14 @@ from .common import EmpiricalNorm, RunningNorm, mlp
 
 
 class WorldModel(nn.Module):
-    def __init__(self, dynamics_dim, contact_dim, codec, action_dim, error_floor, hidden=(2048, 2048, 2048), amp=True):
+    def __init__(self, dynamics_dim, contact_dim, codec, action_dim, error_floor, hidden=(2048, 2048, 2048),
+                 amp=True, *, control_error_features=False, predict_contact_depth=False):
         super().__init__()
         self.codec = codec
-        self.delta_dim = len(error_floor)
-        self.contact_dim = contact_dim
+        self.delta_dim = getattr(codec, "prediction_dim", len(error_floor))
+        self.contact_dim = contact_dim + int(predict_contact_depth)
         self.amp = amp
+        self.control_error_features = control_error_features
         # Dynamics context contains physical state, startup simulator parameters
         # and the measured/sampled transition disturbance. Task command state is
         # deliberately absent: it is recursively derived after each WM step.
@@ -22,11 +24,11 @@ class WorldModel(nn.Module):
         self.net = mlp(
             inp,
             list(hidden),
-            self.delta_dim + contact_dim,
+            self.delta_dim + self.contact_dim,
             act=nn.SiLU,
             layer_norm=True,
         )
-        self.delta_norm = RunningNorm(self.delta_dim, eps=1e-4)
+        self.delta_norm = RunningNorm(len(error_floor), eps=1e-4)
         nn.init.zeros_(self.net[-1].weight)
         nn.init.zeros_(self.net[-1].bias)
         with torch.no_grad():
@@ -34,6 +36,8 @@ class WorldModel(nn.Module):
         self.register_buffer("error_floor", torch.as_tensor(error_floor, dtype=torch.float32))
 
     def inputs(self, dynamics, u):
+        if self.control_error_features:
+            u = u - dynamics[..., :u.shape[-1]]
         return torch.cat((dynamics, u), -1)
 
     def forward(self, x, u, dynamics):
@@ -42,29 +46,29 @@ class WorldModel(nn.Module):
             y = self.net(features)
         y = y.float()
         d1, c = y.split((self.delta_dim, self.contact_dim), -1)
-        scale = self.delta_norm.std()
+        scale, mean = self.delta_norm.std(), self.delta_norm.mean
+        if self.delta_dim != scale.shape[-1]:
+            scale, mean = self.codec.prediction_components(scale), self.codec.prediction_components(mean)
         return (
-            self.codec.integrate(x, d1 * scale + self.delta_norm.mean),
+            self.codec.integrate(x, d1 * scale + mean),
             c,
         )
 
 
 class FailureHead(nn.Module):
-    """Dreamer-style continue head: P(real termination entering this imagined state).
+    """Predict physical termination from task-defined state and context features."""
 
-    It consumes the same privileged task/critic features built from either true
-    simulator state or the world model's predicted ``x1``; no simulator state is
-    queried inside imagination.
-    """
-
-    def __init__(self, context_dim, state_dim):
+    def __init__(self, context_dim, state_dim, *, control_error_features=False):
         super().__init__()
         dim = state_dim + context_dim
         self.norm = RunningNorm(dim)
         self.net = mlp(dim, [256, 128], 1)
+        self.control_error_features = control_error_features
 
-    def features(self, x1, context):
-        return torch.cat((x1, context), -1)
+    def features(self, x, context):
+        if self.control_error_features:
+            context = context - x[..., :context.shape[-1]]
+        return torch.cat((x, context), -1)
 
     def forward(self, features):
         return self.net(self.norm(features)).squeeze(-1)

@@ -1,8 +1,10 @@
 # DexGym
 
-DexGym runs **Wuji Hand 2 · Cube Reorientation** in Isaac Lab 3.0 / Newton
-with the reference-aligned SuperMimic `dex_reference` engine. This is the
-sole task registered by the package.
+DexGym shares one SuperMimic training engine across **Wuji Hand 2 Cube
+Reorientation** and **Marvin M6 + dual Wuji Hand2.2 S0**. Both tasks collect
+physical transitions in Isaac Lab 3.0 with Newton. The cube environment is
+registered with Gymnasium. The Marvin S0 task uses a dedicated Motion Library
+training entry point.
 
 ## Cube SuperMimic
 
@@ -28,6 +30,12 @@ The earlier PPO task implementations are available in
 [the pre-removal revision](https://github.com/FEGkkd/dexgym/tree/f2f416e/source/dexgym/tasks).
 The [dual-arm Hand2.2 assets](docs/robots/marvin_hand22_upgrade_20261111.md)
 and [motion data tools](data/README.md) remain available independently.
+
+## Marvin Hand-centric Bimanual S0
+
+- [S0 training, validation and native MuJoCo replay](docs/tasks/marvin54_hand_centric_s0.md).
+- [S0 task implementation](source/dexgym/tasks/direct/marvin54_s0/) for one
+  goal-conditioned 54 DoF Actor, learned dynamics and a physical failure head.
 
 ## Install and verify
 

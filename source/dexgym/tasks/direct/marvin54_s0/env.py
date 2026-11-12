@@ -1,0 +1,119 @@
+"""Shared S0 task transition contract for GPU collection and native evaluation."""
+
+from types import SimpleNamespace
+
+import torch
+
+from ..marvin54_tracking.task import JOINTS
+from .physics import AUDIT_DEPTH_M, COLLISION, JOINT_LIMIT, NONFINITE, OVERFLOW, SUBSTEPS, TRACKING
+from .task import HandCentricTask, TRACKING_LIMIT_M, cross_tip_vectors
+
+
+class HandCentricEnv:
+    def __init__(self, backend, library, *, reset_noise=True, target_memory=0.0, direct_tip_feedback=False,
+                 jacobian_feedback=False, contact_cost=0.60, finger_clearance_cost=0.0,
+                 cross_clearance_cost=0.0, critic_context="next", wm_state="delta", wm_loss="adaptive",
+                 goal_profile="near", actor_network="elu"):
+        self.backend = backend
+        self.num_envs, self.device = backend.num_envs, backend.device
+        self.task = HandCentricTask(self, backend.model, library, target_memory, direct_tip_feedback,
+                                    jacobian_feedback, contact_cost, finger_clearance_cost, cross_clearance_cost,
+                                    critic_context=critic_context, wm_state=wm_state, wm_loss=wm_loss,
+                                    goal_profile=goal_profile, actor_network=actor_network)
+        self.reset_noise = reset_noise
+        self.reset_sampler = None
+        self.history = torch.zeros(
+            self.num_envs, self.task.history_steps, self.task.history_frame_dim, device=self.device
+        )
+        self._state = backend.state()
+        self.memory = {
+            "frame": torch.zeros(self.num_envs, dtype=torch.long, device=self.device),
+            "action": torch.zeros(self.num_envs, JOINTS, device=self.device),
+            "control_center": self._state[:, :JOINTS],
+            "tip": torch.zeros(self.num_envs, 30, device=self.device),
+        }
+        self.transition = None
+        self.common_step_counter = 0
+        self.disturbance = SimpleNamespace(adaptive_scale=0.0, success_scale=0.0)
+
+    def state(self):
+        return self._state
+
+    def observation(self):
+        return {"policy": self.task.observation_from_history(self.history, self.memory)}
+
+    def reset(self, env_ids=None, frame=None, *, q=None, qd=None):
+        task, lib = self.task, self.task.library
+        if env_ids is None:
+            env_ids = torch.arange(self.num_envs, device=self.device)
+        sample = frame is None
+        if sample:
+            sampler = lib if self.reset_sampler is None else self.reset_sampler
+            frame = sampler.sample(len(env_ids))
+        if q is None:
+            q = lib.qpos[frame]
+        if qd is None:
+            qd = lib.qvel[frame]
+        if sample and self.reset_noise:
+            strength = min(1.0, self.common_step_counter / 6000)
+            q = (q + 0.45 * strength * task.action_step * torch.randn_like(q)).clamp(task.lo, task.hi)
+            qd = qd + 0.12 * strength * torch.randn_like(qd)
+        self.backend.reset(env_ids, q, qd)
+        self._state = self._state.index_copy(0, env_ids, torch.cat((q, qd), -1))
+        self.memory = {key: value.clone() for key, value in self.memory.items()}
+        self.memory["frame"][env_ids] = frame
+        self.memory["action"][env_ids] = 0
+        self.memory["control_center"][env_ids] = q
+        self.memory["tip"][env_ids] = task.geometry.hand_pose(q)["tip"].flatten(1)
+        obs = task.policy_observation(self._state, self.memory, None)
+        self.history[env_ids] = obs[env_ids, None]
+        return self.observation(), {}
+
+    def step(self, action, *, target_override=None):
+        task, before = self.task, self.memory
+        _, target = task.control_target(action, before, None)
+        if target_override is not None:
+            target = target_override.clamp(task.lo, task.hi)
+            action = ((target - before["control_center"]) / task.action_step).clamp(-1, 1)
+        x, torque, depth, first, flags, deep_substeps = self.backend.interval(target, task)
+        self._state = x
+        safety = flags != 0
+        invalid = (flags & (NONFINITE | OVERFLOW)) != 0
+        full_step = ((first == 0) | (first == SUBSTEPS)) & ~invalid
+        clean_x = x.nan_to_num(nan=0., posinf=0., neginf=0.)
+        pose = task.reward_pose(clean_x[:, :JOINTS])
+        tracking = task.tracking_error(pose, before) > TRACKING_LIMIT_M
+        flags = flags | TRACKING * (tracking & ~safety).int()
+        contact = task.contact_labels(depth)
+        reward, tip, _ = task.reward(clean_x, before, action, target, contact, torque, pose=pose)
+        reward = torch.where(invalid, 0., reward)
+        self.memory = task.advance_memory(clean_x, before, action, target, tip, None, soft=False)
+        obs = task.policy_observation(clean_x, self.memory, None)
+        self.history = torch.cat((self.history[:, 1:], obs[:, None]), 1)
+        frame = self.memory["frame"]
+        complete = (frame == task.library.end[frame]) & (flags == 0)
+        terminated = (flags != 0) | complete
+        if self.reset_sampler is not None:
+            self.reset_sampler.record(before["frame"], reward, terminated, complete, invalid)
+        tip_delta = pose["tip"] - task.library.ref_tip_pos[frame]
+        stats = {
+            "tip_mm": tip_delta.norm(dim=-1).mean((1, 2)) * 1000,
+            "cross_tip_mm": cross_tip_vectors(tip_delta).norm(dim=-1).mean((1, 2)) * 1000,
+            "deep_contact_rate": (depth > AUDIT_DEPTH_M).float(),
+            "lost_tracking_rate": ((flags & TRACKING) != 0).float(),
+            "natural_completion_rate": complete.float(),
+        }
+        events = dict(failure_bits=flags, safety_failure=safety, safety_substep=first, reference_complete=complete,
+                      full_step=full_step)
+        event_flags = {
+            "overflow_rate": (flags & OVERFLOW) != 0,
+            "collision_terminal_rate": (flags & COLLISION) != 0,
+            "nonfinite_rate": (flags & NONFINITE) != 0,
+        }
+        self.transition = dict(
+            x1=x, contact=contact, torque=torque, drop=(flags & (COLLISION | JOINT_LIMIT | OVERFLOW)) != 0,
+            nan=invalid, c=target, u=target, depth=depth, deep_substeps=deep_substeps,
+            rollout_stats=stats, rollout_event_flags=event_flags, **events
+        )
+        self.common_step_counter += 1
+        return self.observation(), reward, terminated, torch.zeros_like(terminated), events
