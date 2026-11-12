@@ -1,5 +1,6 @@
 """Hand-centric goals, state-centered position control and differentiable rewards."""
 
+import numpy as np
 import torch
 
 from ..hand2_cube_supermimic.rotations import mm
@@ -31,6 +32,25 @@ class HandGeometry(TrackingGeometry):
         self.fingers = torch.tensor([[
             [model.body(f"{side}_{finger}_{link}").id for link in ("proximal_abd", "middle", "distal")]
             for finger in FINGERS] for side in ("l", "r")], device=device)
+        joint_ids = [model.joint(name).id for name in library.names]
+        bodies = model.jnt_bodyid[joint_ids]
+        ancestors = np.zeros((len(self.tree.tip_bodies), len(joint_ids)), dtype=np.float32)
+        for i, tip in enumerate(self.tree.tip_bodies):
+            body = tip
+            while body:
+                ancestors[i, bodies == body] = 1.0
+                body = int(model.body_parentid[body])
+        self.tip_ancestors = torch.as_tensor(ancestors, device=device)
+        self.joint_bodies = torch.as_tensor(bodies, device=device)
+        self.joint_axis = torch.as_tensor(model.jnt_axis[joint_ids], dtype=torch.float32, device=device)
+        self.joint_anchor = torch.as_tensor(model.jnt_pos[joint_ids], dtype=torch.float32, device=device)
+        home = torch.as_tensor(model.key("home").qpos, dtype=torch.float32, device=device)[None]
+        kin = self.tree.forward(home, torch.zeros_like(home))
+        axis, pivot = self.joint_frames(kin)
+        offset = self.tree.tips(kin)[0][:, :, None, :] - pivot[:, None, :, :]
+        lever = torch.cross(axis[:, None].expand_as(offset), offset, dim=-1)
+        # Scale out the large difference in leverage between arm and finger hinges.
+        self.feedback_scale = ((lever.square().sum(-1) * self.tip_ancestors).sum(1) + 0.02**2).reciprocal()
 
     def hand_pose(self, q):
         kin = self.tree.forward(q, torch.zeros_like(q))
@@ -46,19 +66,40 @@ class HandGeometry(TrackingGeometry):
             "elbow": p[:, self.elbows], "shape": local,
         }
 
+    def joint_frames(self, kin):
+        p, r, _, _ = kin
+        rotation = r[:, self.joint_bodies]
+        pivot = p[:, self.joint_bodies] + (rotation @ self.joint_anchor[..., None]).squeeze(-1)
+        axis = (rotation @ self.joint_axis[..., None]).squeeze(-1)
+        return axis, pivot
+
+    def tip_error_gradient(self, q, desired_tip, tip):
+        """Express Cartesian tip error along the robot's current hinge axes."""
+        axis, pivot = self.joint_frames(self.tree.forward(q, torch.zeros_like(q)))
+        tip = tip.reshape(-1, 10, 3)
+        error = desired_tip.reshape_as(tip) - tip
+        # For each hinge, sum moment arms crossed with the errors of its descendant sites.
+        def descendants(values):
+            return (values.transpose(1, 2) @ self.tip_ancestors).transpose(1, 2)
+
+        moment = descendants(torch.cross(tip, error, dim=-1)) - torch.cross(pivot, descendants(error), dim=-1)
+        return (axis * moment).sum(-1) * self.feedback_scale
+
 
 class HandCentricTask(TrackingTask):
     task_id = TASK_ID
     geometry_type = HandGeometry
     context_dim = 3 * JOINTS + GOAL_FRAME_DIM
 
-    def __init__(self, env, model, library, target_memory=0.0, direct_tip_feedback=False):
+    def __init__(self, env, model, library, target_memory=0.0, direct_tip_feedback=False,
+                 jacobian_feedback=False, contact_cost=0.60):
         super().__init__(env, model, library, "home", "motion-encoder", "transition",
                          first_event=True, tracking_failure_m=TRACKING_LIMIT_M)
         # All training transitions come from exploration around the current Actor.
         self.collection_roles = None
         self.history_steps = HISTORY_STEPS
-        self.history_frame_dim = 3 * JOINTS + 30
+        self.jacobian_feedback = jacobian_feedback
+        self.history_frame_dim = (3 + int(jacobian_feedback)) * JOINTS + 30
         self.history_dim = self.history_steps * self.history_frame_dim
         self.future_offsets = torch.tensor(FUTURE_OFFSETS, device=self.device)
         self.goal_dim = len(FUTURE_OFFSETS) * GOAL_FRAME_DIM
@@ -67,6 +108,7 @@ class HandCentricTask(TrackingTask):
             raise ValueError("target_memory must be in [0,1]")
         self.target_memory = target_memory
         self.direct_tip_feedback = direct_tip_feedback
+        self.contact_cost = contact_cost
         arm_step, hand_step = (0.05, 0.075) if target_memory else (0.095, 0.14)
         self.action_step = self.tensor([arm_step if name.startswith("Joint") else hand_step for name in library.names])
 
@@ -100,7 +142,11 @@ class HandCentricTask(TrackingTask):
     def policy_observation(self, x, m, aux):
         q, qd = x.split(JOINTS, dim=-1)
         control = (m["control_center"] - q) / self.action_step if self.target_memory else m["action"]
-        return torch.cat((q - self.home, qd, control, m["tip"]), dim=-1)
+        features = [q - self.home, qd, control]
+        if self.jacobian_feedback:
+            desired = self.library.ref_tip_pos[self.current_goal(m)]
+            features.append(self.geometry.tip_error_gradient(q, desired, m["tip"]))
+        return torch.cat((*features, m["tip"]), dim=-1)
 
     def context(self, x, m, aux, sim):
         control = (m["control_center"] - x[:, :JOINTS]) / self.action_step if self.target_memory else m["action"]
@@ -181,7 +227,7 @@ class HandCentricTask(TrackingTask):
             "action": -0.04 * a.square().mean(-1),
             "limit": -0.07 * margin.square().mean(-1),
             "clearance": -0.35 * clearance.square().amax(dim=(1, 2)),
-            "contact": -0.60 * contact[:, 1],
+            "contact": -self.contact_cost * contact[:, 1],
         }
         return sum(terms.values()), pose["tip"].flatten(1), terms
 

@@ -34,6 +34,8 @@ def main():
     parser.add_argument("--actor-bootstrap-weight", type=float, default=0.15)
     parser.add_argument("--target-memory", type=float, default=0.0)
     parser.add_argument("--direct-tip-feedback", action="store_true")
+    parser.add_argument("--jacobian-feedback", action="store_true")
+    parser.add_argument("--contact-cost", type=float, default=0.60)
     parser.add_argument("--exploration", type=float, default=0.22)
     parser.add_argument("--horizon", type=int, default=16)
     parser.add_argument("--buffer-steps", type=int, default=192)
@@ -51,6 +53,8 @@ def main():
     if (not np.isfinite(args.actor_lr) or args.actor_lr <= 0 or not 0 <= args.exploration <= 1
             or not 0 <= args.actor_bootstrap_weight <= 1):
         parser.error("Invalid Actor learning rate or exploration scale")
+    if not np.isfinite(args.contact_cost) or args.contact_cost < 0:
+        parser.error("Contact cost must be finite and non-negative")
     if (args.output / "metrics.jsonl").exists():
         parser.error("Select a fresh run directory")
     random.seed(args.seed)
@@ -64,7 +68,8 @@ def main():
     library = HandGoalLibrary(paths, model, args.model, device)
     backend = WarpPhysics(model, library.names, args.num_envs, device, graph=not args.no_cuda_graph)
     env = HandCentricEnv(backend, library, target_memory=args.target_memory,
-                         direct_tip_feedback=args.direct_tip_feedback)
+                         direct_tip_feedback=args.direct_tip_feedback, jacobian_feedback=args.jacobian_feedback,
+                         contact_cost=args.contact_cost)
     task = env.task
     metadata = dict(
         task_id=TASK_ID, model=str(args.model.resolve()), model_sha256=library.model_sha256,
@@ -75,6 +80,8 @@ def main():
         collection="policy_exploration", action_mode="position_target",
         target_memory=args.target_memory,
         direct_tip_feedback=args.direct_tip_feedback,
+        jacobian_feedback=args.jacobian_feedback,
+        training_contact_cost=args.contact_cost,
         action_scale=task.action_step.tolist(), policy_dim=task.policy_dim,
         resume=str(args.resume.resolve()) if args.resume else None,
         backend="MuJoCo Warp", mujoco_version=mujoco.__version__,
@@ -82,7 +89,7 @@ def main():
     if args.resume:
         saved = json.loads((args.resume.parent / "provenance.json").read_text())
         for key in ("task_id", "model_sha256", "motion_sha256", "joint_names", "action_scale",
-                    "policy_dim", "target_memory", "direct_tip_feedback"):
+                    "policy_dim", "target_memory", "direct_tip_feedback", "jacobian_feedback"):
             if saved.get(key, 0.0) != metadata[key]:
                 raise ValueError(f"Checkpoint provenance differs in {key}")
     args.output.mkdir(parents=True, exist_ok=True)

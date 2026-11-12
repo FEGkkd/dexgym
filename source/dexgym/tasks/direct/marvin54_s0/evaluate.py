@@ -149,7 +149,7 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
     deep_substeps = torch.zeros_like(starts)
     records = defaultdict(list)
     if trace_dir:
-        trace = dict(qpos=[env.state()[:, :JOINTS].clone()], target=[], depth=[], substep=[], deep_substeps=[])
+        trace = dict(state=[env.state().clone()], target=[], depth=[], substep=[], deep_substeps=[])
     for _ in range(int(lengths.max())):
         if not active.any():
             break
@@ -170,7 +170,7 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
         deep = env.transition["deep_substeps"]
         substep = event["safety_substep"]
         if trace_dir:
-            trace["qpos"].append(env.state()[:, :JOINTS].clone())
+            trace["state"].append(env.state().clone())
             trace["target"].append(env.transition["u"].clone())
             trace["depth"].append(env.transition["depth"].clone())
             trace["substep"].append(substep.clone())
@@ -212,9 +212,13 @@ def evaluate(env, actor, mode, seed, paths, trace_dir=None):
             time = np.arange(n + 1) * DT
             if trace["substep"][n - 1, i]:
                 time[-1] = time[-2] + trace["substep"][n - 1, i] * PHYSICS_DT
-            np.savez_compressed(trace_dir / f"{i:03d}.npz", time_s=time, qpos=trace["qpos"][:n + 1, i],
+            state = trace["state"][:n + 1, i]
+            np.savez_compressed(trace_dir / f"{i:03d}.npz", time_s=time,
+                                qpos=state[:, :JOINTS], qvel=state[:, JOINTS:],
                                 target=trace["target"][:n, i], depth_m=trace["depth"][:n, i],
-                                deep_substeps=trace["deep_substeps"][:n, i])
+                                deep_substeps=trace["deep_substeps"][:n, i],
+                                tip_mm=errors["tip_mm"][:n, i],
+                                cross_tip_vector_mm=errors["cross_tip_vector_mm"][:n, i])
     eligible_rows = [r for r in rows if r["eligible"]]
     completed = [r for r in eligible_rows if r["complete"]]
     by_episode = defaultdict(list)
@@ -317,7 +321,8 @@ def main():
     else:
         backend = CpuPhysics(model, library.names, len(paths))
     env = HandCentricEnv(backend, library, reset_noise=False, target_memory=prov.get("target_memory", 0.0),
-                         direct_tip_feedback=prov.get("direct_tip_feedback", False))
+                         direct_tip_feedback=prov.get("direct_tip_feedback", False),
+                         jacobian_feedback=prov.get("jacobian_feedback", False))
     actor = env.task.make_actor().to(device).eval()
     payload = torch.load(args.checkpoint, map_location="cpu", weights_only=False)
     if payload["task_id"] != TASK_ID or payload["format_version"] != 1:

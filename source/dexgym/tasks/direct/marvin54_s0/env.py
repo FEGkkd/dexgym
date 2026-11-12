@@ -10,10 +10,12 @@ from .task import HandCentricTask, TRACKING_LIMIT_M, cross_tip_vectors
 
 
 class HandCentricEnv:
-    def __init__(self, backend, library, *, reset_noise=True, target_memory=0.0, direct_tip_feedback=False):
+    def __init__(self, backend, library, *, reset_noise=True, target_memory=0.0, direct_tip_feedback=False,
+                 jacobian_feedback=False, contact_cost=0.60):
         self.backend = backend
         self.num_envs, self.device = backend.num_envs, backend.device
-        self.task = HandCentricTask(self, backend.model, library, target_memory, direct_tip_feedback)
+        self.task = HandCentricTask(self, backend.model, library, target_memory, direct_tip_feedback,
+                                    jacobian_feedback, contact_cost)
         self.reset_noise = reset_noise
         self.history = torch.zeros(
             self.num_envs, self.task.history_steps, self.task.history_frame_dim, device=self.device
