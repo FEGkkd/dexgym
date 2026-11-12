@@ -21,6 +21,8 @@ PHYSICS_CONTRACT = "newton_mjcf_position_servo"
 def aligned_simulation_cfg(model):
     cfg = simulation_cfg()
     solver = cfg.physics.solver_cfg
+    solver.nconmax = 96
+    solver.njmax = 512
     opt = model.opt
     solver.cone = "elliptic" if opt.cone == mujoco.mjtCone.mjCONE_ELLIPTIC else "pyramidal"
     for key in ("impratio", "iterations", "ls_iterations", "tolerance", "ccd_iterations"):
@@ -37,6 +39,8 @@ class NewtonPhysics(Physics):
         self.solver = NewtonManager._solver
         self.dof_ids = solver_dof_indices(self.solver, names, self.device)
         self.mjw_model, self.mjw_data = self.solver.mjw_model, self.solver.mjw_data
+        self.contact_capacity = cfg.physics.solver_cfg.nconmax
+        self.constraint_capacity = cfg.physics.solver_cfg.njmax
         self.stream = wp.get_stream(self.device)
         self.torch_stream = wp.stream_to_torch(self.stream)
         with self.simulation_stream():
@@ -183,6 +187,8 @@ class NewtonPhysics(Physics):
             "device": str(self.device), "envs": self.num_envs,
             "physics_dt_s": PHYSICS_DT, "control_substeps": SUBSTEPS, "errors": errors,
             "physics_contract": self.physics_contract,
+            "contact_capacity_per_env": self.contact_capacity,
+            "constraint_capacity_per_env": self.constraint_capacity,
             "solver_options": {key: getattr(self.solver.mj_model.opt, key)
                                for key in ("cone", "impratio", "iterations", "tolerance")},
         }

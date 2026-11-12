@@ -91,6 +91,7 @@ class HandCentricEnv:
             "tip_mm": tip_delta.norm(dim=-1).mean((1, 2)) * 1000,
             "cross_tip_mm": cross_tip_vectors(tip_delta).norm(dim=-1).mean((1, 2)) * 1000,
             "deep_contact_rate": (depth > AUDIT_DEPTH_M).float(),
+            "overflow_rate": ((flags & OVERFLOW) != 0).float(),
             "lost_tracking_rate": ((flags & TRACKING) != 0).float(),
             "natural_completion_rate": complete.float(),
         }
