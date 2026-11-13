@@ -82,7 +82,7 @@ def checkpoint_geometry(meta):
         if meta["intent"]["goal_version"] != GOAL_VERSION:
             raise ValueError("Unsupported human-intent target geometry version")
         info = meta["intent"]["geometry_model"]
-    elif profile == "retarget_pose":
+    elif profile in ("retarget_pose", "tip_precision"):
         if meta["pose_tracking"]["goal_version"] != POSE_GOAL_VERSION:
             raise ValueError("Unsupported retargeted pose target geometry version")
         info = meta["pose_tracking"]["geometry_model"]
@@ -456,7 +456,7 @@ def main():
     for checkpoint in args.checkpoint:
         meta = json.loads((checkpoint.resolve().parent / "provenance.json").read_text())
         profile = meta.get("reward_profile")
-        geometry_key = {"human_intent": "intent", "retarget_pose": "pose_tracking"}.get(profile)
+        geometry_key = {"human_intent": "intent", "retarget_pose": "pose_tracking", "tip_precision": "pose_tracking"}.get(profile)
         if geometry_key and meta[geometry_key]["geometry_model"]["sha256"] != digest(args.model):
             raise ValueError(f"Native evaluation needs the {profile} policy's teleoperation geometry")
         if profile == "human_intent":

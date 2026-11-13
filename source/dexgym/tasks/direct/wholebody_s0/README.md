@@ -258,3 +258,9 @@ bash scripts/supermimic/host.sh -m dexgym.tasks.direct.wholebody_s0.supermimic_t
 ```
 
 用 `--init` 可以加载同任务的兼容权重。参考清单须带有筛选过的 MuJoCo 回放记录与相符的机器人模型哈希。
+
+## 腕内指尖位置精调
+
+`--reward-profile tip_precision` 保留腕部位姿奖励，提高腕内指尖位置的平均和尾部误差权重。手部策略内部从关节输入计算腕内指尖位置误差和参考位移，输出有界关节残差。控制器沿用原有六组输入和命令约束。
+
+首次运行用 `--arm-init` 指向已训练的 `retarget_pose` checkpoint，用 `--init` 指向同方法的 `fingertip` checkpoint。训练冻结腕部网络，手部继续学习。同 profile 的后续运行可只传 `--init`。PPO 可用 `--native-robot-usd` 选择由遥操 MJCF 转换的 Newton USD，微调指尖反馈网络。

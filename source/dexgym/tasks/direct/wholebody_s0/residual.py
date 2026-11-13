@@ -11,6 +11,7 @@ from ..hand2_cube_supermimic.kinematics import HandKinematics
 from ..hand2_cube_supermimic.rotations import axis_angle_to_mat, mm, mv
 from ..marvin54_tracking.task import JointCodec
 from .bag import digest
+from .finger_feedback import WristLocalFingertips
 from .fingertip import FingertipActor, HAND_SCALE, PalmOrientation, TIP_ERROR_SCALE_M
 from .intent import INTENT_DIM, HumanIntentGeometry, IntentTargets, source_orders
 from .library import MotionLibrary
@@ -61,7 +62,17 @@ POSE_TRACKING_SCALES = {
     "relative_position": .025, "relative_rotation": .125, "joint": .12,
 }
 POSE_HAND_WEIGHTS = {"position": .50, "rotation": .30, "worst_position": .12, "worst_rotation": .08}
+PRECISION_POSITION_SCALE = .0015
+PRECISION_TAIL_THRESHOLD = .0017
+PRECISION_TAIL_SCALE = .0007
+PRECISION_HAND_WEIGHTS = {"position": .49, "tail": .43, "rotation": .05, "joint": .03}
+PRECISION_REWARD_WEIGHTS = {
+    **POSE_TRACKING_WEIGHTS, "left_hand": 5.5, "right_hand": 5.5,
+    "action_rate": .38, "action_magnitude": .025, "command_rate": .035, "projection": .08,
+    "contact": .35, "hard_contact": 1.3,
+}
 REWARD_PROFILES = {"v1": REWARD_WEIGHTS, "fingertip": FINGERTIP_REWARD_WEIGHTS, "retarget_pose": POSE_TRACKING_WEIGHTS,
+                   "tip_precision": PRECISION_REWARD_WEIGHTS,
                    "human_intent": {
     **HUMAN_INTENT_WEIGHTS, **INTENT_EXECUTION_WEIGHTS, **INTENT_COST_WEIGHTS,
 }}
@@ -259,7 +270,8 @@ class ResidualTask:
         self.reward_profile = reward_profile
         self.reward_weights = REWARD_PROFILES[reward_profile]
         self.human_intent = reward_profile == "human_intent"
-        self.retarget_pose = reward_profile == "retarget_pose"
+        self.tip_precision = reward_profile == "tip_precision"
+        self.retarget_pose = reward_profile in ("retarget_pose", "tip_precision")
         self.max_step_reward = sum(self.reward_weights[key] for key in (
             "wrist_position", "wrist_rotation", "left_hand", "right_hand",
             "relative_position", "relative_rotation", "joint",
@@ -286,7 +298,10 @@ class ResidualTask:
         if ((bank.q < self.lo - 1e-6) | (bank.q > self.hi + 1e-6)).any():
             raise ValueError("The native reference exceeds joint/actuator position limits")
         self.home = tensor(model.key("home").qpos.copy(), self.device)
+        if self.tip_precision and not torch.allclose(self.home, tensor(hand_model.key("home").qpos.copy(), self.device)):
+            raise ValueError("Training and teleoperation models must share the home pose")
         self.palm_orientation = PalmOrientation(model, bank.names, self.home.cpu(), DT) if self.uses_hand_actor else None
+        self.fingertip_feedback = WristLocalFingertips(hand_model, bank.names) if self.tip_precision else None
         self.arm = torch.as_tensor([name.startswith("Joint") for name in bank.names], device=self.device)
         self.groups = [
             torch.as_tensor([i for i, name in enumerate(bank.names) if name.endswith("_" + side)], device=self.device)
@@ -337,7 +352,8 @@ class ResidualTask:
     def make_actor(self):
         if self.uses_hand_actor:
             return FingertipActor(OBS_DIM, N, self.hand_groups, self.palm_orientation, intent=self.human_intent,
-                                  train_arm=self.retarget_pose)
+                                  train_arm=self.retarget_pose and not self.tip_precision,
+                                  fingertip_feedback=self.fingertip_feedback)
         return Actor(self.policy_dim, N)
 
     def measured_pose(self, q):
@@ -481,12 +497,23 @@ class ResidualTask:
         for index, side in enumerate(("left_hand", "right_hand")):
             pos = errors["wrist_local_tip"][:, index]
             rot = errors["wrist_local_rotation"][:, index]
-            scores[side] = (
-                POSE_HAND_WEIGHTS["position"] * score(pos, scale["tip_position"])
-                + POSE_HAND_WEIGHTS["rotation"] * score(rot, scale["tip_rotation"])
-                + POSE_HAND_WEIGHTS["worst_position"] * score(pos.topk(2, dim=-1).values, scale["tip_position"])
-                + POSE_HAND_WEIGHTS["worst_rotation"] * score(rot.topk(2, dim=-1).values, scale["tip_rotation"])
-            )
+            if self.tip_precision:
+                normalized = ((pos + 1e-12).sqrt() - PRECISION_TAIL_THRESHOLD) / PRECISION_TAIL_SCALE
+                baseline = softplus(pos.new_tensor(-PRECISION_TAIL_THRESHOLD / PRECISION_TAIL_SCALE))
+                tail = (softplus(normalized) - baseline).topk(2, dim=-1).values.mean(-1)
+                scores[side] = (
+                    PRECISION_HAND_WEIGHTS["position"] * scaled_score(pos, PRECISION_POSITION_SCALE)
+                    + PRECISION_HAND_WEIGHTS["tail"] * (1. - tail)
+                    + PRECISION_HAND_WEIGHTS["rotation"] * score(rot, scale["tip_rotation"])
+                    + PRECISION_HAND_WEIGHTS["joint"] * score(q_error[:, self.hand_groups[index]].square(), 1.)
+                )
+            else:
+                scores[side] = (
+                    POSE_HAND_WEIGHTS["position"] * score(pos, scale["tip_position"])
+                    + POSE_HAND_WEIGHTS["rotation"] * score(rot, scale["tip_rotation"])
+                    + POSE_HAND_WEIGHTS["worst_position"] * score(pos.topk(2, dim=-1).values, scale["tip_position"])
+                    + POSE_HAND_WEIGHTS["worst_rotation"] * score(rot.topk(2, dim=-1).values, scale["tip_rotation"])
+                )
         costs = {
             "action_rate": self.grouped((action - m["action"]).square()),
             "command_rate": self.grouped(((target - m["cmd"]) / self.slew).square()),
@@ -496,6 +523,13 @@ class ResidualTask:
             "hard_contact": contact[:, 1],
             "joint_violation": (self.position_violation(x) / .05).clamp(max=1.),
         }
+        if self.tip_precision:
+            fingers = self.hand_groups.flatten()
+            costs["action_rate"] = (action - m["action"])[:, fingers].square().mean(-1)
+            previous_ref = self.bank.q[m["frame"]]
+            # Penalize changes to the learned offset even while the reference is moving.
+            offset_change = (target - self.bank.q[frame]) - (m["cmd"] - previous_ref)
+            costs["command_rate"] = (offset_change[:, fingers] / self.scale[fingers]).square().mean(-1)
         tracking = sum(self.reward_weights[key] * value for key, value in scores.items())
         reward = tracking - sum(self.reward_weights[key] * value for key, value in costs.items())
         return reward, pose[5], {**errors, "pose_score": tracking, "action_rate": costs["action_rate"]}

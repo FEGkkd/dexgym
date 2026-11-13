@@ -46,7 +46,8 @@ class PalmOrientation(nn.Module):
 
 
 class HandResidualLogits(nn.Module):
-    def __init__(self, observation_dim, dofs, hand_groups, palm_sites, *, intent=False, train_arm=False):
+    def __init__(self, observation_dim, dofs, hand_groups, palm_sites, *, intent=False, train_arm=False,
+                 fingertip_feedback=None):
         super().__init__()
         self.dofs = dofs
         self.observation_dim = observation_dim
@@ -60,6 +61,15 @@ class HandResidualLogits(nn.Module):
         self.register_buffer("hand_groups", hand_groups)
         self.palm_sites = palm_sites
         self.register_buffer("feature_scale", torch.tensor([.5, 3., .08, 3., .08, 1.])[None, None, :, None])
+        self.fingertip_feedback = fingertip_feedback
+        if fingertip_feedback is not None:
+            if not torch.equal(fingertip_feedback.indices.flatten(1), hand_groups.cpu()):
+                raise ValueError("Fingertip feedback and hand action order must match")
+            self.register_buffer("finger_identity", torch.eye(5))
+            self.tip_feedback_nets = nn.ModuleList(mlp(15, [64, 48], 4) for _ in range(hand_count))
+            for net in self.tip_feedback_nets:
+                nn.init.zeros_(net[-1].weight)
+                nn.init.zeros_(net[-1].bias)
         if intent:
             # Inject the task-space goals into the first hidden layers. Zero
             # adapters reproduce the starting controller on the joint inputs.
@@ -90,6 +100,18 @@ class HandResidualLogits(nn.Module):
                                      for i, net in enumerate(self.hand_nets)], dim=-1)
         else:
             hand_logits = torch.cat([net(features[:, i]) for i, net in enumerate(self.hand_nets)], dim=-1)
+            if self.fingertip_feedback is not None:
+                measured_q = state[:, 0] + self.palm_sites.home
+                reference_q = measured_q + state[:, 2]
+                previous_ref = reference_q - self.palm_sites.dt * state[:, 3]
+                measured, reference, previous = self.fingertip_feedback(
+                    torch.stack((measured_q, reference_q, previous_ref))).unbind(0)
+                finger_q = measured_q[:, self.fingertip_feedback.indices]
+                identity = self.finger_identity.expand(state.shape[0], len(self.tip_feedback_nets), -1, -1)
+                feedback = torch.cat(((reference - measured) / .004, (reference - previous) / .004,
+                                      finger_q, identity), dim=-1)
+                hand_update = torch.stack([net(feedback[:, i]) for i, net in enumerate(self.tip_feedback_nets)], dim=1)
+                hand_logits = hand_logits + hand_update.flatten(1)
             arm_logits = self.arm_policy.net(self.arm_policy.norm(base))
         return arm_logits.index_copy(1, self.hand_groups.flatten(), hand_logits)
 
@@ -102,10 +124,12 @@ class HandResidualLogits(nn.Module):
 
 
 class FingertipActor(nn.Module):
-    def __init__(self, observation_dim, dofs, hand_groups, palm_sites, *, intent=False, train_arm=False):
+    def __init__(self, observation_dim, dofs, hand_groups, palm_sites, *, intent=False, train_arm=False,
+                 fingertip_feedback=None):
         super().__init__()
         self.norm = nn.Identity()
-        self.net = HandResidualLogits(observation_dim, dofs, hand_groups, palm_sites, intent=intent, train_arm=train_arm)
+        self.net = HandResidualLogits(observation_dim, dofs, hand_groups, palm_sites, intent=intent, train_arm=train_arm,
+                                      fingertip_feedback=fingertip_feedback)
 
     def forward(self, observation):
         return self.net(self.norm(observation)).tanh()
@@ -116,3 +140,12 @@ class FingertipActor(nn.Module):
         if set(state) != expected:
             raise ValueError("The source actor does not match the pre-intent fingertip architecture")
         self.load_state_dict(state, strict=False)
+
+    def load_precision_weights(self, hand_state, arm_state):
+        expected = {key for key in self.state_dict() if key != "net.finger_identity"
+                    and not key.startswith(("net.tip_feedback_nets.", "net.fingertip_feedback."))}
+        if set(hand_state) != expected or set(arm_state) != expected:
+            raise ValueError("Precision training requires the previous wrist and fingertip actors")
+        merged = {key: arm_state[key] if key.startswith("net.arm_policy.") else value
+                  for key, value in hand_state.items()}
+        self.load_state_dict(merged, strict=False)

@@ -12,15 +12,18 @@ BAD_ACTION = 32
 
 
 class ResidualEnv:
-    def __init__(self, backend, bank, task_class, *, robust, seed, transfer_model=None, reward_profile="v1"):
+    def __init__(self, backend, bank, task_class, *, robust, seed, transfer_model=None, hand_model=None,
+                 reward_profile="v1", include_nominal=False):
         self.backend = backend
         self.device, self.num_envs = backend.device, backend.num_envs
         self.common_step_counter = 0
         self.disturbance = SimpleNamespace(adaptive_scale=float(robust), success_scale=0.)
         arm = torch.as_tensor([name.startswith("Joint") for name in bank.names], device=self.device)
-        self.domain = Domain(self.num_envs, self.device, seed + 37, robust, arm, transfer=transfer_model is not None)
+        self.domain = Domain(self.num_envs, self.device, seed + 37, robust, arm, transfer=transfer_model is not None,
+                             include_nominal=include_nominal)
         self.task = task_class(self, backend.model, bank, domain=self.domain, transfer_model=transfer_model,
-                               reward_profile=reward_profile, hand_model=transfer_model)
+                               reward_profile=reward_profile, hand_model=hand_model or transfer_model)
+        self.hand_learner_reward = getattr(self.task, "hand_reward", None) if include_nominal else None
         self.domain_buffers = apply_newton_domain(backend, self.task)
         self._state = backend.state()
         self.memory = {
@@ -50,7 +53,7 @@ class ResidualEnv:
             frame = bank.sample(len(env_ids), self.domain.generator)
         q, v = bank.q[frame], bank.qd[frame]
         if not exact:
-            q, v = self.domain.reset_noise(q, v)
+            q, v = self.domain.reset_noise(q, v, env_ids)
         q = q.clamp(self.task.lo, self.task.hi)
         self.backend.reset(env_ids, q, v)
         self._state = self._state.index_copy(0, env_ids, torch.cat((q, v), -1))
@@ -64,7 +67,8 @@ class ResidualEnv:
     def apply_impulse(self, x, done):
         if not self.domain.robust or self.common_step_counter % 25 != 24:
             return x
-        ids = ((self.domain.uniform((self.num_envs,)) < 25 * IMPULSE_PROBABILITY) & ~done).nonzero().flatten()
+        ids = ((self.domain.uniform((self.num_envs,)) < 25 * IMPULSE_PROBABILITY)
+               & self.domain.randomized & ~done).nonzero().flatten()
         if not len(ids):
             return x
         dq = x[ids, N:] + self.domain.velocity_impulse((len(ids), N))
@@ -137,11 +141,13 @@ class ResidualEnv:
             "rollout_event_flags": {"reference_complete": completed, "hard_contact": contact[:, 1] > 0,
                                     "solver_invalid": invalid},
         }
+        if self.hand_learner_reward is not None:
+            self.transition["hand_learner_reward"] = torch.where(invalid, -16., self.hand_learner_reward(reward, errors))
         self.common_step_counter += 1
         return self.observation(), reward, terminated, torch.zeros_like(terminated), {}
 
     @torch.no_grad()
-    def contract(self):
+    def contract(self, *, reference_geometry=None):
         bank = self.task.bank
         ids = torch.arange(self.num_envs, device=self.device)
         frames = ids % bank.frames
@@ -150,12 +156,13 @@ class ResidualEnv:
         expected = self.task.goal_geometry[0][frames]
         sites = [self.backend.robot.body_names.index(f"TCP_Link_{side}") for side in "LR"]
         measured = self.backend.robot.data.body_pose_w.torch[:, sites, :3] - self.backend.scene.env_origins[:, None]
+        source = self.task.goal_geometry if reference_geometry is None else reference_geometry
         errors = {
             "q_rad": float((q - bank.q[frames]).abs().max()),
             "qd_rad_s": float((v - bank.qd[frames]).abs().max()),
             "tcp_m": float((measured - expected).abs().max()),
-            "source_tcp_m": float((bank.stored_wrists[..., :3] - self.task.goal_geometry[0]).abs().max()),
-            "source_tip_m": float((bank.stored_tips[..., :3] - self.task.goal_geometry[-1]).abs().max()),
+            "source_tcp_m": float((bank.stored_wrists[..., :3] - source[0]).abs().max()),
+            "source_tip_m": float((bank.stored_tips[..., :3] - source[-1]).abs().max()),
         }
         if any(not 0 <= value < .0003 for value in errors.values()):
             raise RuntimeError(f"Reference/Newton FK and state contract failed: {errors}")

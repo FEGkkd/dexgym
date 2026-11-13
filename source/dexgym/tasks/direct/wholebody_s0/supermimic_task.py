@@ -20,14 +20,21 @@ class WholebodyS0SuperMimic(ResidualTask):
     method = "supermimic"
 
     def collection_action(self, action, memory):
-        if self.fingertip_priority:
-            noise = .06 * torch.randn_like(action) * ~self.arm
+        if self.fingertip_priority or self.tip_precision:
+            sigma = .035 if self.tip_precision else .06
+            noise = sigma * torch.randn_like(action) * ~self.arm
             action = (action + noise).clamp(-1., 1.)
         return action
 
     def world_model_pose_loss(self, predicted, measured):
         hand_q = (predicted[:, :self.action_dim] - measured[:, :self.action_dim])[:, ~self.arm]
-        return (hand_q / .004).square().mean(-1)
+        joint_loss = (hand_q / .004).square().mean(-1)
+        if self.tip_precision:
+            predicted_tip = self.fingertip_feedback(predicted[:, :self.action_dim])
+            measured_tip = self.fingertip_feedback(measured[:, :self.action_dim])
+            tip_loss = ((predicted_tip - measured_tip) / .0005).square().sum(-1).mean((1, 2))
+            return .45 * joint_loss + .55 * tip_loss
+        return joint_loss
 
 
 def collection_steps(iterations, utd):
@@ -48,7 +55,7 @@ def learn(args, env):
         wm_only_iters=args.wm_only_iters, wm_hidden=(args.wm_width,) * 3, wm_window=args.wm_window,
         wm_batches=args.wm_batches, wm_batch=args.wm_batch, pi_batch=args.actor_batch, horizon=args.horizon,
         max_step_reward=task.max_step_reward, actor_bootstrap_weight=args.actor_bootstrap_weight,
-        actor_lr=args.actor_lr, action_noise=(0. if task.fingertip_priority else .06 if task.uses_hand_actor
+        actor_lr=args.actor_lr, action_noise=(0. if task.fingertip_priority or task.tip_precision else .06 if task.uses_hand_actor
                                              else STANDARD.action_noise), contact_weight=.20,
         contact_partial_intervals=True, contact_depth_weight=.03,
         kinematic_loss_weight=args.hand_wm_weight if task.uses_hand_actor else 0.,
@@ -58,7 +65,16 @@ def learn(args, env):
         save_interval=max(1, math.ceil(iterations / args.checkpoints)), log_interval=max(1, min(20, iterations // 8)),
     )
     engine = SuperMimicEngine(task, cfg, args.output)
-    if args.init:
+    if args.arm_init:
+        hand = torch.load(args.init, map_location=env.device, weights_only=False)["modules"]["actor"]
+        arm = torch.load(args.arm_init, map_location=env.device, weights_only=False)
+        engine.actor.load_precision_weights(hand, arm["modules"]["actor"])
+        if args.init_dynamics and tuple(arm["config"]["wm_hidden"]) == tuple(cfg.wm_hidden):
+            engine.wm.load_state_dict(arm["modules"]["wm"])
+            engine.fail_head.load_state_dict(arm["modules"]["fail_head"])
+        else:
+            args.init_dynamics = False
+    elif args.init:
         payload = torch.load(args.init, map_location=env.device, weights_only=False)
         if payload["task_id"] != task.task_id:
             raise ValueError("SuperMimic checkpoint task mismatch")

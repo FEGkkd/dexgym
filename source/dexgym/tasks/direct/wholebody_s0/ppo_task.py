@@ -13,7 +13,7 @@ from rsl_rl.storage import RolloutStorage
 from tensordict import TensorDict
 from torch import nn
 
-from .residual import N, ResidualTask
+from .residual import N, POSE_TRACKING_SCALES, ResidualTask
 from .train_common import atomic_checkpoint, run, train_parser
 
 TASK_ID = "DexGym-WholeBody-S0-PPO-Direct-v0"
@@ -22,6 +22,14 @@ TASK_ID = "DexGym-WholeBody-S0-PPO-Direct-v0"
 class WholebodyS0PPO(ResidualTask):
     task_id = TASK_ID
     method = "ppo"
+
+    def hand_reward(self, reward, errors):
+        # For a frozen arm, use the shared objective with the arm-only
+        # terms removed from PPO credit assignment. Keep contact and joint costs.
+        arm_score = sum(self.reward_weights[key] * self.group_score(errors[feature], POSE_TRACKING_SCALES[key])
+                        for key, feature in (("wrist_position", "wrist"), ("wrist_rotation", "rotation"),
+                                             ("relative_position", "relative"), ("relative_rotation", "relative_rotation")))
+        return reward - arm_score - self.reward_weights["left_hand"] - self.reward_weights["right_hand"]
 
 
 class TanhGaussian(GaussianDistribution):
@@ -42,8 +50,9 @@ class TanhGaussian(GaussianDistribution):
 class HandTanhGaussian(TanhGaussian):
     """Sample the optimized hand actions; execute the frozen arm deterministically."""
 
-    def __init__(self, hand):
-        super().__init__(len(hand), init_std=.06, std_range=(.025, .16), std_type="log")
+    def __init__(self, hand, *, precision=False):
+        std, limits = (.035, (.010, .075)) if precision else (.06, (.025, .16))
+        super().__init__(len(hand), init_std=std, std_range=limits, std_type="log")
         self.register_buffer("hand", hand)
 
     def sample(self):
@@ -70,13 +79,15 @@ def learn(args, env):
     # Reuse the deterministic actor network and normalizer used by SuperMimic.
     model.mlp = actor.net
     model.obs_normalizer = actor.norm
-    model.distribution = (HandTanhGaussian(~task.arm) if task.fingertip_priority else
+    model.distribution = (HandTanhGaussian(~task.arm, precision=task.tip_precision)
+                          if task.fingertip_priority or task.tip_precision else
                           TanhGaussian(N, init_std=.08, std_range=(.025, .20), std_type="log") if task.uses_hand_actor else
                           TanhGaussian(N, init_std=.18, std_range=(.035, .45), std_type="log"))
     critic = MLPModel(obs, groups, "critic", 1, hidden_dims=(512, 512, 256, 128), obs_normalization=True)
     storage = RolloutStorage("rl", count, rollout, obs, (N,), device=device)
     algo = PPO(model, critic, storage, learning_rate=args.lr, num_learning_epochs=4,
-               num_mini_batches=8, desired_kl=.016, entropy_coef=0., device=device)
+               num_mini_batches=8, desired_kl=.016, entropy_coef=0., device=device,
+               schedule="fixed" if task.tip_precision else "adaptive")
     initial_iteration = 0
     prior_steps = 0
     prior_seconds = 0.
@@ -96,6 +107,10 @@ def learn(args, env):
         env.common_step_counter = prior_steps // count
         print(f"PPO resumed at iteration {initial_iteration} with {prior_steps} transitions "
               f"and learning rate {algo.learning_rate:.8g}; target iteration {iterations}", flush=True)
+    elif args.arm_init:
+        hand = torch.load(args.init, map_location=device, weights_only=True)
+        arm = torch.load(args.arm_init, map_location=device, weights_only=True)
+        actor.load_precision_weights(hand["actor"], arm["actor"])
     elif args.init:
         payload = torch.load(args.init, map_location=device, weights_only=True)
         if payload["task_id"] != task.task_id:
@@ -115,6 +130,10 @@ def learn(args, env):
         actor.norm.update(obs["policy"])
     if not (args.init_privileged or args.resume):
         critic.update_normalization(obs)
+    if args.native_robot_usd:
+        for param in model.mlp.hand_nets.parameters():
+            param.requires_grad_(False)
+        model.distribution.requires_grad_(False)
     before = [p.detach().clone() for p in actor.parameters()]
     period = max(1, math.ceil((iterations - initial_iteration) / args.checkpoints))
     start = time.perf_counter()
@@ -144,7 +163,10 @@ def learn(args, env):
                     if len(ids):
                         obs_next, _ = env.reset(env_ids=ids)
                     obs = TensorDict(obs_next, batch_size=[count])
-                    algo.process_env_step(obs, reward, done, {})
+                    learner_reward = reward
+                    if args.native_robot_usd:
+                        learner_reward = info["hand_learner_reward"]
+                    algo.process_env_step(obs, learner_reward, done, {})
                 algo.compute_returns(obs)
             losses = algo.update()
             stats = {key: float(value / rollout) for key, value in sums.items()}

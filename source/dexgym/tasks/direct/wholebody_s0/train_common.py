@@ -18,9 +18,10 @@ from .fingertip import HAND_SCALE
 from .intent import GOAL_VERSION, INTENT_DIM
 from .residual import (DR_DIM, INTENT_EXECUTION_COEF, INTENT_RESIDUAL_COEF, INTENT_SMOOTHNESS_COEF,
                        N, OBS_DIM, POSE_GOAL_VERSION, POSE_HAND_WEIGHTS, POSE_TRACKING_SCALES,
-                       REWARD_PROFILES, ReferenceBank)
-from .robot import NEWTON_USD
+                       PRECISION_HAND_WEIGHTS, PRECISION_POSITION_SCALE, PRECISION_TAIL_SCALE, PRECISION_TAIL_THRESHOLD,
+                       REWARD_PROFILES, Geometry, ReferenceBank)
 from .residual_env import ResidualEnv
+from .robot import NEWTON_USD
 
 
 def train_parser(method, *, default_control_steps=1024):
@@ -35,6 +36,8 @@ def train_parser(method, *, default_control_steps=1024):
     p.add_argument("--transfer-model", type=Path, help="Blend the teleoperation XML's servo and gravity profiles in robust Newton worlds")
     p.add_argument("--reward-profile", choices=REWARD_PROFILES, default="v1")
     p.add_argument("--init", type=Path)
+    p.add_argument("--arm-init", type=Path, help="Initialize the frozen arm from a retarget_pose checkpoint")
+    p.add_argument("--native-robot-usd", type=Path, help="Newton USD converted from the teleoperation MJCF")
     return p
 
 
@@ -42,6 +45,17 @@ def atomic_checkpoint(value, path):
     temp = path.with_suffix(".tmp")
     torch.save(value, temp)
     temp.replace(path)
+
+
+def validate_precision_source(path, profile, provenance):
+    source = json.loads((path.parent / "provenance.json").read_text())
+    for key in ("task_id", "model_sha256", "joint_names", "action_scale_rad", "command_delta_limit_rad", "transfer_model",
+                "policy_dim"):
+        if source[key] != provenance[key]:
+            raise ValueError(f"Precision initializer mismatch for {key}: {path}")
+    if source["reward_profile"] != profile or not set(source["train_episodes"]) <= set(provenance["train_episodes"]):
+        raise ValueError(f"Precision initializer has an incompatible reward profile or data split: {path}")
+    return source
 
 
 def run(args, task_class, learn):
@@ -52,8 +66,14 @@ def run(args, task_class, learn):
     resume = getattr(args, "resume", None)
     if args.reward_profile == "fingertip" and (not args.transfer_model or not (args.init or resume)):
         raise ValueError("The fingertip profile needs a transfer model and a previously trained arm policy")
-    if args.reward_profile in ("human_intent", "retarget_pose") and not args.transfer_model:
+    if args.reward_profile in ("human_intent", "retarget_pose", "tip_precision") and not args.transfer_model:
         raise ValueError(f"{args.reward_profile} needs the teleoperation model for task-space targets")
+    if args.arm_init and (args.reward_profile != "tip_precision" or not args.init or resume):
+        raise ValueError("--arm-init requires --reward-profile tip_precision and --init")
+    if args.reward_profile == "tip_precision" and not (args.arm_init or args.init or resume):
+        raise ValueError("Precision training requires a pretrained policy")
+    if args.native_robot_usd and (args.reward_profile != "tip_precision" or not args.transfer_model):
+        raise ValueError("A native robot USD requires the precision task and its teleoperation MJCF")
     started = time.perf_counter()
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -66,21 +86,44 @@ def run(args, task_class, learn):
     model_path = Path(model_info["path"]).resolve(strict=True)
     if digest(model_path) != model_info["sha256"] or "native_replay" not in manifest:
         raise ValueError("Use the verified native replay Motion Library and its matching packaged robot")
-    model = mujoco.MjModel.from_xml_path(str(model_path))
+    reference_model = mujoco.MjModel.from_xml_path(str(model_path))
     transfer_model, transfer_info = None, None
     if args.transfer_model:
         transfer_path = args.transfer_model.resolve(strict=True)
         transfer_model = mujoco.MjModel.from_xml_path(str(transfer_path))
         transfer_info = {"path": str(transfer_path), "sha256": digest(transfer_path)}
     device = "cuda:0"
-    bank = ReferenceBank(source, "train", model, device,
+    bank = ReferenceBank(source, "train", reference_model, device,
                          intent_model=transfer_model if args.reward_profile == "human_intent" else None)
+    native = args.native_robot_usd is not None
+    robot_usd = args.native_robot_usd.resolve(strict=True) if native else NEWTON_USD
+    model = transfer_model if native else reference_model
+    reference_geometry = None
+    if native:
+        ordered = [model.joint(int(i)).name for i in np.argsort(model.jnt_qposadr)]
+        if ordered != bank.names or not np.allclose(model.key("home").qpos, reference_model.key("home").qpos,
+                                                   atol=1e-7, rtol=0):
+            raise ValueError("Native and reference models must share joint order and home pose")
+        geometry = Geometry(reference_model, bank.names, device)
+        with torch.no_grad():
+            reference_geometry = tuple(torch.cat(values) for values in zip(
+                *(geometry.pose(q) for q in bank.q.split(1024)), strict=True))
     out = args.output
     out.mkdir(parents=True, exist_ok=False)
-    with open_physics("newton", model, bank.names, args.num_envs, robot_usd=NEWTON_USD) as backend:
+    with open_physics("newton", model, bank.names, args.num_envs, robot_usd=robot_usd) as backend:
         env = ResidualEnv(backend, bank, task_class, robust=args.robust, seed=args.seed,
-                          transfer_model=transfer_model, reward_profile=args.reward_profile)
-        contract = env.contract()
+                          transfer_model=None if native else transfer_model, hand_model=transfer_model,
+                          reward_profile=args.reward_profile, include_nominal=native)
+        if native:
+            lo = np.array([reference_model.joint(name).range for name in bank.names])
+            ids = [reference_model.joint(name).id for name in bank.names]
+            actuators = [int(np.flatnonzero(reference_model.actuator_trnid[:, 0] == jid).item()) for jid in ids]
+            bounds = reference_model.actuator_ctrlrange[actuators]
+            env.task.lo = torch.maximum(env.task.lo, torch.as_tensor(np.maximum(lo[:, 0], bounds[:, 0]),
+                                                                     dtype=torch.float32, device=device))
+            env.task.hi = torch.minimum(env.task.hi, torch.as_tensor(np.minimum(lo[:, 1], bounds[:, 1]),
+                                                                     dtype=torch.float32, device=device))
+        contract = env.contract(reference_geometry=reference_geometry)
         task = env.task
         provenance = {
             "task_id": task.task_id, "method": task.method, "manifest": str(source),
@@ -115,6 +158,18 @@ def run(args, task_class, learn):
                 "wrist_relative": "right_tcp_in_left_tcp", "error_scales": POSE_TRACKING_SCALES,
                 "hand_weights": POSE_HAND_WEIGHTS,
             }
+        if task.tip_precision:
+            provenance["pose_tracking"]["hand_weights"] = PRECISION_HAND_WEIGHTS
+            provenance["tip_precision"] = {
+                "finger_feedback": "wrist_local_position_error_and_causal_target_velocity",
+                "frozen_arm": True, "position_scale_m": PRECISION_POSITION_SCALE,
+                "tail_threshold_m": PRECISION_TAIL_THRESHOLD, "tail_scale_m": PRECISION_TAIL_SCALE,
+            }
+        if native:
+            provenance["native_training"] = {
+                "robot_usd": str(robot_usd), "usd_sha256": digest(robot_usd), "model": transfer_info,
+                "nominal_worlds": int((~env.domain.randomized).sum()),
+            }
         if args.robust:
             provenance["domain_profile"] = {
                 "multipliers": {field: list(bounds) for field, bounds in zip(PHYSICAL_FIELDS, SCALE_RANGES, strict=True)},
@@ -126,7 +181,17 @@ def run(args, task_class, learn):
         args.init_intent_actor = False
         args.init_pose_actor = False
         args.init_dynamics = False
-        if args.init:
+        if args.arm_init:
+            validate_precision_source(args.init, "fingertip", provenance)
+            arm = validate_precision_source(args.arm_init, "retarget_pose", provenance)
+            if arm["manifest_sha256"] != provenance["manifest_sha256"]:
+                raise ValueError("The pretrained arm must come from this reference library")
+            args.init_dynamics = arm.get("dynamics_dim") == task.dynamics_dim and not native
+            provenance["initialization_scope"] = "retarget_pose_arm_and_fingertip_hands"
+            provenance["init_sha256"] = digest(args.init)
+            provenance["arm_init"] = str(args.arm_init.resolve())
+            provenance["arm_init_sha256"] = digest(args.arm_init)
+        elif args.init:
             prior = json.loads((args.init.parent / "provenance.json").read_text())
             args.init_v1_arm = task.fingertip_priority and prior.get("reward_profile", "v1") == "v1"
             args.init_intent_actor = task.human_intent and prior.get("reward_profile") == "fingertip"
@@ -149,11 +214,14 @@ def run(args, task_class, learn):
                     keys.append("intent")
                 if task.retarget_pose:
                     keys.append("pose_tracking")
+                if task.tip_precision:
+                    keys.append("tip_precision")
             for key in keys:
                 if prior[key] != provenance[key]:
                     raise ValueError(f"Initialization contract mismatch: {key}")
             args.init_dynamics = (prior.get("dynamics_dim", 2 * N + DR_DIM) == task.dynamics_dim
-                                  and prior.get("transfer_model") == transfer_info)
+                                  and prior.get("transfer_model") == transfer_info
+                                  and prior.get("native_training") == provenance.get("native_training"))
             args.init_privileged = (not (args.init_v1_arm or cross_profile)
                                     and prior.get("context_dim", OBS_DIM + DR_DIM + 1) == task.context_dim
                                     and prior.get("transfer_model") == transfer_info)
@@ -169,7 +237,8 @@ def run(args, task_class, learn):
             prior = json.loads((resume.parent / "provenance.json").read_text())
             keys = ("task_id", "method", "manifest_sha256", "model_sha256", "joint_names", "policy_dim", "context_dim",
                     "action_scale_rad", "command_delta_limit_rad", "reward_weights", "hand_servo", "transfer_model",
-                    "domain_profile", "seed", "num_envs", "robust", "intent", "pose_tracking")
+                    "domain_profile", "seed", "num_envs", "robust", "intent", "pose_tracking", "tip_precision",
+                    "native_training")
             for key in keys:
                 if prior.get(key) != provenance.get(key):
                     raise ValueError(f"Resume contract mismatch: {key}")

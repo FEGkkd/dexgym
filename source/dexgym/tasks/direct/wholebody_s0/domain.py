@@ -11,12 +11,13 @@ IMPULSE_PROBABILITY = .007
 
 
 class Domain:
-    def __init__(self, num_envs, device, seed, robust, arm, *, transfer=False):
+    def __init__(self, num_envs, device, seed, robust, arm, *, transfer=False, include_nominal=False):
         self.device, self.robust, self.arm = device, robust, arm
         self.generator = torch.Generator(device=device).manual_seed(seed)
         self.physical = torch.ones(num_envs, DR_DIM, device=device)
         self.delay = torch.zeros(num_envs, dtype=torch.bool, device=device)
         self.observation_bias = torch.zeros(num_envs, 2 * N, device=device)
+        self.randomized = torch.full((num_envs,), robust, dtype=torch.bool, device=device)
         if robust:
             limits = torch.tensor(SCALE_RANGES, device=device)
             self.physical = limits[:, 0] + self.uniform((num_envs, DR_DIM)) * (limits[:, 1] - limits[:, 0])
@@ -29,6 +30,11 @@ class Domain:
             # Include both real configurations and intermediate calibration values.
             mix = torch.where(profile < .20, 0., torch.where(profile < .65, 1., self.uniform((num_envs, 1))))
             self.physical = torch.cat((self.physical, mix), -1)
+        if robust and include_nominal:
+            self.randomized = self.uniform((num_envs,)) >= .35
+            self.physical = torch.where(self.randomized[:, None], self.physical, 1.)
+            self.delay &= self.randomized
+            self.observation_bias *= self.randomized[:, None]
 
     def uniform(self, shape):
         return torch.rand(shape, device=self.device, generator=self.generator)
@@ -36,11 +42,12 @@ class Domain:
     def normal(self, shape):
         return torch.randn(shape, device=self.device, generator=self.generator)
 
-    def reset_noise(self, q, v):
+    def reset_noise(self, q, v, env_ids=None):
         if not self.robust:
             return q, v
-        return (q + self.normal(q.shape) * torch.where(self.arm, .005, .012),
-                v + self.normal(v.shape) * torch.where(self.arm, .035, .080))
+        mask = (self.randomized if env_ids is None else self.randomized[env_ids]).unsqueeze(-1)
+        return (q + self.normal(q.shape) * torch.where(self.arm, .005, .012) * mask,
+                v + self.normal(v.shape) * torch.where(self.arm, .035, .080) * mask)
 
     def velocity_impulse(self, shape):
         return self.normal(shape) * torch.where(self.arm, .12, .32)
