@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>双臂双手运动审阅 · wholebody_s0</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="dataset.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-main">
+      <span class="project">wholebody_s0</span>
+      <h1>双臂双手运动审阅</h1>
+    </div>
+    <div class="corpus" id="corpus"></div>
+  </header>
+  <div class="workspace">
+    <aside class="sidebar" aria-label="录制列表">
+      <div class="sidebar-head">
+        <h2>录制片段</h2>
+        <select id="episode-filter" aria-label="按动作类型筛选"></select>
+      </div>
+      <nav id="episode-list"></nav>
+    </aside>
+    <main>
+      <section class="episode-header" aria-label="当前录制">
+        <div>
+          <div class="episode-meta" id="episode-meta"></div>
+          <h2 id="episode-title">选择录制</h2>
+          <p id="episode-id" class="technical"></p>
+        </div>
+        <div class="episode-status" id="episode-status"></div>
+      </section>
+      <div id="load-state" class="load-state" role="status" hidden></div>
+      <div id="episode-content" hidden>
+        <section class="motion-layout" aria-label="同步运动回放">
+          <article class="motion-panel">
+            <div class="panel-title">
+              <div><h3>人体 · 双腕轨迹</h3><p id="tracker-frame" class="technical"></p></div>
+              <div class="panel-actions">
+                <select id="tracker-source" aria-label="腕部位姿源"><option value="">标定后</option><option value="_raw">原始 Tracker</option></select>
+                <button data-reset="human" type="button">复位视角</button>
+              </div>
+            </div>
+            <div class="stage">
+              <canvas id="human-view" tabindex="0" aria-label="人体腕部 6DoF 轨迹。拖动旋转，滚轮缩放。"></canvas>
+              <div class="stage-legend"><span class="left">左腕</span><span class="right">右腕</span><span>XYZ 轴标示姿态</span></div>
+            </div>
+            <div class="hand-grid">
+              <div class="hand-inset">
+                <div class="inset-title"><span class="left">左手骨架</span><span id="manus-left-detail"></span></div>
+                <canvas id="left-hand" tabindex="0" aria-label="MANUS 左手局部骨架。拖动旋转。"></canvas>
+              </div>
+              <div class="hand-inset">
+                <div class="inset-title"><span class="right">右手骨架</span><span id="manus-right-detail"></span></div>
+                <canvas id="right-hand" tabindex="0" aria-label="MANUS 右手局部骨架。拖动旋转。"></canvas>
+              </div>
+            </div>
+          </article>
+          <article class="motion-panel">
+            <div class="panel-title">
+              <div><h3>机器人 · 54 DoF 参考</h3><p class="technical">Marvin M6 × 2 / Wuji Hand 2.2 × 2</p></div>
+              <div class="panel-actions">
+                <select id="robot-focus" aria-label="机器人视图"><option value="all">双臂双手</option><option value="left">左手特写</option><option value="right">右手特写</option></select>
+                <button data-reset="robot" type="button">复位视角</button>
+              </div>
+            </div>
+            <div class="stage">
+              <canvas id="robot-view" tabindex="0" aria-label="机器人 54 自由度参考运动。拖动旋转，滚轮缩放。"></canvas>
+              <div class="stage-legend"><span class="left">左臂手</span><span class="right">右臂手</span><span class="target">映射目标</span></div>
+            </div>
+            <div class="joint-panel">
+              <div class="inset-title joint-title">
+                <label for="joint-select">参考关节角</label>
+                <select id="joint-select" aria-label="选择机器人关节"></select>
+                <output id="joint-value"></output>
+              </div>
+              <canvas id="joint-chart" aria-label="选中关节随时间变化的角度曲线"></canvas>
+            </div>
+          </article>
+        </section>
+        <section class="playback" aria-label="播放和同步时间轴">
+          <div class="transport">
+            <select id="motion-variant" aria-label="录制与慢速参考" hidden></select>
+            <button id="play" type="button" class="primary">播放</button>
+            <button id="prev-frame" type="button" aria-label="上一帧" title="上一帧">−1 帧</button>
+            <button id="next-frame" type="button" aria-label="下一帧" title="下一帧">+1 帧</button>
+            <select id="speed" aria-label="播放速度"><option value=".25">0.25×</option><option value=".5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select>
+            <output id="timecode"></output>
+            <input id="seek" type="range" min="0" max="0" value="0" step="1" aria-label="同步回放帧">
+          </div>
+          <div class="availability">
+            <div class="lane-labels"><span>双侧 MANUS</span><span>双腕 Tracker</span><span>Motion Library</span></div>
+            <canvas id="availability" aria-label="时间覆盖图。空隙表示数据不可用或未入库。"></canvas>
+          </div>
+          <div class="frame-strip">
+            <span id="frame-status"></span>
+            <span id="reference-metrics"></span>
+            <span id="frame-reasons"></span>
+          </div>
+        </section>
+        <section class="quality-section">
+          <div class="quality-head">
+            <div>
+              <h2>录包质检</h2>
+              <p id="quality-note"></p>
+            </div>
+            <div class="downloads">
+              <a id="raw-report" download>录包报告 JSON</a>
+              <a id="reference-report" download>参考轨迹报告 JSON</a>
+            </div>
+          </div>
+          <div class="table-wrap" tabindex="0" aria-label="录包逐流质量表">
+            <table>
+              <thead><tr><th scope="col">数据流</th><th scope="col">消息数</th><th scope="col">频率 Hz</th><th scope="col">最大间隔 ms</th><th scope="col">估计缺帧</th><th scope="col">重复源帧</th><th scope="col">无效帧</th><th scope="col">接收延迟 P95 ms</th></tr></thead>
+              <tbody id="stream-table"></tbody>
+            </table>
+          </div>
+          <div class="quality-foot" id="quality-foot"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

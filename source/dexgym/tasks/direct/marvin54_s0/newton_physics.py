@@ -33,9 +33,9 @@ def aligned_simulation_cfg(model):
 class NewtonPhysics(Physics):
     physics_contract = PHYSICS_CONTRACT
 
-    def __init__(self, cfg, model, names, num_envs):
+    def __init__(self, cfg, model, names, num_envs, *, robot_usd=None):
         super().__init__(model, names, num_envs, cfg.device)
-        self.sim, self.scene, self.robot = create_tracking_scene(cfg, num_envs, model, names)
+        self.sim, self.scene, self.robot = create_tracking_scene(cfg, num_envs, model, names, robot_usd=robot_usd)
         self.solver = NewtonManager._solver
         self.dof_ids = solver_dof_indices(self.solver, names, self.device)
         self.mjw_model, self.mjw_data = self.solver.mjw_model, self.solver.mjw_data
@@ -45,6 +45,8 @@ class NewtonPhysics(Physics):
         self.torch_stream = wp.stream_to_torch(self.stream)
         with self.simulation_stream():
             self.align_position_servos(names)
+            if robot_usd is not None:
+                self.align_gravity_compensation()
             self.servo_parameters = []
             for name in ("actuator_gainprm", "actuator_biasprm"):
                 values = wp.to_torch(getattr(self.mjw_model, name))
@@ -97,6 +99,21 @@ class NewtonPhysics(Physics):
             copy(field, velocity_ids, np.zeros_like(getattr(native, field)[velocity_ids]))
         for field in ("jnt_actfrclimited", "jnt_actfrcrange"):
             copy(field, joints, getattr(source, field)[source_joints])
+
+    def align_gravity_compensation(self):
+        """Check the packaged Newton robot, and support explicit historical MJCFs."""
+        requested = self.model.body_gravcomp[self.model.body_mass > 0]
+        native = self.solver.mj_model
+        actual = native.body_gravcomp[native.body_mass > 0]
+        if np.all(requested == 0.0):
+            # Historical checkpoints use the same rigid-body asset with gravity
+            # and without servo gravity compensation.
+            if np.any(actual):
+                native.body_gravcomp[:] = 0.0
+                self.mjw_model.ngravcomp = 0
+                wp.to_torch(self.mjw_model.body_gravcomp).zero_()
+        elif not (np.all(requested == 1.0) and len(actual) and np.all(actual == 1.0)):
+            raise ValueError("Newton body gravity compensation differs from the selected MJCF")
 
     @contextmanager
     def simulation_stream(self):

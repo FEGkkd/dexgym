@@ -86,7 +86,7 @@ BACKEND_NAMES = {
 
 
 @contextmanager
-def open_physics(backend, model, names, num_envs, *, graph=True):
+def open_physics(backend, model, names, num_envs, *, graph=True, robot_usd=None):
     if backend == "cpu":
         yield CpuPhysics(model, names, num_envs)
     elif backend == "newton":
@@ -96,7 +96,7 @@ def open_physics(backend, model, names, num_envs, *, graph=True):
 
         cfg = aligned_simulation_cfg(model)
         with launch_simulation(cfg):
-            yield NewtonPhysics(cfg, model, names, num_envs)
+            yield NewtonPhysics(cfg, model, names, num_envs, robot_usd=robot_usd)
     elif backend == "warp":
         from .warp_physics import WarpPhysics
 

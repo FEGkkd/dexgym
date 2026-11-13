@@ -1,0 +1,1923 @@
+#usda 1.0
+(
+    customLayerData = {
+        string creator = "MuJoCo USD Converter v0.2.0"
+    }
+    defaultPrim = "marvin_m6_dual_arm_wujihand2_2"
+    kilogramsPerUnit = 1
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "marvin_m6_dual_arm_wujihand2_2" (
+    prepend references = @./payloads/base.usda@
+    variants = {
+        string Physics = "mujoco"
+    }
+    append variantSets = "Physics"
+)
+{
+    over "Geometry"
+    {
+        over "pedestal"
+        {
+            custom float mjc:gravcomp = 1
+
+            over "center_mount"
+            {
+                custom float mjc:gravcomp = 1
+
+                over "Base_L"
+                {
+                    custom float mjc:gravcomp = 1
+
+                    over "Link1_L"
+                    {
+                        custom float mjc:gravcomp = 1
+
+                        over "Link2_L"
+                        {
+                            custom float mjc:gravcomp = 1
+
+                            over "Link3_L"
+                            {
+                                custom float mjc:gravcomp = 1
+
+                                over "Link4_L"
+                                {
+                                    custom float mjc:gravcomp = 1
+
+                                    over "Link5_L"
+                                    {
+                                        custom float mjc:gravcomp = 1
+
+                                        over "Link6_L"
+                                        {
+                                            custom float mjc:gravcomp = 1
+
+                                            over "Link7_L"
+                                            {
+                                                custom float mjc:gravcomp = 1
+
+                                                over "TCP_Link_L"
+                                                {
+                                                    over "l_mount"
+                                                    {
+                                                        custom float mjc:gravcomp = 1
+
+                                                        over "l_wrist"
+                                                        {
+                                                            custom float mjc:gravcomp = 1
+
+                                                            over "l_thumb_proximal"
+                                                            {
+                                                                custom float mjc:gravcomp = 1
+
+                                                                over "l_thumb_proximal_abd"
+                                                                {
+                                                                    custom float mjc:gravcomp = 1
+
+                                                                    over "l_thumb_middle"
+                                                                    {
+                                                                        custom float mjc:gravcomp = 1
+
+                                                                        over "l_thumb_distal"
+                                                                        {
+                                                                            custom float mjc:gravcomp = 1
+
+                                                                            over "l_thumb_tip_sensor_frame"
+                                                                            {
+                                                                                custom float mjc:gravcomp = 1
+
+                                                                                over "l_visual_13" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                }
+
+                                                                                over "l_finger1_tip_sensor_col" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "l_finger1_tip_sensor_col" (
+                                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                    )
+                                                                                    {
+                                                                                        uniform int newton:maxHullVertices = 32768
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "l_visual_11" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "l_finger1_link4_col" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "l_finger1_link4_col" (
+                                                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int newton:maxHullVertices = 32768
+                                                                                }
+                                                                            }
+
+                                                                            over "l_thumb_ip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.03150378
+                                                                                float drive:angular:physics:stiffness = 1.9457273
+                                                                            }
+                                                                        }
+
+                                                                        over "l_visual_8" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "l_finger1_link3_col_mesh_disabled" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "l_finger1_link3_col_mesh_disabled" (
+                                                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int newton:maxHullVertices = 32768
+                                                                            }
+                                                                        }
+
+                                                                        over "l_thumb_mcp"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.043875776
+                                                                            float drive:angular:physics:stiffness = 2.2161674
+                                                                        }
+                                                                    }
+
+                                                                    over "l_visual_5" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "l_finger1_link2_col_mesh_disabled" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "l_finger1_link2_col_mesh_disabled" (
+                                                                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform int newton:maxHullVertices = 32768
+                                                                        }
+                                                                    }
+
+                                                                    over "l_thumb_cmc_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.0879732
+                                                                        float drive:angular:physics:stiffness = 4
+                                                                    }
+                                                                }
+
+                                                                over "l_visual_2" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "l_finger1_link1_col_mesh_disabled" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "l_finger1_link1_col_mesh_disabled" (
+                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform int newton:maxHullVertices = 32768
+                                                                    }
+                                                                }
+
+                                                                over "l_thumb_cmc_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.029448574
+                                                                    float drive:angular:physics:stiffness = 3.941151
+                                                                }
+                                                            }
+
+                                                            over "l_index_finger_proximal"
+                                                            {
+                                                                custom float mjc:gravcomp = 1
+
+                                                                over "l_index_finger_proximal_abd"
+                                                                {
+                                                                    custom float mjc:gravcomp = 1
+
+                                                                    over "l_index_finger_middle"
+                                                                    {
+                                                                        custom float mjc:gravcomp = 1
+
+                                                                        over "l_index_finger_distal"
+                                                                        {
+                                                                            custom float mjc:gravcomp = 1
+
+                                                                            over "l_index_finger_tip_sensor_frame"
+                                                                            {
+                                                                                custom float mjc:gravcomp = 1
+
+                                                                                over "l_visual_26" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                }
+
+                                                                                over "l_finger2_tip_sensor_col" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "l_finger2_tip_sensor_col" (
+                                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                    )
+                                                                                    {
+                                                                                        uniform int newton:maxHullVertices = 32768
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "l_visual_24" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "l_finger2_link4_col" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "l_finger2_link4_col" (
+                                                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int newton:maxHullVertices = 32768
+                                                                                }
+                                                                            }
+
+                                                                            over "l_index_finger_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.010130952
+                                                                                float drive:angular:physics:stiffness = 1.9092879
+                                                                            }
+                                                                        }
+
+                                                                        over "l_visual_21" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "l_finger2_link3_col_mesh_disabled" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "l_finger2_link3_col_mesh_disabled" (
+                                                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int newton:maxHullVertices = 32768
+                                                                            }
+                                                                        }
+
+                                                                        over "l_index_finger_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.0342846
+                                                                            float drive:angular:physics:stiffness = 1.9484025
+                                                                        }
+                                                                    }
+
+                                                                    over "l_visual_18" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "l_finger2_link2_col_mesh_disabled" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "l_finger2_link2_col_mesh_disabled" (
+                                                                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform int newton:maxHullVertices = 32768
+                                                                        }
+                                                                    }
+
+                                                                    over "l_index_finger_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.0381346
+                                                                        float drive:angular:physics:stiffness = 2.22365
+                                                                    }
+                                                                }
+
+                                                                over "l_visual_15" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "l_finger2_link1_col_mesh_disabled" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "l_finger2_link1_col_mesh_disabled" (
+                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform int newton:maxHullVertices = 32768
+                                                                    }
+                                                                }
+
+                                                                over "l_index_finger_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.023416588
+                                                                    float drive:angular:physics:stiffness = 3.9127047
+                                                                }
+                                                            }
+
+                                                            over "l_middle_finger_proximal"
+                                                            {
+                                                                custom float mjc:gravcomp = 1
+
+                                                                over "l_middle_finger_proximal_abd"
+                                                                {
+                                                                    custom float mjc:gravcomp = 1
+
+                                                                    over "l_middle_finger_middle"
+                                                                    {
+                                                                        custom float mjc:gravcomp = 1
+
+                                                                        over "l_middle_finger_distal"
+                                                                        {
+                                                                            custom float mjc:gravcomp = 1
+
+                                                                            over "l_middle_finger_tip_sensor_frame"
+                                                                            {
+                                                                                custom float mjc:gravcomp = 1
+
+                                                                                over "l_visual_39" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                }
+
+                                                                                over "l_finger3_tip_sensor_col" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "l_finger2_tip_sensor_col" (
+                                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                    )
+                                                                                    {
+                                                                                        uniform int newton:maxHullVertices = 32768
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "l_visual_37" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "l_finger3_link4_col" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "l_finger2_link4_col" (
+                                                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int newton:maxHullVertices = 32768
+                                                                                }
+                                                                            }
+
+                                                                            over "l_middle_finger_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.011048804
+                                                                                float drive:angular:physics:stiffness = 2.0660336
+                                                                            }
+                                                                        }
+
+                                                                        over "l_visual_34" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "l_finger3_link3_col_mesh_disabled" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "l_finger2_link3_col_mesh_disabled" (
+                                                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int newton:maxHullVertices = 32768
+                                                                            }
+                                                                        }
+
+                                                                        over "l_middle_finger_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.03604832
+                                                                            float drive:angular:physics:stiffness = 1.843125
+                                                                        }
+                                                                    }
+
+                                                                    over "l_visual_31" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "l_finger3_link2_col_mesh_disabled" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "l_finger2_link2_col_mesh_disabled" (
+                                                                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform int newton:maxHullVertices = 32768
+                                                                        }
+                                                                    }
+
+                                                                    over "l_middle_finger_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.026961612
+                                                                        float drive:angular:physics:stiffness = 1.6967539
+                                                                    }
+                                                                }
+
+                                                                over "l_visual_28" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "l_finger3_link1_col_mesh_disabled" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "l_finger3_link1_col_mesh_disabled" (
+                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform int newton:maxHullVertices = 32768
+                                                                    }
+                                                                }
+
+                                                                over "l_middle_finger_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.022575306
+                                                                    float drive:angular:physics:stiffness = 3.7791991
+                                                                }
+                                                            }
+
+                                                            over "l_ring_finger_proximal"
+                                                            {
+                                                                custom float mjc:gravcomp = 1
+
+                                                                over "l_ring_finger_proximal_abd"
+                                                                {
+                                                                    custom float mjc:gravcomp = 1
+
+                                                                    over "l_ring_finger_middle"
+                                                                    {
+                                                                        custom float mjc:gravcomp = 1
+
+                                                                        over "l_ring_finger_distal"
+                                                                        {
+                                                                            custom float mjc:gravcomp = 1
+
+                                                                            over "l_ring_finger_tip_sensor_frame"
+                                                                            {
+                                                                                custom float mjc:gravcomp = 1
+
+                                                                                over "l_visual_52" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                }
+
+                                                                                over "l_finger4_tip_sensor_col" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "l_finger4_tip_sensor_col" (
+                                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                    )
+                                                                                    {
+                                                                                        uniform int newton:maxHullVertices = 32768
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "l_visual_50" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "l_finger4_link4_col" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "l_finger4_link4_col" (
+                                                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int newton:maxHullVertices = 32768
+                                                                                }
+                                                                            }
+
+                                                                            over "l_ring_finger_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.013889304
+                                                                                float drive:angular:physics:stiffness = 1.8849719
+                                                                            }
+                                                                        }
+
+                                                                        over "l_visual_47" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "l_finger4_link3_col_mesh_disabled" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "l_finger2_link3_col_mesh_disabled" (
+                                                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int newton:maxHullVertices = 32768
+                                                                            }
+                                                                        }
+
+                                                                        over "l_ring_finger_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.0384104
+                                                                            float drive:angular:physics:stiffness = 2.1478975
+                                                                        }
+                                                                    }
+
+                                                                    over "l_visual_44" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "l_finger4_link2_col_mesh_disabled" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "l_finger2_link2_col_mesh_disabled" (
+                                                                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform int newton:maxHullVertices = 32768
+                                                                        }
+                                                                    }
+
+                                                                    over "l_ring_finger_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.06851645
+                                                                        float drive:angular:physics:stiffness = 1.3626249
+                                                                    }
+                                                                }
+
+                                                                over "l_visual_41" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "l_finger4_link1_col_mesh_disabled" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "l_finger4_link1_col_mesh_disabled" (
+                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform int newton:maxHullVertices = 32768
+                                                                    }
+                                                                }
+
+                                                                over "l_ring_finger_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.031387463
+                                                                    float drive:angular:physics:stiffness = 3.7139878
+                                                                }
+                                                            }
+
+                                                            over "l_pinky_proximal"
+                                                            {
+                                                                custom float mjc:gravcomp = 1
+
+                                                                over "l_pinky_proximal_abd"
+                                                                {
+                                                                    custom float mjc:gravcomp = 1
+
+                                                                    over "l_pinky_middle"
+                                                                    {
+                                                                        custom float mjc:gravcomp = 1
+
+                                                                        over "l_pinky_distal"
+                                                                        {
+                                                                            custom float mjc:gravcomp = 1
+
+                                                                            over "l_pinky_tip_sensor_frame"
+                                                                            {
+                                                                                custom float mjc:gravcomp = 1
+
+                                                                                over "l_visual_65" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                }
+
+                                                                                over "l_finger5_tip_sensor_col" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "l_finger5_tip_sensor_col" (
+                                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                    )
+                                                                                    {
+                                                                                        uniform int newton:maxHullVertices = 32768
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "l_visual_63" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "l_finger5_link4_col" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "l_finger5_link4_col" (
+                                                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int newton:maxHullVertices = 32768
+                                                                                }
+                                                                            }
+
+                                                                            over "l_pinky_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.02452709
+                                                                                float drive:angular:physics:stiffness = 1.64176
+                                                                            }
+                                                                        }
+
+                                                                        over "l_visual_60" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "l_finger5_link3_col_mesh_disabled" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "l_finger5_link3_col_mesh_disabled" (
+                                                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int newton:maxHullVertices = 32768
+                                                                            }
+                                                                        }
+
+                                                                        over "l_pinky_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.043082368
+                                                                            float drive:angular:physics:stiffness = 2.15492
+                                                                        }
+                                                                    }
+
+                                                                    over "l_visual_57" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "l_finger5_link2_col_mesh_disabled" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "l_finger5_link2_col_mesh_disabled" (
+                                                                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform int newton:maxHullVertices = 32768
+                                                                        }
+                                                                    }
+
+                                                                    over "l_pinky_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.0372302
+                                                                        float drive:angular:physics:stiffness = 2.2755024
+                                                                    }
+                                                                }
+
+                                                                over "l_visual_54" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "l_finger5_link1_col_mesh_disabled" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "l_finger5_link1_col_mesh_disabled" (
+                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform int newton:maxHullVertices = 32768
+                                                                    }
+                                                                }
+
+                                                                over "l_pinky_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.031898048
+                                                                    float drive:angular:physics:stiffness = 4
+                                                                }
+                                                            }
+
+                                                            over "l_visual_0" (
+                                                                instanceable = false
+                                                            )
+                                                            {
+                                                            }
+
+                                                            over "l_palm_collision" (
+                                                                instanceable = false
+                                                            )
+                                                            {
+                                                                over "l_palm_collision" (
+                                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                )
+                                                                {
+                                                                    uniform int newton:maxHullVertices = 32768
+                                                                }
+                                                            }
+                                                        }
+
+                                                        over "l_visual_67" (
+                                                            instanceable = false
+                                                        )
+                                                        {
+                                                        }
+
+                                                        over "l_mount_collision" (
+                                                            instanceable = false
+                                                        )
+                                                        {
+                                                            over "l_mount_collision" (
+                                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                            )
+                                                            {
+                                                                uniform int newton:maxHullVertices = 32768
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                over "Link7_L_visual" (
+                                                    instanceable = false
+                                                )
+                                                {
+                                                    over "Link7_L_visual" (
+                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                    )
+                                                    {
+                                                        uniform int newton:maxHullVertices = 32768
+                                                    }
+                                                }
+
+                                                over "Joint7_L"
+                                                {
+                                                    float drive:angular:physics:damping = 8.463
+                                                    float drive:angular:physics:stiffness = 129.15
+                                                }
+                                            }
+
+                                            over "Link6_L_visual" (
+                                                instanceable = false
+                                            )
+                                            {
+                                                over "Link6_L_visual" (
+                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                )
+                                                {
+                                                    uniform int newton:maxHullVertices = 32768
+                                                }
+                                            }
+
+                                            over "Joint6_L"
+                                            {
+                                                float drive:angular:physics:damping = 12.4
+                                                float drive:angular:physics:stiffness = 202.5
+                                            }
+                                        }
+
+                                        over "Link5_L_visual" (
+                                            instanceable = false
+                                        )
+                                        {
+                                            over "Link5_L_visual" (
+                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                            )
+                                            {
+                                                uniform int newton:maxHullVertices = 32768
+                                            }
+                                        }
+
+                                        over "Joint5_L"
+                                        {
+                                            float drive:angular:physics:damping = 25.76
+                                            float drive:angular:physics:stiffness = 425
+                                        }
+                                    }
+
+                                    over "Link4_L_visual" (
+                                        instanceable = false
+                                    )
+                                    {
+                                        over "Link4_L_visual" (
+                                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                        )
+                                        {
+                                            uniform int newton:maxHullVertices = 32768
+                                        }
+                                    }
+
+                                    over "Joint4_L"
+                                    {
+                                        float drive:angular:physics:damping = 44.88
+                                        float drive:angular:physics:stiffness = 680
+                                    }
+                                }
+
+                                over "Link3_L_visual" (
+                                    instanceable = false
+                                )
+                                {
+                                    over "Link3_L_visual" (
+                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                    )
+                                    {
+                                        uniform int newton:maxHullVertices = 32768
+                                    }
+                                }
+
+                                over "Joint3_L"
+                                {
+                                    float drive:angular:physics:damping = 40
+                                    float drive:angular:physics:stiffness = 673.75
+                                }
+                            }
+
+                            over "Link2_L_visual" (
+                                instanceable = false
+                            )
+                            {
+                                over "Link2_L_visual" (
+                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                )
+                                {
+                                    uniform int newton:maxHullVertices = 32768
+                                }
+                            }
+
+                            over "Joint2_L"
+                            {
+                                float drive:angular:physics:damping = 38.25
+                                float drive:angular:physics:stiffness = 725
+                            }
+                        }
+
+                        over "Link1_L_visual" (
+                            instanceable = false
+                        )
+                        {
+                            over "Link1_L_visual" (
+                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                            )
+                            {
+                                uniform int newton:maxHullVertices = 32768
+                            }
+                        }
+
+                        over "Joint1_L"
+                        {
+                            float drive:angular:physics:damping = 50.4
+                            float drive:angular:physics:stiffness = 725
+                        }
+                    }
+
+                    over "Base_L_visual" (
+                        instanceable = false
+                    )
+                    {
+                        over "Base_L_visual" (
+                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                        )
+                        {
+                            uniform int newton:maxHullVertices = 32768
+                        }
+                    }
+                }
+
+                over "Base_R"
+                {
+                    custom float mjc:gravcomp = 1
+
+                    over "Link1_R"
+                    {
+                        custom float mjc:gravcomp = 1
+
+                        over "Link2_R"
+                        {
+                            custom float mjc:gravcomp = 1
+
+                            over "Link3_R"
+                            {
+                                custom float mjc:gravcomp = 1
+
+                                over "Link4_R"
+                                {
+                                    custom float mjc:gravcomp = 1
+
+                                    over "Link5_R"
+                                    {
+                                        custom float mjc:gravcomp = 1
+
+                                        over "Link6_R"
+                                        {
+                                            custom float mjc:gravcomp = 1
+
+                                            over "Link7_R"
+                                            {
+                                                custom float mjc:gravcomp = 1
+
+                                                over "TCP_Link_R"
+                                                {
+                                                    over "r_mount"
+                                                    {
+                                                        custom float mjc:gravcomp = 1
+
+                                                        over "r_wrist"
+                                                        {
+                                                            custom float mjc:gravcomp = 1
+
+                                                            over "r_thumb_proximal"
+                                                            {
+                                                                custom float mjc:gravcomp = 1
+
+                                                                over "r_thumb_proximal_abd"
+                                                                {
+                                                                    custom float mjc:gravcomp = 1
+
+                                                                    over "r_thumb_middle"
+                                                                    {
+                                                                        custom float mjc:gravcomp = 1
+
+                                                                        over "r_thumb_distal"
+                                                                        {
+                                                                            custom float mjc:gravcomp = 1
+
+                                                                            over "r_thumb_tip_sensor_frame"
+                                                                            {
+                                                                                custom float mjc:gravcomp = 1
+
+                                                                                over "r_visual_13" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                }
+
+                                                                                over "r_finger1_tip_sensor_col" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "r_finger1_tip_sensor_col" (
+                                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                    )
+                                                                                    {
+                                                                                        uniform int newton:maxHullVertices = 32768
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "r_visual_11" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "r_finger1_link4_col" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "r_finger1_link4_col" (
+                                                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int newton:maxHullVertices = 32768
+                                                                                }
+                                                                            }
+
+                                                                            over "r_thumb_ip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.026778214
+                                                                                float drive:angular:physics:stiffness = 0.7390494
+                                                                            }
+                                                                        }
+
+                                                                        over "r_visual_8" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "r_finger1_link3_col_mesh_disabled" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "r_finger1_link3_col_mesh_disabled" (
+                                                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int newton:maxHullVertices = 32768
+                                                                            }
+                                                                        }
+
+                                                                        over "r_thumb_mcp"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.047056768
+                                                                            float drive:angular:physics:stiffness = 0.886467
+                                                                        }
+                                                                    }
+
+                                                                    over "r_visual_5" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "r_finger1_link2_col_mesh_disabled" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "r_finger1_link2_col_mesh_disabled" (
+                                                                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform int newton:maxHullVertices = 32768
+                                                                        }
+                                                                    }
+
+                                                                    over "r_thumb_cmc_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.12
+                                                                        float drive:angular:physics:stiffness = 1.8470088
+                                                                    }
+                                                                }
+
+                                                                over "r_visual_2" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "r_finger1_link1_col_mesh_disabled" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "r_finger1_link1_col_mesh_disabled" (
+                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform int newton:maxHullVertices = 32768
+                                                                    }
+                                                                }
+
+                                                                over "r_thumb_cmc_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.06409536
+                                                                    float drive:angular:physics:stiffness = 2.373265
+                                                                }
+                                                            }
+
+                                                            over "r_index_finger_proximal"
+                                                            {
+                                                                custom float mjc:gravcomp = 1
+
+                                                                over "r_index_finger_proximal_abd"
+                                                                {
+                                                                    custom float mjc:gravcomp = 1
+
+                                                                    over "r_index_finger_middle"
+                                                                    {
+                                                                        custom float mjc:gravcomp = 1
+
+                                                                        over "r_index_finger_distal"
+                                                                        {
+                                                                            custom float mjc:gravcomp = 1
+
+                                                                            over "r_index_finger_tip_sensor_frame"
+                                                                            {
+                                                                                custom float mjc:gravcomp = 1
+
+                                                                                over "r_visual_26" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                }
+
+                                                                                over "r_finger2_tip_sensor_col" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "r_finger2_tip_sensor_col" (
+                                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                    )
+                                                                                    {
+                                                                                        uniform int newton:maxHullVertices = 32768
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "r_visual_24" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "r_finger2_link4_col" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "r_finger2_link4_col" (
+                                                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int newton:maxHullVertices = 32768
+                                                                                }
+                                                                            }
+
+                                                                            over "r_index_finger_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.0246096
+                                                                                float drive:angular:physics:stiffness = 1.0174572
+                                                                            }
+                                                                        }
+
+                                                                        over "r_visual_21" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "r_finger2_link3_col_mesh_disabled" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "r_finger2_link3_col_mesh_disabled" (
+                                                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int newton:maxHullVertices = 32768
+                                                                            }
+                                                                        }
+
+                                                                        over "r_index_finger_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.0342846
+                                                                            float drive:angular:physics:stiffness = 1.9484025
+                                                                        }
+                                                                    }
+
+                                                                    over "r_visual_18" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "r_finger2_link2_col_mesh_disabled" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "r_finger2_link2_col_mesh_disabled" (
+                                                                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform int newton:maxHullVertices = 32768
+                                                                        }
+                                                                    }
+
+                                                                    over "r_index_finger_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.039551027
+                                                                        float drive:angular:physics:stiffness = 1.0584574
+                                                                    }
+                                                                }
+
+                                                                over "r_visual_15" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "r_finger2_link1_col_mesh_disabled" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "r_finger2_link1_col_mesh_disabled" (
+                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform int newton:maxHullVertices = 32768
+                                                                    }
+                                                                }
+
+                                                                over "r_index_finger_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.06257064
+                                                                    float drive:angular:physics:stiffness = 2.4812398
+                                                                }
+                                                            }
+
+                                                            over "r_middle_finger_proximal"
+                                                            {
+                                                                custom float mjc:gravcomp = 1
+
+                                                                over "r_middle_finger_proximal_abd"
+                                                                {
+                                                                    custom float mjc:gravcomp = 1
+
+                                                                    over "r_middle_finger_middle"
+                                                                    {
+                                                                        custom float mjc:gravcomp = 1
+
+                                                                        over "r_middle_finger_distal"
+                                                                        {
+                                                                            custom float mjc:gravcomp = 1
+
+                                                                            over "r_middle_finger_tip_sensor_frame"
+                                                                            {
+                                                                                custom float mjc:gravcomp = 1
+
+                                                                                over "r_visual_39" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                }
+
+                                                                                over "r_finger3_tip_sensor_col" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "r_finger2_tip_sensor_col" (
+                                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                    )
+                                                                                    {
+                                                                                        uniform int newton:maxHullVertices = 32768
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "r_visual_37" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "r_finger3_link4_col" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "r_finger2_link4_col" (
+                                                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int newton:maxHullVertices = 32768
+                                                                                }
+                                                                            }
+
+                                                                            over "r_middle_finger_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.024423672
+                                                                                float drive:angular:physics:stiffness = 1.1009867
+                                                                            }
+                                                                        }
+
+                                                                        over "r_visual_34" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "r_finger3_link3_col_mesh_disabled" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "r_finger2_link3_col_mesh_disabled" (
+                                                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int newton:maxHullVertices = 32768
+                                                                            }
+                                                                        }
+
+                                                                        over "r_middle_finger_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.0327712
+                                                                            float drive:angular:physics:stiffness = 1.843125
+                                                                        }
+                                                                    }
+
+                                                                    over "r_visual_31" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "r_finger3_link2_col_mesh_disabled" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "r_finger2_link2_col_mesh_disabled" (
+                                                                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform int newton:maxHullVertices = 32768
+                                                                        }
+                                                                    }
+
+                                                                    over "r_middle_finger_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.07432376
+                                                                        float drive:angular:physics:stiffness = 0.5512565
+                                                                    }
+                                                                }
+
+                                                                over "r_visual_28" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "r_finger3_link1_col_mesh_disabled" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "r_finger3_link1_col_mesh_disabled" (
+                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform int newton:maxHullVertices = 32768
+                                                                    }
+                                                                }
+
+                                                                over "r_middle_finger_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.0548388
+                                                                    float drive:angular:physics:stiffness = 2.2757416
+                                                                }
+                                                            }
+
+                                                            over "r_ring_finger_proximal"
+                                                            {
+                                                                custom float mjc:gravcomp = 1
+
+                                                                over "r_ring_finger_proximal_abd"
+                                                                {
+                                                                    custom float mjc:gravcomp = 1
+
+                                                                    over "r_ring_finger_middle"
+                                                                    {
+                                                                        custom float mjc:gravcomp = 1
+
+                                                                        over "r_ring_finger_distal"
+                                                                        {
+                                                                            custom float mjc:gravcomp = 1
+
+                                                                            over "r_ring_finger_tip_sensor_frame"
+                                                                            {
+                                                                                custom float mjc:gravcomp = 1
+
+                                                                                over "r_visual_52" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                }
+
+                                                                                over "r_finger4_tip_sensor_col" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "r_finger2_tip_sensor_col" (
+                                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                    )
+                                                                                    {
+                                                                                        uniform int newton:maxHullVertices = 32768
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "r_visual_50" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "r_finger4_link4_col" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "r_finger2_link4_col" (
+                                                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int newton:maxHullVertices = 32768
+                                                                                }
+                                                                            }
+
+                                                                            over "r_ring_finger_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.027482113
+                                                                                float drive:angular:physics:stiffness = 1.0044992
+                                                                            }
+                                                                        }
+
+                                                                        over "r_visual_47" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "r_finger4_link3_col_mesh_disabled" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "r_finger2_link3_col_mesh_disabled" (
+                                                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int newton:maxHullVertices = 32768
+                                                                            }
+                                                                        }
+
+                                                                        over "r_ring_finger_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.0329232
+                                                                            float drive:angular:physics:stiffness = 1.3316964
+                                                                        }
+                                                                    }
+
+                                                                    over "r_visual_44" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "r_finger4_link2_col_mesh_disabled" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "r_finger2_link2_col_mesh_disabled" (
+                                                                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform int newton:maxHullVertices = 32768
+                                                                        }
+                                                                    }
+
+                                                                    over "r_ring_finger_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.07661384
+                                                                        float drive:angular:physics:stiffness = 0.7786428
+                                                                    }
+                                                                }
+
+                                                                over "r_visual_41" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "r_finger4_link1_col_mesh_disabled" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "r_finger4_link1_col_mesh_disabled" (
+                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform int newton:maxHullVertices = 32768
+                                                                    }
+                                                                }
+
+                                                                over "r_ring_finger_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.0554508
+                                                                    float drive:angular:physics:stiffness = 2.2364728
+                                                                }
+                                                            }
+
+                                                            over "r_pinky_proximal"
+                                                            {
+                                                                custom float mjc:gravcomp = 1
+
+                                                                over "r_pinky_proximal_abd"
+                                                                {
+                                                                    custom float mjc:gravcomp = 1
+
+                                                                    over "r_pinky_middle"
+                                                                    {
+                                                                        custom float mjc:gravcomp = 1
+
+                                                                        over "r_pinky_distal"
+                                                                        {
+                                                                            custom float mjc:gravcomp = 1
+
+                                                                            over "r_pinky_tip_sensor_frame"
+                                                                            {
+                                                                                custom float mjc:gravcomp = 1
+
+                                                                                over "r_visual_65" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                }
+
+                                                                                over "r_finger5_tip_sensor_col" (
+                                                                                    instanceable = false
+                                                                                )
+                                                                                {
+                                                                                    over "r_finger5_tip_sensor_col" (
+                                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                    )
+                                                                                    {
+                                                                                        uniform int newton:maxHullVertices = 32768
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                            over "r_visual_63" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                            }
+
+                                                                            over "r_finger5_link4_col" (
+                                                                                instanceable = false
+                                                                            )
+                                                                            {
+                                                                                over "r_finger5_link4_col" (
+                                                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                                )
+                                                                                {
+                                                                                    uniform int newton:maxHullVertices = 32768
+                                                                                }
+                                                                            }
+
+                                                                            over "r_pinky_dip"
+                                                                            {
+                                                                                float drive:angular:physics:damping = 0.020611
+                                                                                float drive:angular:physics:stiffness = 0.656704
+                                                                            }
+                                                                        }
+
+                                                                        over "r_visual_60" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                        }
+
+                                                                        over "r_finger5_link3_col_mesh_disabled" (
+                                                                            instanceable = false
+                                                                        )
+                                                                        {
+                                                                            over "r_finger5_link3_col_mesh_disabled" (
+                                                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                            )
+                                                                            {
+                                                                                uniform int newton:maxHullVertices = 32768
+                                                                            }
+                                                                        }
+
+                                                                        over "r_pinky_pip"
+                                                                        {
+                                                                            float drive:angular:physics:damping = 0.033604246
+                                                                            float drive:angular:physics:stiffness = 1.3360504
+                                                                        }
+                                                                    }
+
+                                                                    over "r_visual_57" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                    }
+
+                                                                    over "r_finger5_link2_col_mesh_disabled" (
+                                                                        instanceable = false
+                                                                    )
+                                                                    {
+                                                                        over "r_finger5_link2_col_mesh_disabled" (
+                                                                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                        )
+                                                                        {
+                                                                            uniform int newton:maxHullVertices = 32768
+                                                                        }
+                                                                    }
+
+                                                                    over "r_pinky_mcp_abd"
+                                                                    {
+                                                                        float drive:angular:physics:damping = 0.03794502
+                                                                        float drive:angular:physics:stiffness = 0.910201
+                                                                    }
+                                                                }
+
+                                                                over "r_visual_54" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                }
+
+                                                                over "r_finger5_link1_col_mesh_disabled" (
+                                                                    instanceable = false
+                                                                )
+                                                                {
+                                                                    over "r_finger5_link1_col_mesh_disabled" (
+                                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                    )
+                                                                    {
+                                                                        uniform int newton:maxHullVertices = 32768
+                                                                    }
+                                                                }
+
+                                                                over "r_pinky_mcp_flex"
+                                                                {
+                                                                    float drive:angular:physics:damping = 0.089069165
+                                                                    float drive:angular:physics:stiffness = 3.281187
+                                                                }
+                                                            }
+
+                                                            over "r_visual_0" (
+                                                                instanceable = false
+                                                            )
+                                                            {
+                                                            }
+
+                                                            over "r_palm_collision" (
+                                                                instanceable = false
+                                                            )
+                                                            {
+                                                                over "r_palm_collision" (
+                                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                                )
+                                                                {
+                                                                    uniform int newton:maxHullVertices = 32768
+                                                                }
+                                                            }
+                                                        }
+
+                                                        over "r_visual_67" (
+                                                            instanceable = false
+                                                        )
+                                                        {
+                                                        }
+
+                                                        over "r_mount_collision" (
+                                                            instanceable = false
+                                                        )
+                                                        {
+                                                            over "r_mount_collision" (
+                                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                            )
+                                                            {
+                                                                uniform int newton:maxHullVertices = 32768
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                over "Link7_R_visual" (
+                                                    instanceable = false
+                                                )
+                                                {
+                                                    over "Link7_R_visual" (
+                                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                    )
+                                                    {
+                                                        uniform int newton:maxHullVertices = 32768
+                                                    }
+                                                }
+
+                                                over "Joint7_R"
+                                                {
+                                                    float drive:angular:physics:damping = 8.463
+                                                    float drive:angular:physics:stiffness = 129.15
+                                                }
+                                            }
+
+                                            over "Link6_R_visual" (
+                                                instanceable = false
+                                            )
+                                            {
+                                                over "Link6_L_visual" (
+                                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                                )
+                                                {
+                                                    uniform int newton:maxHullVertices = 32768
+                                                }
+                                            }
+
+                                            over "Joint6_R"
+                                            {
+                                                float drive:angular:physics:damping = 12.4
+                                                float drive:angular:physics:stiffness = 202.5
+                                            }
+                                        }
+
+                                        over "Link5_R_visual" (
+                                            instanceable = false
+                                        )
+                                        {
+                                            over "Link5_R_visual" (
+                                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                            )
+                                            {
+                                                uniform int newton:maxHullVertices = 32768
+                                            }
+                                        }
+
+                                        over "Joint5_R"
+                                        {
+                                            float drive:angular:physics:damping = 28.336
+                                            float drive:angular:physics:stiffness = 425
+                                        }
+                                    }
+
+                                    over "Link4_R_visual" (
+                                        instanceable = false
+                                    )
+                                    {
+                                        over "Link4_L_visual" (
+                                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                        )
+                                        {
+                                            uniform int newton:maxHullVertices = 32768
+                                        }
+                                    }
+
+                                    over "Joint4_R"
+                                    {
+                                        float drive:angular:physics:damping = 44.88
+                                        float drive:angular:physics:stiffness = 680
+                                    }
+                                }
+
+                                over "Link3_R_visual" (
+                                    instanceable = false
+                                )
+                                {
+                                    over "Link3_L_visual" (
+                                        prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                    )
+                                    {
+                                        uniform int newton:maxHullVertices = 32768
+                                    }
+                                }
+
+                                over "Joint3_R"
+                                {
+                                    float drive:angular:physics:damping = 36.4
+                                    float drive:angular:physics:stiffness = 660
+                                }
+                            }
+
+                            over "Link2_R_visual" (
+                                instanceable = false
+                            )
+                            {
+                                over "Link2_L_visual" (
+                                    prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                                )
+                                {
+                                    uniform int newton:maxHullVertices = 32768
+                                }
+                            }
+
+                            over "Joint2_R"
+                            {
+                                float drive:angular:physics:damping = 45
+                                float drive:angular:physics:stiffness = 725
+                            }
+                        }
+
+                        over "Link1_R_visual" (
+                            instanceable = false
+                        )
+                        {
+                            over "Link1_L_visual" (
+                                prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                            )
+                            {
+                                uniform int newton:maxHullVertices = 32768
+                            }
+                        }
+
+                        over "Joint1_R"
+                        {
+                            float drive:angular:physics:damping = 55.44
+                            float drive:angular:physics:stiffness = 725
+                        }
+                    }
+
+                    over "Base_R_visual" (
+                        instanceable = false
+                    )
+                    {
+                        over "Base_L_visual" (
+                            prepend apiSchemas = ["NewtonMeshCollisionAPI"]
+                        )
+                        {
+                            uniform int newton:maxHullVertices = 32768
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    over "Materials"
+    {
+        over "floor_mat" (
+            instanceable = false
+        )
+        {
+        }
+
+        over "steel" (
+            instanceable = false
+        )
+        {
+        }
+
+        over "rubber" (
+            instanceable = false
+        )
+        {
+        }
+
+        over "aluminum" (
+            instanceable = false
+        )
+        {
+        }
+    }
+    variantSet "Physics" = {
+        "mujoco" (
+            prepend payload = @./payloads/Physics/mujoco.usda@
+        ) {
+
+        }
+        "none" {
+
+        }
+        "physics" (
+            prepend payload = @./payloads/Physics/physics.usda@
+        ) {
+
+        }
+        "physx" (
+            prepend payload = @./payloads/Physics/physx.usda@
+        ) {
+
+        }
+    }
+}

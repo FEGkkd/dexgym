@@ -37,6 +37,11 @@ and [motion data tools](data/README.md) remain available independently.
 - [S0 task implementation](source/dexgym/tasks/direct/marvin54_s0/) for one
   goal-conditioned 54 DoF Actor, learned dynamics and a physical failure head.
 
+## Wholebody S0 Teleoperation
+
+- [Wholebody S0 guide](source/dexgym/tasks/direct/wholebody_s0/README.md) covers MANUS and wrist Tracker MCAP processing, dual-arm retargeting, reference motion screening, Newton training, and native MuJoCo replay.
+- Dedicated [PPO and SuperMimic tasks](source/dexgym/tasks/direct/wholebody_s0/) learn bounded residuals on the same 54-DoF retargeted references. The retargeted pose reward tracks both wrists, ten wrist-local fingertip poses, and the relative pose of the two wrists.
+
 ## Install and verify
 
 Use Python 3.12 and the Isaac Lab 3.0 / Isaac Sim 6 / Newton GPU environment.

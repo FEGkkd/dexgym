@@ -28,9 +28,10 @@ TIP_SITE_NAMES = (
 
 
 class WujiRetargetSession:
-    """Call the same right-hand C SDK retarget API used by whole_body_teleop."""
+    """Call the same Hand2 C SDK retarget API used by whole_body_teleop."""
 
-    def __init__(self, library_path: str | Path):
+    def __init__(self, library_path: str | Path, *, side: str = "right"):
+        handedness = {"left": 0, "right": 1}[side]
         self._library = ctypes.CDLL(str(Path(library_path).expanduser().resolve()))
         lib = self._library
         lib.wuji_version.argtypes = []
@@ -57,7 +58,7 @@ class WujiRetargetSession:
         if lib.wuji_init(None) != 0:
             raise RuntimeError("wuji_init failed")
         self._session = ctypes.c_void_p()
-        status = lib.wuji_retarget_session_create(1, 1, ctypes.byref(self._session))  # Hand2, right
+        status = lib.wuji_retarget_session_create(1, handedness, ctypes.byref(self._session))
         if status != 0:
             lib.wuji_shutdown()
             raise RuntimeError(f"wuji_retarget_session_create failed: {status}")

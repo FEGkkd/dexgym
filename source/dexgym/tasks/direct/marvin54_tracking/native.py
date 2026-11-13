@@ -38,9 +38,11 @@ def simulation_cfg():
     )
 
 
-def create_tracking_scene(cfg, num_envs, model, names):
+def create_tracking_scene(cfg, num_envs, model, names, *, robot_usd=None):
     sim = SimulationContext(cfg)
     scene_cfg = TrackingSceneCfg(num_envs=num_envs, env_spacing=3.0)
+    if robot_usd is not None:
+        scene_cfg.robot = make_robot_cfg(usd_path=robot_usd)
     drives = drive_parameters(model, names)
     actuator = scene_cfg.robot.actuators["all"]
     actuator.stiffness = {name: drive["kp"] for name, drive in drives.items()}
