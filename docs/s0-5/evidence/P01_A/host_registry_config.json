@@ -1,0 +1,111 @@
+{
+  "schema": "s05.p01a.host-roots.v1",
+  "output_root": "/home/ubuntu/dexgym_data/s0-5/p01",
+  "native_storage": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/data/raw/episodes",
+  "raw_roots": [
+    {
+      "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/data/raw/episodes",
+      "mode": "native",
+      "label": "collector_native"
+    },
+    {
+      "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0",
+      "mode": "native_index",
+      "label": "dexgym_raw_index"
+    },
+    {
+      "path": "/home/ubuntu/teleop_ws/data",
+      "mode": "legacy",
+      "label": "teleop_ws_legacy"
+    }
+  ],
+  "native_attestation": {
+    "live_profiles": [
+      "real",
+      "real_full",
+      "real_no_head"
+    ],
+    "source_modes": [
+      "external",
+      "managed"
+    ],
+    "publisher_by_stream": {
+      "manus_left": "//manus_data_publisher",
+      "manus_right": "//manus_data_publisher",
+      "tracker_left_raw": "//vive_tracker_node",
+      "tracker_right_raw": "//vive_tracker_node"
+    }
+  },
+  "positive_replays": {
+    "/home/ubuntu/teleop_ws/data/s0_sim_20261117_153201": {
+      "metadata_sha256": "03ed07f3220d08e4494675e9c7746413717c6d83ece82663d36809e9d9f6c52e",
+      "evidence_ref": "docs/s0-5/reports/P00_review_fix.md#\u5f55\u5305\u65f6\u95f4\u4e0e\u6765\u6e90\u7684\u65b0\u53d1\u73b0"
+    }
+  },
+  "history_roots": [
+    {
+      "family": "wholebody_s0",
+      "paths": [
+        "/home/ubuntu/dexgym/data/processed/wholebody_s0"
+      ]
+    },
+    {
+      "family": "wholebody_s0_1",
+      "paths": [
+        "/home/ubuntu/dexgym/data/processed/wholebody_s0-1",
+        "/home/ubuntu/dexgym/data/wholebody_s0-1_policy_sim"
+      ]
+    },
+    {
+      "family": "wholebody_s0_2",
+      "paths": [
+        "/home/ubuntu/dexgym/data/processed/wholebody_s0-2",
+        "/home/ubuntu/dexgym/wholebody_s0_2"
+      ]
+    },
+    {
+      "family": "marvin54",
+      "paths": [
+        "/home/ubuntu/dexgym_data/marvin54_hand_centric_s0_20261112",
+        "/home/ubuntu/dexgym/marvin54_hand_centric_s0_reports",
+        "/home/ubuntu/dexgym/data/processed/marvin54_hand_centric_s0",
+        "/home/ubuntu/dexgym_worktrees/s0-5/docs/s0-5/evidence/P00_review_fix/marvin54_archive_witness.json"
+      ]
+    },
+    {
+      "family": "wholebody_s04",
+      "paths": [
+        "/home/ubuntu/dexgym/data/processed/wholebody-s04",
+        "/home/ubuntu/dexgym/data/processed/wholebody-s03"
+      ]
+    }
+  ],
+  "s04_used_manifest": {
+    "provenance": "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_aligned_from_scratch_20261125/train/provenance.json",
+    "state": "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_aligned_from_scratch_20261125/train/state.json",
+    "bank": "/home/ubuntu/dexgym/data/processed/wholebody-s04/contact_replay_filtered_6000_20261125/bank_round_2/manifest.json"
+  },
+  "pinned_runtime_sha256": {
+    "dexgym": "82b05b9f4857cd225f2b1eb24647f0bcf7343178bf023f447598cdc78d4fc0bf",
+    "dexgym.tasks.direct.wholebody_s0.bag": "22bf183b81fb0a060ec23008ef4bddd41f459ef0a075e7abba225cb4f3996dea",
+    "dexgym.tasks.direct.wholebody_s0.sync": "a1316b4b5f8fa6141011349689e025c43bda26a0031ccf1f73272c30391406d9",
+    "numpy": "22cd1535fa14d74ef6f457cca149ffdc80875f460be313b8f895273f78bc402e",
+    "scipy": "5df3106bce68233cec43e84208135d8f18fb6e07d2770fbc157fce32bab28c50",
+    "yaml": "6e1974e6a49e3bed59c654918c6aef9769bd9eb5dbd67f7e1906ad4cdd0caea7",
+    "rosbag2_py": "158b4c439188d26dcd914ec043c49f35a997f49b2535fc0e1f8f9dfd612f0886",
+    "rclpy.serialization": "87a380a8c45fd0d4b56349fa73dd13ec2c082d8ab76a9be0fffbe9c65d698b54",
+    "rosidl_runtime_py.utilities": "e232be4bad9322118e5702fa76bda75f51678c1ad1984ce6f21742dc69ed5e0c",
+    "mcap": "f048c80bc12be019fc3e112b8b34d7ad95584e06fab47823d342ebac154d6170",
+    "mcap.reader": "364760096dfd79fc6392fefee18184b53b8bb6cdd3269e8a46d090a4798665be",
+    "gymnasium": "6a0bc3c49302a51d9a2431243acfee9e0375745413dbd321c20bdf3530acb615",
+    "cloudpickle": "2332a6f4cce58df847f9098dfe8fb33f9422993c1bb6025e4636bc9eb1856a74",
+    "zstandard": "5dd909e0b60a946a0b08deaf57545d17dc044f5df4040beec55f7ef6c6fecd11",
+    "lz4": "7adb15f971bdbe00a7f842ab169cd626c188a7e554b47fada4dad098c9831025",
+    "mcap_ros2.decoder": "f502e62074329c6111d4dbb9280d48d3f21cf7dc91fc33aeda8e451f5ffe78e2",
+    "mcap_ros2._dynamic": "7058b5702e10aa16370b4d2ee7e6b23c32b61ad83e56ecec1fefd5e81b05d2b5",
+    "manus_ros2_msgs.msg": "6dcfc70af22de2942a158e1353dcbe8529003ff30d7f0ff4a38f3e90bb10988f",
+    "tianji_interfaces.msg": "1d8ba4f2ba868e27cf9a0f7e72c9fa869adc30ba800d29066efebe64a4f025b9",
+    "manus_wuji_interfaces.msg": "ce8530eb61152eb9b1512e1dcf164d239fde74b7b521a8bd0fee7fded0eec6d3",
+    "dex_collection_interfaces.msg": "47869ef9e61e91dbc54135d6b3f0c4038de8c9556311bab14731f24a5c18ade3"
+  }
+}

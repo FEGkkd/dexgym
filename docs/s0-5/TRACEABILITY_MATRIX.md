@@ -4,7 +4,7 @@
 
 | Requirement ID | 设计 | 模块 | Phase | Unit test | Integration test | Metric / criterion | Evidence path | 当前状态 |
 |---|---|---|---|---|---|---|---|---|
-| S05-REQ-001 | M1/C1 | data/source_registry.py | P01 | reject_non_teleop_and_policy_rerecord | teleop_fixture_and_telemetry_eligibility | P01 A1/B1/B2，两种源、原始节点与遥测资格，排除仿真/EgoPro。 | evidence/P01/<Run ID> | NOT_STARTED |
+| S05-REQ-001 | M1/C1 | data/source_registry.py | P01 | test_egopro_and_simulation_are_excluded_even_with_human_topics | test_native_original_and_symlink_alias_are_tied、test_legacy_telemetry_is_capability_only_and_sim_excluded；B1/B2 另验 | P01 A1/B1/B2，两种源、原始节点与遥测资格，排除仿真/EgoPro。 | [P01-A 审核](reports/P01_A_acceptance.md) | A1 来源与候选状态见报告，B1/B2 未执行 |
 | S05-REQ-002 | M4–M5/C3 | task/action.py | P04 | logical_joint_bijection_and_axis_effect | physical_54_axis_residual_and_zero_equivalence | 54 个独立动作作用及顺序实测，合法零动作等价 B1+。 | evidence/P04/<Run ID> | NOT_STARTED |
 | S05-REQ-003 | M5/C2,C4 | task/observation.py | P04 | future_mutation_prefix_invariance | live_builder_and_rollout_prefix | 相同可用输入前缀输出相同，Actor 字段白名单及 Critic 隔离。 | evidence/P04/<Run ID> | NOT_STARTED |
 | S05-REQ-004 | M3/C1 | intent/geometry.py | P02 | wrist_local_fk_frame_pinch | raw_mapped_feasible_sdk_audit | 原始、映射、可行各自保存。位置误差分解可重建，对捏与相对几何通过分层验证。 | evidence/P02/<Run ID> | NOT_STARTED |
@@ -14,8 +14,8 @@
 | S05-REQ-008 | M3/E4 | intent/relative.py | P06 | cross_hand_and_relative_pose_se3 | independent_and_coordinated_dual_arm_motion | 双手相对 P95 ≤3 mm 挑战，左右独动与同动分报。 | evidence/P06/<Run ID> | NOT_STARTED |
 | S05-REQ-009 | M5,M8/E4 | deploy/timing.py | P10 | timestamp_latency_accounting | target_host_batch1_and_sensor_to_motion | Actor P99 ≤5 ms、端到端 ≤50 ms 挑战，在目标平台独立测量。 | evidence/P10/<Run ID> | NOT_STARTED |
 | S05-REQ-010 | M4,M8/C3 | control/safety.py | P03 | position_velocity_coupling_collision_infeasible | swept_safety_timeout_and_fallback | 可行命令满足显式限制，超时/不可行触发确定回退，记录介入与失败。 | evidence/P03/<Run ID> | NOT_STARTED |
-| S05-REQ-011 | M3/C1,C6 | data/manifest.py | P01 | same_parent_never_crosses_split_hash | lineage_prior_use_and_final_test_seal | P01 A1/D1/F1，根与角色隔离、历史继承和封存清单。 | evidence/P01/<Run ID> | NOT_STARTED |
-| S05-REQ-012 | M3,M5/C1,C2 | data/synchronize.py | P01 | timestamp_cutoff_future_replacement_deletion | mcap_fixture_clock_quality_and_source_trace | P01 C1/C2，单位、时钟等级、逐帧因果索引和边界负控。 | evidence/P01/<Run ID> | NOT_STARTED |
+| S05-REQ-011 | M3/C1,C6 | data/lineage.py、data/historical_usage.py、计划的 data/manifest.py | P01 | test_history_propagates_through_child_to_all_parent_roots、test_unknown_or_historical_root_cannot_enter_final_test | test_real_historical_metadata_and_pending_witness、test_published_hashes_and_status_conservation；封存另验 | P01 A1/D1/F1，根与角色隔离、历史继承和封存清单。 | [P01-A 审核](reports/P01_A_acceptance.md) | A1 证据已登记；D1/F1 未执行，独立 Final Test BLOCKED |
+| S05-REQ-012 | M3,M5/C1,C2 | data/synchronize.py | P01 | timestamp_cutoff_future_replacement_deletion | mcap_fixture_clock_quality_and_source_trace | P01 C1/C2，单位、时钟等级、逐帧因果索引和边界负控。 | [P01-A 时间字段证据](reports/P01_A_acceptance.md#新增时钟及消息问题) | 原始字段来源已定位，C1/C2 未执行 |
 | S05-REQ-013 | M3,M4/C1,C3 | intent/oracle.py | P02 | constraint_oracle_known_pose_impossible | hard_pose_multistart_residual_decomposition | 记录无解、超时和多初值，区分静态可达与动态能力。 | evidence/P02/<Run ID> | NOT_STARTED |
 | S05-REQ-014 | M3–M4/C1,C3 | intent/kinematics.py | P02 | torch_vs_mujoco_fk_and_fd_jacobian | 54_joint_named_fk_multiple_poses | 独立 CPU 模型与 Torch FK、解析 Jacobian 与有限差分匹配，容差有来源。 | evidence/P02/<Run ID> | NOT_STARTED |
 | S05-REQ-015 | M4–M5/C2 | control/servo.py | P03 | cpu_gpu_step_response_filter_state | same_profile_multi_axis_step_and_delay | CPU/GPU 滤波、跟踪与响应一致；臂与手的物理对齐独立定量。 | evidence/P03/<Run ID> | NOT_STARTED |
@@ -32,5 +32,5 @@
 | S05-REQ-026 | M7/E1,E3,E5 | eval/final_compare.py | P09 | frozen_split_config_and_ablation_control | locked_checkpoints_multi_seed_paired_test | 预注册全面消融、多种子、冻结后评 Test，强基线相对收益与不确定性。 | evidence/P09/<Run ID> | NOT_STARTED |
 | S05-REQ-027 | M5,M8/C4,C6 | deploy/controller.py | P10 | exported_policy_and_builder_equivalence | shadow_hil_without_motion_bank | 导出前后逐项等价，证明脱离 Motion Bank，长时在线与看门狗通过。 | evidence/P10/<Run ID> | NOT_STARTED |
 | S05-REQ-028 | M8/E4 | deploy/hardware_gate.md | P10 | authorization_interlock_and_logging | authorized_staged_external_metrology | Shadow/HIL/真机分别授权，外部计量和编码器 FK 分开报告。 | evidence/P10/<Run ID> | NOT_STARTED |
-| S05-REQ-029 | M9/C6 | docs/s0-5/ | P00 | stage_transition_manifest_negative_controls | historic_replay_and_readiness_witness_integrity | 历史 Git 回放、执行基线与证据可复验，人工状态转换。 | [P00 Review Fix](reports/P00_review_fix.md) | P00 报告裁定 |
+| S05-REQ-029 | M9/C6 | docs/s0-5/ | P00 | stage_transition_manifest_negative_controls | historic_replay_and_readiness_witness_integrity | 历史 Git 回放、执行基线与证据可复验，人工状态转换。 | [P00 Review Fix](reports/P00_review_fix.md)、[人工签核](reports/approvals/P00_ACCEPTED_P01_A.md) | P00 ACCEPTED |
 | S05-REQ-030 | M7/E4 | eval/preregister.md | P03 | protocol_target_and_threshold_version | oracle_servo_baselines_and_preregister | P02/P03 验证挑战可行性；正式 RL 前冻结相对门槛与退化界限，标准变化需审批。 | evidence/P03/<Run ID> | NOT_STARTED |

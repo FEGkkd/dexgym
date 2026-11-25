@@ -1,8 +1,8 @@
 {
   "schema": "s05.phase-state.v1",
   "current": {
-    "P00": "READY_FOR_REVIEW",
-    "P01": "NOT_STARTED",
+    "P00": "ACCEPTED",
+    "P01": "IN_PROGRESS",
     "P02": "NOT_STARTED",
     "P03": "NOT_STARTED",
     "P04": "NOT_STARTED",
@@ -30,11 +30,61 @@
       "at": "2026-11-26T00:13:10+08:00",
       "evidence_ref": "reports/P00_acceptance.md",
       "timestamp_basis": "published original P00 commit cc05f09847254ddae3b76581fb9e1feed4f31065"
+    },
+    {
+      "phase": "P00",
+      "from": "READY_FOR_REVIEW",
+      "to": "ACCEPTED",
+      "at": "2026-11-26T00:55:48+08:00",
+      "evidence_ref": "reports/approvals/P00_ACCEPTED_P01_A.md",
+      "approval": {
+        "type": "human",
+        "by": "project user",
+        "ref": "reports/approvals/P00_ACCEPTED_P01_A.md"
+      },
+      "timestamp_basis": "first Ubuntu observation after explicit user approval"
+    },
+    {
+      "phase": "P01",
+      "from": "NOT_STARTED",
+      "to": "IN_PROGRESS",
+      "at": "2026-11-26T00:55:48+08:00",
+      "evidence_ref": "reports/approvals/P00_ACCEPTED_P01_A.md",
+      "authorization_ref": "reports/approvals/P00_ACCEPTED_P01_A.md",
+      "spec_sha256": "662ffd475dc40eb0769c0d2c474b5c526916d168c2413c67b98c4fecb624013a",
+      "scope": "P01-A only",
+      "timestamp_basis": "first Ubuntu observation after authorization"
     }
   ],
   "review_fix_ref": "reports/P00_review_fix.md",
   "final_test": {
     "status": "BLOCKED",
     "reason": "independent source lineage and sealed manifest have not been established"
-  }
+  },
+  "p01_subphases": {
+    "P01-A": "READY_FOR_REVIEW",
+    "P01-B": "NOT_STARTED",
+    "P01-C": "NOT_STARTED",
+    "P01-D": "NOT_STARTED",
+    "P01-E": "NOT_STARTED",
+    "P01-F": "NOT_STARTED"
+  },
+  "p01_subphase_events": [
+    {
+      "phase": "P01-A",
+      "from": "NOT_STARTED",
+      "to": "IN_PROGRESS",
+      "at": "2026-11-26T00:55:48+08:00",
+      "authorization_ref": "reports/approvals/P00_ACCEPTED_P01_A.md"
+    },
+    {
+      "phase": "P01-A",
+      "from": "IN_PROGRESS",
+      "to": "READY_FOR_REVIEW",
+      "at": "2026-11-26T01:15:08+08:00",
+      "evidence_ref": "evidence/P01_A/review_receipt.json",
+      "evidence_sha256": "364cc22ecfa86ef95730f87bc8f9be27f0244ad81ec598935ef72a15277be787",
+      "report_ref": "reports/P01_A_acceptance.md"
+    }
+  ]
 }

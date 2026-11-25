@@ -1,0 +1,604 @@
+{
+  "absolute_run_directory": "/home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03",
+  "approved_spec_sha256": "662ffd475dc40eb0769c0d2c474b5c526916d168c2413c67b98c4fecb624013a",
+  "coverage": {
+    "admitted_metadata_candidates": 32,
+    "capture_sessions": {
+      "UNKNOWN": 32
+    },
+    "confirmed_capture_roots": 32,
+    "duration_known": 32,
+    "duration_semantics": "metadata recording duration, not decoded-quality duration",
+    "eligible_final_test": 0,
+    "human_topics": {
+      "manus_left": 32,
+      "manus_right": 32,
+      "tracker_left": 32,
+      "tracker_right": 32
+    },
+    "recording_dates": {
+      "2026-11-12": 14,
+      "2026-11-13": 16,
+      "2026-11-20": 2
+    },
+    "sum_recorded_duration_ns": 2331957437948,
+    "task_types": {
+      "arm_hand": 6,
+      "arm_motion": 11,
+      "bi_hand": 2,
+      "fruit": 2,
+      "hand_pose": 11
+    }
+  },
+  "external_evidence_sha256": {
+    "runner01.log": "629490ccc28750b09825201137faf3a9b6b07dc8faa907cb2cf3b04229071f95",
+    "test_results.json": "c5e8edeeac8c8711e6abadd447638c89deac6e8c86b4fc84881618c63feb9120",
+    "timing_source.json": "41cadd4cc3de1f6d72ea702d097fff974a2f835ab8dfada10522e8fd194740f2"
+  },
+  "final_test_status": "BLOCKED",
+  "inventory": {
+    "counts": {
+      "archived_mcap_instances": 29,
+      "by_recording_origin": {
+        "LIVE_TELEOP": 32,
+        "SIM_REPLAY": 1,
+        "UNKNOWN": 89
+      },
+      "canonical_recordings": 122,
+      "direct_mcap_instances": 622,
+      "fully_admitted_metadata_recordings": 32,
+      "historical_documents": 810,
+      "independent_capture_roots": 32,
+      "logical_recording_views": 181,
+      "mcap_instances": 651,
+      "multi_part_recordings": 63,
+      "parts_in_multi_part_recordings": 533,
+      "pieces_in_writer_split_groups": 0,
+      "raw_teleop_metadata_candidates": 32,
+      "recording_directories": 152,
+      "status_counts": {
+        "archive_container": {
+          "ADMITTED_CANDIDATE": 0,
+          "DUPLICATE_ALIAS": 0,
+          "EXCLUDED": 28,
+          "PENDING_DECODE_VERIFICATION": 0,
+          "QUARANTINED": 0
+        },
+        "asset": {
+          "ADMITTED_CANDIDATE": 382,
+          "DUPLICATE_ALIAS": 269,
+          "EXCLUDED": 0,
+          "PENDING_DECODE_VERIFICATION": 0,
+          "QUARANTINED": 0
+        },
+        "historical_artifact": {
+          "ADMITTED_CANDIDATE": 0,
+          "DUPLICATE_ALIAS": 0,
+          "EXCLUDED": 810,
+          "PENDING_DECODE_VERIFICATION": 0,
+          "QUARANTINED": 0
+        },
+        "recording": {
+          "ADMITTED_CANDIDATE": 32,
+          "DUPLICATE_ALIAS": 59,
+          "EXCLUDED": 1,
+          "PENDING_DECODE_VERIFICATION": 0,
+          "QUARANTINED": 89
+        }
+      },
+      "unique_byte_payloads": 382,
+      "unresolved_usage_events": 100071,
+      "writer_split_groups": 0
+    },
+    "discovery": [
+      {
+        "mode": "native",
+        "recording_directories": 33,
+        "root": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/data/raw/episodes"
+      },
+      {
+        "mode": "native_index",
+        "recording_directories": 30,
+        "root": "/home/ubuntu/dexgym/data/raw/wholebody_s0"
+      },
+      {
+        "mode": "legacy",
+        "recording_directories": 89,
+        "root": "/home/ubuntu/teleop_ws/data",
+        "zip_containers": 28
+      }
+    ],
+    "errors": [],
+    "execution": {
+      "arguments": [
+        "/home/ubuntu/dexgym_worktrees/s0-5/source/dexgym/tasks/direct/wholebody_s05/data/source_registry.py",
+        "--config",
+        "docs/s0-5/evidence/P01_A/host_registry_config.json",
+        "--output",
+        "/home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry",
+        "--resource",
+        "/home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/resource_preflight.json",
+        "--test-results",
+        "/home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/attempt-01/unit_result.json"
+      ],
+      "config_sha256": "a32a9701deda1e7618f21ac100df8dfe84433859d7fe097d0cfa1df740aaf8c3",
+      "disk_free_bytes_before_publish": 684305117184,
+      "module_sha256": {
+        "historical_usage.py": "be84c1aecbe389e68afc8d31be44c45bfc5c9bda68d25e057bb0c97550751ebd",
+        "inventory.py": "ddd52a0f11ec4b667e08c4ba459f25d0fe01c09837eaaf334af7d537f75dbadf",
+        "lineage.py": "65d3b2b97d23ef9a6d896eb752c3f1e940c16d7e8ccd1d216fe537c3ef6fc7c9",
+        "source_registry.py": "57615c15e8c483ec5509a0aa3ccc4c2121cf42c49522a29a70e1f5a151da3617"
+      },
+      "seconds_before_write": 167.481
+    },
+    "gate_A1": "PASS",
+    "gate_scope": "source metadata and explicit disposition only; CDR, semantic content and splits are separate gates",
+    "history": {
+      "marvin54": {
+        "metadata_documents": 1,
+        "missing_roots": 3,
+        "source_reference_events": 0
+      },
+      "wholebody_s0": {
+        "metadata_documents": 91,
+        "source_reference_events": 2286
+      },
+      "wholebody_s04": {
+        "metadata_documents": 141,
+        "source_reference_events": 32832
+      },
+      "wholebody_s0_1": {
+        "metadata_documents": 357,
+        "source_reference_events": 68849
+      },
+      "wholebody_s0_2": {
+        "metadata_documents": 220,
+        "source_reference_events": 0
+      }
+    },
+    "io": {
+      "archive_member_bytes_hashed": 17421581019,
+      "unique_inode_bytes_hashed": 123460008009
+    },
+    "schema": "s05.p01a.inventory.v1"
+  },
+  "launch_calibration_references": 32,
+  "observed": "2026-11-26T01:15:08+08:00",
+  "output_sha256": {
+    "dataset_coverage.json": "1329d47a069a90e0840d0fdbd45a72e9d1cd0391871a277157579179dffcd246",
+    "final_test_eligibility.json": "dd57972364cd3db7bdf0cd8e45f5fcad45ecc91bc54030b9fa084ff1b7c99e49",
+    "lineage.jsonl": "eebd3b2949890976eb8ab11271b6a127d4c0cededc2de11bddc74061d971ba58",
+    "pending_verification.jsonl": "890ec4a5e2ed742a7f6021d36a015d0675608d9cb182701b14438ad399d28412",
+    "prior_use.jsonl": "7d232cd12681e7ce404b3e1bd3cf39a8fbf15af6ffcb7e732f9a029ad0d720bd",
+    "registry.jsonl": "6f3eab6521bdac42db8391ed76dbde84527eeeb754b3561d3509ca14584d663f",
+    "rejects.jsonl": "64b185b53d15a65101e9bab8376ff26ac6ff36c64844e0a7df3f2df31f055c87",
+    "resource_preflight.json": "a5cf36fed101f87057f8ebb4a9e1e85532e6907d9d93b0c337f53d69858e3155",
+    "source_inventory.json": "dca640bec4ec8afbdf2c666a61903b7d02436593190c47ba6397230be906761a",
+    "telemetry_candidates.json": "49c18ee26a63504215cefecf5f01bf1175e3225d1d6e34638f2db4209923de80",
+    "test_results.json": "e7d7f8d04f2ed2f31a35ebabbf08a92bc0b6009d7a586bc749ca3d1a9a5cc882"
+  },
+  "pending_by_reason": {
+    "HISTORICAL_ROOT_MISSING": 3,
+    "UNVERIFIED_CAPTURE_ORIGIN": 89
+  },
+  "raw_root_flags": {},
+  "reviewed_parent": "09c1c9e3c63797083a82493e2a40dd8bb4b1db6d",
+  "run_id": "P01-A-20261126-09c1c9e-r03",
+  "runtime": {
+    "core_paths": {
+      "cloudpickle": {
+        "bytes": 308,
+        "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/cloudpickle/__init__.py",
+        "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/cloudpickle/__init__.py",
+        "sha256": "2332a6f4cce58df847f9098dfe8fb33f9422993c1bb6025e4636bc9eb1856a74"
+      },
+      "dex_collection_interfaces.msg": {
+        "bytes": 518,
+        "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/__init__.py",
+        "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/__init__.py",
+        "sha256": "47869ef9e61e91dbc54135d6b3f0c4038de8c9556311bab14731f24a5c18ade3"
+      },
+      "dexgym": {
+        "bytes": 45,
+        "path": "/home/ubuntu/dexgym_worktrees/s0-5/source/dexgym/__init__.py",
+        "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/source/dexgym/__init__.py",
+        "sha256": "82b05b9f4857cd225f2b1eb24647f0bcf7343178bf023f447598cdc78d4fc0bf"
+      },
+      "dexgym.tasks.direct.wholebody_s0.bag": {
+        "bytes": 24965,
+        "path": "/home/ubuntu/dexgym_worktrees/s0-5/source/dexgym/tasks/direct/wholebody_s0/bag.py",
+        "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/source/dexgym/tasks/direct/wholebody_s0/bag.py",
+        "sha256": "22bf183b81fb0a060ec23008ef4bddd41f459ef0a075e7abba225cb4f3996dea"
+      },
+      "dexgym.tasks.direct.wholebody_s0.sync": {
+        "bytes": 7599,
+        "path": "/home/ubuntu/dexgym_worktrees/s0-5/source/dexgym/tasks/direct/wholebody_s0/sync.py",
+        "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/source/dexgym/tasks/direct/wholebody_s0/sync.py",
+        "sha256": "a1316b4b5f8fa6141011349689e025c43bda26a0031ccf1f73272c30391406d9"
+      },
+      "gymnasium": {
+        "bytes": 1430,
+        "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/gymnasium/__init__.py",
+        "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/gymnasium/__init__.py",
+        "sha256": "6a0bc3c49302a51d9a2431243acfee9e0375745413dbd321c20bdf3530acb615"
+      },
+      "lz4": {
+        "bytes": 627,
+        "path": "/usr/lib/python3/dist-packages/lz4/__init__.py",
+        "realpath": "/usr/lib/python3/dist-packages/lz4/__init__.py",
+        "sha256": "7adb15f971bdbe00a7f842ab169cd626c188a7e554b47fada4dad098c9831025"
+      },
+      "manus_ros2_msgs.msg": {
+        "bytes": 318,
+        "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/python3.12/site-packages/manus_ros2_msgs/msg/__init__.py",
+        "realpath": "/home/ubuntu/teleop_ws/build/manus_ros2_msgs/rosidl_generator_py/manus_ros2_msgs/msg/__init__.py",
+        "sha256": "6dcfc70af22de2942a158e1353dcbe8529003ff30d7f0ff4a38f3e90bb10988f"
+      },
+      "manus_wuji_interfaces.msg": {
+        "bytes": 335,
+        "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/python3.12/site-packages/manus_wuji_interfaces/msg/__init__.py",
+        "realpath": "/home/ubuntu/teleop_ws/build/manus_wuji_interfaces/rosidl_generator_py/manus_wuji_interfaces/msg/__init__.py",
+        "sha256": "ce8530eb61152eb9b1512e1dcf164d239fde74b7b521a8bd0fee7fded0eec6d3"
+      },
+      "mcap": {
+        "bytes": 22,
+        "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap/__init__.py",
+        "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap/__init__.py",
+        "sha256": "f048c80bc12be019fc3e112b8b34d7ad95584e06fab47823d342ebac154d6170"
+      },
+      "mcap.reader": {
+        "bytes": 26012,
+        "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap/reader.py",
+        "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap/reader.py",
+        "sha256": "364760096dfd79fc6392fefee18184b53b8bb6cdd3269e8a46d090a4798665be"
+      },
+      "mcap_ros2._dynamic": {
+        "bytes": 24207,
+        "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap_ros2/_dynamic.py",
+        "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap_ros2/_dynamic.py",
+        "sha256": "7058b5702e10aa16370b4d2ee7e6b23c32b61ad83e56ecec1fefd5e81b05d2b5"
+      },
+      "mcap_ros2.decoder": {
+        "bytes": 2404,
+        "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap_ros2/decoder.py",
+        "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap_ros2/decoder.py",
+        "sha256": "f502e62074329c6111d4dbb9280d48d3f21cf7dc91fc33aeda8e451f5ffe78e2"
+      },
+      "numpy": {
+        "bytes": 17005,
+        "path": "/usr/lib/python3/dist-packages/numpy/__init__.py",
+        "realpath": "/usr/lib/python3/dist-packages/numpy/__init__.py",
+        "sha256": "22cd1535fa14d74ef6f457cca149ffdc80875f460be313b8f895273f78bc402e"
+      },
+      "rclpy.serialization": {
+        "bytes": 1604,
+        "path": "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/serialization.py",
+        "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/serialization.py",
+        "sha256": "87a380a8c45fd0d4b56349fa73dd13ec2c082d8ab76a9be0fffbe9c65d698b54"
+      },
+      "rosbag2_py": {
+        "bytes": 3094,
+        "path": "/opt/ros/jazzy/lib/python3.12/site-packages/rosbag2_py/__init__.py",
+        "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/rosbag2_py/__init__.py",
+        "sha256": "158b4c439188d26dcd914ec043c49f35a997f49b2535fc0e1f8f9dfd612f0886"
+      },
+      "rosidl_runtime_py.utilities": {
+        "bytes": 3477,
+        "path": "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_runtime_py/utilities.py",
+        "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_runtime_py/utilities.py",
+        "sha256": "e232be4bad9322118e5702fa76bda75f51678c1ad1984ce6f21742dc69ed5e0c"
+      },
+      "scipy": {
+        "bytes": 6530,
+        "path": "/usr/lib/python3/dist-packages/scipy/__init__.py",
+        "realpath": "/usr/lib/python3/dist-packages/scipy/__init__.py",
+        "sha256": "5df3106bce68233cec43e84208135d8f18fb6e07d2770fbc157fce32bab28c50"
+      },
+      "tianji_interfaces.msg": {
+        "bytes": 372,
+        "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages/tianji_interfaces/msg/__init__.py",
+        "realpath": "/home/ubuntu/teleop_ws/build/tianji_interfaces/rosidl_generator_py/tianji_interfaces/msg/__init__.py",
+        "sha256": "1d8ba4f2ba868e27cf9a0f7e72c9fa869adc30ba800d29066efebe64a4f025b9"
+      },
+      "yaml": {
+        "bytes": 12311,
+        "path": "/usr/lib/python3/dist-packages/yaml/__init__.py",
+        "realpath": "/usr/lib/python3/dist-packages/yaml/__init__.py",
+        "sha256": "6e1974e6a49e3bed59c654918c6aef9769bd9eb5dbd67f7e1906ad4cdd0caea7"
+      },
+      "zstandard": {
+        "bytes": 7235,
+        "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/zstandard/__init__.py",
+        "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/zstandard/__init__.py",
+        "sha256": "5dd909e0b60a946a0b08deaf57545d17dc044f5df4040beec55f7ef6c6fecd11"
+      }
+    },
+    "distributions": {
+      "Farama-Notifications": "0.0.4",
+      "PyYAML": "6.0.1",
+      "cloudpickle": "3.1.1",
+      "gymnasium": "1.2.0",
+      "lz4": "4.0.2+dfsg",
+      "mcap": "1.6.0",
+      "mcap-ros2-support": "0.6.0",
+      "numpy": "1.26.4",
+      "scipy": "1.11.4",
+      "zstandard": "0.25.0"
+    },
+    "executable": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python",
+    "foreign": [],
+    "memory_available_bytes_at_receipt": 70661857280,
+    "message_versions": {
+      "dex_collection_interfaces": {
+        "manifest_sha256": "76ebaaaf0f9622c3b930e41dae4a9f2237522b23cfffff7ba75e557dad606941",
+        "message_sha256": {
+          "CameraFrame.msg": "9b35d3373f0bea09cb010b9ba55b9f6e95fada85ba225870e02d10733d072df0",
+          "CollectionStatus.msg": "db2a0465d56ae983c6e0e4f328f8f525f2ad555ea94bc06158ebb2fa7205e832",
+          "SampleObservation.msg": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+          "StreamStatus.msg": "5906cd92650503b75da1909288dea1f40abb978aab2785db0876d53affd510a3",
+          "TopicCatalogue.msg": "0a024762cfc8c57054b4ac4fdf02ad345043291dfab874931a28d2254db20224",
+          "TopicInfo.msg": "e1326ecbc4b5801f3a31e4916356c83a267574179af0c21ee1dd19a75025a7e0"
+        },
+        "prefix": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces"
+      },
+      "diagnostic_msgs": {
+        "manifest_sha256": "2cf6cc6283772afe696afa04241b7f3bdde51cd42545f57d8ec383d4b4de712c",
+        "message_sha256": {
+          "DiagnosticArray.msg": "019690e73d166237243a14998c4a9183c829dcc052ce7d190120d3892bf12c59",
+          "DiagnosticStatus.msg": "04b13e5ea9dd8559ef3f691bab371ec05ed227f1045f4fcd3b0b30338f9a15bd",
+          "KeyValue.msg": "89f6d92c75fbf2d5381e8c3e3b5bf92bbf6dbdb9683a5a5a4433a79f59fe0d74"
+        },
+        "prefix": "/opt/ros/jazzy"
+      },
+      "geometry_msgs": {
+        "manifest_sha256": "879da7003d6d2952701aa23146f0d78096143d5107dd6e775a23e591c2c376a0",
+        "message_sha256": {
+          "Accel.msg": "67f371aabfc8ec1bd58bbb01a1709222e685c549462984c9958cc89fcd9f6abb",
+          "AccelStamped.msg": "c46e9fcf5551d2330b63b1efe0626f747bcda24ddcc9e281597a9354b3bd9eea",
+          "AccelWithCovariance.msg": "59512bab4004aefda7a9dea2a6fdbeb625c66a3a5359aae33b4561cf4a41263b",
+          "AccelWithCovarianceStamped.msg": "04d5dbf78d814f58f4a01b1e9a63b5a5fdd24f5164cf021908d05fb079e63de8",
+          "Inertia.msg": "33bc8db637874153ba5261bb5e7c23ca12754e15e5a2e58a86533c1f5bd66dd4",
+          "InertiaStamped.msg": "456743836340c5d638dba1fcae3211acfe61f0690dcc9fe5b7ae9af8991591f1",
+          "Point.msg": "eb4c07e591cf0269ccb17245dcd4f998162feb09cc8add85fa082c8a30bfc91d",
+          "Point32.msg": "acade2dacb4f1f7988f34e8221079eb1c757f51e8ef48adb5651f7dc478fed59",
+          "PointStamped.msg": "c58b03c27604f45e9b0fd2f1b327dcbada7d6a389beb8c060d448abc25e76bfc",
+          "Polygon.msg": "43679118501e3b294349c9ad73af9f03b476ef77c7096cd79b4ce46646823056",
+          "PolygonInstance.msg": "2ba1b905a10593821b1f8f4c05ad27cf2d1a9bd1e9c2643b01297583993f7bd4",
+          "PolygonInstanceStamped.msg": "0dd863a4fb199e8833d13df9802064884a8be7a7f439f2b6e378aebcf121a506",
+          "PolygonStamped.msg": "ff0812e3cae3e92947ba4abe3f9ea6ad31e04af0f2d97399027786ad27d39f0a",
+          "Pose.msg": "3eceb77c63ebbb544c11d7f991e475e9819e0cf534deb1a879392c1b3dc997de",
+          "Pose2D.msg": "48bbdb9e593b50b3e4b4e4494ca6ce076f59937c1b4ad80bc7ea09e87891a899",
+          "PoseArray.msg": "3f58a91730c78dbc5ec5092131945ccdfeeb775aa0f02df7ff09f6c979b1d398",
+          "PoseStamped.msg": "31898ab0eb64a6c44c27ab4959819a32ec3bc3ee847c8fe1b01c897d48e311e5",
+          "PoseWithCovariance.msg": "a22f234e91b9fcd4ba0c5b533496b43c62d7f6ade39082212ac9835679d29f94",
+          "PoseWithCovarianceStamped.msg": "87b6851480902effb5232f87bf68e76f19bf7b26affa11001be9e515542c21fb",
+          "Quaternion.msg": "298495eb67a139642ffd37cc9029eae085e6c39a8789828b7517868a487939ed",
+          "QuaternionStamped.msg": "855d4fd0cecb74ed55477a8c1f19fc9498207e7833a4f923b56fd68a9ba99ec9",
+          "Transform.msg": "c8916279f0a429dd9561158bd2133bc4e2d780277c3c594116b240a27e7a2993",
+          "TransformStamped.msg": "f6e137c205e9187ac1dafdfbace7435de58bb3779a55e9c6b52c2cb513785c42",
+          "Twist.msg": "ed471ef861f65af991b1f64d66ef941dd41dd4c0702f6222512b1a16c62d58b0",
+          "TwistStamped.msg": "ffc9d5925412410b28d601c55cf386a0b3e4d5dba00920fbafb98d7201f582ca",
+          "TwistWithCovariance.msg": "5690a1f109d4962c73b5ca7f3673c48052d02f37b6a38fe2fb37c899cf555c45",
+          "TwistWithCovarianceStamped.msg": "af369aea38a14e57ff350a3f2c63c2c66335a367822d134fecdef60789e49682",
+          "Vector3.msg": "d8b9ea9aad1f424faf4d2b94dae1e1368af1e5d59de11aeed019399cff7f9e1d",
+          "Vector3Stamped.msg": "bfe690d1b7d907c039c9c1580cf8de557d546c8aeb3280c1bd5e0a60d84356cd",
+          "VelocityStamped.msg": "48517d22e2485d0d018300aba815569d05614f7e0eb9c2959719081d8ca0bd5b",
+          "VelocityWithCovarianceStamped.msg": "d04d9a70bba11e70baa146d05b02804f43c835c2caa733d8ddacc4b09528f43f",
+          "Wrench.msg": "d9667abd3d2a67d5624113fa07a647b0d4806bf89d21c8a5cf914905a036bf25",
+          "WrenchStamped.msg": "853a8534230b795b6c1afcb8483002f5d1cf14e967ffa0da2cba8da5453b2162"
+        },
+        "prefix": "/opt/ros/jazzy"
+      },
+      "manus_ros2_msgs": {
+        "manifest_sha256": "977420793ce7c7b3625e9bfe7f7cf2bbdfdc1717c602bea35303335963266b05",
+        "message_sha256": {
+          "ManusErgonomics.msg": "5b76b018279a265656c8b6a78c78f622251428215167f0eb58e6d75fcaceba4b",
+          "ManusGlove.msg": "b7509eb4ff5ec07e23e499d2a8415c101b9a9ffc7d3e303df63290098b0461c5",
+          "ManusRawNode.msg": "b6f7ea98786eb0d22385bb4848456b7e0b0c19c35a0098a931088383490ace83",
+          "ManusVibrationCommand.msg": "c4d27f8d6c507e7724bcca58e1b749bf337dbcb8e37aaffb264b342ba3c303d6"
+        },
+        "prefix": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs"
+      },
+      "manus_wuji_interfaces": {
+        "manifest_sha256": "43943bd9a1fd351e4dee5847ffe33478e1a962ccef7b0b2f9f9b12a12fb42393",
+        "message_sha256": {
+          "HandCommand.msg": "22ff69186749edc8c41932e2b83e6b2b8b9db993854d1f486c8b4aa61cd70986",
+          "HandDiagnostics.msg": "586ca13402fd20e505615cbcf31a8e6f89f5ac59fad2792227068b65cc83109e",
+          "HandJointDiagnostics.msg": "7d261ab7b40eaa697a9a06ab941a0e7cf8dba1c366cd2a903771e891bcbfc8ac",
+          "HandState.msg": "cba6f85a44a2a12db164b52dbeca42881eaa74b36eb18d3b14b4136c1b7f32ac"
+        },
+        "prefix": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces"
+      },
+      "sensor_msgs": {
+        "manifest_sha256": "00cc932b8a1d2a9064c621bfacab56428a5175afe37269da38ba09361e8a4a5a",
+        "message_sha256": {
+          "BatteryState.msg": "ce13430f3c107274fb7123a6d1e79a9f83974d78cb0be1721695129e49240b25",
+          "CameraInfo.msg": "1fced83678f5f2708aff8540987594692452de9f0b43905ce3bfba689226f3aa",
+          "ChannelFloat32.msg": "6cf885a09a7f499ce2348bc3099e146a6273bb1e7ff875824ecbe05abaf0d086",
+          "CompressedImage.msg": "75ca1003981c407148ff94a3470760985dd69233b8287a5d52848d45a312f144",
+          "FluidPressure.msg": "a2a96aa57e9957549dbf5c739c3dba3fb4303f0dd8426c9178b7333b656bb0d9",
+          "Illuminance.msg": "b55f46c55588f7d729feb7dd84b60b1796dcfdb2351a26982ff2505129702182",
+          "Image.msg": "575cd3434771916c2b551db8ac484522ecef1d6105196e043a305887d2730704",
+          "Imu.msg": "5800b7c2e6d3afed966ae229b1559f6e762c792ad34a88e55ad4288d8bbbd34b",
+          "JointState.msg": "711d1771a002c7190e5bbe746a163a67477c1e2a45482a64f1fe339815ca6f5d",
+          "Joy.msg": "5a7d133e7dc82f531e03bd4ff92c9240a828bb6ceb6f19d5cd767d5372adb757",
+          "JoyFeedback.msg": "47f62324e13743dd7a14bb71d64dc4cc034f4ff7885688c235bc121e224e06c3",
+          "JoyFeedbackArray.msg": "6930a74a9e38918bb6f872c3e30ee3bb172c3b71cb3daf5d07c6ea76ee44f0ab",
+          "LaserEcho.msg": "57511740458bf605dd609aab1b43312ec0e884d702196993a29ea32cb67d4f5f",
+          "LaserScan.msg": "bb688599d8787fa1b48393e50064013e58449055eb60e501eb01a07e8bc03357",
+          "MagneticField.msg": "b1bf534a4175055d85ee4630788c67a960733c383a458b86f6dfdfa27786be64",
+          "MultiDOFJointState.msg": "bb707259b63ea52101697daf624ff7ad73a1f9977117ce3798a36cc1858d99fd",
+          "MultiEchoLaserScan.msg": "8e96fd2ff5e685bfed326fecd90797fade8485be7c02f54250e5ea535c42b5e3",
+          "NavSatFix.msg": "7457a0d5afd253a69a9996288192fb9bf10fdd053989204d5aca8d56d95b65ac",
+          "NavSatStatus.msg": "f41663c70f192cfb8af118403ced55171b9c42af40a4ef798536d8af23b3d4f9",
+          "PointCloud.msg": "8bdec27b9f1b688448410d1c6de34b42af6ef56ad4e496a214793e9ec88db993",
+          "PointCloud2.msg": "22699bfd6c68be148363a2e889408833a5a37d3464ea20032d1c757336b80f2a",
+          "PointField.msg": "6e6d5d51d2e464d3074b44b112f219e67fcdc0b280260d93f8cefd9710ec972e",
+          "Range.msg": "6aac2960a3702cad5c5a6b5eda68e252a97d199bd9b7385c975332edbbc170cf",
+          "RegionOfInterest.msg": "9c07010ab5ffddd1202876a778b44c99cafa780bc0503041c3fd935870a14c6a",
+          "RelativeHumidity.msg": "bd9cff7bdebac733030ec1de6a66f004bf4f31924078a3170984d338352e649a",
+          "Temperature.msg": "20a8580f84dbc063d87c3e1b902494149428272749844fa1dbf24fa80575be82",
+          "TimeReference.msg": "4fdb6fb81fc2e910c560d80dd21b161a72d7f09b2f0ea9bdfcb75d71ab342491"
+        },
+        "prefix": "/opt/ros/jazzy"
+      },
+      "tianji_interfaces": {
+        "manifest_sha256": "4acd3ba53e4e96e40bd3f31ee97dabd44215f1abecf6bb524694ebd4dcab5214",
+        "message_sha256": {
+          "JointCommand.msg": "af405395ba9e2543e5350fc249b63b04052e05962c947fd408df9e298d882f5e",
+          "RobotState.msg": "7a7b0743de6de68d00c9412de12464f42cd744ff68def289211281cdb4d9e343",
+          "SafetyStatus.msg": "499735e00af3722eef912a210375d5487d31411a3b106a6b49c500525a6f378e",
+          "TeleopState.msg": "d63c412812e4bafe47f4a3f1f87fa1daf330550d1e4e8e503323f486a742cdd2",
+          "TrackerPose.msg": "e3f5262e1e720e0a3a86641c0f070edb5e63b2512b246ff9a7b3392643a7453e"
+        },
+        "prefix": "/home/ubuntu/teleop_ws/install/tianji_interfaces"
+      }
+    },
+    "observed": "2026-11-26T00:58:37.162642+08:00",
+    "output": {
+      "available_bytes": 684431949824,
+      "checkout_filesystem": "66306",
+      "distinct_from_source": true,
+      "entries": [
+        "runs"
+      ],
+      "exists": true,
+      "filesystem": "66306",
+      "path": "/home/ubuntu/dexgym_data/s0-5/p01",
+      "resolved": "/home/ubuntu/dexgym_data/s0-5/p01",
+      "writable": true
+    },
+    "overlay_setup_files": [
+      {
+        "bytes": 349,
+        "path": "/opt/ros/jazzy/setup.bash",
+        "realpath": "/opt/ros/jazzy/setup.bash",
+        "sha256": "12556a2725a823c3841f8fbab50892c8b8c69df9654d2a74761407226ecca4df"
+      },
+      {
+        "bytes": 3760,
+        "path": "/home/ubuntu/teleop_ws/install/local_setup.bash",
+        "realpath": "/home/ubuntu/teleop_ws/install/local_setup.bash",
+        "sha256": "0e10d666bbf43cf559467b11b75cf6d26cf8d210e7f94e79dfe5a7dddb2fe91c"
+      },
+      {
+        "bytes": 3801,
+        "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/local_setup.bash",
+        "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/local_setup.bash",
+        "sha256": "b2c43a59660b272f706cfc722ecf0f86364da421eaef62e48039735afc12a7ef"
+      }
+    ],
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "sys_path": [
+      "/home/ubuntu/dexgym_worktrees/s0-5/source",
+      "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_teleop_supervisor/lib/python3.12/site-packages",
+      "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages",
+      "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages",
+      "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/python3.12/site-packages",
+      "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/python3.12/site-packages",
+      "/home/ubuntu/teleop_ws/install/head_driver/lib/python3.12/site-packages",
+      "/home/ubuntu/teleop_ws/install/dex_collection_interfaces/lib/python3.12/site-packages",
+      "/opt/ros/jazzy/opt/gz_math_vendor/lib/python",
+      "/opt/ros/jazzy/lib/python3.12/site-packages",
+      "/usr/lib/python312.zip",
+      "/usr/lib/python3.12",
+      "/usr/lib/python3.12/lib-dynload",
+      "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages",
+      "/usr/local/lib/python3.12/dist-packages",
+      "/usr/lib/python3/dist-packages"
+    ],
+    "tracked_external_diffs": {
+      "/home/ubuntu/dexgym": {
+        "after": "ca0ca092d3120dc5249eccadf0c4c26eb56e22d22a4935ccd72481c4b555c2bc",
+        "before": "ca0ca092d3120dc5249eccadf0c4c26eb56e22d22a4935ccd72481c4b555c2bc",
+        "matches": true
+      },
+      "/home/ubuntu/teleop_ws": {
+        "after": "94c5f2467c1e10342312d15d5ac4ad545377bae405e9dd703d409055e15574ff",
+        "before": "94c5f2467c1e10342312d15d5ac4ad545377bae405e9dd703d409055e15574ff",
+        "matches": true
+      }
+    },
+    "wrong_dexgym": []
+  },
+  "schema": "s05.p01a.review-receipt.v1",
+  "scope": "P01-A only",
+  "telemetry_by_recording_view": {
+    "INELIGIBLE_SOURCE": 1,
+    "NO_COMMAND_FEEDBACK_PAIR": 121,
+    "PENDING_HARDWARE_PROVENANCE": 59
+  },
+  "tests": {
+    "integration": 0,
+    "registry": 0,
+    "unit": 0
+  },
+  "timing_sample_stats": {
+    "left": {
+      "reader_log_ns": {
+        "count": 20,
+        "repeats": 0,
+        "step_p50": 8348855.0
+      },
+      "receive_timestamp_us": {
+        "count": 20,
+        "repeats": 0,
+        "step_p50": 8416.0
+      },
+      "ros_header_ns": {
+        "count": 20,
+        "repeats": 0,
+        "step_p50": 8334324.0
+      },
+      "source_timestamp_us": {
+        "count": 20,
+        "repeats": 0,
+        "step_p50": 8.0
+      }
+    },
+    "right": {
+      "reader_log_ns": {
+        "count": 20,
+        "repeats": 0,
+        "step_p50": 8347900.0
+      },
+      "receive_timestamp_us": {
+        "count": 20,
+        "repeats": 7,
+        "step_p50": 7381.0
+      },
+      "ros_header_ns": {
+        "count": 20,
+        "repeats": 0,
+        "step_p50": 8336173.0
+      },
+      "source_timestamp_us": {
+        "count": 20,
+        "repeats": 7,
+        "step_p50": 8.0
+      }
+    }
+  },
+  "unique_known_roots_by_use": {
+    "HISTORICAL_TEST_ASSIGNMENT": 6,
+    "MODEL_SELECTION": 6,
+    "REPEATED_TEST": 6,
+    "TRAIN": 18,
+    "USAGE_UNKNOWN": 2,
+    "VAL": 6
+  },
+  "usage_by_role": {
+    "HISTORICAL_TEST_ASSIGNMENT": 13209,
+    "MODEL_SELECTION": 1092,
+    "REPEATED_TEST": 985,
+    "TRAIN": 78797,
+    "USAGE_UNKNOWN": 744,
+    "VAL": 18536
+  },
+  "usage_confidence": {
+    "DECLARED_SPLIT": 103967,
+    "HISTORY_INCOMPLETE": 2,
+    "NO_EXPLICIT_SOURCE_ROLES": 742,
+    "RUN_STATE_AND_BANK_SPLIT": 8652
+  }
+}
