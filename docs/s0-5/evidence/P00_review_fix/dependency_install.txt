@@ -1,0 +1,9 @@
+Looking in links: /tmp/s05-review-cc05f09-wheels
+Processing /tmp/s05-review-cc05f09-wheels/Farama_Notifications-0.0.4-py3-none-any.whl (from -r /tmp/s05-review-cc05f09-wheels/requirements.lock (line 1))
+Processing /tmp/s05-review-cc05f09-wheels/cloudpickle-3.1.1-py3-none-any.whl (from -r /tmp/s05-review-cc05f09-wheels/requirements.lock (line 2))
+Processing /tmp/s05-review-cc05f09-wheels/gymnasium-1.2.0-py3-none-any.whl (from -r /tmp/s05-review-cc05f09-wheels/requirements.lock (line 3))
+Processing /tmp/s05-review-cc05f09-wheels/mcap-1.6.0-py3-none-any.whl (from -r /tmp/s05-review-cc05f09-wheels/requirements.lock (line 4))
+Processing /tmp/s05-review-cc05f09-wheels/mcap_ros2_support-0.6.0-py3-none-any.whl (from -r /tmp/s05-review-cc05f09-wheels/requirements.lock (line 5))
+Processing /tmp/s05-review-cc05f09-wheels/zstandard-0.25.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (from -r /tmp/s05-review-cc05f09-wheels/requirements.lock (line 6))
+Installing collected packages: Farama_Notifications, zstandard, mcap_ros2_support, mcap, gymnasium, cloudpickle
+Successfully installed Farama_Notifications-0.0.4 cloudpickle-3.1.1 gymnasium-1.2.0 mcap-1.6.0 mcap_ros2_support-0.6.0 zstandard-0.25.0

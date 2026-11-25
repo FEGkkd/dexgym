@@ -1,0 +1,153 @@
+{
+  "schema": "s05.review-commands.v1",
+  "run_id": "S05-P00-REVIEW-FIX-20261126-CC05F09",
+  "commands": [
+    {
+      "id": "clone",
+      "command": "git clone --depth=1 --single-branch --no-tags --branch s0-5 https://github.com/FEGkkd/dexgym.git /home/ubuntu/dexgym_worktrees/s0-5",
+      "cwd": "/home/ubuntu",
+      "exit": 0,
+      "status": "PASS",
+      "artifacts": [
+        "evidence/P00_review_fix/environment.json"
+      ]
+    },
+    {
+      "id": "output",
+      "command": "mkdir -p /home/ubuntu/dexgym_data/s0-5/p01",
+      "cwd": "/home/ubuntu",
+      "exit": 0,
+      "status": "PASS",
+      "artifacts": [
+        "evidence/P00_review_fix/environment.json"
+      ]
+    },
+    {
+      "id": "initial_environment",
+      "command": "env -i HOME=/home/ubuntu PATH=/usr/bin:/bin LANG=C.UTF-8 PYTHONNOUSERSITE=1 PYTHONDONTWRITEBYTECODE=1 GIT_OPTIONAL_LOCKS=0 bash --noprofile --norc -c '\nsource /opt/ros/jazzy/setup.bash &&\nsource \"$HOME/teleop_ws/install/local_setup.bash\" &&\nsource \"$HOME/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/local_setup.bash\" &&\ncd \"$HOME/dexgym_worktrees/s0-5\" &&\nexport PYTHONPATH=\"$PWD/source${PYTHONPATH:+:$PYTHONPATH}\" &&\nexec /usr/bin/python3 -P /tmp/s05-readiness-probe-cc05f09.py \"$1\"\n' preflight environment",
+      "cwd": "/home/ubuntu/dexgym_worktrees/s0-5",
+      "exit": 1,
+      "status": "FAILED",
+      "artifacts": [
+        "evidence/P00_review_fix/initial_environment.stderr.txt"
+      ]
+    },
+    {
+      "id": "venv",
+      "command": "/usr/bin/python3 -m venv --without-pip --system-site-packages /home/ubuntu/dexgym_worktrees/s0-5/.venv",
+      "cwd": "/home/ubuntu",
+      "exit": 0,
+      "status": "PASS",
+      "artifacts": [
+        "evidence/P00_review_fix/environment.json"
+      ]
+    },
+    {
+      "id": "download_initial",
+      "command": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python -m pip --isolated --disable-pip-version-check download --no-deps --only-binary=:all: --index-url https://pypi.org/simple --dest /tmp/s05-review-cc05f09-wheels --timeout 12 --retries 0 gymnasium==1.2.0 cloudpickle==3.1.1 Farama-Notifications==0.0.4",
+      "cwd": "/home/ubuntu",
+      "exit": 2,
+      "status": "FAILED",
+      "artifacts": [
+        "evidence/P00_review_fix/initial_dependency_download.txt"
+      ]
+    },
+    {
+      "id": "download_retry",
+      "command": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python -m pip --isolated --disable-pip-version-check download --no-deps --only-binary=:all: --index-url https://pypi.org/simple --dest /tmp/s05-review-cc05f09-wheels --timeout 30 --retries 1 gymnasium==1.2.0 cloudpickle==3.1.1 Farama-Notifications==0.0.4",
+      "cwd": "/home/ubuntu",
+      "exit": 0,
+      "status": "PASS",
+      "artifacts": [
+        "evidence/P00_review_fix/dependency_download_retry.txt"
+      ]
+    },
+    {
+      "id": "install",
+      "command": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python -m pip --isolated --disable-pip-version-check install --no-index --no-deps --require-hashes --find-links /tmp/s05-review-cc05f09-wheels -r /tmp/s05-review-cc05f09-wheels/requirements.lock",
+      "cwd": "/home/ubuntu",
+      "exit": 0,
+      "status": "PASS",
+      "artifacts": [
+        "evidence/P00_review_fix/requirements.lock",
+        "evidence/P00_review_fix/dependency_install.txt"
+      ]
+    },
+    {
+      "id": "probe_environment",
+      "command": "bash /tmp/s05-run-readiness-cc05f09.sh /tmp/s05-readiness-probe-pinned-cc05f09.py /tmp/s05-review-cc05f09-run2",
+      "cwd": "/home/ubuntu/dexgym_worktrees/s0-5",
+      "exit": 0,
+      "status": "PASS",
+      "artifacts": [
+        "evidence/P00_review_fix/environment.json",
+        "evidence/P00_review_fix/environment.stderr.txt",
+        "evidence/P00_review_fix/environment.exit.txt",
+        "evidence/P00_review_fix/run_readiness.sh",
+        "evidence/P00_review_fix/readiness_probe.py"
+      ],
+      "exit_artifact": "evidence/P00_review_fix/environment.exit.txt",
+      "mode": "environment"
+    },
+    {
+      "id": "probe_samples",
+      "command": "bash /tmp/s05-run-readiness-cc05f09.sh /tmp/s05-readiness-probe-pinned-cc05f09.py /tmp/s05-review-cc05f09-run2",
+      "cwd": "/home/ubuntu/dexgym_worktrees/s0-5",
+      "exit": 0,
+      "status": "PASS",
+      "artifacts": [
+        "evidence/P00_review_fix/samples.json",
+        "evidence/P00_review_fix/samples.stderr.txt",
+        "evidence/P00_review_fix/samples.exit.txt",
+        "evidence/P00_review_fix/run_readiness.sh",
+        "evidence/P00_review_fix/readiness_probe.py"
+      ],
+      "exit_artifact": "evidence/P00_review_fix/samples.exit.txt",
+      "mode": "samples"
+    },
+    {
+      "id": "probe_historical",
+      "command": "bash /tmp/s05-run-readiness-cc05f09.sh /tmp/s05-readiness-probe-pinned-cc05f09.py /tmp/s05-review-cc05f09-run2",
+      "cwd": "/home/ubuntu/dexgym_worktrees/s0-5",
+      "exit": 0,
+      "status": "PASS",
+      "artifacts": [
+        "evidence/P00_review_fix/historical.json",
+        "evidence/P00_review_fix/historical.stderr.txt",
+        "evidence/P00_review_fix/historical.exit.txt",
+        "evidence/P00_review_fix/run_readiness.sh",
+        "evidence/P00_review_fix/readiness_probe.py"
+      ],
+      "exit_artifact": "evidence/P00_review_fix/historical.exit.txt",
+      "mode": "historical"
+    },
+    {
+      "id": "legacy_source",
+      "command": "nl -ba source/dexgym/tasks/direct/wholebody_s0/sync.py | sed -n '71,82p;124,143p' and git grep -n -E 'receive_ros_timestamp_ns|receive_ros_ns|source_stamp' -- source/dexgym/tasks/direct/wholebody_s0/bag.py",
+      "cwd": "/home/ubuntu/dexgym_worktrees/s0-5",
+      "exit": 0,
+      "status": "PASS",
+      "artifacts": [
+        "evidence/P00_review_fix/sync_source.txt"
+      ]
+    },
+    {
+      "id": "windows_negative_controls",
+      "command": "python -B implementation/dexgym/docs/s0-5/evidence/P00_review_fix/test_review_checks.py",
+      "cwd": "Windows workspace",
+      "exit": 0,
+      "status": "PASS",
+      "artifacts": [
+        "evidence/P00_review_fix/windows_unit_tests.txt"
+      ]
+    },
+    {
+      "id": "p01_production",
+      "command": "P01-A through P01-F",
+      "cwd": "/home/ubuntu/dexgym_worktrees/s0-5",
+      "exit": null,
+      "status": "NOT_RUN",
+      "reason": "P00 Review Fix scope and explicit staged authorization are pending."
+    }
+  ]
+}

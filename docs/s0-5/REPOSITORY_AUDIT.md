@@ -1,5 +1,7 @@
 # DexGym / Teleop 仓库审计
 
+本页的现场目录、状态与资源记录属于原始 P00。Review Fix 的独立 `s0-5` checkout、解释器和资源见 [执行基线](EXECUTION_BASELINE.md)。原始发布快照仍可按 Git SHA 和清单复验。
+
 Run ID `S05-P00-20261125-ubuntu-audit`。当前见证、历史记录与推测按主设计 M9 分类。所有本页行号取指定 checkout 的当时文件。完整的行号索引、摘要及 SHA-256 在 [证据目录](evidence/P00/README.md)。
 
 ## 1. Checkout 身份与宿主机

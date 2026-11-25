@@ -1,0 +1,40 @@
+{
+  "schema": "s05.phase-state.v1",
+  "current": {
+    "P00": "READY_FOR_REVIEW",
+    "P01": "NOT_STARTED",
+    "P02": "NOT_STARTED",
+    "P03": "NOT_STARTED",
+    "P04": "NOT_STARTED",
+    "P05": "NOT_STARTED",
+    "P06": "NOT_STARTED",
+    "P07": "NOT_STARTED",
+    "P08": "NOT_STARTED",
+    "P09": "NOT_STARTED",
+    "P10": "NOT_STARTED"
+  },
+  "events": [
+    {
+      "phase": "P00",
+      "from": "NOT_STARTED",
+      "to": "IN_PROGRESS",
+      "at": "2026-11-25T23:14:28+08:00",
+      "authorization_ref": "Original P00-only user instruction",
+      "evidence_ref": "evidence/P00/host.json",
+      "timestamp_basis": "first observed SSH audit witness"
+    },
+    {
+      "phase": "P00",
+      "from": "IN_PROGRESS",
+      "to": "READY_FOR_REVIEW",
+      "at": "2026-11-26T00:13:10+08:00",
+      "evidence_ref": "reports/P00_acceptance.md",
+      "timestamp_basis": "published original P00 commit cc05f09847254ddae3b76581fb9e1feed4f31065"
+    }
+  ],
+  "review_fix_ref": "reports/P00_review_fix.md",
+  "final_test": {
+    "status": "BLOCKED",
+    "reason": "independent source lineage and sealed manifest have not been established"
+  }
+}

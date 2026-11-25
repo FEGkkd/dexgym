@@ -1,0 +1,5076 @@
+{
+  "schema": "s05.readiness.witness.v1",
+  "section": "samples",
+  "observed": "2026-11-26T00:39:39.585485+08:00",
+  "result": {
+    "native_manifest": {
+      "file": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/manifest.yaml",
+        "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/data/raw/episodes/18e74c646013f1e6-2156b79bc2482857/manifest.yaml",
+        "bytes": 8348,
+        "sha256": "a9588bb82e752a7f0eaeccffcf03522bf320c4f8302507134652cf88bf9480f8"
+      },
+      "keys": [
+        "clocks",
+        "collector_instance_id",
+        "episode_id",
+        "error",
+        "format",
+        "format_version",
+        "initial_state_semantics",
+        "metadata",
+        "metadata_json",
+        "quality_state",
+        "queue_accounting",
+        "requested_streams",
+        "runtime",
+        "selected_streams",
+        "skipped_streams",
+        "start_monotonic_ns",
+        "start_realtime_ns",
+        "state",
+        "stop_monotonic_ns",
+        "stop_realtime_ns",
+        "streams"
+      ],
+      "top_level_scalars": {
+        "format": "dex-native-v2",
+        "format_version": 2,
+        "episode_id": "18e74c646013f1e6-2156b79bc2482857",
+        "state": "COMPLETED",
+        "error": "",
+        "start_monotonic_ns": 620661114006323,
+        "stop_monotonic_ns": 620706985870111,
+        "start_realtime_ns": 1794486970522678763,
+        "stop_realtime_ns": 1794487016394542422,
+        "metadata_json": "{\"operator\":\"\",\"task\":\"hand_pose\",\"object\":\"\",\"session\":\"\",\"trial_index\":1,\"notes\":\"\"}",
+        "quality_state": "good",
+        "collector_instance_id": "18e6e5aace07028d-b808a2f98e980013",
+        "initial_state_semantics": "Pre-Episode cached samples with original observation clocks; not Episode samples",
+        "queue_accounting": "sample and byte limits include one in-flight write; bytes include CDR allocation capacity and observation allocation estimate"
+      },
+      "collections": {
+        "metadata": [
+          "task_name",
+          "operator_name",
+          "notes",
+          "object_name",
+          "session_name",
+          "has_trial_index",
+          "trial_index",
+          "request_id"
+        ],
+        "runtime": [
+          "source_mode"
+        ],
+        "clocks": [
+          "monotonic",
+          "realtime",
+          "ros",
+          "source",
+          "sequence"
+        ],
+        "selected_streams": 7,
+        "requested_streams": 7,
+        "skipped_streams": [],
+        "streams": [
+          "manus_left",
+          "manus_right",
+          "tracker_left",
+          "tracker_left_raw",
+          "tracker_right",
+          "tracker_right_raw",
+          "tracker_safety"
+        ]
+      }
+    },
+    "native_effective_config": {
+      "file": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/effective_config.yaml",
+        "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/data/raw/episodes/18e74c646013f1e6-2156b79bc2482857/effective_config.yaml",
+        "bytes": 14443,
+        "sha256": "c5ef01e51f8e6908ccbe1dd772223f1a67ae753c777de8147e8c189c8d7bb8d2"
+      },
+      "keys": [
+        "collection",
+        "episode",
+        "preview",
+        "runtime",
+        "streams"
+      ],
+      "top_level_scalars": {},
+      "collections": {
+        "collection": [
+          "data_root",
+          "stale_timeout_ms",
+          "status_hz",
+          "receive_threads",
+          "available_only",
+          "minimum_free_bytes"
+        ],
+        "streams": [
+          "pico_head_pose_raw",
+          "pico_head_pose",
+          "pico_head_pose_valid",
+          "head_target_command",
+          "head_command",
+          "head_joint_states",
+          "head_diagnostics",
+          "head_left_color",
+          "head_right_color",
+          "head_left_color_info",
+          "head_right_color_info",
+          "tianji_command",
+          "tianji_state_left",
+          "tianji_state_right",
+          "tianji_robot_state",
+          "tianji_safety_driver",
+          "tianji_safety_teleop",
+          "tianji_teleop_state",
+          "wuji_left_command",
+          "wuji_left_state",
+          "wuji_left_diagnostics",
+          "wuji_left_sim_state",
+          "wuji_right_command",
+          "wuji_right_state",
+          "wuji_right_diagnostics",
+          "wuji_right_sim_state",
+          "manus_left",
+          "manus_right",
+          "tracker_left_raw",
+          "tracker_right_raw",
+          "tracker_left",
+          "tracker_right",
+          "tracker_safety",
+          "wrist_left_color",
+          "wrist_right_color",
+          "wrist_left_color_info",
+          "wrist_right_color_info",
+          "wrist_left_diagnostics",
+          "wrist_right_diagnostics",
+          "teleop_control_phase"
+        ],
+        "preview": [
+          "enabled",
+          "fps",
+          "width",
+          "height",
+          "jpeg_quality"
+        ],
+        "runtime": [
+          "source_mode"
+        ],
+        "episode": [
+          "selected_streams"
+        ]
+      }
+    },
+    "native_streams": {
+      "manus_left": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/manus_left/manus_left_0.mcap",
+        "size": 18041512,
+        "format_catalog": {
+          "/dex/collection/observations/manus_left": "dex_collection_interfaces/msg/SampleObservation",
+          "/manus_glove_left": "manus_ros2_msgs/msg/ManusGlove"
+        },
+        "scanned": 40,
+        "scan_limit": 1800,
+        "per_topic_limit": 20,
+        "failures": {},
+        "decoded": {
+          "/manus_glove_left": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564212929,
+              "ros_header_ns": 1794486970564093268,
+              "source_timestamp_us": 139274567821873,
+              "receive_timestamp_us": 620661153627
+            },
+            "last": {
+              "reader_log_ns": 1794486970722541173,
+              "ros_header_ns": 1794486970722431029,
+              "source_timestamp_us": 139274567822030,
+              "receive_timestamp_us": 620661309498
+            },
+            "timestamps": {
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564212929,
+                "max": 1794486970722541173,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8348855.0
+              },
+              "receive_timestamp_us": {
+                "count": 20,
+                "positive": 20,
+                "min": 620661153627,
+                "max": 620661309498,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8416.0
+              },
+              "ros_header_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564093268,
+                "max": 1794486970722431029,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8334324.0
+              },
+              "source_timestamp_us": {
+                "count": 20,
+                "positive": 20,
+                "min": 139274567821873,
+                "max": 139274567822030,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8.0
+              }
+            },
+            "fields": {
+              "header": "std_msgs/Header",
+              "source_timestamp_us": "uint64",
+              "receive_timestamp_us": "uint64",
+              "glove_id": "int32",
+              "side": "string",
+              "raw_node_count": "int32",
+              "raw_nodes": "sequence<manus_ros2_msgs/ManusRawNode>",
+              "ergonomics_count": "int32",
+              "ergonomics": "sequence<manus_ros2_msgs/ManusErgonomics>",
+              "raw_sensor_orientation": "geometry_msgs/Quaternion",
+              "raw_sensor_count": "int32",
+              "raw_sensor": "sequence<geometry_msgs/Pose>"
+            },
+            "frame_id": "",
+            "raw_nodes_length": 25,
+            "raw_node_count": 25,
+            "topology": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                1
+              ],
+              [
+                3,
+                2
+              ],
+              [
+                4,
+                3
+              ],
+              [
+                5,
+                0
+              ],
+              [
+                6,
+                5
+              ],
+              [
+                7,
+                6
+              ],
+              [
+                8,
+                7
+              ],
+              [
+                9,
+                8
+              ],
+              [
+                10,
+                0
+              ],
+              [
+                11,
+                10
+              ],
+              [
+                12,
+                11
+              ],
+              [
+                13,
+                12
+              ],
+              [
+                14,
+                13
+              ],
+              [
+                15,
+                0
+              ],
+              [
+                16,
+                15
+              ],
+              [
+                17,
+                16
+              ],
+              [
+                18,
+                17
+              ],
+              [
+                19,
+                18
+              ],
+              [
+                20,
+                0
+              ],
+              [
+                21,
+                20
+              ],
+              [
+                22,
+                21
+              ],
+              [
+                23,
+                22
+              ],
+              [
+                24,
+                23
+              ]
+            ],
+            "node_fields": {
+              "node_id": "int32",
+              "parent_node_id": "int32",
+              "joint_type": "string",
+              "chain_type": "string",
+              "pose": "geometry_msgs/Pose"
+            },
+            "glove_id": -1403539900,
+            "python_type_file": {
+              "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/python3.12/site-packages/manus_ros2_msgs/msg/_manus_glove.py",
+              "realpath": "/home/ubuntu/teleop_ws/build/manus_ros2_msgs/rosidl_generator_py/manus_ros2_msgs/msg/_manus_glove.py",
+              "bytes": 16700,
+              "sha256": "5274f5c6404ecd7e1942991729f0ee456c5bc98e759b7a53a8da8e13e8e34354"
+            }
+          },
+          "/dex/collection/observations/manus_left": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564212929,
+              "receive_ros_timestamp_ns": 1794486970564212741,
+              "host_observed_monotonic_ns": 620661155540679,
+              "host_realtime_ns": 1794486970564212929,
+              "source_sequence_id": 157293,
+              "episode_sample_index": 0
+            },
+            "last": {
+              "reader_log_ns": 1794486970722541173,
+              "receive_ros_timestamp_ns": 1794486970722540580,
+              "host_observed_monotonic_ns": 620661313868907,
+              "host_realtime_ns": 1794486970722541173,
+              "source_sequence_id": 157312,
+              "episode_sample_index": 19
+            },
+            "timestamps": {
+              "episode_sample_index": {
+                "count": 20,
+                "positive": 19,
+                "min": 0,
+                "max": 19,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              },
+              "host_observed_monotonic_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 620661155540679,
+                "max": 620661313868907,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8348847.0
+              },
+              "host_realtime_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564212929,
+                "max": 1794486970722541173,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8348855.0
+              },
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564212929,
+                "max": 1794486970722541173,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8348855.0
+              },
+              "receive_ros_timestamp_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564212741,
+                "max": 1794486970722540580,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8348720.0
+              },
+              "source_sequence_id": {
+                "count": 20,
+                "positive": 20,
+                "min": 157293,
+                "max": 157312,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              }
+            },
+            "fields": {
+              "stream_id": "string",
+              "source_instance_id": "string",
+              "source_sequence_id": "uint64",
+              "episode_sample_index": "uint64",
+              "host_observed_monotonic_ns": "int64",
+              "host_realtime_ns": "int64",
+              "receive_ros_timestamp_ns": "int64"
+            },
+            "python_type_file": {
+              "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "bytes": 10755,
+              "sha256": "155bd9a408befe242615a95d03b50778f1595c442b5446375c0e7653849b14b2"
+            }
+          }
+        },
+        "no_sample": [],
+        "publish_time": "UNKNOWN in this API witness",
+        "controller_receive_time": "UNKNOWN"
+      },
+      "manus_right": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/manus_right/manus_right_0.mcap",
+        "size": 18041522,
+        "format_catalog": {
+          "/dex/collection/observations/manus_right": "dex_collection_interfaces/msg/SampleObservation",
+          "/manus_glove_right": "manus_ros2_msgs/msg/ManusGlove"
+        },
+        "scanned": 40,
+        "scan_limit": 1800,
+        "per_topic_limit": 20,
+        "failures": {},
+        "decoded": {
+          "/manus_glove_right": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564383008,
+              "ros_header_ns": 1794486970564126119,
+              "source_timestamp_us": 139274567821874,
+              "receive_timestamp_us": 620661154669
+            },
+            "last": {
+              "reader_log_ns": 1794486970722556124,
+              "ros_header_ns": 1794486970722474552,
+              "source_timestamp_us": 139274567822022,
+              "receive_timestamp_us": 620661302124
+            },
+            "timestamps": {
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564383008,
+                "max": 1794486970722556124,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8347900.0
+              },
+              "receive_timestamp_us": {
+                "count": 20,
+                "positive": 20,
+                "min": 620661154669,
+                "max": 620661302124,
+                "repeats": 7,
+                "backwards": 0,
+                "step_p50": 7381.0
+              },
+              "ros_header_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564126119,
+                "max": 1794486970722474552,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8336173.0
+              },
+              "source_timestamp_us": {
+                "count": 20,
+                "positive": 20,
+                "min": 139274567821874,
+                "max": 139274567822022,
+                "repeats": 7,
+                "backwards": 0,
+                "step_p50": 8.0
+              }
+            },
+            "fields": {
+              "header": "std_msgs/Header",
+              "source_timestamp_us": "uint64",
+              "receive_timestamp_us": "uint64",
+              "glove_id": "int32",
+              "side": "string",
+              "raw_node_count": "int32",
+              "raw_nodes": "sequence<manus_ros2_msgs/ManusRawNode>",
+              "ergonomics_count": "int32",
+              "ergonomics": "sequence<manus_ros2_msgs/ManusErgonomics>",
+              "raw_sensor_orientation": "geometry_msgs/Quaternion",
+              "raw_sensor_count": "int32",
+              "raw_sensor": "sequence<geometry_msgs/Pose>"
+            },
+            "frame_id": "",
+            "raw_nodes_length": 25,
+            "raw_node_count": 25,
+            "topology": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                2,
+                1
+              ],
+              [
+                3,
+                2
+              ],
+              [
+                4,
+                3
+              ],
+              [
+                5,
+                0
+              ],
+              [
+                6,
+                5
+              ],
+              [
+                7,
+                6
+              ],
+              [
+                8,
+                7
+              ],
+              [
+                9,
+                8
+              ],
+              [
+                10,
+                0
+              ],
+              [
+                11,
+                10
+              ],
+              [
+                12,
+                11
+              ],
+              [
+                13,
+                12
+              ],
+              [
+                14,
+                13
+              ],
+              [
+                15,
+                0
+              ],
+              [
+                16,
+                15
+              ],
+              [
+                17,
+                16
+              ],
+              [
+                18,
+                17
+              ],
+              [
+                19,
+                18
+              ],
+              [
+                20,
+                0
+              ],
+              [
+                21,
+                20
+              ],
+              [
+                22,
+                21
+              ],
+              [
+                23,
+                22
+              ],
+              [
+                24,
+                23
+              ]
+            ],
+            "node_fields": {
+              "node_id": "int32",
+              "parent_node_id": "int32",
+              "joint_type": "string",
+              "chain_type": "string",
+              "pose": "geometry_msgs/Pose"
+            },
+            "glove_id": -602446895,
+            "python_type_file": {
+              "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/python3.12/site-packages/manus_ros2_msgs/msg/_manus_glove.py",
+              "realpath": "/home/ubuntu/teleop_ws/build/manus_ros2_msgs/rosidl_generator_py/manus_ros2_msgs/msg/_manus_glove.py",
+              "bytes": 16700,
+              "sha256": "5274f5c6404ecd7e1942991729f0ee456c5bc98e759b7a53a8da8e13e8e34354"
+            }
+          },
+          "/dex/collection/observations/manus_right": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564383008,
+              "receive_ros_timestamp_ns": 1794486970564382928,
+              "host_observed_monotonic_ns": 620661155710752,
+              "host_realtime_ns": 1794486970564383008,
+              "source_sequence_id": 155556,
+              "episode_sample_index": 0
+            },
+            "last": {
+              "reader_log_ns": 1794486970722556124,
+              "receive_ros_timestamp_ns": 1794486970722555907,
+              "host_observed_monotonic_ns": 620661313883868,
+              "host_realtime_ns": 1794486970722556124,
+              "source_sequence_id": 155575,
+              "episode_sample_index": 19
+            },
+            "timestamps": {
+              "episode_sample_index": {
+                "count": 20,
+                "positive": 19,
+                "min": 0,
+                "max": 19,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              },
+              "host_observed_monotonic_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 620661155710752,
+                "max": 620661313883868,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8347896.0
+              },
+              "host_realtime_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564383008,
+                "max": 1794486970722556124,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8347900.0
+              },
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564383008,
+                "max": 1794486970722556124,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8347900.0
+              },
+              "receive_ros_timestamp_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564382928,
+                "max": 1794486970722555907,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8347906.0
+              },
+              "source_sequence_id": {
+                "count": 20,
+                "positive": 20,
+                "min": 155556,
+                "max": 155575,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              }
+            },
+            "fields": {
+              "stream_id": "string",
+              "source_instance_id": "string",
+              "source_sequence_id": "uint64",
+              "episode_sample_index": "uint64",
+              "host_observed_monotonic_ns": "int64",
+              "host_realtime_ns": "int64",
+              "receive_ros_timestamp_ns": "int64"
+            },
+            "python_type_file": {
+              "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "bytes": 10755,
+              "sha256": "155bd9a408befe242615a95d03b50778f1595c442b5446375c0e7653849b14b2"
+            }
+          }
+        },
+        "no_sample": [],
+        "publish_time": "UNKNOWN in this API witness",
+        "controller_receive_time": "UNKNOWN"
+      },
+      "tracker_left": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/tracker_left/tracker_left_0.mcap",
+        "size": 1800950,
+        "format_catalog": {
+          "/dex/collection/observations/tracker_left": "dex_collection_interfaces/msg/SampleObservation",
+          "/vive/tracker/left_wrist": "tianji_interfaces/msg/TrackerPose"
+        },
+        "scanned": 40,
+        "scan_limit": 1800,
+        "per_topic_limit": 20,
+        "failures": {},
+        "decoded": {
+          "/vive/tracker/left_wrist": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564470314,
+              "ros_header_ns": 1794486970564196274
+            },
+            "last": {
+              "reader_log_ns": 1794486970722730607,
+              "ros_header_ns": 1794486970722515416
+            },
+            "timestamps": {
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564470314,
+                "max": 1794486970722730607,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8326388.0
+              },
+              "ros_header_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564196274,
+                "max": 1794486970722515416,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8328371.0
+              }
+            },
+            "fields": {
+              "header": "std_msgs/Header",
+              "pose": "geometry_msgs/Pose",
+              "role": "string",
+              "valid": "boolean",
+              "quality": "double"
+            },
+            "frame_id": "openvr_world",
+            "valid": true,
+            "quality": 1.0,
+            "python_type_file": {
+              "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages/tianji_interfaces/msg/_tracker_pose.py",
+              "realpath": "/home/ubuntu/teleop_ws/build/tianji_interfaces/rosidl_generator_py/tianji_interfaces/msg/_tracker_pose.py",
+              "bytes": 8235,
+              "sha256": "1e2ca0b4d317192c40578a5b2b1c03c9fd21e56f6f654f9dc0b6f0db063b6231"
+            }
+          },
+          "/dex/collection/observations/tracker_left": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564470314,
+              "receive_ros_timestamp_ns": 1794486970564470298,
+              "host_observed_monotonic_ns": 620661155798041,
+              "host_realtime_ns": 1794486970564470314,
+              "source_sequence_id": 92292,
+              "episode_sample_index": 0
+            },
+            "last": {
+              "reader_log_ns": 1794486970722730607,
+              "receive_ros_timestamp_ns": 1794486970722730574,
+              "host_observed_monotonic_ns": 620661314058335,
+              "host_realtime_ns": 1794486970722730607,
+              "source_sequence_id": 92311,
+              "episode_sample_index": 19
+            },
+            "timestamps": {
+              "episode_sample_index": {
+                "count": 20,
+                "positive": 19,
+                "min": 0,
+                "max": 19,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              },
+              "host_observed_monotonic_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 620661155798041,
+                "max": 620661314058335,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8326360.0
+              },
+              "host_realtime_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564470314,
+                "max": 1794486970722730607,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8326388.0
+              },
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564470314,
+                "max": 1794486970722730607,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8326388.0
+              },
+              "receive_ros_timestamp_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564470298,
+                "max": 1794486970722730574,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8326524.0
+              },
+              "source_sequence_id": {
+                "count": 20,
+                "positive": 20,
+                "min": 92292,
+                "max": 92311,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              }
+            },
+            "fields": {
+              "stream_id": "string",
+              "source_instance_id": "string",
+              "source_sequence_id": "uint64",
+              "episode_sample_index": "uint64",
+              "host_observed_monotonic_ns": "int64",
+              "host_realtime_ns": "int64",
+              "receive_ros_timestamp_ns": "int64"
+            },
+            "python_type_file": {
+              "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "bytes": 10755,
+              "sha256": "155bd9a408befe242615a95d03b50778f1595c442b5446375c0e7653849b14b2"
+            }
+          }
+        },
+        "no_sample": [],
+        "publish_time": "UNKNOWN in this API witness",
+        "controller_receive_time": "UNKNOWN"
+      },
+      "tracker_right": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/tracker_right/tracker_right_0.mcap",
+        "size": 1844960,
+        "format_catalog": {
+          "/dex/collection/observations/tracker_right": "dex_collection_interfaces/msg/SampleObservation",
+          "/vive/tracker/right_wrist": "tianji_interfaces/msg/TrackerPose"
+        },
+        "scanned": 40,
+        "scan_limit": 1800,
+        "per_topic_limit": 20,
+        "failures": {},
+        "decoded": {
+          "/vive/tracker/right_wrist": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564469159,
+              "ros_header_ns": 1794486970564196274
+            },
+            "last": {
+              "reader_log_ns": 1794486970722732752,
+              "ros_header_ns": 1794486970722515416
+            },
+            "timestamps": {
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564469159,
+                "max": 1794486970722732752,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8313008.0
+              },
+              "ros_header_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564196274,
+                "max": 1794486970722515416,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8328371.0
+              }
+            },
+            "fields": {
+              "header": "std_msgs/Header",
+              "pose": "geometry_msgs/Pose",
+              "role": "string",
+              "valid": "boolean",
+              "quality": "double"
+            },
+            "frame_id": "openvr_world",
+            "valid": true,
+            "quality": 1.0,
+            "python_type_file": {
+              "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages/tianji_interfaces/msg/_tracker_pose.py",
+              "realpath": "/home/ubuntu/teleop_ws/build/tianji_interfaces/rosidl_generator_py/tianji_interfaces/msg/_tracker_pose.py",
+              "bytes": 8235,
+              "sha256": "1e2ca0b4d317192c40578a5b2b1c03c9fd21e56f6f654f9dc0b6f0db063b6231"
+            }
+          },
+          "/dex/collection/observations/tracker_right": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564469159,
+              "receive_ros_timestamp_ns": 1794486970564469094,
+              "host_observed_monotonic_ns": 620661155796917,
+              "host_realtime_ns": 1794486970564469159,
+              "source_sequence_id": 100022,
+              "episode_sample_index": 0
+            },
+            "last": {
+              "reader_log_ns": 1794486970722732752,
+              "receive_ros_timestamp_ns": 1794486970722732664,
+              "host_observed_monotonic_ns": 620661314060492,
+              "host_realtime_ns": 1794486970722732752,
+              "source_sequence_id": 100041,
+              "episode_sample_index": 19
+            },
+            "timestamps": {
+              "episode_sample_index": {
+                "count": 20,
+                "positive": 19,
+                "min": 0,
+                "max": 19,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              },
+              "host_observed_monotonic_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 620661155796917,
+                "max": 620661314060492,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8313033.0
+              },
+              "host_realtime_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564469159,
+                "max": 1794486970722732752,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8313008.0
+              },
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564469159,
+                "max": 1794486970722732752,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8313008.0
+              },
+              "receive_ros_timestamp_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564469094,
+                "max": 1794486970722732664,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8312620.0
+              },
+              "source_sequence_id": {
+                "count": 20,
+                "positive": 20,
+                "min": 100022,
+                "max": 100041,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              }
+            },
+            "fields": {
+              "stream_id": "string",
+              "source_instance_id": "string",
+              "source_sequence_id": "uint64",
+              "episode_sample_index": "uint64",
+              "host_observed_monotonic_ns": "int64",
+              "host_realtime_ns": "int64",
+              "receive_ros_timestamp_ns": "int64"
+            },
+            "python_type_file": {
+              "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "bytes": 10755,
+              "sha256": "155bd9a408befe242615a95d03b50778f1595c442b5446375c0e7653849b14b2"
+            }
+          }
+        },
+        "no_sample": [],
+        "publish_time": "UNKNOWN in this API witness",
+        "controller_receive_time": "UNKNOWN"
+      },
+      "tracker_left_raw": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/tracker_left_raw/tracker_left_raw_0.mcap",
+        "size": 1712788,
+        "format_catalog": {
+          "/dex/collection/observations/tracker_left_raw": "dex_collection_interfaces/msg/SampleObservation",
+          "/vive/raw/left_wrist": "geometry_msgs/msg/PoseStamped"
+        },
+        "scanned": 40,
+        "scan_limit": 1800,
+        "per_topic_limit": 20,
+        "failures": {},
+        "decoded": {
+          "/vive/raw/left_wrist": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564471507,
+              "ros_header_ns": 1794486970564196274
+            },
+            "last": {
+              "reader_log_ns": 1794486970722616769,
+              "ros_header_ns": 1794486970722515416
+            },
+            "timestamps": {
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564471507,
+                "max": 1794486970722616769,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8328837.0
+              },
+              "ros_header_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564196274,
+                "max": 1794486970722515416,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8328371.0
+              }
+            },
+            "fields": {
+              "header": "std_msgs/Header",
+              "pose": "geometry_msgs/Pose"
+            },
+            "frame_id": "openvr_world",
+            "python_type_file": {
+              "path": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_pose_stamped.py",
+              "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_pose_stamped.py",
+              "bytes": 6261,
+              "sha256": "e572f6a2d674bf4e5a9a1658c018ec9e9ce44b051337da71e6d22aa7b847a773"
+            }
+          },
+          "/dex/collection/observations/tracker_left_raw": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564471507,
+              "receive_ros_timestamp_ns": 1794486970564471452,
+              "host_observed_monotonic_ns": 620661155799236,
+              "host_realtime_ns": 1794486970564471507,
+              "source_sequence_id": 92302,
+              "episode_sample_index": 0
+            },
+            "last": {
+              "reader_log_ns": 1794486970722616769,
+              "receive_ros_timestamp_ns": 1794486970722616618,
+              "host_observed_monotonic_ns": 620661313944515,
+              "host_realtime_ns": 1794486970722616769,
+              "source_sequence_id": 92321,
+              "episode_sample_index": 19
+            },
+            "timestamps": {
+              "episode_sample_index": {
+                "count": 20,
+                "positive": 19,
+                "min": 0,
+                "max": 19,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              },
+              "host_observed_monotonic_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 620661155799236,
+                "max": 620661313944515,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8328746.0
+              },
+              "host_realtime_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564471507,
+                "max": 1794486970722616769,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8328837.0
+              },
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564471507,
+                "max": 1794486970722616769,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8328837.0
+              },
+              "receive_ros_timestamp_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564471452,
+                "max": 1794486970722616618,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8328954.0
+              },
+              "source_sequence_id": {
+                "count": 20,
+                "positive": 20,
+                "min": 92302,
+                "max": 92321,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              }
+            },
+            "fields": {
+              "stream_id": "string",
+              "source_instance_id": "string",
+              "source_sequence_id": "uint64",
+              "episode_sample_index": "uint64",
+              "host_observed_monotonic_ns": "int64",
+              "host_realtime_ns": "int64",
+              "receive_ros_timestamp_ns": "int64"
+            },
+            "python_type_file": {
+              "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "bytes": 10755,
+              "sha256": "155bd9a408befe242615a95d03b50778f1595c442b5446375c0e7653849b14b2"
+            }
+          }
+        },
+        "no_sample": [],
+        "publish_time": "UNKNOWN in this API witness",
+        "controller_receive_time": "UNKNOWN"
+      },
+      "tracker_right_raw": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/tracker_right_raw/tracker_right_raw_0.mcap",
+        "size": 1712798,
+        "format_catalog": {
+          "/dex/collection/observations/tracker_right_raw": "dex_collection_interfaces/msg/SampleObservation",
+          "/vive/raw/right_wrist": "geometry_msgs/msg/PoseStamped"
+        },
+        "scanned": 40,
+        "scan_limit": 1800,
+        "per_topic_limit": 20,
+        "failures": {},
+        "decoded": {
+          "/vive/raw/right_wrist": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564473181,
+              "ros_header_ns": 1794486970564196274
+            },
+            "last": {
+              "reader_log_ns": 1794486970722616786,
+              "ros_header_ns": 1794486970722515416
+            },
+            "timestamps": {
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564473181,
+                "max": 1794486970722616786,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8333760.0
+              },
+              "ros_header_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564196274,
+                "max": 1794486970722515416,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8328371.0
+              }
+            },
+            "fields": {
+              "header": "std_msgs/Header",
+              "pose": "geometry_msgs/Pose"
+            },
+            "frame_id": "openvr_world",
+            "python_type_file": {
+              "path": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_pose_stamped.py",
+              "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_pose_stamped.py",
+              "bytes": 6261,
+              "sha256": "e572f6a2d674bf4e5a9a1658c018ec9e9ce44b051337da71e6d22aa7b847a773"
+            }
+          },
+          "/dex/collection/observations/tracker_right_raw": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564473181,
+              "receive_ros_timestamp_ns": 1794486970564473166,
+              "host_observed_monotonic_ns": 620661155800909,
+              "host_realtime_ns": 1794486970564473181,
+              "source_sequence_id": 100032,
+              "episode_sample_index": 0
+            },
+            "last": {
+              "reader_log_ns": 1794486970722616786,
+              "receive_ros_timestamp_ns": 1794486970722616677,
+              "host_observed_monotonic_ns": 620661313944535,
+              "host_realtime_ns": 1794486970722616786,
+              "source_sequence_id": 100051,
+              "episode_sample_index": 19
+            },
+            "timestamps": {
+              "episode_sample_index": {
+                "count": 20,
+                "positive": 19,
+                "min": 0,
+                "max": 19,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              },
+              "host_observed_monotonic_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 620661155800909,
+                "max": 620661313944535,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8333777.0
+              },
+              "host_realtime_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564473181,
+                "max": 1794486970722616786,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8333760.0
+              },
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564473181,
+                "max": 1794486970722616786,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8333760.0
+              },
+              "receive_ros_timestamp_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564473166,
+                "max": 1794486970722616677,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8333829.0
+              },
+              "source_sequence_id": {
+                "count": 20,
+                "positive": 20,
+                "min": 100032,
+                "max": 100051,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              }
+            },
+            "fields": {
+              "stream_id": "string",
+              "source_instance_id": "string",
+              "source_sequence_id": "uint64",
+              "episode_sample_index": "uint64",
+              "host_observed_monotonic_ns": "int64",
+              "host_realtime_ns": "int64",
+              "receive_ros_timestamp_ns": "int64"
+            },
+            "python_type_file": {
+              "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "bytes": 10755,
+              "sha256": "155bd9a408befe242615a95d03b50778f1595c442b5446375c0e7653849b14b2"
+            }
+          }
+        },
+        "no_sample": [],
+        "publish_time": "UNKNOWN in this API witness",
+        "controller_receive_time": "UNKNOWN"
+      },
+      "tracker_safety": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/tracker_safety/tracker_safety_0.mcap",
+        "size": 1645498,
+        "format_catalog": {
+          "/dex/collection/observations/tracker_safety": "dex_collection_interfaces/msg/SampleObservation",
+          "/vive/tracker/safety_status": "tianji_interfaces/msg/SafetyStatus"
+        },
+        "scanned": 40,
+        "scan_limit": 1800,
+        "per_topic_limit": 20,
+        "failures": {},
+        "decoded": {
+          "/vive/tracker/safety_status": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564465870,
+              "ros_header_ns": 1794486970564196274
+            },
+            "last": {
+              "reader_log_ns": 1794486970722609776,
+              "ros_header_ns": 1794486970722515416
+            },
+            "timestamps": {
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564465870,
+                "max": 1794486970722609776,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8338387.0
+              },
+              "ros_header_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564196274,
+                "max": 1794486970722515416,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8328371.0
+              }
+            },
+            "fields": {
+              "header": "std_msgs/Header",
+              "safe": "boolean",
+              "level": "uint8",
+              "code": "string",
+              "reason": "string"
+            },
+            "frame_id": "openvr_world",
+            "safe": true,
+            "python_type_file": {
+              "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages/tianji_interfaces/msg/_safety_status.py",
+              "realpath": "/home/ubuntu/teleop_ws/build/tianji_interfaces/rosidl_generator_py/tianji_interfaces/msg/_safety_status.py",
+              "bytes": 7783,
+              "sha256": "d251accc8dcc53942cbf7cb70e6399e3bb422f968e1d3df614828bd218593a44"
+            }
+          },
+          "/dex/collection/observations/tracker_safety": {
+            "count": 20,
+            "first": {
+              "reader_log_ns": 1794486970564465870,
+              "receive_ros_timestamp_ns": 1794486970564465788,
+              "host_observed_monotonic_ns": 620661155793616,
+              "host_realtime_ns": 1794486970564465870,
+              "source_sequence_id": 13166971,
+              "episode_sample_index": 0
+            },
+            "last": {
+              "reader_log_ns": 1794486970722609776,
+              "receive_ros_timestamp_ns": 1794486970722609664,
+              "host_observed_monotonic_ns": 620661313937524,
+              "host_realtime_ns": 1794486970722609776,
+              "source_sequence_id": 13166990,
+              "episode_sample_index": 19
+            },
+            "timestamps": {
+              "episode_sample_index": {
+                "count": 20,
+                "positive": 19,
+                "min": 0,
+                "max": 19,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              },
+              "host_observed_monotonic_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 620661155793616,
+                "max": 620661313937524,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8338406.0
+              },
+              "host_realtime_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564465870,
+                "max": 1794486970722609776,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8338387.0
+              },
+              "reader_log_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564465870,
+                "max": 1794486970722609776,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8338387.0
+              },
+              "receive_ros_timestamp_ns": {
+                "count": 20,
+                "positive": 20,
+                "min": 1794486970564465788,
+                "max": 1794486970722609664,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 8338148.0
+              },
+              "source_sequence_id": {
+                "count": 20,
+                "positive": 20,
+                "min": 13166971,
+                "max": 13166990,
+                "repeats": 0,
+                "backwards": 0,
+                "step_p50": 1.0
+              }
+            },
+            "fields": {
+              "stream_id": "string",
+              "source_instance_id": "string",
+              "source_sequence_id": "uint64",
+              "episode_sample_index": "uint64",
+              "host_observed_monotonic_ns": "int64",
+              "host_realtime_ns": "int64",
+              "receive_ros_timestamp_ns": "int64"
+            },
+            "python_type_file": {
+              "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_sample_observation.py",
+              "bytes": 10755,
+              "sha256": "155bd9a408befe242615a95d03b50778f1595c442b5446375c0e7653849b14b2"
+            }
+          }
+        },
+        "no_sample": [],
+        "publish_time": "UNKNOWN in this API witness",
+        "controller_receive_time": "UNKNOWN"
+      }
+    },
+    "native_path_real": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/data/raw/episodes/18e74c646013f1e6-2156b79bc2482857",
+    "merged_meta": {
+      "file": {
+        "path": "/home/ubuntu/teleop_ws/data/teleop_no_camera_20261016_133930/metadata.yaml",
+        "realpath": "/home/ubuntu/teleop_ws/data/teleop_no_camera_20261016_133930/metadata.yaml",
+        "bytes": 29589,
+        "sha256": "a84af107a7c99e1a2d9f7de91b5595c9798ed629d241c8b465e47be50c281774"
+      },
+      "version": 9,
+      "storage": "mcap",
+      "duration_ns": 336291329387,
+      "counts": {
+        "/teleop/head_pose": 0,
+        "/teleop/head_pose_valid": 13374,
+        "/left_arm/wrench": 40140,
+        "/right_arm/wrench": 40140,
+        "/tianji/robot_state": 40141,
+        "/tianji_real_driver/safety": 40141,
+        "/left_hand/command": 40208,
+        "/right_hand/state": 40282,
+        "/manus_glove_left": 40257,
+        "/right_hand/diagnostics": 8,
+        "/manus_glove_right": 40257,
+        "/left_arm/ee_twist": 40209,
+        "/vive/raw/right_wrist": 40261,
+        "/tianji/teleop_diagnostics": 3184,
+        "/left_hand/diagnostics": 8,
+        "/dex/collection/topics": 624,
+        "/left_hand/state": 40269,
+        "/tf": 80520,
+        "/tf_static": 3,
+        "/parameter_events": 0,
+        "/vive/tracker/safety_status": 40261,
+        "/vive/raw/left_wrist": 40261,
+        "/vive/tracker/left_wrist": 29052,
+        "/left_arm/joint_states": 40140,
+        "/right_arm/joint_states": 40141,
+        "/vive/tracker/right_wrist": 39848,
+        "/whole_body_teleop/workflow_state": 1586,
+        "/tianji/joint_command": 76261,
+        "/right_hand/command": 40208,
+        "/dex/collection/status": 1679,
+        "/rosout": 871,
+        "/right_arm/ee_pose": 40209,
+        "/left_arm/ee_pose": 40209,
+        "/vive/tracker/transform_diagnostics": 3161,
+        "/right_arm/ee_twist": 40208,
+        "/tianji/safety": 76269,
+        "/events/write_split": 0,
+        "/tianji/teleop_state": 9
+      }
+    },
+    "merged": {
+      "path": "/home/ubuntu/teleop_ws/data/teleop_no_camera_20261016_133930/teleop_no_camera_20261016_133930_0.mcap",
+      "size": 560609433,
+      "format_catalog": {
+        "/teleop/head_pose": "geometry_msgs/msg/PoseStamped",
+        "/teleop/head_pose_valid": "std_msgs/msg/Bool",
+        "/left_arm/wrench": "geometry_msgs/msg/WrenchStamped",
+        "/left_arm/joint_states": "sensor_msgs/msg/JointState",
+        "/right_arm/wrench": "geometry_msgs/msg/WrenchStamped",
+        "/tianji/robot_state": "tianji_interfaces/msg/RobotState",
+        "/right_arm/joint_states": "sensor_msgs/msg/JointState",
+        "/tianji_real_driver/safety": "tianji_interfaces/msg/SafetyStatus",
+        "/left_hand/command": "manus_wuji_interfaces/msg/HandCommand",
+        "/vive/tracker/safety_status": "tianji_interfaces/msg/SafetyStatus",
+        "/vive/raw/left_wrist": "geometry_msgs/msg/PoseStamped",
+        "/vive/raw/right_wrist": "geometry_msgs/msg/PoseStamped",
+        "/left_hand/state": "manus_wuji_interfaces/msg/HandState",
+        "/left_hand/diagnostics": "manus_wuji_interfaces/msg/HandDiagnostics",
+        "/right_hand/state": "manus_wuji_interfaces/msg/HandState",
+        "/right_hand/diagnostics": "manus_wuji_interfaces/msg/HandDiagnostics",
+        "/dex/collection/topics": "dex_collection_interfaces/msg/TopicCatalogue",
+        "/dex/collection/status": "dex_collection_interfaces/msg/CollectionStatus",
+        "/tf_static": "tf2_msgs/msg/TFMessage",
+        "/parameter_events": "rcl_interfaces/msg/ParameterEvent",
+        "/events/write_split": "rosbag2_interfaces/msg/WriteSplitEvent",
+        "/rosout": "rcl_interfaces/msg/Log",
+        "/vive/tracker/transform_diagnostics": "diagnostic_msgs/msg/DiagnosticArray",
+        "/vive/tracker/left_wrist": "tianji_interfaces/msg/TrackerPose",
+        "/tf": "tf2_msgs/msg/TFMessage",
+        "/vive/tracker/right_wrist": "tianji_interfaces/msg/TrackerPose",
+        "/manus_glove_right": "manus_ros2_msgs/msg/ManusGlove",
+        "/manus_glove_left": "manus_ros2_msgs/msg/ManusGlove",
+        "/right_arm/ee_pose": "geometry_msgs/msg/PoseStamped",
+        "/tianji/joint_command": "tianji_interfaces/msg/JointCommand",
+        "/left_arm/ee_twist": "geometry_msgs/msg/TwistStamped",
+        "/left_arm/ee_pose": "geometry_msgs/msg/PoseStamped",
+        "/right_arm/ee_twist": "geometry_msgs/msg/TwistStamped",
+        "/tianji/safety": "tianji_interfaces/msg/SafetyStatus",
+        "/tianji/teleop_diagnostics": "diagnostic_msgs/msg/DiagnosticArray",
+        "/tianji/teleop_state": "tianji_interfaces/msg/TeleopState",
+        "/whole_body_teleop/workflow_state": "tianji_interfaces/msg/TeleopState",
+        "/right_hand/command": "manus_wuji_interfaces/msg/HandCommand"
+      },
+      "scanned": 1800,
+      "scan_limit": 1800,
+      "per_topic_limit": 20,
+      "failures": {
+        "/right_hand/state": "RMWError: failed to deserialize ROS message: Fast CDR exception deserializing message of type manus_wuji_interfaces::msg::dds_::HandState_., at ./src/type_support_common.cpp:118",
+        "/left_hand/state": "RMWError: failed to deserialize ROS message: Fast CDR exception deserializing message of type manus_wuji_interfaces::msg::dds_::HandState_., at ./src/type_support_common.cpp:118"
+      },
+      "decoded": {
+        "/vive/raw/left_wrist": {
+          "count": 20,
+          "first": {
+            "reader_log_ns": 1792129172042669545,
+            "ros_header_ns": 1792129172042609362
+          },
+          "last": {
+            "reader_log_ns": 1792129172200989453,
+            "ros_header_ns": 1792129172200924289
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172042669545,
+              "max": 1792129172200989453,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8337702.0
+            },
+            "ros_header_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172042609362,
+              "max": 1792129172200924289,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8335163.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "pose": "geometry_msgs/Pose"
+          },
+          "frame_id": "openvr_world",
+          "python_type_file": {
+            "path": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_pose_stamped.py",
+            "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_pose_stamped.py",
+            "bytes": 6261,
+            "sha256": "e572f6a2d674bf4e5a9a1658c018ec9e9ce44b051337da71e6d22aa7b847a773"
+          }
+        },
+        "/vive/raw/right_wrist": {
+          "count": 20,
+          "first": {
+            "reader_log_ns": 1792129172042687772,
+            "ros_header_ns": 1792129172042609362
+          },
+          "last": {
+            "reader_log_ns": 1792129172201008648,
+            "ros_header_ns": 1792129172200924289
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172042687772,
+              "max": 1792129172201008648,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8338225.0
+            },
+            "ros_header_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172042609362,
+              "max": 1792129172200924289,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8335163.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "pose": "geometry_msgs/Pose"
+          },
+          "frame_id": "openvr_world",
+          "python_type_file": {
+            "path": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_pose_stamped.py",
+            "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_pose_stamped.py",
+            "bytes": 6261,
+            "sha256": "e572f6a2d674bf4e5a9a1658c018ec9e9ce44b051337da71e6d22aa7b847a773"
+          }
+        },
+        "/vive/tracker/safety_status": {
+          "count": 20,
+          "first": {
+            "reader_log_ns": 1792129172042725750,
+            "ros_header_ns": 1792129172042609362
+          },
+          "last": {
+            "reader_log_ns": 1792129172201046750,
+            "ros_header_ns": 1792129172200924289
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172042725750,
+              "max": 1792129172201046750,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8339871.0
+            },
+            "ros_header_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172042609362,
+              "max": 1792129172200924289,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8335163.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "safe": "boolean",
+            "level": "uint8",
+            "code": "string",
+            "reason": "string"
+          },
+          "frame_id": "openvr_world",
+          "safe": true,
+          "python_type_file": {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages/tianji_interfaces/msg/_safety_status.py",
+            "realpath": "/home/ubuntu/teleop_ws/build/tianji_interfaces/rosidl_generator_py/tianji_interfaces/msg/_safety_status.py",
+            "bytes": 7783,
+            "sha256": "d251accc8dcc53942cbf7cb70e6399e3bb422f968e1d3df614828bd218593a44"
+          }
+        },
+        "/vive/tracker/transform_diagnostics": {
+          "count": 10,
+          "first": {
+            "reader_log_ns": 1792129172053105914,
+            "ros_header_ns": 1792129172026101836
+          },
+          "last": {
+            "reader_log_ns": 1792129173017874058,
+            "ros_header_ns": 1792129173017756094
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 10,
+              "positive": 10,
+              "min": 1792129172053105914,
+              "max": 1792129173017874058,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 108318697.0
+            },
+            "ros_header_ns": {
+              "count": 10,
+              "positive": 10,
+              "min": 1792129172026101836,
+              "max": 1792129173017756094,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 108394653.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "status": "sequence<diagnostic_msgs/DiagnosticStatus>"
+          },
+          "frame_id": "",
+          "python_type_file": {
+            "path": "/opt/ros/jazzy/lib/python3.12/site-packages/diagnostic_msgs/msg/_diagnostic_array.py",
+            "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/diagnostic_msgs/msg/_diagnostic_array.py",
+            "bytes": 6947,
+            "sha256": "d74b48761bcbed8c496650bef39fc3c67c6cba9d8da5a19c81779713968d33a5"
+          }
+        },
+        "/vive/tracker/right_wrist": {
+          "count": 20,
+          "first": {
+            "reader_log_ns": 1792129172061762384,
+            "ros_header_ns": 1792129172051461926
+          },
+          "last": {
+            "reader_log_ns": 1792129172209524313,
+            "ros_header_ns": 1792129172209277538
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172061762384,
+              "max": 1792129172209524313,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8300091.0
+            },
+            "ros_header_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172051461926,
+              "max": 1792129172209277538,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8335163.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "pose": "geometry_msgs/Pose",
+            "role": "string",
+            "valid": "boolean",
+            "quality": "double"
+          },
+          "frame_id": "openvr_world",
+          "valid": true,
+          "quality": 1.0,
+          "python_type_file": {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages/tianji_interfaces/msg/_tracker_pose.py",
+            "realpath": "/home/ubuntu/teleop_ws/build/tianji_interfaces/rosidl_generator_py/tianji_interfaces/msg/_tracker_pose.py",
+            "bytes": 8235,
+            "sha256": "1e2ca0b4d317192c40578a5b2b1c03c9fd21e56f6f654f9dc0b6f0db063b6231"
+          }
+        },
+        "/vive/tracker/left_wrist": {
+          "count": 20,
+          "first": {
+            "reader_log_ns": 1792129172061784920,
+            "ros_header_ns": 1792129172059267037
+          },
+          "last": {
+            "reader_log_ns": 1792129172251151192,
+            "ros_header_ns": 1792129172250924340
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172061784920,
+              "max": 1792129172251151192,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8362312.0
+            },
+            "ros_header_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172059267037,
+              "max": 1792129172250924340,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8339204.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "pose": "geometry_msgs/Pose",
+            "role": "string",
+            "valid": "boolean",
+            "quality": "double"
+          },
+          "frame_id": "openvr_world",
+          "valid": true,
+          "quality": 1.0,
+          "python_type_file": {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages/tianji_interfaces/msg/_tracker_pose.py",
+            "realpath": "/home/ubuntu/teleop_ws/build/tianji_interfaces/rosidl_generator_py/tianji_interfaces/msg/_tracker_pose.py",
+            "bytes": 8235,
+            "sha256": "1e2ca0b4d317192c40578a5b2b1c03c9fd21e56f6f654f9dc0b6f0db063b6231"
+          }
+        },
+        "/manus_glove_left": {
+          "count": 20,
+          "first": {
+            "reader_log_ns": 1792129172077250700,
+            "ros_header_ns": 1792129172077201327,
+            "source_timestamp_us": 139270780584006,
+            "receive_timestamp_us": 151599205994
+          },
+          "last": {
+            "reader_log_ns": 1792129172235609490,
+            "ros_header_ns": 1792129172235540700,
+            "source_timestamp_us": 139270780584164,
+            "receive_timestamp_us": 151599363893
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172077250700,
+              "max": 1792129172235609490,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8335504.0
+            },
+            "receive_timestamp_us": {
+              "count": 20,
+              "positive": 20,
+              "min": 151599205994,
+              "max": 151599363893,
+              "repeats": 2,
+              "backwards": 0,
+              "step_p50": 8430.0
+            },
+            "ros_header_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172077201327,
+              "max": 1792129172235540700,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8334628.0
+            },
+            "source_timestamp_us": {
+              "count": 20,
+              "positive": 20,
+              "min": 139270780584006,
+              "max": 139270780584164,
+              "repeats": 2,
+              "backwards": 0,
+              "step_p50": 8.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "source_timestamp_us": "uint64",
+            "receive_timestamp_us": "uint64",
+            "glove_id": "int32",
+            "side": "string",
+            "raw_node_count": "int32",
+            "raw_nodes": "sequence<manus_ros2_msgs/ManusRawNode>",
+            "ergonomics_count": "int32",
+            "ergonomics": "sequence<manus_ros2_msgs/ManusErgonomics>",
+            "raw_sensor_orientation": "geometry_msgs/Quaternion",
+            "raw_sensor_count": "int32",
+            "raw_sensor": "sequence<geometry_msgs/Pose>"
+          },
+          "frame_id": "",
+          "raw_nodes_length": 25,
+          "raw_node_count": 25,
+          "topology": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              10,
+              0
+            ],
+            [
+              11,
+              10
+            ],
+            [
+              12,
+              11
+            ],
+            [
+              13,
+              12
+            ],
+            [
+              14,
+              13
+            ],
+            [
+              15,
+              0
+            ],
+            [
+              16,
+              15
+            ],
+            [
+              17,
+              16
+            ],
+            [
+              18,
+              17
+            ],
+            [
+              19,
+              18
+            ],
+            [
+              20,
+              0
+            ],
+            [
+              21,
+              20
+            ],
+            [
+              22,
+              21
+            ],
+            [
+              23,
+              22
+            ],
+            [
+              24,
+              23
+            ]
+          ],
+          "node_fields": {
+            "node_id": "int32",
+            "parent_node_id": "int32",
+            "joint_type": "string",
+            "chain_type": "string",
+            "pose": "geometry_msgs/Pose"
+          },
+          "glove_id": -1403539900,
+          "python_type_file": {
+            "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/python3.12/site-packages/manus_ros2_msgs/msg/_manus_glove.py",
+            "realpath": "/home/ubuntu/teleop_ws/build/manus_ros2_msgs/rosidl_generator_py/manus_ros2_msgs/msg/_manus_glove.py",
+            "bytes": 16700,
+            "sha256": "5274f5c6404ecd7e1942991729f0ee456c5bc98e759b7a53a8da8e13e8e34354"
+          }
+        },
+        "/manus_glove_right": {
+          "count": 20,
+          "first": {
+            "reader_log_ns": 1792129172077266805,
+            "ros_header_ns": 1792129172077244460,
+            "source_timestamp_us": 139270780583999,
+            "receive_timestamp_us": 151599199615
+          },
+          "last": {
+            "reader_log_ns": 1792129172235629613,
+            "ros_header_ns": 1792129172235601491,
+            "source_timestamp_us": 139270780584166,
+            "receive_timestamp_us": 151599366019
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172077266805,
+              "max": 1792129172235629613,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8339690.0
+            },
+            "receive_timestamp_us": {
+              "count": 20,
+              "positive": 20,
+              "min": 151599199615,
+              "max": 151599366019,
+              "repeats": 4,
+              "backwards": 0,
+              "step_p50": 8425.0
+            },
+            "ros_header_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172077244460,
+              "max": 1792129172235601491,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8338155.0
+            },
+            "source_timestamp_us": {
+              "count": 20,
+              "positive": 20,
+              "min": 139270780583999,
+              "max": 139270780584166,
+              "repeats": 4,
+              "backwards": 0,
+              "step_p50": 8.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "source_timestamp_us": "uint64",
+            "receive_timestamp_us": "uint64",
+            "glove_id": "int32",
+            "side": "string",
+            "raw_node_count": "int32",
+            "raw_nodes": "sequence<manus_ros2_msgs/ManusRawNode>",
+            "ergonomics_count": "int32",
+            "ergonomics": "sequence<manus_ros2_msgs/ManusErgonomics>",
+            "raw_sensor_orientation": "geometry_msgs/Quaternion",
+            "raw_sensor_count": "int32",
+            "raw_sensor": "sequence<geometry_msgs/Pose>"
+          },
+          "frame_id": "",
+          "raw_nodes_length": 25,
+          "raw_node_count": 25,
+          "topology": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              5,
+              0
+            ],
+            [
+              6,
+              5
+            ],
+            [
+              7,
+              6
+            ],
+            [
+              8,
+              7
+            ],
+            [
+              9,
+              8
+            ],
+            [
+              10,
+              0
+            ],
+            [
+              11,
+              10
+            ],
+            [
+              12,
+              11
+            ],
+            [
+              13,
+              12
+            ],
+            [
+              14,
+              13
+            ],
+            [
+              15,
+              0
+            ],
+            [
+              16,
+              15
+            ],
+            [
+              17,
+              16
+            ],
+            [
+              18,
+              17
+            ],
+            [
+              19,
+              18
+            ],
+            [
+              20,
+              0
+            ],
+            [
+              21,
+              20
+            ],
+            [
+              22,
+              21
+            ],
+            [
+              23,
+              22
+            ],
+            [
+              24,
+              23
+            ]
+          ],
+          "node_fields": {
+            "node_id": "int32",
+            "parent_node_id": "int32",
+            "joint_type": "string",
+            "chain_type": "string",
+            "pose": "geometry_msgs/Pose"
+          },
+          "glove_id": -602446895,
+          "python_type_file": {
+            "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/python3.12/site-packages/manus_ros2_msgs/msg/_manus_glove.py",
+            "realpath": "/home/ubuntu/teleop_ws/build/manus_ros2_msgs/rosidl_generator_py/manus_ros2_msgs/msg/_manus_glove.py",
+            "bytes": 16700,
+            "sha256": "5274f5c6404ecd7e1942991729f0ee456c5bc98e759b7a53a8da8e13e8e34354"
+          }
+        },
+        "/left_arm/ee_pose": {
+          "count": 20,
+          "first": {
+            "reader_log_ns": 1792129172478957530,
+            "ros_header_ns": 1792129172478832244
+          },
+          "last": {
+            "reader_log_ns": 1792129172637381906,
+            "ros_header_ns": 1792129172637174367
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172478957530,
+              "max": 1792129172637381906,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8337206.0
+            },
+            "ros_header_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172478832244,
+              "max": 1792129172637174367,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8333921.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "pose": "geometry_msgs/Pose"
+          },
+          "frame_id": "left_arm_base",
+          "python_type_file": {
+            "path": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_pose_stamped.py",
+            "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_pose_stamped.py",
+            "bytes": 6261,
+            "sha256": "e572f6a2d674bf4e5a9a1658c018ec9e9ce44b051337da71e6d22aa7b847a773"
+          }
+        },
+        "/left_arm/ee_twist": {
+          "count": 20,
+          "first": {
+            "reader_log_ns": 1792129172478976329,
+            "ros_header_ns": 1792129172478832244
+          },
+          "last": {
+            "reader_log_ns": 1792129172637399042,
+            "ros_header_ns": 1792129172637174367
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172478976329,
+              "max": 1792129172637399042,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8335902.0
+            },
+            "ros_header_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172478832244,
+              "max": 1792129172637174367,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8333921.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "twist": "geometry_msgs/Twist"
+          },
+          "frame_id": "left_arm_base",
+          "python_type_file": {
+            "path": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_twist_stamped.py",
+            "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_twist_stamped.py",
+            "bytes": 6296,
+            "sha256": "7fc93af74a3ea63a5f0279bfc6da7251217a27010adb71b9d1a9abe53fe7764f"
+          }
+        },
+        "/right_arm/ee_pose": {
+          "count": 20,
+          "first": {
+            "reader_log_ns": 1792129172478996159,
+            "ros_header_ns": 1792129172478832244
+          },
+          "last": {
+            "reader_log_ns": 1792129172637346718,
+            "ros_header_ns": 1792129172637174367
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172478996159,
+              "max": 1792129172637346718,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8342382.0
+            },
+            "ros_header_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172478832244,
+              "max": 1792129172637174367,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8333921.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "pose": "geometry_msgs/Pose"
+          },
+          "frame_id": "right_arm_base",
+          "python_type_file": {
+            "path": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_pose_stamped.py",
+            "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_pose_stamped.py",
+            "bytes": 6261,
+            "sha256": "e572f6a2d674bf4e5a9a1658c018ec9e9ce44b051337da71e6d22aa7b847a773"
+          }
+        },
+        "/right_hand/command": {
+          "count": 20,
+          "first": {
+            "reader_log_ns": 1792129172485905862,
+            "ros_header_ns": 1792129172485862795
+          },
+          "last": {
+            "reader_log_ns": 1792129172644362405,
+            "ros_header_ns": 1792129172644307866
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172485905862,
+              "max": 1792129172644362405,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8326770.0
+            },
+            "ros_header_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172485862795,
+              "max": 1792129172644307866,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8330354.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "side": "string",
+            "joint_names": "string[20]",
+            "position": "double[20]",
+            "sequence": "uint64"
+          },
+          "frame_id": "",
+          "position_length": 20,
+          "joint_names_length": 20,
+          "python_type_file": {
+            "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/python3.12/site-packages/manus_wuji_interfaces/msg/_hand_command.py",
+            "realpath": "/home/ubuntu/teleop_ws/build/manus_wuji_interfaces/rosidl_generator_py/manus_wuji_interfaces/msg/_hand_command.py",
+            "bytes": 10615,
+            "sha256": "cbe9bcae09514ba7805e1d383c2ae1002ec3b3cc6681b46e93c2491e19fc5027"
+          }
+        },
+        "/left_hand/command": {
+          "count": 20,
+          "first": {
+            "reader_log_ns": 1792129172485919408,
+            "ros_header_ns": 1792129172485882154
+          },
+          "last": {
+            "reader_log_ns": 1792129172644352856,
+            "ros_header_ns": 1792129172644307868
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172485919408,
+              "max": 1792129172644352856,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8313926.0
+            },
+            "ros_header_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172485882154,
+              "max": 1792129172644307868,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8318505.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "side": "string",
+            "joint_names": "string[20]",
+            "position": "double[20]",
+            "sequence": "uint64"
+          },
+          "frame_id": "",
+          "position_length": 20,
+          "joint_names_length": 20,
+          "python_type_file": {
+            "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/python3.12/site-packages/manus_wuji_interfaces/msg/_hand_command.py",
+            "realpath": "/home/ubuntu/teleop_ws/build/manus_wuji_interfaces/rosidl_generator_py/manus_wuji_interfaces/msg/_hand_command.py",
+            "bytes": 10615,
+            "sha256": "cbe9bcae09514ba7805e1d383c2ae1002ec3b3cc6681b46e93c2491e19fc5027"
+          }
+        },
+        "/right_arm/ee_twist": {
+          "count": 20,
+          "first": {
+            "reader_log_ns": 1792129172487405962,
+            "ros_header_ns": 1792129172487166404
+          },
+          "last": {
+            "reader_log_ns": 1792129172645647565,
+            "ros_header_ns": 1792129172645467758
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172487405962,
+              "max": 1792129172645647565,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8316923.0
+            },
+            "ros_header_ns": {
+              "count": 20,
+              "positive": 20,
+              "min": 1792129172487166404,
+              "max": 1792129172645467758,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8333444.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "twist": "geometry_msgs/Twist"
+          },
+          "frame_id": "right_arm_base",
+          "python_type_file": {
+            "path": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_twist_stamped.py",
+            "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/geometry_msgs/msg/_twist_stamped.py",
+            "bytes": 6296,
+            "sha256": "7fc93af74a3ea63a5f0279bfc6da7251217a27010adb71b9d1a9abe53fe7764f"
+          }
+        },
+        "/tianji/safety": {
+          "count": 1,
+          "first": {
+            "reader_log_ns": 1792129172489718872,
+            "ros_header_ns": 1792129152654194528
+          },
+          "last": {
+            "reader_log_ns": 1792129172489718872,
+            "ros_header_ns": 1792129152654194528
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 1,
+              "positive": 1,
+              "min": 1792129172489718872,
+              "max": 1792129172489718872,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": null
+            },
+            "ros_header_ns": {
+              "count": 1,
+              "positive": 1,
+              "min": 1792129152654194528,
+              "max": 1792129152654194528,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": null
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "safe": "boolean",
+            "level": "uint8",
+            "code": "string",
+            "reason": "string"
+          },
+          "frame_id": "",
+          "safe": true,
+          "python_type_file": {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages/tianji_interfaces/msg/_safety_status.py",
+            "realpath": "/home/ubuntu/teleop_ws/build/tianji_interfaces/rosidl_generator_py/tianji_interfaces/msg/_safety_status.py",
+            "bytes": 7783,
+            "sha256": "d251accc8dcc53942cbf7cb70e6399e3bb422f968e1d3df614828bd218593a44"
+          }
+        },
+        "/tianji/teleop_state": {
+          "count": 1,
+          "first": {
+            "reader_log_ns": 1792129172490446717,
+            "ros_header_ns": 1792129152654172853
+          },
+          "last": {
+            "reader_log_ns": 1792129172490446717,
+            "ros_header_ns": 1792129152654172853
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 1,
+              "positive": 1,
+              "min": 1792129172490446717,
+              "max": 1792129172490446717,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": null
+            },
+            "ros_header_ns": {
+              "count": 1,
+              "positive": 1,
+              "min": 1792129152654172853,
+              "max": 1792129152654172853,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": null
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "state": "uint8",
+            "state_name": "string",
+            "session_id": "string",
+            "reason": "string",
+            "restart_requires_home": "boolean"
+          },
+          "frame_id": "",
+          "python_type_file": {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages/tianji_interfaces/msg/_teleop_state.py",
+            "realpath": "/home/ubuntu/teleop_ws/build/tianji_interfaces/rosidl_generator_py/tianji_interfaces/msg/_teleop_state.py",
+            "bytes": 8693,
+            "sha256": "77f89fe1ac9a6b1e5ee4854913387812ac86ebe4f8709821bd34631401ca0a50"
+          }
+        },
+        "/whole_body_teleop/workflow_state": {
+          "count": 2,
+          "first": {
+            "reader_log_ns": 1792129172654935830,
+            "ros_header_ns": 1792129172654905004
+          },
+          "last": {
+            "reader_log_ns": 1792129172854964373,
+            "ros_header_ns": 1792129172854923370
+          },
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 2,
+              "positive": 2,
+              "min": 1792129172654935830,
+              "max": 1792129172854964373,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 200028543.0
+            },
+            "ros_header_ns": {
+              "count": 2,
+              "positive": 2,
+              "min": 1792129172654905004,
+              "max": 1792129172854923370,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 200018366.0
+            }
+          },
+          "fields": {
+            "header": "std_msgs/Header",
+            "state": "uint8",
+            "state_name": "string",
+            "session_id": "string",
+            "reason": "string",
+            "restart_requires_home": "boolean"
+          },
+          "frame_id": "",
+          "python_type_file": {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages/tianji_interfaces/msg/_teleop_state.py",
+            "realpath": "/home/ubuntu/teleop_ws/build/tianji_interfaces/rosidl_generator_py/tianji_interfaces/msg/_teleop_state.py",
+            "bytes": 8693,
+            "sha256": "77f89fe1ac9a6b1e5ee4854913387812ac86ebe4f8709821bd34631401ca0a50"
+          }
+        }
+      },
+      "no_sample": [
+        "/left_arm/joint_states",
+        "/left_arm/wrench",
+        "/left_hand/diagnostics",
+        "/left_hand/state",
+        "/right_arm/joint_states",
+        "/right_arm/wrench",
+        "/right_hand/diagnostics",
+        "/right_hand/state",
+        "/tianji/joint_command",
+        "/tianji/robot_state",
+        "/tianji/teleop_diagnostics",
+        "/tianji_real_driver/safety"
+      ],
+      "publish_time": "UNKNOWN in this API witness",
+      "controller_receive_time": "UNKNOWN"
+    },
+    "merged_embedded_schema": {
+      "per_topic_limit": 12,
+      "topics": {
+        "/left_arm/joint_states": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129173053875542,
+              "max": 1792129173145547705,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8334442.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129173053826073,
+              "max": 1792129173145499446,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8328834.0
+            }
+          },
+          "fields": [
+            "header",
+            "name",
+            "position",
+            "velocity",
+            "effort"
+          ],
+          "schema_name": "sensor_msgs/msg/JointState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+          "array_lengths": {
+            "name": 7,
+            "position": 7,
+            "velocity": 0,
+            "effort": 7
+          }
+        },
+        "/left_arm/ee_pose": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129172478957530,
+              "max": 1792129172570658781,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8344221.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129172478832244,
+              "max": 1792129172570502758,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8334160.0
+            }
+          },
+          "fields": [
+            "header",
+            "pose"
+          ],
+          "schema_name": "geometry_msgs/msg/PoseStamped",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+          "array_lengths": {}
+        },
+        "/left_arm/ee_twist": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129172478976329,
+              "max": 1792129172570665898,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8342744.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129172478832244,
+              "max": 1792129172570502758,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8334160.0
+            }
+          },
+          "fields": [
+            "header",
+            "twist"
+          ],
+          "schema_name": "geometry_msgs/msg/TwistStamped",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "55a24debccea194c673cf7e935bb852d75656a425421884b2466f6032ecc5feb",
+          "array_lengths": {}
+        },
+        "/left_arm/wrench": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129173053906125,
+              "max": 1792129173145568241,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8337717.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129173053826073,
+              "max": 1792129173145499446,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8328834.0
+            }
+          },
+          "fields": [
+            "header",
+            "wrench"
+          ],
+          "schema_name": "geometry_msgs/msg/WrenchStamped",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "3a547dc5d67b12b7a47b12cea54fc014368b90605375364e550162e64eb468e2",
+          "array_lengths": {}
+        },
+        "/left_hand/command": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129172485919408,
+              "max": 1792129172577582648,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8300214.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129172485882154,
+              "max": 1792129172577551286,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8317723.0
+            }
+          },
+          "fields": [
+            "header",
+            "side",
+            "joint_names",
+            "position",
+            "sequence"
+          ],
+          "schema_name": "manus_wuji_interfaces/msg/HandCommand",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+          "array_lengths": {
+            "joint_names": 20,
+            "position": 20
+          }
+        },
+        "/left_hand/state": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129171975679703,
+              "max": 1792129172067370311,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8320362.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129171975633912,
+              "max": 1792129172067310692,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8329418.0
+            }
+          },
+          "fields": [
+            "header",
+            "side",
+            "joint_names",
+            "position",
+            "velocity",
+            "effort",
+            "connected",
+            "enabled",
+            "state",
+            "home_sequence"
+          ],
+          "schema_name": "manus_wuji_interfaces/msg/HandState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "db7dca35c06545242eff872b1eef79c729171b7d84a963966de903e608d5e575",
+          "array_lengths": {
+            "joint_names": 20,
+            "position": 20,
+            "velocity": 20,
+            "effort": 20
+          }
+        },
+        "/left_hand/diagnostics": {
+          "count": 8,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 8,
+              "positive": 8,
+              "min": 1792129175960108548,
+              "max": 1792129502676553181,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 4476175859.0
+            },
+            "ros_header_ns": {
+              "count": 8,
+              "positive": 8,
+              "min": 1792129175960063110,
+              "max": 1792129502676497316,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 4476171852.0
+            }
+          },
+          "fields": [
+            "header",
+            "side",
+            "connected",
+            "enabled",
+            "error_code",
+            "message"
+          ],
+          "schema_name": "manus_wuji_interfaces/msg/HandDiagnostics",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "bc21f69f6033c51f454d47fa45dd6c5448b24e2e7ddc20a6e453f924e06cd8d5",
+          "array_lengths": {}
+        },
+        "/right_arm/joint_states": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129173045552590,
+              "max": 1792129173137295232,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8339593.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129173045498339,
+              "max": 1792129173137178033,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8328834.0
+            }
+          },
+          "fields": [
+            "header",
+            "name",
+            "position",
+            "velocity",
+            "effort"
+          ],
+          "schema_name": "sensor_msgs/msg/JointState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+          "array_lengths": {
+            "name": 7,
+            "position": 7,
+            "velocity": 0,
+            "effort": 7
+          }
+        },
+        "/right_arm/ee_pose": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129172478996159,
+              "max": 1792129172570616883,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8342382.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129172478832244,
+              "max": 1792129172570502758,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8334160.0
+            }
+          },
+          "fields": [
+            "header",
+            "pose"
+          ],
+          "schema_name": "geometry_msgs/msg/PoseStamped",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+          "array_lengths": {}
+        },
+        "/right_arm/ee_twist": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129172487405962,
+              "max": 1792129172579019829,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8344767.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129172487166404,
+              "max": 1792129172578814029,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8333921.0
+            }
+          },
+          "fields": [
+            "header",
+            "twist"
+          ],
+          "schema_name": "geometry_msgs/msg/TwistStamped",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "55a24debccea194c673cf7e935bb852d75656a425421884b2466f6032ecc5feb",
+          "array_lengths": {}
+        },
+        "/right_arm/wrench": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129173053916540,
+              "max": 1792129173145582317,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8329984.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129173053826073,
+              "max": 1792129173145499446,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8328834.0
+            }
+          },
+          "fields": [
+            "header",
+            "wrench"
+          ],
+          "schema_name": "geometry_msgs/msg/WrenchStamped",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "3a547dc5d67b12b7a47b12cea54fc014368b90605375364e550162e64eb468e2",
+          "array_lengths": {}
+        },
+        "/right_hand/command": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129172485905862,
+              "max": 1792129172577570586,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8314392.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129172485862795,
+              "max": 1792129172577539171,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8311749.0
+            }
+          },
+          "fields": [
+            "header",
+            "side",
+            "joint_names",
+            "position",
+            "sequence"
+          ],
+          "schema_name": "manus_wuji_interfaces/msg/HandCommand",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+          "array_lengths": {
+            "joint_names": 20,
+            "position": 20
+          }
+        },
+        "/right_hand/state": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129171865513671,
+              "max": 1792129171957211249,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8336171.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129171865469436,
+              "max": 1792129171957148660,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8328034.0
+            }
+          },
+          "fields": [
+            "header",
+            "side",
+            "joint_names",
+            "position",
+            "velocity",
+            "effort",
+            "connected",
+            "enabled",
+            "state",
+            "home_sequence"
+          ],
+          "schema_name": "manus_wuji_interfaces/msg/HandState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "db7dca35c06545242eff872b1eef79c729171b7d84a963966de903e608d5e575",
+          "array_lengths": {
+            "joint_names": 20,
+            "position": 20,
+            "velocity": 20,
+            "effort": 20
+          }
+        },
+        "/right_hand/diagnostics": {
+          "count": 8,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 8,
+              "positive": 8,
+              "min": 1792129175959466076,
+              "max": 1792129502676563609,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 4476066909.0
+            },
+            "ros_header_ns": {
+              "count": 8,
+              "positive": 8,
+              "min": 1792129175959418817,
+              "max": 1792129502676521670,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 4476066725.0
+            }
+          },
+          "fields": [
+            "header",
+            "side",
+            "connected",
+            "enabled",
+            "error_code",
+            "message"
+          ],
+          "schema_name": "manus_wuji_interfaces/msg/HandDiagnostics",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "bc21f69f6033c51f454d47fa45dd6c5448b24e2e7ddc20a6e453f924e06cd8d5",
+          "array_lengths": {}
+        },
+        "/tianji/robot_state": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129173045594759,
+              "max": 1792129173137327718,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8332786.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129173045563596,
+              "max": 1792129173137290937,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 8336709.0
+            }
+          },
+          "fields": [
+            "header",
+            "state",
+            "left_error",
+            "right_error",
+            "feedback_valid",
+            "hardware_state",
+            "hardware_state_name",
+            "connected",
+            "homed",
+            "enabled",
+            "command_allowed",
+            "motion_allowed",
+            "reason"
+          ],
+          "schema_name": "tianji_interfaces/msg/RobotState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "fa3b3c3a8d5af4e6d581c34d2202cdf2f994c4a6e46bf935162b39b89f87af24",
+          "array_lengths": {}
+        },
+        "/tianji/joint_command": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129193980525752,
+              "max": 1792129194024633637,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 4001375.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129193980417490,
+              "max": 1792129194024503707,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 4007816.0
+            }
+          },
+          "fields": [
+            "header",
+            "joint_names",
+            "positions",
+            "sequence",
+            "session_id",
+            "valid_until",
+            "source"
+          ],
+          "schema_name": "tianji_interfaces/msg/JointCommand",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "78e31755714b821e61477256df9e8a5f0cc9d52559462a1150551ee19d34de06",
+          "array_lengths": {
+            "joint_names": 14,
+            "positions": 14
+          }
+        },
+        "/tianji/teleop_state": {
+          "count": 9,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 9,
+              "positive": 9,
+              "min": 1792129172490446717,
+              "max": 1792129502673813328,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 3559051385.5
+            },
+            "ros_header_ns": {
+              "count": 9,
+              "positive": 9,
+              "min": 1792129152654172853,
+              "max": 1792129502673762514,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 4376006207.0
+            }
+          },
+          "fields": [
+            "header",
+            "state",
+            "state_name",
+            "session_id",
+            "reason",
+            "restart_requires_home"
+          ],
+          "schema_name": "tianji_interfaces/msg/TeleopState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "350ac86e1130b573586e1c902234241af1737bdb182b66622bf2e33222f89297",
+          "array_lengths": {}
+        },
+        "/tianji/safety": {
+          "count": 12,
+          "status": "PASS",
+          "timestamps": {
+            "reader_log_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129172489718872,
+              "max": 1792129194000584266,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 1310919645.0
+            },
+            "ros_header_ns": {
+              "count": 12,
+              "positive": 12,
+              "min": 1792129152654194528,
+              "max": 1792129194000552102,
+              "repeats": 0,
+              "backwards": 0,
+              "step_p50": 1310939689.0
+            }
+          },
+          "fields": [
+            "header",
+            "safe",
+            "level",
+            "code",
+            "reason"
+          ],
+          "schema_name": "tianji_interfaces/msg/SafetyStatus",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "853429cef94a8c9631dba8ab6dab1b73cf28192c9435bf01c6a07c0bef6d45b2",
+          "array_lengths": {}
+        }
+      }
+    },
+    "wire_clocks": {
+      "manus_left": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/manus_left/manus_left_0.mcap",
+        "limit": 32,
+        "count": 32,
+        "unequal": 0,
+        "zero_publish": 0,
+        "rows": [
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970564212929,
+            "publish_time_ns": 1794486970564212929
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970564212929,
+            "publish_time_ns": 1794486970564212929
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970572515821,
+            "publish_time_ns": 1794486970572515821
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970572515821,
+            "publish_time_ns": 1794486970572515821
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970580995937,
+            "publish_time_ns": 1794486970580995937
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970580995937,
+            "publish_time_ns": 1794486970580995937
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970589210060,
+            "publish_time_ns": 1794486970589210060
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970589210060,
+            "publish_time_ns": 1794486970589210060
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970597610243,
+            "publish_time_ns": 1794486970597610243
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970597610243,
+            "publish_time_ns": 1794486970597610243
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970605913855,
+            "publish_time_ns": 1794486970605913855
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970605913855,
+            "publish_time_ns": 1794486970605913855
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970614189578,
+            "publish_time_ns": 1794486970614189578
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970614189578,
+            "publish_time_ns": 1794486970614189578
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970622578652,
+            "publish_time_ns": 1794486970622578652
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970622578652,
+            "publish_time_ns": 1794486970622578652
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970631019439,
+            "publish_time_ns": 1794486970631019439
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970631019439,
+            "publish_time_ns": 1794486970631019439
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970639410537,
+            "publish_time_ns": 1794486970639410537
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970639410537,
+            "publish_time_ns": 1794486970639410537
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970647514819,
+            "publish_time_ns": 1794486970647514819
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970647514819,
+            "publish_time_ns": 1794486970647514819
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970655863674,
+            "publish_time_ns": 1794486970655863674
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970655863674,
+            "publish_time_ns": 1794486970655863674
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970664309149,
+            "publish_time_ns": 1794486970664309149
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970664309149,
+            "publish_time_ns": 1794486970664309149
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970672533553,
+            "publish_time_ns": 1794486970672533553
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970672533553,
+            "publish_time_ns": 1794486970672533553
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970680988772,
+            "publish_time_ns": 1794486970680988772
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970680988772,
+            "publish_time_ns": 1794486970680988772
+          },
+          {
+            "topic": "/manus_glove_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970689185960,
+            "publish_time_ns": 1794486970689185960
+          },
+          {
+            "topic": "/dex/collection/observations/manus_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970689185960,
+            "publish_time_ns": 1794486970689185960
+          }
+        ]
+      },
+      "manus_right": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/manus_right/manus_right_0.mcap",
+        "limit": 32,
+        "count": 32,
+        "unequal": 0,
+        "zero_publish": 0,
+        "rows": [
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970564383008,
+            "publish_time_ns": 1794486970564383008
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970564383008,
+            "publish_time_ns": 1794486970564383008
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970572514253,
+            "publish_time_ns": 1794486970572514253
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970572514253,
+            "publish_time_ns": 1794486970572514253
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970581001995,
+            "publish_time_ns": 1794486970581001995
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970581001995,
+            "publish_time_ns": 1794486970581001995
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970589238129,
+            "publish_time_ns": 1794486970589238129
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970589238129,
+            "publish_time_ns": 1794486970589238129
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970597621322,
+            "publish_time_ns": 1794486970597621322
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970597621322,
+            "publish_time_ns": 1794486970597621322
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970605925749,
+            "publish_time_ns": 1794486970605925749
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970605925749,
+            "publish_time_ns": 1794486970605925749
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970614196332,
+            "publish_time_ns": 1794486970614196332
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970614196332,
+            "publish_time_ns": 1794486970614196332
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970622586842,
+            "publish_time_ns": 1794486970622586842
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970622586842,
+            "publish_time_ns": 1794486970622586842
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970631037573,
+            "publish_time_ns": 1794486970631037573
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970631037573,
+            "publish_time_ns": 1794486970631037573
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970639423472,
+            "publish_time_ns": 1794486970639423472
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970639423472,
+            "publish_time_ns": 1794486970639423472
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970647524190,
+            "publish_time_ns": 1794486970647524190
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970647524190,
+            "publish_time_ns": 1794486970647524190
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970655872090,
+            "publish_time_ns": 1794486970655872090
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970655872090,
+            "publish_time_ns": 1794486970655872090
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970664311943,
+            "publish_time_ns": 1794486970664311943
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970664311943,
+            "publish_time_ns": 1794486970664311943
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970672544100,
+            "publish_time_ns": 1794486970672544100
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970672544100,
+            "publish_time_ns": 1794486970672544100
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970680995082,
+            "publish_time_ns": 1794486970680995082
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970680995082,
+            "publish_time_ns": 1794486970680995082
+          },
+          {
+            "topic": "/manus_glove_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970689198102,
+            "publish_time_ns": 1794486970689198102
+          },
+          {
+            "topic": "/dex/collection/observations/manus_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970689198102,
+            "publish_time_ns": 1794486970689198102
+          }
+        ]
+      },
+      "tracker_left": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/tracker_left/tracker_left_0.mcap",
+        "limit": 32,
+        "count": 32,
+        "unequal": 0,
+        "zero_publish": 0,
+        "rows": [
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970564470314,
+            "publish_time_ns": 1794486970564470314
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970564470314,
+            "publish_time_ns": 1794486970564470314
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970572731757,
+            "publish_time_ns": 1794486970572731757
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970572731757,
+            "publish_time_ns": 1794486970572731757
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970581088158,
+            "publish_time_ns": 1794486970581088158
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970581088158,
+            "publish_time_ns": 1794486970581088158
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970589429896,
+            "publish_time_ns": 1794486970589429896
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970589429896,
+            "publish_time_ns": 1794486970589429896
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970597824738,
+            "publish_time_ns": 1794486970597824738
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970597824738,
+            "publish_time_ns": 1794486970597824738
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970606079861,
+            "publish_time_ns": 1794486970606079861
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970606079861,
+            "publish_time_ns": 1794486970606079861
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970614453326,
+            "publish_time_ns": 1794486970614453326
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970614453326,
+            "publish_time_ns": 1794486970614453326
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970622756176,
+            "publish_time_ns": 1794486970622756176
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970622756176,
+            "publish_time_ns": 1794486970622756176
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970631305265,
+            "publish_time_ns": 1794486970631305265
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970631305265,
+            "publish_time_ns": 1794486970631305265
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970639426699,
+            "publish_time_ns": 1794486970639426699
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970639426699,
+            "publish_time_ns": 1794486970639426699
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970647672154,
+            "publish_time_ns": 1794486970647672154
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970647672154,
+            "publish_time_ns": 1794486970647672154
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970656023225,
+            "publish_time_ns": 1794486970656023225
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970656023225,
+            "publish_time_ns": 1794486970656023225
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970664511964,
+            "publish_time_ns": 1794486970664511964
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970664511964,
+            "publish_time_ns": 1794486970664511964
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970672706376,
+            "publish_time_ns": 1794486970672706376
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970672706376,
+            "publish_time_ns": 1794486970672706376
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970681068403,
+            "publish_time_ns": 1794486970681068403
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970681068403,
+            "publish_time_ns": 1794486970681068403
+          },
+          {
+            "topic": "/vive/tracker/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970689355644,
+            "publish_time_ns": 1794486970689355644
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left",
+            "sequence": 0,
+            "log_time_ns": 1794486970689355644,
+            "publish_time_ns": 1794486970689355644
+          }
+        ]
+      },
+      "tracker_right": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/tracker_right/tracker_right_0.mcap",
+        "limit": 32,
+        "count": 32,
+        "unequal": 0,
+        "zero_publish": 0,
+        "rows": [
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970564469159,
+            "publish_time_ns": 1794486970564469159
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970564469159,
+            "publish_time_ns": 1794486970564469159
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970572613552,
+            "publish_time_ns": 1794486970572613552
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970572613552,
+            "publish_time_ns": 1794486970572613552
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970581092360,
+            "publish_time_ns": 1794486970581092360
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970581092360,
+            "publish_time_ns": 1794486970581092360
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970589379270,
+            "publish_time_ns": 1794486970589379270
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970589379270,
+            "publish_time_ns": 1794486970589379270
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970597821497,
+            "publish_time_ns": 1794486970597821497
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970597821497,
+            "publish_time_ns": 1794486970597821497
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970606082689,
+            "publish_time_ns": 1794486970606082689
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970606082689,
+            "publish_time_ns": 1794486970606082689
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970614452329,
+            "publish_time_ns": 1794486970614452329
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970614452329,
+            "publish_time_ns": 1794486970614452329
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970622758728,
+            "publish_time_ns": 1794486970622758728
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970622758728,
+            "publish_time_ns": 1794486970622758728
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970631296481,
+            "publish_time_ns": 1794486970631296481
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970631296481,
+            "publish_time_ns": 1794486970631296481
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970639434774,
+            "publish_time_ns": 1794486970639434774
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970639434774,
+            "publish_time_ns": 1794486970639434774
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970647666760,
+            "publish_time_ns": 1794486970647666760
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970647666760,
+            "publish_time_ns": 1794486970647666760
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970656021313,
+            "publish_time_ns": 1794486970656021313
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970656021313,
+            "publish_time_ns": 1794486970656021313
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970664507402,
+            "publish_time_ns": 1794486970664507402
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970664507402,
+            "publish_time_ns": 1794486970664507402
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970672701374,
+            "publish_time_ns": 1794486970672701374
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970672701374,
+            "publish_time_ns": 1794486970672701374
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970681070227,
+            "publish_time_ns": 1794486970681070227
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970681070227,
+            "publish_time_ns": 1794486970681070227
+          },
+          {
+            "topic": "/vive/tracker/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970689318995,
+            "publish_time_ns": 1794486970689318995
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right",
+            "sequence": 0,
+            "log_time_ns": 1794486970689318995,
+            "publish_time_ns": 1794486970689318995
+          }
+        ]
+      },
+      "tracker_left_raw": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/tracker_left_raw/tracker_left_raw_0.mcap",
+        "limit": 32,
+        "count": 32,
+        "unequal": 0,
+        "zero_publish": 0,
+        "rows": [
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970564471507,
+            "publish_time_ns": 1794486970564471507
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970564471507,
+            "publish_time_ns": 1794486970564471507
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970572589860,
+            "publish_time_ns": 1794486970572589860
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970572589860,
+            "publish_time_ns": 1794486970572589860
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970581000870,
+            "publish_time_ns": 1794486970581000870
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970581000870,
+            "publish_time_ns": 1794486970581000870
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970589311731,
+            "publish_time_ns": 1794486970589311731
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970589311731,
+            "publish_time_ns": 1794486970589311731
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970597713334,
+            "publish_time_ns": 1794486970597713334
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970597713334,
+            "publish_time_ns": 1794486970597713334
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970605980170,
+            "publish_time_ns": 1794486970605980170
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970605980170,
+            "publish_time_ns": 1794486970605980170
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970614303440,
+            "publish_time_ns": 1794486970614303440
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970614303440,
+            "publish_time_ns": 1794486970614303440
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970622653015,
+            "publish_time_ns": 1794486970622653015
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970622653015,
+            "publish_time_ns": 1794486970622653015
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970631034537,
+            "publish_time_ns": 1794486970631034537
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970631034537,
+            "publish_time_ns": 1794486970631034537
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970639423956,
+            "publish_time_ns": 1794486970639423956
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970639423956,
+            "publish_time_ns": 1794486970639423956
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970647639404,
+            "publish_time_ns": 1794486970647639404
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970647639404,
+            "publish_time_ns": 1794486970647639404
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970655905223,
+            "publish_time_ns": 1794486970655905223
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970655905223,
+            "publish_time_ns": 1794486970655905223
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970664388487,
+            "publish_time_ns": 1794486970664388487
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970664388487,
+            "publish_time_ns": 1794486970664388487
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970672601264,
+            "publish_time_ns": 1794486970672601264
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970672601264,
+            "publish_time_ns": 1794486970672601264
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970680995087,
+            "publish_time_ns": 1794486970680995087
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970680995087,
+            "publish_time_ns": 1794486970680995087
+          },
+          {
+            "topic": "/vive/raw/left_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970689323924,
+            "publish_time_ns": 1794486970689323924
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_left_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970689323924,
+            "publish_time_ns": 1794486970689323924
+          }
+        ]
+      },
+      "tracker_right_raw": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/tracker_right_raw/tracker_right_raw_0.mcap",
+        "limit": 32,
+        "count": 32,
+        "unequal": 0,
+        "zero_publish": 0,
+        "rows": [
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970564473181,
+            "publish_time_ns": 1794486970564473181
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970564473181,
+            "publish_time_ns": 1794486970564473181
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970572596991,
+            "publish_time_ns": 1794486970572596991
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970572596991,
+            "publish_time_ns": 1794486970572596991
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970581014133,
+            "publish_time_ns": 1794486970581014133
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970581014133,
+            "publish_time_ns": 1794486970581014133
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970589318989,
+            "publish_time_ns": 1794486970589318989
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970589318989,
+            "publish_time_ns": 1794486970589318989
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970597728561,
+            "publish_time_ns": 1794486970597728561
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970597728561,
+            "publish_time_ns": 1794486970597728561
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970605990956,
+            "publish_time_ns": 1794486970605990956
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970605990956,
+            "publish_time_ns": 1794486970605990956
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970614305911,
+            "publish_time_ns": 1794486970614305911
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970614305911,
+            "publish_time_ns": 1794486970614305911
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970622662817,
+            "publish_time_ns": 1794486970622662817
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970622662817,
+            "publish_time_ns": 1794486970622662817
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970631105963,
+            "publish_time_ns": 1794486970631105963
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970631105963,
+            "publish_time_ns": 1794486970631105963
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970639439723,
+            "publish_time_ns": 1794486970639439723
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970639439723,
+            "publish_time_ns": 1794486970639439723
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970647639978,
+            "publish_time_ns": 1794486970647639978
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970647639978,
+            "publish_time_ns": 1794486970647639978
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970656029074,
+            "publish_time_ns": 1794486970656029074
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970656029074,
+            "publish_time_ns": 1794486970656029074
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970664392474,
+            "publish_time_ns": 1794486970664392474
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970664392474,
+            "publish_time_ns": 1794486970664392474
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970672604035,
+            "publish_time_ns": 1794486970672604035
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970672604035,
+            "publish_time_ns": 1794486970672604035
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970681005644,
+            "publish_time_ns": 1794486970681005644
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970681005644,
+            "publish_time_ns": 1794486970681005644
+          },
+          {
+            "topic": "/vive/raw/right_wrist",
+            "sequence": 0,
+            "log_time_ns": 1794486970689321528,
+            "publish_time_ns": 1794486970689321528
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_right_raw",
+            "sequence": 0,
+            "log_time_ns": 1794486970689321528,
+            "publish_time_ns": 1794486970689321528
+          }
+        ]
+      },
+      "tracker_safety": {
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/tracker_safety/tracker_safety_0.mcap",
+        "limit": 32,
+        "count": 32,
+        "unequal": 0,
+        "zero_publish": 0,
+        "rows": [
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970564465870,
+            "publish_time_ns": 1794486970564465870
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970564465870,
+            "publish_time_ns": 1794486970564465870
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970572587111,
+            "publish_time_ns": 1794486970572587111
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970572587111,
+            "publish_time_ns": 1794486970572587111
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970581080540,
+            "publish_time_ns": 1794486970581080540
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970581080540,
+            "publish_time_ns": 1794486970581080540
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970589375558,
+            "publish_time_ns": 1794486970589375558
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970589375558,
+            "publish_time_ns": 1794486970589375558
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970597713945,
+            "publish_time_ns": 1794486970597713945
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970597713945,
+            "publish_time_ns": 1794486970597713945
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970606073041,
+            "publish_time_ns": 1794486970606073041
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970606073041,
+            "publish_time_ns": 1794486970606073041
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970614301765,
+            "publish_time_ns": 1794486970614301765
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970614301765,
+            "publish_time_ns": 1794486970614301765
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970622752573,
+            "publish_time_ns": 1794486970622752573
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970622752573,
+            "publish_time_ns": 1794486970622752573
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970631097999,
+            "publish_time_ns": 1794486970631097999
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970631097999,
+            "publish_time_ns": 1794486970631097999
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970639412779,
+            "publish_time_ns": 1794486970639412779
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970639412779,
+            "publish_time_ns": 1794486970639412779
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970647634061,
+            "publish_time_ns": 1794486970647634061
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970647634061,
+            "publish_time_ns": 1794486970647634061
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970656017852,
+            "publish_time_ns": 1794486970656017852
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970656017852,
+            "publish_time_ns": 1794486970656017852
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970664384154,
+            "publish_time_ns": 1794486970664384154
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970664384154,
+            "publish_time_ns": 1794486970664384154
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970672596112,
+            "publish_time_ns": 1794486970672596112
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970672596112,
+            "publish_time_ns": 1794486970672596112
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970681060641,
+            "publish_time_ns": 1794486970681060641
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970681060641,
+            "publish_time_ns": 1794486970681060641
+          },
+          {
+            "topic": "/vive/tracker/safety_status",
+            "sequence": 0,
+            "log_time_ns": 1794486970689313355,
+            "publish_time_ns": 1794486970689313355
+          },
+          {
+            "topic": "/dex/collection/observations/tracker_safety",
+            "sequence": 0,
+            "log_time_ns": 1794486970689313355,
+            "publish_time_ns": 1794486970689313355
+          }
+        ]
+      },
+      "merged": {
+        "path": "/home/ubuntu/teleop_ws/data/teleop_no_camera_20261016_133930/teleop_no_camera_20261016_133930_0.mcap",
+        "limit": 32,
+        "count": 32,
+        "unequal": 32,
+        "zero_publish": 0,
+        "rows": [
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171256916045,
+            "publish_time_ns": 1792129171251232601
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171256923903,
+            "publish_time_ns": 1792129171251289429
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171256926185,
+            "publish_time_ns": 1792129171254832931
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171257037568,
+            "publish_time_ns": 1792129171257030507
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171257553631,
+            "publish_time_ns": 1792129171257548865
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171257654220,
+            "publish_time_ns": 1792129171257649055
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171257665749,
+            "publish_time_ns": 1792129171257662352
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171257712059,
+            "publish_time_ns": 1792129171257698872
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171355100573,
+            "publish_time_ns": 1792129171355091213
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171358062179,
+            "publish_time_ns": 1792129171358057380
+          },
+          {
+            "topic": "/tf_static",
+            "sequence": 0,
+            "log_time_ns": 1792129171368297819,
+            "publish_time_ns": 1792123603209640735
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171855567167,
+            "publish_time_ns": 1792129171855559812
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171856891547,
+            "publish_time_ns": 1792129171856881571
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171860149410,
+            "publish_time_ns": 1792129171860141700
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171860979601,
+            "publish_time_ns": 1792129171860972426
+          },
+          {
+            "topic": "/right_hand/state",
+            "sequence": 0,
+            "log_time_ns": 1792129171865513671,
+            "publish_time_ns": 1792129171865472416
+          },
+          {
+            "topic": "/dex/collection/status",
+            "sequence": 0,
+            "log_time_ns": 1792129171865640348,
+            "publish_time_ns": 1792129171773966548
+          },
+          {
+            "topic": "/dex/collection/topics",
+            "sequence": 0,
+            "log_time_ns": 1792129171866973589,
+            "publish_time_ns": 1792129171773796580
+          },
+          {
+            "topic": "/right_hand/state",
+            "sequence": 0,
+            "log_time_ns": 1792129171873865877,
+            "publish_time_ns": 1792129171873813063
+          },
+          {
+            "topic": "/right_hand/state",
+            "sequence": 0,
+            "log_time_ns": 1792129171882170330,
+            "publish_time_ns": 1792129171882135355
+          },
+          {
+            "topic": "/right_hand/state",
+            "sequence": 0,
+            "log_time_ns": 1792129171890506501,
+            "publish_time_ns": 1792129171890453497
+          },
+          {
+            "topic": "/right_hand/state",
+            "sequence": 0,
+            "log_time_ns": 1792129171898953902,
+            "publish_time_ns": 1792129171898840876
+          },
+          {
+            "topic": "/right_hand/state",
+            "sequence": 0,
+            "log_time_ns": 1792129171907635398,
+            "publish_time_ns": 1792129171907517801
+          },
+          {
+            "topic": "/right_hand/state",
+            "sequence": 0,
+            "log_time_ns": 1792129171915503464,
+            "publish_time_ns": 1792129171915455582
+          },
+          {
+            "topic": "/right_hand/state",
+            "sequence": 0,
+            "log_time_ns": 1792129171923881986,
+            "publish_time_ns": 1792129171923821022
+          },
+          {
+            "topic": "/right_hand/state",
+            "sequence": 0,
+            "log_time_ns": 1792129171932195942,
+            "publish_time_ns": 1792129171932141262
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171937444242,
+            "publish_time_ns": 1792129162657504417
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171937455597,
+            "publish_time_ns": 1792129163657518386
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171937457332,
+            "publish_time_ns": 1792129164658468244
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171937458624,
+            "publish_time_ns": 1792129165658507030
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171937459714,
+            "publish_time_ns": 1792129166659503241
+          },
+          {
+            "topic": "/rosout",
+            "sequence": 0,
+            "log_time_ns": 1792129171937461045,
+            "publish_time_ns": 1792129167660505275
+          }
+        ]
+      }
+    },
+    "replay_evidence": {
+      "file": {
+        "path": "/home/ubuntu/teleop_ws/data/s0_sim_20261117_153201/metadata.yaml",
+        "realpath": "/home/ubuntu/teleop_ws/data/s0_sim_20261117_153201/metadata.yaml",
+        "bytes": 16624,
+        "sha256": "03ed07f3220d08e4494675e9c7746413717c6d83ece82663d36809e9d9f6c52e"
+      },
+      "version": 9,
+      "storage": "mcap",
+      "duration_ns": 60621889990,
+      "counts": {
+        "/vive/raw/right_wrist": 6779,
+        "/vive/raw/left_wrist": 7248,
+        "/vive/tracker/right_wrist": 6779,
+        "/vive/tracker/left_wrist": 7248,
+        "/rosout": 55,
+        "/events/write_split": 0,
+        "/parameter_events": 0,
+        "/vive/tracker/safety_status": 7248,
+        "/manus_glove_left": 7262,
+        "/dex/collection/topics": 61,
+        "/vive/raw/left_upper_arm": 0,
+        "/dex/collection/status": 303,
+        "/head/left/image_raw": 1810,
+        "/head/left/camera_info": 1810,
+        "/vive/tracker/transform_diagnostics": 589,
+        "/manus_glove_right": 7262,
+        "/head/right/image_raw": 1810,
+        "/tf_static": 1,
+        "/head/camera/diagnostics": 60,
+        "/head/right/camera_info": 1810,
+        "/tf": 14051
+      }
+    },
+    "replay_check": {
+      "argv": [
+        "ros2",
+        "bag",
+        "info",
+        "-s",
+        "mcap",
+        "/home/ubuntu/teleop_ws/data/s0_sim_20261117_153201/s0_sim_20261117_153201_0.mcap"
+      ],
+      "exit": 0,
+      "stdout": "\nFiles:             /home/ubuntu/teleop_ws/data/s0_sim_20261117_153201/s0_sim_20261117_153201_0.mcap\nBag size:          9.4 GiB\nStorage id:        mcap\nROS Distro:        jazzy\nDuration:          60.621889990s\nStart:             Nov 17 2026 15:33:28.203948551 (1794900808.203948551)\nEnd:               Nov 17 2026 15:34:28.825838541 (1794900868.825838541)\nMessages:          72186\nTopic information: Topic: /dex/collection/status | Type: dex_collection_interfaces/msg/CollectionStatus | Count: 303 | Serialization Format: cdr\n                   Topic: /dex/collection/topics | Type: dex_collection_interfaces/msg/TopicCatalogue | Count: 61 | Serialization Format: cdr\n                   Topic: /events/write_split | Type: rosbag2_interfaces/msg/WriteSplitEvent | Count: 0 | Serialization Format: cdr\n                   Topic: /head/camera/diagnostics | Type: diagnostic_msgs/msg/DiagnosticArray | Count: 60 | Serialization Format: cdr\n                   Topic: /head/left/camera_info | Type: sensor_msgs/msg/CameraInfo | Count: 1810 | Serialization Format: cdr\n                   Topic: /head/left/image_raw | Type: dex_collection_interfaces/msg/CameraFrame | Count: 1810 | Serialization Format: cdr\n                   Topic: /head/right/camera_info | Type: sensor_msgs/msg/CameraInfo | Count: 1810 | Serialization Format: cdr\n                   Topic: /head/right/image_raw | Type: dex_collection_interfaces/msg/CameraFrame | Count: 1810 | Serialization Format: cdr\n                   Topic: /manus_glove_left | Type: manus_ros2_msgs/msg/ManusGlove | Count: 7262 | Serialization Format: cdr\n                   Topic: /manus_glove_right | Type: manus_ros2_msgs/msg/ManusGlove | Count: 7262 | Serialization Format: cdr\n                   Topic: /parameter_events | Type: rcl_interfaces/msg/ParameterEvent | Count: 0 | Serialization Format: cdr\n                   Topic: /rosout | Type: rcl_interfaces/msg/Log | Count: 55 | Serialization Format: cdr\n                   Topic: /tf | Type: tf2_msgs/msg/TFMessage | Count: 14051 | Serialization Format: cdr\n                   Topic: /tf_static | Type: tf2_msgs/msg/TFMessage | Count: 1 | Serialization Format: cdr\n                   Topic: /vive/raw/left_upper_arm | Type: geometry_msgs/msg/PoseStamped | Count: 0 | Serialization Format: cdr\n                   Topic: /vive/raw/left_wrist | Type: geometry_msgs/msg/PoseStamped | Count: 7248 | Serialization Format: cdr\n                   Topic: /vive/raw/right_wrist | Type: geometry_msgs/msg/PoseStamped | Count: 6779 | Serialization Format: cdr\n                   Topic: /vive/tracker/left_wrist | Type: tianji_interfaces/msg/TrackerPose | Count: 7248 | Serialization Format: cdr\n                   Topic: /vive/tracker/right_wrist | Type: tianji_interfaces/msg/TrackerPose | Count: 6779 | Serialization Format: cdr\n                   Topic: /vive/tracker/safety_status | Type: tianji_interfaces/msg/SafetyStatus | Count: 7248 | Serialization Format: cdr\n                   Topic: /vive/tracker/transform_diagnostics | Type: diagnostic_msgs/msg/DiagnosticArray | Count: 589 | Serialization Format: cdr\nService:           0\nService information: \n",
+      "stderr": ""
+    },
+    "parsed_schema": {
+      "manus_left__header_ns": {
+        "shape": [
+          5500
+        ],
+        "dtype": "int64"
+      },
+      "manus_left__pose": {
+        "shape": [
+          5500,
+          25,
+          7
+        ],
+        "dtype": "float64"
+      },
+      "manus_left__source_stamp": {
+        "shape": [
+          5500
+        ],
+        "dtype": "int64"
+      },
+      "manus_left__sdk_receive_us": {
+        "shape": [
+          5500
+        ],
+        "dtype": "int64"
+      },
+      "manus_left__log_ns": {
+        "shape": [
+          5500
+        ],
+        "dtype": "int64"
+      },
+      "manus_left__publish_ns": {
+        "shape": [
+          5500
+        ],
+        "dtype": "int64"
+      },
+      "manus_left__receive_ros_ns": {
+        "shape": [
+          5500
+        ],
+        "dtype": "int64"
+      },
+      "manus_right__pose": {
+        "shape": [
+          5500,
+          25,
+          7
+        ],
+        "dtype": "float64"
+      },
+      "tracker_left__pose": {
+        "shape": [
+          5500,
+          7
+        ],
+        "dtype": "float64"
+      },
+      "tracker_right__pose": {
+        "shape": [
+          5500,
+          7
+        ],
+        "dtype": "float64"
+      }
+    },
+    "size_witness": {
+      "aligned_frames": 2294,
+      "aligned_array_nbytes": 3853920,
+      "parsed_file_bytes": 9178612,
+      "aligned_file_bytes": 2226076,
+      "evidence_scope": "existing S0 episode, not a P01 sizing benchmark"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+Collecting gymnasium==1.2.0
+  Using cached gymnasium-1.2.0-py3-none-any.whl.metadata (9.9 kB)
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ReadTimeoutError("HTTPSConnectionPool(host='pypi.org', port=443): Read timed out. (read timeout=30.0)")': /simple/cloudpickle/
+Collecting cloudpickle==3.1.1
+  Using cached cloudpickle-3.1.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting Farama-Notifications==0.0.4
+  Using cached Farama_Notifications-0.0.4-py3-none-any.whl.metadata (558 bytes)
+Downloading gymnasium-1.2.0-py3-none-any.whl (944 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 944.3/944.3 kB 15.4 kB/s eta 0:00:00
+Downloading cloudpickle-3.1.1-py3-none-any.whl (20 kB)
+Downloading Farama_Notifications-0.0.4-py3-none-any.whl (2.5 kB)
+Saved /tmp/s05-review-cc05f09-wheels/gymnasium-1.2.0-py3-none-any.whl
+Saved /tmp/s05-review-cc05f09-wheels/cloudpickle-3.1.1-py3-none-any.whl
+Saved /tmp/s05-review-cc05f09-wheels/Farama_Notifications-0.0.4-py3-none-any.whl
+Successfully downloaded gymnasium cloudpickle Farama-Notifications

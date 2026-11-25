@@ -1,0 +1,1514 @@
+{
+  "schema": "s05.readiness.witness.v1",
+  "section": "environment",
+  "observed": "2026-11-26T00:39:14.848170+08:00",
+  "result": {
+    "executable": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "cwd": "/home/ubuntu/dexgym_worktrees/s0-5",
+    "sys_path": [
+      "/home/ubuntu/dexgym_worktrees/s0-5/source",
+      "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_teleop_supervisor/lib/python3.12/site-packages",
+      "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages",
+      "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages",
+      "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/python3.12/site-packages",
+      "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/python3.12/site-packages",
+      "/home/ubuntu/teleop_ws/install/head_driver/lib/python3.12/site-packages",
+      "/home/ubuntu/teleop_ws/install/dex_collection_interfaces/lib/python3.12/site-packages",
+      "/opt/ros/jazzy/opt/gz_math_vendor/lib/python",
+      "/opt/ros/jazzy/lib/python3.12/site-packages",
+      "/usr/lib/python312.zip",
+      "/usr/lib/python3.12",
+      "/usr/lib/python3.12/lib-dynload",
+      "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages",
+      "/usr/local/lib/python3.12/dist-packages",
+      "/usr/lib/python3/dist-packages"
+    ],
+    "distributions": {
+      "mcap": "1.6.0",
+      "mcap-ros2-support": "0.6.0",
+      "gymnasium": "1.2.0",
+      "cloudpickle": "3.1.1",
+      "Farama-Notifications": "0.0.4",
+      "zstandard": "0.25.0",
+      "lz4": "4.0.2+dfsg",
+      "numpy": "1.26.4",
+      "scipy": "1.11.4",
+      "PyYAML": "6.0.1"
+    },
+    "overlays": {
+      "AMENT_PREFIX_PATH": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_teleop_supervisor:/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_data_collection:/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces:/home/ubuntu/teleop_ws/install/whole_body_bringup:/home/ubuntu/teleop_ws/install/wuji_hand2_real_driver:/home/ubuntu/teleop_ws/install/pico_xr_driver:/home/ubuntu/teleop_ws/install/whole_body_teleop:/home/ubuntu/teleop_ws/install/wuji_sdk_cpp:/home/ubuntu/teleop_ws/install/wrist_camera_driver:/home/ubuntu/teleop_ws/install/whole_body_mujoco_driver:/home/ubuntu/teleop_ws/install/vive_tracker_ros:/home/ubuntu/teleop_ws/install/tianji_real_driver:/home/ubuntu/teleop_ws/install/pico_tracker_ros:/home/ubuntu/teleop_ws/install/tianji_interfaces:/home/ubuntu/teleop_ws/install/pico_driver:/home/ubuntu/teleop_ws/install/manus_wuji_interfaces:/home/ubuntu/teleop_ws/install/manus_ros2:/home/ubuntu/teleop_ws/install/manus_ros2_msgs:/home/ubuntu/teleop_ws/install/head_driver:/home/ubuntu/teleop_ws/install/head_camera_viewer:/home/ubuntu/teleop_ws/install/head_camera_driver:/home/ubuntu/teleop_ws/install/dex_collection_interfaces:/opt/ros/jazzy",
+      "PYTHONPATH": "/home/ubuntu/dexgym_worktrees/s0-5/source:/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_teleop_supervisor/lib/python3.12/site-packages:/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages:/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages:/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/python3.12/site-packages:/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/python3.12/site-packages:/home/ubuntu/teleop_ws/install/head_driver/lib/python3.12/site-packages:/home/ubuntu/teleop_ws/install/dex_collection_interfaces/lib/python3.12/site-packages:/opt/ros/jazzy/opt/gz_math_vendor/lib/python:/opt/ros/jazzy/lib/python3.12/site-packages",
+      "LD_LIBRARY_PATH": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_teleop_supervisor/lib:/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib:/home/ubuntu/teleop_ws/install/whole_body_teleop/lib:/home/ubuntu/teleop_ws/install/wuji_sdk_cpp/lib:/home/ubuntu/teleop_ws/install/whole_body_mujoco_driver/lib:/home/ubuntu/teleop_ws/install/tianji_real_driver/lib:/home/ubuntu/teleop_ws/install/tianji_interfaces/lib:/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib:/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib:/home/ubuntu/teleop_ws/install/head_driver/lib:/home/ubuntu/teleop_ws/install/dex_collection_interfaces/lib:/opt/ros/jazzy/opt/rviz_ogre_vendor/lib:/opt/ros/jazzy/lib/x86_64-linux-gnu:/opt/ros/jazzy/opt/gz_math_vendor/lib:/opt/ros/jazzy/opt/gz_utils_vendor/lib:/opt/ros/jazzy/opt/gz_cmake_vendor/lib:/opt/ros/jazzy/lib",
+      "ROS_DISTRO": "jazzy"
+    },
+    "overlay_setup_files": [
+      {
+        "path": "/opt/ros/jazzy/setup.bash",
+        "realpath": "/opt/ros/jazzy/setup.bash",
+        "bytes": 349,
+        "sha256": "12556a2725a823c3841f8fbab50892c8b8c69df9654d2a74761407226ecca4df"
+      },
+      {
+        "path": "/home/ubuntu/teleop_ws/install/local_setup.bash",
+        "realpath": "/home/ubuntu/teleop_ws/install/local_setup.bash",
+        "bytes": 3760,
+        "sha256": "0e10d666bbf43cf559467b11b75cf6d26cf8d210e7f94e79dfe5a7dddb2fe91c"
+      },
+      {
+        "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/local_setup.bash",
+        "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/local_setup.bash",
+        "bytes": 3801,
+        "sha256": "b2c43a59660b272f706cfc722ecf0f86364da421eaef62e48039735afc12a7ef"
+      }
+    ],
+    "imports": {
+      "dexgym": {
+        "status": "PASS",
+        "version": null,
+        "file": {
+          "path": "/home/ubuntu/dexgym_worktrees/s0-5/source/dexgym/__init__.py",
+          "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/source/dexgym/__init__.py",
+          "bytes": 45,
+          "sha256": "82b05b9f4857cd225f2b1eb24647f0bcf7343178bf023f447598cdc78d4fc0bf"
+        }
+      },
+      "dexgym.tasks.direct.wholebody_s0.bag": {
+        "status": "PASS",
+        "version": null,
+        "file": {
+          "path": "/home/ubuntu/dexgym_worktrees/s0-5/source/dexgym/tasks/direct/wholebody_s0/bag.py",
+          "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/source/dexgym/tasks/direct/wholebody_s0/bag.py",
+          "bytes": 24965,
+          "sha256": "22bf183b81fb0a060ec23008ef4bddd41f459ef0a075e7abba225cb4f3996dea"
+        }
+      },
+      "dexgym.tasks.direct.wholebody_s0.sync": {
+        "status": "PASS",
+        "version": null,
+        "file": {
+          "path": "/home/ubuntu/dexgym_worktrees/s0-5/source/dexgym/tasks/direct/wholebody_s0/sync.py",
+          "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/source/dexgym/tasks/direct/wholebody_s0/sync.py",
+          "bytes": 7599,
+          "sha256": "a1316b4b5f8fa6141011349689e025c43bda26a0031ccf1f73272c30391406d9"
+        }
+      },
+      "numpy": {
+        "status": "PASS",
+        "version": "1.26.4",
+        "file": {
+          "path": "/usr/lib/python3/dist-packages/numpy/__init__.py",
+          "realpath": "/usr/lib/python3/dist-packages/numpy/__init__.py",
+          "bytes": 17005,
+          "sha256": "22cd1535fa14d74ef6f457cca149ffdc80875f460be313b8f895273f78bc402e"
+        }
+      },
+      "scipy": {
+        "status": "PASS",
+        "version": "1.11.4",
+        "file": {
+          "path": "/usr/lib/python3/dist-packages/scipy/__init__.py",
+          "realpath": "/usr/lib/python3/dist-packages/scipy/__init__.py",
+          "bytes": 6530,
+          "sha256": "5df3106bce68233cec43e84208135d8f18fb6e07d2770fbc157fce32bab28c50"
+        }
+      },
+      "yaml": {
+        "status": "PASS",
+        "version": "6.0.1",
+        "file": {
+          "path": "/usr/lib/python3/dist-packages/yaml/__init__.py",
+          "realpath": "/usr/lib/python3/dist-packages/yaml/__init__.py",
+          "bytes": 12311,
+          "sha256": "6e1974e6a49e3bed59c654918c6aef9769bd9eb5dbd67f7e1906ad4cdd0caea7"
+        }
+      },
+      "rosbag2_py": {
+        "status": "PASS",
+        "version": null,
+        "file": {
+          "path": "/opt/ros/jazzy/lib/python3.12/site-packages/rosbag2_py/__init__.py",
+          "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/rosbag2_py/__init__.py",
+          "bytes": 3094,
+          "sha256": "158b4c439188d26dcd914ec043c49f35a997f49b2535fc0e1f8f9dfd612f0886"
+        }
+      },
+      "rclpy.serialization": {
+        "status": "PASS",
+        "version": null,
+        "file": {
+          "path": "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/serialization.py",
+          "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/rclpy/serialization.py",
+          "bytes": 1604,
+          "sha256": "87a380a8c45fd0d4b56349fa73dd13ec2c082d8ab76a9be0fffbe9c65d698b54"
+        }
+      },
+      "rosidl_runtime_py.utilities": {
+        "status": "PASS",
+        "version": null,
+        "file": {
+          "path": "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_runtime_py/utilities.py",
+          "realpath": "/opt/ros/jazzy/lib/python3.12/site-packages/rosidl_runtime_py/utilities.py",
+          "bytes": 3477,
+          "sha256": "e232be4bad9322118e5702fa76bda75f51678c1ad1984ce6f21742dc69ed5e0c"
+        }
+      },
+      "mcap": {
+        "status": "PASS",
+        "version": "1.6.0",
+        "file": {
+          "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap/__init__.py",
+          "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap/__init__.py",
+          "bytes": 22,
+          "sha256": "f048c80bc12be019fc3e112b8b34d7ad95584e06fab47823d342ebac154d6170"
+        }
+      },
+      "mcap.reader": {
+        "status": "PASS",
+        "version": null,
+        "file": {
+          "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap/reader.py",
+          "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap/reader.py",
+          "bytes": 26012,
+          "sha256": "364760096dfd79fc6392fefee18184b53b8bb6cdd3269e8a46d090a4798665be"
+        }
+      },
+      "gymnasium": {
+        "status": "PASS",
+        "version": "1.2.0",
+        "file": {
+          "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/gymnasium/__init__.py",
+          "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/gymnasium/__init__.py",
+          "bytes": 1430,
+          "sha256": "6a0bc3c49302a51d9a2431243acfee9e0375745413dbd321c20bdf3530acb615"
+        }
+      },
+      "cloudpickle": {
+        "status": "PASS",
+        "version": "3.1.1",
+        "file": {
+          "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/cloudpickle/__init__.py",
+          "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/cloudpickle/__init__.py",
+          "bytes": 308,
+          "sha256": "2332a6f4cce58df847f9098dfe8fb33f9422993c1bb6025e4636bc9eb1856a74"
+        }
+      },
+      "zstandard": {
+        "status": "PASS",
+        "version": "0.25.0",
+        "file": {
+          "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/zstandard/__init__.py",
+          "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/zstandard/__init__.py",
+          "bytes": 7235,
+          "sha256": "5dd909e0b60a946a0b08deaf57545d17dc044f5df4040beec55f7ef6c6fecd11"
+        }
+      },
+      "lz4": {
+        "status": "PASS",
+        "version": "4.0.2+dfsg",
+        "file": {
+          "path": "/usr/lib/python3/dist-packages/lz4/__init__.py",
+          "realpath": "/usr/lib/python3/dist-packages/lz4/__init__.py",
+          "bytes": 627,
+          "sha256": "7adb15f971bdbe00a7f842ab169cd626c188a7e554b47fada4dad098c9831025"
+        }
+      },
+      "mcap_ros2.decoder": {
+        "status": "PASS",
+        "version": null,
+        "file": {
+          "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap_ros2/decoder.py",
+          "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap_ros2/decoder.py",
+          "bytes": 2404,
+          "sha256": "f502e62074329c6111d4dbb9280d48d3f21cf7dc91fc33aeda8e451f5ffe78e2"
+        }
+      },
+      "mcap_ros2._dynamic": {
+        "status": "PASS",
+        "version": null,
+        "file": {
+          "path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap_ros2/_dynamic.py",
+          "realpath": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/lib/python3.12/site-packages/mcap_ros2/_dynamic.py",
+          "bytes": 24207,
+          "sha256": "7058b5702e10aa16370b4d2ee7e6b23c32b61ad83e56ecec1fefd5e81b05d2b5"
+        }
+      },
+      "manus_ros2_msgs.msg": {
+        "status": "PASS",
+        "version": null,
+        "file": {
+          "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/python3.12/site-packages/manus_ros2_msgs/msg/__init__.py",
+          "realpath": "/home/ubuntu/teleop_ws/build/manus_ros2_msgs/rosidl_generator_py/manus_ros2_msgs/msg/__init__.py",
+          "bytes": 318,
+          "sha256": "6dcfc70af22de2942a158e1353dcbe8529003ff30d7f0ff4a38f3e90bb10988f"
+        }
+      },
+      "tianji_interfaces.msg": {
+        "status": "PASS",
+        "version": null,
+        "file": {
+          "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/python3.12/site-packages/tianji_interfaces/msg/__init__.py",
+          "realpath": "/home/ubuntu/teleop_ws/build/tianji_interfaces/rosidl_generator_py/tianji_interfaces/msg/__init__.py",
+          "bytes": 372,
+          "sha256": "1d8ba4f2ba868e27cf9a0f7e72c9fa869adc30ba800d29066efebe64a4f025b9"
+        }
+      },
+      "manus_wuji_interfaces.msg": {
+        "status": "PASS",
+        "version": null,
+        "file": {
+          "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/python3.12/site-packages/manus_wuji_interfaces/msg/__init__.py",
+          "realpath": "/home/ubuntu/teleop_ws/build/manus_wuji_interfaces/rosidl_generator_py/manus_wuji_interfaces/msg/__init__.py",
+          "bytes": 335,
+          "sha256": "ce8530eb61152eb9b1512e1dcf164d239fde74b7b521a8bd0fee7fded0eec6d3"
+        }
+      },
+      "dex_collection_interfaces.msg": {
+        "status": "PASS",
+        "version": null,
+        "file": {
+          "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/__init__.py",
+          "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/__init__.py",
+          "bytes": 518,
+          "sha256": "47869ef9e61e91dbc54135d6b3f0c4038de8c9556311bab14731f24a5c18ade3"
+        }
+      }
+    },
+    "wrong_dexgym": [],
+    "foreign": [],
+    "output": {
+      "path": "/home/ubuntu/dexgym_data/s0-5/p01",
+      "exists": true,
+      "resolved": "/home/ubuntu/dexgym_data/s0-5/p01",
+      "writable": true,
+      "entries": [],
+      "distinct_from_source": true,
+      "available_bytes": 684434825216,
+      "filesystem": "66306",
+      "checkout_filesystem": "66306"
+    },
+    "interfaces": {
+      "manus_ros2_msgs": {
+        "prefix": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs",
+        "requested": [
+          "ManusGlove",
+          "ManusRawNode"
+        ],
+        "definitions": [
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/share/manus_ros2_msgs/msg/ManusErgonomics.msg",
+            "realpath": "/home/ubuntu/teleop_ws/src/manus_ros2_msgs/msg/ManusErgonomics.msg",
+            "bytes": 28,
+            "sha256": "5b76b018279a265656c8b6a78c78f622251428215167f0eb58e6d75fcaceba4b"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/share/manus_ros2_msgs/msg/ManusGlove.msg",
+            "realpath": "/home/ubuntu/teleop_ws/src/manus_ros2_msgs/msg/ManusGlove.msg",
+            "bytes": 306,
+            "sha256": "b7509eb4ff5ec07e23e499d2a8415c101b9a9ffc7d3e303df63290098b0461c5"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/share/manus_ros2_msgs/msg/ManusRawNode.msg",
+            "realpath": "/home/ubuntu/teleop_ws/src/manus_ros2_msgs/msg/ManusRawNode.msg",
+            "bytes": 100,
+            "sha256": "b6f7ea98786eb0d22385bb4848456b7e0b0c19c35a0098a931088383490ace83"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/share/manus_ros2_msgs/msg/ManusVibrationCommand.msg",
+            "realpath": "/home/ubuntu/teleop_ws/src/manus_ros2_msgs/msg/ManusVibrationCommand.msg",
+            "bytes": 95,
+            "sha256": "c4d27f8d6c507e7724bcca58e1b749bf337dbcb8e37aaffb264b342ba3c303d6"
+          }
+        ],
+        "manifest": {
+          "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/share/manus_ros2_msgs/package.xml",
+          "realpath": "/home/ubuntu/teleop_ws/src/manus_ros2_msgs/package.xml",
+          "bytes": 893,
+          "sha256": "977420793ce7c7b3625e9bfe7f7cf2bbdfdc1717c602bea35303335963266b05"
+        },
+        "typesupport": [
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/libmanus_ros2_msgs__rosidl_typesupport_c.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/libmanus_ros2_msgs__rosidl_typesupport_c.so",
+            "bytes": 23920,
+            "sha256": "a874a4276a7363395ff706581265db489fac80a23c411404a7a28f515b8a3da5"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/libmanus_ros2_msgs__rosidl_typesupport_cpp.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/libmanus_ros2_msgs__rosidl_typesupport_cpp.so",
+            "bytes": 24872,
+            "sha256": "05515afecb9a8a758e42a6a832ab8cf2373d3c195084985bd6080084b9be1372"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/libmanus_ros2_msgs__rosidl_typesupport_fastrtps_c.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/libmanus_ros2_msgs__rosidl_typesupport_fastrtps_c.so",
+            "bytes": 54760,
+            "sha256": "12f6de7e59c68e2ce47ad4e769f780965ce0fe9639d780cd8b05f6e92e4da051"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/libmanus_ros2_msgs__rosidl_typesupport_fastrtps_cpp.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/libmanus_ros2_msgs__rosidl_typesupport_fastrtps_cpp.so",
+            "bytes": 69256,
+            "sha256": "a9b1c72c830818808567ab23138233e3dfa78bdad96b8ee95b00346283d6dce9"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/libmanus_ros2_msgs__rosidl_typesupport_introspection_c.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/libmanus_ros2_msgs__rosidl_typesupport_introspection_c.so",
+            "bytes": 35336,
+            "sha256": "485b453837137117bef33ff8b654e31658ed7256c42e263fea9a38fe0c3a20e3"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/libmanus_ros2_msgs__rosidl_typesupport_introspection_cpp.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/manus_ros2_msgs/lib/libmanus_ros2_msgs__rosidl_typesupport_introspection_cpp.so",
+            "bytes": 49232,
+            "sha256": "60c73321ea7caf295650f813f428a3d2ffd4ffa2e0c1b8f6349315c01775451a"
+          }
+        ]
+      },
+      "tianji_interfaces": {
+        "prefix": "/home/ubuntu/teleop_ws/install/tianji_interfaces",
+        "requested": [
+          "TrackerPose",
+          "SafetyStatus",
+          "RobotState",
+          "JointCommand",
+          "TeleopState"
+        ],
+        "definitions": [
+          {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/share/tianji_interfaces/msg/JointCommand.msg",
+            "realpath": "/home/ubuntu/teleop_ws/src/tianji_interfaces/msg/JointCommand.msg",
+            "bytes": 148,
+            "sha256": "af405395ba9e2543e5350fc249b63b04052e05962c947fd408df9e298d882f5e"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/share/tianji_interfaces/msg/RobotState.msg",
+            "realpath": "/home/ubuntu/teleop_ws/src/tianji_interfaces/msg/RobotState.msg",
+            "bytes": 364,
+            "sha256": "7a7b0743de6de68d00c9412de12464f42cd744ff68def289211281cdb4d9e343"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/share/tianji_interfaces/msg/SafetyStatus.msg",
+            "realpath": "/home/ubuntu/teleop_ws/src/tianji_interfaces/msg/SafetyStatus.msg",
+            "bytes": 71,
+            "sha256": "499735e00af3722eef912a210375d5487d31411a3b106a6b49c500525a6f378e"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/share/tianji_interfaces/msg/TeleopState.msg",
+            "realpath": "/home/ubuntu/teleop_ws/src/tianji_interfaces/msg/TeleopState.msg",
+            "bytes": 112,
+            "sha256": "d63c412812e4bafe47f4a3f1f87fa1daf330550d1e4e8e503323f486a742cdd2"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/share/tianji_interfaces/msg/TrackerPose.msg",
+            "realpath": "/home/ubuntu/teleop_ws/src/tianji_interfaces/msg/TrackerPose.msg",
+            "bytes": 86,
+            "sha256": "e3f5262e1e720e0a3a86641c0f070edb5e63b2512b246ff9a7b3392643a7453e"
+          }
+        ],
+        "manifest": {
+          "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/share/tianji_interfaces/package.xml",
+          "realpath": "/home/ubuntu/teleop_ws/src/tianji_interfaces/package.xml",
+          "bytes": 695,
+          "sha256": "4acd3ba53e4e96e40bd3f31ee97dabd44215f1abecf6bb524694ebd4dcab5214"
+        },
+        "typesupport": [
+          {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/libtianji_interfaces__rosidl_typesupport_c.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/libtianji_interfaces__rosidl_typesupport_c.so",
+            "bytes": 82496,
+            "sha256": "2ed23ef2b85c74a6c8e1ab32ef68dfff00b71e694087f73e187af8d25607aacd"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/libtianji_interfaces__rosidl_typesupport_cpp.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/libtianji_interfaces__rosidl_typesupport_cpp.so",
+            "bytes": 116912,
+            "sha256": "66396c61f2d6c6aae025014c79000a23403d961a4c9e9f7e3c6dafcf45bf2d19"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/libtianji_interfaces__rosidl_typesupport_fastrtps_c.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/libtianji_interfaces__rosidl_typesupport_fastrtps_c.so",
+            "bytes": 185912,
+            "sha256": "5726636b2b1529943ca96196920b33b2922a9d3a1c251edf2086967e654c63b9"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/libtianji_interfaces__rosidl_typesupport_fastrtps_cpp.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/libtianji_interfaces__rosidl_typesupport_fastrtps_cpp.so",
+            "bytes": 288120,
+            "sha256": "a2ae25c06741a82c68a2bfaf8de575e1cd04b38f58acca8fbcdd517cca3a9d13"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/libtianji_interfaces__rosidl_typesupport_introspection_c.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/libtianji_interfaces__rosidl_typesupport_introspection_c.so",
+            "bytes": 146344,
+            "sha256": "94120b5274fe57314af27f72e199f78fe4136e2e86050377ee660798ec338ce4"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/libtianji_interfaces__rosidl_typesupport_introspection_cpp.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/tianji_interfaces/lib/libtianji_interfaces__rosidl_typesupport_introspection_cpp.so",
+            "bytes": 183344,
+            "sha256": "c4d7b93fccf6689769f65865e1f39daed585b2f1a65a056eb65ae452b55765fc"
+          }
+        ]
+      },
+      "manus_wuji_interfaces": {
+        "prefix": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces",
+        "requested": [
+          "HandCommand",
+          "HandState",
+          "HandDiagnostics"
+        ],
+        "definitions": [
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/share/manus_wuji_interfaces/msg/HandCommand.msg",
+            "realpath": "/home/ubuntu/teleop_ws/src/manus_wuji_interfaces/msg/HandCommand.msg",
+            "bytes": 95,
+            "sha256": "22ff69186749edc8c41932e2b83e6b2b8b9db993854d1f486c8b4aa61cd70986"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/share/manus_wuji_interfaces/msg/HandDiagnostics.msg",
+            "realpath": "/home/ubuntu/teleop_ws/src/manus_wuji_interfaces/msg/HandDiagnostics.msg",
+            "bytes": 903,
+            "sha256": "586ca13402fd20e505615cbcf31a8e6f89f5ac59fad2792227068b65cc83109e"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/share/manus_wuji_interfaces/msg/HandJointDiagnostics.msg",
+            "realpath": "/home/ubuntu/teleop_ws/src/manus_wuji_interfaces/msg/HandJointDiagnostics.msg",
+            "bytes": 738,
+            "sha256": "7d261ab7b40eaa697a9a06ab941a0e7cf8dba1c366cd2a903771e891bcbfc8ac"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/share/manus_wuji_interfaces/msg/HandState.msg",
+            "realpath": "/home/ubuntu/teleop_ws/src/manus_wuji_interfaces/msg/HandState.msg",
+            "bytes": 1071,
+            "sha256": "cba6f85a44a2a12db164b52dbeca42881eaa74b36eb18d3b14b4136c1b7f32ac"
+          }
+        ],
+        "manifest": {
+          "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/share/manus_wuji_interfaces/package.xml",
+          "realpath": "/home/ubuntu/teleop_ws/src/manus_wuji_interfaces/package.xml",
+          "bytes": 666,
+          "sha256": "43943bd9a1fd351e4dee5847ffe33478e1a962ccef7b0b2f9f9b12a12fb42393"
+        },
+        "typesupport": [
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/libmanus_wuji_interfaces__rosidl_typesupport_c.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/libmanus_wuji_interfaces__rosidl_typesupport_c.so",
+            "bytes": 50768,
+            "sha256": "64b8fc8cd2af0b062921460d18d86a60ce6e22fef724b7b76361cd392e5a7208"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/libmanus_wuji_interfaces__rosidl_typesupport_cpp.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/libmanus_wuji_interfaces__rosidl_typesupport_cpp.so",
+            "bytes": 77288,
+            "sha256": "2de90d67a332ef42b2de46c55a054028cbe03b73a22992046a87c63996fd517a"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/libmanus_wuji_interfaces__rosidl_typesupport_fastrtps_c.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/libmanus_wuji_interfaces__rosidl_typesupport_fastrtps_c.so",
+            "bytes": 132120,
+            "sha256": "eb59af3d770b2c5f243dc2290d104fa3586eb1d59bfe7557fb762b08e4a56b76"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/libmanus_wuji_interfaces__rosidl_typesupport_fastrtps_cpp.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/libmanus_wuji_interfaces__rosidl_typesupport_fastrtps_cpp.so",
+            "bytes": 198944,
+            "sha256": "b0ccb1766362e8b1931a775a8f6740dc00523113f7bc94de61a38b8620de2489"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/libmanus_wuji_interfaces__rosidl_typesupport_introspection_c.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/libmanus_wuji_interfaces__rosidl_typesupport_introspection_c.so",
+            "bytes": 120576,
+            "sha256": "e33c497052e85b53ec8115f8d1644ea9cd18bee5178572e4b2f4693f230ffa32"
+          },
+          {
+            "path": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/libmanus_wuji_interfaces__rosidl_typesupport_introspection_cpp.so",
+            "realpath": "/home/ubuntu/teleop_ws/install/manus_wuji_interfaces/lib/libmanus_wuji_interfaces__rosidl_typesupport_introspection_cpp.so",
+            "bytes": 148968,
+            "sha256": "88da60077e4e34dc364a44e986ef9d7240c5f3a09ff33e5d0b2ab606f2b2052e"
+          }
+        ]
+      },
+      "dex_collection_interfaces": {
+        "prefix": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces",
+        "requested": [
+          "SampleObservation",
+          "CollectionStatus",
+          "TopicCatalogue"
+        ],
+        "definitions": [
+          {
+            "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/CameraFrame.msg",
+            "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/CameraFrame.msg",
+            "bytes": 336,
+            "sha256": "9b35d3373f0bea09cb010b9ba55b9f6e95fada85ba225870e02d10733d072df0"
+          },
+          {
+            "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/CollectionStatus.msg",
+            "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/CollectionStatus.msg",
+            "bytes": 409,
+            "sha256": "db2a0465d56ae983c6e0e4f328f8f525f2ad555ea94bc06158ebb2fa7205e832"
+          },
+          {
+            "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/SampleObservation.msg",
+            "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/SampleObservation.msg",
+            "bytes": 250,
+            "sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a"
+          },
+          {
+            "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/StreamStatus.msg",
+            "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/StreamStatus.msg",
+            "bytes": 294,
+            "sha256": "5906cd92650503b75da1909288dea1f40abb978aab2785db0876d53affd510a3"
+          },
+          {
+            "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/TopicCatalogue.msg",
+            "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/TopicCatalogue.msg",
+            "bytes": 120,
+            "sha256": "0a024762cfc8c57054b4ac4fdf02ad345043291dfab874931a28d2254db20224"
+          },
+          {
+            "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/TopicInfo.msg",
+            "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/TopicInfo.msg",
+            "bytes": 393,
+            "sha256": "e1326ecbc4b5801f3a31e4916356c83a267574179af0c21ee1dd19a75025a7e0"
+          }
+        ],
+        "manifest": {
+          "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/package.xml",
+          "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/package.xml",
+          "bytes": 662,
+          "sha256": "76ebaaaf0f9622c3b930e41dae4a9f2237522b23cfffff7ba75e557dad606941"
+        },
+        "typesupport": [
+          {
+            "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/libdex_collection_interfaces__rosidl_typesupport_c.so",
+            "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/libdex_collection_interfaces__rosidl_typesupport_c.so",
+            "bytes": 66976,
+            "sha256": "80cb9c68e553c5b7af429e8ad41ad1f54747666fcc7036b6a11e40f3fc1ad0b8"
+          },
+          {
+            "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/libdex_collection_interfaces__rosidl_typesupport_cpp.so",
+            "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/libdex_collection_interfaces__rosidl_typesupport_cpp.so",
+            "bytes": 309576,
+            "sha256": "d994e462e0e7a517f017c746f8476cd1d3bbb07e784e166af9f53afd56d09e57"
+          },
+          {
+            "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/libdex_collection_interfaces__rosidl_typesupport_fastrtps_c.so",
+            "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/libdex_collection_interfaces__rosidl_typesupport_fastrtps_c.so",
+            "bytes": 227536,
+            "sha256": "8fb930a36fc81e12d3e0e03f24f2754a744667e659dc03ccaf1c6e5f9cad2992"
+          },
+          {
+            "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/libdex_collection_interfaces__rosidl_typesupport_fastrtps_cpp.so",
+            "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/libdex_collection_interfaces__rosidl_typesupport_fastrtps_cpp.so",
+            "bytes": 556288,
+            "sha256": "100df682ec68b03afe76818c48f1dff30f992235c7d54fcd17876d1084648ca8"
+          },
+          {
+            "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/libdex_collection_interfaces__rosidl_typesupport_introspection_c.so",
+            "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/libdex_collection_interfaces__rosidl_typesupport_introspection_c.so",
+            "bytes": 145920,
+            "sha256": "f28df67b6a48b000ceb296c3abafe2d87a001720c6572456580b240af2cfc75a"
+          },
+          {
+            "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/libdex_collection_interfaces__rosidl_typesupport_introspection_cpp.so",
+            "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/lib/libdex_collection_interfaces__rosidl_typesupport_introspection_cpp.so",
+            "bytes": 513528,
+            "sha256": "2490c6de4f0c297182bee902839c90334c3cfe7e26f06fa5e938dce4004ad4e9"
+          }
+        ]
+      },
+      "sensor_msgs": {
+        "prefix": "/opt/ros/jazzy",
+        "requested": [
+          "JointState"
+        ],
+        "definitions": [
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/BatteryState.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/BatteryState.msg",
+            "bytes": 2969,
+            "sha256": "ce13430f3c107274fb7123a6d1e79a9f83974d78cb0be1721695129e49240b25"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/CameraInfo.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/CameraInfo.msg",
+            "bytes": 6351,
+            "sha256": "1fced83678f5f2708aff8540987594692452de9f0b43905ce3bfba689226f3aa"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/ChannelFloat32.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/ChannelFloat32.msg",
+            "bytes": 1009,
+            "sha256": "6cf885a09a7f499ce2348bc3099e146a6273bb1e7ff875824ecbe05abaf0d086"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/CompressedImage.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/CompressedImage.msg",
+            "bytes": 2854,
+            "sha256": "75ca1003981c407148ff94a3470760985dd69233b8287a5d52848d45a312f144"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/FluidPressure.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/FluidPressure.msg",
+            "bytes": 525,
+            "sha256": "a2a96aa57e9957549dbf5c739c3dba3fb4303f0dd8426c9178b7333b656bb0d9"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/Illuminance.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/Illuminance.msg",
+            "bytes": 994,
+            "sha256": "b55f46c55588f7d729feb7dd84b60b1796dcfdb2351a26982ff2505129702182"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/Image.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/Image.msg",
+            "bytes": 1451,
+            "sha256": "575cd3434771916c2b551db8ac484522ecef1d6105196e043a305887d2730704"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/Imu.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/Imu.msg",
+            "bytes": 1211,
+            "sha256": "5800b7c2e6d3afed966ae229b1559f6e762c792ad34a88e55ad4288d8bbbd34b"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/JointState.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/JointState.msg",
+            "bytes": 999,
+            "sha256": "711d1771a002c7190e5bbe746a163a67477c1e2a45482a64f1fe339815ca6f5d"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/Joy.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/Joy.msg",
+            "bytes": 269,
+            "sha256": "5a7d133e7dc82f531e03bd4ff92c9240a828bb6ceb6f19d5cd767d5372adb757"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/JoyFeedback.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/JoyFeedback.msg",
+            "bytes": 412,
+            "sha256": "47f62324e13743dd7a14bb71d64dc4cc034f4ff7885688c235bc121e224e06c3"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/JoyFeedbackArray.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/JoyFeedbackArray.msg",
+            "bytes": 83,
+            "sha256": "6930a74a9e38918bb6f872c3e30ee3bb172c3b71cb3daf5d07c6ea76ee44f0ab"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/LaserEcho.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/LaserEcho.msg",
+            "bytes": 239,
+            "sha256": "57511740458bf605dd609aab1b43312ec0e884d702196993a29ea32cb67d4f5f"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/LaserScan.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/LaserScan.msg",
+            "bytes": 1593,
+            "sha256": "bb688599d8787fa1b48393e50064013e58449055eb60e501eb01a07e8bc03357"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/MagneticField.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/MagneticField.msg",
+            "bytes": 1183,
+            "sha256": "b1bf534a4175055d85ee4630788c67a960733c383a458b86f6dfdfa27786be64"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/MultiDOFJointState.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/MultiDOFJointState.msg",
+            "bytes": 1208,
+            "sha256": "bb707259b63ea52101697daf624ff7ad73a1f9977117ce3798a36cc1858d99fd"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/MultiEchoLaserScan.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/MultiEchoLaserScan.msg",
+            "bytes": 1768,
+            "sha256": "8e96fd2ff5e685bfed326fecd90797fade8485be7c02f54250e5ea535c42b5e3"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/NavSatFix.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/NavSatFix.msg",
+            "bytes": 1605,
+            "sha256": "7457a0d5afd253a69a9996288192fb9bf10fdd053989204d5aca8d56d95b65ac"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/NavSatStatus.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/NavSatStatus.msg",
+            "bytes": 964,
+            "sha256": "f41663c70f192cfb8af118403ced55171b9c42af40a4ef798536d8af23b3d4f9"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/PointCloud.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/PointCloud.msg",
+            "bytes": 642,
+            "sha256": "8bdec27b9f1b688448410d1c6de34b42af6ef56ad4e496a214793e9ec88db993"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/PointCloud2.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/PointCloud2.msg",
+            "bytes": 1047,
+            "sha256": "22699bfd6c68be148363a2e889408833a5a37d3464ea20032d1c757336b80f2a"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/PointField.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/PointField.msg",
+            "bytes": 485,
+            "sha256": "6e6d5d51d2e464d3074b44b112f219e67fcdc0b280260d93f8cefd9710ec972e"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/Range.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/Range.msg",
+            "bytes": 2124,
+            "sha256": "6aac2960a3702cad5c5a6b5eda68e252a97d199bd9b7385c975332edbbc170cf"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/RegionOfInterest.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/RegionOfInterest.msg",
+            "bytes": 872,
+            "sha256": "9c07010ab5ffddd1202876a778b44c99cafa780bc0503041c3fd935870a14c6a"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/RelativeHumidity.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/RelativeHumidity.msg",
+            "bytes": 626,
+            "sha256": "bd9cff7bdebac733030ec1de6a66f004bf4f31924078a3170984d338352e649a"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/Temperature.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/Temperature.msg",
+            "bytes": 343,
+            "sha256": "20a8580f84dbc063d87c3e1b902494149428272749844fa1dbf24fa80575be82"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/sensor_msgs/msg/TimeReference.msg",
+            "realpath": "/opt/ros/jazzy/share/sensor_msgs/msg/TimeReference.msg",
+            "bytes": 382,
+            "sha256": "4fdb6fb81fc2e910c560d80dd21b161a72d7f09b2f0ea9bdfcb75d71ab342491"
+          }
+        ],
+        "manifest": {
+          "path": "/opt/ros/jazzy/share/sensor_msgs/package.xml",
+          "realpath": "/opt/ros/jazzy/share/sensor_msgs/package.xml",
+          "bytes": 1298,
+          "sha256": "00cc932b8a1d2a9064c621bfacab56428a5175afe37269da38ba09361e8a4a5a"
+        },
+        "typesupport": [
+          {
+            "path": "/opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_c.so",
+            "realpath": "/opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_c.so",
+            "bytes": 44872,
+            "sha256": "e6fd118d66d77554f00ecefa5901e0f1a70399c308e50f98a176cc41268810a6"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_cpp.so",
+            "realpath": "/opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_cpp.so",
+            "bytes": 62064,
+            "sha256": "0f9cc40fad86d4db7ffbf29898a476898518739afaef57e0ce96cf3ed7731fae"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_fastrtps_c.so",
+            "realpath": "/opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_fastrtps_c.so",
+            "bytes": 159840,
+            "sha256": "a4261554657cf0eb5e2c987fd6e26c7a8a2844b9c7f472cefd9b5ddfb9c0c6bd"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_fastrtps_cpp.so",
+            "realpath": "/opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_fastrtps_cpp.so",
+            "bytes": 196680,
+            "sha256": "68ae64f7328717477112f20409b009c377e1014581c71806494cd8049e36d37e"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_introspection_c.so",
+            "realpath": "/opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_introspection_c.so",
+            "bytes": 132808,
+            "sha256": "35cd741f52f771c562fb2ed9d7cc76580679caf3ee5272d00c6eb072b3f074af"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_introspection_cpp.so",
+            "realpath": "/opt/ros/jazzy/lib/libsensor_msgs__rosidl_typesupport_introspection_cpp.so",
+            "bytes": 163096,
+            "sha256": "cc7ff0aab64fb3a875eacf009e2046e6da7c5b843ffed2487e2b3ce98ee59fd7"
+          }
+        ]
+      },
+      "geometry_msgs": {
+        "prefix": "/opt/ros/jazzy",
+        "requested": [
+          "PoseStamped",
+          "TwistStamped",
+          "WrenchStamped"
+        ],
+        "definitions": [
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/Accel.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/Accel.msg",
+            "bytes": 119,
+            "sha256": "67f371aabfc8ec1bd58bbb01a1709222e685c549462984c9958cc89fcd9f6abb"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/AccelStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/AccelStamped.msg",
+            "bytes": 92,
+            "sha256": "c46e9fcf5551d2330b63b1efe0626f747bcda24ddcc9e281597a9354b3bd9eea"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/AccelWithCovariance.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/AccelWithCovariance.msg",
+            "bytes": 330,
+            "sha256": "59512bab4004aefda7a9dea2a6fdbeb625c66a3a5359aae33b4561cf4a41263b"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/AccelWithCovarianceStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/AccelWithCovarianceStamped.msg",
+            "bytes": 133,
+            "sha256": "04d5dbf78d814f58f4a01b1e9a63b5a5fdd24f5164cf021908d05fb079e63de8"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/Inertia.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/Inertia.msg",
+            "bytes": 260,
+            "sha256": "33bc8db637874153ba5261bb5e7c23ca12754e15e5a2e58a86533c1f5bd66dd4"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/InertiaStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/InertiaStamped.msg",
+            "bytes": 92,
+            "sha256": "456743836340c5d638dba1fcae3211acfe61f0690dcc9fe5b7ae9af8991591f1"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/Point.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/Point.msg",
+            "bytes": 84,
+            "sha256": "eb4c07e591cf0269ccb17245dcd4f998162feb09cc8add85fa082c8a30bfc91d"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/Point32.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/Point32.msg",
+            "bytes": 362,
+            "sha256": "acade2dacb4f1f7988f34e8221079eb1c757f51e8ef48adb5651f7dc478fed59"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/PointStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/PointStamped.msg",
+            "bytes": 108,
+            "sha256": "c58b03c27604f45e9b0fd2f1b327dcbada7d6a389beb8c060d448abc25e76bfc"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/Polygon.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/Polygon.msg",
+            "bytes": 109,
+            "sha256": "43679118501e3b294349c9ad73af9f03b476ef77c7096cd79b4ce46646823056"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/PolygonInstance.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/PolygonInstance.msg",
+            "bytes": 213,
+            "sha256": "2ba1b905a10593821b1f8f4c05ad27cf2d1a9bd1e9c2643b01297583993f7bd4"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/PolygonInstanceStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/PolygonInstanceStamped.msg",
+            "bytes": 218,
+            "sha256": "0dd863a4fb199e8833d13df9802064884a8be7a7f439f2b6e378aebcf121a506"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/PolygonStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/PolygonStamped.msg",
+            "bytes": 114,
+            "sha256": "ff0812e3cae3e92947ba4abe3f9ea6ad31e04af0f2d97399027786ad27d39f0a"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/Pose.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/Pose.msg",
+            "bytes": 119,
+            "sha256": "3eceb77c63ebbb544c11d7f991e475e9819e0cf534deb1a879392c1b3dc997de"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/Pose2D.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/Pose2D.msg",
+            "bytes": 934,
+            "sha256": "48bbdb9e593b50b3e4b4e4494ca6ce076f59937c1b4ad80bc7ea09e87891a899"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/PoseArray.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/PoseArray.msg",
+            "bytes": 94,
+            "sha256": "3f58a91730c78dbc5ec5092131945ccdfeeb775aa0f02df7ff09f6c979b1d398"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/PoseStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/PoseStamped.msg",
+            "bytes": 89,
+            "sha256": "31898ab0eb64a6c44c27ab4959819a32ec3bc3ee847c8fe1b01c897d48e311e5"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/PoseWithCovariance.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/PoseWithCovariance.msg",
+            "bytes": 323,
+            "sha256": "a22f234e91b9fcd4ba0c5b533496b43c62d7f6ade39082212ac9835679d29f94"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/PoseWithCovarianceStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/PoseWithCovarianceStamped.msg",
+            "bytes": 131,
+            "sha256": "87b6851480902effb5232f87bf68e76f19bf7b26affa11001be9e515542c21fb"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/Quaternion.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/Quaternion.msg",
+            "bytes": 116,
+            "sha256": "298495eb67a139642ffd37cc9029eae085e6c39a8789828b7517868a487939ed"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/QuaternionStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/QuaternionStamped.msg",
+            "bytes": 126,
+            "sha256": "855d4fd0cecb74ed55477a8c1f19fc9498207e7833a4f923b56fd68a9ba99ec9"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/Transform.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/Transform.msg",
+            "bytes": 118,
+            "sha256": "c8916279f0a429dd9561158bd2133bc4e2d780277c3c594116b240a27e7a2993"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/TransformStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/TransformStamped.msg",
+            "bytes": 748,
+            "sha256": "f6e137c205e9187ac1dafdfbace7435de58bb3779a55e9c6b52c2cb513785c42"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/Twist.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/Twist.msg",
+            "bytes": 116,
+            "sha256": "ed471ef861f65af991b1f64d66ef941dd41dd4c0702f6222512b1a16c62d58b0"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/TwistStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/TwistStamped.msg",
+            "bytes": 92,
+            "sha256": "ffc9d5925412410b28d601c55cf386a0b3e4d5dba00920fbafb98d7201f582ca"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/TwistWithCovariance.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/TwistWithCovariance.msg",
+            "bytes": 326,
+            "sha256": "5690a1f109d4962c73b5ca7f3673c48052d02f37b6a38fe2fb37c899cf555c45"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/TwistWithCovarianceStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/TwistWithCovarianceStamped.msg",
+            "bytes": 134,
+            "sha256": "af369aea38a14e57ff350a3f2c63c2c66335a367822d134fecdef60789e49682"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/Vector3.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/Vector3.msg",
+            "bytes": 251,
+            "sha256": "d8b9ea9aad1f424faf4d2b94dae1e1368af1e5d59de11aeed019399cff7f9e1d"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/Vector3Stamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/Vector3Stamped.msg",
+            "bytes": 285,
+            "sha256": "bfe690d1b7d907c039c9c1580cf8de557d546c8aeb3280c1bd5e0a60d84356cd"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/VelocityStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/VelocityStamped.msg",
+            "bytes": 499,
+            "sha256": "48517d22e2485d0d018300aba815569d05614f7e0eb9c2959719081d8ca0bd5b"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/VelocityWithCovarianceStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/VelocityWithCovarianceStamped.msg",
+            "bytes": 671,
+            "sha256": "d04d9a70bba11e70baa146d05b02804f43c835c2caa733d8ddacc4b09528f43f"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/Wrench.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/Wrench.msg",
+            "bytes": 116,
+            "sha256": "d9667abd3d2a67d5624113fa07a647b0d4806bf89d21c8a5cf914905a036bf25"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/geometry_msgs/msg/WrenchStamped.msg",
+            "realpath": "/opt/ros/jazzy/share/geometry_msgs/msg/WrenchStamped.msg",
+            "bytes": 95,
+            "sha256": "853a8534230b795b6c1afcb8483002f5d1cf14e967ffa0da2cba8da5453b2162"
+          }
+        ],
+        "manifest": {
+          "path": "/opt/ros/jazzy/share/geometry_msgs/package.xml",
+          "realpath": "/opt/ros/jazzy/share/geometry_msgs/package.xml",
+          "bytes": 1080,
+          "sha256": "879da7003d6d2952701aa23146f0d78096143d5107dd6e775a23e591c2c376a0"
+        },
+        "typesupport": [
+          {
+            "path": "/opt/ros/jazzy/lib/libgeometry_msgs__rosidl_typesupport_c.so",
+            "realpath": "/opt/ros/jazzy/lib/libgeometry_msgs__rosidl_typesupport_c.so",
+            "bytes": 44968,
+            "sha256": "669d3a9dc76d69d952f0cf35dbd8597fbccce0aeb672fdf8958d8c001f5974cf"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libgeometry_msgs__rosidl_typesupport_cpp.so",
+            "realpath": "/opt/ros/jazzy/lib/libgeometry_msgs__rosidl_typesupport_cpp.so",
+            "bytes": 57688,
+            "sha256": "5ddee683118ee24cf4d5b85791c55c6f6ffc7d3d84fcb80d23de1a34e70c0323"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libgeometry_msgs__rosidl_typesupport_fastrtps_c.so",
+            "realpath": "/opt/ros/jazzy/lib/libgeometry_msgs__rosidl_typesupport_fastrtps_c.so",
+            "bytes": 135112,
+            "sha256": "04c1c0afb3aeeb8a01dbeb9f11e894549ba6339146cb716e8777c738f0fa6c49"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libgeometry_msgs__rosidl_typesupport_fastrtps_cpp.so",
+            "realpath": "/opt/ros/jazzy/lib/libgeometry_msgs__rosidl_typesupport_fastrtps_cpp.so",
+            "bytes": 155632,
+            "sha256": "b0d212e5a3994fe1336c8b8cc2d20ccf27747ee1bacc0df7934bc9e460b1a4a7"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libgeometry_msgs__rosidl_typesupport_introspection_c.so",
+            "realpath": "/opt/ros/jazzy/lib/libgeometry_msgs__rosidl_typesupport_introspection_c.so",
+            "bytes": 75640,
+            "sha256": "b4091cf50955bf414397f66af1e14c44ecc06f850f0090032b033b8e25a1443a"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libgeometry_msgs__rosidl_typesupport_introspection_cpp.so",
+            "realpath": "/opt/ros/jazzy/lib/libgeometry_msgs__rosidl_typesupport_introspection_cpp.so",
+            "bytes": 85808,
+            "sha256": "54e62cb65315f66c02c9c9f70161558b0a5fbd6fe3f02809596f58a74ffdd119"
+          }
+        ]
+      },
+      "diagnostic_msgs": {
+        "prefix": "/opt/ros/jazzy",
+        "requested": [
+          "DiagnosticArray"
+        ],
+        "definitions": [
+          {
+            "path": "/opt/ros/jazzy/share/diagnostic_msgs/msg/DiagnosticArray.msg",
+            "realpath": "/opt/ros/jazzy/share/diagnostic_msgs/msg/DiagnosticArray.msg",
+            "bytes": 192,
+            "sha256": "019690e73d166237243a14998c4a9183c829dcc052ce7d190120d3892bf12c59"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/diagnostic_msgs/msg/DiagnosticStatus.msg",
+            "realpath": "/opt/ros/jazzy/share/diagnostic_msgs/msg/DiagnosticStatus.msg",
+            "bytes": 428,
+            "sha256": "04b13e5ea9dd8559ef3f691bab371ec05ed227f1045f4fcd3b0b30338f9a15bd"
+          },
+          {
+            "path": "/opt/ros/jazzy/share/diagnostic_msgs/msg/KeyValue.msg",
+            "realpath": "/opt/ros/jazzy/share/diagnostic_msgs/msg/KeyValue.msg",
+            "bytes": 95,
+            "sha256": "89f6d92c75fbf2d5381e8c3e3b5bf92bbf6dbdb9683a5a5a4433a79f59fe0d74"
+          }
+        ],
+        "manifest": {
+          "path": "/opt/ros/jazzy/share/diagnostic_msgs/package.xml",
+          "realpath": "/opt/ros/jazzy/share/diagnostic_msgs/package.xml",
+          "bytes": 1168,
+          "sha256": "2cf6cc6283772afe696afa04241b7f3bdde51cd42545f57d8ec383d4b4de712c"
+        },
+        "typesupport": [
+          {
+            "path": "/opt/ros/jazzy/lib/libdiagnostic_msgs__rosidl_typesupport_c.so",
+            "realpath": "/opt/ros/jazzy/lib/libdiagnostic_msgs__rosidl_typesupport_c.so",
+            "bytes": 27240,
+            "sha256": "46bc7a94c1b462ab3b61fec53652366b4ee26666b77f64fc89640b7adea4a609"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libdiagnostic_msgs__rosidl_typesupport_cpp.so",
+            "realpath": "/opt/ros/jazzy/lib/libdiagnostic_msgs__rosidl_typesupport_cpp.so",
+            "bytes": 36080,
+            "sha256": "9bced3a3addc6396b35bd12317ce6af441550efedf0f605a8ab5f55f1db0699f"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libdiagnostic_msgs__rosidl_typesupport_fastrtps_c.so",
+            "realpath": "/opt/ros/jazzy/lib/libdiagnostic_msgs__rosidl_typesupport_fastrtps_c.so",
+            "bytes": 61800,
+            "sha256": "a0e4bf13ee6720b3396d31577598722bee3b2763db315b717133bb2d6747a080"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libdiagnostic_msgs__rosidl_typesupport_fastrtps_cpp.so",
+            "realpath": "/opt/ros/jazzy/lib/libdiagnostic_msgs__rosidl_typesupport_fastrtps_cpp.so",
+            "bytes": 86456,
+            "sha256": "1194cadc69a6dae495a04ea4e7d4443abe46129f82ac7ad6f43aa8b22fed245f"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libdiagnostic_msgs__rosidl_typesupport_introspection_c.so",
+            "realpath": "/opt/ros/jazzy/lib/libdiagnostic_msgs__rosidl_typesupport_introspection_c.so",
+            "bytes": 46920,
+            "sha256": "750fa7badb4b77dd55588c3a54ba9657216ff1e32628eca8b4104436ab32fd7d"
+          },
+          {
+            "path": "/opt/ros/jazzy/lib/libdiagnostic_msgs__rosidl_typesupport_introspection_cpp.so",
+            "realpath": "/opt/ros/jazzy/lib/libdiagnostic_msgs__rosidl_typesupport_introspection_cpp.so",
+            "bytes": 70968,
+            "sha256": "233f604775b6f6388f8c275886d95a8bf8a05df3c82699bd337f5bca05af05e8"
+          }
+        ]
+      }
+    },
+    "sync_declarations": {
+      "sample_indices": {
+        "start": 33,
+        "lines": [
+          [
+            46,
+            "insertion = np.searchsorted(time, query)"
+          ]
+        ]
+      },
+      "interpolate": {
+        "start": 56,
+        "lines": [
+          [
+            56,
+            "def interpolate(values, stamps, query, indexes, *, poses=False):"
+          ]
+        ]
+      },
+      "causal_index": {
+        "start": 73,
+        "lines": [
+          [
+            73,
+            "def causal_index(track, query, max_age):"
+          ],
+          [
+            76,
+            "latest = np.searchsorted(arrival[order], query, side=\"right\") - 1"
+          ],
+          [
+            78,
+            "age = query - track.header[index]"
+          ]
+        ]
+      },
+      "align_episode": {
+        "start": 115,
+        "lines": [
+          [
+            127,
+            "omit = track.arrays[\"duplicate_source\"] if key.startswith(\"manus\") else None"
+          ],
+          [
+            128,
+            "indexes = sample_indices(track.header, track.valid, query, max_gap, omit)"
+          ],
+          [
+            130,
+            "aligned[key + \"_pose\"] = interpolate(track.arrays[\"pose\"], track.header, query, indexes, poses=True)"
+          ],
+          [
+            132,
+            "aligned[key + \"_brackets\"] = indexes"
+          ],
+          [
+            133,
+            "aligned[key + \"_causal_index\"] = causal_index(track, query, max_gap)"
+          ],
+          [
+            134,
+            "ages = np.abs(query[valid, None] - track.header[indexes[valid]]) / MS_NS"
+          ],
+          [
+            136,
+            "\"valid_frames\": int(valid.sum()), \"causal_available_frames\": int((aligned[key + \"_causal_index\"] >= 0).sum()),"
+          ],
+          [
+            141,
+            "safety_index = causal_index(safety, query, TRACKER_GAP_NS)"
+          ],
+          [
+            155,
+            "clocks = tracks[key].header[aligned[key + \"_brackets\"][both]]"
+          ]
+        ]
+      }
+    },
+    "repositories": {
+      "/home/ubuntu/dexgym_worktrees/s0-5": {
+        "head": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/dexgym_worktrees/s0-5",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exit": 0,
+          "stdout": "cc05f09847254ddae3b76581fb9e1feed4f31065\n",
+          "stderr": ""
+        },
+        "branch": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/dexgym_worktrees/s0-5",
+            "branch",
+            "--show-current"
+          ],
+          "exit": 0,
+          "stdout": "s0-5\n",
+          "stderr": ""
+        },
+        "tracked_paths": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/dexgym_worktrees/s0-5",
+            "diff",
+            "--name-status",
+            "HEAD"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "tracked_diff_sha256": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/dexgym_worktrees/s0-5",
+            "diff",
+            "--binary",
+            "HEAD"
+          ],
+          "exit": 0,
+          "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": ""
+        },
+        "status": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/dexgym_worktrees/s0-5",
+            "status",
+            "--porcelain=v1",
+            "-uall"
+          ],
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      },
+      "/home/ubuntu/dexgym": {
+        "head": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/dexgym",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exit": 0,
+          "stdout": "21a813a1950891c712e421b5ced883763bc904cb\n",
+          "stderr": ""
+        },
+        "branch": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/dexgym",
+            "branch",
+            "--show-current"
+          ],
+          "exit": 0,
+          "stdout": "main\n",
+          "stderr": ""
+        },
+        "tracked_paths": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/dexgym",
+            "diff",
+            "--name-status",
+            "HEAD"
+          ],
+          "exit": 0,
+          "stdout": "M\tsource/dexgym/assets/marvin_wuji/__init__.py\nM\tsource/dexgym/data/wuji_retarget.py\n",
+          "stderr": ""
+        },
+        "tracked_diff_sha256": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/dexgym",
+            "diff",
+            "--binary",
+            "HEAD"
+          ],
+          "exit": 0,
+          "stdout": "ca0ca092d3120dc5249eccadf0c4c26eb56e22d22a4935ccd72481c4b555c2bc",
+          "stderr": ""
+        },
+        "status": null
+      },
+      "/home/ubuntu/teleop_ws": {
+        "head": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/teleop_ws",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exit": 0,
+          "stdout": "30cf13bdc496c43b3016462cfa0a206334d1ff7f\n",
+          "stderr": ""
+        },
+        "branch": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/teleop_ws",
+            "branch",
+            "--show-current"
+          ],
+          "exit": 0,
+          "stdout": "4sensor\n",
+          "stderr": ""
+        },
+        "tracked_paths": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/teleop_ws",
+            "diff",
+            "--name-status",
+            "HEAD"
+          ],
+          "exit": 0,
+          "stdout": "M\tsrc/tianji_real_driver/config/real.yaml\nM\tsrc/tianji_real_driver/include/tianji_real_driver/command_trace.hpp\nM\tsrc/tianji_real_driver/include/tianji_real_driver/real_driver_node.hpp\nM\tsrc/tianji_real_driver/src/real_driver_node.cpp\nM\tsrc/tianji_real_driver/test/test_command_trace.cpp\nM\tsrc/vive_tracker_ros/config/tracker.yaml\nM\tsrc/vive_tracker_ros/config/tracker_calibration.yaml\nM\tsrc/whole_body_mujoco_driver/config/sim.yaml\nM\tsrc/whole_body_mujoco_driver/include/whole_body_mujoco_driver/mujoco_backend.hpp\nM\tsrc/whole_body_mujoco_driver/include/whole_body_mujoco_driver/mujoco_driver_node.hpp\nM\tsrc/whole_body_mujoco_driver/model/README.md\nM\tsrc/whole_body_mujoco_driver/model/VALIDATION.md\nD\tsrc/whole_body_mujoco_driver/model/dual_arm.xml\nM\tsrc/whole_body_mujoco_driver/model/dual_arm_marvin.xml\nM\tsrc/whole_body_mujoco_driver/model/run_viewer.py\nM\tsrc/whole_body_mujoco_driver/model/tools/build_mjcf.py\nM\tsrc/whole_body_mujoco_driver/model/tools/render_previews.py\nM\tsrc/whole_body_mujoco_driver/src/mujoco_backend.cpp\nM\tsrc/whole_body_mujoco_driver/src/mujoco_driver_node.cpp\nM\tsrc/whole_body_mujoco_driver/test/test_mujoco_backend.cpp\nM\tsrc/whole_body_teleop/CMakeLists.txt\nM\tsrc/whole_body_teleop/config/bimanual_position_real.yaml\nM\tsrc/whole_body_teleop/config/bimanual_position_real_full.yaml\nM\tsrc/whole_body_teleop/config/bimanual_position_real_no_head.yaml\nM\tsrc/whole_body_teleop/config/manimux_position_real.yaml\nM\tsrc/whole_body_teleop/config/manimux_position_real_full.yaml\nM\tsrc/whole_body_teleop/config/manimux_position_real_full_tuned_20261102.yaml\nM\tsrc/whole_body_teleop/config/manimux_position_real_no_head.yaml\nM\tsrc/whole_body_teleop/config/manimux_position_real_no_head_tuned_20261102.yaml\nM\tsrc/whole_body_teleop/config/real_full.yaml\nM\tsrc/whole_body_teleop/include/tianji_teleop_controller/bimanual_registration.hpp\nM\tsrc/whole_body_teleop/include/tianji_teleop_controller/kinematics_adapter.hpp\nM\tsrc/whole_body_teleop/include/tianji_teleop_controller/teleop_core.hpp\nM\tsrc/whole_body_teleop/src/marvin_kine_sdk.cpp\nM\tsrc/whole_body_teleop/src/recovery_policy.cpp\nM\tsrc/whole_body_teleop/src/teleop_controller_node.cpp\nM\tsrc/whole_body_teleop/src/teleop_core.cpp\nM\tsrc/whole_body_teleop/test/replay/CMakeLists.txt\nM\tsrc/whole_body_teleop/test/replay/export_bag.py\nM\tsrc/whole_body_teleop/test/replay/replay_configuration.hpp\nM\tsrc/whole_body_teleop/test/test_bimanual_profile.py\nM\tsrc/whole_body_teleop/test/test_controller_state_machine.cpp\nM\tsrc/whole_body_teleop/test/test_recovery_policy.cpp\nM\tsrc/whole_body_teleop/test/test_teleop_core.cpp\nM\tsrc/wrist_camera_driver/README.md\nM\tsrc/wrist_camera_driver/config/wrist_cameras.yaml\nM\tsrc/wrist_camera_driver/include/wrist_camera_driver/capture.hpp\nM\tsrc/wrist_camera_driver/src/capture.cpp\nM\tsrc/wrist_camera_driver/src/wrist_camera_node.cpp\nM\tsrc/wrist_camera_driver/test/test_capture_contract.cpp\n",
+          "stderr": ""
+        },
+        "tracked_diff_sha256": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/teleop_ws",
+            "diff",
+            "--binary",
+            "HEAD"
+          ],
+          "exit": 0,
+          "stdout": "94c5f2467c1e10342312d15d5ac4ad545377bae405e9dd703d409055e15574ff",
+          "stderr": ""
+        },
+        "status": null
+      },
+      "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection": {
+        "head": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exit": 0,
+          "stdout": "937bc44f7643cfc3a8de5146a7e6646dbe10c201\n",
+          "stderr": ""
+        },
+        "branch": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection",
+            "branch",
+            "--show-current"
+          ],
+          "exit": 0,
+          "stdout": "codex/cpp-data-collection\n",
+          "stderr": ""
+        },
+        "tracked_paths": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection",
+            "diff",
+            "--name-status",
+            "HEAD"
+          ],
+          "exit": 0,
+          "stdout": "M\tapps/backend/app/native_routes.py\nM\tapps/backend/app/runtime_routes.py\nM\tapps/backend/app/services/capture_workflow.py\nM\tapps/backend/app/services/episode_history.py\nM\tapps/backend/app/services/native_collection.py\nM\tapps/backend/app/services/prealignment.py\nM\tapps/backend/app/services/prealignment_geometry.py\nM\tapps/backend/app/services/prealignment_observer.py\nM\tapps/backend/app/services/teleop.py\nM\tapps/backend/app/services/web_entry.py\nM\tapps/backend/requirements-native.txt\nM\tapps/backend/tests/test_native_collection.py\nM\tapps/backend/tests/test_prealignment.py\nM\tapps/backend/tests/test_prealignment_ros_runtime.py\nM\tapps/backend/tests/test_teleop.py\nM\tapps/backend/tests/test_web_entry.py\nM\tapps/frontend/src/components/PlatformHeader.test.tsx\nM\tapps/frontend/src/components/PlatformHeader.tsx\nM\tapps/frontend/src/main.tsx\nM\tapps/frontend/src/modules/camera/CameraPanel.tsx\nM\tapps/frontend/src/modules/recording/OperatorState.tsx\nM\tapps/frontend/src/modules/recording/api.ts\nM\tapps/frontend/src/modules/runtime/api.ts\nM\tapps/frontend/src/modules/teleop/PrealignmentProvider.test.tsx\nM\tapps/frontend/src/modules/teleop/PrealignmentProvider.tsx\nM\tapps/frontend/src/modules/teleop/TeleopPanel.tsx\nM\tapps/frontend/src/modules/teleop/api.ts\nM\tapps/frontend/src/pages/CollectionPage.toggle.test.tsx\nM\tapps/frontend/src/pages/CollectionPage.tsx\nM\tapps/frontend/src/styles.css\nM\tconfig/capture_workflow.yaml\nM\tconfig/prealignment.yaml\nM\tros2_ws/src/dex_data_collection/CMakeLists.txt\nM\tscripts/ops/agent.py\nM\tscripts/ops/config.py\nM\tscripts/ops/safety.py\nM\tscripts/ops/shutdown.py\nM\tscripts/platform_runtime.py\n",
+          "stderr": ""
+        },
+        "tracked_diff_sha256": {
+          "argv": [
+            "git",
+            "-C",
+            "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection",
+            "diff",
+            "--binary",
+            "HEAD"
+          ],
+          "exit": 0,
+          "stdout": "5f8ed173fd6c6bb46a39e62d576f2da3892b71b4f4f6b9dd1458a8280715c64a",
+          "stderr": ""
+        },
+        "status": null
+      }
+    },
+    "commands": [
+      {
+        "argv": [
+          "dpkg-query",
+          "-W",
+          "ros-jazzy-rclpy",
+          "ros-jazzy-rosbag2-py",
+          "ros-jazzy-rosbag2-storage-mcap",
+          "ros-jazzy-rosidl-runtime-py",
+          "python3",
+          "python3-numpy",
+          "python3-scipy",
+          "python3-yaml",
+          "python3-lz4"
+        ],
+        "exit": 0,
+        "stdout": "python3\t3.12.3-0ubuntu2.1\npython3-lz4\t4.0.2+dfsg-1build4\npython3-numpy\t1:1.26.4+ds-6ubuntu1\npython3-scipy\t1.11.4-6build1\npython3-yaml\t6.0.1-2build2\nros-jazzy-rclpy\t7.1.12-1noble.20260902.053513\nros-jazzy-rosbag2-py\t0.26.11-1noble.20260903.090602\nros-jazzy-rosbag2-storage-mcap\t0.26.11-1noble.20260903.070458\nros-jazzy-rosidl-runtime-py\t0.13.2-1noble.20260612.050026\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "df",
+          "-B1",
+          "/home/ubuntu/dexgym_data/s0-5/p01",
+          "/home/ubuntu/dexgym_worktrees/s0-5"
+        ],
+        "exit": 0,
+        "stdout": "Filesystem         1B-blocks          Used    Available Use% Mounted on\n/dev/nvme0n1p2 1966736678912 1182321610752 684434817024  64% /\n/dev/nvme0n1p2 1966736678912 1182321610752 684434817024  64% /\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "free",
+          "-b"
+        ],
+        "exit": 0,
+        "stdout": "               total        used        free      shared  buff/cache   available\nMem:     134761656320 62765879296  6635335680  3146391552 69561237504 71995777024\nSwap:    34359738368  8114425856 26245312512\n",
+        "stderr": ""
+      },
+      {
+        "argv": [
+          "nvidia-smi",
+          "--query-gpu=name,memory.total,memory.used,driver_version",
+          "--format=csv,noheader"
+        ],
+        "exit": 0,
+        "stdout": "NVIDIA GeForce RTX 5090, 32607 MiB, 23001 MiB, 595.84\n",
+        "stderr": ""
+      }
+    ]
+  }
+}

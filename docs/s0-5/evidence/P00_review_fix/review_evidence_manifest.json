@@ -1,0 +1,125 @@
+{
+  "schema": "s05.review-evidence.v1",
+  "files": [
+    {
+      "path": "evidence/P00_review_fix/commands.json",
+      "size": 6366,
+      "sha256": "61d77bab345937afbd7575887042998467494cb38344ab81ca69ab7de2580763"
+    },
+    {
+      "path": "evidence/P00_review_fix/dependency_download_retry.txt",
+      "size": 1179,
+      "sha256": "a5c09f7506b780ab38eced2578416d8466bdfbe43dc23222db0477c1266610d0"
+    },
+    {
+      "path": "evidence/P00_review_fix/dependency_install.txt",
+      "size": 1214,
+      "sha256": "ef3e0391d728f88e98328c425e4e31391cc5d786f08e2a2839e83438b10274d1"
+    },
+    {
+      "path": "evidence/P00_review_fix/environment.exit.txt",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "evidence/P00_review_fix/environment.json",
+      "size": 76935,
+      "sha256": "14dda29e64a8e627cadc462ead4827c076b354f9015867bae5582fc24db68077"
+    },
+    {
+      "path": "evidence/P00_review_fix/environment.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/P00_review_fix/historical.exit.txt",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "evidence/P00_review_fix/historical.json",
+      "size": 54326,
+      "sha256": "1167129f5c2f9c37c1ffd1a0300d6bf25b85cc90d65c7f77410770f4c41c765a"
+    },
+    {
+      "path": "evidence/P00_review_fix/historical.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/P00_review_fix/initial_dependency_download.txt",
+      "size": 4054,
+      "sha256": "e176e683d180a1cb90c47cc4a2857672900bad48640e6251cbde6db42f8d3120"
+    },
+    {
+      "path": "evidence/P00_review_fix/initial_environment.stderr.txt",
+      "size": 2204,
+      "sha256": "27069d4fb2c862485a11b6b7f6a045ec6a5a5cc3262f630e2f833be6ad578250"
+    },
+    {
+      "path": "evidence/P00_review_fix/marvin54_archive_witness.json",
+      "size": 1432,
+      "sha256": "06b60ed31fdbb93660623c2643fe432cdaea8c9a40b2419f781b539441e03ac1"
+    },
+    {
+      "path": "evidence/P00_review_fix/p00_snapshot_manifest.json",
+      "size": 8751,
+      "sha256": "ae2b7c44ed043fae45fa8476c67cf01837effd643a33647941adf6544ebcc82b"
+    },
+    {
+      "path": "evidence/P00_review_fix/readiness_probe.py",
+      "size": 19536,
+      "sha256": "a9ba2d9f0fb9c42bfa3e75ba438898b160dd620224a918bcec67720df8d9e4c4"
+    },
+    {
+      "path": "evidence/P00_review_fix/README.md",
+      "size": 2249,
+      "sha256": "90b8c653f2314c3007635f840c8e262db53c7ca4018c354f00226d354c7fcf1f"
+    },
+    {
+      "path": "evidence/P00_review_fix/requirements.lock",
+      "size": 593,
+      "sha256": "6324ddb46585e48631f1f8774aeb13333472f378a26f7381264fe6e821fbd64b"
+    },
+    {
+      "path": "evidence/P00_review_fix/review_gates.json",
+      "size": 3408,
+      "sha256": "b3f511166d4b164e9fdc1995d06abb43200c22889cb7cc7f975594b930ea4f49"
+    },
+    {
+      "path": "evidence/P00_review_fix/run_readiness.sh",
+      "size": 1110,
+      "sha256": "8b2bf4b659abb94080c9a069a403c07e3871a4dd0cb3c0e9d741cc5ec23ebf0d"
+    },
+    {
+      "path": "evidence/P00_review_fix/samples.exit.txt",
+      "size": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "evidence/P00_review_fix/samples.json",
+      "size": 173337,
+      "sha256": "ec5230d8450071dc9c08a347e4689f88d41fb436c50c13a9207255c8570d2c7d"
+    },
+    {
+      "path": "evidence/P00_review_fix/samples.stderr.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "evidence/P00_review_fix/sync_source.txt",
+      "size": 1558,
+      "sha256": "bf9a12e4b429883f4091b8b4cb01fca22839adc575a93249e75302e1156ae1fa"
+    },
+    {
+      "path": "evidence/P00_review_fix/test_review_checks.py",
+      "size": 4282,
+      "sha256": "4cc93690426cdad26d793959861217097af2f61b6fee2fe4ddd5965526fefbbc"
+    },
+    {
+      "path": "evidence/P00_review_fix/windows_unit_tests.txt",
+      "size": 208,
+      "sha256": "380ef002adade245ace0c5a07e35de99b6fa3d9cbd53921b82cea9de27139f0d"
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "schema": "s05.review-gates.v1",
+  "gates": [
+    {
+      "id": "R01",
+      "status": "PASS",
+      "remaining_risk": "Overlay drift, full-run disk/RSS, physics versions.",
+      "references": [
+        {
+          "path": "evidence/P00_review_fix/environment.json",
+          "kind": "recorded_evidence",
+          "pointer": "/result/imports"
+        },
+        {
+          "path": "evidence/P00_review_fix/requirements.lock",
+          "kind": "recorded_evidence"
+        },
+        {
+          "path": "EXECUTION_BASELINE.md",
+          "kind": "design"
+        }
+      ]
+    },
+    {
+      "id": "R02",
+      "status": "PASS",
+      "remaining_risk": "Full lineage/feedback eligibility and schema coverage await P01.",
+      "references": [
+        {
+          "path": "evidence/P00_review_fix/samples.json",
+          "kind": "recorded_evidence",
+          "pointer": "/result/merged_embedded_schema"
+        },
+        {
+          "path": "evidence/P00_review_fix/samples.json",
+          "kind": "recorded_evidence",
+          "pointer": "/result/native_streams"
+        },
+        {
+          "path": "specs/P01_teleop_data.md",
+          "kind": "design"
+        }
+      ]
+    },
+    {
+      "id": "R03",
+      "status": "PASS",
+      "remaining_risk": "Controller clock unverified; P01-C/D calibrates and freezes thresholds.",
+      "references": [
+        {
+          "path": "evidence/P00_review_fix/samples.json",
+          "kind": "recorded_evidence",
+          "pointer": "/result/wire_clocks"
+        },
+        {
+          "path": "evidence/P00_review_fix/sync_source.txt",
+          "kind": "recorded_evidence"
+        },
+        {
+          "path": "CONTRACTS.md",
+          "kind": "design"
+        }
+      ]
+    },
+    {
+      "id": "R04",
+      "status": "PASS",
+      "remaining_risk": "Independent final-test eligibility unproven; historic Marvin54 live source is missing.",
+      "references": [
+        {
+          "path": "evidence/P00_review_fix/historical.json",
+          "kind": "recorded_evidence",
+          "pointer": "/result/s04_actual"
+        },
+        {
+          "path": "evidence/P00_review_fix/marvin54_archive_witness.json",
+          "kind": "recorded_evidence",
+          "pointer": "/recorded_splits"
+        },
+        {
+          "path": "HISTORICAL_DATA_USAGE.md",
+          "kind": "design"
+        }
+      ]
+    },
+    {
+      "id": "R05",
+      "status": "PASS",
+      "remaining_risk": "Initial v0.2.0 requires approval, empirical QC thresholds remain pending.",
+      "references": [
+        {
+          "path": "specs/P01_teleop_data.md",
+          "kind": "design"
+        },
+        {
+          "path": "evidence/P00_review_fix/environment.json",
+          "kind": "recorded_evidence",
+          "pointer": "/result/output"
+        }
+      ]
+    },
+    {
+      "id": "R06",
+      "status": "PASS",
+      "remaining_risk": "Review checks integrity and rejects inconsistent status; human evaluates technical evidence.",
+      "references": [
+        {
+          "path": "evidence/P00_review_fix/p00_snapshot_manifest.json",
+          "kind": "recorded_evidence",
+          "pointer": "/commit"
+        },
+        {
+          "path": "evidence/P00_review_fix/windows_unit_tests.txt",
+          "kind": "recorded_evidence"
+        },
+        {
+          "path": "reports/P00_review_fix.md",
+          "kind": "design"
+        }
+      ]
+    }
+  ]
+}

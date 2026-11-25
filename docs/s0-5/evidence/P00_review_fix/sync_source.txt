@@ -1,0 +1,25 @@
+Ubuntu isolated checkout at cc05f09847254ddae3b76581fb9e1feed4f31065
+Read-only excerpts from nl -ba and git grep invocation in commands.json.
+
+source/dexgym/tasks/direct/wholebody_s0/sync.py
+73  def causal_index(track, query, max_age):
+74      arrival = track.arrays["receive_ros_ns"]
+75      order = np.argsort(arrival, kind="stable")
+76      latest = np.searchsorted(arrival[order], query, side="right") - 1
+77      index = order[np.maximum(latest, 0)]
+78      age = query - track.header[index]
+79      good = (latest >= 0) & track.valid[index] & (age >= 0) & (age <= max_age)
+80      return np.where(good, index, -1)
+127         omit = track.arrays["duplicate_source"] if key.startswith("manus") else None
+128         indexes = sample_indices(track.header, track.valid, query, max_gap, omit)
+129         valid = indexes[:, 0] >= 0
+130         aligned[key + "_pose"] = interpolate(track.arrays["pose"], track.header, query, indexes, poses=True)
+131         aligned[key + "_valid"] = valid
+132         aligned[key + "_brackets"] = indexes
+133         aligned[key + "_causal_index"] = causal_index(track, query, max_gap)
+
+source/dexgym/tasks/direct/wholebody_s0/bag.py
+192                source_stamp=msg.source_timestamp_us,
+382                        msg.host_realtime_ns, msg.receive_ros_timestamp_ns, msg.source_instance_id,
+428    for index, name in enumerate(("episode_index", "adapter_sequence", "monotonic_ns", "realtime_ns", "receive_ros_ns", "source_instance")):
+445    latency = (arrays["receive_ros_ns"][header > 0] - header[header > 0]) / MS_NS

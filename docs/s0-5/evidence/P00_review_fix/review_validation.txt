@@ -1,0 +1,25 @@
+Windows document/evidence check
+Command: python -B implementation/dexgym/docs/s0-5/evidence/P00/check_documents.py
+Exit: 0
+BLOCKED historic Git replay on this checkout: cc05f09847254ddae3b76581fb9e1feed4f31065
+PASS structure: 29 Markdown files, 30 requirements, 11 phase specs, 161 local links
+PASS integrity: 24 hashed evidence files and 6 referenced review rows
+PASS phase event log; approval authenticity and technical acceptance require human review
+
+Ubuntu checkout /home/ubuntu/dexgym_worktrees/s0-5
+Command: /usr/bin/python3 -B docs/s0-5/evidence/P00/check_documents.py --require-history
+PASS historic Git replay of 38 files at cc05f09847254ddae3b76581fb9e1feed4f31065
+PASS structure: 29 Markdown files, 30 requirements, 11 phase specs, 161 local links
+PASS integrity: 24 hashed evidence files and 6 referenced review rows
+PASS phase event log; approval authenticity and technical acceptance require human review
+Exit: 0
+Command: /usr/bin/python3 -B docs/s0-5/evidence/P00/check_documents.py --history-only --require-history
+PASS historic Git replay of 38 files at cc05f09847254ddae3b76581fb9e1feed4f31065
+Exit: 0
+Command: /usr/bin/python3 -B docs/s0-5/evidence/P00_review_fix/test_review_checks.py
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK
+Exit: 0

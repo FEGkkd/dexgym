@@ -1,20 +1,16 @@
 # S0-5 项目状态
 
+[phase_state.json](phase_state.json) 记录当前阶段与授权事件。[P00 Review Fix 报告](reports/P00_review_fix.md) 保存本轮审查结论。
+
 | 阶段 | 状态 | 说明 |
 |---|---|---|
-| P00 | READY_FOR_REVIEW | 按 [P00 验收](reports/P00_acceptance.md) 提请人工签核 |
-| P01–P10 | NOT_STARTED | 初始规格已建，分别待前序验收和授权 |
+| P00 | READY_FOR_REVIEW | 六项修订完成后提交审核，等待人工 ACCEPTED |
+| P01–P10 | NOT_STARTED | P01 正式门 P01-A 至 P01-F 均未启动 |
 
-**证据基线。** Ubuntu 主 checkout `21a813a1950891c712e421b5ced883763bc904cb`，S0-4 发布形态 `e7f747e16e83aea4f8e6549e216cdd751bede229`，训练底座 `b833eb6d69d67e7c10bcfbefa9eee13bce41e7e0`，Teleop `30cf13bdc496c43b3016462cfa0a206334d1ff7f`。既有 tracked 修改在 [审计](REPOSITORY_AUDIT.md) 列出。P00 只引入本目录内容。P00 Run ID `S05-P00-20261125-ubuntu-audit`。
+**版本。** 原始 P00 由 GitHub `s0-5` 的 `cc05f09847254ddae3b76581fb9e1feed4f31065` 发布。Review Fix 在 Ubuntu 的独立 `/home/ubuntu/dexgym_worktrees/s0-5` 以此为审查基线。GitHub 分支与实际运行路径核对见 [执行基线](EXECUTION_BASELINE.md)。原始 P00 主仓库、S0-4 发布/训练、Teleop 的当时身份见 [旧审计](REPOSITORY_AUDIT.md)。
 
-**冻结状态。** 主设计、契约、评估 v0.1.0 基线与 P00 spec 提交审核。P01–P10 为各阶段待更新的初版 v0.1.0。频率、阈值、物理限制、测量精度和环境配置按责任阶段冻结。正式 Test 尚未建立或打开用于 S0-5 调参和选型。
+**复验与交付。** 设计／核心接口／评估规范更新至 v0.1.1，P01 Spec 为 v0.2.0 待人工冻结。旧 P00 指标和原始验收报告留存，历史 38 文件可按 Git SHA 复验。新检查器校验当前证据、引用和合法转换。除文档及审计代码外，后续模块仍属于设计阶段。[本轮证据](evidence/P00_review_fix/README.md)
 
-**已交付。** P00 文档、证据见证脚本、真实输出及一致性检查；S0-5 生产接口与训练尚处于方案阶段。
+**独立终评。** 当前资格未证实，`Final Test = BLOCKED`。P01 可在授权后建设开发 Train/Validation 视图，P09 启动必须持有独立封存清单、母源证据和访问日志。[历史用途](HISTORICAL_DATA_USAGE.md)
 
-**已验证。** 主 checkout 与 S0-4 运行结构差异、依赖 overlay、Teleop 样本原始消息与派生 schema、现有 54 DoF CPU 模型的 10 子步。现有资产测试在匹配环境下 6 通过、3 跳过。运行细节及 SHA 见 [证据](evidence/P00/README.md)。
-
-**最新历史参考。** 已有 S0-4 对齐训练快照标记暂停于已评估 19,000，选中 15,000，后者验证/测试 P95 为 11.22/12.03 mm，困难连续段 P95 为 38.07 mm。属于历史 S0-4 证据，P00 无新策略实验。
-
-**未决事项。** 见 [未决问题](OPEN_ISSUES.md) 与 [风险](RISK_REGISTER.md)，包含 P01 存储、采集时钟和谱系。本阶段采样访问成功，全量数据质量、硬件参数和性能仍待所属阶段。
-
-**下一项授权。** 仅人工审核 P00。进入 P01 需用户明确批准并确认 P00 ACCEPTED，核对可用原始数据和合法目录、标定与解析入口、有余量的独立输出位置，审查并冻结 P01 的 lineage、split、时间契约和证据预算。P01 由 TDD 先验证一个可追溯的原包转换再扩量。
+**下一项授权。** 用户确认 P00 ACCEPTED 并授权 P01-A 前，项目停在 P00。随后签核 v0.2.0、核验执行基线和原包访问，审批约束和受控样本。P01-C/D 用开发数据实测并冻结时钟、QC、资源和划分后，才可申请全量 P01-E。[P01 Spec](specs/P01_teleop_data.md)

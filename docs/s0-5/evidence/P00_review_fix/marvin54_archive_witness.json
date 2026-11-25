@@ -1,0 +1,46 @@
+{
+  "schema": "s05.historical.archive-witness.v1",
+  "observed": "2026-11-26T00:39:21.058671+08:00",
+  "scope": "Existing Windows archive, not the formerly named Ubuntu data root",
+  "artifacts": [
+    {
+      "path": "marvin54_hand_centric_s0_reports/data_summary.json",
+      "sha256": "4e777c050826f4bffa69ed22e7ab738778b54a874966fa2ad3a932f11005caaf",
+      "bytes": 5671
+    },
+    {
+      "path": "marvin54_hand_centric_s0_reports/localized_data_summary.json",
+      "sha256": "a93f8ce43e03351ee2907b77832e588752ea3703a963198da283a22d0f5c1945",
+      "bytes": 5665
+    },
+    {
+      "path": "marvin54_hand_centric_s0_reports/test_native/evaluation.json",
+      "sha256": "c778e193ecf41ac0e4359a915685422a5466b0104f4467c8bac809f916ef4641",
+      "bytes": 1079698
+    },
+    {
+      "path": "docs/tasks/marvin54_hand_centric_s0.md",
+      "sha256": "7b54270478569cbdf62c68a46650a4857b8d5ba68c847090553cee26b85814ae",
+      "bytes": 11905
+    }
+  ],
+  "claimed_verified_source_episodes": 278,
+  "recorded_splits": {
+    "train": {
+      "episodes": 201,
+      "clips": 1445,
+      "frames": 581857
+    },
+    "val": {
+      "episodes": 30,
+      "clips": 210,
+      "frames": 92536
+    },
+    "test": {
+      "episodes": 34,
+      "clips": 177,
+      "frames": 71560
+    }
+  },
+  "documented_source": "EgoProStandard-body, case-specific evidence for this archive. Source and all historical roles still need lineage matching."
+}
