@@ -18,7 +18,7 @@ M4、M5、M7、M8 及 C2/C3，冻结 E1–E5。
 
 ## 5. 前置条件
 
-P02 ACCEPTED，目标、FK/Jacobian、可达和模型限位经核验，确定 Servo 参数来源。
+P02 ACCEPTED，且 P01-T 的独立遥测资格技术 PASS 并经人工 ACCEPTED。目标、FK/Jacobian、可达和模型限位经核验，并确定 Servo 参数来源。P01-T 提供真实时钟、命令和响应证据。P03 仍独立验证 Servo 对齐与性能。[P01-T](P01_T_telemetry_acquisition.md)
 
 ## 6. 现有实现审计
 

@@ -4,7 +4,7 @@ S0-5 是面向 Marvin M6 双臂和 Wuji Hand 2.2 双手的 54 自由度实时残
 
 | 阅读顺序 | 文档 |
 |---|---|
-| 审核入口 | [项目状态](PROJECT_STATE.md) · [P01-A 验收报告](reports/P01_A_acceptance.md) · [P00 Review Fix](reports/P00_review_fix.md) · [原始 P00 验收报告](reports/P00_acceptance.md) |
+| 审核入口 | [项目状态](PROJECT_STATE.md) · [P01-B Review Fix](reports/P01_B_review_fix.md) · [P01-A 验收报告](reports/P01_A_acceptance.md) · [P00 Review Fix](reports/P00_review_fix.md) · [原始 P00 验收报告](reports/P00_acceptance.md) |
 | 事实依据 | [执行基线](EXECUTION_BASELINE.md) · [仓库与 Teleop 审计](REPOSITORY_AUDIT.md) · [历史数据使用](HISTORICAL_DATA_USAGE.md) · [审计证据](evidence/P00/README.md) |
 | 设计与验收 | [主设计](MASTER_DESIGN.md) · [接口契约](CONTRACTS.md) · [评估协议](EVALUATION_PROTOCOL.md) |
 | 需求与计划 | [需求](REQUIREMENTS.md) · [追踪矩阵](TRACEABILITY_MATRIX.md) · [路线图与阶段规格](ROADMAP.md) |

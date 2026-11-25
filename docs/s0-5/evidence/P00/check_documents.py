@@ -127,7 +127,70 @@ def phase_states(document):
                     f'Human approval evidence required for {phase}')
         states[phase] = target
     require(document['current'] == states, 'Phase replay differs from current state')
+    if 'dependency_dcr' in document:
+        p01_dependency_states(document)
     return states
+
+
+def p01_dependency_states(document):
+    dcr = document['dependency_dcr']
+    require(dcr.get('id') == 'DCR-001' and dcr.get('approval',{}).get('type')=='human',
+            'P01 dependency change requires a human approval')
+    require(dcr.get('mandatory_dependencies')=={
+        'P01-C':['P01-B-HMB'],'P01 exit':['P01-F'],'P03':['P02','P01-T']},
+        'DCR-001 dependency configuration drifted')
+    approved=datetime.fromisoformat(dcr['approved_at'])
+    checked_file(ROOT,dcr['approval']['ref'])
+    spec=checked_file(ROOT,dcr['active_spec_ref'])
+    require(digest(spec.read_bytes())==dcr['active_spec_sha256'], 'Active P01 spec hash mismatch')
+    owners=('P01-A','P01-B','P01-B-HMB','P01-C','P01-D','P01-E','P01-F','P01-T')
+    states=dict.fromkeys(owners,'NOT_STARTED')
+    prerequisites={'P01-B-HMB':'P01-A','P01-C':'P01-B-HMB','P01-D':'P01-C',
+                   'P01-E':'P01-D','P01-F':'P01-E'}
+    accepted={}
+    previous=None
+    for event in document['p01_subphase_events']:
+        owner,status=event['phase'],event['to']
+        moment=datetime.fromisoformat(event['at'])
+        require(owner in states and moment.tzinfo is not None and (previous is None or moment>=previous),
+                'Invalid P01 subphase chronology')
+        require(event['from']==states[owner], 'P01 subphase replay mismatch')
+        registration=owner=='P01-T' and states[owner]=='NOT_STARTED' and status=='BLOCKED'
+        require(registration or status in EDGES[states[owner]], f'Invalid {owner} transition to {status}')
+        prior=prerequisites.get(owner)
+        if status=='IN_PROGRESS':
+            require(bool(event.get('authorization_ref')), f'{owner} requires separate start authorization')
+            if prior:
+                require(states[prior]=='ACCEPTED', f'{owner} requires {prior} ACCEPTED')
+            if owner in ('P01-C','P01-D','P01-E','P01-F'):
+                require(moment>=approved and event.get('spec_sha256')==dcr['active_spec_sha256'],
+                        f'{owner} requires the reapproved v0.2.1 spec')
+        if status=='READY_FOR_REVIEW' and owner in ('P01-B-HMB','P01-T'):
+            evidence=checked_file(ROOT,event['evidence_ref'])
+            gate_key='HMB' if owner=='P01-B-HMB' else 'P01-T'
+            require(digest(evidence.read_bytes())==event['evidence_sha256'] and
+                    event.get('technical_gates',{}).get(gate_key)=='PASS',
+                    f'{owner} requires a referenced technical PASS')
+            payload=load_json(evidence)
+            evidence_gate='new_hmb_gate' if owner=='P01-B-HMB' else 'technical_p01_t_gate'
+            require(payload.get(evidence_gate)=='PASS', f'{owner} receipt does not support technical PASS')
+        if status=='ACCEPTED':
+            approval=event.get('approval',{})
+            require(approval.get('type')=='human' and bool(approval.get('by')) and bool(approval.get('ref')),
+                    f'{owner} requires human ACCEPTED')
+            checked_file(ROOT,approval['ref'])
+            accepted[owner]=moment
+        else:
+            accepted.pop(owner,None)
+        states[owner],previous=status,moment
+    require(states==document['p01_subphases'], 'P01 current subphase status differs from history')
+    for event in document['events']:
+        moment=datetime.fromisoformat(event['at'])
+        if event['phase']=='P01' and event['to']=='ACCEPTED':
+            require('P01-F' in accepted and accepted['P01-F']<=moment, 'P01 exit requires P01-F ACCEPTED')
+        if event['phase']=='P03' and event['to']=='IN_PROGRESS':
+            require('P01-T' in accepted and accepted['P01-T']<=moment, 'P03 requires P01-T ACCEPTED')
+    print('PASS DCR-001 subphase replay, human gates, active spec and independent P03 dependency')
 
 
 def rows(path):
@@ -168,7 +231,8 @@ def structure():
     require(all(len(r)==4 and all(r) and r[2] in PHASES for r in req), 'Requirement row schema')
     require(all(len(r)==9 and all(r) for r in matrix) and [r[2] for r in req]==[r[3] for r in matrix],
             'Traceability row/ownership')
-    specs = sorted((ROOT / 'specs').glob('P??_*.md'))
+    specs = sorted(s for s in (ROOT / 'specs').glob('P??_*.md')
+                   if s.name!='P01_T_telemetry_acquisition.md')
     require(tuple(s.name[:3] for s in specs) == PHASES, 'Phase spec list')
     for spec in specs:
         doc = read(spec)

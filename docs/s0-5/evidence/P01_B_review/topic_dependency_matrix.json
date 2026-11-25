@@ -1,0 +1,179 @@
+{
+  "schema": "s05.topic-dependencies.v1",
+  "version": "0.2.1",
+  "admission_format": "dex-native-v2",
+  "assessment_baseline": "f32d6bbfc4f535a5c53db1025a484e48fc5f2ce3",
+  "streams": [
+    {
+      "role": "manus",
+      "topics": [
+        "/manus_glove_left",
+        "/manus_glove_right"
+      ],
+      "type": "manus_ros2_msgs/msg/ManusGlove",
+      "class": "HMB_REQUIRED",
+      "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+      "observation": {
+        "type": "dex_collection_interfaces/msg/SampleObservation",
+        "schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+        "topics": [
+          "/dex/collection/observations/manus_left",
+          "/dex/collection/observations/manus_right"
+        ]
+      }
+    },
+    {
+      "role": "registered_tracker",
+      "topics": [
+        "/vive/tracker/left_wrist",
+        "/vive/tracker/right_wrist"
+      ],
+      "type": "tianji_interfaces/msg/TrackerPose",
+      "class": "HMB_REQUIRED",
+      "schema_sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+      "observation": {
+        "type": "dex_collection_interfaces/msg/SampleObservation",
+        "schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+        "topics": [
+          "/dex/collection/observations/tracker_left",
+          "/dex/collection/observations/tracker_right"
+        ]
+      }
+    },
+    {
+      "role": "raw_tracker",
+      "topics": [
+        "/vive/raw/left_wrist",
+        "/vive/raw/right_wrist"
+      ],
+      "type": "geometry_msgs/msg/PoseStamped",
+      "class": "HMB_REQUIRED",
+      "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+      "observation": {
+        "type": "dex_collection_interfaces/msg/SampleObservation",
+        "schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+        "topics": [
+          "/dex/collection/observations/tracker_left_raw",
+          "/dex/collection/observations/tracker_right_raw"
+        ]
+      }
+    },
+    {
+      "role": "tracker_safety",
+      "topics": [
+        "/vive/tracker/safety_status"
+      ],
+      "type": "tianji_interfaces/msg/SafetyStatus",
+      "class": "HMB_REQUIRED",
+      "schema_sha256": "853429cef94a8c9631dba8ab6dab1b73cf28192c9435bf01c6a07c0bef6d45b2",
+      "observation": {
+        "type": "dex_collection_interfaces/msg/SampleObservation",
+        "schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+        "topics": [
+          "/dex/collection/observations/tracker_safety"
+        ]
+      }
+    },
+    {
+      "role": "collector_status",
+      "topics": [
+        "/dex/collection/status"
+      ],
+      "type": "dex_collection_interfaces/msg/CollectionStatus",
+      "class": "HMB_CONDITIONAL",
+      "rule": "Auxiliary for independently attested native witnesses; mandatory whenever cited for source, integrity, safety, validity or synchronization. Unknown legacy remains isolated irrespective of decoding."
+    },
+    {
+      "role": "capture_catalogue",
+      "topics": [
+        "/dex/collection/topics",
+        "/events/write_split"
+      ],
+      "class": "HMB_CONDITIONAL",
+      "rule": "Required only where specifically cited as source or completeness proof."
+    },
+    {
+      "role": "arm_command",
+      "topics": [
+        "/tianji/joint_command"
+      ],
+      "type": "tianji_interfaces/msg/JointCommand",
+      "class": "TELEMETRY_REQUIRED"
+    },
+    {
+      "role": "hand_command",
+      "topics": [
+        "/left_hand/command",
+        "/right_hand/command"
+      ],
+      "type": "manus_wuji_interfaces/msg/HandCommand",
+      "class": "TELEMETRY_REQUIRED"
+    },
+    {
+      "role": "arm_feedback",
+      "topics": [
+        "/left_arm/joint_states",
+        "/right_arm/joint_states"
+      ],
+      "type": "sensor_msgs/msg/JointState",
+      "class": "TELEMETRY_REQUIRED"
+    },
+    {
+      "role": "hand_feedback",
+      "topics": [
+        "/left_hand/state",
+        "/right_hand/state"
+      ],
+      "type": "manus_wuji_interfaces/msg/HandState",
+      "class": "TELEMETRY_REQUIRED"
+    },
+    {
+      "role": "robot_state_and_safety",
+      "topics": [
+        "/tianji/robot_state",
+        "/tianji/teleop_state",
+        "/tianji/safety",
+        "/tianji_real_driver/safety",
+        "/left_hand/safety",
+        "/right_hand/safety"
+      ],
+      "class": "TELEMETRY_REQUIRED"
+    },
+    {
+      "role": "controller_diagnostics",
+      "topics": [
+        "/tianji/teleop_diagnostics",
+        "/left_hand/diagnostics",
+        "/right_hand/diagnostics"
+      ],
+      "class": "AUXILIARY_DIAGNOSTIC"
+    },
+    {
+      "role": "end_effector_derived_or_external",
+      "topics": [
+        "/left_arm/ee_pose",
+        "/right_arm/ee_pose",
+        "/left_arm/ee_twist",
+        "/right_arm/ee_twist",
+        "/left_arm/wrench",
+        "/right_arm/wrench"
+      ],
+      "class": "AUXILIARY_DIAGNOSTIC",
+      "rule": "May become required for a P01-T claim using external response measurements."
+    }
+  ],
+  "fallback": {
+    "category": "OUT_OF_SCOPE",
+    "rule": "Catalogue only, unreviewed channel is never admission or proof evidence."
+  },
+  "sidecar_requirements": [
+    "frozen A1 raw-provenance witness",
+    "native run snapshot and recorder source",
+    "A1 calibration snapshot SHA",
+    "collector identity",
+    "verified BODY writer pairs",
+    "tracker validity and safety fields"
+  ],
+  "legacy_rule": "Diagnostic decoding never upgrades provenance. Legacy source eligibility requires a separately approved evidence profile, including explicit dependencies.",
+  "training_effect": "none"
+}

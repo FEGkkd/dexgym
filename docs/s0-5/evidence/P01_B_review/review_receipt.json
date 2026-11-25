@@ -1,0 +1,546 @@
+{
+  "absolute_run": "/home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-REVIEW-20261126-f32d6bb-r02",
+  "dependency_matrix_sha256": "da316e5a87498b4b6f1e7aa9869ef762fdf00cc82b85291fd2df5b8047e99311",
+  "final_test": "BLOCKED",
+  "historic_B1": "FAIL",
+  "historic_B2": "BLOCKED",
+  "hmb_fixed_witnesses": {
+    "ISOLATED_SOURCE": 7,
+    "PASS": 7
+  },
+  "hmb_real_replay": {
+    "adapter_issues": [],
+    "admission_effect": "NONE; this gate checks bounded raw decode witnesses",
+    "event_count": 798,
+    "fixture_counts": {
+      "PASS": 7
+    },
+    "fixtures": [
+      {
+        "counts": {
+          "/manus_glove_left": 8,
+          "/manus_glove_right": 8,
+          "/vive/raw/left_wrist": 8,
+          "/vive/raw/right_wrist": 8,
+          "/vive/tracker/left_wrist": 8,
+          "/vive/tracker/right_wrist": 8,
+          "/vive/tracker/safety_status": 8
+        },
+        "formal_training_eligible": false,
+        "format": "dex-native-v2",
+        "known_unsafe_safety_samples": 0,
+        "reasons": [],
+        "recording_id": "recording:89f09cb37b13dc62b5f9eb96",
+        "role": "BOUNDED_DIAGNOSTIC",
+        "status": "PASS"
+      },
+      {
+        "counts": {
+          "/manus_glove_left": 8,
+          "/manus_glove_right": 8,
+          "/vive/raw/left_wrist": 8,
+          "/vive/raw/right_wrist": 8,
+          "/vive/tracker/left_wrist": 8,
+          "/vive/tracker/right_wrist": 8,
+          "/vive/tracker/safety_status": 8
+        },
+        "formal_training_eligible": false,
+        "format": "dex-native-v2",
+        "known_unsafe_safety_samples": 0,
+        "reasons": [],
+        "recording_id": "recording:28e5a46fe95f2f5803bf377d",
+        "role": "BOUNDED_DIAGNOSTIC",
+        "status": "PASS"
+      },
+      {
+        "counts": {
+          "/manus_glove_left": 8,
+          "/manus_glove_right": 8,
+          "/vive/raw/left_wrist": 8,
+          "/vive/raw/right_wrist": 8,
+          "/vive/tracker/left_wrist": 8,
+          "/vive/tracker/right_wrist": 8,
+          "/vive/tracker/safety_status": 8
+        },
+        "formal_training_eligible": false,
+        "format": "dex-native-v2",
+        "known_unsafe_safety_samples": 0,
+        "reasons": [],
+        "recording_id": "recording:30d00a5452b46fe0c89ed936",
+        "role": "BOUNDED_DIAGNOSTIC",
+        "status": "PASS"
+      },
+      {
+        "counts": {
+          "/manus_glove_left": 8,
+          "/manus_glove_right": 8,
+          "/vive/raw/left_wrist": 8,
+          "/vive/raw/right_wrist": 8,
+          "/vive/tracker/left_wrist": 8,
+          "/vive/tracker/right_wrist": 8,
+          "/vive/tracker/safety_status": 8
+        },
+        "formal_training_eligible": false,
+        "format": "dex-native-v2",
+        "known_unsafe_safety_samples": 0,
+        "reasons": [],
+        "recording_id": "recording:69fee6c9daa61d68031317bd",
+        "role": "BOUNDED_DIAGNOSTIC",
+        "status": "PASS"
+      },
+      {
+        "counts": {
+          "/manus_glove_left": 8,
+          "/manus_glove_right": 8,
+          "/vive/raw/left_wrist": 8,
+          "/vive/raw/right_wrist": 8,
+          "/vive/tracker/left_wrist": 8,
+          "/vive/tracker/right_wrist": 8,
+          "/vive/tracker/safety_status": 8
+        },
+        "formal_training_eligible": false,
+        "format": "dex-native-v2",
+        "known_unsafe_safety_samples": 0,
+        "reasons": [],
+        "recording_id": "recording:4e5319e373fc2a90a1c33861",
+        "role": "BOUNDED_DIAGNOSTIC",
+        "status": "PASS"
+      },
+      {
+        "counts": {
+          "/manus_glove_left": 8,
+          "/manus_glove_right": 8,
+          "/vive/raw/left_wrist": 8,
+          "/vive/raw/right_wrist": 8,
+          "/vive/tracker/left_wrist": 8,
+          "/vive/tracker/right_wrist": 8,
+          "/vive/tracker/safety_status": 8
+        },
+        "formal_training_eligible": false,
+        "format": "dex-native-v2",
+        "known_unsafe_safety_samples": 0,
+        "reasons": [],
+        "recording_id": "recording:8800a1148baaa5ee2d0d517b",
+        "role": "BOUNDED_DIAGNOSTIC",
+        "status": "PASS"
+      },
+      {
+        "counts": {
+          "/manus_glove_left": 8,
+          "/manus_glove_right": 8,
+          "/vive/raw/left_wrist": 8,
+          "/vive/raw/right_wrist": 8,
+          "/vive/tracker/left_wrist": 8,
+          "/vive/tracker/right_wrist": 8,
+          "/vive/tracker/safety_status": 8
+        },
+        "formal_training_eligible": false,
+        "format": "dex-native-v2",
+        "known_unsafe_safety_samples": 0,
+        "reasons": [],
+        "recording_id": "recording:8d51b482abc64ad7af84b3fe",
+        "role": "BOUNDED_DIAGNOSTIC",
+        "status": "PASS"
+      }
+    ],
+    "lost_or_different_indexes": [],
+    "physical_validation": "NOT_RUN_P01_C",
+    "recordings": 7,
+    "technical_hmb_gate": "PASS"
+  },
+  "legacy_collection_status": {
+    "affected_recordings": [
+      {
+        "asset_sha256": "f92f82518abb2d2b39e322e53b02b8926aa31beb00517d79653a12a1b2eb54d1",
+        "outcomes": {
+          "PASS": 32
+        },
+        "part_id": "asset:660be67a713d8d31d075bb28",
+        "path": "/home/ubuntu/teleop_ws/data/s0_sim_20261117_153201/s0_sim_20261117_153201_0.mcap",
+        "recording_id": "recording:c5b198536cf03404afda8672",
+        "records": 32,
+        "sample_index_max": 6548,
+        "sample_index_min": 105,
+        "source_origin": "SIM_REPLAY",
+        "source_status": "EXCLUDED"
+      },
+      {
+        "asset_sha256": "453e302698ce8879618dd81b851040ec1c671190fd8aeb10585a557e017bf3ac",
+        "outcomes": {
+          "PASS": 32
+        },
+        "part_id": "asset:6b0227861bbcf780a5560518",
+        "path": "/home/ubuntu/teleop_ws/data/teleop_no_camera_20261016_133930/teleop_no_camera_20261016_133930_0.mcap",
+        "recording_id": "recording:156841c4f9f3866699b980f3",
+        "records": 32,
+        "sample_index_max": 15563,
+        "sample_index_min": 16,
+        "source_origin": "UNKNOWN",
+        "source_status": "QUARANTINED"
+      },
+      {
+        "asset_sha256": "0c4705276aaf0b1c6dc614a05169b7a1aa8e83c2942de29c82cf88c8b414efc8",
+        "outcomes": {
+          "PASS": 23
+        },
+        "part_id": "asset:92d1afeb6bbab340a084b426",
+        "path": "/home/ubuntu/teleop_ws/data/bag_no_camera/bag_no_camera_0.mcap",
+        "recording_id": "recording:aeecac94430b60e4baa779d8",
+        "records": 23,
+        "sample_index_max": 13177,
+        "sample_index_min": 391,
+        "source_origin": "UNKNOWN",
+        "source_status": "QUARANTINED"
+      },
+      {
+        "asset_sha256": "ea3c47f2841a1037a5585cc84d487e94f1b123e3bfeec50438b8152db784d696",
+        "outcomes": {
+          "PASS": 32
+        },
+        "part_id": "asset:dcb7bffc2e0278465b706362",
+        "path": "/home/ubuntu/teleop_ws/data/head/head_0.mcap",
+        "recording_id": "recording:041dfe33685261850e922693",
+        "records": 32,
+        "sample_index_max": 16351,
+        "sample_index_min": 1581,
+        "source_origin": "UNKNOWN",
+        "source_status": "QUARANTINED"
+      }
+    ],
+    "auxiliary_review_outcomes": {
+      "PASS": 119
+    },
+    "current_overlay": {
+      "CollectionStatus": {
+        "description_path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/CollectionStatus.json",
+        "description_sha256": "f6a6b6aab761eddea7932596556b2a63d4c2708668c0009f95144c7fd8143f64",
+        "fields": [
+          "stamp",
+          "state",
+          "episode_id",
+          "artifact_path",
+          "error",
+          "accepting",
+          "streams",
+          "collector_instance_id",
+          "snapshot_version",
+          "metadata_json",
+          "quality_state",
+          "started_realtime_ns",
+          "started_monotonic_ns",
+          "stopped_monotonic_ns",
+          "last_episode_id",
+          "last_artifact_path",
+          "last_episode_state"
+        ],
+        "msg_path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/CollectionStatus.msg",
+        "msg_sha256": "db2a0465d56ae983c6e0e4f328f8f525f2ad555ea94bc06158ebb2fa7205e832",
+        "ros_type_hash": "RIHS01_56af1b621e7e9afa10d7a4b20709b0d5f3a1a40ce92612926774ae8b959a8f6b"
+      },
+      "StreamStatus": {
+        "description_path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/StreamStatus.json",
+        "description_sha256": "7d4c08374bd9f04d9d22d5154236c4597e7fe2d02d2a96011a93dd1a32486c14",
+        "fields": [
+          "stream_id",
+          "topic",
+          "message_type",
+          "state",
+          "error",
+          "required",
+          "enabled",
+          "recording",
+          "received",
+          "accepted",
+          "written",
+          "dropped",
+          "write_errors",
+          "queued_bytes",
+          "queue_high_watermark",
+          "receive_hz",
+          "last_sample_age_ms"
+        ],
+        "msg_path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/StreamStatus.msg",
+        "msg_sha256": "5906cd92650503b75da1909288dea1f40abb978aab2785db0876d53affd510a3",
+        "ros_type_hash": "RIHS01_0b8d6f81aae72825104b9a4eda5ca5ffac1f8e93467e58a2b8dbb0cdeeae9349"
+      }
+    },
+    "embedded_schema_comparison": {
+      "embedded_nested_fields": [
+        "string stream_id",
+        "string topic",
+        "string message_type",
+        "string state",
+        "string error",
+        "bool required",
+        "bool enabled",
+        "bool recording",
+        "uint64 received",
+        "uint64 accepted",
+        "uint64 written",
+        "uint64 dropped",
+        "uint64 write_errors",
+        "uint64 queued_bytes",
+        "uint64 queue_high_watermark",
+        "float64 receive_hz",
+        "float64 last_sample_age_ms"
+      ],
+      "historical_nested_fields": [
+        "string stream_id",
+        "string topic",
+        "string message_type",
+        "string state",
+        "string error",
+        "bool required",
+        "bool enabled",
+        "bool recording",
+        "uint64 received",
+        "uint64 accepted",
+        "uint64 written",
+        "uint64 dropped",
+        "uint64 write_errors",
+        "uint64 queued_bytes",
+        "uint64 queue_high_watermark",
+        "float64 receive_hz",
+        "float64 last_sample_age_ms",
+        "uint64 received_bytes",
+        "float64 receive_bytes_sec",
+        "float64 receive_lock_wait_ms",
+        "uint64 eligible",
+        "uint64 queued_samples",
+        "uint64 write_in_flight",
+        "float64 write_mean_ms",
+        "bool source_sequence_available",
+        "uint64 source_sequence_gaps",
+        "uint64 episode_source_sequence_gaps"
+      ],
+      "missing_nested_fields": [
+        "bool source_sequence_available",
+        "float64 receive_bytes_sec",
+        "float64 receive_lock_wait_ms",
+        "float64 write_mean_ms",
+        "uint64 eligible",
+        "uint64 episode_source_sequence_gaps",
+        "uint64 queued_samples",
+        "uint64 received_bytes",
+        "uint64 source_sequence_gaps",
+        "uint64 write_in_flight"
+      ],
+      "secondary_decoder_first_record": "MATCH",
+      "secondary_definition_sha256": "3f3d4a4985146d4ac03330fc35901c01245035470d829590dc289fbdab76a680",
+      "top_level_wire_fields_match": true
+    },
+    "files": {
+      "legacy_raw_cdr.jsonl": "8d0eca8bc69240f7ccb142f0db9ecd54389cfbf44f96c39298993ee91289ec99",
+      "legacy_redecoded_status.jsonl": "cc587ec4c8cb396acc7040aa7b01357675c764352750ca0ae42b6deda6002c9a"
+    },
+    "git_provenance": [
+      {
+        "repo": "/home/ubuntu/teleop_ws",
+        "results": [
+          {
+            "log": "dc7df63e30ef6d53cba92da232f33454be0b72dd 2026-10-10 fix: stabilize dual-tracker teleoperation lifecycle and IK limits",
+            "matches_historical_install": true,
+            "path": "src/dex_collection_interfaces/msg/CollectionStatus.msg",
+            "sha256": "db2a0465d56ae983c6e0e4f328f8f525f2ad555ea94bc06158ebb2fa7205e832"
+          },
+          {
+            "log": "dc7df63e30ef6d53cba92da232f33454be0b72dd 2026-10-10 fix: stabilize dual-tracker teleoperation lifecycle and IK limits",
+            "matches_historical_install": false,
+            "path": "src/dex_collection_interfaces/msg/StreamStatus.msg",
+            "sha256": "5906cd92650503b75da1909288dea1f40abb978aab2785db0876d53affd510a3"
+          }
+        ],
+        "scope": "up to 24 commits touching available two definitions"
+      },
+      {
+        "repo": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection",
+        "results": [
+          {
+            "log": "2fc969e94eab939d4525e080cb627a5a1e169fe0 2026-10-14 Parallelize camera ingress and isolate compressed previews",
+            "matches_historical_install": true,
+            "path": "ros2_ws/src/dex_collection_interfaces/msg/CollectionStatus.msg",
+            "sha256": "db2a0465d56ae983c6e0e4f328f8f525f2ad555ea94bc06158ebb2fa7205e832"
+          },
+          {
+            "log": "2fc969e94eab939d4525e080cb627a5a1e169fe0 2026-10-14 Parallelize camera ingress and isolate compressed previews",
+            "matches_historical_install": true,
+            "path": "ros2_ws/src/dex_collection_interfaces/msg/StreamStatus.msg",
+            "sha256": "cf813eafe0a692a67fa6df4db5ffb4298b60d57e3f72e8cfc826a361aa601cdf"
+          },
+          {
+            "log": "9f4efe63a38b7d03ab2a4bcb9fbe713b798eeab1 2026-09-23 feat: build independent ROS2 collection platform with live robot model",
+            "matches_historical_install": true,
+            "path": "ros2_ws/src/dex_collection_interfaces/msg/CollectionStatus.msg",
+            "sha256": "db2a0465d56ae983c6e0e4f328f8f525f2ad555ea94bc06158ebb2fa7205e832"
+          },
+          {
+            "log": "9f4efe63a38b7d03ab2a4bcb9fbe713b798eeab1 2026-09-23 feat: build independent ROS2 collection platform with live robot model",
+            "matches_historical_install": false,
+            "path": "ros2_ws/src/dex_collection_interfaces/msg/StreamStatus.msg",
+            "sha256": "5906cd92650503b75da1909288dea1f40abb978aab2785db0876d53affd510a3"
+          }
+        ],
+        "scope": "up to 24 commits touching available two definitions"
+      }
+    ],
+    "historical_overlay": {
+      "CollectionStatus": {
+        "description_path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/ros2_ws/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/CollectionStatus.json",
+        "description_sha256": "9f28baa8b9ab970c78a0fab725420c2a7138cd662b3ed56ae9f77568b5cfeaa1",
+        "fields": [
+          "stamp",
+          "state",
+          "episode_id",
+          "artifact_path",
+          "error",
+          "accepting",
+          "streams",
+          "collector_instance_id",
+          "snapshot_version",
+          "metadata_json",
+          "quality_state",
+          "started_realtime_ns",
+          "started_monotonic_ns",
+          "stopped_monotonic_ns",
+          "last_episode_id",
+          "last_artifact_path",
+          "last_episode_state"
+        ],
+        "msg_path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/ros2_ws/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/CollectionStatus.msg",
+        "msg_sha256": "db2a0465d56ae983c6e0e4f328f8f525f2ad555ea94bc06158ebb2fa7205e832",
+        "ros_type_hash": "RIHS01_ce543f80bf868a5ccd4933e5279f7649b3afc53908f2c67630c48ae1a3d2838c"
+      },
+      "StreamStatus": {
+        "description_path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/ros2_ws/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/StreamStatus.json",
+        "description_sha256": "57b6f035f2d1c0e151c919ba72b888501edb739e70457d2f620a2cffd899cf40",
+        "fields": [
+          "stream_id",
+          "topic",
+          "message_type",
+          "state",
+          "error",
+          "required",
+          "enabled",
+          "recording",
+          "received",
+          "accepted",
+          "written",
+          "dropped",
+          "write_errors",
+          "queued_bytes",
+          "queue_high_watermark",
+          "receive_hz",
+          "last_sample_age_ms",
+          "received_bytes",
+          "receive_bytes_sec",
+          "receive_lock_wait_ms",
+          "eligible",
+          "queued_samples",
+          "write_in_flight",
+          "write_mean_ms",
+          "source_sequence_available",
+          "source_sequence_gaps",
+          "episode_source_sequence_gaps"
+        ],
+        "msg_path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/ros2_ws/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/StreamStatus.msg",
+        "msg_sha256": "cf813eafe0a692a67fa6df4db5ffb4298b60d57e3f72e8cfc826a361aa601cdf",
+        "ros_type_hash": "RIHS01_76593ec0c47133f1120bf50c44ee2300df359190a1dca721bc9b2cf919d8ad8b"
+      }
+    },
+    "historical_typesupport": {
+      "CollectionStatus": {
+        "module": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/ros2_ws/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_collection_status.py",
+        "sha256": "6325183a30f4a8c7f4967878f04e0663e24c2516a38ad5f3d891e9e649b2eaaa"
+      },
+      "StreamStatus": {
+        "module": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/ros2_ws/install/dex_collection_interfaces/lib/python3.12/site-packages/dex_collection_interfaces/msg/_stream_status.py",
+        "sha256": "e5b5903e2a70b71416f9e27f1fb0f11ceeaec5b4e6cfdbf89f7db651cebf2713"
+      },
+      "fastrtps_c": {
+        "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/ros2_ws/install/dex_collection_interfaces/lib/libdex_collection_interfaces__rosidl_typesupport_fastrtps_c.so",
+        "sha256": "091284aadcfb436b72ad1c06d5b2d1de67a90a6fa5dc85583126e7ceab7b5075"
+      }
+    },
+    "old_gate_B1": "FAIL",
+    "original_failed_events": 119,
+    "scope": "Re-decode original failures only. Provenance and qualification remain unchanged."
+  },
+  "manifest_sha256": "d50d6ffc30ac6a79ea2607c267e6227a7d64a4a59fb2d021dd579b628a661639",
+  "manus_sdk_original_witness": {
+    "calendar_count": 2336,
+    "library_blob": "363be71c6609a9624002e076c7d5e819d231fc28",
+    "library_sha256": "b4e98f04144585cf51428c41e6af202dc664a599fb70a61adbcfe6ff0958825b",
+    "matches_reviewed_teleop_lib_blob": true,
+    "median_ms_values": [
+      8.0
+    ],
+    "online_capture_clock_verified": false,
+    "semantics": "If timecode=false, SDK documentation defines the decoded fraction as ms. This is a component interpretation, not a ROS or controller clock fit.",
+    "timecode_true": 0,
+    "total_samples": 2336
+  },
+  "new_hmb_gate": "PASS",
+  "original_archive_sha_checks": {
+    "A": 11,
+    "B": 15
+  },
+  "output_sha256": {
+    "hmb.command": "4a1f4e12f20c126dfb38169e78b9313c489d2d4e0ac8090f8667a5f65005e844",
+    "hmb_gate_result.json": "568d7e61397b49d6d0e4d3172fa0fbef91a438492d4ed31ac20501b959df74fe",
+    "legacy.command": "64f9e23b0efb2165d24ba9c289a4c31db2bddb692cb0205c7e2047043a062f92",
+    "legacy.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "legacy.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "legacy.stdout": "1bcf2a284b80fa773cf88a8fe6c13a884250598dd2b0c466bd82ef0ade005d92",
+    "legacy/collection_status_review.json": "13d1724f841f546a9b2084600eb1496e5221f159e0069c838905681ca37a6aa8",
+    "legacy/legacy_raw_cdr.jsonl": "8d0eca8bc69240f7ccb142f0db9ecd54389cfbf44f96c39298993ee91289ec99",
+    "legacy/legacy_redecoded_status.jsonl": "cc587ec4c8cb396acc7040aa7b01357675c764352750ca0ae42b6deda6002c9a",
+    "resource_preflight.command": "def0cb6cb95d493924782ae72b68f5cadcc10f456c180a61873296e5008c49fc",
+    "resource_preflight.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "resource_preflight.json": "2fe292d099cc65aa3fa22014b5bd1bfb0d762c0f2f94fbbc301ccc5d98d53fda",
+    "resource_preflight.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "resource_preflight.stdout": "2fe292d099cc65aa3fa22014b5bd1bfb0d762c0f2f94fbbc301ccc5d98d53fda",
+    "telemetry_review.json": "3f2e8d64beda134a33e116a87e228181d0a3cd358674a5b1929a0578164407ea",
+    "topic_catalogue_classification.json": "75aa267e5504fb2e5d4a293c1a5f10722bbd369f1562e30cc3b6b569b56d767d",
+    "unit.command": "65dd3ed271643aceeb1bfd261f76ed05fa78dd761aecae9d24bf74314c864b4a",
+    "unit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "unit.stderr": "94178e782bf2399a4e49472fb5857e1940796fc16909f7698ea5218da44c4e0a",
+    "unit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "reviewed_parent": "f32d6bbfc4f535a5c53db1025a484e48fc5f2ce3",
+  "run_id": "P01-B-REVIEW-20261126-f32d6bb-r02",
+  "schema": "s05.p01b.review-fix.v1",
+  "telemetry_review": {
+    "B2": "BLOCKED",
+    "P01_T": "BLOCKED",
+    "authenticated_dynamic_candidates": 0,
+    "clock_audit": {
+      "indexed_named_axis_rows": 1824,
+      "missing_command_issue_clock": 1824,
+      "missing_robot_feedback_clock": 1504
+    },
+    "collection_status_recovery_changes_eligibility": false,
+    "known_historical_attestations": 0,
+    "new_affirmative_provenance": 0,
+    "review_legacy_recordings": [
+      "recording:c5b198536cf03404afda8672",
+      "recording:156841c4f9f3866699b980f3",
+      "recording:aeecac94430b60e4baa779d8",
+      "recording:041dfe33685261850e922693"
+    ],
+    "source_support_files": {
+      "ANNOTATED_CALIBRATION_WINDOW_ONLY": 21,
+      "RECORDER_LIFECYCLE_ONLY": 21
+    },
+    "telemetry_levels": {
+      "DUPLICATE_ALIAS": 59,
+      "EXCLUDED_SOURCE": 1,
+      "NO_COMMAND_FEEDBACK_PAIR": 84,
+      "NO_HARDWARE_PROVENANCE": 37
+    },
+    "views_lacking_hardware_provenance": 37
+  },
+  "training_admission_grants": 0,
+  "utc_offset_observed": "2026-11-26T02:26:28+08:00",
+  "verified_historical_diagnostics": 9,
+  "verified_historical_modules": 15
+}

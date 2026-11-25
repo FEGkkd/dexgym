@@ -57,6 +57,16 @@
     }
   ],
   "review_fix_ref": "reports/P00_review_fix.md",
+  "dependency_dcr": {
+    "id": "DCR-001",
+    "approved_at": "2026-11-26T02:17:53+08:00",
+    "approval": {"type": "human", "by": "project user", "ref": "dcr/DCR-001_p01_hmb_telemetry_dependencies.md"},
+    "scope": "dependency change only. Separate technical and start approvals remain required",
+    "active_spec_ref": "specs/P01-data-v0.2.1.md",
+    "active_spec_version": "0.2.1",
+    "active_spec_sha256": "1de9df40e11a7c73de3c99fe77c67d878e24635a0303e940639bfd37ee6b69c3",
+    "mandatory_dependencies": {"P01-C": ["P01-B-HMB"], "P01 exit": ["P01-F"], "P03": ["P02", "P01-T"]}
+  },
   "final_test": {
     "status": "BLOCKED",
     "reason": "independent source lineage and sealed manifest have not been established"
@@ -64,10 +74,12 @@
   "p01_subphases": {
     "P01-A": "ACCEPTED",
     "P01-B": "BLOCKED",
+    "P01-B-HMB": "READY_FOR_REVIEW",
     "P01-C": "NOT_STARTED",
     "P01-D": "NOT_STARTED",
     "P01-E": "NOT_STARTED",
-    "P01-F": "NOT_STARTED"
+    "P01-F": "NOT_STARTED",
+    "P01-T": "BLOCKED"
   },
   "p01_subphase_events": [
     {
@@ -110,6 +122,34 @@
       "evidence_ref": "evidence/P01_B/review_receipt.json",
       "evidence_sha256": "edc758262697f982eb15a51093b4d58a29a8025230c3c9643fd1d263b7a927a5",
       "report_ref": "reports/P01_B_acceptance.md"
+    },
+    {
+      "phase": "P01-B-HMB",
+      "from": "NOT_STARTED",
+      "to": "IN_PROGRESS",
+      "at": "2026-11-26T02:17:53+08:00",
+      "authorization_ref": "dcr/DCR-001_p01_hmb_telemetry_dependencies.md",
+      "run_id": "P01-B-REVIEW-20261126-f32d6bb-r02"
+    },
+    {
+      "phase": "P01-B-HMB",
+      "from": "IN_PROGRESS",
+      "to": "READY_FOR_REVIEW",
+      "at": "2026-11-26T02:26:28+08:00",
+      "technical_gates": {"HMB": "PASS", "auxiliary_legacy_decode": "RECOVERED"},
+      "evidence_ref": "evidence/P01_B_review/review_receipt.json",
+      "evidence_sha256": "7fd4162a13a27d0d844d437e643913a8bf356f4b19b817c2f615a9344fbb72e9",
+      "report_ref": "reports/P01_B_review_fix.md"
+    },
+    {
+      "phase": "P01-T",
+      "from": "NOT_STARTED",
+      "to": "BLOCKED",
+      "at": "2026-11-26T02:26:28+08:00",
+      "technical_gates": {"P01-T": "BLOCKED", "historical_B2": "BLOCKED"},
+      "evidence_ref": "evidence/P01_B_review/review_receipt.json",
+      "spec_ref": "specs/P01_T_telemetry_acquisition.md",
+      "reason": "No authenticated hardware, physical response pairing and clock evidence"
     }
   ]
 }

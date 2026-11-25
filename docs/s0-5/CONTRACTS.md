@@ -1,4 +1,4 @@
-# S0-5 接口契约 v0.1.1
+# S0-5 接口契约 v0.1.2
 
 阶段规格引用版本号。文中候选数值由指定阶段验证后冻结。
 
@@ -8,7 +8,7 @@ W 为机器人共同世界系，U_h 为参考或实测腕系，H 为原始采集
 
 每个 raw source episode 按原始 recording GUID 和文件哈希登记，同一采集的重录包/裁剪/增广必须共用 parent lineage。对重命名/重新编码可能重复的源做时间区间与内容指纹检查，无法溯源的条目隔离并统计。Manifest 声明 source_family=teleop_manus_tracker，经 topic/schema 与采集记录复核。EgoPro、纯仿真衍生、控制器输出重录包、缺真原始来源项在训练来源准入前单独标注。Train/Validation/Test 按 lineage 分组，Test 清单冻结、访问记账，P09 冻结候选后评分。断言 split 交集为空并拒绝未经认证的转录来源。
 
-Human Motion Bank 保留 raw topology 与所有实际节点数。P00 历史样本为 25 个 MANUS 节点，21 点仅作为后续选点。System Identification / Robot Telemetry Bank 通过独立资格保留实际命令、反馈和配置的引用。两者允许共享原包引用。[P01 字段与格式规格](specs/P01_teleop_data.md) · [历史用途与终评](HISTORICAL_DATA_USAGE.md)
+Human Motion Bank 保留 raw topology 与所有实际节点数。P00 历史样本为 25 个 MANUS 节点，21 点仅用于后续选点。必要及条件消息按冻结 Topic Dependency Matrix 和逐源证据判定。P01-T 单独签核可追溯发令、物理测量、时间与响应资格，供 P03 和 P08 使用。两种 Bank 允许共享原包引用。[P01 v0.2.1](specs/P01-data-v0.2.1.md) · [Topic Dependency Matrix](specs/topic_dependency_matrix.md) · [历史用途与终评](HISTORICAL_DATA_USAGE.md)
 
 | 层 | 每帧所需字段 | 来源或约束 |
 |---|---|---|
