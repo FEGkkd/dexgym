@@ -1,0 +1,9 @@
+Ubuntu, /home/ubuntu/dexgym
+PYTHONDONTWRITEBYTECODE=1 CUDA_VISIBLE_DEVICES='' bash scripts/supermimic/host.sh --pytest -p no:cacheprovider -q -rs tests/assets/test_marvin_binding.py tests/assets/test_marvin_contract.py tests/assets/test_marvin_controller.py
+exit=0
+.ss..s...                                                                [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/assets/test_marvin_binding.py:30: Set TIANJI_MARVIN_KINE_CONFIG for SDK integration
+SKIPPED [1] tests/assets/test_marvin_binding.py:53: Set TIANJI_MARVIN_KINE_CONFIG for SDK integration
+SKIPPED [1] tests/assets/test_marvin_contract.py:43: Set DEXGYM_MARVIN_MJCF for external source contract check
+6 passed, 3 skipped in 0.72s

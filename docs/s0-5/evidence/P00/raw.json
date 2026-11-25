@@ -1,0 +1,121 @@
+{
+  "observed": "2026-11-25T23:21:22.201612+08:00",
+  "result": {
+    "inspected_bags": [
+      {
+        "inspect": {
+          "argv": [
+            "bash",
+            "-lc",
+            "source /opt/ros/jazzy/setup.bash && ros2 bag info -s mcap \"$1\"",
+            "p00",
+            "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/initial_state/tracker_safety/tracker_safety_0.mcap"
+          ],
+          "cwd": "/home/ubuntu/dexgym",
+          "exit": 0,
+          "stderr": "",
+          "stdout": "\nFiles:             /home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/initial_state/tracker_safety/tracker_safety_0.mcap\nBag size:          6.4 KiB\nStorage id:        mcap\nROS Distro:        jazzy\nDuration:          0.000000000s\nStart:             Nov 12 2026 20:36:10.522638473 (1794486970.522638473)\nEnd:               Nov 12 2026 20:36:10.522638473 (1794486970.522638473)\nMessages:          2\nTopic information: Topic: /dex/collection/observations/tracker_safety | Type: dex_collection_interfaces/msg/SampleObservation | Count: 1 | Serialization Format: cdr\n                   Topic: /vive/tracker/safety_status | Type: tianji_interfaces/msg/SafetyStatus | Count: 1 | Serialization Format: cdr\nService:           0\nService information: \n"
+        },
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/initial_state/tracker_safety/tracker_safety_0.mcap",
+        "sha256": "6d6f4dbfb5f3492af22a28d478ce65c5fc2b87b8748ef8238538aae22d45a2ba"
+      },
+      {
+        "inspect": {
+          "argv": [
+            "bash",
+            "-lc",
+            "source /opt/ros/jazzy/setup.bash && ros2 bag info -s mcap \"$1\"",
+            "p00",
+            "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/manus_left/manus_left_0.mcap"
+          ],
+          "cwd": "/home/ubuntu/dexgym",
+          "exit": 0,
+          "stderr": "",
+          "stdout": "\nFiles:             /home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/manus_left/manus_left_0.mcap\nBag size:          17.2 MiB\nStorage id:        mcap\nROS Distro:        jazzy\nDuration:          45.824956713s\nStart:             Nov 12 2026 20:36:10.564212929 (1794486970.564212929)\nEnd:               Nov 12 2026 20:36:56.389169642 (1794487016.389169642)\nMessages:          11000\nTopic information: Topic: /dex/collection/observations/manus_left | Type: dex_collection_interfaces/msg/SampleObservation | Count: 5500 | Serialization Format: cdr\n                   Topic: /manus_glove_left | Type: manus_ros2_msgs/msg/ManusGlove | Count: 5500 | Serialization Format: cdr\nService:           0\nService information: \n"
+        },
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/manus_left/manus_left_0.mcap",
+        "sha256": "8e32308947db45d2b45c7931357c72b65fcb5db3ed7d6bcd63b34fb1d4736ff1"
+      },
+      {
+        "inspect": {
+          "argv": [
+            "bash",
+            "-lc",
+            "source /opt/ros/jazzy/setup.bash && ros2 bag info -s mcap \"$1\"",
+            "p00",
+            "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/manus_right/manus_right_0.mcap"
+          ],
+          "cwd": "/home/ubuntu/dexgym",
+          "exit": 0,
+          "stderr": "",
+          "stdout": "\nFiles:             /home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/manus_right/manus_right_0.mcap\nBag size:          17.2 MiB\nStorage id:        mcap\nROS Distro:        jazzy\nDuration:          45.824788014s\nStart:             Nov 12 2026 20:36:10.564383008 (1794486970.564383008)\nEnd:               Nov 12 2026 20:36:56.389171022 (1794487016.389171022)\nMessages:          11000\nTopic information: Topic: /dex/collection/observations/manus_right | Type: dex_collection_interfaces/msg/SampleObservation | Count: 5500 | Serialization Format: cdr\n                   Topic: /manus_glove_right | Type: manus_ros2_msgs/msg/ManusGlove | Count: 5500 | Serialization Format: cdr\nService:           0\nService information: \n"
+        },
+        "path": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857/streams/manus_right/manus_right_0.mcap",
+        "sha256": "ad736d4e273face9a2c4d520212ee7dd81f0fc319b3907e97824a58b104290cf"
+      },
+      {
+        "inspect": {
+          "argv": [
+            "bash",
+            "-lc",
+            "source /opt/ros/jazzy/setup.bash && ros2 bag info -s mcap \"$1\"",
+            "p00",
+            "/home/ubuntu/teleop_ws/data/teleop_no_camera_20261016_133930/teleop_no_camera_20261016_133930_0.mcap"
+          ],
+          "cwd": "/home/ubuntu/dexgym",
+          "exit": 0,
+          "stderr": "",
+          "stdout": "\nFiles:             /home/ubuntu/teleop_ws/data/teleop_no_camera_20261016_133930/teleop_no_camera_20261016_133930_0.mcap\nBag size:          534.6 MiB\nStorage id:        mcap\nROS Distro:        jazzy\nDuration:          336.291329387s\nStart:             Oct 16 2026 13:39:31.256916045 (1792129171.256916045)\nEnd:               Oct 16 2026 13:45:07.548245432 (1792129507.548245432)\nMessages:          1090399\nTopic information: Topic: /dex/collection/status | Type: dex_collection_interfaces/msg/CollectionStatus | Count: 1679 | Serialization Format: cdr\n                   Topic: /dex/collection/topics | Type: dex_collection_interfaces/msg/TopicCatalogue | Count: 624 | Serialization Format: cdr\n                   Topic: /events/write_split | Type: rosbag2_interfaces/msg/WriteSplitEvent | Count: 0 | Serialization Format: cdr\n                   Topic: /left_arm/ee_pose | Type: geometry_msgs/msg/PoseStamped | Count: 40209 | Serialization Format: cdr\n                   Topic: /left_arm/ee_twist | Type: geometry_msgs/msg/TwistStamped | Count: 40209 | Serialization Format: cdr\n                   Topic: /left_arm/joint_states | Type: sensor_msgs/msg/JointState | Count: 40140 | Serialization Format: cdr\n                   Topic: /left_arm/wrench | Type: geometry_msgs/msg/WrenchStamped | Count: 40140 | Serialization Format: cdr\n                   Topic: /left_hand/command | Type: manus_wuji_interfaces/msg/HandCommand | Count: 40208 | Serialization Format: cdr\n                   Topic: /left_hand/diagnostics | Type: manus_wuji_interfaces/msg/HandDiagnostics | Count: 8 | Serialization Format: cdr\n                   Topic: /left_hand/state | Type: manus_wuji_interfaces/msg/HandState | Count: 40269 | Serialization Format: cdr\n                   Topic: /manus_glove_left | Type: manus_ros2_msgs/msg/ManusGlove | Count: 40257 | Serialization Format: cdr\n                   Topic: /manus_glove_right | Type: manus_ros2_msgs/msg/ManusGlove | Count: 40257 | Serialization Format: cdr\n                   Topic: /parameter_events | Type: rcl_interfaces/msg/ParameterEvent | Count: 0 | Serialization Format: cdr\n                   Topic: /right_arm/ee_pose | Type: geometry_msgs/msg/PoseStamped | Count: 40209 | Serialization Format: cdr\n                   Topic: /right_arm/ee_twist | Type: geometry_msgs/msg/TwistStamped | Count: 40208 | Serialization Format: cdr\n                   Topic: /right_arm/joint_states | Type: sensor_msgs/msg/JointState | Count: 40141 | Serialization Format: cdr\n                   Topic: /right_arm/wrench | Type: geometry_msgs/msg/WrenchStamped | Count: 40140 | Serialization Format: cdr\n                   Topic: /right_hand/command | Type: manus_wuji_interfaces/msg/HandCommand | Count: 40208 | Serialization Format: cdr\n                   Topic: /right_hand/diagnostics | Type: manus_wuji_interfaces/msg/HandDiagnostics | Count: 8 | Serialization Format: cdr\n                   Topic: /right_hand/state | Type: manus_wuji_interfaces/msg/HandState | Count: 40282 | Serialization Format: cdr\n                   Topic: /rosout | Type: rcl_interfaces/msg/Log | Count: 871 | Serialization Format: cdr\n                   Topic: /teleop/head_pose | Type: geometry_msgs/msg/PoseStamped | Count: 0 | Serialization Format: cdr\n                   Topic: /teleop/head_pose_valid | Type: std_msgs/msg/Bool | Count: 13374 | Serialization Format: cdr\n                   Topic: /tf | Type: tf2_msgs/msg/TFMessage | Count: 80520 | Serialization Format: cdr\n                   Topic: /tf_static | Type: tf2_msgs/msg/TFMessage | Count: 3 | Serialization Format: cdr\n                   Topic: /tianji/joint_command | Type: tianji_interfaces/msg/JointCommand | Count: 76261 | Serialization Format: cdr\n                   Topic: /tianji/robot_state | Type: tianji_interfaces/msg/RobotState | Count: 40141 | Serialization Format: cdr\n                   Topic: /tianji/safety | Type: tianji_interfaces/msg/SafetyStatus | Count: 76269 | Serialization Format: cdr\n                   Topic: /tianji/teleop_diagnostics | Type: diagnostic_msgs/msg/DiagnosticArray | Count: 3184 | Serialization Format: cdr\n                   Topic: /tianji/teleop_state | Type: tianji_interfaces/msg/TeleopState | Count: 9 | Serialization Format: cdr\n                   Topic: /tianji_real_driver/safety | Type: tianji_interfaces/msg/SafetyStatus | Count: 40141 | Serialization Format: cdr\n                   Topic: /vive/raw/left_wrist | Type: geometry_msgs/msg/PoseStamped | Count: 40261 | Serialization Format: cdr\n                   Topic: /vive/raw/right_wrist | Type: geometry_msgs/msg/PoseStamped | Count: 40261 | Serialization Format: cdr\n                   Topic: /vive/tracker/left_wrist | Type: tianji_interfaces/msg/TrackerPose | Count: 29052 | Serialization Format: cdr\n                   Topic: /vive/tracker/right_wrist | Type: tianji_interfaces/msg/TrackerPose | Count: 39848 | Serialization Format: cdr\n                   Topic: /vive/tracker/safety_status | Type: tianji_interfaces/msg/SafetyStatus | Count: 40261 | Serialization Format: cdr\n                   Topic: /vive/tracker/transform_diagnostics | Type: diagnostic_msgs/msg/DiagnosticArray | Count: 3161 | Serialization Format: cdr\n                   Topic: /whole_body_teleop/workflow_state | Type: tianji_interfaces/msg/TeleopState | Count: 1586 | Serialization Format: cdr\nService:           0\nService information: \n"
+        },
+        "path": "/home/ubuntu/teleop_ws/data/teleop_no_camera_20261016_133930/teleop_no_camera_20261016_133930_0.mcap",
+        "sha256": "453e302698ce8879618dd81b851040ec1c671190fd8aeb10585a557e017bf3ac"
+      }
+    ],
+    "model": {
+      "path": "/home/ubuntu/dexgym/source/dexgym/assets/marvin_wuji/hand2_2/generated/dual_arm_marvin.xml",
+      "probe": {
+        "argv": [
+          "/home/ubuntu/miniconda3/envs/wuji/bin/python",
+          "-c",
+          "import mujoco,numpy as np,sys\nm=mujoco.MjModel.from_xml_path(sys.argv[1]); d=mujoco.MjData(m)\nprint('nq/nv/nu/njnt',m.nq,m.nv,m.nu,m.njnt,'dt',m.opt.timestep,'gravity',m.opt.gravity.tolist())\nfor i in range(10): mujoco.mj_step(m,d)\nassert np.isfinite(d.qpos).all() and np.isfinite(d.qvel).all()\nprint('ten_substeps_finite',d.time,'step_warnings',sum(int(w.number) for w in d.warning))\n",
+          "/home/ubuntu/dexgym/source/dexgym/assets/marvin_wuji/hand2_2/generated/dual_arm_marvin.xml"
+        ],
+        "cwd": "/home/ubuntu/dexgym",
+        "exit": 0,
+        "stderr": "",
+        "stdout": "nq/nv/nu/njnt 54 54 54 54 dt 0.002 gravity [0.0, 0.0, -9.81]\nten_substeps_finite 0.020000000000000004 step_warnings 0\n"
+      },
+      "sha256": "b9b79c659c249328a125555aca876d03a13655ce29e5eccef8a27c41173d99b4"
+    },
+    "model_catalog": [
+      "/home/ubuntu/dexgym/source/dexgym/assets/marvin_wuji/hand2_2/generated/dual_arm_marvin.xml"
+    ],
+    "raw_episode_slots": 30,
+    "resolved_episode_slots": 30,
+    "resolved_root": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/data/raw/episodes/18e74c646013f1e6-2156b79bc2482857",
+    "sample_episode": "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857",
+    "sample_episode_files": [
+      "effective_config.yaml",
+      "events.jsonl",
+      "initial_state/tracker_safety/metadata.yaml",
+      "initial_state/tracker_safety/tracker_safety_0.mcap",
+      "manifest.yaml",
+      "run_snapshot.json",
+      "streams/manus_left/manus_left_0.mcap",
+      "streams/manus_left/metadata.yaml",
+      "streams/manus_right/manus_right_0.mcap",
+      "streams/manus_right/metadata.yaml",
+      "streams/tracker_left/metadata.yaml",
+      "streams/tracker_left/tracker_left_0.mcap",
+      "streams/tracker_left_raw/metadata.yaml",
+      "streams/tracker_left_raw/tracker_left_raw_0.mcap",
+      "streams/tracker_right/metadata.yaml",
+      "streams/tracker_right/tracker_right_0.mcap",
+      "streams/tracker_right_raw/metadata.yaml",
+      "streams/tracker_right_raw/tracker_right_raw_0.mcap",
+      "streams/tracker_safety/metadata.yaml",
+      "streams/tracker_safety/tracker_safety_0.mcap"
+    ]
+  },
+  "section": "raw"
+}

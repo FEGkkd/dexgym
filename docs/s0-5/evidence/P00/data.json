@@ -1,0 +1,1501 @@
+{
+  "observed": "2026-11-25T23:16:33.022538+08:00",
+  "result": {
+    "derived_samples": [
+      {
+        "arrays": {
+          "manus_left__adapter_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__auxiliary_valid": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "manus_left__duplicate_source": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "manus_left__episode_index": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__ergonomics_count": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__ergonomics_values": [
+            "float64",
+            [
+              5500,
+              20
+            ]
+          ],
+          "manus_left__frame_id": [
+            "<U1",
+            [
+              5500
+            ]
+          ],
+          "manus_left__glove_id": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__header_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__log_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__mcap_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__monotonic_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__pose": [
+            "float64",
+            [
+              5500,
+              25,
+              7
+            ]
+          ],
+          "manus_left__publish_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__raw_sensor_count": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__raw_sensor_orientation": [
+            "float64",
+            [
+              5500,
+              4
+            ]
+          ],
+          "manus_left__raw_sensor_pose": [
+            "float64",
+            [
+              5500,
+              5,
+              7
+            ]
+          ],
+          "manus_left__realtime_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__receive_ros_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__sdk_receive_us": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__source_instance": [
+            "<U44",
+            [
+              5500
+            ]
+          ],
+          "manus_left__source_stamp": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_left__valid": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "manus_right__adapter_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__auxiliary_valid": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "manus_right__duplicate_source": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "manus_right__episode_index": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__ergonomics_count": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__ergonomics_values": [
+            "float64",
+            [
+              5500,
+              20
+            ]
+          ],
+          "manus_right__frame_id": [
+            "<U1",
+            [
+              5500
+            ]
+          ],
+          "manus_right__glove_id": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__header_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__log_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__mcap_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__monotonic_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__pose": [
+            "float64",
+            [
+              5500,
+              25,
+              7
+            ]
+          ],
+          "manus_right__publish_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__raw_sensor_count": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__raw_sensor_orientation": [
+            "float64",
+            [
+              5500,
+              4
+            ]
+          ],
+          "manus_right__raw_sensor_pose": [
+            "float64",
+            [
+              5500,
+              5,
+              7
+            ]
+          ],
+          "manus_right__realtime_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__receive_ros_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__sdk_receive_us": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__source_instance": [
+            "<U45",
+            [
+              5500
+            ]
+          ],
+          "manus_right__source_stamp": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "manus_right__valid": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__adapter_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__duplicate_source": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__episode_index": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__frame_id": [
+            "<U12",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__header_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__log_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__mcap_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__monotonic_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__pose": [
+            "float64",
+            [
+              5500,
+              7
+            ]
+          ],
+          "tracker_left__publish_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__quality": [
+            "float64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__realtime_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__receive_ros_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__source_instance": [
+            "<U46",
+            [
+              5500
+            ]
+          ],
+          "tracker_left__valid": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "tracker_left_raw__adapter_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left_raw__duplicate_source": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "tracker_left_raw__episode_index": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left_raw__frame_id": [
+            "<U12",
+            [
+              5500
+            ]
+          ],
+          "tracker_left_raw__header_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left_raw__log_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left_raw__mcap_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left_raw__monotonic_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left_raw__pose": [
+            "float64",
+            [
+              5500,
+              7
+            ]
+          ],
+          "tracker_left_raw__publish_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left_raw__realtime_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left_raw__receive_ros_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_left_raw__source_instance": [
+            "<U50",
+            [
+              5500
+            ]
+          ],
+          "tracker_left_raw__valid": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__adapter_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__duplicate_source": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__episode_index": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__frame_id": [
+            "<U12",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__header_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__log_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__mcap_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__monotonic_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__pose": [
+            "float64",
+            [
+              5500,
+              7
+            ]
+          ],
+          "tracker_right__publish_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__quality": [
+            "float64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__realtime_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__receive_ros_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__source_instance": [
+            "<U47",
+            [
+              5500
+            ]
+          ],
+          "tracker_right__valid": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "tracker_right_raw__adapter_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right_raw__duplicate_source": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "tracker_right_raw__episode_index": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right_raw__frame_id": [
+            "<U12",
+            [
+              5500
+            ]
+          ],
+          "tracker_right_raw__header_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right_raw__log_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right_raw__mcap_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right_raw__monotonic_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right_raw__pose": [
+            "float64",
+            [
+              5500,
+              7
+            ]
+          ],
+          "tracker_right_raw__publish_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right_raw__realtime_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right_raw__receive_ros_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_right_raw__source_instance": [
+            "<U51",
+            [
+              5500
+            ]
+          ],
+          "tracker_right_raw__valid": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__adapter_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__duplicate_source": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__episode_index": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__frame_id": [
+            "<U12",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__header_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__log_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__mcap_sequence": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__monotonic_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__publish_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__realtime_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__receive_ros_ns": [
+            "int64",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__safe": [
+            "bool",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__safety_code": [
+            "<U10",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__source_instance": [
+            "<U48",
+            [
+              5500
+            ]
+          ],
+          "tracker_safety__valid": [
+            "bool",
+            [
+              5500
+            ]
+          ]
+        },
+        "path": "/home/ubuntu/dexgym/data/processed/wholebody_s0/2026-11-12/episodes/18e74c646013f1e6-2156b79bc2482857/parsed.npz",
+        "sha256": "bea1a0d4ea3237a143eab4c7026c660bce707a30e4e22734757b8f1869de479a"
+      },
+      {
+        "arrays": {
+          "human_valid": [
+            "bool",
+            [
+              2294
+            ]
+          ],
+          "manus_left_brackets": [
+            "int64",
+            [
+              2294,
+              2
+            ]
+          ],
+          "manus_left_causal_index": [
+            "int64",
+            [
+              2294
+            ]
+          ],
+          "manus_left_pose": [
+            "float32",
+            [
+              2294,
+              25,
+              7
+            ]
+          ],
+          "manus_left_valid": [
+            "bool",
+            [
+              2294
+            ]
+          ],
+          "manus_right_brackets": [
+            "int64",
+            [
+              2294,
+              2
+            ]
+          ],
+          "manus_right_causal_index": [
+            "int64",
+            [
+              2294
+            ]
+          ],
+          "manus_right_pose": [
+            "float32",
+            [
+              2294,
+              25,
+              7
+            ]
+          ],
+          "manus_right_valid": [
+            "bool",
+            [
+              2294
+            ]
+          ],
+          "time_ns": [
+            "int64",
+            [
+              2294
+            ],
+            20000000,
+            20000000
+          ],
+          "time_s": [
+            "float64",
+            [
+              2294
+            ]
+          ],
+          "tracker_left_brackets": [
+            "int64",
+            [
+              2294,
+              2
+            ]
+          ],
+          "tracker_left_causal_index": [
+            "int64",
+            [
+              2294
+            ]
+          ],
+          "tracker_left_pose": [
+            "float32",
+            [
+              2294,
+              7
+            ]
+          ],
+          "tracker_left_raw_brackets": [
+            "int64",
+            [
+              2294,
+              2
+            ]
+          ],
+          "tracker_left_raw_causal_index": [
+            "int64",
+            [
+              2294
+            ]
+          ],
+          "tracker_left_raw_pose": [
+            "float32",
+            [
+              2294,
+              7
+            ]
+          ],
+          "tracker_left_raw_valid": [
+            "bool",
+            [
+              2294
+            ]
+          ],
+          "tracker_left_valid": [
+            "bool",
+            [
+              2294
+            ]
+          ],
+          "tracker_right_brackets": [
+            "int64",
+            [
+              2294,
+              2
+            ]
+          ],
+          "tracker_right_causal_index": [
+            "int64",
+            [
+              2294
+            ]
+          ],
+          "tracker_right_pose": [
+            "float32",
+            [
+              2294,
+              7
+            ]
+          ],
+          "tracker_right_raw_brackets": [
+            "int64",
+            [
+              2294,
+              2
+            ]
+          ],
+          "tracker_right_raw_causal_index": [
+            "int64",
+            [
+              2294
+            ]
+          ],
+          "tracker_right_raw_pose": [
+            "float32",
+            [
+              2294,
+              7
+            ]
+          ],
+          "tracker_right_raw_valid": [
+            "bool",
+            [
+              2294
+            ]
+          ],
+          "tracker_right_valid": [
+            "bool",
+            [
+              2294
+            ]
+          ],
+          "tracker_safety_valid": [
+            "bool",
+            [
+              2294
+            ]
+          ]
+        },
+        "path": "/home/ubuntu/dexgym/data/processed/wholebody_s0/2026-11-12/episodes/18e74c646013f1e6-2156b79bc2482857/aligned.npz",
+        "sha256": "ae8a146a09926d53d1415e23d6d68b88167365310b45982a8a6bf20910ec49d8"
+      },
+      {
+        "arrays": {
+          "arm_accepted": [
+            "bool",
+            [
+              2294,
+              2
+            ]
+          ],
+          "arm_orientation_error_rad": [
+            "float32",
+            [
+              2294,
+              2
+            ]
+          ],
+          "arm_position_error_m": [
+            "float32",
+            [
+              2294,
+              2
+            ]
+          ],
+          "arm_q": [
+            "float32",
+            [
+              2294,
+              14
+            ]
+          ],
+          "arm_rate_limited": [
+            "bool",
+            [
+              2294,
+              2
+            ]
+          ],
+          "arm_safety_code": [
+            "int16",
+            [
+              2294,
+              2
+            ]
+          ],
+          "hand_limit_adjust_rad": [
+            "float32",
+            [
+              2294
+            ]
+          ],
+          "hand_q_unclipped": [
+            "float32",
+            [
+              2294,
+              40
+            ]
+          ],
+          "hand_valid": [
+            "bool",
+            [
+              2294,
+              2
+            ]
+          ],
+          "in_library": [
+            "bool",
+            [
+              2294
+            ]
+          ],
+          "native_tcp_base": [
+            "float32",
+            [
+              2294,
+              2,
+              7
+            ]
+          ],
+          "native_tcp_world": [
+            "float32",
+            [
+              2294,
+              2,
+              7
+            ]
+          ],
+          "q_ref": [
+            "float32",
+            [
+              2294,
+              54
+            ]
+          ],
+          "reference_usable": [
+            "bool",
+            [
+              2294
+            ]
+          ],
+          "rejection_bits": [
+            "uint16",
+            [
+              2294
+            ]
+          ],
+          "relative_wrist_vector_error_m": [
+            "float32",
+            [
+              2294
+            ]
+          ],
+          "robot_fingertip_pose": [
+            "float32",
+            [
+              2294,
+              2,
+              5,
+              7
+            ]
+          ],
+          "robot_skeleton": [
+            "float32",
+            [
+              2294,
+              71,
+              3
+            ]
+          ],
+          "robot_wrist_pose": [
+            "float32",
+            [
+              2294,
+              2,
+              7
+            ]
+          ],
+          "static_penetration_m": [
+            "float32",
+            [
+              2294
+            ]
+          ],
+          "target_tcp_base": [
+            "float32",
+            [
+              2294,
+              2,
+              7
+            ]
+          ],
+          "target_tcp_world": [
+            "float32",
+            [
+              2294,
+              2,
+              7
+            ]
+          ],
+          "time_ns": [
+            "int64",
+            [
+              2294
+            ],
+            20000000,
+            20000000
+          ]
+        },
+        "path": "/home/ubuntu/dexgym/data/processed/wholebody_s0/2026-11-12/episodes/18e74c646013f1e6-2156b79bc2482857/reference.npz",
+        "sha256": "7b5cb89fc6b75b5dc7094332d91db174449f19dabb5373f5873ff690305a1029"
+      }
+    ],
+    "episode_metadata": [
+      "/home/ubuntu/dexgym/data/processed/wholebody_s0/2026-11-12/episodes/18e74c646013f1e6-2156b79bc2482857/configuration.json",
+      "/home/ubuntu/dexgym/data/processed/wholebody_s0/2026-11-12/episodes/18e74c646013f1e6-2156b79bc2482857/quality.json",
+      "/home/ubuntu/dexgym/data/processed/wholebody_s0/2026-11-12/episodes/18e74c646013f1e6-2156b79bc2482857/retarget_quality.json"
+    ],
+    "expected_npz_counts": {
+      "aligned.npz": 30,
+      "parsed.npz": 30,
+      "reference.npz": 30
+    },
+    "library": [
+      {
+        "groups": {
+          "actuator_indices": 54,
+          "clips": 174,
+          "firmware_joint_names": 54,
+          "joint_groups": 4,
+          "joint_limits_rad": 54,
+          "joint_names": 54,
+          "provenance": 9,
+          "qpos_indices": 54,
+          "quality_filter": 6,
+          "splits": 3,
+          "tracker_frame": 1
+        },
+        "keys": [
+          "schema",
+          "task",
+          "kind",
+          "rate_hz",
+          "joint_names",
+          "firmware_joint_names",
+          "qpos_indices",
+          "actuator_indices",
+          "joint_limits_rad",
+          "joint_groups",
+          "position_unit",
+          "velocity_unit",
+          "pose_unit",
+          "quaternion_order",
+          "tracker_frame",
+          "robot_frame",
+          "source_frame_interval",
+          "reference_origin",
+          "provenance",
+          "quality_filter",
+          "splits",
+          "clips"
+        ],
+        "path": "/home/ubuntu/dexgym/data/processed/wholebody_s0/2026-11-12/motion_library/manifest.json",
+        "sha256": "ab2883c16c8cf617ee082c32fe442b97bf41cea396757c767e92b4853472a5b8"
+      },
+      {
+        "groups": {
+          "actuator_indices": 54,
+          "clips": 173,
+          "firmware_joint_names": 54,
+          "joint_groups": 4,
+          "joint_limits_rad": 54,
+          "joint_names": 54,
+          "native_replay": 7,
+          "provenance": 9,
+          "qpos_indices": 54,
+          "quality_filter": 6,
+          "splits": 3,
+          "tracker_frame": 1
+        },
+        "keys": [
+          "schema",
+          "task",
+          "kind",
+          "rate_hz",
+          "joint_names",
+          "firmware_joint_names",
+          "qpos_indices",
+          "actuator_indices",
+          "joint_limits_rad",
+          "joint_groups",
+          "position_unit",
+          "velocity_unit",
+          "pose_unit",
+          "quaternion_order",
+          "tracker_frame",
+          "robot_frame",
+          "source_frame_interval",
+          "reference_origin",
+          "provenance",
+          "quality_filter",
+          "splits",
+          "clips",
+          "native_replay"
+        ],
+        "path": "/home/ubuntu/dexgym/data/processed/wholebody_s0/2026-11-12/native_replay/motion_library/manifest.json",
+        "sha256": "ba0cb021c53c4a4076bf19e9cf1f68f5294e15206e065c3d600743faf8509d28"
+      },
+      {
+        "groups": {
+          "actuator_indices": 54,
+          "clips": 253,
+          "firmware_joint_names": 54,
+          "joint_groups": 4,
+          "joint_limits_rad": 54,
+          "joint_names": 54,
+          "provenance": 9,
+          "qpos_indices": 54,
+          "quality_filter": 6,
+          "splits": 3,
+          "tracker_frame": 1
+        },
+        "keys": [
+          "schema",
+          "task",
+          "kind",
+          "rate_hz",
+          "joint_names",
+          "firmware_joint_names",
+          "qpos_indices",
+          "actuator_indices",
+          "joint_limits_rad",
+          "joint_groups",
+          "position_unit",
+          "velocity_unit",
+          "pose_unit",
+          "quaternion_order",
+          "tracker_frame",
+          "robot_frame",
+          "source_frame_interval",
+          "reference_origin",
+          "provenance",
+          "quality_filter",
+          "splits",
+          "clips"
+        ],
+        "path": "/home/ubuntu/dexgym/data/processed/wholebody_s0/2026-11-13/motion_library/manifest.json",
+        "sha256": "163a2a5d27681f5eb9e9b4931789da6a9a55556e7b92217a3908051a7bc6bd70"
+      },
+      {
+        "groups": {
+          "actuator_indices": 54,
+          "clips": 427,
+          "firmware_joint_names": 54,
+          "joint_groups": 4,
+          "joint_limits_rad": 54,
+          "joint_names": 54,
+          "provenance": 9,
+          "qpos_indices": 54,
+          "quality_filter": 6,
+          "recording_dates": 2,
+          "source_daily_manifests": 2,
+          "splits": 3,
+          "tracker_frame": 1
+        },
+        "keys": [
+          "schema",
+          "task",
+          "kind",
+          "rate_hz",
+          "joint_names",
+          "firmware_joint_names",
+          "qpos_indices",
+          "actuator_indices",
+          "joint_limits_rad",
+          "joint_groups",
+          "position_unit",
+          "velocity_unit",
+          "pose_unit",
+          "quaternion_order",
+          "tracker_frame",
+          "robot_frame",
+          "source_frame_interval",
+          "reference_origin",
+          "provenance",
+          "quality_filter",
+          "splits",
+          "clips",
+          "recording_dates",
+          "source_daily_manifests"
+        ],
+        "path": "/home/ubuntu/dexgym/data/processed/wholebody_s0/batch_01_2026-11-12_13/motion_library/manifest.json",
+        "sha256": "a6a655e3b90e0b1a9dfc6780bb831cc9c3ade046a4129e1b4f576149c1c917be"
+      },
+      {
+        "groups": {
+          "actuator_indices": 54,
+          "clips": 561,
+          "firmware_joint_names": 54,
+          "joint_groups": 4,
+          "joint_limits_rad": 54,
+          "joint_names": 54,
+          "native_replay": 5,
+          "provenance": 9,
+          "qpos_indices": 54,
+          "quality_filter": 6,
+          "recording_dates": 2,
+          "retiming": 6,
+          "source_daily_manifests": 2,
+          "splits": 3,
+          "tracker_frame": 1
+        },
+        "keys": [
+          "schema",
+          "task",
+          "kind",
+          "rate_hz",
+          "joint_names",
+          "firmware_joint_names",
+          "qpos_indices",
+          "actuator_indices",
+          "joint_limits_rad",
+          "joint_groups",
+          "position_unit",
+          "velocity_unit",
+          "pose_unit",
+          "quaternion_order",
+          "tracker_frame",
+          "robot_frame",
+          "source_frame_interval",
+          "reference_origin",
+          "provenance",
+          "quality_filter",
+          "splits",
+          "clips",
+          "recording_dates",
+          "source_daily_manifests",
+          "native_replay",
+          "retiming"
+        ],
+        "path": "/home/ubuntu/dexgym/data/processed/wholebody_s0/batch_01_2026-11-12_13/native_replay/motion_library/manifest.json",
+        "sha256": "c5560f9f7c739f21a11e42f9fdb1015d0fe29a075a2bea6337b6187707ef19c6"
+      },
+      {
+        "groups": {
+          "actuator_indices": 54,
+          "clips": 424,
+          "firmware_joint_names": 54,
+          "joint_groups": 4,
+          "joint_limits_rad": 54,
+          "joint_names": 54,
+          "native_replay": 7,
+          "provenance": 9,
+          "qpos_indices": 54,
+          "quality_filter": 6,
+          "recording_dates": 2,
+          "source_daily_manifests": 2,
+          "splits": 3,
+          "tracker_frame": 1
+        },
+        "keys": [
+          "schema",
+          "task",
+          "kind",
+          "rate_hz",
+          "joint_names",
+          "firmware_joint_names",
+          "qpos_indices",
+          "actuator_indices",
+          "joint_limits_rad",
+          "joint_groups",
+          "position_unit",
+          "velocity_unit",
+          "pose_unit",
+          "quaternion_order",
+          "tracker_frame",
+          "robot_frame",
+          "source_frame_interval",
+          "reference_origin",
+          "provenance",
+          "quality_filter",
+          "splits",
+          "clips",
+          "recording_dates",
+          "source_daily_manifests",
+          "native_replay"
+        ],
+        "path": "/home/ubuntu/dexgym/data/processed/wholebody_s0/batch_01_2026-11-12_13/native_replay_original/motion_library/manifest.json",
+        "sha256": "219735fafb5030fa6e5dc229871942eeaa812f48116b56269507ddf04380e209"
+      },
+      {
+        "groups": {
+          "actuator_indices": 54,
+          "clips": 137,
+          "firmware_joint_names": 54,
+          "joint_groups": 4,
+          "joint_limits_rad": 54,
+          "joint_names": 54,
+          "native_replay": 7,
+          "provenance": 9,
+          "qpos_indices": 54,
+          "quality_filter": 6,
+          "recording_dates": 2,
+          "retiming": 6,
+          "source_daily_manifests": 2,
+          "splits": 3,
+          "tracker_frame": 1
+        },
+        "keys": [
+          "schema",
+          "task",
+          "kind",
+          "rate_hz",
+          "joint_names",
+          "firmware_joint_names",
+          "qpos_indices",
+          "actuator_indices",
+          "joint_limits_rad",
+          "joint_groups",
+          "position_unit",
+          "velocity_unit",
+          "pose_unit",
+          "quaternion_order",
+          "tracker_frame",
+          "robot_frame",
+          "source_frame_interval",
+          "reference_origin",
+          "provenance",
+          "quality_filter",
+          "splits",
+          "clips",
+          "recording_dates",
+          "source_daily_manifests",
+          "retiming",
+          "native_replay"
+        ],
+        "path": "/home/ubuntu/dexgym/data/processed/wholebody_s0/batch_01_2026-11-12_13/native_replay_retimed/motion_library/manifest.json",
+        "sha256": "73c57f7f05cbdbd978328ae2b69be5c67755cd4d1b54201e8acf3bb42530d407"
+      },
+      {
+        "groups": {
+          "actuator_indices": 54,
+          "clips": 137,
+          "firmware_joint_names": 54,
+          "joint_groups": 4,
+          "joint_limits_rad": 54,
+          "joint_names": 54,
+          "provenance": 9,
+          "qpos_indices": 54,
+          "quality_filter": 6,
+          "recording_dates": 2,
+          "retiming": 6,
+          "source_daily_manifests": 2,
+          "splits": 3,
+          "tracker_frame": 1
+        },
+        "keys": [
+          "schema",
+          "task",
+          "kind",
+          "rate_hz",
+          "joint_names",
+          "firmware_joint_names",
+          "qpos_indices",
+          "actuator_indices",
+          "joint_limits_rad",
+          "joint_groups",
+          "position_unit",
+          "velocity_unit",
+          "pose_unit",
+          "quaternion_order",
+          "tracker_frame",
+          "robot_frame",
+          "source_frame_interval",
+          "reference_origin",
+          "provenance",
+          "quality_filter",
+          "splits",
+          "clips",
+          "recording_dates",
+          "source_daily_manifests",
+          "retiming"
+        ],
+        "path": "/home/ubuntu/dexgym/data/processed/wholebody_s0/batch_01_2026-11-12_13/retimed_candidates/manifest.json",
+        "sha256": "7155b7f9c8557ce80db34eda45f35b84d7da8da33fed0d47855a30ba43159431"
+      }
+    ],
+    "paired_episode_count": 30,
+    "raw_count": 86,
+    "raw_manifest_samples": [],
+    "raw_samples": [
+      {
+        "path": "/home/ubuntu/teleop_ws/data/teleop_no_camera_20261016_133930/teleop_no_camera_20261016_133930_0.mcap",
+        "reader_error": "No module named 'mcap'",
+        "sha256": "453e302698ce8879618dd81b851040ec1c671190fd8aeb10585a557e017bf3ac",
+        "size": 560609433
+      },
+      {
+        "path": "/home/ubuntu/teleop_ws/data/bag_no_camera/bag_no_camera_0.mcap",
+        "reader_error": "No module named 'mcap'",
+        "sha256": "0c4705276aaf0b1c6dc614a05169b7a1aa8e83c2942de29c82cf88c8b414efc8",
+        "size": 6862980
+      },
+      {
+        "path": "/home/ubuntu/teleop_ws/data/s0_sim_20261117_153201/s0_sim_20261117_153201_0.mcap",
+        "reader_error": "No module named 'mcap'",
+        "sha256": "f92f82518abb2d2b39e322e53b02b8926aa31beb00517d79653a12a1b2eb54d1",
+        "size": 10070472015
+      }
+    ]
+  },
+  "section": "data"
+}

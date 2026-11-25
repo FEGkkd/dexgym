@@ -1,0 +1,377 @@
+{
+  "observed": "2026-11-25T23:25:39.369092+08:00",
+  "result": {
+    "bag_witness": {
+      "argv": [
+        "bash",
+        "-lc",
+        "source /opt/ros/jazzy/setup.bash || exit 1\nsource \"$HOME/teleop_ws/install/local_setup.bash\" || exit 1\nfor overlay in \"$HOME/dex_data_platform/install/local_setup.bash\" \"$HOME/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/local_setup.bash\"; do\n if [ -f \"$overlay\" ]; then source \"$overlay\"; fi\ndone\npython3 - \"$1\" <<'PY'\nimport sys, pathlib, rosbag2_py\nfrom rclpy.serialization import deserialize_message\nfrom rosidl_runtime_py.utilities import get_message\nfor tag in ('manus_left','manus_right','tracker_left','tracker_right'):\n path=next((pathlib.Path(sys.argv[1])/'streams'/tag).glob('*.mcap'))\n r=rosbag2_py.SequentialReader()\n r.open(rosbag2_py.StorageOptions(uri=str(path),storage_id='mcap'),rosbag2_py.ConverterOptions('cdr','cdr'))\n types={t.name:t.type for t in r.get_all_topics_and_types()}\n found=set()\n while r.has_next() and len(found)<len(types):\n  topic,value,stamp=r.read_next()\n  if topic in found: continue\n  cls=get_message(types[topic]); msg=deserialize_message(value,cls);found.add(topic)\n  print(tag, topic, types[topic], stamp, sorted(msg.get_fields_and_field_types()))\n  if hasattr(msg,'nodes'): print('nodes',len(msg.nodes),sorted(msg.nodes[0].get_fields_and_field_types()) if msg.nodes else [])\n assert len(found)==len(types),(tag,types,found)\nPY",
+        "p00",
+        "/home/ubuntu/dexgym/data/raw/wholebody_s0/2026-11-12/18e74c646013f1e6-2156b79bc2482857"
+      ],
+      "cwd": "/home/ubuntu/dexgym",
+      "exit": 0,
+      "stderr": "",
+      "stdout": "manus_left /manus_glove_left manus_ros2_msgs/msg/ManusGlove 1794486970564212929 ['ergonomics', 'ergonomics_count', 'glove_id', 'header', 'raw_node_count', 'raw_nodes', 'raw_sensor', 'raw_sensor_count', 'raw_sensor_orientation', 'receive_timestamp_us', 'side', 'source_timestamp_us']\nmanus_left /dex/collection/observations/manus_left dex_collection_interfaces/msg/SampleObservation 1794486970564212929 ['episode_sample_index', 'host_observed_monotonic_ns', 'host_realtime_ns', 'receive_ros_timestamp_ns', 'source_instance_id', 'source_sequence_id', 'stream_id']\nmanus_right /manus_glove_right manus_ros2_msgs/msg/ManusGlove 1794486970564383008 ['ergonomics', 'ergonomics_count', 'glove_id', 'header', 'raw_node_count', 'raw_nodes', 'raw_sensor', 'raw_sensor_count', 'raw_sensor_orientation', 'receive_timestamp_us', 'side', 'source_timestamp_us']\nmanus_right /dex/collection/observations/manus_right dex_collection_interfaces/msg/SampleObservation 1794486970564383008 ['episode_sample_index', 'host_observed_monotonic_ns', 'host_realtime_ns', 'receive_ros_timestamp_ns', 'source_instance_id', 'source_sequence_id', 'stream_id']\ntracker_left /vive/tracker/left_wrist tianji_interfaces/msg/TrackerPose 1794486970564470314 ['header', 'pose', 'quality', 'role', 'valid']\ntracker_left /dex/collection/observations/tracker_left dex_collection_interfaces/msg/SampleObservation 1794486970564470314 ['episode_sample_index', 'host_observed_monotonic_ns', 'host_realtime_ns', 'receive_ros_timestamp_ns', 'source_instance_id', 'source_sequence_id', 'stream_id']\ntracker_right /vive/tracker/right_wrist tianji_interfaces/msg/TrackerPose 1794486970564469159 ['header', 'pose', 'quality', 'role', 'valid']\ntracker_right /dex/collection/observations/tracker_right dex_collection_interfaces/msg/SampleObservation 1794486970564469159 ['episode_sample_index', 'host_observed_monotonic_ns', 'host_realtime_ns', 'receive_ros_timestamp_ns', 'source_instance_id', 'source_sequence_id', 'stream_id']\n"
+    },
+    "bank": {
+      "dictionaries": {
+        "arm_reference_refit": [
+          "schema",
+          "parent_bank",
+          "parent_bank_sha256",
+          "modified_split",
+          "goals_and_timestamps_unchanged",
+          "arm_margin_deg",
+          "wrist_p95_threshold_mm",
+          "native_mujoco_replay",
+          "splits"
+        ],
+        "collision_clearance": [
+          "version",
+          "arm_bound_deg",
+          "max_tip_mm",
+          "penetration_tol_mm",
+          "verified_static",
+          "source_manifest",
+          "source_sha256"
+        ],
+        "contact_replay_screen": [
+          "controls",
+          "distance_mm",
+          "parent_manifest",
+          "whole_clip_on_repeat"
+        ],
+        "egopro_bounded_ik_retime": [
+          "schema",
+          "parent_bank",
+          "parent_bank_sha256",
+          "splits",
+          "purpose",
+          "arm_joint_margin_deg",
+          "speed_profile"
+        ],
+        "egopro_refresh": [
+          "raw_manifest_sha256",
+          "curation_manifest_sha256",
+          "raw_main_count",
+          "new_raw_recordings",
+          "removed_raw_recordings",
+          "legacy_recordings",
+          "decoded_new_recordings",
+          "new_reference_episodes",
+          "new_reference_clips",
+          "refit_manifest",
+          "refit_manifest_sha256"
+        ],
+        "fixed_hand_reachability": [
+          "source_manifest",
+          "source_manifest_sha256",
+          "arm_budget_deg",
+          "threshold_mm",
+          "score",
+          "static",
+          "target",
+          "original_angles_preserved"
+        ],
+        "frame": [
+          "wrist",
+          "fingers",
+          "relative",
+          "fingers_order",
+          "landmarks"
+        ],
+        "hand_reference_contract": [
+          "mode",
+          "parent_bank_sha256",
+          "model_sha256",
+          "library_version",
+          "library_sha256",
+          "left_right_landmark_order",
+          "landmarks_per_finger",
+          "session_input_unit",
+          "session_output_unit",
+          "ego_sdk_hz",
+          "ego_output_alpha",
+          "contact_clearance_depth_mm",
+          "training_manus_fraction",
+          "training_manus_seed",
+          "training_manus_ids",
+          "converted",
+          "remaining_manus",
+          "report"
+        ],
+        "position_rate_contract": [
+          "file",
+          "sha256",
+          "sources",
+          "profile"
+        ],
+        "source_contract": [
+          "original_manifest",
+          "original_frames",
+          "based_on_recorded_crop_plan",
+          "verified_release",
+          "appended_sdk_frames"
+        ],
+        "source_indexes": [
+          "teleop_retarget.json",
+          "all_egopro_references.json",
+          "wrist_calibration.json",
+          "egopro_extra_10h",
+          "egopro_manifest.json",
+          "egopro_manifest_workspace_refresh_20261117.json",
+          "egopro_workspace_refresh_retarget"
+        ],
+        "splits": [
+          "test",
+          "validation",
+          "train"
+        ],
+        "tracking_data": [
+          "mode",
+          "source_training",
+          "official_eval",
+          "speed",
+          "clock_baked",
+          "collision_rule",
+          "source_manifest",
+          "eval_source_manifest",
+          "extra_time_scale",
+          "input_manifest",
+          "input_manifest_sha256",
+          "historical_screen_sha256",
+          "exclusions_sha256"
+        ],
+        "train_source_weights": [
+          "teleop",
+          "egopro"
+        ],
+        "training_quarantine": [
+          "schema",
+          "parent_bank",
+          "parent_bank_sha256",
+          "refit_audit_sha256",
+          "excluded_file",
+          "excluded_sha256",
+          "excluded_train_clips",
+          "excluded_train_frames",
+          "failed_contact_refit_clips",
+          "additional_above_wrist_p95_threshold_clips",
+          "active_train_clips",
+          "active_train_frames",
+          "targets_and_timestamps_unchanged_on_retained_frames",
+          "excluded_membership"
+        ],
+        "training_trajectory_append": [
+          "schema",
+          "parent_bank",
+          "parent_bank_sha256",
+          "modified_split",
+          "parent_train_frames",
+          "appended_frames",
+          "clip_id",
+          "arm_margin_deg",
+          "residual_bound_deg",
+          "prefix_sha256",
+          "source_candidate_sha256",
+          "source",
+          "geometry"
+        ],
+        "wrist_calibration": [
+          "file",
+          "sha256",
+          "source",
+          "translation_m",
+          "quaternion_xyzw",
+          "direction",
+          "wrist_bodies",
+          "tcp_sites"
+        ],
+        "wrist_refit": [
+          "input_bank",
+          "input_bank_sha256",
+          "position_p95_threshold_mm",
+          "wrist_target",
+          "clock",
+          "collision_limit_m",
+          "elbow_speed_margin_m_s",
+          "elbow_accel_p95_margin_m_s2",
+          "elbow_accel_max_margin_m_s2",
+          "first_pass_sha256",
+          "evaluated_manifest_sha256"
+        ]
+      },
+      "keys": [
+        "schema",
+        "task",
+        "rate_hz",
+        "joint_names",
+        "source_manifest",
+        "source_manifest_sha256",
+        "teleop_model",
+        "teleop_model_sha256",
+        "home",
+        "arm_home_file",
+        "arm_home_sha256",
+        "hand_home_file",
+        "hand_home_sha256",
+        "home_reset_depth_m",
+        "position_lower_rad",
+        "position_upper_rad",
+        "frame",
+        "splits",
+        "wrist_calibration",
+        "previous_bank_sha256",
+        "previous_model_sha256",
+        "train_source_weights",
+        "source_indexes",
+        "position_rate_rad_s",
+        "position_rate_contract",
+        "teleop_start_alignment",
+        "extension_recordings",
+        "wrist_refit",
+        "egopro_refresh",
+        "hand_reference_contract",
+        "arm_reference_refit",
+        "training_quarantine",
+        "training_trajectory_append",
+        "egopro_bounded_ik_retime",
+        "tracking_data",
+        "fixed_hand_reachability",
+        "collision_clearance",
+        "source_contract",
+        "contact_replay_screen"
+      ],
+      "list_shapes": {
+        "home": [
+          54,
+          null
+        ],
+        "joint_names": [
+          54,
+          null
+        ],
+        "position_lower_rad": [
+          54,
+          null
+        ],
+        "position_rate_rad_s": [
+          54,
+          null
+        ],
+        "position_upper_rad": [
+          54,
+          null
+        ]
+      },
+      "path": "/home/ubuntu/dexgym/data/processed/wholebody-s04/contact_replay_filtered_6000_20261125/bank_round_2/manifest.json",
+      "scalars": {
+        "arm_home_file": "/home/ubuntu/teleop_ws/src/tianji_real_driver/config/real.yaml",
+        "arm_home_sha256": "cc444835248a43b0926d561219e98ac8ead27dcb66b49e5f8d7b86115284e57d",
+        "extension_recordings": 330,
+        "hand_home_file": "/home/ubuntu/.config/dex/hand_home.yaml",
+        "hand_home_sha256": "05a45bef056a5f032e2f543f6a7bea0f804c160fadd9c81e588ef774bfe12739",
+        "home_reset_depth_m": 0.0,
+        "previous_bank_sha256": "f5b067ac462d892fdf6af3482371fb197729d34dd829d4e1dac43d959066bac4",
+        "previous_model_sha256": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+        "rate_hz": 50,
+        "schema": "dexgym.wholebody_s0_1.targets.v1",
+        "source_manifest": "/home/ubuntu/dexgym/data/processed/wholebody_s0/batch_01_2026-11-12_13/native_replay/motion_library/manifest.json",
+        "source_manifest_sha256": "c5560f9f7c739f21a11e42f9fdb1015d0fe29a075a2bea6337b6187707ef19c6",
+        "task": "wholebody_s0-1",
+        "teleop_model": "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/dual_arm_marvin.xml",
+        "teleop_model_sha256": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+        "teleop_start_alignment": "per_side_physical_wrist_anchor"
+      },
+      "sha256": "42842eeeaba0d6d87950e63cae2f25d0a9485b60bd012a8a661ddea7ab89bec5"
+    },
+    "isolated_test": {
+      "argv": [
+        "/home/ubuntu/miniconda3/envs/wuji/bin/python",
+        "-m",
+        "pytest",
+        "-p",
+        "no:cacheprovider",
+        "-q",
+        "tests/assets/test_marvin_binding.py"
+      ],
+      "cwd": "/home/ubuntu/dexgym",
+      "exit": 0,
+      "stderr": "",
+      "stdout": ".ss                                                                      [100%]\n1 passed, 2 skipped in 0.07s\n"
+    },
+    "model_launch": [
+      [
+        6,
+        "export MODEL=/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/dual_arm_marvin.xml"
+      ]
+    ],
+    "retarget_sources": {
+      "/home/ubuntu/teleop_ws/src/whole_body_teleop/src/retarget_node.cpp": {
+        "lines": [
+          [
+            1,
+            "#include \"manus_wuji_teleop/retarget_node.hpp\""
+          ],
+          [
+            25,
+            "input_topic_ = node_.declare_parameter<std::string>(prefix + \"input_topic\", \"/manus_glove_\" + side_);"
+          ],
+          [
+            26,
+            "command_topic_ = node_.declare_parameter<std::string>(prefix + \"command_topic\", \"/\" + side_ + \"_hand/command\");"
+          ],
+          [
+            39,
+            "retarget_ = std::make_unique<wuji_sdk_cpp::RetargetSession>(sdk_manager_, handedness_);"
+          ],
+          [
+            50,
+            "RCLCPP_INFO(node_.get_logger(), \"MANUS retarget ready: %s -> %s (output_lp_alpha=%.3f)\","
+          ],
+          [
+            118,
+            "// Apply the configured Z-axis rotation before passing coordinates to the retargeter."
+          ],
+          [
+            155,
+            "const auto result = retarget_->step(keypoints(*msg));"
+          ],
+          [
+            164,
+            "// Recheck source age after retarget computation, then commit under the"
+          ]
+        ],
+        "matched": 8,
+        "sha256": "6699176c4a278445c5ef10631ef8b9f9d538aa816353d78ea2b99eba9ee8c117"
+      }
+    },
+    "servo_profile": {
+      "damping_scale": 1.0,
+      "delay_ms": 0,
+      "gravity_scale": 1.0,
+      "target_filter_ms": 16,
+      "velocity_feedforward": 0.0,
+      "velocity_filter_ms": 24.0
+    },
+    "wrapped_tests": {
+      "argv": [
+        "bash",
+        "scripts/supermimic/host.sh",
+        "--pytest",
+        "-p",
+        "no:cacheprovider",
+        "-q",
+        "tests/assets/test_marvin_binding.py",
+        "tests/assets/test_marvin_contract.py",
+        "tests/assets/test_marvin_controller.py"
+      ],
+      "cwd": "/home/ubuntu/dexgym",
+      "exit": 0,
+      "stderr": "",
+      "stdout": ".ss..s...                                                                [100%]\n6 passed, 3 skipped in 0.68s\n"
+    }
+  },
+  "section": "followup"
+}

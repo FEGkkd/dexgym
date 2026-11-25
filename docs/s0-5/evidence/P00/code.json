@@ -1,0 +1,1818 @@
+{
+  "observed": "2026-11-25T23:17:23.255325+08:00",
+  "result": {
+    "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_gravity_20000_20261125/checkout/source/dexgym/tasks/direct/wholebody_s0_1/bank.py": {
+      "lines": [
+        [
+          16,
+          "def recorded_frame_steps(time_ns, source_time_ns):"
+        ],
+        [
+          40,
+          "class TaskBank:"
+        ],
+        [
+          41,
+          "def __init__(self, manifest, split, device, *, goals_only=False,"
+        ],
+        [
+          92,
+          "def prepare_recorded_clock(self):"
+        ],
+        [
+          119,
+          "def advance_frame(self, frame, steps, recorded=None, *, max_steps=None):"
+        ],
+        [
+          131,
+          "def set_reference_hand_targets(self, fk, reference_q=None):"
+        ],
+        [
+          146,
+          "def mix_mapped_hand_clips(self, hand, fk):"
+        ],
+        [
+          176,
+          "def set_mapped_hand_targets(self, fk):"
+        ],
+        [
+          187,
+          "def at(self, index):"
+        ],
+        [
+          191,
+          "def prepare_opposition_sampling(self, fraction):"
+        ],
+        [
+          208,
+          "def sample_pool(self, pool, count, generator, opposition=None):"
+        ],
+        [
+          216,
+          "def sample(self, count, generator):"
+        ],
+        [
+          227,
+          "def bridge_pose(home, goal, fraction):"
+        ]
+      ],
+      "sha256": "003da54827969345edca5612ad388da03ef5f5fe4ccf36eb983c1e5788ccee08"
+    },
+    "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_gravity_20000_20261125/checkout/source/dexgym/tasks/direct/wholebody_s0_1/control.py": {
+      "lines": [
+        [
+          51,
+          "def rotation6(rotation):"
+        ],
+        [
+          55,
+          "class History(NamedTuple):"
+        ],
+        [
+          61,
+          "class Command(nn.Module):"
+        ],
+        [
+          62,
+          "def __init__(self, metadata):"
+        ],
+        [
+          78,
+          "def desired(self, action):"
+        ],
+        [
+          81,
+          "def forward(self, action, previous_command):"
+        ],
+        [
+          89,
+          "class Observation(nn.Module):"
+        ],
+        [
+          90,
+          "def __init__(self, model, metadata, version=OBSERVATION_VERSION, *, proximal=False):"
+        ],
+        [
+          118,
+          "def actor_frame(self, pose):"
+        ],
+        [
+          130,
+          "def current_values(self, q, qd, goal, measured):"
+        ],
+        [
+          149,
+          "def flatten(values):"
+        ],
+        [
+          152,
+          "def forward_current(self, state, goal, previous_command):"
+        ],
+        [
+          164,
+          "def forward(self, state, goal, history):"
+        ],
+        [
+          195,
+          "class AbsoluteAction(nn.Module):"
+        ],
+        [
+          198,
+          "def __init__(self, features, scale, *, history_delta=False, observation_version=None, action_home=None):"
+        ],
+        [
+          245,
+          "def forward(self, observation):"
+        ],
+        [
+          267,
+          "class OnlineController(nn.Module):"
+        ],
+        [
+          270,
+          "def __init__(self, observation, actor):"
+        ],
+        [
+          275,
+          "def forward(self, wrist, rotation, hand, q, qd, previous_wrist, previous_rotation, previous_hand, previous_q,"
+        ],
+        [
+          286,
+          "class CurrentOnlineController(OnlineController):"
+        ],
+        [
+          289,
+          "def forward(self, wrist, rotation, hand, q, qd, previous_command):"
+        ]
+      ],
+      "sha256": "5ea4bfe4c8d0653bef15809a30c48539ae62b710cccd3db6e637d747da9d281e"
+    },
+    "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_gravity_20000_20261125/checkout/source/dexgym/tasks/direct/wholebody_s0_1/finger_reward.py": {
+      "lines": [
+        [
+          18,
+          "def thumb_ip_indices(model):"
+        ],
+        [
+          22,
+          "def bilateral_tip_vectors(pose):"
+        ],
+        [
+          28,
+          "def thumb_tip_vectors(pose):"
+        ],
+        [
+          33,
+          "def bilateral_opposition_gate(goal):"
+        ],
+        [
+          39,
+          "def opposing_fingertip_cost(measured, previous, goal, old_goal, dt):"
+        ],
+        [
+          56,
+          "class FingerRewardConfig:"
+        ],
+        [
+          65,
+          "def __post_init__(self):"
+        ],
+        [
+          80,
+          "def to_dict(self):"
+        ],
+        [
+          99,
+          "def add_finger_reward_arguments(parser):"
+        ],
+        [
+          119,
+          "def finger_reward_config(args):"
+        ]
+      ],
+      "sha256": "e03a51e68a8660c26f270c5c0cbeb83e516a04799412073e3d6e62bc9bfa733f"
+    },
+    "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_gravity_20000_20261125/checkout/source/dexgym/tasks/direct/wholebody_s0_1/kinematics.py": {
+      "lines": [
+        [
+          21,
+          "def finger_anchor_ids(model, *, proximal=False):"
+        ],
+        [
+          27,
+          "class Pose(NamedTuple):"
+        ],
+        [
+          35,
+          "class Geometry(NamedTuple):"
+        ],
+        [
+          42,
+          "def relative_pose(wrist, rotation):"
+        ],
+        [
+          47,
+          "def make_pose(wrist, rotation, hand):"
+        ],
+        [
+          51,
+          "class RightWristKinematics(nn.Module):"
+        ],
+        [
+          54,
+          "def __init__(self, model, names, physical_wrist=False, *, side=\"R\"):"
+        ],
+        [
+          78,
+          "def forward(self, q):"
+        ],
+        [
+          90,
+          "class LinkLevel(nn.Module):"
+        ],
+        [
+          91,
+          "def __init__(self, buffers):"
+        ],
+        [
+          96,
+          "def forward(self, q, positions, rotations):"
+        ],
+        [
+          104,
+          "class RobotKinematics(nn.Module):"
+        ],
+        [
+          105,
+          "def __init__(self, model, names, physical_wrist=False, *, proximal=False):"
+        ],
+        [
+          134,
+          "def body_frames(self, q):"
+        ],
+        [
+          141,
+          "def wrist_jacobian(self, q):"
+        ],
+        [
+          154,
+          "def forward(self, q):"
+        ]
+      ],
+      "sha256": "6822bfc2a1ede30db7db8ca8a18cbcebb643c44835fe2cfa359c8a48211bbb3f"
+    },
+    "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_gravity_20000_20261125/checkout/source/dexgym/tasks/direct/wholebody_s0_1/prepare.py": {
+      "lines": [
+        [
+          20,
+          "def reset_depths(model, q):"
+        ],
+        [
+          30,
+          "def prepare(args):"
+        ],
+        [
+          106,
+          "def main():"
+        ]
+      ],
+      "sha256": "1730defdd76389eb698352e94b406b5fc435250fa5a75d190c6569eccf078941"
+    },
+    "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_gravity_20000_20261125/checkout/source/dexgym/tasks/direct/wholebody_s0_1/targets.py": {
+      "lines": [
+        [
+          15,
+          "def joint_names(model):"
+        ],
+        [
+          21,
+          "def actuator_ids(model, names):"
+        ],
+        [
+          25,
+          "def command_bounds(model, names):"
+        ],
+        [
+          31,
+          "def recorded_home(model, arm_path, hand_path):"
+        ],
+        [
+          59,
+          "class TargetMapper:"
+        ],
+        [
+          62,
+          "def __init__(self, model, *, physical_wrist=False):"
+        ],
+        [
+          69,
+          "def from_clip(self, clip, manus_orders):"
+        ],
+        [
+          78,
+          "def from_frame(self, tcp_pose_xyzw, left_manus_pose, right_manus_pose, manus_orders):"
+        ],
+        [
+          87,
+          "def native_state(model, q, qd=None):"
+        ]
+      ],
+      "sha256": "a61b70e4fd87f0b7e98c15956ff8dd141c3a3f42b664b323d13b7cddd70c84e1"
+    },
+    "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_gravity_20000_20261125/checkout/source/dexgym/tasks/direct/wholebody_s0_2/hand_shape.py": {
+      "lines": [
+        [
+          7,
+          "def adjacent_finger_closure(actual, goal):"
+        ],
+        [
+          9,
+          "def vectors(p):"
+        ],
+        [
+          21,
+          "def shape_components(actual, goal):"
+        ],
+        [
+          44,
+          "def shape_cost(actual, goal):"
+        ],
+        [
+          47,
+          "def robust(value):"
+        ],
+        [
+          63,
+          "def vary_hand_observation(history, width, generator):"
+        ],
+        [
+          77,
+          "class HandShapeAnchor:"
+        ],
+        [
+          80,
+          "def __init__(self, env, teacher, augment):"
+        ],
+        [
+          85,
+          "def __call__(self, actor):"
+        ]
+      ],
+      "sha256": "71afd3748cf1f0f2fa47aebfc6340745e184d65b2a3ceeaaa45b68c48132c5b4"
+    },
+    "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_gravity_20000_20261125/checkout/source/dexgym/tasks/direct/wholebody_s0_2/interface.py": {
+      "lines": [
+        [
+          20,
+          "def hand_increment(action):"
+        ],
+        [
+          25,
+          "def action_contract():"
+        ],
+        [
+          29,
+          "def check_action_contract(archive):"
+        ],
+        [
+          50,
+          "def frame_features(version):"
+        ],
+        [
+          58,
+          "def local(pose):"
+        ],
+        [
+          62,
+          "def world(pose):"
+        ],
+        [
+          66,
+          "def rotation6(rotation):"
+        ],
+        [
+          70,
+          "def rotation_from_columns(columns):"
+        ],
+        [
+          75,
+          "def observation_wrist(frame):"
+        ],
+        [
+          79,
+          "def quiet_residual_weight(current, previous):"
+        ],
+        [
+          94,
+          "def below(value, low, high):"
+        ],
+        [
+          102,
+          "def joint_clearance(position, lower, upper):"
+        ],
+        [
+          106,
+          "def quiet_arm_speed_weight(frame, arm_index):"
+        ],
+        [
+          113,
+          "def quiet_goal(goal, previous):"
+        ],
+        [
+          119,
+          "def anchor_offset(geometry, anchor):"
+        ],
+        [
+          128,
+          "def next_anchor(geometry, goal, previous, anchor):"
+        ],
+        [
+          138,
+          "class Interface(nn.Module):"
+        ],
+        [
+          139,
+          "def __init__(self, fk, command, arm_margin_deg=5., *, version=VERSION, residual_bound_deg=None,"
+        ],
+        [
+          170,
+          "def desired(self, action, ref, previous_command):"
+        ],
+        [
+          182,
+          "def normalized(self, action, ref, previous_command):"
+        ],
+        [
+          185,
+          "def frame(self, state, previous_command, goal, ref, anchor=None):"
+        ],
+        [
+          216,
+          "class Actor(nn.Module):"
+        ],
+        [
+          217,
+          "def __init__(self, command, *, version=VERSION, hand_prior=None, hand_correction_deg=None,"
+        ],
+        [
+          258,
+          "def forward(self, history):"
+        ],
+        [
+          288,
+          "def robust(value):"
+        ],
+        [
+          292,
+          "def precision_reward(world_cost, wrist_cost, motion_cost):"
+        ],
+        [
+          298,
+          "def dual_tip_score(local_error, world_error):"
+        ],
+        [
+          300,
+          "def score(error,radius):"
+        ],
+        [
+          308,
+          "def uncorrective_motion(displacement, previous_error):"
+        ],
+        [
+          318,
+          "def tip_pairs(points):"
+        ],
+        [
+          324,
+          "def paired_tip_errors(tips, target):"
+        ],
+        [
+          335,
+          "def pair_average(value, weight):"
+        ],
+        [
+          339,
+          "def weak_wrist_cost(pose, goal):"
+        ],
+        [
+          346,
+          "def worst_hand_tip_error_sq(pose, goal):"
+        ],
+        [
+          350,
+          "def fingertip_placement(tip, target, scale):"
+        ],
+        [
+          369,
+          "def objective(geom, old, goal, previous_goal, action, cmd, prev, prev2, anchor, actuator, *,"
+        ]
+      ],
+      "sha256": "2d78844031733ecf811c25931e254a949738faedf6cab68f301aefa8b348ac44"
+    },
+    "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_gravity_20000_20261125/checkout/source/dexgym/tasks/direct/wholebody_s0_2/task.py": {
+      "lines": [
+        [
+          16,
+          "def pose_rows(pose, rows):"
+        ],
+        [
+          20,
+          "def no_legacy_reward(state, *args, **kwargs):"
+        ],
+        [
+          25,
+          "class TrackingEnv(DirectEnv):"
+        ],
+        [
+          26,
+          "def __init__(self, backend, bank, model, seed, arm_margin_deg=5., *, evaluation=False, version=VERSION,"
+        ],
+        [
+          61,
+          "def reset(self, ids=None, *, frames=None, home=None, exact=False):"
+        ],
+        [
+          77,
+          "def reference(self, frame, bridge, lag, bias):"
+        ],
+        [
+          89,
+          "def observation(self, ids=None, *, current_only=False):"
+        ],
+        [
+          98,
+          "def tracking_failure(self, measured, goal, wrist_dist, wrist_rot):"
+        ],
+        [
+          102,
+          "def step(self, action):"
+        ],
+        [
+          160,
+          "class Env(ImaginationEnv):"
+        ],
+        [
+          161,
+          "def __init__(self, backend, bank, model, seed, arm_margin_deg=5., *, version=VERSION,"
+        ],
+        [
+          201,
+          "def reset(self, env_ids=None):"
+        ],
+        [
+          207,
+          "class Task(ImaginationTask):"
+        ],
+        [
+          211,
+          "def make_actor(self):"
+        ],
+        [
+          219,
+          "def memory(self):"
+        ],
+        [
+          227,
+          "def encode_memory(self, m):"
+        ],
+        [
+          233,
+          "def decode_memory(self, encoded):"
+        ],
+        [
+          241,
+          "def ref(self, m):"
+        ],
+        [
+          244,
+          "def policy_observation(self, x, m, aux):"
+        ],
+        [
+          248,
+          "def context(self, x, m, aux, sim):"
+        ],
+        [
+          253,
+          "def collection_action(self, action, memory):"
+        ],
+        [
+          267,
+          "def control_target(self, action, m, bias=None):"
+        ],
+        [
+          272,
+          "def reward(self, x, m, action, command, contact, torque, soft=False):"
+        ],
+        [
+          303,
+          "def advance_memory(self, x, memory, action, command, geometry, next_goal, soft=True):"
+        ]
+      ],
+      "sha256": "aced5774761f220e022e4d276dba4d1c06d1fc163288f78e16b47b5e259ed633"
+    },
+    "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_gravity_20000_20261125/checkout/source/dexgym/tasks/direct/wholebody_s0_2/training_arm_servo.py": {
+      "lines": [
+        [
+          10,
+          "class TrainingArmServo:"
+        ],
+        [
+          11,
+          "def __init__(self, model, names, observe):"
+        ],
+        [
+          41,
+          "def mass_and_load(self, q):"
+        ],
+        [
+          58,
+          "def axes(self, p, r):"
+        ],
+        [
+          64,
+          "def response(self,q,qd,previous):"
+        ],
+        [
+          82,
+          "def command(self,q,qd,previous,reference,hand_q,target_world):"
+        ]
+      ],
+      "sha256": "65310a84f4d4e613ae0b437d1c39e44f7fa7a945222c6b5911ae903ab543f85b"
+    },
+    "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_gravity_20000_20261125/checkout/source/dexgym/tasks/direct/wholebody_s0_2/training_hand_servo.py": {
+      "lines": [
+        [
+          10,
+          "class TrainingHandServo:"
+        ],
+        [
+          11,
+          "def __init__(self, model, names, observation, command):"
+        ],
+        [
+          38,
+          "def load(self, q):"
+        ],
+        [
+          49,
+          "def increment(self, target, step, q, previous):"
+        ]
+      ],
+      "sha256": "a86d9b49bf38a331e87f67d217618a3e049c63c4d64f17035e50484475806da1"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/marvin54_s0/env.py": {
+      "lines": [
+        [
+          12,
+          "class HandCentricEnv:"
+        ],
+        [
+          13,
+          "def __init__(self, backend, library, *, reset_noise=True, target_memory=0.0, direct_tip_feedback=False,"
+        ],
+        [
+          39,
+          "def state(self):"
+        ],
+        [
+          42,
+          "def observation(self):"
+        ],
+        [
+          45,
+          "def reset(self, env_ids=None, frame=None, *, q=None, qd=None):"
+        ],
+        [
+          72,
+          "def step(self, action, *, target_override=None):"
+        ]
+      ],
+      "sha256": "0f554e0764d82eae85ca8655e01196d8fbee1ef8af1bebb4549ba582f111d07d"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/marvin54_s0/newton_physics.py": {
+      "lines": [
+        [
+          21,
+          "def aligned_simulation_cfg(model):"
+        ],
+        [
+          33,
+          "class NewtonPhysics(Physics):"
+        ],
+        [
+          36,
+          "def __init__(self, cfg, model, names, num_envs):"
+        ],
+        [
+          60,
+          "def restore_servo_parameters(self):"
+        ],
+        [
+          66,
+          "def align_position_servos(self, names):"
+        ],
+        [
+          102,
+          "def align_gravity_compensation(self):"
+        ],
+        [
+          118,
+          "def simulation_stream(self):"
+        ],
+        [
+          125,
+          "def state(self):"
+        ],
+        [
+          128,
+          "def set_targets(self, target):"
+        ],
+        [
+          131,
+          "def reset(self, ids, q, qd):"
+        ],
+        [
+          142,
+          "def contact_depth(self):"
+        ],
+        [
+          152,
+          "def interval(self, target, task):"
+        ],
+        [
+          183,
+          "def contract(self, env):"
+        ]
+      ],
+      "sha256": "b9093511aeeccfb9b6e337d9e2e7738305dc5e95a184f9623ec7190413eca129"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/marvin54_s0/physics.py": {
+      "lines": [
+        [
+          21,
+          "class Physics:"
+        ],
+        [
+          22,
+          "def __init__(self, model, names, num_envs, device):"
+        ],
+        [
+          31,
+          "def flags(task, state, depth):"
+        ],
+        [
+          38,
+          "class CpuPhysics(Physics):"
+        ],
+        [
+          39,
+          "def __init__(self, model, names, num_envs):"
+        ],
+        [
+          43,
+          "def state(self):"
+        ],
+        [
+          46,
+          "def reset(self, ids, q, qd):"
+        ],
+        [
+          54,
+          "def interval(self, target, task):"
+        ],
+        [
+          89,
+          "def open_physics(backend, model, names, num_envs, *, graph=True):"
+        ]
+      ],
+      "sha256": "04abe9a424e72242da9dffbaa96fab87ae880ad0c4f6d84aa336a54d900d7a0f"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/marvin54_s0/task.py": {
+      "lines": [
+        [
+          29,
+          "class HandGoalLibrary(MotionLibrary):"
+        ],
+        [
+          32,
+          "def reference_velocities(self, frame):"
+        ],
+        [
+          45,
+          "def prepare_velocities(self):"
+        ],
+        [
+          56,
+          "class VelocityIntegratedJointCodec(JointCodec):"
+        ],
+        [
+          60,
+          "def prediction_components(state_delta):"
+        ],
+        [
+          64,
+          "def integrate(x, velocity_delta):"
+        ],
+        [
+          70,
+          "def cross_tip_vectors(tips):"
+        ],
+        [
+          74,
+          "class HandGeometry(TrackingGeometry):"
+        ],
+        [
+          75,
+          "def __init__(self, model, library, device):"
+        ],
+        [
+          101,
+          "def hand_pose(self, q, *, with_clearance=False, with_cross_clearance=False):"
+        ],
+        [
+          120,
+          "def joint_frames(self, kin):"
+        ],
+        [
+          127,
+          "def tip_error_gradient(self, q, desired_tip, tip):"
+        ],
+        [
+          140,
+          "class HandCentricTask(TrackingTask):"
+        ],
+        [
+          146,
+          "def __init__(self, env, model, library, target_memory=0.0, direct_tip_feedback=False,"
+        ],
+        [
+          204,
+          "def make_actor(self):"
+        ],
+        [
+          209,
+          "def goal_features(self, frame, pose=None):"
+        ],
+        [
+          237,
+          "def observation_from_history(self, history, memory):"
+        ],
+        [
+          248,
+          "def policy_observation(self, x, m, aux):"
+        ],
+        [
+          257,
+          "def context(self, x, m, aux, sim):"
+        ],
+        [
+          267,
+          "def encode_memory(m):"
+        ],
+        [
+          272,
+          "def decode_memory(encoded):"
+        ],
+        [
+          276,
+          "def advance_memory(self, x1, m, a, target, tip, next_goal, soft=True):"
+        ],
+        [
+          281,
+          "def control_target(self, action, m, bias):"
+        ],
+        [
+          285,
+          "def tracking_error(self, pose, memory):"
+        ],
+        [
+          289,
+          "def termination(self, x1, m):"
+        ],
+        [
+          295,
+          "def errors(self, x, m, pose):"
+        ],
+        [
+          315,
+          "def reward(self, x1, m, a, target, contact, torque, soft=False, pose=None):"
+        ],
+        [
+          354,
+          "def reward_pose(self, q):"
+        ],
+        [
+          358,
+          "def world_model_pose_loss(self, predicted, measured):"
+        ],
+        [
+          366,
+          "def rotation_error(self, x, m):"
+        ]
+      ],
+      "sha256": "5c8a44bcaac48f1c12752072f59e3f178cc9fb12ff0b5f06db17d5f9d24dd0bd"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/marvin54_s0/warp_physics.py": {
+      "lines": [
+        [
+          13,
+          "def contact_depth(count: wp.array(dtype=wp.int32), world: wp.array(dtype=wp.int32),"
+        ],
+        [
+          22,
+          "class WarpPhysics(Physics):"
+        ],
+        [
+          23,
+          "def __init__(self, model, names, num_envs, device=\"cuda:0\", *, graph=True):"
+        ],
+        [
+          47,
+          "def simulation_stream(self):"
+        ],
+        [
+          54,
+          "def substep(self):"
+        ],
+        [
+          64,
+          "def state(self):"
+        ],
+        [
+          67,
+          "def reset(self, ids, q, qd):"
+        ],
+        [
+          75,
+          "def interval(self, target, task):"
+        ]
+      ],
+      "sha256": "d3f49d674d7851609706781c3a536ff4e3845541af681fabd830173abb916485"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/wholebody_s0/bag.py": {
+      "lines": [
+        [
+          41,
+          "def digest(path):"
+        ],
+        [
+          46,
+          "def load_yaml(path):"
+        ],
+        [
+          50,
+          "def select_episodes(root, day, timezone):"
+        ],
+        [
+          66,
+          "def stats(values):"
+        ],
+        [
+          77,
+          "def timing(stamps_ns):"
+        ],
+        [
+          96,
+          "def stamp_ns(stamp):"
+        ],
+        [
+          100,
+          "def xyz(point):"
+        ],
+        [
+          104,
+          "def quaternion(rotation):"
+        ],
+        [
+          108,
+          "def pose(message):"
+        ],
+        [
+          112,
+          "def hand_topology(nodes):"
+        ],
+        [
+          116,
+          "def manus_keypoint_order(topology):"
+        ],
+        [
+          138,
+          "class Track:"
+        ],
+        [
+          143,
+          "def header(self):"
+        ],
+        [
+          147,
+          "def valid(self):"
+        ],
+        [
+          151,
+          "class Samples:"
+        ],
+        [
+          154,
+          "def __init__(self, key, expected_frame):"
+        ],
+        [
+          164,
+          "def add(self, msg, log_ns, publish_ns, sequence):"
+        ],
+        [
+          246,
+          "def joints(self, msg, data):"
+        ],
+        [
+          280,
+          "def arrays(self):"
+        ],
+        [
+          293,
+          "def vector_checks(key, arrays, topology):"
+        ],
+        [
+          336,
+          "def read_stream(folder, stream_id, spec, key, expected_frame):"
+        ],
+        [
+          483,
+          "def read_episode(folder, manifest, expected_frame):"
+        ]
+      ],
+      "sha256": "22bf183b81fb0a060ec23008ef4bddd41f459ef0a075e7abba225cb4f3996dea"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/wholebody_s0/domain.py": {
+      "lines": [
+        [
+          13,
+          "class Domain:"
+        ],
+        [
+          14,
+          "def __init__(self, num_envs, device, seed, robust, arm, *, transfer=False):"
+        ],
+        [
+          33,
+          "def uniform(self, shape):"
+        ],
+        [
+          36,
+          "def normal(self, shape):"
+        ],
+        [
+          39,
+          "def reset_noise(self, q, v):"
+        ],
+        [
+          45,
+          "def velocity_impulse(self, shape):"
+        ],
+        [
+          48,
+          "def imagine_push(self, x):"
+        ],
+        [
+          55,
+          "def apply_newton_domain(backend, task):"
+        ]
+      ],
+      "sha256": "00bbac99180bd31435bc33b658f214c75b74e1746ec724f9026d729e9aef0146"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/wholebody_s0/evaluate_residual.py": {
+      "lines": [
+        [
+          26,
+          "def angles_deg(a, b):"
+        ],
+        [
+          32,
+          "def lag_ms(reference, measured):"
+        ],
+        [
+          51,
+          "def load_actor(checkpoint, task, *, compare_earlier_library=False):"
+        ],
+        [
+          77,
+          "def checkpoint_geometry(meta):"
+        ],
+        [
+          96,
+          "def task_for_checkpoint(checkpoint, env, model, bank, domain):"
+        ],
+        [
+          102,
+          "class NativeEvaluator:"
+        ],
+        [
+          103,
+          "def __init__(self, bank, reference_model, model_path, target_poses, human_tips, checkpoint, output, seed, robust,"
+        ],
+        [
+          146,
+          "def configure(self, domain):"
+        ],
+        [
+          162,
+          "def state(self):"
+        ],
+        [
+          166,
+          "def read_sites(self):"
+        ],
+        [
+          180,
+          "def deepest_geoms(self):"
+        ],
+        [
+          185,
+          "def step_interval(self, target, count):"
+        ],
+        [
+          216,
+          "def run(self, index):"
+        ],
+        [
+          352,
+          "def worker_init(args):"
+        ],
+        [
+          357,
+          "def worker_run(i):"
+        ],
+        [
+          361,
+          "def stats(items):"
+        ],
+        [
+          382,
+          "def eval_case(args, bank, reference_model, target_poses, human_tips, checkpoint, robust, folder, model_offset):"
+        ],
+        [
+          426,
+          "def main():"
+        ]
+      ],
+      "sha256": "a1656f07b0dbd2397e977bfdbdb0b96882c317ea2baa2077ef05dd7589549de1"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/wholebody_s0/intent.py": {
+      "lines": [
+        [
+          19,
+          "class IntentTargets(NamedTuple):"
+        ],
+        [
+          25,
+          "def unit(vectors):"
+        ],
+        [
+          32,
+          "def palm_basis(wrist, knuckles):"
+        ],
+        [
+          39,
+          "class HumanIntentGeometry:"
+        ],
+        [
+          42,
+          "def __init__(self, model):"
+        ],
+        [
+          69,
+          "def targets(self, clip, orders):"
+        ],
+        [
+          84,
+          "def world_tips(self, targets):"
+        ],
+        [
+          90,
+          "def source_orders(library, entry):"
+        ]
+      ],
+      "sha256": "9c2186696a8b672a5f9d394b78cb30d9cf076a017a7649050dffc7cb7bb43b2f"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/wholebody_s0/library.py": {
+      "lines": [
+        [
+          15,
+          "class MotionLibrary:"
+        ],
+        [
+          20,
+          "def open(cls, path):"
+        ],
+        [
+          30,
+          "def entries(self, split):"
+        ],
+        [
+          35,
+          "def load_clip(self, entry):"
+        ]
+      ],
+      "sha256": "35f9c4991dfd980b7adc42799f55c6aae238184fba49d33a5c1d0f5953a46687"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/wholebody_s0/pipeline.py": {
+      "lines": [
+        [
+          32,
+          "def read_json(path):"
+        ],
+        [
+          36,
+          "def read_npz(path):"
+        ],
+        [
+          41,
+          "def velocity(q):"
+        ],
+        [
+          45,
+          "def clip_ranges(mask):"
+        ],
+        [
+          49,
+          "def fill_display(q, home):"
+        ],
+        [
+          57,
+          "def reference_one(job):"
+        ],
+        [
+          154,
+          "def split_episodes(results):"
+        ],
+        [
+          173,
+          "def export_library(output, results, robot, identity):"
+        ],
+        [
+          237,
+          "def build(args):"
+        ],
+        [
+          270,
+          "def viewer(args):"
+        ],
+        [
+          276,
+          "def verify(args):"
+        ]
+      ],
+      "sha256": "9e7b763ae4ddd30b64b2dc8a0d38db78fef447242fadf42f8bd507802f91db06"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/wholebody_s0/ppo_task.py": {
+      "lines": [
+        [
+          22,
+          "class WholebodyS0PPO(ResidualTask):"
+        ],
+        [
+          27,
+          "class TanhGaussian(GaussianDistribution):"
+        ],
+        [
+          28,
+          "def sample(self):"
+        ],
+        [
+          31,
+          "def deterministic_output(self, mlp_output):"
+        ],
+        [
+          34,
+          "def as_deterministic_output_module(self):"
+        ],
+        [
+          37,
+          "def log_prob(self, outputs):"
+        ],
+        [
+          42,
+          "class HandTanhGaussian(TanhGaussian):"
+        ],
+        [
+          45,
+          "def __init__(self, hand):"
+        ],
+        [
+          49,
+          "def sample(self):"
+        ],
+        [
+          53,
+          "def log_prob(self, outputs):"
+        ],
+        [
+          59,
+          "def learn(args, env):"
+        ],
+        [
+          122,
+          "def checkpoint(name, step):"
+        ],
+        [
+          174,
+          "def main():"
+        ]
+      ],
+      "sha256": "4ed2300503edfbd4eb7a872c54a50bf6a8fa6c68135a4ec12d93fcd802b4870e"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/wholebody_s0/residual_env.py": {
+      "lines": [
+        [
+          14,
+          "class ResidualEnv:"
+        ],
+        [
+          15,
+          "def __init__(self, backend, bank, task_class, *, robust, seed, transfer_model=None, reward_profile=\"v1\"):"
+        ],
+        [
+          34,
+          "def state(self):"
+        ],
+        [
+          37,
+          "def observation(self):"
+        ],
+        [
+          45,
+          "def reset(self, env_ids=None, frame=None, *, exact=False):"
+        ],
+        [
+          64,
+          "def apply_impulse(self, x, done):"
+        ],
+        [
+          79,
+          "def step(self, action):"
+        ],
+        [
+          144,
+          "def contract(self):"
+        ]
+      ],
+      "sha256": "177c8d845c731ee96cef52efd5596fe77f9918decaa12ca2db1e9dfcd7cfb764"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/wholebody_s0/retarget.py": {
+      "lines": [
+        [
+          18,
+          "def arm_options(parameters, robot):"
+        ],
+        [
+          63,
+          "def run_arm_tool(aligned, config, robot, tool, kine_config):"
+        ],
+        [
+          107,
+          "def run_hand_sdk(parsed, aligned, streams, config, library_path):"
+        ]
+      ],
+      "sha256": "8e5691b9d09f1e2ecd5035b12bba5cc0cb584c05306c47720ae671da1fd37f8a"
+    },
+    "/home/ubuntu/dexgym/source/dexgym/tasks/direct/wholebody_s0/sync.py": {
+      "lines": [
+        [
+          15,
+          "def runs(mask):"
+        ],
+        [
+          20,
+          "def slerp(a, b, fraction):"
+        ],
+        [
+          33,
+          "def sample_indices(stamps, valid, query, max_gap, omit=None):"
+        ],
+        [
+          56,
+          "def interpolate(values, stamps, query, indexes, *, poses=False):"
+        ],
+        [
+          73,
+          "def causal_index(track, query, max_age):"
+        ],
+        [
+          83,
+          "def validate_calibration(tracks, configuration):"
+        ],
+        [
+          115,
+          "def align_episode(tracks, start_ns, stop_ns):"
+        ]
+      ],
+      "sha256": "a1316b4b5f8fa6141011349689e025c43bda26a0031ccf1f73272c30391406d9"
+    },
+    "/tmp/dexgym-s04-main.Wwwqff99/source/dexgym/tasks/direct/wholebody_s04/aligned_physics.py": {
+      "lines": [
+        [
+          12,
+          "def apply_bilateral_servo("
+        ],
+        [
+          37,
+          "class AlignedPhysics(WarpPhysics):"
+        ],
+        [
+          40,
+          "def __init__(self, model, names, num_envs, profile, *, graph=True):"
+        ],
+        [
+          77,
+          "def substep(self):"
+        ],
+        [
+          83,
+          "def reset(self, ids, q, qd):"
+        ],
+        [
+          89,
+          "def interval(self, target, task):"
+        ]
+      ],
+      "sha256": "633b7cd4c3a0b0c5da49fe7e472ab363146e1901ff5a61041b398822bee1e0cb"
+    },
+    "/tmp/dexgym-s04-main.Wwwqff99/source/dexgym/tasks/direct/wholebody_s04/aligned_task.py": {
+      "lines": [
+        [
+          10,
+          "class ServoTask(Task):"
+        ],
+        [
+          13,
+          "def __init__(self, env, backend, profile):"
+        ],
+        [
+          21,
+          "def memory(self):"
+        ],
+        [
+          26,
+          "def encode_memory(self, memory):"
+        ],
+        [
+          29,
+          "def decode_memory(self, encoded):"
+        ],
+        [
+          34,
+          "def applied_target(self, previous, command):"
+        ],
+        [
+          39,
+          "def control_target(self, action, memory, bias=None):"
+        ],
+        [
+          43,
+          "def advance_memory(self, x, memory, action, command, geometry, next_goal, soft=True):"
+        ],
+        [
+          49,
+          "class ServoEnv(Env):"
+        ],
+        [
+          50,
+          "def __init__(self, backend, bank, model, profile, seed, *, stationary_reset_fraction):"
+        ],
+        [
+          54,
+          "def step(self, action):"
+        ]
+      ],
+      "sha256": "b5c3579db989036250f06e6128c44b161635d3487f21d82bda62a571ed1a6bc7"
+    },
+    "/tmp/dexgym-s04-main.Wwwqff99/source/dexgym/tasks/direct/wholebody_s04/hand_points.py": {
+      "lines": [
+        [
+          13,
+          "def pad_legacy_observation(value, history=5):"
+        ],
+        [
+          20,
+          "def non_tip_local(pose, proximal):"
+        ],
+        [
+          25,
+          "def transform(pose, points):"
+        ],
+        [
+          29,
+          "def articulated_points(pose, proximal):"
+        ],
+        [
+          33,
+          "def arm_landmark_cost(measured, goal, proximal):"
+        ],
+        [
+          41,
+          "def worst_rotation_deg(measured, goal):"
+        ]
+      ],
+      "sha256": "6c55f5c1aad4633fcb1b76ccda5118b906f0b8f20ee1535147476dc336c31cd0"
+    },
+    "/tmp/dexgym-s04-main.Wwwqff99/source/dexgym/tasks/direct/wholebody_s04/sweep.py": {
+      "lines": [
+        [
+          12,
+          "class ScanBank(TaskBank):"
+        ],
+        [
+          15,
+          "def advance_frame(self,frame,steps,recorded=None,*,max_steps=None):"
+        ],
+        [
+          21,
+          "def write(path,data):"
+        ],
+        [
+          27,
+          "def measure(actual, goal, depth):"
+        ],
+        [
+          37,
+          "def windows(clips,length=208,overlap=26):"
+        ],
+        [
+          43,
+          "def sweep(bank,model,sim,actor_weight,path,split,*,demo=False,collect_anchor=True):"
+        ]
+      ],
+      "sha256": "7e882dbb85f5577a741ecb1050a4cfb91e9c9f9b8409bf7356ea93750c6262f1"
+    },
+    "/tmp/dexgym-s04-main.Wwwqff99/source/dexgym/tasks/direct/wholebody_s04/task.py": {
+      "lines": [
+        [
+          17,
+          "class ArmCommand(nn.Module):"
+        ],
+        [
+          20,
+          "def __init__(self, model, metadata, command):"
+        ],
+        [
+          36,
+          "def bounds(self, arm_ref):"
+        ],
+        [
+          40,
+          "def coupled_cost(self, paired):"
+        ],
+        [
+          44,
+          "def check_bank(self, references):"
+        ],
+        [
+          52,
+          "def forward(self, action, ref):"
+        ],
+        [
+          76,
+          "class Observation(nn.Module):"
+        ],
+        [
+          83,
+          "def __init__(self, fk, proximal):"
+        ],
+        [
+          88,
+          "def frame(self, state, previous_command, goal, ref):"
+        ],
+        [
+          102,
+          "def world_errors(measured, goal):"
+        ],
+        [
+          106,
+          "def tracking_value(error2):"
+        ],
+        [
+          112,
+          "def arm_recovery_cost(actual, goal, interaction_gate=False):"
+        ],
+        [
+          137,
+          "def interhand_clearance_cost(actual, goal):"
+        ],
+        [
+          139,
+          "def gap(pose):"
+        ],
+        [
+          150,
+          "def residual_rate(command, previous, reference, previous_reference, arm):"
+        ],
+        [
+          156,
+          "def smoothness_cost(rate, error2, goal, previous_goal, quiet_scale=1.):"
+        ],
+        [
+          168,
+          "def joint_limit_risk(state, command):"
+        ],
+        [
+          176,
+          "def fingertip_tail_cost(error_sq):"
+        ],
+        [
+          183,
+          "def wrist_pose_cost(actual, goal):"
+        ],
+        [
+          192,
+          "class TrackingEnv(DirectEnv):"
+        ],
+        [
+          193,
+          "def __init__(self, backend, bank, model, seed, *, evaluation=False,"
+        ],
+        [
+          221,
+          "def set_sampling_iteration(self, iteration):"
+        ],
+        [
+          225,
+          "def observation(self, ids=None, *, current_only=False):"
+        ],
+        [
+          235,
+          "def command_targets(self, action):"
+        ],
+        [
+          239,
+          "def tracking_failure(self, measured, goal, wrist_dist, wrist_rot):"
+        ],
+        [
+          242,
+          "def tracking_objective(self, error2, actual, goal, stationary=None):"
+        ],
+        [
+          257,
+          "def correction_rate(self, command, previous, frame, previous_frame):"
+        ],
+        [
+          261,
+          "def tracking_reward(self, state, geometry, previous, goal, previous_goal, command, previous_command,"
+        ],
+        [
+          274,
+          "def step(self, action):"
+        ],
+        [
+          303,
+          "class Task(ImaginationTask):"
+        ],
+        [
+          309,
+          "def make_actor(self):"
+        ],
+        [
+          317,
+          "def policy_observation(self, x, memory, aux):"
+        ],
+        [
+          322,
+          "def control_target(self, action, memory, bias=None):"
+        ],
+        [
+          326,
+          "def collection_action(self, action, memory):"
+        ],
+        [
+          329,
+          "def reward(self, x, memory, action, command, contact, torque, soft=False):"
+        ],
+        [
+          350,
+          "class Env(ImaginationEnv):"
+        ],
+        [
+          351,
+          "def __init__(self, backend, bank, model, seed, *, evaluation=False, stationary_reset_fraction=0.):"
+        ]
+      ],
+      "sha256": "35220b940bb2453088eb30fc6856a4787e712904aaf5f3911ea14b88d581ae9d"
+    },
+    "/tmp/dexgym-s04-main.Wwwqff99/source/dexgym/tasks/direct/wholebody_s04/train_aligned.py": {
+      "lines": [
+        [
+          30,
+          "def write(path, payload):"
+        ],
+        [
+          36,
+          "def now():"
+        ],
+        [
+          40,
+          "class Progress:"
+        ],
+        [
+          41,
+          "def __init__(self, folder, objective):"
+        ],
+        [
+          49,
+          "def set(self, **items):"
+        ],
+        [
+          54,
+          "class WristSamplingBank(TaskBank):"
+        ],
+        [
+          55,
+          "def __init__(self, path, fraction, pool_path):"
+        ],
+        [
+          70,
+          "def sample(self, count, generator):"
+        ],
+        [
+          84,
+          "def sweep_stats(path, split):"
+        ],
+        [
+          103,
+          "def initial_reset(phy, starts):"
+        ],
+        [
+          114,
+          "def suites(bank, backend, model, weights, entries):"
+        ],
+        [
+          192,
+          "class ReviewTrainer(Learner):"
+        ],
+        [
+          193,
+          "def __init__(self, task, cfg, folder, progress, profile, model, evaluation_envs, bank_path, hold_cases):"
+        ],
+        [
+          207,
+          "def policy_update(self):"
+        ],
+        [
+          215,
+          "def save_actor(self, path, next_iteration=None):"
+        ],
+        [
+          221,
+          "def assess(self, iteration, actor_path):"
+        ],
+        [
+          261,
+          "def adjust(self, current):"
+        ],
+        [
+          320,
+          "class HoldDemonstrations:"
+        ],
+        [
+          323,
+          "def __init__(self, path, device, weight):"
+        ],
+        [
+          332,
+          "def __call__(self, actor):"
+        ],
+        [
+          341,
+          "class HoldGeometryLoss:"
+        ],
+        [
+          344,
+          "def __init__(self, task, weight):"
+        ],
+        [
+          349,
+          "def __call__(self, actor, obs, state, memory):"
+        ],
+        [
+          375,
+          "class EasyStateRetention:"
+        ],
+        [
+          378,
+          "def __init__(self, task, actor_path):"
+        ],
+        [
+          384,
+          "def __call__(self, actor, obs, state, memory):"
+        ],
+        [
+          397,
+          "def verify_transition(env, backend):"
+        ],
+        [
+          419,
+          "def main():"
+        ]
+      ],
+      "sha256": "d9634e9a420d68ec961942d0abfae1699423b83562a85c6b40505e114af210fb"
+    }
+  },
+  "section": "code"
+}

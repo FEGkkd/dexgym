@@ -1,0 +1,237 @@
+{
+  "observed": "2026-11-25T23:17:16.067154+08:00",
+  "result": {
+    "artifacts": {
+      "/home/ubuntu/dexgym/data/processed/wholebody-s04/hardware_servo_calibration_20261125/servo_profile.json": "c6308ebd8e6dc72167cea8f6964b02c5a6c620265b6617210efa33ac824bdaff",
+      "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_aligned_from_scratch_20261125/aligned_physics.py": "4c669aef8684b772ec87d31cde7a21839fb0fb8e91b8bf15152e0a1aa9462fb7",
+      "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_aligned_from_scratch_20261125/aligned_task.py": "81e5b4ac62a80de4de44713cfac65f70b644540e937d9dac02edec3e08e78421",
+      "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_aligned_from_scratch_20261125/backend_parity.json": "72dcc203031a5e7da5efd780327effcc19ae24b51971718bca5e91e45c0d2853",
+      "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_aligned_from_scratch_20261125/train.py": "9453394413a644bdc956a53f1927fc54ec9be73cc028d8f265585509b18cdc99",
+      "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_aligned_from_scratch_20261125/train/provenance.json": "6d0ae90db29a66b20287beec796ec27e3f18b10dd3b5d5664e84137743bbd632",
+      "/tmp/dexgym-s04-main.Wwwqff99/source/dexgym/tasks/direct/wholebody_s04/servo_profile.json": "c6308ebd8e6dc72167cea8f6964b02c5a6c620265b6617210efa33ac824bdaff"
+    },
+    "parity": {
+      "frames": 150,
+      "gpu": "NVIDIA GeForce RTX 5090",
+      "gpu_still_max_joint_deg": 0.003046264173462987,
+      "gravity": [
+        0.0,
+        0.0,
+        -9.81
+      ],
+      "max_arm_cpu_gpu_position_deg": 0.00034019924089488316,
+      "max_arm_cpu_gpu_velocity_deg_s": 0.0014489394733713196,
+      "max_effort_fraction": 0.34452328858552156,
+      "profile": {
+        "damping_scale": 1.0,
+        "delay_ms": 0,
+        "gravity_scale": 1.0,
+        "target_filter_ms": 16,
+        "velocity_feedforward": 0.0,
+        "velocity_filter_ms": 24.0
+      },
+      "source": "same native MuJoCo 2 ms servo and two held-out initial poses",
+      "substeps": 10
+    },
+    "provenance": {
+      "action_dim": 14,
+      "action_mode": "arm_ref_residual8_fixed_hand_ref_v1",
+      "backend": "MuJoCo Warp aligned to native 2ms",
+      "bank": "/home/ubuntu/dexgym/data/processed/wholebody-s04/contact_replay_filtered_6000_20261125/bank_round_2/manifest.json",
+      "bank_sha256": "42842eeeaba0d6d87950e63cae2f25d0a9485b60bd012a8a661ddea7ab89bec5",
+      "command_dim": 54,
+      "config": {
+        "action_noise": 0,
+        "actor_bootstrap_weight": 0.65,
+        "actor_lr": 4e-05,
+        "amp": false,
+        "buffer_steps": 1800,
+        "compile": false,
+        "compile_policy": false,
+        "contact_depth_weight": 0.03,
+        "contact_partial_intervals": true,
+        "contact_weight": 0.2,
+        "control_error_features": true,
+        "critic_epochs": 3,
+        "critic_minibatches": 4,
+        "failure_clip": 0.25,
+        "failure_head": true,
+        "failure_warmup_iters": 260,
+        "final_state_weight": 1.0,
+        "gamma": 0.99,
+        "holdout_fraction": 0.1,
+        "horizon": 8,
+        "imagination_start_reserve": null,
+        "isolate_wm_init": true,
+        "kinematic_loss_weight": 0.0,
+        "lam": 0.95,
+        "log_interval": 10,
+        "lr": 0.00011,
+        "lr_decay_iters": 250000,
+        "lr_final_ratio": 0.03,
+        "max_iterations": 20000,
+        "max_step_reward": 1.0,
+        "optimizer": "fused-adam",
+        "pi_batch": 384,
+        "profile_training": true,
+        "save_interval": 1000,
+        "seed": 49,
+        "utd": 0.5,
+        "warmup_steps": 66,
+        "wm_batch": 768,
+        "wm_batches": 3,
+        "wm_failure_frac": 0.25,
+        "wm_failure_horizon": 16,
+        "wm_hidden": [
+          1280,
+          1280,
+          1280
+        ],
+        "wm_only_iters": 350,
+        "wm_window": 8
+      },
+      "created_at": "2026-11-25T12:04:18.592254+00:00",
+      "envs": 64,
+      "goal_points_per_hand": 20,
+      "history_frames": 5,
+      "initialization": "random_policy_random_world_model",
+      "model_sha256": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+      "observation_version": "s04_world_hand20_history5_v1",
+      "parent_checkpoint": null,
+      "proof": {
+        "action_dim": 14,
+        "exact_sdk_command": true,
+        "filter_memory_verified": true,
+        "policy_input": 2880
+      },
+      "residual_bound_deg": 8.0,
+      "seed": 49,
+      "servo_profile": {
+        "damping_scale": 1.0,
+        "delay_ms": 0,
+        "gravity_scale": 1.0,
+        "target_filter_ms": 16,
+        "velocity_feedforward": 0.0,
+        "velocity_filter_ms": 24.0
+      },
+      "servo_profile_sha256": "c6308ebd8e6dc72167cea8f6964b02c5a6c620265b6617210efa33ac824bdaff",
+      "task_id": "wholebody-s04"
+    },
+    "reviews": [
+      {
+        "actor_sha256": "68ef312452b060a92be075d1602e031cc0e20c4657c859da6eebfcf9350f3f61",
+        "hard": {
+          "contact_frames": 1,
+          "highpass_tip_rms_mm_s": 63.58329391479492,
+          "p95_mm": 38.065223693847656,
+          "stopped": 0,
+          "windows": 19
+        },
+        "hold": {
+          "all_p95_mm": 21.18193817138672,
+          "case_10148_mm": 34.17605972290039,
+          "case_38378_mm": 38.291744232177734,
+          "cases": 50,
+          "completed": 50,
+          "contact_frames": 2,
+          "hard_p95_mm": 38.29069137573242,
+          "hit_15": 0.88,
+          "tip_speed_rms_mm_s": 0.01742955856025219
+        },
+        "iteration": 15000,
+        "test": {
+          "all_ten_hit_15": 0.9739352896914973,
+          "contact_frames": 147,
+          "frames": 33225,
+          "hard_stops": 1,
+          "invalid": 1,
+          "p50_mm": 4.1796875,
+          "p95_mm": 12.030078124999989,
+          "scored": 33224,
+          "wrist_p95_deg": 5.789066791534424,
+          "wrist_position_p95_mm": 10.605666160583496
+        },
+        "validation": {
+          "all_ten_hit_15": 0.9827956464444336,
+          "contact_frames": 94,
+          "frames": 40978,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p50_mm": 4.03125,
+          "p95_mm": 11.21875,
+          "scored": 40978,
+          "wrist_p95_deg": 4.3529953956604,
+          "wrist_position_p95_mm": 10.0307035446167
+        }
+      },
+      {
+        "actor_sha256": "c1011a52b58e3d579496f0d2e394eb0b356974e98ba2c7586bc984ea1d1e0da0",
+        "hard": {
+          "contact_frames": 1,
+          "highpass_tip_rms_mm_s": 68.45728302001953,
+          "p95_mm": 36.85658264160156,
+          "stopped": 0,
+          "windows": 19
+        },
+        "hold": {
+          "all_p95_mm": 21.933677673339844,
+          "case_10148_mm": 39.63125991821289,
+          "case_38378_mm": 35.219749450683594,
+          "cases": 50,
+          "completed": 50,
+          "contact_frames": 2,
+          "hard_p95_mm": 39.630775451660156,
+          "hit_15": 0.88,
+          "tip_speed_rms_mm_s": 0.017754845321178436
+        },
+        "iteration": 19000,
+        "test": {
+          "all_ten_hit_15": 0.9721896162528216,
+          "contact_frames": 137,
+          "frames": 33225,
+          "hard_stops": 1,
+          "invalid": 1,
+          "p50_mm": 4.28515625,
+          "p95_mm": 12.2265625,
+          "scored": 33224,
+          "wrist_p95_deg": 5.7304840087890625,
+          "wrist_position_p95_mm": 10.737685203552246
+        },
+        "validation": {
+          "all_ten_hit_15": 0.9796232124554639,
+          "contact_frames": 93,
+          "frames": 40978,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p50_mm": 4.125,
+          "p95_mm": 11.587109375000011,
+          "scored": 40978,
+          "wrist_p95_deg": 4.348803997039795,
+          "wrist_position_p95_mm": 10.307589530944824
+        }
+      }
+    ],
+    "settings": {
+      "backend": "MuJoCo Warp / 2 ms",
+      "error": null,
+      "evaluating": null,
+      "hold_geometry": false,
+      "initialized": true,
+      "paused_from_iteration": 19204,
+      "recommended_iteration": 15000,
+      "resume_checkpoint": "/home/ubuntu/dexgym/data/processed/wholebody-s04/world_hand20_aligned_from_scratch_20261125/train/model_19000.pt",
+      "reviewed_iteration": 19000,
+      "setup": "\u5168\u65b0\u7b56\u7565\u4e0e\u52a8\u529b\u5b66\uff0c\u6b63\u5e38\u91cd\u529b\uff0cSDK \u624b\u578b\u56fa\u5b9a\uff0c\u6bcf\u624b 20 \u70b9",
+      "started_at": "2026-11-25T12:04:16.515802+00:00",
+      "status": "\u5df2\u6682\u505c \u00b7 \u8bad\u7ec3\u5185\u5b58\u5df2\u91ca\u653e",
+      "target_iteration": 20000,
+      "trained_iteration": 19000,
+      "transitions": 2479232,
+      "updated_at": "2026-11-25T15:05:36.748182+00:00",
+      "uses_arm_rate_change": true,
+      "uses_hold_demonstrations": false,
+      "uses_wrist_sampling": true
+    }
+  },
+  "section": "s04"
+}

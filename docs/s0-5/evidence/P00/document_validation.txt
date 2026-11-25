@@ -1,0 +1,7 @@
+Windows checkout, Python 3.14
+Command: python implementation/dexgym/docs/s0-5/evidence/P00/check_documents.py
+First pass: exit=1, the acceptance-row parser expected a delimiter after the ID and rejected labels attached to the ID. The regex was corrected, with the 17-row assertion retained.
+Re-run: exit=0
+PASS 25 Markdown documents, 30 requirements, 11 phases with 25 sections each
+PASS 92 relative Markdown links, 17 acceptance rows and 8 machine-readable witness files
+tracked_diff_sha256 08940ad1618351ee810e0a6177223375ef7461ff0a5fb9609a847d6b8a6efb90

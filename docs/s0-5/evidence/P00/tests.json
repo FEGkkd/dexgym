@@ -1,0 +1,21 @@
+{
+  "observed": "2026-11-25T23:21:23.904797+08:00",
+  "result": {
+    "argv": [
+      "/home/ubuntu/miniconda3/envs/wuji/bin/python",
+      "-m",
+      "pytest",
+      "-p",
+      "no:cacheprovider",
+      "-q",
+      "tests/assets/test_marvin_binding.py",
+      "tests/assets/test_marvin_contract.py",
+      "tests/assets/test_marvin_controller.py"
+    ],
+    "cwd": "/home/ubuntu/dexgym",
+    "exit": 2,
+    "stderr": "",
+    "stdout": "\n==================================== ERRORS ====================================\n____________ ERROR collecting tests/assets/test_marvin_contract.py _____________\nImportError while importing test module '/home/ubuntu/dexgym/tests/assets/test_marvin_contract.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n../miniconda3/envs/wuji/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests/assets/test_marvin_contract.py:12: in <module>\n    from dexgym.assets.marvin_wuji.robot_cfg import (\nsource/dexgym/assets/marvin_wuji/robot_cfg.py:7: in <module>\n    from isaaclab.actuators import ImplicitActuatorCfg\nE   ModuleNotFoundError: No module named 'isaaclab'\n___________ ERROR collecting tests/assets/test_marvin_controller.py ____________\nImportError while importing test module '/home/ubuntu/dexgym/tests/assets/test_marvin_controller.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n../miniconda3/envs/wuji/lib/python3.12/importlib/__init__.py:90: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntests/assets/test_marvin_controller.py:14: in <module>\n    from dexgym.assets.marvin_wuji.robot_cfg import PACKAGED_MJCF\nsource/dexgym/assets/marvin_wuji/robot_cfg.py:7: in <module>\n    from isaaclab.actuators import ImplicitActuatorCfg\nE   ModuleNotFoundError: No module named 'isaaclab'\n=========================== short test summary info ============================\nERROR tests/assets/test_marvin_contract.py\nERROR tests/assets/test_marvin_controller.py\n!!!!!!!!!!!!!!!!!!! Interrupted: 2 errors during collection !!!!!!!!!!!!!!!!!!!!\n2 errors in 0.83s\n"
+  },
+  "section": "tests"
+}
