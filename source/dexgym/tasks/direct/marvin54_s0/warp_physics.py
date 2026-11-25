@@ -11,16 +11,21 @@ from .physics import AUDIT_DEPTH_M, OVERFLOW, SUBSTEPS, Physics
 
 @wp.kernel
 def contact_depth(count: wp.array(dtype=wp.int32), world: wp.array(dtype=wp.int32),
-                  dist: wp.array(dtype=wp.float32), result: wp.array(dtype=wp.float32)):
+                  dist: wp.array(dtype=wp.float32), result: wp.array(dtype=wp.float32),
+                  count_touching: wp.bool):
     i = wp.tid()
     if i < count[0]:
         env = world[i]
         if 0 <= env and env < result.shape[0]:
-            wp.atomic_max(result, env, wp.max(0.0, -dist[i]))
+            depth = wp.max(0.0, -dist[i])
+            if count_touching and dist[i] <= 0.0:
+                depth = wp.max(1e-10, depth)
+            wp.atomic_max(result, env, depth)
 
 
 class WarpPhysics(Physics):
-    def __init__(self, model, names, num_envs, device="cuda:0", *, graph=True):
+    def __init__(self, model, names, num_envs, device="cuda:0", *, graph=True, count_touching=False):
+        self.count_touching = count_touching
         super().__init__(model, names, num_envs, device)
         wp.init()
         self.stream = wp.Stream(device)
@@ -59,7 +64,7 @@ class WarpPhysics(Physics):
         mjw.collision(m, d)
         self.depth.zero_()
         wp.launch(contact_depth, dim=d.contact.dist.shape[0],
-                  inputs=[d.nacon, d.contact.worldid, d.contact.dist, self.depth])
+                  inputs=[d.nacon, d.contact.worldid, d.contact.dist, self.depth, self.count_touching])
 
     def state(self):
         return torch.cat((self.qpos, self.qvel), -1)

@@ -53,3 +53,21 @@ S0-4 为 Marvin M6 双臂和两只 Wuji Hand2.2 学习一个通用的臂残差�
 对齐版以随机初始化的策略和世界模型从零训练。MuJoCo Warp 在标准重力下以 2 ms 子步执行，每个控制拍走 10 个子步。当前臂部采用 16 ms 一阶位置目标滤波和倍率为 1 的重力补偿，沿用原执行器力矩限制。世界模型的回放和想象保留已发命令与滤波后等效目标的区别，并显式推进滤波状态。
 
 SuperMimic 训练使用 64 个环境和随机种子 49，前 350 轮先更新世界模型，随后用 8 步想象更新策略。每 1,000 轮保存并回放固定验证和测试轨迹，另外评估 50 个定点姿态和 19 个难动作窗口。当前难段采样池来自筛查过的训练集，按照臂偏差持续、腕内形状误差较小且无接触的条件选样。阶段改动和最新结果见[训练与评估记录](../experiments/wholebody_s04_20261125.md)。
+
+## 源码与训练入口
+
+动作解码、观测、奖励和任务状态在 [task.py](../../source/dexgym/tasks/direct/wholebody_s04/task.py)。每指四点构造在 [hand_points.py](../../source/dexgym/tasks/direct/wholebody_s04/hand_points.py)。校准伺服的收集和想象分别见 [aligned_physics.py](../../source/dexgym/tasks/direct/wholebody_s04/aligned_physics.py) 与 [aligned_task.py](../../source/dexgym/tasks/direct/wholebody_s04/aligned_task.py)。
+
+在已配置 MuJoCo Warp 的训练环境中，使用与模型匹配的筛查轨迹清单和定点评估用例 JSON。定点用例沿用评估清单的 `frame` 和可选 `hard_tail` 字段。
+
+```bash
+S04_GOAL_POINTS=20 bash scripts/supermimic/host.sh \
+  -m dexgym.tasks.direct.wholebody_s04.train_aligned \
+  --bank /path/to/manifest.json --model /path/to/dual_arm_marvin.xml \
+  --profile source/dexgym/tasks/direct/wholebody_s04/servo_profile.json \
+  --hold-cases /path/to/gravity_cases.json --output /path/to/run
+```
+
+入口默认使用 64 个环境和 20,000 轮。同一输出目录下可用 `--resume` 从已有训练检查点续训。混采阶段加 `--mixed-wrist`，输出目录需要配套的 `wrist_sample_pool.npz` 与 `train/model_3000_actor.pt`。定点示教阶段使用 `--hold-teacher` 与同目录的 `hold_teacher.npz`。
+
+源码发布前在独立检出中用 6 段、782 帧轨迹子集做了 4 环境、9 轮训练冒烟验证，检查了 2,880 维观测、14 维动作、手参考逐拍直通和滤波状态一致性。世界模型更新 27 次，策略更新 5 次。

@@ -38,7 +38,7 @@ class SuperMimicEngine:
             if cfg.isolate_wm_init:
                 torch.random.default_generator.manual_seed(cfg.seed + 1)
             self.wm = WorldModel(
-                task.dynamics_dim, task.contact_dim, task.codec, task.action_dim,
+                task.dynamics_dim, task.contact_dim, task.codec, getattr(task, "command_dim", task.action_dim),
                 task.error_floor, cfg.wm_hidden, cfg.amp,
                 control_error_features=cfg.control_error_features,
                 predict_contact_depth=cfg.contact_depth_weight > 0,
@@ -48,7 +48,7 @@ class SuperMimicEngine:
         self.fail_head = FailureHead(termination_context_dim, task.state_dim,
                                      control_error_features=cfg.control_error_features).to(self.device)
         self.critic = Critic(task.context_dim, cfg.amp).to(self.device)
-        self.torque_norm = RunningNorm(task.action_dim, eps=1e-3).to(self.device)
+        self.torque_norm = RunningNorm(getattr(task, "command_dim", task.action_dim), eps=1e-3).to(self.device)
         self.optimizers, self.muon_optimizers = self.make_optimizers()
         self.buffer = ReplayBuffer(cfg.buffer_steps, self.env.num_envs, self.device, cfg.holdout_fraction)
         self.step_wm = torch.compile(self.wm) if cfg.compile else self.wm
@@ -331,6 +331,9 @@ class SuperMimicEngine:
         if not torch.isfinite(loss):
             raise FloatingPointError(f"Non-finite {name} loss")
         loss.backward()
+        self.step_gradients(name, optimizers)
+
+    def step_gradients(self, name, optimizers):
         norm = nn.utils.clip_grad_norm_(self.modules()[name].parameters(), 1.0)
         if name == "actor":
             nn.utils.clip_grad_value_(self.actor.parameters(), 0.1)
@@ -341,6 +344,30 @@ class SuperMimicEngine:
             raise FloatingPointError(f"Non-finite {name} gradient")
         for optimizer in optimizers:
             optimizer.step()
+
+    def optimize_balanced_actor(self, imagined, behavior, cap):
+        """Bound the learned dynamics gradient before adding reference supervision."""
+        optimizers = self.optimizers_for("actor")
+        for optimizer in optimizers:
+            optimizer.zero_grad(set_to_none=True)
+        if not torch.isfinite(imagined) or not torch.isfinite(behavior):
+            raise FloatingPointError("Non-finite actor loss")
+        params = tuple(self.actor.parameters())
+        gradients = torch.autograd.grad(imagined, params, retain_graph=behavior.requires_grad)
+        raw_norm = torch.linalg.vector_norm(torch.stack([g.detach().norm() for g in gradients]))
+        if not torch.isfinite(raw_norm):
+            raise FloatingPointError("Non-finite imagined actor gradient")
+        scale = (cap / raw_norm.clamp_min(1e-12)).clamp(max=1.)
+        if behavior.requires_grad:
+            behavior.backward()
+        with torch.no_grad():
+            for param, gradient in zip(params, gradients, strict=True):
+                if param.grad is None:
+                    param.grad = gradient * scale
+                else:
+                    param.grad.add_(gradient * scale)
+        self.step_gradients("actor", optimizers)
+        return raw_norm.detach(), scale.detach()
 
     def lr_at(self, it):
         c = self.cfg
@@ -389,6 +416,7 @@ class SuperMimicEngine:
         behavior_penalty = x.new_zeros(x.shape[0])
         regularize = getattr(t, "actor_regularization", None)
         reference_anchor = getattr(t, "actor_reference_anchor", None)
+        online_anchor = getattr(t, "actor_online_anchor", None)
         try:
             for step in range(c.horizon):
                 context = self.task_features(x, m, aux, sim)
@@ -431,8 +459,17 @@ class SuperMimicEngine:
                 behavior_penalty = behavior_penalty + sum(c.gamma ** step for step in range(c.horizon)) * (
                     reference_anchor(self.step_actor)
                 )
+            if online_anchor is not None:
+                behavior_penalty = behavior_penalty + sum(c.gamma ** step for step in range(c.horizon)) * (
+                    online_anchor(self.step_actor, w["obs"], w["x"], t.decode_memory(w["m"]))
+                )
             actor_loss = (behavior_penalty - objective).mean()
-            self.optimize("actor", actor_loss)
+            cap = getattr(t, "imagined_actor_grad_cap", 0.)
+            balance = None
+            if cap:
+                balance = self.optimize_balanced_actor(-objective.mean(), behavior_penalty.mean(), cap)
+            else:
+                self.optimize("actor", actor_loss)
         finally:
             for module in frozen:
                 module.requires_grad_(True)
@@ -460,6 +497,10 @@ class SuperMimicEngine:
                 self.optimize("critic", critic_loss)
         result = dict(actor_loss=actor_loss.detach(), critic_loss=critic_loss.detach(), survival=survival.detach().mean(),
                       actor_behavior_penalty=behavior_penalty.detach().mean())
+        if balance is not None:
+            result.update(imagined_actor_grad=balance[0], imagined_actor_grad_scale=balance[1])
+        if online_anchor is not None:
+            result.update(online_anchor.metrics)
         if c.profile_training:
             result.update(actor_seconds=critic_start - start_time, critic_seconds=self.profile_time() - critic_start)
         return result

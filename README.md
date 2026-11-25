@@ -45,6 +45,7 @@ and [motion data tools](data/README.md) remain available independently.
 ## Wholebody S0-4 Experiment
 
 - [Task design and policy contract](docs/tasks/wholebody_s04.md).
+- [Task and aligned training source](source/dexgym/tasks/direct/wholebody_s04/).
 - [Training and evaluation snapshot (2026-11-25)](docs/experiments/wholebody_s04_20261125.md).
 
 ## Install and verify
