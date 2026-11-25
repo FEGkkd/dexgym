@@ -1,0 +1,1313 @@
+{
+  "captured_at": "2026-11-25T21:48:31+08:00",
+  "run": {
+    "name": "world_hand20_aligned_from_scratch_20261125",
+    "status": "训练",
+    "target_iterations": 20000,
+    "collected_at_snapshot_through": 11074,
+    "latest_completed_evaluation": {
+      "iteration": 11000,
+      "actor": "model_11000_actor.pt",
+      "actor_sha256": "b2432075f18e056463df5f7d69a5aec1d343d562aaa2ca8e5ea80a4152e3bd54",
+      "evaluation_time": "2026-11-25T21:47:53+08:00"
+    },
+    "lowest_development_score_checkpoint": {
+      "iteration": 10000,
+      "actor": "model_10000_actor.pt",
+      "actor_sha256": "b708e7e37acdba0e44781501c637b2b96440c309d6f732f4c25e3aa6803f56a3",
+      "evaluation_time": "2026-11-25T21:38:58+08:00"
+    },
+    "initialized_from": "random_policy_random_world_model",
+    "base_model_sha256": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "environment_count": 64,
+    "evaluation_environment_count": 112,
+    "backend": "MuJoCo Warp aligned to native 2ms",
+    "seed": 49,
+    "contract": {
+      "task_id": "wholebody-s04",
+      "action_dim": 14,
+      "command_dim": 54,
+      "residual_bound_deg": 8.0,
+      "action_mode": "arm_ref_residual8_fixed_hand_ref_v1",
+      "observation_version": "s04_world_hand20_history5_v1",
+      "goal_points_per_hand": 20,
+      "history_frames": 5,
+      "observation_frame_dim": 576,
+      "observation_dim": 2880
+    },
+    "config": {
+      "seed": 49,
+      "max_iterations": 20000,
+      "buffer_steps": 1800,
+      "warmup_steps": 66,
+      "utd": 0.5,
+      "wm_only_iters": 350,
+      "wm_window": 8,
+      "wm_failure_frac": 0.25,
+      "wm_failure_horizon": 16,
+      "final_state_weight": 1.0,
+      "contact_weight": 0.2,
+      "contact_partial_intervals": true,
+      "contact_depth_weight": 0.03,
+      "kinematic_loss_weight": 0.0,
+      "wm_batches": 3,
+      "wm_batch": 768,
+      "wm_hidden": [
+        1280,
+        1280,
+        1280
+      ],
+      "isolate_wm_init": true,
+      "control_error_features": true,
+      "pi_batch": 384,
+      "horizon": 8,
+      "imagination_start_reserve": null,
+      "actor_bootstrap_weight": 0.65,
+      "max_step_reward": 1.0,
+      "critic_epochs": 3,
+      "critic_minibatches": 4,
+      "gamma": 0.99,
+      "lam": 0.95,
+      "lr": 0.00011,
+      "optimizer": "fused-adam",
+      "actor_lr": 4e-05,
+      "lr_decay_iters": 250000,
+      "lr_final_ratio": 0.03,
+      "action_noise": 0,
+      "failure_warmup_iters": 260,
+      "failure_head": true,
+      "failure_clip": 0.25,
+      "amp": false,
+      "compile": false,
+      "compile_policy": false,
+      "profile_training": true,
+      "save_interval": 1000,
+      "log_interval": 10,
+      "holdout_fraction": 0.1
+    },
+    "original_initialization_checks": {
+      "filter_memory_verified": true,
+      "exact_sdk_command": true,
+      "action_dim": 14,
+      "policy_input": 2880
+    },
+    "series": [
+      {
+        "iteration": 1000,
+        "actor": "model_1000_actor.pt",
+        "collected_transitions": 132224,
+        "validation": {
+          "frames": 40978,
+          "scored": 40978,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 21.453125,
+          "p50_mm": 6.09375,
+          "all_ten_hit_15": 0.8932597979403583,
+          "contact_frames": 115,
+          "wrist_p95_deg": 5.2893292427063,
+          "wrist_position_p95_mm": 17.766200160980226
+        },
+        "test": {
+          "frames": 33225,
+          "scored": 33225,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 20.453125,
+          "p50_mm": 6.50390625,
+          "all_ten_hit_15": 0.8947479307750188,
+          "contact_frames": 165,
+          "wrist_p95_deg": 6.523173904418943,
+          "wrist_position_p95_mm": 15.674092864990227
+        },
+        "hard": {
+          "windows": 19,
+          "p95_mm": 49.86186599731445,
+          "highpass_tip_rms_mm_s": 47.42759704589844,
+          "contact_frames": 2,
+          "stopped": 0
+        },
+        "hold": {
+          "cases": 50,
+          "completed": 50,
+          "all_p95_mm": 38.511192321777344,
+          "hard_p95_mm": 64.39506530761719,
+          "hit_15": 0.8,
+          "tip_speed_rms_mm_s": 0.006549461744725704,
+          "contact_frames": 3,
+          "case_10148_mm": 64.39542388916016,
+          "case_38378_mm": 43.594749450683594
+        },
+        "settings": {
+          "before": {
+            "smoothness": 0.043,
+            "wrist": 0.026,
+            "tip_tail": 0.032,
+            "contact": 0.042,
+            "actor_lr": 4e-05
+          },
+          "next": {
+            "smoothness": 0.043,
+            "wrist": 0.026,
+            "tip_tail": 0.032,
+            "contact": 0.042,
+            "actor_lr": 4e-05
+          },
+          "reasons": [
+            "建立新动力学下第一份闭环基线"
+          ]
+        }
+      },
+      {
+        "iteration": 2000,
+        "actor": "model_2000_actor.pt",
+        "collected_transitions": 260224,
+        "validation": {
+          "frames": 40978,
+          "scored": 40978,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 14.594921875000011,
+          "p50_mm": 4.9609375,
+          "all_ten_hit_15": 0.9536580604226658,
+          "contact_frames": 115,
+          "wrist_p95_deg": 4.85328061580658,
+          "wrist_position_p95_mm": 12.674553155899051
+        },
+        "test": {
+          "frames": 33225,
+          "scored": 33225,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 15.078125,
+          "p50_mm": 5.0546875,
+          "all_ten_hit_15": 0.9490142964635064,
+          "contact_frames": 123,
+          "wrist_p95_deg": 6.2918439865112274,
+          "wrist_position_p95_mm": 12.456790161132812
+        },
+        "hard": {
+          "windows": 19,
+          "p95_mm": 45.73807907104492,
+          "highpass_tip_rms_mm_s": 52.241249084472656,
+          "contact_frames": 2,
+          "stopped": 0
+        },
+        "hold": {
+          "cases": 50,
+          "completed": 50,
+          "all_p95_mm": 27.210397720336914,
+          "hard_p95_mm": 55.87159729003906,
+          "hit_15": 0.84,
+          "tip_speed_rms_mm_s": 0.009577558375895023,
+          "contact_frames": 0,
+          "case_10148_mm": 55.871665954589844,
+          "case_38378_mm": 36.33373260498047
+        },
+        "settings": {
+          "before": {
+            "smoothness": 0.043,
+            "wrist": 0.026,
+            "tip_tail": 0.032,
+            "contact": 0.042,
+            "actor_lr": 4e-05
+          },
+          "next": {
+            "smoothness": 0.043,
+            "wrist": 0.026,
+            "tip_tail": 0.032,
+            "contact": 0.042,
+            "actor_lr": 4e-05
+          },
+          "reasons": [
+            "指标稳定，保持本轮任务权重"
+          ]
+        }
+      },
+      {
+        "iteration": 3000,
+        "actor": "model_3000_actor.pt",
+        "collected_transitions": 388224,
+        "validation": {
+          "frames": 40978,
+          "scored": 40978,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 12.860546875000011,
+          "p50_mm": 4.421875,
+          "all_ten_hit_15": 0.9684952901556932,
+          "contact_frames": 106,
+          "wrist_p95_deg": 4.537417149543763,
+          "wrist_position_p95_mm": 11.410161590576177
+        },
+        "test": {
+          "frames": 33225,
+          "scored": 33225,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 13.5,
+          "p50_mm": 4.55078125,
+          "all_ten_hit_15": 0.9631903686982694,
+          "contact_frames": 156,
+          "wrist_p95_deg": 5.851454639434813,
+          "wrist_position_p95_mm": 11.407689094543455
+        },
+        "hard": {
+          "windows": 19,
+          "p95_mm": 42.97123336791992,
+          "highpass_tip_rms_mm_s": 51.851383209228516,
+          "contact_frames": 2,
+          "stopped": 0
+        },
+        "hold": {
+          "cases": 50,
+          "completed": 50,
+          "all_p95_mm": 24.72201156616211,
+          "hard_p95_mm": 52.863197326660156,
+          "hit_15": 0.86,
+          "tip_speed_rms_mm_s": 0.011483829468488693,
+          "contact_frames": 1,
+          "case_10148_mm": 52.86324691772461,
+          "case_38378_mm": 32.254295349121094
+        },
+        "settings": {
+          "before": {
+            "smoothness": 0.043,
+            "wrist": 0.026,
+            "tip_tail": 0.032,
+            "contact": 0.042,
+            "actor_lr": 4e-05
+          },
+          "next": {
+            "smoothness": 0.043,
+            "wrist": 0.026,
+            "tip_tail": 0.032,
+            "contact": 0.042,
+            "actor_lr": 4e-05
+          },
+          "reasons": [
+            "指标稳定，保持本轮任务权重"
+          ]
+        }
+      },
+      {
+        "iteration": 4000,
+        "actor": "model_4000_actor.pt",
+        "collected_transitions": 520448,
+        "validation": {
+          "frames": 40978,
+          "scored": 40978,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 15.578125,
+          "p50_mm": 4.875,
+          "all_ten_hit_15": 0.9452389086827078,
+          "contact_frames": 116,
+          "wrist_p95_deg": 4.694947719573975,
+          "wrist_position_p95_mm": 12.530230522155762
+        },
+        "test": {
+          "frames": 33225,
+          "scored": 33225,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 16.21875,
+          "p50_mm": 4.921875,
+          "all_ten_hit_15": 0.9420617005267118,
+          "contact_frames": 171,
+          "wrist_p95_deg": 6.27725887298584,
+          "wrist_position_p95_mm": 11.538525581359863
+        },
+        "hard": {
+          "windows": 19,
+          "p95_mm": 48.43608856201172,
+          "highpass_tip_rms_mm_s": 35.180015563964844,
+          "contact_frames": 3,
+          "stopped": 0
+        },
+        "hold": {
+          "cases": 50,
+          "completed": 50,
+          "all_p95_mm": 27.108978271484375,
+          "hard_p95_mm": 73.89933013916016,
+          "hit_15": 0.8,
+          "tip_speed_rms_mm_s": 0.055546607822179794,
+          "contact_frames": 0,
+          "case_10148_mm": 73.8993911743164,
+          "case_38378_mm": 44.533714294433594
+        },
+        "settings": {
+          "before": {
+            "smoothness": 0.043,
+            "wrist": 0.026,
+            "tip_tail": 0.032,
+            "contact": 0.042,
+            "actor_lr": 4e-05
+          },
+          "next": {
+            "smoothness": 0.043,
+            "wrist": 0.03,
+            "tip_tail": 0.037,
+            "contact": 0.042,
+            "actor_lr": 3.44e-05,
+            "hold_teacher_weight": 0.12
+          },
+          "reasons": [
+            "验证精度回退，收小策略更新步长",
+            "难段尾误差改善不足，增加通用腕姿和指尖尾误差权重",
+            "整体精度回退且难姿态无收益，收小定点示教权重",
+            "当前定点示教权重 0.120"
+          ]
+        }
+      },
+      {
+        "iteration": 5000,
+        "actor": "model_5000_actor.pt",
+        "collected_transitions": 648448,
+        "validation": {
+          "frames": 40978,
+          "scored": 40978,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 14.774609375000011,
+          "p50_mm": 4.66015625,
+          "all_ten_hit_15": 0.9516569866757773,
+          "contact_frames": 102,
+          "wrist_p95_deg": 4.596257209777832,
+          "wrist_position_p95_mm": 11.91164779663086
+        },
+        "test": {
+          "frames": 33225,
+          "scored": 33225,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 15.2421875,
+          "p50_mm": 4.65234375,
+          "all_ten_hit_15": 0.9484123401053424,
+          "contact_frames": 126,
+          "wrist_p95_deg": 6.0821027755737305,
+          "wrist_position_p95_mm": 11.033245086669922
+        },
+        "hard": {
+          "windows": 19,
+          "p95_mm": 58.05666732788086,
+          "highpass_tip_rms_mm_s": 32.575958251953125,
+          "contact_frames": 1,
+          "stopped": 0
+        },
+        "hold": {
+          "cases": 50,
+          "completed": 50,
+          "all_p95_mm": 38.71269226074219,
+          "hard_p95_mm": 73.58301544189453,
+          "hit_15": 0.78,
+          "tip_speed_rms_mm_s": 1.2209339141845703,
+          "contact_frames": 0,
+          "case_10148_mm": 73.58480072021484,
+          "case_38378_mm": 49.5279426574707
+        },
+        "settings": {
+          "before": {
+            "smoothness": 0.043,
+            "wrist": 0.03,
+            "tip_tail": 0.037,
+            "contact": 0.042,
+            "actor_lr": 3.44e-05
+          },
+          "next": {
+            "smoothness": 0.049999999999999996,
+            "wrist": 0.034,
+            "tip_tail": 0.041999999999999996,
+            "contact": 0.042,
+            "actor_lr": 3.44e-05,
+            "hold_teacher_weight": 0.12
+          },
+          "reasons": [
+            "抖动回升，在验证精度未回退时小幅增加平滑约束",
+            "难段尾误差改善不足，增加通用腕姿和指尖尾误差权重",
+            "当前定点示教权重 0.120"
+          ]
+        }
+      },
+      {
+        "iteration": 6000,
+        "actor": "model_6000_actor.pt",
+        "collected_transitions": 776448,
+        "validation": {
+          "frames": 40978,
+          "scored": 40978,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 14.962109375000011,
+          "p50_mm": 4.69140625,
+          "all_ten_hit_15": 0.9502171897115526,
+          "contact_frames": 105,
+          "wrist_p95_deg": 4.6114277839660645,
+          "wrist_position_p95_mm": 12.148365020751953
+        },
+        "test": {
+          "frames": 33225,
+          "scored": 33225,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 15.224999999999994,
+          "p50_mm": 4.7109375,
+          "all_ten_hit_15": 0.9482618510158014,
+          "contact_frames": 139,
+          "wrist_p95_deg": 6.049457550048828,
+          "wrist_position_p95_mm": 10.89362907409668
+        },
+        "hard": {
+          "windows": 19,
+          "p95_mm": 49.76349639892578,
+          "highpass_tip_rms_mm_s": 33.58320999145508,
+          "contact_frames": 1,
+          "stopped": 0
+        },
+        "hold": {
+          "cases": 50,
+          "completed": 50,
+          "all_p95_mm": 28.36332893371582,
+          "hard_p95_mm": 75.67347717285156,
+          "hit_15": 0.78,
+          "tip_speed_rms_mm_s": 0.055710408836603165,
+          "contact_frames": 0,
+          "case_10148_mm": 75.67404174804688,
+          "case_38378_mm": 51.91473388671875
+        },
+        "settings": {
+          "before": {
+            "smoothness": 0.049999999999999996,
+            "wrist": 0.034,
+            "tip_tail": 0.041999999999999996,
+            "contact": 0.042,
+            "actor_lr": 3.44e-05
+          },
+          "next": {
+            "smoothness": 0.049999999999999996,
+            "wrist": 0.034,
+            "tip_tail": 0.041999999999999996,
+            "contact": 0.042,
+            "actor_lr": 3.44e-05,
+            "hold_teacher_weight": 0.12
+          },
+          "reasons": [
+            "当前定点示教权重 0.120"
+          ]
+        }
+      },
+      {
+        "iteration": 7000,
+        "actor": "model_7000_actor.pt",
+        "collected_transitions": 908672,
+        "validation": {
+          "frames": 40978,
+          "scored": 40978,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 19.796875,
+          "p50_mm": 5.3984375,
+          "all_ten_hit_15": 0.9116355117380057,
+          "contact_frames": 157,
+          "wrist_p95_deg": 4.497352600097656,
+          "wrist_position_p95_mm": 16.480289459228516
+        },
+        "test": {
+          "frames": 33225,
+          "scored": 33225,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 18.265625,
+          "p50_mm": 5.7109375,
+          "all_ten_hit_15": 0.9197291196388262,
+          "contact_frames": 147,
+          "wrist_p95_deg": 6.03743839263916,
+          "wrist_position_p95_mm": 14.374054908752441
+        },
+        "hard": {
+          "windows": 19,
+          "p95_mm": 50.412418365478516,
+          "highpass_tip_rms_mm_s": 38.8955192565918,
+          "contact_frames": 0,
+          "stopped": 0
+        },
+        "hold": {
+          "cases": 50,
+          "completed": 50,
+          "all_p95_mm": 30.577302932739258,
+          "hard_p95_mm": 67.47191619873047,
+          "hit_15": 0.82,
+          "tip_speed_rms_mm_s": 0.01432664506137371,
+          "contact_frames": 0,
+          "case_10148_mm": 67.47296142578125,
+          "case_38378_mm": 42.514732360839844
+        },
+        "settings": {
+          "before": {
+            "smoothness": 0.049999999999999996,
+            "wrist": 0.034,
+            "tip_tail": 0.041999999999999996,
+            "contact": 0.042,
+            "actor_lr": 3.44e-05
+          },
+          "next": {
+            "smoothness": 0.049999999999999996,
+            "wrist": 0.038000000000000006,
+            "tip_tail": 0.04699999999999999,
+            "contact": 0.048,
+            "actor_lr": 2.9584000000000003e-05,
+            "hold_geometry_weight": 0.02125
+          },
+          "reasons": [
+            "验证精度回退，收小策略更新步长",
+            "难段尾误差改善不足，增加通用腕姿和指尖尾误差权重",
+            "验证接触增多，提高双手间距惩罚",
+            "训练定点的几何约束权重 0.021"
+          ]
+        }
+      },
+      {
+        "iteration": 8000,
+        "actor": "model_8000_actor.pt",
+        "collected_transitions": 1036672,
+        "validation": {
+          "frames": 40978,
+          "scored": 40978,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 18.515625,
+          "p50_mm": 5.2734375,
+          "all_ten_hit_15": 0.9226414173458929,
+          "contact_frames": 99,
+          "wrist_p95_deg": 4.459710121154785,
+          "wrist_position_p95_mm": 15.98850154876709
+        },
+        "test": {
+          "frames": 33225,
+          "scored": 33225,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 17.078125,
+          "p50_mm": 5.46484375,
+          "all_ten_hit_15": 0.9323100075244545,
+          "contact_frames": 128,
+          "wrist_p95_deg": 5.821511268615723,
+          "wrist_position_p95_mm": 13.895736694335938
+        },
+        "hard": {
+          "windows": 19,
+          "p95_mm": 48.724300384521484,
+          "highpass_tip_rms_mm_s": 41.235008239746094,
+          "contact_frames": 0,
+          "stopped": 0
+        },
+        "hold": {
+          "cases": 50,
+          "completed": 50,
+          "all_p95_mm": 28.168474197387695,
+          "hard_p95_mm": 67.92282104492188,
+          "hit_15": 0.8,
+          "tip_speed_rms_mm_s": 0.015960831195116043,
+          "contact_frames": 0,
+          "case_10148_mm": 67.92568969726562,
+          "case_38378_mm": 44.27299499511719
+        },
+        "settings": {
+          "before": {
+            "smoothness": 0.049999999999999996,
+            "wrist": 0.038000000000000006,
+            "tip_tail": 0.04699999999999999,
+            "contact": 0.048,
+            "actor_lr": 2.9584000000000003e-05
+          },
+          "next": {
+            "smoothness": 0.049999999999999996,
+            "wrist": 0.038000000000000006,
+            "tip_tail": 0.04699999999999999,
+            "contact": 0.048,
+            "actor_lr": 2.9584000000000003e-05,
+            "hold_geometry_weight": 0.02125
+          },
+          "reasons": [
+            "训练定点的几何约束权重 0.021"
+          ]
+        }
+      },
+      {
+        "iteration": 9000,
+        "actor": "model_9000_actor.pt",
+        "collected_transitions": 1168896,
+        "validation": {
+          "frames": 40978,
+          "scored": 40978,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 11.9296875,
+          "p50_mm": 4.28515625,
+          "all_ten_hit_15": 0.9769632485724047,
+          "contact_frames": 119,
+          "wrist_p95_deg": 4.512538433074951,
+          "wrist_position_p95_mm": 10.432943344116211
+        },
+        "test": {
+          "frames": 33225,
+          "scored": 33225,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 12.7578125,
+          "p50_mm": 4.4140625,
+          "all_ten_hit_15": 0.9683972911963883,
+          "contact_frames": 136,
+          "wrist_p95_deg": 5.899411201477051,
+          "wrist_position_p95_mm": 10.839889526367188
+        },
+        "hard": {
+          "windows": 19,
+          "p95_mm": 40.9585075378418,
+          "highpass_tip_rms_mm_s": 58.64847946166992,
+          "contact_frames": 1,
+          "stopped": 0
+        },
+        "hold": {
+          "cases": 50,
+          "completed": 50,
+          "all_p95_mm": 25.218364715576172,
+          "hard_p95_mm": 44.506980895996094,
+          "hit_15": 0.88,
+          "tip_speed_rms_mm_s": 0.01567416824400425,
+          "contact_frames": 0,
+          "case_10148_mm": 44.507389068603516,
+          "case_38378_mm": 38.602264404296875
+        },
+        "settings": {
+          "before": {
+            "smoothness": 0.049999999999999996,
+            "wrist": 0.038000000000000006,
+            "tip_tail": 0.04699999999999999,
+            "contact": 0.048,
+            "actor_lr": 2.9584000000000003e-05
+          },
+          "next": {
+            "smoothness": 0.056999999999999995,
+            "wrist": 0.038000000000000006,
+            "tip_tail": 0.04699999999999999,
+            "contact": 0.054,
+            "actor_lr": 2.9584000000000003e-05,
+            "wrist_sampling_fraction": 0.18
+          },
+          "reasons": [
+            "抖动回升，在验证精度未回退时小幅增加平滑约束",
+            "验证接触增多，提高双手间距惩罚"
+          ]
+        }
+      },
+      {
+        "iteration": 10000,
+        "actor": "model_10000_actor.pt",
+        "collected_transitions": 1296896,
+        "validation": {
+          "frames": 40978,
+          "scored": 40978,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 11.7578125,
+          "p50_mm": 4.203125,
+          "all_ten_hit_15": 0.9790863390111767,
+          "contact_frames": 118,
+          "wrist_p95_deg": 4.4952216148376465,
+          "wrist_position_p95_mm": 10.425039291381836
+        },
+        "test": {
+          "frames": 33225,
+          "scored": 33225,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 12.546875,
+          "p50_mm": 4.34765625,
+          "all_ten_hit_15": 0.97104589917231,
+          "contact_frames": 128,
+          "wrist_p95_deg": 5.885695934295654,
+          "wrist_position_p95_mm": 10.881875038146973
+        },
+        "hard": {
+          "windows": 19,
+          "p95_mm": 39.10820388793945,
+          "highpass_tip_rms_mm_s": 58.2576789855957,
+          "contact_frames": 1,
+          "stopped": 0
+        },
+        "hold": {
+          "cases": 50,
+          "completed": 50,
+          "all_p95_mm": 21.505788803100586,
+          "hard_p95_mm": 39.315948486328125,
+          "hit_15": 0.88,
+          "tip_speed_rms_mm_s": 0.01654333621263504,
+          "contact_frames": 0,
+          "case_10148_mm": 39.31598663330078,
+          "case_38378_mm": 39.29671096801758
+        },
+        "settings": {
+          "before": {
+            "smoothness": 0.056999999999999995,
+            "wrist": 0.038000000000000006,
+            "tip_tail": 0.04699999999999999,
+            "contact": 0.054,
+            "actor_lr": 2.9584000000000003e-05
+          },
+          "next": {
+            "smoothness": 0.056999999999999995,
+            "wrist": 0.038000000000000006,
+            "tip_tail": 0.04699999999999999,
+            "contact": 0.054,
+            "actor_lr": 2.9584000000000003e-05,
+            "wrist_sampling_fraction": 0.18
+          },
+          "reasons": [
+            "指标稳定，保持本轮任务权重"
+          ]
+        }
+      },
+      {
+        "iteration": 11000,
+        "actor": "model_11000_actor.pt",
+        "collected_transitions": 1424896,
+        "validation": {
+          "frames": 40978,
+          "scored": 40978,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 11.8125,
+          "p50_mm": 4.25,
+          "all_ten_hit_15": 0.9798672458392308,
+          "contact_frames": 91,
+          "wrist_p95_deg": 4.418463230133057,
+          "wrist_position_p95_mm": 10.380182266235352
+        },
+        "test": {
+          "frames": 33225,
+          "scored": 33225,
+          "hard_stops": 0,
+          "invalid": 0,
+          "p95_mm": 12.420312499999994,
+          "p50_mm": 4.34765625,
+          "all_ten_hit_15": 0.9711662904439428,
+          "contact_frames": 125,
+          "wrist_p95_deg": 5.7253923416137695,
+          "wrist_position_p95_mm": 10.91089916229248
+        },
+        "hold": {
+          "cases": 50,
+          "completed": 50,
+          "all_p95_mm": 22.78938102722168,
+          "hard_p95_mm": 39.38350296020508,
+          "hit_15": 0.88,
+          "tip_speed_rms_mm_s": 0.015859432518482208,
+          "contact_frames": 1,
+          "case_10148_mm": 39.38420867919922,
+          "case_38378_mm": 39.29264831542969
+        },
+        "hard": {
+          "windows": 19,
+          "p95_mm": 39.542449951171875,
+          "highpass_tip_rms_mm_s": 61.946815490722656,
+          "contact_frames": 0,
+          "stopped": 0
+        },
+        "settings": {
+          "before": {
+            "smoothness": 0.056999999999999995,
+            "wrist": 0.038000000000000006,
+            "tip_tail": 0.04699999999999999,
+            "contact": 0.054,
+            "actor_lr": 2.9584000000000003e-05
+          },
+          "next": {
+            "smoothness": 0.056999999999999995,
+            "wrist": 0.04200000000000001,
+            "tip_tail": 0.05199999999999999,
+            "contact": 0.054,
+            "actor_lr": 2.9584000000000003e-05,
+            "wrist_sampling_fraction": 0.205
+          },
+          "reasons": [
+            "难段尾误差改善不足，增加通用腕姿和指尖尾误差权重",
+            "增加通用难轨迹的覆盖比例"
+          ]
+        }
+      }
+    ],
+    "phase_changes": [
+      {
+        "iteration": 3000,
+        "previous_live_iteration": 3188,
+        "reason": "启用训练集经正常重力和无接触验证的通用定点恢复示教"
+      },
+      {
+        "iteration": 6000,
+        "previous_live_iteration": 6057,
+        "reason": "从示教关节角切换到正常重力下的定点指尖几何约束"
+      },
+      {
+        "iteration": 8000,
+        "previous_live_iteration": 8441,
+        "reason": "增加训练集持续腕偏片段覆盖，并保持常规跟随"
+      }
+    ],
+    "train_only_wrist_sampling": {
+      "all_train": {
+        "frames": 664739,
+        "scored": 664739,
+        "hard_stops": 0,
+        "invalid": 0,
+        "p95_mm": 6.8125,
+        "p50_mm": 2.875,
+        "all_ten_hit_15": 0.9890889507009518,
+        "contact_frames": 2165,
+        "wrist_p95_deg": 5.1602067947387695,
+        "wrist_position_p95_mm": 8.619709014892578
+      },
+      "pool_sizes": {
+        "teleop": 194,
+        "egopro": 168,
+        "severe_teleop": 63,
+        "severe_egopro": 0
+      },
+      "windows": 170,
+      "distinct_clips": 86,
+      "used_splits": [
+        "train"
+      ],
+      "qualification": "persistent fingertip error dominated by arm, small local shape error, no contact"
+    },
+    "initial_hold_demonstrations": {
+      "split": "train",
+      "sampler_seed": 1116,
+      "selected_poses": 262,
+      "accepted_poses": 213,
+      "observations": 2130,
+      "normal_gravity": true,
+      "contact_frames": 0,
+      "last_six_frames_maximum_mm": 15.0,
+      "max_residual_deg": 8.0,
+      "p95_settled_worst_mm": 14.229763984680176
+    }
+  },
+  "trajectory_bank": {
+    "manifest_sha256": "42842eeeaba0d6d87950e63cae2f25d0a9485b60bd012a8a661ddea7ab89bec5",
+    "splits": {
+      "test": {
+        "segments": 985,
+        "frames": 33225,
+        "source_segments": {
+          "egopro": 879,
+          "teleop": 106
+        },
+        "sha256": "6ce5f96918e047ad851d63ed5ae378882e9b275534b9b63f0bdfc99bfd4e4e8a"
+      },
+      "validation": {
+        "segments": 1092,
+        "frames": 40978,
+        "source_segments": {
+          "egopro": 979,
+          "teleop": 113
+        },
+        "sha256": "628a2b299217398dd4d40a38513185f78aba8f6fdbd61d77408eba34519fa5e3"
+      },
+      "train": {
+        "segments": 5483,
+        "frames": 664739,
+        "source_segments": {
+          "egopro": 5102,
+          "teleop": 381
+        },
+        "sha256": "2cbb9c780a87ce4965173892a8f198efbd8eda8db5afc73fafa033fd6dc51e24"
+      }
+    },
+    "control_hz": 50,
+    "train_source_weights": {
+      "teleop": 0.5,
+      "egopro": 0.5
+    },
+    "hand_reference": {
+      "mode": "wuji_sdk_fk4_v1",
+      "library_version": "2026.10.26",
+      "library_sha256": "1bdc160c6c27a9b1bfa727dfb7c33c8b01fbb5acbefc8cfdfa17b2fd84c75282",
+      "session_input_unit": "m",
+      "session_output_unit": "rad",
+      "landmarks_per_finger": [
+        "joint_0",
+        "joint_2",
+        "joint_3",
+        "tip"
+      ]
+    }
+  },
+  "aligned_drive": {
+    "profile": {
+      "gravity_scale": 1.0,
+      "delay_ms": 0,
+      "velocity_feedforward": 0.0,
+      "velocity_filter_ms": 24.0,
+      "target_filter_ms": 16,
+      "damping_scale": 1.0
+    },
+    "profile_sha256": "c6308ebd8e6dc72167cea8f6964b02c5a6c620265b6617210efa33ac824bdaff",
+    "preflight": {
+      "source": "same native MuJoCo 2 ms servo and two held-out initial poses",
+      "gpu": "NVIDIA GeForce RTX 5090",
+      "profile": {
+        "gravity_scale": 1.0,
+        "delay_ms": 0,
+        "velocity_feedforward": 0.0,
+        "velocity_filter_ms": 24.0,
+        "target_filter_ms": 16,
+        "damping_scale": 1.0
+      },
+      "frames": 150,
+      "substeps": 10,
+      "gravity": [
+        0.0,
+        0.0,
+        -9.81
+      ],
+      "max_arm_cpu_gpu_position_deg": 0.00034019924089488316,
+      "max_arm_cpu_gpu_velocity_deg_s": 0.0014489394733713196,
+      "gpu_still_max_joint_deg": 0.003046264173462987,
+      "max_effort_fraction": 0.34452328858552156
+    },
+    "held_out_calibration": {
+      "fit_bags": 20,
+      "evaluation_bags": 6,
+      "fit_motion_windows": 38,
+      "evaluation_motion_windows": 12,
+      "motion_metrics": {
+        "original": {
+          "left": {
+            "lag_ms": 50.0,
+            "lag_bags": 6,
+            "moving_p95_deg_bag_median": 2.9087996445238877,
+            "hardware_error_p95_deg_bag_median": 1.9641741125777274
+          },
+          "right": {
+            "lag_ms": 45.0,
+            "lag_bags": 6,
+            "moving_p95_deg_bag_median": 2.6877869661973444,
+            "hardware_error_p95_deg_bag_median": 1.8771648336583837
+          }
+        },
+        "calibrated": {
+          "left": {
+            "lag_ms": 60.0,
+            "lag_bags": 6,
+            "moving_p95_deg_bag_median": 2.4855742384987902,
+            "hardware_error_p95_deg_bag_median": 0.688226353721666
+          },
+          "right": {
+            "lag_ms": 60.0,
+            "lag_bags": 6,
+            "moving_p95_deg_bag_median": 2.4509465020618526,
+            "hardware_error_p95_deg_bag_median": 0.6510248710548684
+          }
+        },
+        "filtered": {
+          "left": {
+            "lag_ms": 60.0,
+            "lag_bags": 6,
+            "moving_p95_deg_bag_median": 2.974485921528183,
+            "hardware_error_p95_deg_bag_median": 0.4537665967914658
+          },
+          "right": {
+            "lag_ms": 60.0,
+            "lag_bags": 6,
+            "moving_p95_deg_bag_median": 2.9872350786203272,
+            "hardware_error_p95_deg_bag_median": 0.43291432061697577
+          }
+        }
+      }
+    }
+  },
+  "legacy_actor_same_aligned_backend": {
+    "validation": {
+      "frames": 40978,
+      "scored": 40978,
+      "hard_stops": 0,
+      "invalid": 0,
+      "p95_mm": 17.3125,
+      "p50_mm": 8.3671875,
+      "all_ten_hit_15": 0.9206891502757577,
+      "contact_frames": 237,
+      "wrist_p95_deg": 4.417840480804443,
+      "wrist_position_p95_mm": 16.396839141845703
+    },
+    "test": {
+      "frames": 33225,
+      "scored": 33225,
+      "hard_stops": 0,
+      "invalid": 0,
+      "p95_mm": 16.515625,
+      "p50_mm": 8.296875,
+      "all_ten_hit_15": 0.926561324303988,
+      "contact_frames": 200,
+      "wrist_p95_deg": 5.526279449462891,
+      "wrist_position_p95_mm": 15.736862182617188
+    },
+    "hard": {
+      "windows": 19,
+      "p95_mm": 41.06907272338867,
+      "highpass_tip_rms_mm_s": 98.35789489746094,
+      "contact_frames": 0,
+      "stopped": 0
+    },
+    "hold": {
+      "cases": 50,
+      "completed": 50,
+      "all_p95_mm": 20.783889770507812,
+      "hard_p95_mm": 51.05024337768555,
+      "hit_15": 0.82,
+      "tip_speed_rms_mm_s": 7.648658275604248,
+      "contact_frames": 2,
+      "case_10148_mm": 51.05049514770508,
+      "case_38378_mm": 45.0142707824707
+    },
+    "provenance": {
+      "iteration": 17000,
+      "goal_points_per_hand": 20,
+      "actor_sha256": "4f60c09f3aec23b3d5879919c793db57ffdb395206b55f58ebef3d7c03aa0308"
+    }
+  },
+  "legacy_evaluation": {
+    "point_comparison": {
+      "5": {
+        "iteration": 17000,
+        "validation": {
+          "frames": 40978,
+          "scored_frames": 40978,
+          "ten_tip_hit_15mm": 0.9894089511445165,
+          "ten_tip_hit_15mm_no_contact": 0.9883840109326956,
+          "tip_p95_mm": 10.015625,
+          "wrist_orientation_p95_deg": 4.068270850181579,
+          "wrist_translation_p95_mm": 10.00444145202637,
+          "joint_landmarks_p95_mm": 10.498538732528687,
+          "contact_frames": 43,
+          "peak_contact_mm": 1.282254695892334,
+          "row_command_jitter_rms_deg_s": 25.86355972290039
+        },
+        "test": {
+          "frames": 33225,
+          "scored_frames": 33225,
+          "ten_tip_hit_15mm": 0.9851015801354401,
+          "ten_tip_hit_15mm_no_contact": 0.9839578630549285,
+          "tip_p95_mm": 10.2109375,
+          "wrist_orientation_p95_deg": 5.144143486022949,
+          "wrist_translation_p95_mm": 10.45923900604248,
+          "joint_landmarks_p95_mm": 11.059938812255853,
+          "contact_frames": 38,
+          "peak_contact_mm": 0.857125997543335,
+          "row_command_jitter_rms_deg_s": 27.350299835205078
+        },
+        "hard_validation": {
+          "frames": 135,
+          "scored_frames": 135,
+          "ten_tip_hit_15mm": 0.31851851851851853,
+          "ten_tip_hit_15mm_no_contact": 0.31851851851851853,
+          "tip_p95_mm": 34.83125,
+          "wrist_orientation_p95_deg": 21.566054534912105,
+          "wrist_translation_p95_mm": 33.25512619018554,
+          "joint_landmarks_p95_mm": 37.724846267700194,
+          "contact_frames": 0,
+          "peak_contact_mm": 0.0,
+          "row_command_jitter_rms_deg_s": 44.00535202026367
+        },
+        "recording_172809": {
+          "frames": 1290,
+          "scored_frames": 1290,
+          "ten_tip_hit_15mm": 0.9728682170542635,
+          "ten_tip_hit_15mm_no_contact": 0.9651162790697675,
+          "tip_p95_mm": 13.211328124999996,
+          "wrist_orientation_p95_deg": 9.854345798492432,
+          "wrist_translation_p95_mm": 25.577181529998747,
+          "joint_landmarks_p95_mm": 23.35191593170165,
+          "contact_frames": 10,
+          "peak_contact_mm": 0.34189921617507935,
+          "row_command_jitter_rms_deg_s": 15.414544105529785
+        }
+      },
+      "20": {
+        "iteration": 17000,
+        "validation": {
+          "frames": 40978,
+          "scored_frames": 40978,
+          "ten_tip_hit_15mm": 0.9918004783054322,
+          "ten_tip_hit_15mm_no_contact": 0.9907023280784811,
+          "tip_p95_mm": 9.649609375000011,
+          "wrist_orientation_p95_deg": 3.7986959338188195,
+          "wrist_translation_p95_mm": 9.56104159355164,
+          "joint_landmarks_p95_mm": 10.069934129714966,
+          "contact_frames": 46,
+          "peak_contact_mm": 0.8312250971794128,
+          "row_command_jitter_rms_deg_s": 26.430402755737305
+        },
+        "test": {
+          "frames": 33225,
+          "scored_frames": 33225,
+          "ten_tip_hit_15mm": 0.9856132430398796,
+          "ten_tip_hit_15mm_no_contact": 0.9844394281414598,
+          "tip_p95_mm": 9.959374999999994,
+          "wrist_orientation_p95_deg": 4.977046966552731,
+          "wrist_translation_p95_mm": 10.018933105468747,
+          "joint_landmarks_p95_mm": 10.751339721679685,
+          "contact_frames": 39,
+          "peak_contact_mm": 0.787775993347168,
+          "row_command_jitter_rms_deg_s": 27.844348907470703
+        },
+        "hard_validation": {
+          "frames": 135,
+          "scored_frames": 135,
+          "ten_tip_hit_15mm": 0.32592592592592595,
+          "ten_tip_hit_15mm_no_contact": 0.32592592592592595,
+          "tip_p95_mm": 35.384375,
+          "wrist_orientation_p95_deg": 21.447727394104003,
+          "wrist_translation_p95_mm": 32.90780601501464,
+          "joint_landmarks_p95_mm": 36.50606880187988,
+          "contact_frames": 0,
+          "peak_contact_mm": 0.0,
+          "row_command_jitter_rms_deg_s": 44.50080108642578
+        },
+        "recording_172809": {
+          "frames": 1290,
+          "scored_frames": 1290,
+          "ten_tip_hit_15mm": 0.9883720930232558,
+          "ten_tip_hit_15mm_no_contact": 0.9844961240310077,
+          "tip_p95_mm": 10.943359374999998,
+          "wrist_orientation_p95_deg": 9.10767102241516,
+          "wrist_translation_p95_mm": 23.913326740264893,
+          "joint_landmarks_p95_mm": 21.327588176727293,
+          "contact_frames": 5,
+          "peak_contact_mm": 0.15271498262882233,
+          "row_command_jitter_rms_deg_s": 15.53167724609375
+        }
+      }
+    },
+    "gravity_continuation": {
+      "recommended": {
+        "iteration": 17000,
+        "validation": {
+          "frames": 40978,
+          "scored_frames": 40978,
+          "ten_tip_hit_15mm": 0.9918004783054322,
+          "ten_tip_hit_15mm_no_contact": 0.9907023280784811,
+          "tip_p95_mm": 9.649609375000011,
+          "wrist_orientation_p95_deg": 3.7986959338188195,
+          "wrist_translation_p95_mm": 9.56104159355164,
+          "joint_landmarks_p95_mm": 10.069934129714966,
+          "contact_frames": 46,
+          "peak_contact_mm": 0.8312250971794128,
+          "row_command_jitter_rms_deg_s": 26.430402755737305
+        },
+        "test": {
+          "frames": 33225,
+          "scored_frames": 33225,
+          "ten_tip_hit_15mm": 0.9856132430398796,
+          "ten_tip_hit_15mm_no_contact": 0.9844394281414598,
+          "tip_p95_mm": 9.959374999999994,
+          "wrist_orientation_p95_deg": 4.977046966552731,
+          "wrist_translation_p95_mm": 10.018933105468747,
+          "joint_landmarks_p95_mm": 10.751339721679685,
+          "contact_frames": 39,
+          "peak_contact_mm": 0.787775993347168,
+          "row_command_jitter_rms_deg_s": 27.844348907470703
+        },
+        "hard_validation": {
+          "frames": 135,
+          "scored_frames": 135,
+          "ten_tip_hit_15mm": 0.32592592592592595,
+          "ten_tip_hit_15mm_no_contact": 0.32592592592592595,
+          "tip_p95_mm": 35.384375,
+          "wrist_orientation_p95_deg": 21.447727394104003,
+          "wrist_translation_p95_mm": 32.90780601501464,
+          "joint_landmarks_p95_mm": 36.50606880187988,
+          "contact_frames": 0,
+          "peak_contact_mm": 0.0,
+          "row_command_jitter_rms_deg_s": 44.50080108642578
+        },
+        "recording_172809": {
+          "frames": 1290,
+          "scored_frames": 1290,
+          "ten_tip_hit_15mm": 0.9883720930232558,
+          "ten_tip_hit_15mm_no_contact": 0.9844961240310077,
+          "tip_p95_mm": 10.943359374999998,
+          "wrist_orientation_p95_deg": 9.10767102241516,
+          "wrist_translation_p95_mm": 23.913326740264893,
+          "joint_landmarks_p95_mm": 21.327588176727293,
+          "contact_frames": 5,
+          "peak_contact_mm": 0.15271498262882233,
+          "row_command_jitter_rms_deg_s": 15.53167724609375
+        }
+      },
+      "latest": {
+        "iteration": 29000,
+        "validation": {
+          "frames": 40978,
+          "scored_frames": 40978,
+          "ten_tip_hit_15mm": 0.9852115769437259,
+          "ten_tip_hit_15mm_no_contact": 0.9841378300551515,
+          "tip_p95_mm": 10.469921875000011,
+          "wrist_orientation_p95_deg": 3.8896267056465157,
+          "wrist_translation_p95_mm": 10.139755582809448,
+          "joint_landmarks_p95_mm": 10.862497138977053,
+          "contact_frames": 46,
+          "peak_contact_mm": 0.8693624138832092,
+          "row_command_jitter_rms_deg_s": 25.857688903808594
+        },
+        "test": {
+          "frames": 33225,
+          "scored_frames": 33225,
+          "ten_tip_hit_15mm": 0.9792325056433409,
+          "ten_tip_hit_15mm_no_contact": 0.9780285929270128,
+          "tip_p95_mm": 10.6484375,
+          "wrist_orientation_p95_deg": 5.212453365325926,
+          "wrist_translation_p95_mm": 10.371974563598627,
+          "joint_landmarks_p95_mm": 11.3016975402832,
+          "contact_frames": 44,
+          "peak_contact_mm": 0.8847418427467346,
+          "row_command_jitter_rms_deg_s": 27.186969757080078
+        },
+        "hard_validation": {
+          "frames": 135,
+          "scored_frames": 135,
+          "ten_tip_hit_15mm": 0.24444444444444444,
+          "ten_tip_hit_15mm_no_contact": 0.24444444444444444,
+          "tip_p95_mm": 40.43124999999999,
+          "wrist_orientation_p95_deg": 21.413877868652342,
+          "wrist_translation_p95_mm": 32.379578781127925,
+          "joint_landmarks_p95_mm": 35.85934562683105,
+          "contact_frames": 0,
+          "peak_contact_mm": 0.0,
+          "row_command_jitter_rms_deg_s": 40.93318176269531
+        },
+        "recording_172809": {
+          "frames": 1290,
+          "scored_frames": 1290,
+          "ten_tip_hit_15mm": 0.9465116279069767,
+          "ten_tip_hit_15mm_no_contact": 0.9441860465116279,
+          "tip_p95_mm": 15.437109374999997,
+          "wrist_orientation_p95_deg": 11.35604720115661,
+          "wrist_translation_p95_mm": 25.4986301422119,
+          "joint_landmarks_p95_mm": 23.069767665863036,
+          "contact_frames": 3,
+          "peak_contact_mm": 0.0662502720952034,
+          "row_command_jitter_rms_deg_s": 14.646218299865723
+        }
+      }
+    },
+    "protocol_note": "Historical rollout plant and SDK/FK target streams. Separate from the aligned-plant run."
+  },
+  "scoring": {
+    "aligned_world_tip_p95": "P95 across scored frames of the maximum Euclidean error among ten tips.",
+    "aligned_all_ten_hit_15": "Scored frames with max error <= 15 mm divided by all planned frames.",
+    "aligned_hold": "100 ticks at a fixed target, last 25 ticks scored.",
+    "aligned_hard_windows": "19 preset validation windows for continuous difficult motion.",
+    "legacy_recording_target": "Wuji SDK hand-reference FK in the calibrated robot world frame."
+  }
+}

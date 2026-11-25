@@ -42,6 +42,11 @@ and [motion data tools](data/README.md) remain available independently.
 - [Wholebody S0 guide](source/dexgym/tasks/direct/wholebody_s0/README.md) covers MANUS and wrist Tracker MCAP processing, dual-arm retargeting, reference motion screening, Newton training, and native MuJoCo replay.
 - Dedicated [PPO and SuperMimic tasks](source/dexgym/tasks/direct/wholebody_s0/) learn bounded residuals on the same 54-DoF retargeted references. The retargeted pose reward tracks both wrists, ten wrist-local fingertip poses, and the relative pose of the two wrists.
 
+## Wholebody S0-4 Experiment
+
+- [Task design and policy contract](docs/tasks/wholebody_s04.md).
+- [Training and evaluation snapshot (2026-11-25)](docs/experiments/wholebody_s04_20261125.md).
+
 ## Install and verify
 
 Use Python 3.12 and the Isaac Lab 3.0 / Isaac Sim 6 / Newton GPU environment.
