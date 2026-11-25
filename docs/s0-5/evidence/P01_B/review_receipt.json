@@ -1,0 +1,2705 @@
+{
+  "absolute_attempt": "/home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-20261126-46ed5e2/attempt-04",
+  "actual_source_levels": {
+    "DUPLICATE_ALIAS": 59,
+    "EXCLUDED": 1,
+    "QUARANTINED": 89,
+    "RAW_SOURCE_CONFIRMED_FIELDS_SEPARATE": 32
+  },
+  "bounded_native_coverage": [
+    {
+      "captured_bimanual_tag": false,
+      "four_stream_overlap_ns": 1056578994,
+      "left_manus_max_local_node_motion_raw_unit": 0.0015871777185774033,
+      "left_wrist_peak_displacement_raw_unit": 0.020898427924527025,
+      "recording_id": "recording:28e5a46fe95f2f5803bf377d",
+      "right_manus_max_local_node_motion_raw_unit": 0.02779256720309508,
+      "right_wrist_peak_displacement_raw_unit": 0.09039202806565538,
+      "task": "hand_pose"
+    },
+    {
+      "captured_bimanual_tag": false,
+      "four_stream_overlap_ns": 1057491666,
+      "left_manus_max_local_node_motion_raw_unit": 0.003363006163994052,
+      "left_wrist_peak_displacement_raw_unit": 0.0016219620081120098,
+      "recording_id": "recording:30d00a5452b46fe0c89ed936",
+      "right_manus_max_local_node_motion_raw_unit": 0.0019591979284101883,
+      "right_wrist_peak_displacement_raw_unit": 0.0025662523512066924,
+      "task": "fruit"
+    },
+    {
+      "captured_bimanual_tag": false,
+      "four_stream_overlap_ns": 1058310515,
+      "left_manus_max_local_node_motion_raw_unit": 0.041878658491932466,
+      "left_wrist_peak_displacement_raw_unit": 0.018620731062584082,
+      "recording_id": "recording:4e5319e373fc2a90a1c33861",
+      "right_manus_max_local_node_motion_raw_unit": 0.025053301048563802,
+      "right_wrist_peak_displacement_raw_unit": 0.005316471354418929,
+      "task": "arm_motion"
+    },
+    {
+      "captured_bimanual_tag": false,
+      "four_stream_overlap_ns": 1058238411,
+      "left_manus_max_local_node_motion_raw_unit": 0.004280334788635286,
+      "left_wrist_peak_displacement_raw_unit": 0.0006668323175203036,
+      "recording_id": "recording:69fee6c9daa61d68031317bd",
+      "right_manus_max_local_node_motion_raw_unit": 0.015781624153482162,
+      "right_wrist_peak_displacement_raw_unit": 0.0027461513195065983,
+      "task": "arm_hand"
+    },
+    {
+      "captured_bimanual_tag": true,
+      "four_stream_overlap_ns": 1057995831,
+      "left_manus_max_local_node_motion_raw_unit": 0.0008811056952634982,
+      "left_wrist_peak_displacement_raw_unit": 0.01899822867807879,
+      "recording_id": "recording:8800a1148baaa5ee2d0d517b",
+      "right_manus_max_local_node_motion_raw_unit": 0.026309710927948607,
+      "right_wrist_peak_displacement_raw_unit": 0.21138181392807762,
+      "task": "bi_hand"
+    },
+    {
+      "captured_bimanual_tag": false,
+      "four_stream_overlap_ns": 1058263968,
+      "left_manus_max_local_node_motion_raw_unit": 0.0003669948907571292,
+      "left_wrist_peak_displacement_raw_unit": 0.0031103512914470327,
+      "recording_id": "recording:89f09cb37b13dc62b5f9eb96",
+      "right_manus_max_local_node_motion_raw_unit": 0.0038908213036398594,
+      "right_wrist_peak_displacement_raw_unit": 0.0008803275937282665,
+      "task": "hand_pose"
+    },
+    {
+      "captured_bimanual_tag": true,
+      "four_stream_overlap_ns": 1058139522,
+      "left_manus_max_local_node_motion_raw_unit": 0.010185445695728535,
+      "left_wrist_peak_displacement_raw_unit": 0.002233336883741703,
+      "recording_id": "recording:8d51b482abc64ad7af84b3fe",
+      "right_manus_max_local_node_motion_raw_unit": 0.01739013397242749,
+      "right_wrist_peak_displacement_raw_unit": 0.00741105904921715,
+      "task": "bi_hand"
+    }
+  ],
+  "bounded_native_overlap_ns": 7405018907,
+  "catalogue": {
+    "parts": 651,
+    "payloads": 382,
+    "schemas_total": 38,
+    "semantic_versions_by_format_and_status": [
+      {
+        "count": 12,
+        "format": "dex-native-v2",
+        "status": "VERIFIED_IN_REAL_SAMPLE"
+      },
+      {
+        "count": 1,
+        "format": "ros2-merged-mcap",
+        "status": "DECODE_FAILED"
+      },
+      {
+        "count": 20,
+        "format": "ros2-merged-mcap",
+        "status": "VERIFIED_IN_REAL_SAMPLE"
+      }
+    ],
+    "unavailable": 0,
+    "unknown_target_channels": 0
+  },
+  "decode_sample_counts": {
+    "formats": {
+      "dex-native-v2": 8,
+      "ros2-merged-mcap": 6
+    },
+    "recordings": 14,
+    "scanned_parts": 89,
+    "task_tags": {
+      "UNKNOWN": 6,
+      "arm_hand": 1,
+      "arm_motion": 1,
+      "bag_batter": 1,
+      "bi_hand": 2,
+      "fruit": 1,
+      "hand_pose": 2
+    }
+  },
+  "final_test": "BLOCKED",
+  "fixture_timezone": "Asia/Shanghai",
+  "frozen_p01_spec_sha256": "662ffd475dc40eb0769c0d2c474b5c526916d168c2413c67b98c4fecb624013a",
+  "independent_A1": {
+    "admitted_count": 32,
+    "errors": [],
+    "gate": "PASS",
+    "historical_gate_unchanged": "PASS",
+    "measured": {
+      "fully_admitted_metadata_recordings": 32,
+      "logical_recording_views": 181,
+      "mcap_instances": 651
+    },
+    "process_semantics": "Successful checker execution is independent of gate and human approval."
+  },
+  "inherited_a_denominators": {
+    "archived_mcap_instances": 29,
+    "by_recording_origin": {
+      "LIVE_TELEOP": 32,
+      "SIM_REPLAY": 1,
+      "UNKNOWN": 89
+    },
+    "canonical_recordings": 122,
+    "direct_mcap_instances": 622,
+    "fully_admitted_metadata_recordings": 32,
+    "historical_documents": 810,
+    "independent_capture_roots": 32,
+    "logical_recording_views": 181,
+    "mcap_instances": 651,
+    "multi_part_recordings": 63,
+    "parts_in_multi_part_recordings": 533,
+    "pieces_in_writer_split_groups": 0,
+    "raw_teleop_metadata_candidates": 32,
+    "recording_directories": 152,
+    "status_counts": {
+      "archive_container": {
+        "ADMITTED_CANDIDATE": 0,
+        "DUPLICATE_ALIAS": 0,
+        "EXCLUDED": 28,
+        "PENDING_DECODE_VERIFICATION": 0,
+        "QUARANTINED": 0
+      },
+      "asset": {
+        "ADMITTED_CANDIDATE": 382,
+        "DUPLICATE_ALIAS": 269,
+        "EXCLUDED": 0,
+        "PENDING_DECODE_VERIFICATION": 0,
+        "QUARANTINED": 0
+      },
+      "historical_artifact": {
+        "ADMITTED_CANDIDATE": 0,
+        "DUPLICATE_ALIAS": 0,
+        "EXCLUDED": 810,
+        "PENDING_DECODE_VERIFICATION": 0,
+        "QUARANTINED": 0
+      },
+      "recording": {
+        "ADMITTED_CANDIDATE": 32,
+        "DUPLICATE_ALIAS": 59,
+        "EXCLUDED": 1,
+        "PENDING_DECODE_VERIFICATION": 0,
+        "QUARANTINED": 89
+      }
+    },
+    "unique_byte_payloads": 382,
+    "unresolved_usage_events": 100071,
+    "writer_split_groups": 0
+  },
+  "legacy_collection_status_probe": {
+    "cdr_sha256": "771768e2d0c1f12db4f9600a4e04a19f224f68ebc35dd897cd6c0de8bd33b082",
+    "embedded_ros2msg": {
+      "detail": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb0 in position 9: invalid start byte",
+      "status": "FAIL"
+    },
+    "installed_fast_cdr_diagnostic": {
+      "detail": "RMWError: failed to deserialize ROS message: Fast CDR exception deserializing message of type dex_collection_interfaces::msg::dds_::CollectionStatus_., at ./src/type_support_common.cpp:118",
+      "status": "FAIL"
+    },
+    "part_id": "asset:6b0227861bbcf780a5560518",
+    "part_sha256": "453e302698ce8879618dd81b851040ec1c671190fd8aeb10585a557e017bf3ac",
+    "physical_message": 16,
+    "recording_id": "recording:156841c4f9f3866699b980f3",
+    "ros_topic_type_hash": "RIHS01_ce543f80bf868a5ccd4933e5279f7649b3afc53908f2c67630c48ae1a3d2838c",
+    "schema_sha256": "b8ded4b4b2291f9db6db32388e48e1d7f692fbaa1bf4bca1c7c47d32f64fab5b",
+    "topic": "/dex/collection/status"
+  },
+  "local_diagnostic_file_sha256": {
+    "attempt-04/collection_status_probe.json": "66177555188aa6fe01a64ad83bf84559e65d488249c5d63a56726db62e62c35f",
+    "attempt-04/decode.command": "04eddfced7a25ab43f1cb10664981015f66788e24ef4e399f3c48197c99ea56f",
+    "attempt-04/sdk_components.json": "7b7b34344119454a75c37b0b9ff94b0ebb7c06f3db10b747e19dda7515a152bb",
+    "attempt-04/test_results.json": "4a7a36bad4e3943b6399093bf2b171f731835fc1e2a49b220ae091ee5031f25d",
+    "attempt-04/timing_source.json": "198ed91008b8407d332808597c23dbf19ec25e5ea2a58f6be8bc08121c9f5458",
+    "runner01.log": "dbc85541a243444f18eec5b1824b55c7d033a696a672676cfc25f9011b2ad8ed",
+    "runner02.log": "4cef59b6e2b5accf388b5ede7e8598537a30e2baa7a87b83073c456746c9204b",
+    "runner03.log": "6765f9f6b15e80e48e709f74dba16589857e403024a1637097d20bc6553a5b61",
+    "runner04.log": "00a399be15bfb0a61bb9d7c21c2e692a08256553d8310fb74807d83f86789d18"
+  },
+  "module_sha256": {
+    "__init__.py": "ece1989aa93ca60ac521562aad89efc35f13b5bccb227b7301bf629af5bea471",
+    "adapters/__init__.py": "84030e774053ba9ae5dfee3fac9001d7ac0dcbb6a47d3038fb7ba2fb978848be",
+    "adapters/dex_native_v2.py": "0c6a6a4678160b19a8ff7c2e4d1071929a3bef955dbb0067b949491953232529",
+    "adapters/ros2_merged_mcap.py": "1eb6275c614c70b5495fad44b1351952cf662e3e5dda748a8bef73f0599a572e",
+    "decode_audit.py": "b1b88582366e5c46580d561724f6b31b82840dce6d86e41075444e728a3442bf",
+    "decode_inputs.py": "6bebd143d041acc06b6a4c39736b8cb8cde4e4e5d47c1a9684e5faeada69e725",
+    "decode_metrics.py": "e39397dd1ce2e371b94b9405fc46d1610a0e95a4e283b960fbb505f08abaa7ad",
+    "historical_usage.py": "be84c1aecbe389e68afc8d31be44c45bfc5c9bda68d25e057bb0c97550751ebd",
+    "inventory.py": "a7cbe1b49c2f34e58b9b788f26b3f5eda74b33607fd834fdb430267cdfec3c0d",
+    "lineage.py": "65d3b2b97d23ef9a6d896eb752c3f1e940c16d7e8ccd1d216fe537c3ef6fc7c9",
+    "raw_events.py": "b063566865ad0f611bb510d8c6abbd452d293f4e5574dcf67d90c70792f92553",
+    "registry_gate.py": "20c5513e31fbdd747377a668fe682e65e3e1475ba04e1893a641f83afb0ce595",
+    "schema_registry.py": "a9bee16e429cc07a7c87591310fb73dbbe8ff0eaa03fc1cee7e02a312e66499a",
+    "source_registry.py": "c33048815c4e8f48e5e957e2abf0629d3775fabd8a9b9141c3f77df18566c77e",
+    "telemetry.py": "b47440c50911198b1501d719d10f0105779671cfc2d66105fbd6672d7d5a5058"
+  },
+  "observed": "2026-11-26T01:56:49+08:00",
+  "output_bytes": {
+    "adapter_contract.json": 62772,
+    "dataset_coverage.json": 14690,
+    "decode_attempts.json": 53038,
+    "decode_fields.json": 499864,
+    "fixtures_manifest.json": 94886,
+    "lineage_followup.json": 509,
+    "manus_topology_report.json": 81979,
+    "missing_fields.json": 144705,
+    "raw_events.jsonl": 107541392,
+    "raw_timestamp_report.json": 98502,
+    "schema_registry.json": 841013,
+    "source_eligibility_updates.jsonl": 77471,
+    "telemetry_eligibility.json": 60803,
+    "telemetry_index.jsonl": 13601335,
+    "test_results.json": 4524
+  },
+  "output_sha256": {
+    "adapter_contract.json": "0d6b2d65a800c36f6950bb1930c8cd958f317a2aef90d601705ec39f54746db0",
+    "dataset_coverage.json": "4de000a166d6aac287a104dc0d65d06b1031164dd52d31f8591d9ccb4496c9ba",
+    "decode_attempts.json": "25e2e395f220c686749ae268566f4ed18c5c619373d86381c4484e70c097547e",
+    "decode_fields.json": "862b9708db8ccac4d3b61d5bc9a83bf7efe330fc193330da61172c04da43f64a",
+    "fixtures_manifest.json": "41a4357bbc6261250ad54b96cb483ac46ce3387de479254a8ad1fe089812bbf7",
+    "lineage_followup.json": "a8cfb6823ce946baef927ee911271be101cc33e2b0903b2ab6beef466293c2f4",
+    "manus_topology_report.json": "ad98d56699a13335c071129389f49590bb61d032485bac2be5df2085520634f4",
+    "missing_fields.json": "0fe4bfd234242aff7be8e28f8d41ffde6ad82a48835aac6c7144d58b61dd8922",
+    "raw_events.jsonl": "d86552746176c86536b71cd6061dbb8974644c9de35291dc25eec31250f5c34d",
+    "raw_timestamp_report.json": "1c816ad25092986e8d3f160b4733de500a366b01c024b4a206b26eb87ff72a4a",
+    "schema_registry.json": "bfa4b120810ee6665a127475be74b8833d7a28c8223ce680f96758929b8529fe",
+    "source_eligibility_updates.jsonl": "0dbf8c393f6947f919ebd1193c3d997c6f008b9234b694e2c064dc9f235e3598",
+    "telemetry_eligibility.json": "6ceab5d9c5cc1ce8e4b7731fa7a1f58de25b7d42949a8bcd10989fbfbc1b2ef9",
+    "telemetry_index.jsonl": "eb3b4bca352544ee21000c63d72bf1c4eb72c476a31df0f33aa038c490ccd76c",
+    "test_results.json": "17f106f1ab80cfb00519cea163bb00bfbc3b0f19cb0f5674d7616ebf0840042d"
+  },
+  "output_sha256_manifest": "88b8db12d2fc7de8c2f6d84052b93ca534567837ba3852309ee6df304b548e8e",
+  "parent_commit": "46ed5e2ae51b2e735897d79205409e4ccd6c8382",
+  "raw_manus_clocks": [
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 32,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8332398,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8332834,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 2,
+          "step_median_raw": 8426,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 2,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:156841c4f9f3866699b980f3",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 2
+      },
+      "task": null,
+      "topic": "/manus_glove_left"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 32,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8333953,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8331283,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 7,
+          "step_median_raw": 8421,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 7,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:156841c4f9f3866699b980f3",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 7
+      },
+      "task": null,
+      "topic": "/manus_glove_right"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8327382,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8331781,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 19,
+          "step_median_raw": 8409,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 19,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:28e5a46fe95f2f5803bf377d",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 19
+      },
+      "task": "hand_pose",
+      "topic": "/manus_glove_left"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8327374,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8328036,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 24,
+          "step_median_raw": 8412,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 24,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:28e5a46fe95f2f5803bf377d",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 24
+      },
+      "task": "hand_pose",
+      "topic": "/manus_glove_right"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8329551,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8332029,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 11,
+          "step_median_raw": 8415,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 11,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:30d00a5452b46fe0c89ed936",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 11
+      },
+      "task": "fruit",
+      "topic": "/manus_glove_left"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8332704,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8335585,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 13,
+          "step_median_raw": 8418,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 13,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:30d00a5452b46fe0c89ed936",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 13
+      },
+      "task": "fruit",
+      "topic": "/manus_glove_right"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8332948,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8332688,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 7,
+          "step_median_raw": 8419,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 7,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:4e5319e373fc2a90a1c33861",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 7
+      },
+      "task": "arm_motion",
+      "topic": "/manus_glove_left"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8332468,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8334102,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 14,
+          "step_median_raw": 8418,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 1,
+          "missing": 0,
+          "repeat_steps": 14,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:4e5319e373fc2a90a1c33861",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 14
+      },
+      "task": "arm_motion",
+      "topic": "/manus_glove_right"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 32,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8328865,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8332351,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 6,
+          "step_median_raw": 8426,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 6,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:60351a9b86ad40ee83b12b83",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 6
+      },
+      "task": null,
+      "topic": "/manus_glove_left"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 32,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8330765,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8333996,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 1,
+          "step_median_raw": 8410,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 1,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:60351a9b86ad40ee83b12b83",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 1
+      },
+      "task": null,
+      "topic": "/manus_glove_right"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8331504,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8335322,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 12,
+          "step_median_raw": 8417,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 12,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:69fee6c9daa61d68031317bd",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 12
+      },
+      "task": "arm_hand",
+      "topic": "/manus_glove_left"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8336288,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8333822,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 28,
+          "step_median_raw": 8414,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 28,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:69fee6c9daa61d68031317bd",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 28
+      },
+      "task": "arm_hand",
+      "topic": "/manus_glove_right"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 32,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8332905,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8333099,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 3,
+          "step_median_raw": 8427,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 3,
+          "step_median_raw": 9,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:6fd4b25bf32a1f804a4dc5f2",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 3
+      },
+      "task": null,
+      "topic": "/manus_glove_left"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 32,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8330928,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8332645,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 2,
+          "step_median_raw": 8407,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 2,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:6fd4b25bf32a1f804a4dc5f2",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 2
+      },
+      "task": null,
+      "topic": "/manus_glove_right"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8333424,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8331924,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 14,
+          "step_median_raw": 8421,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 14,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:8800a1148baaa5ee2d0d517b",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 14
+      },
+      "task": "bi_hand",
+      "topic": "/manus_glove_left"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8330984,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8333146,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 29,
+          "step_median_raw": 8416,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 29,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:8800a1148baaa5ee2d0d517b",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 29
+      },
+      "task": "bi_hand",
+      "topic": "/manus_glove_right"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8322496,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8333981,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 5,
+          "step_median_raw": 8418,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 5,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:89f09cb37b13dc62b5f9eb96",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 5
+      },
+      "task": "hand_pose",
+      "topic": "/manus_glove_left"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8325777,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8331641,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 21,
+          "step_median_raw": 8411,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 21,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:89f09cb37b13dc62b5f9eb96",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 21
+      },
+      "task": "hand_pose",
+      "topic": "/manus_glove_right"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8333789,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8332024,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 11,
+          "step_median_raw": 8416,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 1,
+          "missing": 0,
+          "repeat_steps": 11,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:8d51b482abc64ad7af84b3fe",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 11
+      },
+      "task": "bi_hand",
+      "topic": "/manus_glove_left"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8333389,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8330420,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 27,
+          "step_median_raw": 8406,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 27,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:8d51b482abc64ad7af84b3fe",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 27
+      },
+      "task": "bi_hand",
+      "topic": "/manus_glove_right"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 32,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8331182,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8333136,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 6,
+          "step_median_raw": 8427,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 6,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:aeecac94430b60e4baa779d8",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 6
+      },
+      "task": null,
+      "topic": "/manus_glove_left"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 32,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8332856,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8333873,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 2,
+          "step_median_raw": 8405,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 2,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:c5b198536cf03404afda8672",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 2
+      },
+      "task": null,
+      "topic": "/manus_glove_left"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 32,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8323834,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8332476,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 5,
+          "step_median_raw": 8410,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 5,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:c5b198536cf03404afda8672",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 5
+      },
+      "task": null,
+      "topic": "/manus_glove_right"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8335020,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8333251,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 2,
+          "step_median_raw": 8416,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 2,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:caa8c1066d47f297449075fd",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 2
+      },
+      "task": "bag_batter",
+      "topic": "/manus_glove_left"
+    },
+    {
+      "clocks": {
+        "controller_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 128,
+          "repeat_steps": 0,
+          "step_median_raw": null,
+          "unit": null,
+          "zero_values": 0
+        },
+        "mcap_log": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8336169,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "ros_header": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 0,
+          "missing": 0,
+          "repeat_steps": 0,
+          "step_median_raw": 8330522,
+          "unit": "ns",
+          "zero_values": 0
+        },
+        "sdk_receive": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 1,
+          "missing": 0,
+          "repeat_steps": 35,
+          "step_median_raw": 8409,
+          "unit": "us",
+          "zero_values": 0
+        },
+        "sdk_source": {
+          "backward_steps": 0,
+          "large_forward_steps_diagnostic_only": 1,
+          "missing": 0,
+          "repeat_steps": 35,
+          "step_median_raw": 8,
+          "unit": null,
+          "zero_values": 0
+        }
+      },
+      "recording_id": "recording:caa8c1066d47f297449075fd",
+      "repeats": {
+        "SAME_CACHED_CAPTURE_CANDIDATE_WITH_NEW_HEADER": 35
+      },
+      "task": "bag_batter",
+      "topic": "/manus_glove_right"
+    }
+  ],
+  "resource": {
+    "distributions": {
+      "Farama-Notifications": "0.0.4",
+      "PyYAML": "6.0.1",
+      "cloudpickle": "3.1.1",
+      "gymnasium": "1.2.0",
+      "lz4": "4.0.2+dfsg",
+      "mcap": "1.6.0",
+      "mcap-ros2-support": "0.6.0",
+      "numpy": "1.26.4",
+      "scipy": "1.11.4",
+      "zstandard": "0.25.0"
+    },
+    "executable": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python",
+    "free_bytes": 684107431936,
+    "overlay_setup_files": [
+      {
+        "bytes": 349,
+        "path": "/opt/ros/jazzy/setup.bash",
+        "realpath": "/opt/ros/jazzy/setup.bash",
+        "sha256": "12556a2725a823c3841f8fbab50892c8b8c69df9654d2a74761407226ecca4df"
+      },
+      {
+        "bytes": 3760,
+        "path": "/home/ubuntu/teleop_ws/install/local_setup.bash",
+        "realpath": "/home/ubuntu/teleop_ws/install/local_setup.bash",
+        "sha256": "0e10d666bbf43cf559467b11b75cf6d26cf8d210e7f94e79dfe5a7dddb2fe91c"
+      },
+      {
+        "bytes": 3801,
+        "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/local_setup.bash",
+        "realpath": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/local_setup.bash",
+        "sha256": "b2c43a59660b272f706cfc722ecf0f86364da421eaef62e48039735afc12a7ef"
+      }
+    ],
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+  },
+  "run_scope": "B only, bounded diagnostics",
+  "schema": "s05.p01b.review-receipt.v1",
+  "sdk_components": {
+    "calendar_count": 2336,
+    "library_blob": "363be71c6609a9624002e076c7d5e819d231fc28",
+    "library_sha256": "b4e98f04144585cf51428c41e6af202dc664a599fb70a61adbcfe6ff0958825b",
+    "matches_reviewed_teleop_lib_blob": true,
+    "median_ms_values": [
+      8.0
+    ],
+    "online_capture_clock_verified": false,
+    "semantics": "If timecode=false, SDK documentation defines the decoded fraction as ms. This is a component interpretation, not a ROS or controller clock fit.",
+    "timecode_true": 0,
+    "total_samples": 2336
+  },
+  "signature_followup": {
+    "complete_conflicts": 0,
+    "observed_payload_conflicts": 0,
+    "old_unresolved_prior_use_events": 100071,
+    "unopenable_or_unbound_sidecars": 0,
+    "unresolved_semantic_matches": 0,
+    "weak_count": 1,
+    "weak_under_old_aliases": 0
+  },
+  "source_supporting_file_roles": {
+    "ANNOTATED_CALIBRATION_WINDOW_ONLY": 21,
+    "RECORDER_LIFECYCLE_ONLY": 21
+  },
+  "tech_gates": {
+    "B1": "FAIL",
+    "B2": "BLOCKED",
+    "adapter_issues": [],
+    "decode_attempt_counts": {
+      "CDR_DECODE_FAILED": 119,
+      "PASS": 21321
+    },
+    "manus_structural_failures": 0,
+    "missing_schema_versions": 1,
+    "old_hand_state_sample_verified": true,
+    "pairing_counts_by_event": {
+      "INITIAL_STATE_ONLY": 24,
+      "UNVERIFIED": 5380,
+      "VERIFIED_WRITER_PAIR": 12544
+    },
+    "timer_mapping": "NOT_RUN_P01_C",
+    "unverified_events_in_attested_native": 0
+  },
+  "telemetry_earliest_old_hand_and_arm_examples": [
+    {
+      "available_fields": [
+        "connected",
+        "effort",
+        "enabled",
+        "header",
+        "home_sequence",
+        "joint_names",
+        "position",
+        "side",
+        "state",
+        "velocity"
+      ],
+      "axes_match_recorded_schema": true,
+      "effort_unit": null,
+      "expected_dimension": 20,
+      "index": {
+        "asset_sha256": "453e302698ce8879618dd81b851040ec1c671190fd8aeb10585a557e017bf3ac",
+        "channel_id": 8,
+        "mcap_sequence": 0,
+        "part_id": "asset:6b0227861bbcf780a5560518",
+        "part_order": 0,
+        "physical_message": 15,
+        "schema_key": "manus_wuji_interfaces/msg/HandState|ros2msg|cdr|db7dca35c06545242eff872b1eef79c729171b7d84a963966de903e608d5e575",
+        "schema_sha256": "db7dca35c06545242eff872b1eef79c729171b7d84a963966de903e608d5e575",
+        "topic": "/right_hand/state"
+      },
+      "joint_names": [
+        "r_THJ0",
+        "r_THJ1",
+        "r_THJ2",
+        "r_THJ3",
+        "r_FFJ0",
+        "r_FFJ1",
+        "r_FFJ2",
+        "r_FFJ3",
+        "r_MFJ0",
+        "r_MFJ1",
+        "r_MFJ2",
+        "r_MFJ3",
+        "r_RFJ0",
+        "r_RFJ1",
+        "r_RFJ2",
+        "r_RFJ3",
+        "r_LFJ0",
+        "r_LFJ1",
+        "r_LFJ2",
+        "r_LFJ3"
+      ],
+      "measured_or_command": "FEEDBACK_TOPIC_UNVALIDATED_ORIGIN",
+      "role": "right_hand_feedback",
+      "vector_lengths": {
+        "current": null,
+        "effort": 20,
+        "position": 20,
+        "velocity": 20
+      }
+    },
+    {
+      "available_fields": [
+        "connected",
+        "effort",
+        "enabled",
+        "header",
+        "home_sequence",
+        "joint_names",
+        "position",
+        "side",
+        "state",
+        "velocity"
+      ],
+      "axes_match_recorded_schema": true,
+      "effort_unit": null,
+      "expected_dimension": 20,
+      "index": {
+        "asset_sha256": "453e302698ce8879618dd81b851040ec1c671190fd8aeb10585a557e017bf3ac",
+        "channel_id": 10,
+        "mcap_sequence": 0,
+        "part_id": "asset:6b0227861bbcf780a5560518",
+        "part_order": 0,
+        "physical_message": 44,
+        "schema_key": "manus_wuji_interfaces/msg/HandState|ros2msg|cdr|db7dca35c06545242eff872b1eef79c729171b7d84a963966de903e608d5e575",
+        "schema_sha256": "db7dca35c06545242eff872b1eef79c729171b7d84a963966de903e608d5e575",
+        "topic": "/left_hand/state"
+      },
+      "joint_names": [
+        "l_THJ0",
+        "l_THJ1",
+        "l_THJ2",
+        "l_THJ3",
+        "l_FFJ0",
+        "l_FFJ1",
+        "l_FFJ2",
+        "l_FFJ3",
+        "l_MFJ0",
+        "l_MFJ1",
+        "l_MFJ2",
+        "l_MFJ3",
+        "l_RFJ0",
+        "l_RFJ1",
+        "l_RFJ2",
+        "l_RFJ3",
+        "l_LFJ0",
+        "l_LFJ1",
+        "l_LFJ2",
+        "l_LFJ3"
+      ],
+      "measured_or_command": "FEEDBACK_TOPIC_UNVALIDATED_ORIGIN",
+      "role": "left_hand_feedback",
+      "vector_lengths": {
+        "current": null,
+        "effort": 20,
+        "position": 20,
+        "velocity": 20
+      }
+    },
+    {
+      "available_fields": [
+        "header",
+        "joint_names",
+        "position",
+        "sequence",
+        "side"
+      ],
+      "axes_match_recorded_schema": true,
+      "effort_unit": null,
+      "expected_dimension": 20,
+      "index": {
+        "asset_sha256": "453e302698ce8879618dd81b851040ec1c671190fd8aeb10585a557e017bf3ac",
+        "channel_id": 29,
+        "mcap_sequence": 0,
+        "part_id": "asset:6b0227861bbcf780a5560518",
+        "part_order": 0,
+        "physical_message": 673,
+        "schema_key": "manus_wuji_interfaces/msg/HandCommand|ros2msg|cdr|146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+        "schema_sha256": "146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+        "topic": "/right_hand/command"
+      },
+      "joint_names": [
+        "r_THJ0",
+        "r_THJ1",
+        "r_THJ2",
+        "r_THJ3",
+        "r_FFJ0",
+        "r_FFJ1",
+        "r_FFJ2",
+        "r_FFJ3",
+        "r_MFJ0",
+        "r_MFJ1",
+        "r_MFJ2",
+        "r_MFJ3",
+        "r_RFJ0",
+        "r_RFJ1",
+        "r_RFJ2",
+        "r_RFJ3",
+        "r_LFJ0",
+        "r_LFJ1",
+        "r_LFJ2",
+        "r_LFJ3"
+      ],
+      "measured_or_command": "COMMAND",
+      "role": "right_hand_command",
+      "vector_lengths": {
+        "current": null,
+        "effort": null,
+        "position": 20,
+        "velocity": null
+      }
+    },
+    {
+      "available_fields": [
+        "header",
+        "joint_names",
+        "position",
+        "sequence",
+        "side"
+      ],
+      "axes_match_recorded_schema": true,
+      "effort_unit": null,
+      "expected_dimension": 20,
+      "index": {
+        "asset_sha256": "453e302698ce8879618dd81b851040ec1c671190fd8aeb10585a557e017bf3ac",
+        "channel_id": 30,
+        "mcap_sequence": 0,
+        "part_id": "asset:6b0227861bbcf780a5560518",
+        "part_order": 0,
+        "physical_message": 674,
+        "schema_key": "manus_wuji_interfaces/msg/HandCommand|ros2msg|cdr|146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+        "schema_sha256": "146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+        "topic": "/left_hand/command"
+      },
+      "joint_names": [
+        "l_THJ0",
+        "l_THJ1",
+        "l_THJ2",
+        "l_THJ3",
+        "l_FFJ0",
+        "l_FFJ1",
+        "l_FFJ2",
+        "l_FFJ3",
+        "l_MFJ0",
+        "l_MFJ1",
+        "l_MFJ2",
+        "l_MFJ3",
+        "l_RFJ0",
+        "l_RFJ1",
+        "l_RFJ2",
+        "l_RFJ3",
+        "l_LFJ0",
+        "l_LFJ1",
+        "l_LFJ2",
+        "l_LFJ3"
+      ],
+      "measured_or_command": "COMMAND",
+      "role": "left_hand_command",
+      "vector_lengths": {
+        "current": null,
+        "effort": null,
+        "position": 20,
+        "velocity": null
+      }
+    },
+    {
+      "available_fields": [
+        "effort",
+        "header",
+        "name",
+        "position",
+        "velocity"
+      ],
+      "axes_match_recorded_schema": true,
+      "effort_unit": null,
+      "expected_dimension": 7,
+      "index": {
+        "asset_sha256": "453e302698ce8879618dd81b851040ec1c671190fd8aeb10585a557e017bf3ac",
+        "channel_id": 32,
+        "mcap_sequence": 0,
+        "part_id": "asset:6b0227861bbcf780a5560518",
+        "part_order": 0,
+        "physical_message": 1815,
+        "schema_key": "sensor_msgs/msg/JointState|ros2msg|cdr|3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+        "schema_sha256": "3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+        "topic": "/right_arm/joint_states"
+      },
+      "joint_names": [
+        "right_j1",
+        "right_j2",
+        "right_j3",
+        "right_j4",
+        "right_j5",
+        "right_j6",
+        "right_j7"
+      ],
+      "measured_or_command": "FEEDBACK_TOPIC_UNVALIDATED_ORIGIN",
+      "role": "right_arm_feedback",
+      "vector_lengths": {
+        "current": null,
+        "effort": 7,
+        "position": 7,
+        "velocity": 0
+      }
+    },
+    {
+      "available_fields": [
+        "effort",
+        "header",
+        "name",
+        "position",
+        "velocity"
+      ],
+      "axes_match_recorded_schema": true,
+      "effort_unit": null,
+      "expected_dimension": 7,
+      "index": {
+        "asset_sha256": "453e302698ce8879618dd81b851040ec1c671190fd8aeb10585a557e017bf3ac",
+        "channel_id": 35,
+        "mcap_sequence": 0,
+        "part_id": "asset:6b0227861bbcf780a5560518",
+        "part_order": 0,
+        "physical_message": 1837,
+        "schema_key": "sensor_msgs/msg/JointState|ros2msg|cdr|3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+        "schema_sha256": "3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+        "topic": "/left_arm/joint_states"
+      },
+      "joint_names": [
+        "left_j1",
+        "left_j2",
+        "left_j3",
+        "left_j4",
+        "left_j5",
+        "left_j6",
+        "left_j7"
+      ],
+      "measured_or_command": "FEEDBACK_TOPIC_UNVALIDATED_ORIGIN",
+      "role": "left_arm_feedback",
+      "vector_lengths": {
+        "current": null,
+        "effort": 7,
+        "position": 7,
+        "velocity": 0
+      }
+    },
+    {
+      "available_fields": [
+        "header",
+        "joint_names",
+        "positions",
+        "sequence",
+        "session_id",
+        "source",
+        "valid_until"
+      ],
+      "axes_match_recorded_schema": true,
+      "effort_unit": null,
+      "expected_dimension": 14,
+      "index": {
+        "asset_sha256": "453e302698ce8879618dd81b851040ec1c671190fd8aeb10585a557e017bf3ac",
+        "channel_id": 21,
+        "mcap_sequence": 0,
+        "part_id": "asset:6b0227861bbcf780a5560518",
+        "part_order": 0,
+        "physical_message": 60242,
+        "schema_key": "tianji_interfaces/msg/JointCommand|ros2msg|cdr|78e31755714b821e61477256df9e8a5f0cc9d52559462a1150551ee19d34de06",
+        "schema_sha256": "78e31755714b821e61477256df9e8a5f0cc9d52559462a1150551ee19d34de06",
+        "topic": "/tianji/joint_command"
+      },
+      "joint_names": [
+        "left_j1",
+        "left_j2",
+        "left_j3",
+        "left_j4",
+        "left_j5",
+        "left_j6",
+        "left_j7",
+        "right_j1",
+        "right_j2",
+        "right_j3",
+        "right_j4",
+        "right_j5",
+        "right_j6",
+        "right_j7"
+      ],
+      "measured_or_command": "COMMAND",
+      "role": "arm_command",
+      "vector_lengths": {
+        "current": null,
+        "effort": null,
+        "position": 14,
+        "velocity": null
+      }
+    }
+  ],
+  "telemetry_levels_by_recording_view": {
+    "DUPLICATE_ALIAS": 59,
+    "EXCLUDED_SOURCE": 1,
+    "NO_COMMAND_FEEDBACK_PAIR": 84,
+    "NO_HARDWARE_PROVENANCE": 37
+  },
+  "telemetry_missing_fields": {
+    "arm_command": {
+      "current_absent": 224,
+      "current_empty": 0,
+      "current_wrong_size": 0,
+      "effort_absent": 224,
+      "effort_empty": 0,
+      "effort_wrong_size": 0,
+      "feedback_clock_unknown": 224,
+      "joint_order_or_axes_invalid": 0,
+      "observed": 224,
+      "position_absent": 0,
+      "position_empty": 0,
+      "position_wrong_size": 0,
+      "velocity_absent": 224,
+      "velocity_empty": 0,
+      "velocity_wrong_size": 0
+    },
+    "arm_safety": {
+      "observed": 194
+    },
+    "driver_state": {
+      "observed": 225
+    },
+    "left_arm_feedback": {
+      "current_absent": 288,
+      "current_empty": 0,
+      "current_wrong_size": 0,
+      "effort_absent": 0,
+      "effort_empty": 0,
+      "effort_wrong_size": 0,
+      "feedback_clock_unknown": 288,
+      "joint_order_or_axes_invalid": 0,
+      "observed": 288,
+      "position_absent": 0,
+      "position_empty": 0,
+      "position_wrong_size": 0,
+      "velocity_absent": 0,
+      "velocity_empty": 128,
+      "velocity_wrong_size": 0
+    },
+    "left_hand_command": {
+      "current_absent": 256,
+      "current_empty": 0,
+      "current_wrong_size": 0,
+      "effort_absent": 256,
+      "effort_empty": 0,
+      "effort_wrong_size": 0,
+      "feedback_clock_unknown": 256,
+      "joint_order_or_axes_invalid": 0,
+      "observed": 256,
+      "position_absent": 0,
+      "position_empty": 0,
+      "position_wrong_size": 0,
+      "velocity_absent": 256,
+      "velocity_empty": 0,
+      "velocity_wrong_size": 0
+    },
+    "left_hand_diagnostics": {
+      "observed": 29
+    },
+    "left_hand_feedback": {
+      "current_absent": 256,
+      "current_empty": 0,
+      "current_wrong_size": 0,
+      "effort_absent": 0,
+      "effort_empty": 0,
+      "effort_wrong_size": 0,
+      "feedback_clock_unknown": 96,
+      "joint_order_or_axes_invalid": 0,
+      "observed": 256,
+      "position_absent": 0,
+      "position_empty": 0,
+      "position_wrong_size": 0,
+      "velocity_absent": 0,
+      "velocity_empty": 0,
+      "velocity_wrong_size": 0
+    },
+    "left_wrist_pose": {
+      "observed": 288
+    },
+    "left_wrist_twist": {
+      "observed": 256
+    },
+    "left_wrist_wrench": {
+      "observed": 128
+    },
+    "real_driver_safety": {
+      "observed": 225
+    },
+    "right_arm_feedback": {
+      "current_absent": 288,
+      "current_empty": 0,
+      "current_wrong_size": 0,
+      "effort_absent": 0,
+      "effort_empty": 0,
+      "effort_wrong_size": 0,
+      "feedback_clock_unknown": 288,
+      "joint_order_or_axes_invalid": 0,
+      "observed": 288,
+      "position_absent": 0,
+      "position_empty": 0,
+      "position_wrong_size": 0,
+      "velocity_absent": 0,
+      "velocity_empty": 128,
+      "velocity_wrong_size": 0
+    },
+    "right_hand_command": {
+      "current_absent": 256,
+      "current_empty": 0,
+      "current_wrong_size": 0,
+      "effort_absent": 256,
+      "effort_empty": 0,
+      "effort_wrong_size": 0,
+      "feedback_clock_unknown": 256,
+      "joint_order_or_axes_invalid": 0,
+      "observed": 256,
+      "position_absent": 0,
+      "position_empty": 0,
+      "position_wrong_size": 0,
+      "velocity_absent": 256,
+      "velocity_empty": 0,
+      "velocity_wrong_size": 0
+    },
+    "right_hand_diagnostics": {
+      "observed": 29
+    },
+    "right_hand_feedback": {
+      "current_absent": 256,
+      "current_empty": 0,
+      "current_wrong_size": 0,
+      "effort_absent": 0,
+      "effort_empty": 0,
+      "effort_wrong_size": 0,
+      "feedback_clock_unknown": 96,
+      "joint_order_or_axes_invalid": 0,
+      "observed": 256,
+      "position_absent": 0,
+      "position_empty": 0,
+      "position_wrong_size": 0,
+      "velocity_absent": 0,
+      "velocity_empty": 0,
+      "velocity_wrong_size": 0
+    },
+    "right_wrist_pose": {
+      "observed": 288
+    },
+    "right_wrist_twist": {
+      "observed": 256
+    },
+    "right_wrist_wrench": {
+      "observed": 128
+    },
+    "teleop_diagnostics": {
+      "observed": 128
+    },
+    "teleop_state": {
+      "observed": 14
+    },
+    "tracker_safety": {
+      "observed": 1160
+    }
+  },
+  "test_counts": {
+    "integration": 5,
+    "unit": 30
+  },
+  "test_exits": {
+    "decode": 0,
+    "integration": 0,
+    "unit": 0
+  },
+  "topology": {
+    "events": 2336,
+    "geometry_issue_counts": {},
+    "seen_per_stream_examples": {
+      "25": 25
+    },
+    "topology_changes": 0
+  },
+  "typed_versions": [
+    {
+      "failed_count": 0,
+      "format": "dex-native-v2",
+      "sample_count": 8974,
+      "schema_key": "dex_collection_interfaces/msg/SampleObservation|ros2msg|cdr|f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+      "sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/dex/collection/observations/manus_left",
+        "/dex/collection/observations/manus_right",
+        "/dex/collection/observations/tracker_left",
+        "/dex/collection/observations/tracker_left_raw",
+        "/dex/collection/observations/tracker_right",
+        "/dex/collection/observations/tracker_right_raw",
+        "/dex/collection/observations/tracker_safety"
+      ],
+      "type": "dex_collection_interfaces/msg/SampleObservation"
+    },
+    {
+      "failed_count": 0,
+      "format": "dex-native-v2",
+      "sample_count": 2304,
+      "schema_key": "geometry_msgs/msg/PoseStamped|ros2msg|cdr|91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+      "sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_arm/ee_pose",
+        "/right_arm/ee_pose",
+        "/vive/raw/left_wrist",
+        "/vive/raw/right_wrist"
+      ],
+      "type": "geometry_msgs/msg/PoseStamped"
+    },
+    {
+      "failed_count": 0,
+      "format": "dex-native-v2",
+      "sample_count": 256,
+      "schema_key": "geometry_msgs/msg/TwistStamped|ros2msg|cdr|55a24debccea194c673cf7e935bb852d75656a425421884b2466f6032ecc5feb",
+      "sha256": "55a24debccea194c673cf7e935bb852d75656a425421884b2466f6032ecc5feb",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_arm/ee_twist",
+        "/right_arm/ee_twist"
+      ],
+      "type": "geometry_msgs/msg/TwistStamped"
+    },
+    {
+      "failed_count": 0,
+      "format": "dex-native-v2",
+      "sample_count": 2048,
+      "schema_key": "manus_ros2_msgs/msg/ManusGlove|ros2msg|cdr|5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+      "sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/manus_glove_left",
+        "/manus_glove_right"
+      ],
+      "type": "manus_ros2_msgs/msg/ManusGlove"
+    },
+    {
+      "failed_count": 0,
+      "format": "dex-native-v2",
+      "sample_count": 256,
+      "schema_key": "manus_wuji_interfaces/msg/HandCommand|ros2msg|cdr|146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+      "sha256": "146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_hand/command",
+        "/right_hand/command"
+      ],
+      "type": "manus_wuji_interfaces/msg/HandCommand"
+    },
+    {
+      "failed_count": 0,
+      "format": "dex-native-v2",
+      "sample_count": 256,
+      "schema_key": "manus_wuji_interfaces/msg/HandState|ros2msg|cdr|5aa32a75a2b15633613c7ce24c307d6e46e383e9f6d6dbe482a9fc23db46c082",
+      "sha256": "5aa32a75a2b15633613c7ce24c307d6e46e383e9f6d6dbe482a9fc23db46c082",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_hand/state",
+        "/right_hand/state"
+      ],
+      "type": "manus_wuji_interfaces/msg/HandState"
+    },
+    {
+      "failed_count": 0,
+      "format": "dex-native-v2",
+      "sample_count": 256,
+      "schema_key": "sensor_msgs/msg/JointState|ros2msg|cdr|3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+      "sha256": "3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_arm/joint_states",
+        "/right_arm/joint_states"
+      ],
+      "type": "sensor_msgs/msg/JointState"
+    },
+    {
+      "failed_count": 0,
+      "format": "dex-native-v2",
+      "sample_count": 128,
+      "schema_key": "tianji_interfaces/msg/JointCommand|ros2msg|cdr|78e31755714b821e61477256df9e8a5f0cc9d52559462a1150551ee19d34de06",
+      "sha256": "78e31755714b821e61477256df9e8a5f0cc9d52559462a1150551ee19d34de06",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/tianji/joint_command"
+      ],
+      "type": "tianji_interfaces/msg/JointCommand"
+    },
+    {
+      "failed_count": 0,
+      "format": "dex-native-v2",
+      "sample_count": 129,
+      "schema_key": "tianji_interfaces/msg/RobotState|ros2msg|cdr|fa3b3c3a8d5af4e6d581c34d2202cdf2f994c4a6e46bf935162b39b89f87af24",
+      "sha256": "fa3b3c3a8d5af4e6d581c34d2202cdf2f994c4a6e46bf935162b39b89f87af24",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/tianji/robot_state"
+      ],
+      "type": "tianji_interfaces/msg/RobotState"
+    },
+    {
+      "failed_count": 0,
+      "format": "dex-native-v2",
+      "sample_count": 1290,
+      "schema_key": "tianji_interfaces/msg/SafetyStatus|ros2msg|cdr|853429cef94a8c9631dba8ab6dab1b73cf28192c9435bf01c6a07c0bef6d45b2",
+      "sha256": "853429cef94a8c9631dba8ab6dab1b73cf28192c9435bf01c6a07c0bef6d45b2",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/tianji/safety",
+        "/tianji_real_driver/safety",
+        "/vive/tracker/safety_status"
+      ],
+      "type": "tianji_interfaces/msg/SafetyStatus"
+    },
+    {
+      "failed_count": 0,
+      "format": "dex-native-v2",
+      "sample_count": 3,
+      "schema_key": "tianji_interfaces/msg/TeleopState|ros2msg|cdr|350ac86e1130b573586e1c902234241af1737bdb182b66622bf2e33222f89297",
+      "sha256": "350ac86e1130b573586e1c902234241af1737bdb182b66622bf2e33222f89297",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/tianji/teleop_state"
+      ],
+      "type": "tianji_interfaces/msg/TeleopState"
+    },
+    {
+      "failed_count": 0,
+      "format": "dex-native-v2",
+      "sample_count": 2048,
+      "schema_key": "tianji_interfaces/msg/TrackerPose|ros2msg|cdr|05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+      "sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/vive/tracker/left_wrist",
+        "/vive/tracker/right_wrist"
+      ],
+      "type": "tianji_interfaces/msg/TrackerPose"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 32,
+      "schema_key": "dex_collection_interfaces/msg/CollectionStatus|ros2msg|cdr|93e5ccf00e03cac2e6c06d7a4e05a6162a8b24cb7392f2962881c3a6c1972f2a",
+      "sha256": "93e5ccf00e03cac2e6c06d7a4e05a6162a8b24cb7392f2962881c3a6c1972f2a",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/dex/collection/status"
+      ],
+      "type": "dex_collection_interfaces/msg/CollectionStatus"
+    },
+    {
+      "failed_count": 119,
+      "format": "ros2-merged-mcap",
+      "sample_count": 0,
+      "schema_key": "dex_collection_interfaces/msg/CollectionStatus|ros2msg|cdr|b8ded4b4b2291f9db6db32388e48e1d7f692fbaa1bf4bca1c7c47d32f64fab5b",
+      "sha256": "b8ded4b4b2291f9db6db32388e48e1d7f692fbaa1bf4bca1c7c47d32f64fab5b",
+      "status": "DECODE_FAILED",
+      "topics": [
+        "/dex/collection/status"
+      ],
+      "type": "dex_collection_interfaces/msg/CollectionStatus"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 135,
+      "schema_key": "dex_collection_interfaces/msg/TopicCatalogue|ros2msg|cdr|65839bbedefd0fdd3bdc82ac4a43bf9e0e39b03ab6acdca552de1d821b48f4af",
+      "sha256": "65839bbedefd0fdd3bdc82ac4a43bf9e0e39b03ab6acdca552de1d821b48f4af",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/dex/collection/topics"
+      ],
+      "type": "dex_collection_interfaces/msg/TopicCatalogue"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 128,
+      "schema_key": "diagnostic_msgs/msg/DiagnosticArray|ros2msg|cdr|01dbb8d55211eaed5bbaaad4e6972126610ff5d4a4b8917c2c26b5f1cbdd4c82",
+      "sha256": "01dbb8d55211eaed5bbaaad4e6972126610ff5d4a4b8917c2c26b5f1cbdd4c82",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/tianji/teleop_diagnostics"
+      ],
+      "type": "diagnostic_msgs/msg/DiagnosticArray"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 640,
+      "schema_key": "geometry_msgs/msg/PoseStamped|ros2msg|cdr|91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+      "sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_arm/ee_pose",
+        "/right_arm/ee_pose",
+        "/vive/raw/left_wrist",
+        "/vive/raw/right_wrist"
+      ],
+      "type": "geometry_msgs/msg/PoseStamped"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 256,
+      "schema_key": "geometry_msgs/msg/TwistStamped|ros2msg|cdr|55a24debccea194c673cf7e935bb852d75656a425421884b2466f6032ecc5feb",
+      "sha256": "55a24debccea194c673cf7e935bb852d75656a425421884b2466f6032ecc5feb",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_arm/ee_twist",
+        "/right_arm/ee_twist"
+      ],
+      "type": "geometry_msgs/msg/TwistStamped"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 256,
+      "schema_key": "geometry_msgs/msg/WrenchStamped|ros2msg|cdr|3a547dc5d67b12b7a47b12cea54fc014368b90605375364e550162e64eb468e2",
+      "sha256": "3a547dc5d67b12b7a47b12cea54fc014368b90605375364e550162e64eb468e2",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_arm/wrench",
+        "/right_arm/wrench"
+      ],
+      "type": "geometry_msgs/msg/WrenchStamped"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 288,
+      "schema_key": "manus_ros2_msgs/msg/ManusGlove|ros2msg|cdr|5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+      "sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/manus_glove_left",
+        "/manus_glove_right"
+      ],
+      "type": "manus_ros2_msgs/msg/ManusGlove"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 256,
+      "schema_key": "manus_wuji_interfaces/msg/HandCommand|ros2msg|cdr|146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+      "sha256": "146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_hand/command",
+        "/right_hand/command"
+      ],
+      "type": "manus_wuji_interfaces/msg/HandCommand"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 44,
+      "schema_key": "manus_wuji_interfaces/msg/HandDiagnostics|ros2msg|cdr|a8152e37b00da452adc4c124606d1cbaf73e562eb4930bb28f5958b7ccec0722",
+      "sha256": "a8152e37b00da452adc4c124606d1cbaf73e562eb4930bb28f5958b7ccec0722",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_hand/diagnostics",
+        "/right_hand/diagnostics"
+      ],
+      "type": "manus_wuji_interfaces/msg/HandDiagnostics"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 14,
+      "schema_key": "manus_wuji_interfaces/msg/HandDiagnostics|ros2msg|cdr|bc21f69f6033c51f454d47fa45dd6c5448b24e2e7ddc20a6e453f924e06cd8d5",
+      "sha256": "bc21f69f6033c51f454d47fa45dd6c5448b24e2e7ddc20a6e453f924e06cd8d5",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_hand/diagnostics",
+        "/right_hand/diagnostics"
+      ],
+      "type": "manus_wuji_interfaces/msg/HandDiagnostics"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 64,
+      "schema_key": "manus_wuji_interfaces/msg/HandState|ros2msg|cdr|5aa32a75a2b15633613c7ce24c307d6e46e383e9f6d6dbe482a9fc23db46c082",
+      "sha256": "5aa32a75a2b15633613c7ce24c307d6e46e383e9f6d6dbe482a9fc23db46c082",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_hand/state",
+        "/right_hand/state"
+      ],
+      "type": "manus_wuji_interfaces/msg/HandState"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 64,
+      "schema_key": "manus_wuji_interfaces/msg/HandState|ros2msg|cdr|6d858cc718cb38d7de9edf629d285c9e685f26ead372b6bd1633fe5b18961470",
+      "sha256": "6d858cc718cb38d7de9edf629d285c9e685f26ead372b6bd1633fe5b18961470",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_hand/state",
+        "/right_hand/state"
+      ],
+      "type": "manus_wuji_interfaces/msg/HandState"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 128,
+      "schema_key": "manus_wuji_interfaces/msg/HandState|ros2msg|cdr|db7dca35c06545242eff872b1eef79c729171b7d84a963966de903e608d5e575",
+      "sha256": "db7dca35c06545242eff872b1eef79c729171b7d84a963966de903e608d5e575",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_hand/state",
+        "/right_hand/state"
+      ],
+      "type": "manus_wuji_interfaces/msg/HandState"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 320,
+      "schema_key": "sensor_msgs/msg/JointState|ros2msg|cdr|3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+      "sha256": "3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/left_arm/joint_states",
+        "/right_arm/joint_states"
+      ],
+      "type": "sensor_msgs/msg/JointState"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 96,
+      "schema_key": "tianji_interfaces/msg/JointCommand|ros2msg|cdr|78e31755714b821e61477256df9e8a5f0cc9d52559462a1150551ee19d34de06",
+      "sha256": "78e31755714b821e61477256df9e8a5f0cc9d52559462a1150551ee19d34de06",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/tianji/joint_command"
+      ],
+      "type": "tianji_interfaces/msg/JointCommand"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 96,
+      "schema_key": "tianji_interfaces/msg/RobotState|ros2msg|cdr|fa3b3c3a8d5af4e6d581c34d2202cdf2f994c4a6e46bf935162b39b89f87af24",
+      "sha256": "fa3b3c3a8d5af4e6d581c34d2202cdf2f994c4a6e46bf935162b39b89f87af24",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/tianji/robot_state"
+      ],
+      "type": "tianji_interfaces/msg/RobotState"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 289,
+      "schema_key": "tianji_interfaces/msg/SafetyStatus|ros2msg|cdr|853429cef94a8c9631dba8ab6dab1b73cf28192c9435bf01c6a07c0bef6d45b2",
+      "sha256": "853429cef94a8c9631dba8ab6dab1b73cf28192c9435bf01c6a07c0bef6d45b2",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/tianji/safety",
+        "/tianji_real_driver/safety",
+        "/vive/tracker/safety_status"
+      ],
+      "type": "tianji_interfaces/msg/SafetyStatus"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 8,
+      "schema_key": "tianji_interfaces/msg/TeleopState|ros2msg|cdr|350ac86e1130b573586e1c902234241af1737bdb182b66622bf2e33222f89297",
+      "sha256": "350ac86e1130b573586e1c902234241af1737bdb182b66622bf2e33222f89297",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/tianji/teleop_state"
+      ],
+      "type": "tianji_interfaces/msg/TeleopState"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 3,
+      "schema_key": "tianji_interfaces/msg/TeleopState|ros2msg|cdr|d17ebd728cf6dd91d51eaf484716d2de34176911ad9f75589c942b82f59a51e2",
+      "sha256": "d17ebd728cf6dd91d51eaf484716d2de34176911ad9f75589c942b82f59a51e2",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/tianji/teleop_state"
+      ],
+      "type": "tianji_interfaces/msg/TeleopState"
+    },
+    {
+      "failed_count": 0,
+      "format": "ros2-merged-mcap",
+      "sample_count": 256,
+      "schema_key": "tianji_interfaces/msg/TrackerPose|ros2msg|cdr|05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+      "sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+      "status": "VERIFIED_IN_REAL_SAMPLE",
+      "topics": [
+        "/vive/tracker/left_wrist",
+        "/vive/tracker/right_wrist"
+      ],
+      "type": "tianji_interfaces/msg/TrackerPose"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "s05.p01b.sample-plan.v1",
+  "output_root": "/home/ubuntu/dexgym_data/s0-5/p01",
+  "required_recordings": [
+    "/18e74c646013f1e6-2156b79bc2482857",
+    "/teleop_no_camera_20261016_133930",
+    "/s0_sim_20261117_153201"
+  ],
+  "max_recordings": 24,
+  "native_per_channel": 128,
+  "merged_per_channel": 32,
+  "physical_record_limit": 110000,
+  "native_writer": {
+    "repo": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection",
+    "commit": "937bc44f7643cfc3a8de5146a7e6646dbe10c201",
+    "path": "ros2_ws/src/dex_data_collection/src/recorder.cpp",
+    "sha256": "5345e756e2670f218c727e7c326fe0b9fc80a92dd1ba7be38eac9f87e9834ab2"
+  },
+  "attestations": [],
+  "attestation_roots": [
+    "/home/ubuntu/teleop_ws/data",
+    "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/data/raw/episodes"
+  ],
+  "decision": "Bounded development and diagnostic prefixes. Include required native, historical HandState and recorded replay negative control. Cover native task, date, profile strata and all bi_hand tagged episodes. Select additional targeted type hashes by greatest new coverage. No final QC, clock fit, production Motion Bank or training."
+}

@@ -14,6 +14,7 @@ from zoneinfo import ZoneInfo
 
 from .lineage import Lineage, exact_aliases
 from .historical_usage import root_use
+from .registry_gate import signature_conflicts
 
 STATUSES = ('ADMITTED_CANDIDATE', 'EXCLUDED', 'QUARANTINED', 'DUPLICATE_ALIAS',
             'PENDING_DECODE_VERIFICATION')
@@ -126,9 +127,17 @@ def final_test(roots, use):
                 next_gate='P09 requires independent sources, sealed manifest and access log')
 
 
-def record_aliases(records):
-    aliases = exact_aliases(records)
+def record_aliases(records, pending=None):
+    conflicts = signature_conflicts(records)
+    affected = {key for conflict in conflicts for key in conflict['record_ids']}
+    if pending is not None:
+        pending.extend(dict(reason='CONFLICTING_COMPLETE_PAYLOAD',**x) for x in conflicts)
+    aliases = exact_aliases([r for r in records if r['id'] not in affected])
     for row in records:
+        if row['id'] in affected:
+            row['flags'] = sorted(set(row.get('flags',[]))|{'CONFLICTING_COMPLETE_PAYLOAD'})
+            if row['status'] != 'EXCLUDED':
+                row.update(status='QUARANTINED',admission_reason='CONFLICTING_COMPLETE_PAYLOAD')
         if row['id'] in aliases:
             row.update(status='DUPLICATE_ALIAS', admission_reason='EXACT_ORDERED_MCAP_COPY',
                        alias_of=aliases[row['id']])

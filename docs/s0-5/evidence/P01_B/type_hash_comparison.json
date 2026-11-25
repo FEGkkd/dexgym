@@ -1,0 +1,38 @@
+[
+  {
+    "path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/CollectionStatus.json",
+    "sha256": "f6a6b6aab761eddea7932596556b2a63d4c2708668c0009f95144c7fd8143f64",
+    "type_hashes": [
+      {
+        "hash_string": "RIHS01_56af1b621e7e9afa10d7a4b20709b0d5f3a1a40ce92612926774ae8b959a8f6b",
+        "type_name": "dex_collection_interfaces/msg/CollectionStatus"
+      },
+      {
+        "hash_string": "RIHS01_b106235e25a4c5ed35098aa0a61a3ee9c9b18d197f398b0e4206cea9acf9c197",
+        "type_name": "builtin_interfaces/msg/Time"
+      },
+      {
+        "hash_string": "RIHS01_0b8d6f81aae72825104b9a4eda5ca5ffac1f8e93467e58a2b8dbb0cdeeae9349",
+        "type_name": "dex_collection_interfaces/msg/StreamStatus"
+      }
+    ]
+  },
+  {
+    "path": "/home/ubuntu/teleop_ws/install/dex_collection_interfaces/share/dex_collection_interfaces/msg/CollectionStatus.json",
+    "sha256": "f6a6b6aab761eddea7932596556b2a63d4c2708668c0009f95144c7fd8143f64",
+    "type_hashes": [
+      {
+        "hash_string": "RIHS01_56af1b621e7e9afa10d7a4b20709b0d5f3a1a40ce92612926774ae8b959a8f6b",
+        "type_name": "dex_collection_interfaces/msg/CollectionStatus"
+      },
+      {
+        "hash_string": "RIHS01_b106235e25a4c5ed35098aa0a61a3ee9c9b18d197f398b0e4206cea9acf9c197",
+        "type_name": "builtin_interfaces/msg/Time"
+      },
+      {
+        "hash_string": "RIHS01_0b8d6f81aae72825104b9a4eda5ca5ffac1f8e93467e58a2b8dbb0cdeeae9349",
+        "type_name": "dex_collection_interfaces/msg/StreamStatus"
+      }
+    ]
+  }
+]

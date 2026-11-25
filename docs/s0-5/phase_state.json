@@ -62,8 +62,8 @@
     "reason": "independent source lineage and sealed manifest have not been established"
   },
   "p01_subphases": {
-    "P01-A": "READY_FOR_REVIEW",
-    "P01-B": "NOT_STARTED",
+    "P01-A": "ACCEPTED",
+    "P01-B": "BLOCKED",
     "P01-C": "NOT_STARTED",
     "P01-D": "NOT_STARTED",
     "P01-E": "NOT_STARTED",
@@ -85,6 +85,31 @@
       "evidence_ref": "evidence/P01_A/review_receipt.json",
       "evidence_sha256": "364cc22ecfa86ef95730f87bc8f9be27f0244ad81ec598935ef72a15277be787",
       "report_ref": "reports/P01_A_acceptance.md"
+    },
+    {
+      "phase": "P01-A",
+      "from": "READY_FOR_REVIEW",
+      "to": "ACCEPTED",
+      "at": "2026-11-26T01:36:20+08:00",
+      "approval": {"type": "human", "by": "project user", "ref": "reports/approvals/P01_A_ACCEPTED_P01_B.md"}
+    },
+    {
+      "phase": "P01-B",
+      "from": "NOT_STARTED",
+      "to": "IN_PROGRESS",
+      "at": "2026-11-26T01:36:20+08:00",
+      "authorization_ref": "reports/approvals/P01_A_ACCEPTED_P01_B.md",
+      "run_id": "P01-B-20261126-46ed5e2"
+    },
+    {
+      "phase": "P01-B",
+      "from": "IN_PROGRESS",
+      "to": "BLOCKED",
+      "at": "2026-11-26T01:56:49+08:00",
+      "technical_gates": {"B1": "FAIL", "B2": "BLOCKED"},
+      "evidence_ref": "evidence/P01_B/review_receipt.json",
+      "evidence_sha256": "edc758262697f982eb15a51093b4d58a29a8025230c3c9643fd1d263b7a927a5",
+      "report_ref": "reports/P01_B_acceptance.md"
     }
   ]
 }

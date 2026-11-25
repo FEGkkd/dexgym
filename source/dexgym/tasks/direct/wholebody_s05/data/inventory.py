@@ -12,6 +12,7 @@ import yaml
 
 from .historical_usage import ARTIFACT_KEYS, history_events, iter_context, references
 from .lineage import Lineage
+from .registry_gate import merged_signature
 from .source_registry import (
     HUMAN_TOPICS, STATUSES, capability, classify, coverage, date_from_ns, final_test,
     legacy_groups, record_aliases, root_use, same_bytes, stable_id, stable_json, stat_key,
@@ -131,6 +132,7 @@ class Inventory:
         self.errors = []
         self.pending = []
         self.cache = {}
+        self.legacy_part_counts = {}
         self.archive_hashed_bytes = 0
 
     def error(self, path, reason):
@@ -282,12 +284,26 @@ class Inventory:
         self.discovery.append(dict(root=str(root),mode=cfg['mode'],recording_directories=count))
 
     def merged(self, locator, info, witness, group, parts, label, catalogue, archived=False):
+        from .adapters.ros2_merged_mcap import catalogue_asset
+
         origin = 'UNKNOWN'
         flags = []
         conf = self.config['positive_replays'].get(locator)
-        signature = None
-        if parts and all(p['file_sha256'] for p in parts):
-            signature = ('rosbag2',tuple(p['file_sha256'] for p in parts))
+        if group['order_source']=='sidecar' and not group['missing'] and info.get('files'):
+            for part in parts:
+                key = part.get('file_sha256')
+                if not key:
+                    continue
+                if key not in self.legacy_part_counts:
+                    try:
+                        channels, state = catalogue_asset(part)
+                        counts = [channel['declared_count'] for channel in channels]
+                        self.legacy_part_counts[key] = (
+                            sum(counts) if state=='CATALOGUED' and counts and None not in counts else None)
+                    except (OSError,ValueError,KeyError,RuntimeError):
+                        self.legacy_part_counts[key] = None
+                part['verified_message_count'] = self.legacy_part_counts[key]
+        signature = merged_signature(info,group,parts)
         if conf and conf['metadata_sha256']==witness.get('sha256'):
             origin = 'SIM_REPLAY'
         elif REPLAY_NAME.search(locator):
@@ -570,7 +586,7 @@ class Inventory:
                 self.scan_legacy(root)
             else:
                 self.scan_native(root)
-        aliases=record_aliases(self.records)
+        aliases=record_aliases(self.records,self.pending)
         self.candidate_relations()
         by_sha=defaultdict(list)
         for a in self.assets:
