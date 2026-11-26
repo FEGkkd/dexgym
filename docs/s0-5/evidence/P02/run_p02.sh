@@ -21,7 +21,9 @@ date -Is > "$out/started_at"
 printf '%q ' "${cmd[@]}" > "$out/command"
 rc=0
 runtime=(env -i HOME=/home/ubuntu PATH=/usr/bin:/bin LANG=C.UTF-8 PYTHONDONTWRITEBYTECODE=1
-         PYTHONNOUSERSITE=1 "PYTHONPATH=$PWD/source" OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1)
+         PYTHONNOUSERSITE=1 "PYTHONPATH=$PWD/source:/home/ubuntu/.local/lib/python3.12/site-packages"
+         OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1)
+"${runtime[@]}" "$PWD/.venv/bin/python" -P -c 'import json,platform,sys,mujoco,numpy,scipy,yaml; print(json.dumps(dict(python=sys.executable,version=platform.python_version(),paths=sys.path,modules={x.__name__:dict(path=x.__file__,version=x.__version__) for x in (mujoco,numpy,scipy,yaml)})))' > "$out/runtime.json"
 /usr/bin/time -v -o "$out/resources.txt" "${runtime[@]}" "$PWD/.venv/bin/python" -P "${cmd[@]}" > "$out/stdout" 2> "$out/stderr" || rc=$?
 printf '%s\n' "$rc" > "$out/exit"
 date -Is > "$out/ended_at"
