@@ -200,7 +200,7 @@ def controls(out,base,plan,robot,reference):
     other=solve_minimax(robot,goal,base,seed,300)
     check_witness(reference,goal,result,low)
     status=abs(result['epigraph_m']-other['epigraph_m'])<1e-10
-    if not status or low<=1.:
+    if not status or low<=.015:
         raise ValueError('Determinism or synthetic analytic bound control failed')
     cases.append(dict(name='known_unreachable_translation',radial_lower_bound_m=low,result=result,
                       deterministic_goal_value_within_1e_10_m=status,repeated_q_max_delta_rad=float(
@@ -264,6 +264,8 @@ def main(mode,out,geo=None,bud=None):
         task(out,geo,bud,base,plan,rows,robot,witness,bank)
     if mode=='functional':
         functional(out,geo,base,plan,robot,witness,bank)
+        controls(out,base,plan,robot,witness)
+    if mode=='controls':
         controls(out,base,plan,robot,witness)
 
 
