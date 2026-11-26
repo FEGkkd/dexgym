@@ -89,8 +89,8 @@
     "P01-B-HMB": "ACCEPTED",
     "P01-C": "ACCEPTED",
     "P01-D": "ACCEPTED",
-    "P01-E": "READY_FOR_REVIEW",
-    "P01-F": "NOT_STARTED",
+    "P01-E": "ACCEPTED",
+    "P01-F": "IN_PROGRESS",
     "P01-T": "BLOCKED"
   },
   "p01_subphase_events": [
@@ -296,6 +296,37 @@
       "technical_gates": {
         "E1": "PASS"
       }
+    },
+    {
+      "phase": "P01-E",
+      "from": "READY_FOR_REVIEW",
+      "to": "ACCEPTED",
+      "scope": "E1_PRODUCTION",
+      "at": "2026-11-26T19:18:19+08:00",
+      "reviewed_commit": "b22f8be3c35bf1b5ad9bae98335ecd1510cacc1e",
+      "run_id": "P01-E-E1-20261126-3f90652",
+      "manifest_sha256": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074",
+      "receipt_sha256": "0930e732e92e6213742e8b48cd1921d980c1315c7c108bda1ea24c0c59de483b",
+      "plan_sha256": "0f94b842e2558ec04da257aff94d469ae9b965968fff1a4593382fc2eea09404",
+      "approval": {
+        "type": "human",
+        "by": "project_user",
+        "ref": "reports/approvals/P01_E_ACCEPTED_P01_F.md"
+      }
+    },
+    {
+      "phase": "P01-F",
+      "from": "NOT_STARTED",
+      "to": "IN_PROGRESS",
+      "at": "2026-11-26T19:19:16+08:00",
+      "scope": "INDEPENDENT_HMB_QUALIFICATION",
+      "authorization_ref": "reports/approvals/P01_E_ACCEPTED_P01_F.md",
+      "spec_sha256": "1de9df40e11a7c73de3c99fe77c67d878e24635a0303e940639bfd37ee6b69c3",
+      "implementation_spec_ref": "specs/P01_F_independent_hmb_acceptance.md",
+      "implementation_spec_sha256": "5fe4dedf5985716c2f5360ed67fa87c63ec76c34bb1d25e2c6895fbdb37048ee",
+      "sample_plan_ref": "evidence/P01_F/sample_plan.json",
+      "sample_plan_sha256": "a0900a0ad5491fe5ea5ef152ab9bc888c0ac6629e58c929df2f4bc2a3a4a2548",
+      "run_id": "P01-F-20261126-b22f8be"
     }
   ],
   "p01e_preflight": {

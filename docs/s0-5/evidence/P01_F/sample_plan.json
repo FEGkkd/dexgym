@@ -1,0 +1,20 @@
+{
+  "schema": "s05.p01f.independent_selection.v1",
+  "run_id": "P01-F-20261126-b22f8be",
+  "approved_e1": "b22f8be3c35bf1b5ad9bae98335ecd1510cacc1e",
+  "seed": "s05-p01f-20261126-v1",
+  "per_root": "Rank full partitions by SHA256(seed:partition_key), choose first partition with all six pose streams and at least one joint-valid causal tick. Choose common-valid eligible tick nearest the partition center. Fall back by same ranking and document every missing witness.",
+  "scenarios": ["normal_motion", "DUPLICATE_SOURCE", "DROPOUT", "STALE", "UNSAFE", "recovery", "natural_tail", "partition_boundary"],
+  "scenario_cap": 3,
+  "scenario_tie_break": "SHA256(seed:scenario:partition_key:tick), with scopes and missingness disclosed",
+  "top_k": 3,
+  "extreme_speed_streams": ["manus_left", "manus_right", "tracker_right", "tracker_right_raw"],
+  "extreme_speed_modes": ["causal", "offline"],
+  "extreme_geometry": ["left_original_tip", "right_original_tip", "relative_registered_wrists"],
+  "extreme_tie_break": "descending metric, then partition key, tick, stream and node ascending",
+  "context_ticks_either_side": 4,
+  "history_ticks": 5,
+  "reference_ticks": [50, 100, 250],
+  "known_E1_witnesses": "Prefer independent root selections. Report exact physical index pairs reused, if any.",
+  "tolerance": {"translation_m": 5e-12, "rotation_rad": 2e-7, "velocity_abs_m_s": 1e-8, "velocity_relative": 1e-8}
+}

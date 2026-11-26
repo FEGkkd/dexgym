@@ -5,19 +5,20 @@
 | 阶段 | 当前状态 | 授权范围 |
 |---|---|---|
 | P00 | ACCEPTED | 用户签核 `09c1c9e3c63797083a82493e2a40dd8bb4b1db6d` |
-| P01 | IN_PROGRESS | E1 技术验收已完成，等待 P01-E 人工签核 |
+| P01 | IN_PROGRESS | E1 已获人工签核，P01-F 独立复验与移交准备 |
 | P01-A | ACCEPTED | 人工签核仅覆盖 A1 元数据门 |
 | P01-B（历史） | BLOCKED | v0.2.0 原 B1 FAIL / B2 BLOCKED |
 | P01-B-HMB | ACCEPTED | 用户签核 `8b0f399` 的有界解码门 |
 | P01-C（历史结论） | BLOCKED | 原运行与原 C2 真实时钟缺证状态保留 |
 | P01-C（历史 HMB 仿真资格） | ACCEPTED | 项目用户签核 `eb00f25`、最终凭据与 SHA |
 | P01-D | ACCEPTED | 用户签核 `34e44b6`，绑定原 D1 配置和运行凭据 |
-| P01-E | READY_FOR_REVIEW | E0 已获人工签核，E1 PASS，正式 HMB 等待独立审核 |
+| P01-E | ACCEPTED | 用户签核绑定正式 Run、manifest、计划及凭据 SHA |
+| P01-F | IN_PROGRESS | 只读审计 E1 与下游 Reader，等待独立技术复验 |
 | C2-RT | BLOCKED | 设备物理捕获、控制器接收和跨时钟误差界未证 |
 | 物理 robot-base 注册 | BLOCKED | 缺独立外部测量 |
 | P01-T | BLOCKED | 动态资格为 0，P03 正式启动的强制前置 |
 | Final Test | BLOCKED | 缺乏独立封存证据 |
-| P01-F、P02–P10 | NOT_STARTED | 待各自授权 |
+| P02–P10 | NOT_STARTED | 待各自授权 |
 
 原 Master Design、Contracts、Evaluation Protocol v0.1.1 和 P01 v0.2.0 留作历史版本。项目用户批准 DCR-001 的依赖范围，活动规格为 P01 v0.2.1 和三份 v0.1.2 设计。QC 数值阈值、时钟参数和全量预算将在 P01-C/D 另行实测和冻结。[DCR-001](dcr/DCR-001_p01_hmb_telemetry_dependencies.md) · [原批准记录](reports/approvals/P00_ACCEPTED_P01_A.md)
 
@@ -35,4 +36,4 @@ P01-D Run `P01-D-20261126-eb00f25` 产出已获人工批准的冻结方案与有
 
 E0 的原技术审核事件和证据继续保留。项目用户独立批准配置与实施锁的精确 SHA 及正式 Run ID `P01-E-E1-20261126-3f90652`。[E0 预检报告](reports/P01_E_preflight.md) · [E0 签核与 E1 授权](reports/approvals/P01_E_E0_ACCEPTED_P01_E_E1.md)
 
-正式 E1 历史仿真 HMB 完成 32 个母源、308 个分区、116,613 个计划拍。全量独立语义反读及 33 对原包 CRC/CDR/schema/观察器见证已通过，因果联合有效 114,532 拍，至少 5 拍的因果段内共 114,332 拍。下一授权节点为 P01-E 人工签核与 P01-F 独立开工批准。[E1 验收报告](reports/P01_E_acceptance.md) · [正式 HMB manifest](evidence/P01_E_E1/hmb_manifest.json)
+正式 E1 历史仿真 HMB 已由用户签核。P01-F 独立审计 Run 为 `P01-F-20261126-b22f8be`。[E1 验收报告](reports/P01_E_acceptance.md) · [人工签核](reports/approvals/P01_E_ACCEPTED_P01_F.md) · [P01-F 规格](specs/P01_F_independent_hmb_acceptance.md)

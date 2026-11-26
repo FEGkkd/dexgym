@@ -172,7 +172,7 @@ def p01_dependency_states(document):
                         f'{owner} requires the reapproved v0.2.1 spec')
             if owner=='P01-C':
                 scopes[owner]=event.get('scope')
-            if owner in ('P01-C','P01-D') or (owner=='P01-E' and event.get('scope')=='E0_PREFLIGHT'):
+            if owner in ('P01-C','P01-D','P01-F') or (owner=='P01-E' and event.get('scope')=='E0_PREFLIGHT'):
                 for field in ('implementation_spec','sample_plan'):
                     artifact=checked_file(ROOT,event[f'{field}_ref'])
                     require(digest(artifact.read_bytes())==event[f'{field}_sha256'],
@@ -233,6 +233,15 @@ def p01_dependency_states(document):
             require(approval.get('type')=='human' and bool(approval.get('by')) and bool(approval.get('ref')),
                     f'{owner} requires human ACCEPTED')
             checked_file(ROOT,approval['ref'])
+            if owner=='P01-E':
+                require(event['run_id']==document['p01e_production_authorization']['run_id'],
+                        'E1 approval run differs from authorized production')
+                for key,name in (('manifest','hmb_manifest.json'),('receipt','review_receipt.json'),
+                                 ('plan','production_plan.json')):
+                    path='evidence/P01_E_E1/'+name
+                    original=git('show',f"{event['reviewed_commit']}:docs/s0-5/{path}")
+                    require(original.returncode==0 and digest(original.stdout)==event[key+'_sha256']==
+                            digest(checked_file(ROOT,path).read_bytes()),f'E1 approval {key} hash mismatch')
             if owner=='P01-D':
                 commit=event.get('reviewed_commit','')
                 require(bool(re.fullmatch(r'[0-9a-f]{40}',commit)),'P01-D acceptance requires the reviewed commit')
@@ -411,7 +420,7 @@ def structure():
             'Traceability row/ownership')
     p01_adjuncts={'P01_T_telemetry_acquisition.md','P01_C_calibration_and_causal_sync.md',
                   'P01_C_RT_clock_qualification.md','P01_C_simulation_review_v0.2.0.md',
-                  'P01_D_dataset_freeze.md','P01_E_production_preflight.md'}
+                  'P01_D_dataset_freeze.md','P01_E_production_preflight.md','P01_F_independent_hmb_acceptance.md'}
     specs = sorted(s for s in (ROOT / 'specs').glob('P??_*.md') if s.name not in p01_adjuncts)
     require(tuple(s.name[:3] for s in specs) == PHASES, 'Phase spec list')
     for spec in specs:
