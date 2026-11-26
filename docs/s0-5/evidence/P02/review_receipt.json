@@ -1,0 +1,37 @@
+{
+  "E1_manifest_sha256": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074",
+  "F1_handoff_sha256": "cc1f21ead157e576113a184dba48a5d2596f4835ffdf53e554823cb67eb3fb97",
+  "P03_start_authorized": false,
+  "engineering_blocks": {
+    "C2-RT": "BLOCKED",
+    "Final Test": "BLOCKED",
+    "HMB_REALTIME_VERIFIED": "BLOCKED",
+    "P01-T": "BLOCKED",
+    "robot-base": "BLOCKED"
+  },
+  "execution_git": "d5f653af8fb6c0134397fba795f19a488b926df1",
+  "gates": {
+    "P02": "PASS",
+    "P02-A": "PASS",
+    "P02-B": "PASS",
+    "P02-C": "PASS",
+    "P02-D": "PASS",
+    "P02-E": "PASS"
+  },
+  "outcomes": {
+    "feasible_witnesses": 36,
+    "planned_cases": 38,
+    "unknown": 2
+  },
+  "plan_sha256": "e9e292c8a852a913b37f10ac7a2a83ba0c19295e3cb7ab0c272620b0e56a9e19",
+  "receipts": {
+    "artifact_manifest": "f485267f6d970ebe1b9807072621cf950c0d00320234af5913ee0a08029b694a",
+    "score_integrity": "cd0ad8ac6464195989f6f4453114e1ce4c3acb797c773d0460456ec52239fe56",
+    "scoring_handoff": "9c224264c86c93d2efd83b13efcfd1367d5bb61fc769a4ef3e74176ce7c746c0"
+  },
+  "review_only": true,
+  "run_id": "P02-20261126-54c2e06",
+  "schema": "s05.p02.review_receipt.v1",
+  "scope": "HISTORICAL_HMB_STATIC_SIMULATION_DEVELOPMENT",
+  "spec_sha256": "e71316025b77e335e2273d2f72d48d7dc10832453bb35b84edee5539d8260fca"
+}

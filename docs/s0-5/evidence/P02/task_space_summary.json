@@ -1,0 +1,2170 @@
+{
+  "All": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 38,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 38,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 38,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 38,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.022700180971217933,
+      "max_tip_p50_p95_p99_m": [
+        0.03741582933554888,
+        0.2612112706245659,
+        0.2911738423156341
+      ],
+      "planned": 38,
+      "scored": 35,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 35,
+        "SOLVER_TIMEOUT": 1,
+        "UNKNOWN": 2
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 38,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 38,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 38,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 38,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02271465744201793,
+      "max_tip_p50_p95_p99_m": [
+        0.06021625295659384,
+        0.25924594732790374,
+        0.293647921616305
+      ],
+      "planned": 38,
+      "scored": 36,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 36,
+        "UNKNOWN": 2
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 38,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 38,
+          "n": 5,
+          "rate": 0.13157894736842105
+        },
+        "0.01": {
+          "denominator": 38,
+          "n": 11,
+          "rate": 0.2894736842105263
+        },
+        "0.015": {
+          "denominator": 38,
+          "n": 15,
+          "rate": 0.39473684210526316
+        }
+      },
+      "local_rmse_m_median": 0.0054383633231250336,
+      "max_tip_p50_p95_p99_m": [
+        0.018380610675999928,
+        0.24991239860267506,
+        0.2764919877592688
+      ],
+      "planned": 38,
+      "scored": 36,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 31,
+        "FEASIBLE_AT_TOLERANCE": 5,
+        "UNKNOWN": 2
+      }
+    }
+  },
+  "ROOT": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 32,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 32,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 32,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 32,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.022734483284297422,
+      "max_tip_p50_p95_p99_m": [
+        0.03857706000414176,
+        0.22070797936395692,
+        0.28253723119491586
+      ],
+      "planned": 32,
+      "scored": 31,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 31,
+        "SOLVER_TIMEOUT": 1
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 32,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 32,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 32,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 32,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.022779820633313404,
+      "max_tip_p50_p95_p99_m": [
+        0.06149798289862235,
+        0.24826835473218062,
+        0.2813591101837501
+      ],
+      "planned": 32,
+      "scored": 32,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 32
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 32,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 32,
+          "n": 5,
+          "rate": 0.15625
+        },
+        "0.01": {
+          "denominator": 32,
+          "n": 10,
+          "rate": 0.3125
+        },
+        "0.015": {
+          "denominator": 32,
+          "n": 13,
+          "rate": 0.40625
+        }
+      },
+      "local_rmse_m_median": 0.0054383633231250336,
+      "max_tip_p50_p95_p99_m": [
+        0.019739671414147886,
+        0.20955425421433754,
+        0.26800992642901206
+      ],
+      "planned": 32,
+      "scored": 32,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 27,
+        "FEASIBLE_AT_TOLERANCE": 5
+      }
+    }
+  },
+  "TAIL": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02225072102377946,
+      "max_tip_p50_p95_p99_m": [
+        0.029176970327872177,
+        0.24478191073657182,
+        0.2750194388066901
+      ],
+      "planned": 6,
+      "scored": 4,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 4,
+        "UNKNOWN": 2
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.022250721023779473,
+      "max_tip_p50_p95_p99_m": [
+        0.05333480968423304,
+        0.2550431285993091,
+        0.28267442825440103
+      ],
+      "planned": 6,
+      "scored": 4,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 4,
+        "UNKNOWN": 2
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 6,
+          "n": 1,
+          "rate": 0.16666666666666666
+        },
+        "0.015": {
+          "denominator": 6,
+          "n": 2,
+          "rate": 0.3333333333333333
+        }
+      },
+      "local_rmse_m_median": 0.005154339544740712,
+      "max_tip_p50_p95_p99_m": [
+        0.014313678268594032,
+        0.2330521225454177,
+        0.26358532852538513
+      ],
+      "planned": 6,
+      "scored": 4,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 4,
+        "UNKNOWN": 2
+      }
+    }
+  },
+  "Train": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 28,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 28,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 28,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 28,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.022700180971217933,
+      "max_tip_p50_p95_p99_m": [
+        0.04025047433487465,
+        0.2734212993100824,
+        0.2922156631024722
+      ],
+      "planned": 28,
+      "scored": 27,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 27,
+        "SOLVER_TIMEOUT": 1
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 28,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 28,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 28,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 28,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02271465744201793,
+      "max_tip_p50_p95_p99_m": [
+        0.059159364033140295,
+        0.2748745436660996,
+        0.2941483115791519
+      ],
+      "planned": 28,
+      "scored": 28,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 28
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 28,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 28,
+          "n": 4,
+          "rate": 0.14285714285714285
+        },
+        "0.01": {
+          "denominator": 28,
+          "n": 10,
+          "rate": 0.35714285714285715
+        },
+        "0.015": {
+          "denominator": 28,
+          "n": 13,
+          "rate": 0.4642857142857143
+        }
+      },
+      "local_rmse_m_median": 0.005491005809079654,
+      "max_tip_p50_p95_p99_m": [
+        0.017090116920890908,
+        0.2612757220254494,
+        0.2771410164040555
+      ],
+      "planned": 28,
+      "scored": 28,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 24,
+        "FEASIBLE_AT_TOLERANCE": 4
+      }
+    }
+  },
+  "Validation": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.022262540451600428,
+      "max_tip_p50_p95_p99_m": [
+        0.035893138329889704,
+        0.13686009010976652,
+        0.1765563192606909
+      ],
+      "planned": 10,
+      "scored": 8,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 8,
+        "UNKNOWN": 2
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.022262540451600442,
+      "max_tip_p50_p95_p99_m": [
+        0.06261449173892186,
+        0.18783523678707356,
+        0.23687412366233224
+      ],
+      "planned": 10,
+      "scored": 8,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 8,
+        "UNKNOWN": 2
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 10,
+          "n": 1,
+          "rate": 0.1
+        },
+        "0.01": {
+          "denominator": 10,
+          "n": 1,
+          "rate": 0.1
+        },
+        "0.015": {
+          "denominator": 10,
+          "n": 2,
+          "rate": 0.2
+        }
+      },
+      "local_rmse_m_median": 0.005373069425563457,
+      "max_tip_p50_p95_p99_m": [
+        0.019739671414147886,
+        0.11447389560132207,
+        0.15157881235814477
+      ],
+      "planned": 10,
+      "scored": 8,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 7,
+        "FEASIBLE_AT_TOLERANCE": 1,
+        "UNKNOWN": 2
+      }
+    }
+  },
+  "split_task:Train:arm_hand": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 4,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 4,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 4,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 4,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.020748778621506675,
+      "max_tip_p50_p95_p99_m": [
+        0.04025047433487465,
+        0.12855321158967364,
+        0.13640234379010022
+      ],
+      "planned": 4,
+      "scored": 3,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 3,
+        "SOLVER_TIMEOUT": 1
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 4,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 4,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 4,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 4,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.022084697568366417,
+      "max_tip_p50_p95_p99_m": [
+        0.03707860245149964,
+        0.13062578009279957,
+        0.14349409010265976
+      ],
+      "planned": 4,
+      "scored": 4,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 4
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 4,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 4,
+          "n": 2,
+          "rate": 0.5
+        },
+        "0.01": {
+          "denominator": 4,
+          "n": 3,
+          "rate": 0.75
+        },
+        "0.015": {
+          "denominator": 4,
+          "n": 3,
+          "rate": 0.75
+        }
+      },
+      "local_rmse_m_median": 0.005587249874015463,
+      "max_tip_p50_p95_p99_m": [
+        0.006996813795937411,
+        0.10981016783241189,
+        0.12403638366410102
+      ],
+      "planned": 4,
+      "scored": 4,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 2,
+        "FEASIBLE_AT_TOLERANCE": 2
+      }
+    }
+  },
+  "split_task:Train:arm_motion": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02266093866635479,
+      "max_tip_p50_p95_p99_m": [
+        0.0591664799188963,
+        0.28974133873373176,
+        0.29442953227450325
+      ],
+      "planned": 10,
+      "scored": 10,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 10
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.022660938666354782,
+      "max_tip_p50_p95_p99_m": [
+        0.10211418455246862,
+        0.29302243416274637,
+        0.29527418899555735
+      ],
+      "planned": 10,
+      "scored": 10,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 10
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 10,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 10,
+          "n": 1,
+          "rate": 0.1
+        },
+        "0.015": {
+          "denominator": 10,
+          "n": 1,
+          "rate": 0.1
+        }
+      },
+      "local_rmse_m_median": 0.006627455826674691,
+      "max_tip_p50_p95_p99_m": [
+        0.04813291105324695,
+        0.2756807019532854,
+        0.2786013308548255
+      ],
+      "planned": 10,
+      "scored": 10,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 10
+      }
+    }
+  },
+  "split_task:Train:bi_hand": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.01788821723381336,
+      "max_tip_p50_p95_p99_m": [
+        0.023972483059040133,
+        0.023972483059040133,
+        0.023972483059040133
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 1
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.017888217233813362,
+      "max_tip_p50_p95_p99_m": [
+        0.04375365327397833,
+        0.04375365327397833,
+        0.04375365327397833
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 1
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 1,
+          "rate": 1.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 1,
+          "rate": 1.0
+        }
+      },
+      "local_rmse_m_median": 0.004129365929580612,
+      "max_tip_p50_p95_p99_m": [
+        0.006418906693634761,
+        0.006418906693634761,
+        0.006418906693634761
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 1
+      }
+    }
+  },
+  "split_task:Train:fruit": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02443820506857896,
+      "max_tip_p50_p95_p99_m": [
+        0.11245477074873494,
+        0.11245477074873494,
+        0.11245477074873494
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 1
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.024438205068578994,
+      "max_tip_p50_p95_p99_m": [
+        0.21365656173562467,
+        0.21365656173562467,
+        0.21365656173562467
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 1
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.013622416215670632,
+      "max_tip_p50_p95_p99_m": [
+        0.0876663918014961,
+        0.0876663918014961,
+        0.0876663918014961
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 1
+      }
+    }
+  },
+  "split_task:Train:hand_pose": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 12,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 12,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 12,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 12,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.023335604349067403,
+      "max_tip_p50_p95_p99_m": [
+        0.03278802653617579,
+        0.06399415078438193,
+        0.06578625262947296
+      ],
+      "planned": 12,
+      "scored": 12,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 12
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 12,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 12,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 12,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 12,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.023335604349067375,
+      "max_tip_p50_p95_p99_m": [
+        0.059159364033140295,
+        0.09487979045520337,
+        0.09506881999032502
+      ],
+      "planned": 12,
+      "scored": 12,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 12
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 12,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 12,
+          "n": 2,
+          "rate": 0.16666666666666666
+        },
+        "0.01": {
+          "denominator": 12,
+          "n": 5,
+          "rate": 0.4166666666666667
+        },
+        "0.015": {
+          "denominator": 12,
+          "n": 8,
+          "rate": 0.6666666666666666
+        }
+      },
+      "local_rmse_m_median": 0.00454528889694754,
+      "max_tip_p50_p95_p99_m": [
+        0.011525457729149455,
+        0.053592276569933636,
+        0.05359905209312505
+      ],
+      "planned": 12,
+      "scored": 12,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 10,
+        "FEASIBLE_AT_TOLERANCE": 2
+      }
+    }
+  },
+  "split_task:Validation:arm_hand": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.021552034388068957,
+      "max_tip_p50_p95_p99_m": [
+        0.0356484581321834,
+        0.03723909221521233,
+        0.03738048191148157
+      ],
+      "planned": 2,
+      "scored": 2,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 2
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02155203438806893,
+      "max_tip_p50_p95_p99_m": [
+        0.06724819623154916,
+        0.07277159795624168,
+        0.07326256699843657
+      ],
+      "planned": 2,
+      "scored": 2,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 2
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.0054792803127487084,
+      "max_tip_p50_p95_p99_m": [
+        0.01739515444276536,
+        0.019160126372056673,
+        0.019317012765771458
+      ],
+      "planned": 2,
+      "scored": 2,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 2
+      }
+    }
+  },
+  "split_task:Validation:arm_motion": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 5,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 5,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 5,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 5,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.023206528326019955,
+      "max_tip_p50_p95_p99_m": [
+        0.029781096292709693,
+        0.04321542625202253,
+        0.04440958891507256
+      ],
+      "planned": 5,
+      "scored": 3,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 3,
+        "UNKNOWN": 2
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 5,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 5,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 5,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 5,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02320652832601997,
+      "max_tip_p50_p95_p99_m": [
+        0.056546445155652096,
+        0.07225011183098043,
+        0.07364599331323184
+      ],
+      "planned": 5,
+      "scored": 3,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 3,
+        "UNKNOWN": 2
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 5,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 5,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 5,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 5,
+          "n": 1,
+          "rate": 0.2
+        }
+      },
+      "local_rmse_m_median": 0.004964799506302825,
+      "max_tip_p50_p95_p99_m": [
+        0.02270023955007891,
+        0.02777375748640763,
+        0.02822473685852574
+      ],
+      "planned": 5,
+      "scored": 3,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 3,
+        "UNKNOWN": 2
+      }
+    }
+  },
+  "split_task:Validation:bi_hand": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02106705786295304,
+      "max_tip_p50_p95_p99_m": [
+        0.03437044732423053,
+        0.03437044732423053,
+        0.03437044732423053
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 1
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02106705786295304,
+      "max_tip_p50_p95_p99_m": [
+        0.06411790027373068,
+        0.06411790027373068,
+        0.06411790027373068
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 1
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.005359910271998486,
+      "max_tip_p50_p95_p99_m": [
+        0.02012310846409562,
+        0.02012310846409562,
+        0.02012310846409562
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 1
+      }
+    }
+  },
+  "split_task:Validation:fruit": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.019004503712603378,
+      "max_tip_p50_p95_p99_m": [
+        0.18648037654842203,
+        0.18648037654842203,
+        0.18648037654842203
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 1
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.019004503712603447,
+      "max_tip_p50_p95_p99_m": [
+        0.24913384538114694,
+        0.24913384538114694,
+        0.24913384538114694
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 1
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.012057364910072713,
+      "max_tip_p50_p95_p99_m": [
+        0.16085504154735047,
+        0.16085504154735047,
+        0.16085504154735047
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 1
+      }
+    }
+  },
+  "split_task:Validation:hand_pose": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02282515798232933,
+      "max_tip_p50_p95_p99_m": [
+        0.03857706000414176,
+        0.03857706000414176,
+        0.03857706000414176
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 1
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02282515798232934,
+      "max_tip_p50_p95_p99_m": [
+        0.04300174314870352,
+        0.04300174314870352,
+        0.04300174314870352
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 1
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 1,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 1,
+          "n": 1,
+          "rate": 1.0
+        },
+        "0.01": {
+          "denominator": 1,
+          "n": 1,
+          "rate": 1.0
+        },
+        "0.015": {
+          "denominator": 1,
+          "n": 1,
+          "rate": 1.0
+        }
+      },
+      "local_rmse_m_median": 0.0054640149889313705,
+      "max_tip_p50_p95_p99_m": [
+        0.003887448862520237,
+        0.003887448862520237,
+        0.003887448862520237
+      ],
+      "planned": 1,
+      "scored": 1,
+      "status_counts": {
+        "FEASIBLE_AT_TOLERANCE": 1
+      }
+    }
+  },
+  "task:arm_hand": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.021404145855266395,
+      "max_tip_p50_p95_p99_m": [
+        0.03741582933554888,
+        0.1187417963391404,
+        0.13444006073999357
+      ],
+      "planned": 6,
+      "scored": 5,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 5,
+        "SOLVER_TIMEOUT": 1
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02155203438806893,
+      "max_tip_p50_p95_p99_m": [
+        0.05029316703020148,
+        0.12837970301858995,
+        0.14304487468781787
+      ],
+      "planned": 6,
+      "scored": 6,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 6
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 6,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 6,
+          "n": 2,
+          "rate": 0.3333333333333333
+        },
+        "0.01": {
+          "denominator": 6,
+          "n": 3,
+          "rate": 0.5
+        },
+        "0.015": {
+          "denominator": 6,
+          "n": 3,
+          "rate": 0.5
+        }
+      },
+      "local_rmse_m_median": 0.005587249874015463,
+      "max_tip_p50_p95_p99_m": [
+        0.012237606772972268,
+        0.10053376180756754,
+        0.1221811024591322
+      ],
+      "planned": 6,
+      "scored": 6,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 4,
+        "FEASIBLE_AT_TOLERANCE": 2
+      }
+    }
+  },
+  "task:arm_motion": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 15,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 15,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 15,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 15,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.022729133912817976,
+      "max_tip_p50_p95_p99_m": [
+        0.040676121432697866,
+        0.28778792475841025,
+        0.2940388494794389
+      ],
+      "planned": 15,
+      "scored": 13,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 13,
+        "UNKNOWN": 2
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 15,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 15,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 15,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 15,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02272913391281793,
+      "max_tip_p50_p95_p99_m": [
+        0.07399496368379468,
+        0.2920842029824085,
+        0.29508654275948976
+      ],
+      "planned": 15,
+      "scored": 13,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 13,
+        "UNKNOWN": 2
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 15,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 15,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 15,
+          "n": 1,
+          "rate": 0.06666666666666667
+        },
+        "0.015": {
+          "denominator": 15,
+          "n": 2,
+          "rate": 0.13333333333333333
+        }
+      },
+      "local_rmse_m_median": 0.005421334478216231,
+      "max_tip_p50_p95_p99_m": [
+        0.026407978269360192,
+        0.2744637732443104,
+        0.27835794511303047
+      ],
+      "planned": 15,
+      "scored": 13,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 13,
+        "UNKNOWN": 2
+      }
+    }
+  },
+  "task:bi_hand": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.0194776375483832,
+      "max_tip_p50_p95_p99_m": [
+        0.029171465191635333,
+        0.03385054911097101,
+        0.03426646768157863
+      ],
+      "planned": 2,
+      "scored": 2,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 2
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.0194776375483832,
+      "max_tip_p50_p95_p99_m": [
+        0.053935776773854506,
+        0.06309968792374307,
+        0.06391425780373317
+      ],
+      "planned": 2,
+      "scored": 2,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 2
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 2,
+          "n": 1,
+          "rate": 0.5
+        },
+        "0.015": {
+          "denominator": 2,
+          "n": 1,
+          "rate": 0.5
+        }
+      },
+      "local_rmse_m_median": 0.004744638100789549,
+      "max_tip_p50_p95_p99_m": [
+        0.01327100757886519,
+        0.019437898375572575,
+        0.01998606644639101
+      ],
+      "planned": 2,
+      "scored": 2,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 2
+      }
+    }
+  },
+  "task:fruit": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02172135439059117,
+      "max_tip_p50_p95_p99_m": [
+        0.1494675736485785,
+        0.18277909625843766,
+        0.18574012049042515
+      ],
+      "planned": 2,
+      "scored": 2,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 2
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.02172135439059122,
+      "max_tip_p50_p95_p99_m": [
+        0.2313952035583858,
+        0.24735998119887082,
+        0.24877907254469173
+      ],
+      "planned": 2,
+      "scored": 2,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 2
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 2,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.012839890562871673,
+      "max_tip_p50_p95_p99_m": [
+        0.12426071667442329,
+        0.15719560906005775,
+        0.16012315504989194
+      ],
+      "planned": 2,
+      "scored": 2,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 2
+      }
+    }
+  },
+  "task:hand_pose": {
+    "arms14": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 13,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 13,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 13,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 13,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.023043276888045614,
+      "max_tip_p50_p95_p99_m": [
+        0.03393276222144997,
+        0.06379050284743977,
+        0.06574552304208453
+      ],
+      "planned": 13,
+      "scored": 13,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 13
+      }
+    },
+    "sdk_wrist_ik": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 13,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 13,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.01": {
+          "denominator": 13,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.015": {
+          "denominator": 13,
+          "n": 0,
+          "rate": 0.0
+        }
+      },
+      "local_rmse_m_median": 0.023043276888045583,
+      "max_tip_p50_p95_p99_m": [
+        0.058997305357205966,
+        0.09485830982621228,
+        0.0950645238645268
+      ],
+      "planned": 13,
+      "scored": 13,
+      "status_counts": {
+        "RECORDED_STATIC_SDK_WRIST_IK": 13
+      }
+    },
+    "whole54": {
+      "all_tip_hit": {
+        "0.003": {
+          "denominator": 13,
+          "n": 0,
+          "rate": 0.0
+        },
+        "0.005": {
+          "denominator": 13,
+          "n": 3,
+          "rate": 0.23076923076923078
+        },
+        "0.01": {
+          "denominator": 13,
+          "n": 6,
+          "rate": 0.46153846153846156
+        },
+        "0.015": {
+          "denominator": 13,
+          "n": 9,
+          "rate": 0.6923076923076923
+        }
+      },
+      "local_rmse_m_median": 0.005369573182571527,
+      "max_tip_p50_p95_p99_m": [
+        0.01119880577509296,
+        0.05359150662411643,
+        0.05359889810396161
+      ],
+      "planned": 13,
+      "scored": 13,
+      "status_counts": {
+        "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 10,
+        "FEASIBLE_AT_TOLERANCE": 3
+      }
+    }
+  }
+}

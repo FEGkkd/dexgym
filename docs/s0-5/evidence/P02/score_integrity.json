@@ -1,0 +1,1385 @@
+{
+  "all_case_count": 38,
+  "full_q_witnesses": 36,
+  "reach_formula": "Triangle inequality over first hinge pivot, successive fixed link lengths and functional tip. Positive result bounds the error even before other constraints.",
+  "reach_radius_m": [
+    [
+      0.8728598318710479,
+      0.9204987574277683,
+      0.9233693114538755,
+      0.915901600343705,
+      0.9026559157481213
+    ],
+    [
+      0.8728598721248031,
+      0.9204987451501601,
+      0.9233692831829721,
+      0.915901581402071,
+      0.9026559158669087
+    ]
+  ],
+  "rechecked": [
+    {
+      "active_model_ranges": [
+        "r_thumb_cmc_flex"
+      ],
+      "case_key": "root:capture:1bc59d07cb650ee219d5adbf",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.027829955827595815,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.027829955827595815,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999999999172,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.6112188427800691,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:1bc59d07cb650ee219d5adbf",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [
+        "l_thumb_cmc_flex",
+        "l_ring_finger_dip"
+      ],
+      "case_key": "root:capture:2151546f1c0b35e04218a1bb",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999999819454,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 1.291411422243982e-12,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:2151546f1c0b35e04218a1bb",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:2edc372773190c61446b634c",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.21161631222463048,
+      "lower_bound_tip_m": [
+        [
+          0.179989749229669,
+          0.1661848413763579,
+          0.1647681527701453,
+          0.1595639000051595,
+          0.15689605324763964
+        ],
+        [
+          0.21161631222463048,
+          0.18089206942202937,
+          0.17031029524438254,
+          0.1656121880805149,
+          0.16247336384105124
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999999971,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 1.8279542726411284,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:2edc372773190c61446b634c",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:3118754b1d9742a2718048e2",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.24517666093058108,
+      "lower_bound_tip_m": [
+        [
+          0.24517666093058108,
+          0.21186785645111814,
+          0.20175789280810416,
+          0.19916993579082418,
+          0.19344645642888078
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999999995147,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 1.7719159473017498e-13,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:3118754b1d9742a2718048e2",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:359d7bf76d7a7d4677d6585e",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999998715268,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 2.5486279753295094e-12,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:359d7bf76d7a7d4677d6585e",
+      "split": "Validation"
+    },
+    {
+      "active_model_ranges": [
+        "Joint6_L",
+        "r_middle_finger_dip"
+      ],
+      "case_key": "root:capture:378ae16c5078ff3880ede8d9",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.000499987475456723,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 1.6431300764452317e-14,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:378ae16c5078ff3880ede8d9",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:406fe87c6799120301158f3a",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0266935064792114,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0266935064792114,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000000000282,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.6071871597627649,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:406fe87c6799120301158f3a",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:5460d9dca502d3924632a907",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999999999796,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.23054850513891711,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:5460d9dca502d3924632a907",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [
+        "Joint6_L",
+        "l_thumb_cmc_flex",
+        "r_thumb_cmc_flex"
+      ],
+      "case_key": "root:capture:54911698b12e5b40cd8bfe65",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999999890231,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.4428661777259939,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:54911698b12e5b40cd8bfe65",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:57223e1ea4fd73f5aa16c512",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000000000213,
+        "collision_pair": [
+          "Base_R_collision",
+          "Link2_R_collision"
+        ],
+        "coupling_margin_rad": 0.22237959402007768,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:57223e1ea4fd73f5aa16c512",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [
+        "l_thumb_cmc_flex",
+        "r_thumb_cmc_flex"
+      ],
+      "case_key": "root:capture:5bf13e82640cd2c5c35e4df1",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000000000143,
+        "collision_pair": [
+          "Base_R_collision",
+          "Link2_R_collision"
+        ],
+        "coupling_margin_rad": 1.3322676295501878e-15,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:5bf13e82640cd2c5c35e4df1",
+      "split": "Validation"
+    },
+    {
+      "active_model_ranges": [
+        "l_index_finger_dip"
+      ],
+      "case_key": "root:capture:6154b09c32ffe84771d612f1",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.007805989710988308,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.007805989710988308,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999792230543,
+        "collision_pair": [
+          "l_finger2_link3_col",
+          "l_finger3_link2_col"
+        ],
+        "coupling_margin_rad": 0.7371469801815633,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:6154b09c32ffe84771d612f1",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [
+        "Joint6_L",
+        "l_pinky_dip"
+      ],
+      "case_key": "root:capture:6b3b94ebe706970ec08979e9",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999992885348,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": -5.016431714466307e-12,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:6b3b94ebe706970ec08979e9",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:6fb07249fb5b858f8269a562",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.14954608974744263,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.14954608974744263,
+          0.13871308950408298,
+          0.1384830265763378,
+          0.1426970578586418,
+          0.14647442368481842
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000052896234,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": -6.341838165724312e-11,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:6fb07249fb5b858f8269a562",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [
+        "l_thumb_cmc_flex"
+      ],
+      "case_key": "root:capture:7df0193e6cf8cf09cd304b77",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000000000074,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.241333271815928,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:7df0193e6cf8cf09cd304b77",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:803fa7655c2b3b01ed771c5b",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999999971971,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 8.615330671091215e-14,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:803fa7655c2b3b01ed771c5b",
+      "split": "Validation"
+    },
+    {
+      "active_model_ranges": [
+        "l_thumb_cmc_flex",
+        "r_thumb_cmc_flex"
+      ],
+      "case_key": "root:capture:84d149ff204d06f24ac72ebc",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999864092166961,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.041019922969520506,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:84d149ff204d06f24ac72ebc",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [
+        "l_thumb_cmc_flex",
+        "r_thumb_ip",
+        "r_index_finger_dip"
+      ],
+      "case_key": "root:capture:84d75398497941b2ac85b0f3",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.037766941569045115,
+      "lower_bound_tip_m": [
+        [
+          0.037766941569045115,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999058005571849,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 1.278280161720602e-07,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:84d75398497941b2ac85b0f3",
+      "split": "Validation"
+    },
+    {
+      "active_model_ranges": [
+        "l_thumb_cmc_flex",
+        "r_thumb_cmc_flex"
+      ],
+      "case_key": "root:capture:8c85b5bd93595270f134bf72",
+      "collision_near_margin": false,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0009439030409919957,
+        "collision_pair": [
+          "r_palm_collision",
+          "r_finger5_link2_col"
+        ],
+        "coupling_margin_rad": 0.9036940928906176,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:8c85b5bd93595270f134bf72",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [
+        "Joint7_R"
+      ],
+      "case_key": "root:capture:982b9b5f7d882e16937303ce",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000000450894,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.29826832038910167,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:982b9b5f7d882e16937303ce",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:9e230fc5926c7a9444ebdd09",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.09724111888445539,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.09724111888445539,
+          0.06877235816920343,
+          0.061869020154489446,
+          0.06203888314640335,
+          0.06043160396748978
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000000500646,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": -3.637090628672013e-13,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:9e230fc5926c7a9444ebdd09",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:a0cb71cb6806e10bbcf6cc7a",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000001782606,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 5.448530515650418e-12,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:a0cb71cb6806e10bbcf6cc7a",
+      "split": "Validation"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:a34b6b9544d8f84e440282be",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999999999935,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.0,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:a34b6b9544d8f84e440282be",
+      "split": "Validation"
+    },
+    {
+      "active_model_ranges": [
+        "Joint6_L"
+      ],
+      "case_key": "root:capture:a94a53f04dab331aad3f21f4",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000000000143,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.15155969518963097,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:a94a53f04dab331aad3f21f4",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:b0f31ba1d6c26e94ab2c7289",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000000140795,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": -6.583622536027178e-13,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:b0f31ba1d6c26e94ab2c7289",
+      "split": "Validation"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:b63bc72d2e8b2ee395e966f6",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999999673391,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 1.439737218333903e-12,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:b70297470e5e9fc8d030706e",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000082215281,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 1.3870682380456856e-10,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:b70297470e5e9fc8d030706e",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [
+        "Joint6_L"
+      ],
+      "case_key": "root:capture:b87d55215a7b4038f575c980",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000000000421,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.0,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:b87d55215a7b4038f575c980",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:bb5de955239eef5b1d2905ef",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.04092303542399209,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.04092303542399209,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000002095481,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": -1.6475709685437323e-13,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:bb5de955239eef5b1d2905ef",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [
+        "l_thumb_cmc_flex"
+      ],
+      "case_key": "root:capture:d0e7ee58285307de8b1a4b93",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999999999935,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.4616321140461366,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:d0e7ee58285307de8b1a4b93",
+      "split": "Validation"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "root:capture:e9111547768c345fe7e81e0e",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999999999311,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.9870700724528507,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:e9111547768c345fe7e81e0e",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [
+        "Joint6_L"
+      ],
+      "case_key": "root:capture:ec8bfe090a05041d139cf9f6",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000000000143,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.1593097973663662,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:ec8bfe090a05041d139cf9f6",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "tail:causal.manus_left.speed",
+      "collision_near_margin": true,
+      "coupling_active": true,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0005000000003641536,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": -3.802735903946086e-12,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:bb5de955239eef5b1d2905ef",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [
+        "Joint6_L"
+      ],
+      "case_key": "tail:left_original_tip",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999999999907856,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.5982945448827208,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:54911698b12e5b40cd8bfe65",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [
+        "Joint6_L"
+      ],
+      "case_key": "tail:right_original_tip",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.0,
+      "lower_bound_tip_m": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999785797243778,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 0.15818038123365374,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:ec8bfe090a05041d139cf9f6",
+      "split": "Train"
+    },
+    {
+      "active_model_ranges": [],
+      "case_key": "tail:relative_registered_wrists",
+      "collision_near_margin": true,
+      "coupling_active": false,
+      "lower_bound_max_m": 0.23762462154666295,
+      "lower_bound_tip_m": [
+        [
+          0.2021658360077979,
+          0.19303626477119526,
+          0.19452937702011472,
+          0.18987124173617706,
+          0.1879578589680085
+        ],
+        [
+          0.23762462154666295,
+          0.20073321680146958,
+          0.18767956254142945,
+          0.18286326878293133,
+          0.17672856472838236
+        ]
+      ],
+      "margin": {
+        "collision_clearance_m": 0.0004999402019085497,
+        "collision_pair": [
+          "Base_L_collision",
+          "Link2_L_collision"
+        ],
+        "coupling_margin_rad": 1.8062308795291226,
+        "feasible": true,
+        "penetration_m": 0.0,
+        "range_violation_rad": 0.0
+      },
+      "root": "capture:6fb07249fb5b858f8269a562",
+      "split": "Train"
+    }
+  ],
+  "root_counts": {
+    "Train": 24,
+    "Validation": 8
+  },
+  "rotations_rad": {
+    "relative_rotation": [
+      0.4527318572411875,
+      1.2880860755557964,
+      1.9158069042518397,
+      2.0439324754939827
+    ],
+    "rotation": [
+      0.30408590343381947,
+      0.9700885013357753,
+      2.15989834379479,
+      2.407033845574546
+    ]
+  },
+  "tip_fk_recheck": "PASS",
+  "vector_decomposition": "PASS"
+}

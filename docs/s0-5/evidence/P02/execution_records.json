@@ -1,0 +1,143 @@
+{
+  "constraints-01": {
+    "command": "constraint_probe.py plan.json constraint_probe_plan.json RUN OUTPUT\n",
+    "ended": "2026-11-26T20:32:28+08:00",
+    "exit": 0,
+    "git": "d5f653af8fb6c0134397fba795f19a488b926df1",
+    "logs": {
+      "resources.txt": "d3258ae61862388fd480035bbedc1a84855d18020b78d167bd08aad36d1502ce",
+      "runtime.json": "18ae1b1fccda55ccb8ee69639027fe9c3a1b23c2660abc772e6786760f0e9171",
+      "stderr": "bcf7f4c85268727f370854b874bf927bd064be28d6ee3cdf47646859004112ea",
+      "stdout": "5da4444ef5b0a304bcd3e5d8789fe1300a9a91bc875efa07df8f9052b30dedc0"
+    },
+    "missing_logs": [],
+    "started": "2026-11-26T20:32:24+08:00"
+  },
+  "history-01": {
+    "command": "docs/s0-5/evidence/P02/run_history.py docs/s0-5/evidence/P02/plan.json /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/history-01 /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/model-02/model_report.json ",
+    "ended": "2026-11-26T20:21:53+08:00",
+    "exit": 0,
+    "git": "df01b82995d4fe5c9662b38ef6f73b6c392a0bf3",
+    "logs": {
+      "resources.txt": "d1d636a44af2c4e80eb9e3e3bfb364ad3e449bf240b4662a6d5a0f13a25ac0f7",
+      "runtime.json": "18ae1b1fccda55ccb8ee69639027fe9c3a1b23c2660abc772e6786760f0e9171",
+      "stderr": "bcf7f4c85268727f370854b874bf927bd064be28d6ee3cdf47646859004112ea",
+      "stdout": "f16bab6cafb3ca8f5eab62d8c98d4afa1575124a151194480197cddbf3b4c7b3"
+    },
+    "missing_logs": [],
+    "started": "2026-11-26T20:21:46+08:00"
+  },
+  "history-02": {
+    "command": "docs/s0-5/evidence/P02/run_history.py docs/s0-5/evidence/P02/plan.json /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/history-02 /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/model-02/model_report.json ",
+    "ended": "2026-11-26T20:23:28+08:00",
+    "exit": 0,
+    "git": "5bbdbf1a2e413c4fc71cde1fa660d5722468c872",
+    "logs": {
+      "resources.txt": "0120c357ed4c10d231f8f58cfe413bf512d71f8c5bcfc971e89f1ce412a81673",
+      "runtime.json": "18ae1b1fccda55ccb8ee69639027fe9c3a1b23c2660abc772e6786760f0e9171",
+      "stderr": "bcf7f4c85268727f370854b874bf927bd064be28d6ee3cdf47646859004112ea",
+      "stdout": "7aaaff2b7e00188fd457d0b14a6d6dbc35f3e4cd99089e8a203dc64af75030a1"
+    },
+    "missing_logs": [],
+    "started": "2026-11-26T20:23:20+08:00"
+  },
+  "intent-01": {
+    "command": "docs/s0-5/evidence/P02/run_study.py docs/s0-5/evidence/P02/plan.json /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/intent-01 /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/model-02/model_report.json ",
+    "ended": "2026-11-26T20:20:21+08:00",
+    "exit": 1,
+    "git": "0501bf8d1742e3fa8407c7b62a3feb3b6ce8bece",
+    "logs": {
+      "resources.txt": "3a21800bfc596e54fc4bd0c8a878a1dc5a3f7150068d0dc0b9b0e642ffe9b914",
+      "runtime.json": "18ae1b1fccda55ccb8ee69639027fe9c3a1b23c2660abc772e6786760f0e9171",
+      "stderr": "57493fc2330e58135224efc7c2318ac432049e0f1bcadfa45fc4ca3a24191d1d",
+      "stdout": "062ad84b46fcf88a5d539e240dda6e1b29e2a781f50b1539e3ee673637b9e1e1"
+    },
+    "missing_logs": [],
+    "started": "2026-11-26T20:19:35+08:00"
+  },
+  "intent-02": {
+    "command": "docs/s0-5/evidence/P02/run_study.py docs/s0-5/evidence/P02/plan.json /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/intent-02 /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/model-02/model_report.json ",
+    "ended": "2026-11-26T20:22:39+08:00",
+    "exit": 0,
+    "git": "df01b82995d4fe5c9662b38ef6f73b6c392a0bf3",
+    "logs": {
+      "resources.txt": "fe7cb5dba437612cb91e6af8fe5f8d3da8e622ff6c31c582f52456299f0ee34d",
+      "runtime.json": "18ae1b1fccda55ccb8ee69639027fe9c3a1b23c2660abc772e6786760f0e9171",
+      "stderr": "caf8edbe09331facca1214198dd951a70979c49bbb00589385729a83f9313f3d",
+      "stdout": "062ad84b46fcf88a5d539e240dda6e1b29e2a781f50b1539e3ee673637b9e1e1"
+    },
+    "missing_logs": [],
+    "started": "2026-11-26T20:21:53+08:00"
+  },
+  "model-01": {
+    "command": "docs/s0-5/evidence/P02/audit_model.py docs/s0-5/evidence/P02/plan.json /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/model-01/model_report.json ",
+    "ended": "2026-11-26T20:13:50+08:00",
+    "exit": 1,
+    "git": "0acfdcb3422b03d5b63c3a1785d642fd816d6bd4",
+    "logs": {
+      "resources.txt": "a3137cde311923e492cdf6aa4011ebe885a49b9479c3d6256b15f811e8a7a7aa",
+      "stderr": "0c80d6d6481b14a78127022800aaf86b06b8edd9fca0bf543e5d27067659083a",
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "missing_logs": [
+      "runtime.json"
+    ],
+    "started": "2026-11-26T20:13:50+08:00"
+  },
+  "model-02": {
+    "command": "docs/s0-5/evidence/P02/audit_model.py docs/s0-5/evidence/P02/plan.json /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/model-02/model_report.json ",
+    "ended": "2026-11-26T20:16:34+08:00",
+    "exit": 0,
+    "git": "0acfdcb3422b03d5b63c3a1785d642fd816d6bd4",
+    "logs": {
+      "resources.txt": "9ac4ab452f90ef328f7d6e781bb433d98829c93df239f6cd3436be2dac7978b3",
+      "runtime.json": "18ae1b1fccda55ccb8ee69639027fe9c3a1b23c2660abc772e6786760f0e9171",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "3f9ffe9741ed838d8a22478b5f07197347f73611df60cc4c0af5608461c97003"
+    },
+    "missing_logs": [],
+    "started": "2026-11-26T20:16:23+08:00"
+  },
+  "pinch-01": {
+    "command": "run_pinch_witness.py plan.json pinch_witness_plan.json pinch-01/near_pinch_witness.json\n",
+    "ended": "2026-11-26T20:30:47+08:00",
+    "exit": 0,
+    "git": "068e59cab545fe354b592175d1a5848a5f290408",
+    "logs": {
+      "resources.txt": "3909ba96aaeac4c87b47185a9593d02308e0cd5410251edfb8fab9b3ad8972e2",
+      "runtime.json": "18ae1b1fccda55ccb8ee69639027fe9c3a1b23c2660abc772e6786760f0e9171",
+      "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "15c0a8ef549f4beb6d1ad3233f28a4188ed02a48fd3f260e84d1b8ec88296b06"
+    },
+    "missing_logs": [],
+    "started": "2026-11-26T20:30:35+08:00"
+  },
+  "tests-01": {
+    "command": "-m unittest discover -s tests/s0_5/unit -p test_p02\\*.py -v ",
+    "ended": "2026-11-26T20:19:35+08:00",
+    "exit": 0,
+    "git": "0501bf8d1742e3fa8407c7b62a3feb3b6ce8bece",
+    "logs": {
+      "resources.txt": "e6b831f8fed6fada86823b81ba85d2bd85d9305611f1940163d6c9254a47bda0",
+      "runtime.json": "18ae1b1fccda55ccb8ee69639027fe9c3a1b23c2660abc772e6786760f0e9171",
+      "stderr": "35b46c6be0a66b908ce60cc2fd9e5715892ce9bc51b97a7e721958ab04612e18",
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "missing_logs": [],
+    "started": "2026-11-26T20:19:35+08:00"
+  },
+  "tests-02": {
+    "command": "-m unittest discover -s tests/s0_5/unit -p test_p02\\*.py -v ",
+    "ended": "2026-11-26T20:23:20+08:00",
+    "exit": 0,
+    "git": "5bbdbf1a2e413c4fc71cde1fa660d5722468c872",
+    "logs": {
+      "resources.txt": "aa79fc60cfb7044375fe66761dac6a8097c982ab6f632e648ab6ca446c933cf5",
+      "runtime.json": "18ae1b1fccda55ccb8ee69639027fe9c3a1b23c2660abc772e6786760f0e9171",
+      "stderr": "59f74e3c936093ab4a5057456601129a47c66bc6871a2d1cdf0cb7a7d0446751",
+      "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "missing_logs": [],
+    "started": "2026-11-26T20:23:19+08:00"
+  }
+}

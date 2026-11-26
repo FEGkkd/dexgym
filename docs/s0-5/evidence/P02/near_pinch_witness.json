@@ -1,0 +1,1192 @@
+{
+  "exam_partitions": 32,
+  "plan_sha256": "2d663b9fa7dee3d891c403b78bae0c104d0dc0943bc628e03e57b3e9933bd245",
+  "scope": "Independent functional mapping witness only. Do not fit or change the mapping, QC, primary solver denominator, or scoring target.",
+  "strata": {
+    "Train": {
+      "left": {
+        "close_pose_ticks": 784,
+        "first": {
+          "distance_m": 0.011547016189748844,
+          "mapping": {
+            "after_error_m": [
+              5.485677294651096e-18,
+              0.027453069467398467,
+              0.02097960902289026,
+              0.021301437620534918
+            ],
+            "after_vectors": [
+              [
+                -0.002284046413007907,
+                -0.005426244087033516,
+                -0.005765105761623521
+              ],
+              [
+                -0.01337347185222833,
+                0.01631840779365317,
+                -0.00929986460251915
+              ],
+              [
+                -0.03648805352595001,
+                0.01465728063522024,
+                -0.004896195092980005
+              ],
+              [
+                -0.06133846397498256,
+                0.021718022393255338,
+                -0.018034185741400657
+              ]
+            ],
+            "before_error_m": [
+              0.03679413575652954,
+              0.04493872808122872,
+              0.03413580145819185,
+              0.023927322379896806
+            ],
+            "before_vectors": [
+              [
+                0.012936483950467086,
+                0.024665859856774282,
+                -0.020482753731306994
+              ],
+              [
+                -0.005763206670490833,
+                0.031364459765557066,
+                -0.016658688587360887
+              ],
+              [
+                -0.028877788344212514,
+                0.029703332607124135,
+                -0.012255019077821741
+              ],
+              [
+                -0.053728198793245065,
+                0.03676407436515923,
+                -0.025393009726242394
+              ]
+            ],
+            "bone_length_delta_m": [
+              [
+                -0.0008120519062760137,
+                -0.000728826327607901,
+                -0.001093947345025218
+              ],
+              [
+                -0.002321520168707472,
+                0.004859654630560279,
+                0.00610444411609961
+              ],
+              [
+                6.938893903907228e-18,
+                1.0408340855860843e-17,
+                6.938893903907228e-18
+              ],
+              [
+                0.0,
+                1.0408340855860843e-17,
+                6.938893903907228e-18
+              ],
+              [
+                0.0,
+                2.0816681711721685e-17,
+                0.0
+              ]
+            ],
+            "desired_vectors": [
+              [
+                -0.002284046413007907,
+                -0.005426244087033518,
+                -0.0057651057616235155
+              ],
+              [
+                -0.014001020566677161,
+                -0.009000804736581361,
+                0.0012932785873756404
+              ],
+              [
+                -0.02433768237353815,
+                -0.0011828540421360669,
+                0.0015538133578044033
+              ],
+              [
+                -0.0402625556684725,
+                0.01871256162938805,
+                -0.01730993484980665
+              ]
+            ],
+            "near_pinch_pairs": [
+              0
+            ],
+            "proper_rotation_det": 1.0000000000000004,
+            "raw_vectors": [
+              [
+                0.007856450974941254,
+                -1.8279999494552612e-05,
+                -0.00846223533153534
+              ],
+              [
+                -0.00012011080980300903,
+                0.015889699570834637,
+                -0.017170637845993042
+              ],
+              [
+                0.0022255703806877136,
+                0.03254716470837593,
+                -0.010314621031284332
+              ],
+              [
+                0.033327825367450714,
+                0.057017482817173004,
+                0.009883210062980652
+              ]
+            ],
+            "scale": 0.7136034101921734,
+            "tol_active": [
+              5.485677294651096e-18
+            ]
+          },
+          "partition": "recording:51adcf9b11cd609ee6efaf88/00006",
+          "root": "capture:2151546f1c0b35e04218a1bb",
+          "source": {
+            "arrival_bounds_ns": [
+              47993648064,
+              47993648064
+            ],
+            "calibration_id": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+            "capture_bounds_ns": [
+              47985648064,
+              47985648064
+            ],
+            "clock_generation": "collector-monotonic-v1",
+            "fresh": true,
+            "identity": {
+              "calendar": {
+                "day": 13,
+                "fraction": 646,
+                "hour": 8,
+                "minute": 1,
+                "month": 11,
+                "second": 4,
+                "timecode": false,
+                "year": 2026
+              },
+              "instance": "18e78a85978e274c-c83ce777c0932f01/manus_left",
+              "ros_header": 1794556864649041200,
+              "sdk_receive_raw": 690555238680,
+              "sdk_timestamp_raw": 139274682962566,
+              "writer_sequence": 174774
+            },
+            "raw_clock": {
+              "collector_monotonic": {
+                "domain": "collector_host_monotonic",
+                "field": "SampleObservation.host_observed_monotonic_ns",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 690555240505231
+              },
+              "collector_realtime": {
+                "domain": "collector_host_realtime",
+                "field": "SampleObservation.host_realtime_ns",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794556864649177490
+              },
+              "collector_receive": {
+                "domain": "collector_ros_clock",
+                "field": "SampleObservation.receive_ros_timestamp_ns",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794556864649177302
+              },
+              "command_issue": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "control_tick": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "controller_receive": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "mcap_log": {
+                "domain": "collector_host_realtime",
+                "field": "mcap.log_time",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794556864649177490
+              },
+              "mcap_publish": {
+                "domain": "collector_host_realtime",
+                "field": "mcap.publish_time",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794556864649177490
+              },
+              "robot_feedback": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "ros_header": {
+                "domain": "message_ros_clock",
+                "field": "header.stamp",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794556864649041200
+              },
+              "sdk_receive": {
+                "domain": "publisher_steady_clock",
+                "field": "receive_timestamp_us",
+                "status": "RECORDED",
+                "unit": "us",
+                "value": 690555238680
+              },
+              "sdk_source": {
+                "domain": "manus_sdk_compressed_timestamp",
+                "field": "source_timestamp_us",
+                "status": "RECORDED",
+                "unit": null,
+                "value": 139274682962566
+              },
+              "source_capture": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              }
+            },
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "933ad411711f8c75579cac7c4824bcc65794066582d4ce689d27818c7679461c",
+              "cdr_sha256": "af7a504cd8c60bd243ceb49df92fa5ceef0c2d34a01b6d3d54a8b9b15f4536e7",
+              "collector_mono_ns": 690555240505231,
+              "observation_cdr_sha256": "6b9384e25a4523ac36ad66a088effe18447710623c8a9584410084d721d5c111",
+              "observation_message": 11509,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:1e56e41ded988dd4cd00aa3d",
+              "physical_message": 11508,
+              "raw_index_token": "asset:1e56e41ded988dd4cd00aa3d:11508",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e78a85978e274c-c83ce777c0932f01/manus_left",
+              "stream": "manus_left",
+              "topic": "/manus_glove_left",
+              "writer_sequence": 174774
+            },
+            "recorded_frame": "",
+            "safe": null,
+            "source_eligible": true,
+            "stream": "manus_left",
+            "topology_id": "1be9984507ba11d92beee5dbd442ffa8ca99312688e8c33d1517fc5fdd2e6ec8"
+          },
+          "tick": 0,
+          "topology": 0
+        },
+        "min_distance_m": 0.008840365141790112,
+        "pose_ticks": 9313
+      },
+      "right": {
+        "close_pose_ticks": 730,
+        "first": {
+          "distance_m": 0.01257292922958103,
+          "mapping": {
+            "after_error_m": [
+              5.818439421673296e-18,
+              0.036695850130497816,
+              0.03483346790830438,
+              0.029927179270904408
+            ],
+            "after_vectors": [
+              [
+                -0.0022807148211470493,
+                -0.004372695768901494,
+                -0.00830196491456106
+              ],
+              [
+                -0.02300630267534315,
+                -0.024860262785935748,
+                -0.012348430054656218
+              ],
+              [
+                -0.0424855133210069,
+                -0.022264375293133153,
+                -0.010366880305036269
+              ],
+              [
+                -0.06240376698314104,
+                -0.02062939210706994,
+                -0.0032266091930951285
+              ]
+            ],
+            "before_error_m": [
+              0.027709692250116345,
+              0.05018380533562971,
+              0.04656526078076369,
+              0.03635380254291841
+            ],
+            "before_vectors": [
+              [
+                0.0001763034215722884,
+                -0.027966692760132493,
+                -0.022623745946572585
+              ],
+              [
+                -0.02177779355398348,
+                -0.036657261281551244,
+                -0.019509320570661987
+              ],
+              [
+                -0.04125700419964723,
+                -0.03406137378874865,
+                -0.017527770821042038
+              ],
+              [
+                -0.06117525786178137,
+                -0.032426390602685436,
+                -0.010387499709100897
+              ]
+            ],
+            "bone_length_delta_m": [
+              [
+                -0.00012055849065133878,
+                -8.044471485269683e-05,
+                -0.0006013560831530859
+              ],
+              [
+                -0.0024538906892362794,
+                0.003571369843077831,
+                0.004276165889413475
+              ],
+              [
+                2.0816681711721685e-17,
+                0.0,
+                -6.938893903907228e-18
+              ],
+              [
+                0.0,
+                -6.938893903907228e-18,
+                -3.469446951953614e-18
+              ],
+              [
+                0.0,
+                1.3877787807814457e-17,
+                3.469446951953614e-18
+              ]
+            ],
+            "desired_vectors": [
+              [
+                -0.0022807148211470493,
+                -0.0043726957689014965,
+                -0.008301964914561066
+              ],
+              [
+                -0.01885665933465206,
+                0.009191240452651395,
+                0.0006846434177639994
+              ],
+              [
+                -0.024627812021717113,
+                0.0060015037766884905,
+                -0.0005938014025391564
+              ],
+              [
+                -0.034562172057306995,
+                -0.011603510038450577,
+                0.0030195979746185527
+              ]
+            ],
+            "near_pinch_pairs": [
+              0
+            ],
+            "proper_rotation_det": 1.0,
+            "raw_vectors": [
+              [
+                0.0114712193608284,
+                -0.0016583148390054703,
+                0.004872336983680725
+              ],
+              [
+                0.0018403679132461548,
+                -0.023739970289170742,
+                -0.013410665094852448
+              ],
+              [
+                0.004827685654163361,
+                -0.031142117455601692,
+                -0.009837426245212555
+              ],
+              [
+                0.0035241544246673584,
+                -0.0458382498472929,
+                0.012460775673389435
+              ]
+            ],
+            "scale": 0.7680256473273361,
+            "tol_active": [
+              5.818439421673296e-18
+            ]
+          },
+          "partition": "recording:51adcf9b11cd609ee6efaf88/00006",
+          "root": "capture:2151546f1c0b35e04218a1bb",
+          "source": {
+            "arrival_bounds_ns": [
+              47993645680,
+              47993645680
+            ],
+            "calibration_id": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+            "capture_bounds_ns": [
+              47985645680,
+              47985645680
+            ],
+            "clock_generation": "collector-monotonic-v1",
+            "fresh": true,
+            "identity": {
+              "calendar": {
+                "day": 13,
+                "fraction": 640,
+                "hour": 8,
+                "minute": 1,
+                "month": 11,
+                "second": 4,
+                "timecode": false,
+                "year": 2026
+              },
+              "instance": "18e78a85978e274c-c83ce777c0932f01/manus_right",
+              "ros_header": 1794556864649105195,
+              "sdk_receive_raw": 690555232353,
+              "sdk_timestamp_raw": 139274682962560,
+              "writer_sequence": 173459
+            },
+            "raw_clock": {
+              "collector_monotonic": {
+                "domain": "collector_host_monotonic",
+                "field": "SampleObservation.host_observed_monotonic_ns",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 690555240502847
+              },
+              "collector_realtime": {
+                "domain": "collector_host_realtime",
+                "field": "SampleObservation.host_realtime_ns",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794556864649175119
+              },
+              "collector_receive": {
+                "domain": "collector_ros_clock",
+                "field": "SampleObservation.receive_ros_timestamp_ns",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794556864649175102
+              },
+              "command_issue": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "control_tick": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "controller_receive": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "mcap_log": {
+                "domain": "collector_host_realtime",
+                "field": "mcap.log_time",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794556864649175119
+              },
+              "mcap_publish": {
+                "domain": "collector_host_realtime",
+                "field": "mcap.publish_time",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794556864649175119
+              },
+              "robot_feedback": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "ros_header": {
+                "domain": "message_ros_clock",
+                "field": "header.stamp",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794556864649105195
+              },
+              "sdk_receive": {
+                "domain": "publisher_steady_clock",
+                "field": "receive_timestamp_us",
+                "status": "RECORDED",
+                "unit": "us",
+                "value": 690555232353
+              },
+              "sdk_source": {
+                "domain": "manus_sdk_compressed_timestamp",
+                "field": "source_timestamp_us",
+                "status": "RECORDED",
+                "unit": null,
+                "value": 139274682962560
+              },
+              "source_capture": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              }
+            },
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "b2a0294ab1adcbfa6383f6fd2fe060a3fb041d12bd45c0aace18db41a6dd98d4",
+              "cdr_sha256": "e8ce450dcae5a2672309e7b09659d198bcf7c8581629019e57ddb4e05846758a",
+              "collector_mono_ns": 690555240502847,
+              "observation_cdr_sha256": "f5d5a1b1b7d25392bcb96b24fcf1071633f535304f6edb0afd68b11a793fed37",
+              "observation_message": 11509,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:7c3559cb6a58d69028b602c8",
+              "physical_message": 11508,
+              "raw_index_token": "asset:7c3559cb6a58d69028b602c8:11508",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e78a85978e274c-c83ce777c0932f01/manus_right",
+              "stream": "manus_right",
+              "topic": "/manus_glove_right",
+              "writer_sequence": 173459
+            },
+            "recorded_frame": "",
+            "safe": null,
+            "source_eligible": true,
+            "stream": "manus_right",
+            "topology_id": "1be9984507ba11d92beee5dbd442ffa8ca99312688e8c33d1517fc5fdd2e6ec8"
+          },
+          "tick": 0,
+          "topology": 0
+        },
+        "min_distance_m": 0.011330948927088295,
+        "pose_ticks": 9313
+      }
+    },
+    "Validation": {
+      "left": {
+        "close_pose_ticks": 12,
+        "first": {
+          "distance_m": 0.019933760028470637,
+          "mapping": {
+            "after_error_m": [
+              4.29459036048861e-18,
+              0.024866217766797937,
+              0.02154620369336725,
+              0.02234766085866676
+            ],
+            "after_vectors": [
+              [
+                0.0011035645927713507,
+                -0.0006262552316535774,
+                -0.014168093025693704
+              ],
+              [
+                -0.012525235141027335,
+                0.023197422452804074,
+                -0.03297924084459117
+              ],
+              [
+                -0.035490255803328645,
+                0.022638258309037068,
+                -0.022899717197085764
+              ],
+              [
+                -0.05176857553489175,
+                0.024149799986130253,
+                -0.016252341694821565
+              ]
+            ],
+            "before_error_m": [
+              0.04065372021026092,
+              0.04375185383698627,
+              0.03664275892967189,
+              0.02876651139251466
+            ],
+            "before_vectors": [
+              [
+                0.01759327224636582,
+                0.031574204985698934,
+                -0.032713843757973676
+              ],
+              [
+                -0.0042803813142301,
+                0.03929765256148033,
+                -0.04225211621073116
+              ],
+              [
+                -0.02724540197653141,
+                0.038738488417713324,
+                -0.03217259256322576
+              ],
+              [
+                -0.043523721708094515,
+                0.04025003009480651,
+                -0.025525217060961558
+              ]
+            ],
+            "bone_length_delta_m": [
+              [
+                -0.001203268005049954,
+                -0.001100288366954194,
+                -0.0015522400922573683
+              ],
+              [
+                -0.002923677516032966,
+                0.005173179151837477,
+                0.006558726633124415
+              ],
+              [
+                6.938893903907228e-18,
+                3.469446951953614e-18,
+                6.938893903907228e-18
+              ],
+              [
+                2.7755575615628914e-17,
+                1.3877787807814457e-17,
+                1.3877787807814457e-17
+              ],
+              [
+                2.0816681711721685e-17,
+                -3.469446951953614e-18,
+                0.0
+              ]
+            ],
+            "desired_vectors": [
+              [
+                0.0011035645927713503,
+                -0.0006262552316535749,
+                -0.0141680930256937
+              ],
+              [
+                -0.014242288927049412,
+                -0.001374439878825234,
+                -0.0295727626225587
+              ],
+              [
+                -0.025668311936939022,
+                0.0034684891635317315,
+                -0.022362815726054707
+              ],
+              [
+                -0.030586267496210576,
+                0.017779505169843553,
+                -0.013066887886963106
+              ]
+            ],
+            "near_pinch_pairs": [
+              0
+            ],
+            "proper_rotation_det": 1.0000000000000004,
+            "raw_vectors": [
+              [
+                0.019360139966011047,
+                -0.004600076004862785,
+                -0.001174338161945343
+              ],
+              [
+                0.04346148669719696,
+                0.012567220255732536,
+                -0.008520588278770447
+              ],
+              [
+                0.03607819974422455,
+                0.03106587752699852,
+                -0.005727358162403107
+              ],
+              [
+                0.025566115975379944,
+                0.04458051361143589,
+                0.012334443628787994
+              ]
+            ],
+            "scale": 0.7136034101921734,
+            "tol_active": [
+              4.29459036048861e-18
+            ]
+          },
+          "partition": "recording:6ba87f16c91a1161b47efa2f/00004",
+          "root": "capture:5bf13e82640cd2c5c35e4df1",
+          "source": {
+            "arrival_bounds_ns": [
+              36019409523,
+              36019409523
+            ],
+            "calibration_id": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+            "capture_bounds_ns": [
+              36011409523,
+              36011409523
+            ],
+            "clock_generation": "collector-monotonic-v1",
+            "fresh": true,
+            "identity": {
+              "calendar": {
+                "day": 12,
+                "fraction": 333,
+                "hour": 12,
+                "minute": 41,
+                "month": 11,
+                "second": 32,
+                "timecode": false,
+                "year": 2026
+              },
+              "instance": "18e6e5aace070dda-86fdee9f00081cff/manus_left",
+              "ros_header": 1794487292339093264,
+              "sdk_receive_raw": 620982924923,
+              "sdk_timestamp_raw": 139274568171853,
+              "writer_sequence": 195906
+            },
+            "raw_clock": {
+              "collector_monotonic": {
+                "domain": "collector_host_monotonic",
+                "field": "SampleObservation.host_observed_monotonic_ns",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 620982930549521
+              },
+              "collector_realtime": {
+                "domain": "collector_host_realtime",
+                "field": "SampleObservation.host_realtime_ns",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794487292339221787
+              },
+              "collector_receive": {
+                "domain": "collector_ros_clock",
+                "field": "SampleObservation.receive_ros_timestamp_ns",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794487292339221761
+              },
+              "command_issue": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "control_tick": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "controller_receive": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "mcap_log": {
+                "domain": "collector_host_realtime",
+                "field": "mcap.log_time",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794487292339221787
+              },
+              "mcap_publish": {
+                "domain": "collector_host_realtime",
+                "field": "mcap.publish_time",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794487292339221787
+              },
+              "robot_feedback": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "ros_header": {
+                "domain": "message_ros_clock",
+                "field": "header.stamp",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794487292339093264
+              },
+              "sdk_receive": {
+                "domain": "publisher_steady_clock",
+                "field": "receive_timestamp_us",
+                "status": "RECORDED",
+                "unit": "us",
+                "value": 620982924923
+              },
+              "sdk_source": {
+                "domain": "manus_sdk_compressed_timestamp",
+                "field": "source_timestamp_us",
+                "status": "RECORDED",
+                "unit": null,
+                "value": 139274568171853
+              },
+              "source_capture": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              }
+            },
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "f3265a31ffdae5e62bcc3fbc82bc383186ad69d7e6fedd5fc214d01a06b2f0f0",
+              "cdr_sha256": "6f311959223965d707ddc966e7ce65a57b2cc23595e57953b82d6d2a2a62acd9",
+              "collector_mono_ns": 620982930549521,
+              "observation_cdr_sha256": "63dd6a4e25482bf8e1ab8fad07ab56c6cd7637f5ea799fa7972db814accba9d1",
+              "observation_message": 8635,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:dfc54003233473be2dd15f5c",
+              "physical_message": 8634,
+              "raw_index_token": "asset:dfc54003233473be2dd15f5c:8634",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/manus_left",
+              "stream": "manus_left",
+              "topic": "/manus_glove_left",
+              "writer_sequence": 195906
+            },
+            "recorded_frame": "",
+            "safe": null,
+            "source_eligible": true,
+            "stream": "manus_left",
+            "topology_id": "1be9984507ba11d92beee5dbd442ffa8ca99312688e8c33d1517fc5fdd2e6ec8"
+          },
+          "tick": 201,
+          "topology": 0
+        },
+        "min_distance_m": 0.01938216662059793,
+        "pose_ticks": 3163
+      },
+      "right": {
+        "close_pose_ticks": 289,
+        "first": {
+          "distance_m": 0.00819451776040823,
+          "mapping": {
+            "after_error_m": [
+              1.939479807224432e-18,
+              0.023020661146953038,
+              2.6379777400251014e-18,
+              6.60918830693726e-18
+            ],
+            "after_vectors": [
+              [
+                0.013926815686923211,
+                -0.0010339758185930123,
+                -0.004211931425837451
+              ],
+              [
+                0.007816132838400863,
+                -0.008630012769144567,
+                -0.016415479224284518
+              ],
+              [
+                -0.003058040741246156,
+                0.012718604834425329,
+                -0.005423146062561668
+              ],
+              [
+                -0.00505904314596535,
+                0.001593395772618883,
+                0.003387708797356115
+              ]
+            ],
+            "before_error_m": [
+              0.029798398431058484,
+              0.04577125446699924,
+              0.04485786575703948,
+              0.03757713191189995
+            ],
+            "before_vectors": [
+              [
+                0.024785636543935553,
+                -0.02357547901190348,
+                -0.020395601974801197
+              ],
+              [
+                0.002779866536889594,
+                -0.0313592174560963,
+                -0.027831261234925908
+              ],
+              [
+                -0.012186219700325646,
+                -0.027877031544595983,
+                -0.022183181150528364
+              ],
+              [
+                -0.02693475024994327,
+                -0.02618628340285626,
+                -0.009331713608279002
+              ]
+            ],
+            "bone_length_delta_m": [
+              [
+                0.0009916697233176633,
+                0.0010443966522362125,
+                -0.0020655915588304943
+              ],
+              [
+                -0.0015248197229253135,
+                0.001808358367615382,
+                0.0023530651513181747
+              ],
+              [
+                2.0816681711721685e-17,
+                -6.938893903907228e-18,
+                0.0
+              ],
+              [
+                -0.0020983826024603483,
+                0.0049349631617659935,
+                0.0063607194061889305
+              ],
+              [
+                -0.002122478461320604,
+                0.002236130683121399,
+                0.004089614312887815
+              ]
+            ],
+            "desired_vectors": [
+              [
+                0.013926815686923211,
+                -0.0010339758185930132,
+                -0.004211931425837449
+              ],
+              [
+                -0.003415818917870613,
+                0.010645488049273906,
+                -0.01073664416885528
+              ],
+              [
+                -0.0030580407412461558,
+                0.012718604834425329,
+                -0.005423146062561665
+              ],
+              [
+                -0.005059043145965352,
+                0.001593395772618885,
+                0.0033877087973561088
+              ]
+            ],
+            "near_pinch_pairs": [
+              0,
+              2,
+              3
+            ],
+            "proper_rotation_det": 1.0,
+            "raw_vectors": [
+              [
+                0.0029172003269195557,
+                0.01864155661314726,
+                0.0021646246314048767
+              ],
+              [
+                0.013535253703594208,
+                -0.001604421529918909,
+                -0.014884687960147858
+              ],
+              [
+                0.006459750235080719,
+                -0.002011046279221773,
+                -0.017151646316051483
+              ],
+              [
+                -0.0035521164536476135,
+                -0.007040280848741531,
+                -0.002228684723377228
+              ]
+            ],
+            "scale": 0.7680256473273361,
+            "tol_active": [
+              1.939479807224432e-18,
+              2.6379777400251014e-18,
+              6.60918830693726e-18
+            ]
+          },
+          "partition": "recording:6ba87f16c91a1161b47efa2f/00004",
+          "root": "capture:5bf13e82640cd2c5c35e4df1",
+          "source": {
+            "arrival_bounds_ns": [
+              31994416445,
+              31994416445
+            ],
+            "calibration_id": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+            "capture_bounds_ns": [
+              31986416445,
+              31986416445
+            ],
+            "clock_generation": "collector-monotonic-v1",
+            "fresh": true,
+            "identity": {
+              "calendar": {
+                "day": 12,
+                "fraction": 310,
+                "hour": 12,
+                "minute": 41,
+                "month": 11,
+                "second": 28,
+                "timecode": false,
+                "year": 2026
+              },
+              "instance": "18e6e5aace070dda-86fdee9f00081cff/manus_right",
+              "ros_header": 1794487288314154140,
+              "sdk_receive_raw": 620978902320,
+              "sdk_timestamp_raw": 139274568167734,
+              "writer_sequence": 193686
+            },
+            "raw_clock": {
+              "collector_monotonic": {
+                "domain": "collector_host_monotonic",
+                "field": "SampleObservation.host_observed_monotonic_ns",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 620978905556443
+              },
+              "collector_realtime": {
+                "domain": "collector_host_realtime",
+                "field": "SampleObservation.host_realtime_ns",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794487288314228705
+              },
+              "collector_receive": {
+                "domain": "collector_ros_clock",
+                "field": "SampleObservation.receive_ros_timestamp_ns",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794487288314228638
+              },
+              "command_issue": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "control_tick": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "controller_receive": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "mcap_log": {
+                "domain": "collector_host_realtime",
+                "field": "mcap.log_time",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794487288314228705
+              },
+              "mcap_publish": {
+                "domain": "collector_host_realtime",
+                "field": "mcap.publish_time",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794487288314228705
+              },
+              "robot_feedback": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              },
+              "ros_header": {
+                "domain": "message_ros_clock",
+                "field": "header.stamp",
+                "status": "RECORDED",
+                "unit": "ns",
+                "value": 1794487288314154140
+              },
+              "sdk_receive": {
+                "domain": "publisher_steady_clock",
+                "field": "receive_timestamp_us",
+                "status": "RECORDED",
+                "unit": "us",
+                "value": 620978902320
+              },
+              "sdk_source": {
+                "domain": "manus_sdk_compressed_timestamp",
+                "field": "source_timestamp_us",
+                "status": "RECORDED",
+                "unit": null,
+                "value": 139274568167734
+              },
+              "source_capture": {
+                "domain": null,
+                "field": null,
+                "status": "UNKNOWN",
+                "unit": null,
+                "value": null
+              }
+            },
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "66433a0feabf2bf1d3d8baa6140191d8b4ef0c0f800854e278b834454acba381",
+              "cdr_sha256": "b94c4c7cbecd41ec73db2a623dfba203b1e0c9cf398e516c7975fb2dc86c699e",
+              "collector_mono_ns": 620978905556443,
+              "observation_cdr_sha256": "12147ccd0f113ed10d7726ea279a11d19392a792e3f7eff69f57b688d1b1bcbc",
+              "observation_message": 7669,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:6c2144a15e4a6e4196e9e6cf",
+              "physical_message": 7668,
+              "raw_index_token": "asset:6c2144a15e4a6e4196e9e6cf:7668",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/manus_right",
+              "stream": "manus_right",
+              "topic": "/manus_glove_right",
+              "writer_sequence": 193686
+            },
+            "recorded_frame": "",
+            "safe": null,
+            "source_eligible": true,
+            "stream": "manus_right",
+            "topology_id": "1be9984507ba11d92beee5dbd442ffa8ca99312688e8c33d1517fc5fdd2e6ec8"
+          },
+          "tick": 0,
+          "topology": 0
+        },
+        "min_distance_m": 0.0053855820447730966,
+        "pose_ticks": 3163
+      }
+    }
+  },
+  "total_ticks": 12627
+}

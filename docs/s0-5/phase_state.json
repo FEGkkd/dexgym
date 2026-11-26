@@ -3,7 +3,7 @@
   "current": {
     "P00": "ACCEPTED",
     "P01": "ACCEPTED",
-    "P02": "IN_PROGRESS",
+    "P02": "READY_FOR_REVIEW",
     "P03": "NOT_STARTED",
     "P04": "NOT_STARTED",
     "P05": "NOT_STARTED",
@@ -82,6 +82,26 @@
       "spec_sha256": "9b03d7cdb80dfd43b43b5fb459630d30bdd25d8f50e2ef4c12435d3ddd0e1cf6",
       "scope": "STATIC_INTENT_AND_FEASIBILITY",
       "run_id": "P02-20261126-54c2e06"
+    },
+    {
+      "phase": "P02",
+      "from": "IN_PROGRESS",
+      "to": "READY_FOR_REVIEW",
+      "at": "2026-11-26T20:36:34+08:00",
+      "evidence_ref": "evidence/P02/review_receipt.json",
+      "evidence_sha256": "1f55ed102ad10d5dce1eac0e7c10ed68e2604ccf0f645b74e0432646ede6492b",
+      "run_id": "P02-20261126-54c2e06",
+      "spec_sha256": "e71316025b77e335e2273d2f72d48d7dc10832453bb35b84edee5539d8260fca",
+      "scope": "HISTORICAL_HMB_STATIC_SIMULATION_DEVELOPMENT",
+      "technical_gates": {
+        "P02": "PASS",
+        "P02-A": "PASS",
+        "P02-B": "PASS",
+        "P02-C": "PASS",
+        "P02-D": "PASS",
+        "P02-E": "PASS"
+      },
+      "authorization_ref": "reports/approvals/P01_ACCEPTED_P02.md"
     }
   ],
   "review_fix_ref": "reports/P00_review_fix.md",

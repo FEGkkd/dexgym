@@ -125,11 +125,38 @@ def phase_states(document):
             approval = event.get('approval', {})
             require(approval.get('type') == 'human' and bool(approval.get('by')) and bool(approval.get('ref')),
                     f'Human approval evidence required for {phase}')
+        if phase == 'P02' and target in {'READY_FOR_REVIEW','BLOCKED','FAILED'}:
+            check_p02_result(event)
         states[phase] = target
     require(document['current'] == states, 'Phase replay differs from current state')
     if 'dependency_dcr' in document:
         p01_dependency_states(document)
     return states
+
+
+def check_p02_result(event):
+    evidence = checked_file(ROOT,event['evidence_ref'])
+    receipt = load_json(evidence)
+    require(digest(evidence.read_bytes()) == event['evidence_sha256'] and
+            receipt['schema'] == 's05.p02.review_receipt.v1' and receipt['run_id'] == event['run_id'] and
+            receipt['scope'] == 'HISTORICAL_HMB_STATIC_SIMULATION_DEVELOPMENT' and
+            receipt['spec_sha256'] == event['spec_sha256'], 'P02 execution receipt differs')
+    expected = {'READY_FOR_REVIEW':'PASS','BLOCKED':'BLOCKED','FAILED':'FAIL'}[event['to']]
+    labels = tuple('P02-'+c for c in 'ABCDE')
+    gates = receipt['gates']
+    require(set(gates) == {'P02',*labels} and gates['P02'] == expected and
+            (expected != 'PASS' or all(gates[label] == 'PASS' for label in labels)),
+            'P02 technical gates do not match phase disposition')
+    require(not receipt['P03_start_authorized'] and receipt['review_only'] and
+            set(receipt['engineering_blocks']) == {'C2-RT','robot-base','P01-T','Final Test','HMB_REALTIME_VERIFIED'} and
+            set(receipt['engineering_blocks'].values()) == {'BLOCKED'}, 'P02 receipt scope differs')
+    for key,name in {'artifact_manifest':'output_sha256.json','score_integrity':'score_integrity.json',
+                     'scoring_handoff':'P03_scoring_handoff.json'}.items():
+        require(digest((evidence.parent/name).read_bytes()) == receipt['receipts'][key], f'Invalid P02 {key} hash')
+    for key,name in {'E1_manifest_sha256':'evidence/P01_E_E1/hmb_manifest.json',
+                     'F1_handoff_sha256':'evidence/P01_F/p02_handoff_manifest.json',
+                     'spec_sha256':'specs/P02_intent_and_feasibility.md','plan_sha256':'evidence/P02/plan.json'}.items():
+        require(digest(checked_file(ROOT,name).read_bytes()) == receipt[key], f'P02 frozen evidence differs: {key}')
 
 
 def p01_dependency_states(document):

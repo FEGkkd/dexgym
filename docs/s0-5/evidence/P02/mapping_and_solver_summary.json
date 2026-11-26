@@ -1,0 +1,832 @@
+{
+  "All": {
+    "active_pinch_after_m": [
+      4.690975831039127e-18,
+      4.690975831039127e-18,
+      4.690975831039127e-18,
+      4.690975831039127e-18
+    ],
+    "active_pinch_before_m": [
+      0.047748874116720054,
+      0.047748874116720054,
+      0.047748874116720054,
+      0.047748874116720054
+    ],
+    "all_status": {
+      "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 31,
+      "FEASIBLE_AT_TOLERANCE": 5,
+      "UNKNOWN_INVALID_GEOMETRIC_COHORT_MEMBER": 2
+    },
+    "bone_length_abs_delta_m": [
+      6.938893903907228e-18,
+      2.0816681711721685e-17,
+      0.0005428292810015166,
+      0.007628536235753932
+    ],
+    "geometric_projection": {
+      "cross_hand_m": [
+        0.008680080130625604,
+        0.1711952649353039,
+        0.21802550063512027,
+        0.23496055995505247
+      ],
+      "local_landmark_rmse_m": [
+        0.0054383633231250336,
+        0.015266020445052115,
+        0.017685893322947753,
+        0.01870007149763696
+      ],
+      "max_tip_m": [
+        0.018380610675999928,
+        0.24991239860267506,
+        0.2764919877592688,
+        0.2793314880802105
+      ],
+      "mean_tip_m": [
+        0.006809219233608454,
+        0.1599008801986993,
+        0.21988096819223546,
+        0.2294888953895211
+      ],
+      "pinch_distance_m": [
+        0.00078963823300017,
+        0.012653321404023298,
+        0.019447165163685012,
+        0.03813804975153742
+      ],
+      "pinch_vector_m": [
+        0.0033752071621549547,
+        0.018782945417820728,
+        0.02802103670908256,
+        0.04529862092235073
+      ],
+      "relative_wrist_rotation_rad": [
+        0.4527318572411874,
+        1.2880860755557952,
+        1.915806904251838,
+        2.0439324754939827
+      ],
+      "relative_wrist_translation_m": [
+        0.07240608859028402,
+        0.30951136907592275,
+        0.32218635522895067,
+        0.32421917100655734
+      ],
+      "tip_m": [
+        0.004688608264284119,
+        0.20227140015625616,
+        0.23900706963529345,
+        0.2793314880802105
+      ],
+      "wrist_rotation_rad": [
+        0.30408590343381947,
+        0.9700885013357753,
+        2.1598983437947905,
+        2.407033845574546
+      ],
+      "wrist_translation_m": [
+        0.053527659849995204,
+        0.2825840038297834,
+        0.37957891326521725,
+        0.4015936706522343
+      ]
+    },
+    "improved_cases": 35,
+    "mapped": 36,
+    "near_pinch_pairs": 1,
+    "paired_arms_m": [
+      0.03741582933554888,
+      0.2612112706245659,
+      0.2911738423156341,
+      0.2956015806596961
+    ],
+    "paired_count": 35,
+    "paired_delta_54_minus_14_m": [
+      -0.016270092579485584,
+      -0.005871858083421348,
+      -0.003271201798070501,
+      -0.0020685043595602137
+    ],
+    "paired_full_m": [
+      0.019356234364200153,
+      0.25133281403052177,
+      0.2765731163398671,
+      0.2793314880802105
+    ],
+    "wrist_baseline_distortion_m": [
+      1.0141512582029304e-16,
+      2.2090162117962119e-16,
+      2.426732169488949e-16,
+      2.5374444910834164e-16
+    ]
+  },
+  "ROOT": {
+    "active_pinch_after_m": [
+      4.690975831039127e-18,
+      4.690975831039127e-18,
+      4.690975831039127e-18,
+      4.690975831039127e-18
+    ],
+    "active_pinch_before_m": [
+      0.047748874116720054,
+      0.047748874116720054,
+      0.047748874116720054,
+      0.047748874116720054
+    ],
+    "all_status": {
+      "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 27,
+      "FEASIBLE_AT_TOLERANCE": 5
+    },
+    "bone_length_abs_delta_m": [
+      6.938893903907228e-18,
+      2.0816681711721685e-17,
+      0.0006984696031652727,
+      0.007628536235753932
+    ],
+    "geometric_projection": {
+      "cross_hand_m": [
+        0.008680080130625604,
+        0.16740972493392414,
+        0.2188020934380258,
+        0.23496055995505247
+      ],
+      "local_landmark_rmse_m": [
+        0.0054383633231250336,
+        0.014281578250157087,
+        0.01758008776176252,
+        0.01870007149763696
+      ],
+      "max_tip_m": [
+        0.019739671414147886,
+        0.20955425421433754,
+        0.26800992642901206,
+        0.2793314880802105
+      ],
+      "mean_tip_m": [
+        0.007056021351684507,
+        0.12296479999360796,
+        0.18462113304662658,
+        0.20203767482584795
+      ],
+      "pinch_distance_m": [
+        0.00078963823300017,
+        0.010521972176170718,
+        0.017523371869918657,
+        0.03813804975153742
+      ],
+      "pinch_vector_m": [
+        0.003363291215795189,
+        0.018503330673167336,
+        0.02826598372476446,
+        0.04529862092235073
+      ],
+      "relative_wrist_rotation_rad": [
+        0.4570295828081482,
+        1.3920256326881542,
+        1.9304498266795127,
+        2.0439324754939827
+      ],
+      "relative_wrist_translation_m": [
+        0.07105853767941123,
+        0.30608696411237646,
+        0.3187401108667123,
+        0.32421917100655734
+      ],
+      "tip_m": [
+        0.004766670731477475,
+        0.16863516161991213,
+        0.22762766159410724,
+        0.2793314880802105
+      ],
+      "wrist_rotation_rad": [
+        0.29167802407895355,
+        0.9016281042867824,
+        2.1877445975164505,
+        2.407033845574546
+      ],
+      "wrist_translation_m": [
+        0.053527659849995204,
+        0.24301583093274895,
+        0.3616555345266547,
+        0.4015936706522343
+      ]
+    },
+    "improved_cases": 31,
+    "mapped": 32,
+    "near_pinch_pairs": 1,
+    "paired_arms_m": [
+      0.03857706000414176,
+      0.22070797936395692,
+      0.28253723119491586,
+      0.2956015806596961
+    ],
+    "paired_count": 31,
+    "paired_delta_54_minus_14_m": [
+      -0.0163706478792798,
+      -0.005795855707284784,
+      -0.0031297079817751653,
+      -0.0020685043595602137
+    ],
+    "paired_full_m": [
+      0.02012310846409562,
+      0.2125775330551652,
+      0.26837513809517966,
+      0.2793314880802105
+    ],
+    "wrist_baseline_distortion_m": [
+      1.0303407228015593e-16,
+      2.2122448412484442e-16,
+      2.4393850062426034e-16,
+      2.5374444910834164e-16
+    ]
+  },
+  "TAIL": {
+    "active_pinch_after_m": null,
+    "active_pinch_before_m": null,
+    "all_status": {
+      "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 4,
+      "UNKNOWN_INVALID_GEOMETRIC_COHORT_MEMBER": 2
+    },
+    "bone_length_abs_delta_m": [
+      6.938893903907228e-18,
+      2.0816681711721685e-17,
+      2.362693374280412e-17,
+      3.122502256758253e-17
+    ],
+    "geometric_projection": {
+      "cross_hand_m": [
+        0.008496309109473882,
+        0.18997173873761602,
+        0.1964710606023815,
+        0.19703529259050329
+      ],
+      "local_landmark_rmse_m": [
+        0.005154339544740712,
+        0.014316654432064074,
+        0.015505266542375629,
+        0.01580241956995352
+      ],
+      "max_tip_m": [
+        0.014313678268594032,
+        0.2330521225454177,
+        0.26358532852538513,
+        0.27121863002037705
+      ],
+      "mean_tip_m": [
+        0.004979441870937481,
+        0.19584592323734976,
+        0.2227603009590868,
+        0.2294888953895211
+      ],
+      "pinch_distance_m": [
+        0.0008872860652781242,
+        0.017383942330292692,
+        0.021853394732702532,
+        0.021890531186590803
+      ],
+      "pinch_vector_m": [
+        0.004017288429382557,
+        0.01935880357807194,
+        0.02320935950622143,
+        0.023695348832248754
+      ],
+      "relative_wrist_rotation_rad": [
+        0.4466885369508897,
+        0.8892654170538001,
+        0.9487642551408784,
+        0.963638964662648
+      ],
+      "relative_wrist_translation_m": [
+        0.07444987647586418,
+        0.2825654504793474,
+        0.3112419908380144,
+        0.3184111259276812
+      ],
+      "tip_m": [
+        0.0042910273355848995,
+        0.23656155786333585,
+        0.26361556333611885,
+        0.27121863002037705
+      ],
+      "wrist_rotation_rad": [
+        0.34872649938588063,
+        0.91919099328489,
+        1.0082700716435098,
+        1.0305398412331648
+      ],
+      "wrist_translation_m": [
+        0.05800248778931057,
+        0.33684750979772743,
+        0.36383907804525717,
+        0.3705869701071396
+      ]
+    },
+    "improved_cases": 4,
+    "mapped": 4,
+    "near_pinch_pairs": 0,
+    "paired_arms_m": [
+      0.029176970327872177,
+      0.24478191073657182,
+      0.2750194388066901,
+      0.28257882082421976
+    ],
+    "paired_count": 4,
+    "paired_delta_54_minus_14_m": [
+      -0.014382992776491306,
+      -0.011729788191154104,
+      -0.011434110281304987,
+      -0.011360190803842707
+    ],
+    "paired_full_m": [
+      0.014313678268594032,
+      0.2330521225454177,
+      0.26358532852538513,
+      0.27121863002037705
+    ],
+    "wrist_baseline_distortion_m": [
+      8.59289464099441e-17,
+      1.0267027178904895e-16,
+      1.0398561323422769e-16,
+      1.0431444859552239e-16
+    ]
+  },
+  "Train": {
+    "active_pinch_after_m": [
+      4.690975831039127e-18,
+      4.690975831039127e-18,
+      4.690975831039127e-18,
+      4.690975831039127e-18
+    ],
+    "active_pinch_before_m": [
+      0.047748874116720054,
+      0.047748874116720054,
+      0.047748874116720054,
+      0.047748874116720054
+    ],
+    "all_status": {
+      "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 24,
+      "FEASIBLE_AT_TOLERANCE": 4
+    },
+    "bone_length_abs_delta_m": [
+      6.938893903907228e-18,
+      2.0816681711721685e-17,
+      0.00013482786656292067,
+      0.007628536235753932
+    ],
+    "geometric_projection": {
+      "cross_hand_m": [
+        0.008471039708748794,
+        0.17908249669214923,
+        0.2195357776652651,
+        0.23496055995505247
+      ],
+      "local_landmark_rmse_m": [
+        0.005491005809079654,
+        0.015552099978332862,
+        0.017917705477162434,
+        0.01870007149763696
+      ],
+      "max_tip_m": [
+        0.017090116920890908,
+        0.2612757220254494,
+        0.2771410164040555,
+        0.2793314880802105
+      ],
+      "mean_tip_m": [
+        0.005800052860754931,
+        0.1823738373331785,
+        0.22207706583732936,
+        0.2294888953895211
+      ],
+      "pinch_distance_m": [
+        0.0007799382329812393,
+        0.0136493389554888,
+        0.018802817674165632,
+        0.021890531186590803
+      ],
+      "pinch_vector_m": [
+        0.0034760030614514846,
+        0.020340948597345417,
+        0.02695719509574572,
+        0.02868698640796775
+      ],
+      "relative_wrist_rotation_rad": [
+        0.4466885369508897,
+        1.1066760643251092,
+        1.5375410126734574,
+        1.6778594148021422
+      ],
+      "relative_wrist_translation_m": [
+        0.07240608859028402,
+        0.31425790606352727,
+        0.32265099883526077,
+        0.32421917100655734
+      ],
+      "tip_m": [
+        0.004766670731477475,
+        0.2114236100323216,
+        0.2446821072765661,
+        0.2793314880802105
+      ],
+      "wrist_rotation_rad": [
+        0.29167802407895355,
+        0.9481061959185424,
+        1.505485430754015,
+        2.0589556740537605
+      ],
+      "wrist_translation_m": [
+        0.05278657415586802,
+        0.27885267416332316,
+        0.3527740286306423,
+        0.3705869701071396
+      ]
+    },
+    "improved_cases": 27,
+    "mapped": 28,
+    "near_pinch_pairs": 1,
+    "paired_arms_m": [
+      0.04025047433487465,
+      0.2734212993100824,
+      0.2922156631024722,
+      0.2956015806596961
+    ],
+    "paired_count": 27,
+    "paired_delta_54_minus_14_m": [
+      -0.016270092579485584,
+      -0.006061324160378353,
+      -0.0030870172544573736,
+      -0.0020685043595602137
+    ],
+    "paired_full_m": [
+      0.0174049869877997,
+      0.26269613745329623,
+      0.2772221449846538,
+      0.2793314880802105
+    ],
+    "wrist_baseline_distortion_m": [
+      9.722192682305768e-17,
+      2.0161043641658056e-16,
+      2.447679193235743e-16,
+      2.5374444910834164e-16
+    ]
+  },
+  "Validation": {
+    "active_pinch_after_m": null,
+    "active_pinch_before_m": null,
+    "all_status": {
+      "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 7,
+      "FEASIBLE_AT_TOLERANCE": 1,
+      "UNKNOWN_INVALID_GEOMETRIC_COHORT_MEMBER": 2
+    },
+    "bone_length_abs_delta_m": [
+      6.938893903907228e-18,
+      2.0816681711721685e-17,
+      0.0019147092074314137,
+      0.00440480315379152
+    ],
+    "geometric_projection": {
+      "cross_hand_m": [
+        0.01019687483723915,
+        0.07705964583898658,
+        0.13634469513716588,
+        0.14013607884354515
+      ],
+      "local_landmark_rmse_m": [
+        0.005373069425563457,
+        0.010267502326242748,
+        0.011699392393306718,
+        0.012057364910072713
+      ],
+      "max_tip_m": [
+        0.019739671414147886,
+        0.11447389560132207,
+        0.15157881235814477,
+        0.16085504154735047
+      ],
+      "mean_tip_m": [
+        0.007056021351684507,
+        0.03947642974809319,
+        0.05273393376853097,
+        0.05604830977364043
+      ],
+      "pinch_distance_m": [
+        0.0008602140756846788,
+        0.007603256019014028,
+        0.025004079283038622,
+        0.03813804975153742
+      ],
+      "pinch_vector_m": [
+        0.003274066064871114,
+        0.015183732955353708,
+        0.03615693697539132,
+        0.04529862092235073
+      ],
+      "relative_wrist_rotation_rad": [
+        0.505300056554792,
+        1.6474157108618872,
+        1.9646291225675634,
+        2.0439324754939827
+      ],
+      "relative_wrist_translation_m": [
+        0.07032437556368532,
+        0.2422293785348087,
+        0.2930157834247435,
+        0.3057123846472272
+      ],
+      "tip_m": [
+        0.004537047421524423,
+        0.05019751168594509,
+        0.10829125151762513,
+        0.16085504154735047
+      ],
+      "wrist_rotation_rad": [
+        0.3647761021972524,
+        1.118672397708552,
+        2.1493615560013466,
+        2.407033845574546
+      ],
+      "wrist_translation_m": [
+        0.06265286141295306,
+        0.18324539396034378,
+        0.3579240153138561,
+        0.4015936706522343
+      ]
+    },
+    "improved_cases": 8,
+    "mapped": 8,
+    "near_pinch_pairs": 0,
+    "paired_arms_m": [
+      0.035893138329889704,
+      0.13686009010976652,
+      0.1765563192606909,
+      0.18648037654842203
+    ],
+    "paired_count": 8,
+    "paired_delta_54_minus_14_m": [
+      -0.015699038348167334,
+      -0.008630370949560418,
+      -0.0062107540034667865,
+      -0.005605849766943376
+    ],
+    "paired_full_m": [
+      0.019739671414147886,
+      0.11447389560132207,
+      0.15157881235814477,
+      0.16085504154735047
+    ],
+    "wrist_baseline_distortion_m": [
+      1.2538340229565883e-16,
+      2.0756365355541469e-16,
+      2.1920261649044953e-16,
+      2.2211235722420826e-16
+    ]
+  },
+  "optimization": {
+    "attempts": 216,
+    "budget_exhausted": 122,
+    "durations_seconds": [
+      0.16974840949978898,
+      0.25616367024986175,
+      0.38603322444969307,
+      0.5271136809997188
+    ],
+    "finite_feasible_witness_attempts": 211,
+    "iterations": [
+      90.0,
+      90.0,
+      90.0,
+      90.0
+    ],
+    "solver_success": 94
+  },
+  "sample_motion": [
+    {
+      "case_key": "root:capture:1bc59d07cb650ee219d5adbf",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.022972085754398387,
+      "task": "hand_pose"
+    },
+    {
+      "case_key": "root:capture:2151546f1c0b35e04218a1bb",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.44337085645325147,
+      "task": "arm_hand"
+    },
+    {
+      "case_key": "root:capture:2edc372773190c61446b634c",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.4133805289811475,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "root:capture:3118754b1d9742a2718048e2",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.4179357801848217,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "root:capture:359d7bf76d7a7d4677d6585e",
+      "split": "Validation",
+      "sum_four_stream_peak_proxy_m_s": 0.31201030597529417,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "root:capture:378ae16c5078ff3880ede8d9",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.7557996678402195,
+      "task": "arm_hand"
+    },
+    {
+      "case_key": "root:capture:406fe87c6799120301158f3a",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.12892268989737224,
+      "task": "hand_pose"
+    },
+    {
+      "case_key": "root:capture:5460d9dca502d3924632a907",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.35227400419948895,
+      "task": "hand_pose"
+    },
+    {
+      "case_key": "root:capture:54911698b12e5b40cd8bfe65",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.29474325748908076,
+      "task": "hand_pose"
+    },
+    {
+      "case_key": "root:capture:57223e1ea4fd73f5aa16c512",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.45339525714005363,
+      "task": "hand_pose"
+    },
+    {
+      "case_key": "root:capture:5bf13e82640cd2c5c35e4df1",
+      "split": "Validation",
+      "sum_four_stream_peak_proxy_m_s": 0.12278811213958199,
+      "task": "hand_pose"
+    },
+    {
+      "case_key": "root:capture:6154b09c32ffe84771d612f1",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 1.1532280358591322,
+      "task": "hand_pose"
+    },
+    {
+      "case_key": "root:capture:6b3b94ebe706970ec08979e9",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.31479085188363193,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "root:capture:6fb07249fb5b858f8269a562",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.24930469558064827,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "root:capture:7df0193e6cf8cf09cd304b77",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.11392218936348181,
+      "task": "hand_pose"
+    },
+    {
+      "case_key": "root:capture:803fa7655c2b3b01ed771c5b",
+      "split": "Validation",
+      "sum_four_stream_peak_proxy_m_s": 0.355947268702405,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "root:capture:84d149ff204d06f24ac72ebc",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.41798331304654224,
+      "task": "arm_hand"
+    },
+    {
+      "case_key": "root:capture:84d75398497941b2ac85b0f3",
+      "split": "Validation",
+      "sum_four_stream_peak_proxy_m_s": 0.10999658831315669,
+      "task": "fruit"
+    },
+    {
+      "case_key": "root:capture:8c85b5bd93595270f134bf72",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.6471564870286165,
+      "task": "hand_pose"
+    },
+    {
+      "case_key": "root:capture:982b9b5f7d882e16937303ce",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.15652007324660988,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "root:capture:9e230fc5926c7a9444ebdd09",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.12830142729281402,
+      "task": "arm_hand"
+    },
+    {
+      "case_key": "root:capture:a0cb71cb6806e10bbcf6cc7a",
+      "split": "Validation",
+      "sum_four_stream_peak_proxy_m_s": 0.3719619569197798,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "root:capture:a34b6b9544d8f84e440282be",
+      "split": "Validation",
+      "sum_four_stream_peak_proxy_m_s": 0.12317033998430438,
+      "task": "bi_hand"
+    },
+    {
+      "case_key": "root:capture:a94a53f04dab331aad3f21f4",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.22155266890610595,
+      "task": "hand_pose"
+    },
+    {
+      "case_key": "root:capture:b0f31ba1d6c26e94ab2c7289",
+      "split": "Validation",
+      "sum_four_stream_peak_proxy_m_s": 0.038258386195577206,
+      "task": "arm_hand"
+    },
+    {
+      "case_key": "root:capture:b63bc72d2e8b2ee395e966f6",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.4294826268990148,
+      "task": "bi_hand"
+    },
+    {
+      "case_key": "root:capture:b70297470e5e9fc8d030706e",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.22253625079102662,
+      "task": "fruit"
+    },
+    {
+      "case_key": "root:capture:b87d55215a7b4038f575c980",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.3812527620367433,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "root:capture:bb5de955239eef5b1d2905ef",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.374508129953175,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "root:capture:d0e7ee58285307de8b1a4b93",
+      "split": "Validation",
+      "sum_four_stream_peak_proxy_m_s": 0.5353254578468882,
+      "task": "arm_hand"
+    },
+    {
+      "case_key": "root:capture:e9111547768c345fe7e81e0e",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.2587067242857974,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "root:capture:ec8bfe090a05041d139cf9f6",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.03752636823109586,
+      "task": "hand_pose"
+    },
+    {
+      "case_key": "tail:causal.manus_left.speed",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 6.728627917364976,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "tail:causal.tracker_right.speed",
+      "split": "Validation",
+      "sum_four_stream_peak_proxy_m_s": null,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "tail:causal.tracker_right_raw.speed",
+      "split": "Validation",
+      "sum_four_stream_peak_proxy_m_s": null,
+      "task": "arm_motion"
+    },
+    {
+      "case_key": "tail:left_original_tip",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 1.76080817744373,
+      "task": "hand_pose"
+    },
+    {
+      "case_key": "tail:right_original_tip",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 1.3621926124262562,
+      "task": "hand_pose"
+    },
+    {
+      "case_key": "tail:relative_registered_wrists",
+      "split": "Train",
+      "sum_four_stream_peak_proxy_m_s": 0.36673576269146296,
+      "task": "arm_motion"
+    }
+  ]
+}

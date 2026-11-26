@@ -1,0 +1,50 @@
+{
+  "E1_manifest_sha256": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074",
+  "F1_handoff_sha256": "cc1f21ead157e576113a184dba48a5d2596f4835ffdf53e554823cb67eb3fb97",
+  "P03_required_independent_acceptance": [
+    "P02",
+    "P01-T",
+    "C2-RT",
+    "robot-base"
+  ],
+  "P03_start_authorized": false,
+  "control_state_used_by_generator": false,
+  "dynamic_execution_measured": false,
+  "intent_generator_sha256": "1864819e79a0e7b60284465d2225bd729b0edb07ea653fb57fec276af084eeda",
+  "offline_q_access": "OFFLINE_DIAGNOSTIC_ONLY",
+  "online_actor_and_nominal_forbidden": [
+    "q_oracle_offline",
+    "future geometry",
+    "offline interpolation",
+    "diagnostic tail labels",
+    "complete-trajectory metadata"
+  ],
+  "operational_target_freeze": "PENDING_HUMAN_REVIEW_OF_P02_AND_WORKSPACE_DCR",
+  "oracle_sha256": "98e01de6ea5f54971c782e89d3bcfe3252e57b074f0a4bddda4d0597b25b9181",
+  "plan_sha256": "e9e292c8a852a913b37f10ac7a2a83ba0c19295e3cb7ab0c272620b0e56a9e19",
+  "retain_mapped_and_projection_in_scoring": true,
+  "robot_model_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+  "run_id": "P02-20261126-54c2e06",
+  "schema": "s05.p02.scoring_handoff.v1",
+  "scope": "HISTORICAL_HMB_STATIC_SIMULATION_DEVELOPMENT",
+  "scorer_sha256": "ce5a9e31bf375e56207a87f79052a79f3dcf015e37599d8c7a9c52a4a5c1ec22",
+  "views": {
+    "approved_handoff_sha256": "cc1f21ead157e576113a184dba48a5d2596f4835ffdf53e554823cb67eb3fb97",
+    "feasible": 36,
+    "files": {
+      "feasible_scoring_target.npz": "af3a0b6ab79ac9d4a0ac0f81f2c8e53d9556686797c2c79363dd6a493569ee50",
+      "mapped_intent.npz": "80de0a315f168da2af29f705f5faa47b204fb29feda459cf9576e856261d96c0",
+      "mapping_contract.json": "27671adc7f78d29ab282fabcf43d542f16e31e1481e51b2f7f3cd5c4121b5b2b",
+      "projection_error.npz": "8ed5e18e554e462983069fef7ec1b95e0a505d61871dfe37958554eb19559b3b",
+      "q_oracle_offline.npz": "93b76752062ff433d9c8f983ff7bee066b2d42103fae2f7648ada1ea22c8ff83",
+      "study_records.json": "4655024865e000c5ec15339d2e1bd66911a44eec5e4451c9d49a67fefa939df8",
+      "summary.json": "78fe11d116a5728ade675ed33c5f04a1f092dad084c110606dd320e5a6930527"
+    },
+    "mapped": 36,
+    "model_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+    "planned": 38,
+    "primary_pose_contract": "per root frozen representative plus preserved diagnostic tails",
+    "q_actor_and_online_nominal_access": "FORBIDDEN",
+    "time_scope": "HISTORICAL_SIMULATED_CAUSAL_GEOMETRY_ONLY"
+  }
+}
