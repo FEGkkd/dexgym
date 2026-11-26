@@ -62,7 +62,11 @@ def main(run,geometry,out):
         'review_tests.txt':run/'review_tests.stderr',
         'semantic_red.txt':run/'semantic_red.stderr'}
     for name,path in knobs.items():
-        shutil.copyfile(path,out/name)
+        if name.endswith('.txt'):
+            # Presentation copies omit trailing console spaces. Raw stderr stays hashed in the run.
+            (out/name).write_text(''.join(line.rstrip()+'\n' for line in path.read_text().splitlines()),encoding='utf-8')
+        else:
+            shutil.copyfile(path,out/name)
     constraints=load(run/'constraint_activity.json')
     reduced={k:v for k,v in constraints.items() if k not in ('witnesses','rows','cases','per_witness')}
     write(out/'constraint_activity_summary.json',reduced)
