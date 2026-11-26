@@ -1,0 +1,135 @@
+{
+  "schema": "s05.campaign.launch-evidence.v1",
+  "campaign_id": "S05-V1-20261127-490770e",
+  "status": "BLOCKED_INFRASTRUCTURE_AND_PRECURSOR_GATES",
+  "permission": "SIMULATION_CAMPAIGN_AUTHORIZED",
+  "hardware_operation": "BLOCKED",
+  "host": {
+    "name": "ubuntu-System-Product-Name",
+    "storage": "KINGSTON SNV3S2000G /dev/nvme0n1",
+    "mount": "/dev/nvme0n1p2 ext4 /",
+    "other_persistent_devices": 0,
+    "issue": "Linux kernel reports critical medium errors (READ); observed at multiple distinct sectors",
+    "sample_sectors": [
+      2022203072,
+      2022203168,
+      3501857272,
+      2027537152,
+      3474570112,
+      3525072120,
+      17126400
+    ],
+    "sample_timezone": "Asia/Shanghai",
+    "observed_interval": "2026-11-27 02:27:54–02:36:42",
+    "tmpfs": "63 GiB volatile /dev/shm, not recovery storage",
+    "gpu": "RTX 5090, 32607 MiB"
+  },
+  "authorization": {
+    "config_sha256": "955d80d09ffe674533cf5000e7bd227c3cdd7998cbbfb2737b42c273bc60e822",
+    "resource_review": "TECHNICAL_PASS",
+    "scientific_gates_passed": []
+  },
+  "evidence_root": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e",
+  "runs": {
+    "cpu_preflight": {
+      "relative": "preflight/host-inputs-r03-cpu.json",
+      "sha256": "6430d546f62d372fd7b3c71aa568cc4bc665ad69d1336781983e09edb88d04e3",
+      "exit": 0,
+      "roots_train": 24,
+      "roots_validation": 8,
+      "partitions": 308,
+      "planned_hmb_ticks": 116613
+    },
+    "rmb_smoke_01": {
+      "relative": "runs/V1-A-smoke-01/stderr.log",
+      "exit": 1,
+      "reason": "FX_LOG_SWITCH missing in wrong variant of libKine.so; updated to production vendor"
+    },
+    "rmb_smoke_02": {
+      "relative": "runs/V1-A-smoke-02/bank/rmb_manifest.json",
+      "sha256": "5f061d565c7c3e008787eedf21586eabd3c142bd18c61c40a3b103f71d993ded",
+      "exit": 0,
+      "scope": "SMOKE_ONLY",
+      "planned": 250,
+      "mapped": 247,
+      "raw_marvin_ik_success_left": 247,
+      "raw_marvin_ik_success_right": 0,
+      "legal_nominal": 0,
+      "causal_prefix_tests": 2,
+      "compared_fields_per_prefix": 99,
+      "switch_step_max_mm": 17.77435
+    },
+    "native_smoke_01": {
+      "relative": "runs/V1-B-native-smoke-01/cpu-smoke.json",
+      "sha256": "8ca101dbf9d7fd4ea39170be008fb35ec3ba1ca1fffd99ce1d0b1223b11c5c5e0",
+      "exit": 135,
+      "actual_mujoco_control_steps": 136,
+      "scope": "SYNTHETIC_TARGETS_DIAGNOSTIC"
+    },
+    "native_smoke_02": {
+      "relative": "runs/V1-B-native-smoke-02/cpu-smoke.json",
+      "sha256": "f4f99b9945d6badfc521c4a375ae6ea40692b7dc4b2724192f390a2e94e0cbad",
+      "exit": 135,
+      "actual_mujoco_control_steps": 136,
+      "scope": "SYNTHETIC_TARGETS_DIAGNOSTIC"
+    },
+    "ubuntu_tests_report": {
+      "relative": "runs/V1-B-native-smoke-02/tests.log",
+      "reported_passes_before_exit": 19,
+      "exit": 135
+    },
+    "cuda_seeded_kernel": {
+      "relative": "preflight/host-inputs-r05.json",
+      "sha256": "aebfdceb81e4970fa66652cca0c47563f358ce61c509bc10e7a21cdc76c7bd37",
+      "warp_result": 62,
+      "torch_sum": 65774.8828125,
+      "exit": 135,
+      "physical_steps": 0
+    },
+    "dashboard": {
+      "addr": "http://127.0.0.1:8765",
+      "runtime_pid": 143800,
+      "http_response": 200,
+      "api": "/api/snapshot",
+      "mode": "READ_ONLY_LOCALHOST",
+      "initial_pid": 141491,
+      "forwarded_browser": "http://127.0.0.1:18765/",
+      "browser_observation": {
+        "title": "S0-5 研发监控",
+        "connected": true,
+        "view": "总体进展",
+        "campaign_id": "S05-V1-20261127-490770e",
+        "status": "BLOCKED",
+        "actual_transitions": 272,
+        "world_model_stage": "NOT_STARTED",
+        "time_asia_shanghai": "2026-11-27 02:45:40"
+      }
+    }
+  },
+  "local_verification": {
+    "campaign_execution_config_exit": 0,
+    "data_replay_adapter_and_native_task": {"passed": 27, "exit": 0, "environment": "Windows CPU; identical native model assets mirrored under an ASCII path"},
+    "teleop_inventory": {"passed": 4, "exit": 0},
+    "dashboard": {"passed": 6, "exit": 0, "environment": "Windows loopback enabled; includes HTTP acceptance, read-only and rebinding controls"},
+    "dashboard_javascript_syntax_exit": 0,
+    "frozen_snapshot": {
+      "commit": "490770e1df45832d0693380563152bd19eefa3f4",
+      "checker_exit": 0,
+      "historical_paths_verified": 274,
+      "checks_passed": 30,
+      "checks_exit": 0
+    },
+    "qualifies_ubuntu_or_scientific_gates": false
+  },
+  "accounting": {
+    "synthetic_target_mujoco_smoke_transitions": 272,
+    "independent_policy_evaluation_transitions": 0,
+    "learner_iterations": 0,
+    "imagined_transitions": 0,
+    "world_model_updates": 0,
+    "actor_updates": 0,
+    "critic_updates": 0,
+    "qualified_env_count": null
+  },
+  "next": "Supply healthy durable storage or restore the host storage. Verify software imports and clean process exit from that storage. Re-run Train IK probe and complete G-A; rerun CPU/GPU parity and 64-scale smoke before larger GPU runs."
+}

@@ -50,7 +50,12 @@ class SuperMimicEngine:
         self.critic = Critic(task.context_dim, cfg.amp).to(self.device)
         self.torque_norm = RunningNorm(getattr(task, "command_dim", task.action_dim), eps=1e-3).to(self.device)
         self.optimizers, self.muon_optimizers = self.make_optimizers()
-        self.buffer = ReplayBuffer(cfg.buffer_steps, self.env.num_envs, self.device, cfg.holdout_fraction)
+        replay_factory = getattr(task, "make_replay_buffer", None)
+        self.buffer = (
+            ReplayBuffer(cfg.buffer_steps, self.env.num_envs, self.device, cfg.holdout_fraction)
+            if replay_factory is None
+            else replay_factory(cfg.buffer_steps)
+        )
         self.step_wm = torch.compile(self.wm) if cfg.compile else self.wm
         self.step_actor = torch.compile(self.actor) if cfg.compile else self.actor
         self.reward_step = torch.compile(task.reward) if cfg.compile_policy else task.reward
@@ -104,9 +109,11 @@ class SuperMimicEngine:
         stats = []
         names = ("reward", "drop_rate", "rot_error")
         replay_obs = getattr(self.task, "replay_observation", None)
+        replay_metadata = getattr(self.task, "replay_metadata", None)
         collection_action = getattr(self.task, "collection_action", None)
         for _ in range(steps):
             x, m, aux = self.task.read()
+            metadata = {} if replay_metadata is None else replay_metadata(m)
             sim = self.task.simulator_context
             context = self.task.context(x, m, aux, sim)
             training_obs = self.obs[: self.buffer.train_end]
@@ -123,7 +130,7 @@ class SuperMimicEngine:
             c = cap["c"]
             u = cap["u"]
             next_x = self.task.reader.state()
-            valid = ~cap["nan"]
+            valid = ~cap["nan"] & cap.get("valid", ~cap["nan"])
             for value in (
                 x,
                 cap["x1"],
@@ -189,6 +196,9 @@ class SuperMimicEngine:
             if eligible_start is not None:
                 reserve = self.cfg.imagination_start_reserve or self.cfg.horizon
                 transition["imagination_valid"] = valid & eligible_start(m, reserve)
+            if transition.keys() & metadata.keys():
+                raise ValueError("replay metadata cannot replace a control or physical state field")
+            transition.update(metadata)
             self.buffer.add(transition)
             denom = valid.float().sum().clamp_min(1)
             extra = cap.get("rollout_stats", {})
@@ -208,8 +218,12 @@ class SuperMimicEngine:
             ids = (terminated | truncated).nonzero().flatten()
             if len(ids):
                 post, _ = self.env.reset(env_ids=ids)
-                self.obs = torch.where((terminated | truncated)[:, None], post["policy"], self.obs)
-            self.sim_steps += self.env.num_envs
+                self.obs = (
+                    post["policy"] if getattr(self.env, "reset_returns_full_batch", False)
+                    else torch.where((terminated | truncated)[:, None], post["policy"], self.obs)
+                )
+            physical = cap.get("physical_executed")
+            self.sim_steps += self.env.num_envs if physical is None else int(physical.sum().item())
         values = torch.stack(stats).mean(0)
         return dict(zip((*names, *extra, *events), values, strict=True))
 
@@ -233,6 +247,7 @@ class SuperMimicEngine:
         depth_losses = []
         kinematic_losses = []
         features = []
+        advance_auxiliary = getattr(t, "replay_auxiliary", None)
         scale = getattr(t, "wm_error_scale", None)
         if scale is None:
             scale = torch.maximum(self.wm.delta_norm.std(), self.wm.error_floor)
@@ -262,6 +277,8 @@ class SuperMimicEngine:
                 )
                 features.append(self.fail_head.features(x1.detach(), t.context(x1.detach(), memory, aux, sim)))
             x, aux = t.replay_push(x1, w["push"][:, j], aux)
+            if advance_auxiliary is not None:
+                aux = advance_auxiliary(aux, w["c"][:, j])
         mask = w["mask"]
         denom = mask.sum().clamp_min(1)
         dynamics_mask = mask * w["full_step"] if "full_step" in w else mask
@@ -376,6 +393,11 @@ class SuperMimicEngine:
 
     def sample_starts(self):
         b = self.buffer
+        compact_sampler = getattr(b, "sample_starts", None)
+        if compact_sampler is not None:
+            sample = compact_sampler(self.cfg.pi_batch)
+            sample["sim_context"] = self.task.simulator_context[sample["env"]]
+            return sample
         rows = (b.ptr - b.size + torch.arange(b.size, device=self.device)) % b.capacity
         mask = b.data.get("imagination_valid", b.data["valid"])
         eligible = mask[rows, : b.train_end].nonzero()
@@ -590,7 +612,8 @@ class SuperMimicEngine:
                 stats.update(wm_state_positions=state_positions, wm_contact_positions=contact_positions)
                 if self.cfg.profile_training:
                     stats.update(collect_seconds=wm_start - collect_start, wm_seconds=self.profile_time() - wm_start)
-                if it >= self.cfg.wm_only_iters:
+                gate = getattr(self.task, "policy_update_allowed", None)
+                if it >= self.cfg.wm_only_iters and (gate is None or gate(self)):
                     stats.update(self.policy_update())
                 if it % self.cfg.log_interval == 0:
                     if self.buffer.train_end < self.env.num_envs:

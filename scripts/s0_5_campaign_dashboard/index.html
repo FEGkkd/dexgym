@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>S0-5 研发监控</title>
+  <link rel="stylesheet" href="/dashboard.css">
+  <script src="/dashboard.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">跳到监控内容</a>
+  <header class="top">
+    <div class="title">
+      <span class="model">S0-5</span>
+      <h1>研发监控</h1>
+    </div>
+    <p id="campaign-id" class="campaign-id">等待 Campaign 台账</p>
+    <div class="connection">
+      <span id="connection" class="badge" aria-live="polite">正在连接</span>
+      <span id="refresh-time">尚无快照</span>
+    </div>
+  </header>
+  <div class="shell">
+    <aside class="rail">
+      <nav aria-label="监控页面">
+        <a href="#overall" data-view="overall">总体进展</a>
+        <a href="#data" data-view="data">数据与环境</a>
+        <a href="#training" data-view="training">训练</a>
+        <a href="#world" data-view="world">World Model</a>
+        <a href="#validation" data-view="validation">独立验证</a>
+        <a href="#hardware" data-view="hardware">资源</a>
+        <a href="#history" data-view="history">迭代历史</a>
+        <a href="#deployment" data-view="deployment">部署与 EgoPro</a>
+      </nav>
+      <div class="rail-foot">
+        <strong>只读</strong>
+        <span>每 5 秒读取运行产物</span>
+      </div>
+    </aside>
+    <main id="content" tabindex="-1">
+      <div id="warning" hidden class="notice" role="status"></div>
+      <div id="view"></div>
+      <noscript>请启用 JavaScript，面板需要读取和绘制监控快照。</noscript>
+    </main>
+  </div>
+</body>
+</html>

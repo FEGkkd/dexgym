@@ -1,0 +1,65 @@
+{
+  "schema": "s05.campaign.independent_resource_review.v1",
+  "reviewer": "/root/campaign_dashboard",
+  "execution_config_sha256": "955d80d09ffe674533cf5000e7bd227c3cdd7998cbbfb2737b42c273bc60e822",
+  "evidence_sha256": "9abff418c94ef2e70401251449b2a0d1501028a5355db1367f194a46de2ce1ab",
+  "verdict": "TECHNICAL_PASS",
+  "scope": "DCR-007 only",
+  "evidence": {
+    "authorization_attachment_sha256": "77b5118f392450eb7c3123e1206f9e89aa4e5ba630e0eaee781cc9e7df2a7867",
+    "design_commit": "490770e1df45832d0693380563152bd19eefa3f4",
+    "design_freeze_sha256": "cd5bff29a5b5f683fae328898aa9060b40fc4be00e193a22d9bf18cb2d10b60b",
+    "dcr_sha256": "f0aed05c49ae378b3b137eae9222484a2fec37a7f764096161bd94d954ce163e",
+    "checker_sha256": "5f73b273bf6062e6e9232f90a6d8556d6da2d3e6d9aa04326049d23ce59575a1",
+    "review_scope": "DCR-007 resource-only overlay and immutable v2.0.1 identity",
+    "budget_checked": {
+      "train_total": 280000000,
+      "train_primary_total": 250000000,
+      "train_static_bucket": 50000000,
+      "train_precursor": 10000000,
+      "train_dynamic": 100000000,
+      "train_mixed": 100000000,
+      "train_d2": 15000000,
+      "train_e2": 15000000,
+      "eval_total": 10000000,
+      "eval_c0": 1500000,
+      "eval_training_watch": 5500000,
+      "eval_d0": 600000,
+      "eval_d1": 400000,
+      "eval_d2_e": 1400000,
+      "eval_d3": 600000,
+      "gpu_count": 1,
+      "gpu_seconds": 172800,
+      "elapsed_seconds": 259200,
+      "resource_wait_seconds": 86400,
+      "persistent_bytes": 268435456000
+    },
+    "authorized_training_identity": {
+      "physical_envs": 4096,
+      "qualification_ladder": [
+        64,
+        256,
+        1024,
+        2048,
+        4096
+      ],
+      "cumulative_learner_iterations": 30000,
+      "rollout_transitions_at_target": 245760000,
+      "wm_watchdog_physical_transitions": 250000
+    },
+    "negative_controls": {
+      "expanded_total": "authorized overlay is exact and indivisible",
+      "borrow_final_eval": "authorized overlay is exact and indivisible",
+      "hardware_scope": "authorization boundary differs",
+      "overwrite_history_contract": "frozen task identity differs",
+      "nonlocal_dashboard": "dashboard must remain local",
+      "invalid_concurrency": "physical scale differs",
+      "lost_watchdog": "training/evaluation cadence differs"
+    },
+    "scope_confirmation": "No expanded data qualification, evaluation target, safety or robot authority. Conditional E branch keeps original gates.",
+    "findings": [
+      "Pinned overlay matches resource-only authorization and baseline identities.",
+      "Validator checks authorized envelope. Actual budget consumption, GPU scale, evidence authenticity and scientific gates require runtime witnesses and separate review."
+    ]
+  }
+}

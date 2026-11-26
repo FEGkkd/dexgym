@@ -1,0 +1,135 @@
+{
+  "schema": "s05.campaign.execution.v1",
+  "campaign_id": "S05-V1-20261127-490770e",
+  "design_commit": "490770e1df45832d0693380563152bd19eefa3f4",
+  "design_freeze_sha256": "cd5bff29a5b5f683fae328898aa9060b40fc4be00e193a22d9bf18cb2d10b60b",
+  "authorization": {
+    "source": "user_pasted_formal_campaign_instruction",
+    "attachment_sha256": "77b5118f392450eb7c3123e1206f9e89aa4e5ba630e0eaee781cc9e7df2a7867",
+    "ego_scope": "CONDITIONAL_E0_TO_E3",
+    "m1_continuous_simulation": true,
+    "scope": [
+      "V1-A",
+      "V1-B",
+      "V1-C0",
+      "V1-C1",
+      "V1-C2",
+      "V1-C3",
+      "V1-D0",
+      "V1-D1",
+      "V1-D2",
+      "V1-D3",
+      "V1-E0",
+      "V1-E1",
+      "V1-E2",
+      "V1-E3"
+    ],
+    "forbidden": [
+      "REAL_ROBOT_ACTUATION",
+      "REAL_DRIVERS",
+      "FORMAL_PHYSICAL_SCORING",
+      "INDEPENDENT_FINAL_TEST"
+    ]
+  },
+  "execution": {
+    "ubuntu_worktree": "/home/ubuntu/dexgym_worktrees/s05-v1-campaign-20261127",
+    "evidence_root": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e",
+    "python": "/home/ubuntu/dexgym/.venv/bin/python",
+    "device": "cuda:0",
+    "dashboard_bind": "127.0.0.1",
+    "dashboard_port": 8765
+  },
+  "budget": {
+    "train_total": 280000000,
+    "train_primary_total": 250000000,
+    "train_static_bucket": 50000000,
+    "train_precursor": 10000000,
+    "train_dynamic": 100000000,
+    "train_mixed": 100000000,
+    "train_d2": 15000000,
+    "train_e2": 15000000,
+    "eval_total": 10000000,
+    "eval_c0": 1500000,
+    "eval_training_watch": 5500000,
+    "eval_d0": 600000,
+    "eval_d1": 400000,
+    "eval_d2_e": 1400000,
+    "eval_d3": 600000,
+    "gpu_count": 1,
+    "gpu_seconds": 172800,
+    "elapsed_seconds": 259200,
+    "resource_wait_seconds": 86400,
+    "persistent_bytes": 268435456000
+  },
+  "training": {
+    "algorithm": "SuperMimic",
+    "target_physical_envs": 4096,
+    "qualification_ladder": [
+      64,
+      256,
+      1024,
+      2048,
+      4096
+    ],
+    "reviewed_resource_fallbacks": [
+      2048,
+      1024
+    ],
+    "target_cumulative_learner_iterations": 30000,
+    "utd": 0.5,
+    "collection_ticks_per_iteration": 2,
+    "scaled_rollout_target": 245760000,
+    "warmup_steps": 66,
+    "wm_only_iterations_candidate": 350,
+    "wm_hidden": [
+      1280,
+      1280,
+      1280
+    ],
+    "actor_hidden": [
+      512,
+      512,
+      256
+    ],
+    "action_dim": 54,
+    "history": 5,
+    "wm_window": 8,
+    "imagination_horizon": 8,
+    "wm_batch": 768,
+    "wm_batches": 3,
+    "policy_batch": 384,
+    "wm_critic_lr": 0.00011,
+    "actor_lr": 0.00004,
+    "gamma": 0.99,
+    "lambda": 0.95,
+    "actor_bootstrap": 0.65,
+    "critic_epochs": 3,
+    "optimizer": "fused-adam",
+    "seed": 49,
+    "actual_physics": "MuJoCo Warp"
+  },
+  "cadence": {
+    "log_iter_range": [
+      10,
+      50
+    ],
+    "checkpoint_and_physical_eval_iters": 1000,
+    "review_iter_range": [
+      1000,
+      2000
+    ],
+    "wm_watchdog_physical_transitions": 250000
+  },
+  "replay": {
+    "capacity_candidates": [
+      128,
+      256,
+      512,
+      1024,
+      1800
+    ],
+    "storage": "one causal physical-frame representation or compact codec, verified reconstruction before use",
+    "frozen_schema": "v2.0.1"
+  },
+  "execution_state": "AUTHORIZED_DESIGN_AND_RESOURCE_SCOPE_RECORDED_PENDING_INDEPENDENT_DCR_REVIEW"
+}

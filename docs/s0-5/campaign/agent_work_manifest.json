@@ -1,0 +1,84 @@
+{
+  "schema": "s05.campaign.work-manifest.v1",
+  "campaign_id": "S05-V1-20261127-490770e",
+  "design_baseline": "490770e1df45832d0693380563152bd19eefa3f4",
+  "scope": "PARTIAL_ACTUAL_STARTUP_AND_DIAGNOSTICS",
+  "work": [
+    {
+      "role": "A Data & Reference",
+      "agent": "campaign_data",
+      "paths": [
+        "source/dexgym/tasks/direct/wholebody_s05/v1/rmb",
+        "tests/s0_5/v1_rmb"
+      ],
+      "witness": "Actual native smoke, mapped 247/250, zero legal dual-arm nominal, six local tests",
+      "status": "BLOCKED_G_A"
+    },
+    {
+      "role": "B Physics & Residual Task",
+      "agent": "campaign_physics",
+      "paths": [
+        "source/dexgym/tasks/direct/wholebody_s05/v1/task",
+        "tests/s0_5/v1_task"
+      ],
+      "witness": "Two native MuJoCo small runs produced 272 transitions and exited 135, no gate",
+      "status": "BLOCKED_G_B"
+    },
+    {
+      "role": "C World Model",
+      "agent": "campaign_learning",
+      "paths": [
+        "source/dexgym/tasks/direct/wholebody_s05/v1/learning"
+      ],
+      "witness": "Initial C0 adapter and actual prediction probe implemented; mixed dynamics checks still pending",
+      "status": "NOT_STARTED_PHYSICS_C0"
+    },
+    {
+      "role": "D Training Optimization",
+      "agent": "campaign_optimization",
+      "paths": [
+        "docs/s0-5/campaign/initial_optimization_review.md"
+      ],
+      "witness": "Reviewed preflight transition accounting, scale arithmetic and resource limits",
+      "status": "STARTUP_REVIEW_ONLY"
+    },
+    {
+      "role": "E Deployment",
+      "agent": "campaign_deployment",
+      "paths": [
+        "scripts/s0_5_campaign_teleop"
+      ],
+      "witness": "Read-only MCAP inventory implementation; four fixture controls passed",
+      "status": "D1_NOT_STARTED"
+    },
+    {
+      "role": "F Dashboard",
+      "agent": "campaign_dashboard",
+      "paths": [
+        "scripts/s0_5_campaign_dashboard"
+      ],
+      "witness": "6 local tests, same host runtime, HTTP 200 and live browser confirmed",
+      "status": "RUNNING_READ_ONLY"
+    },
+    {
+      "role": "Independent launch review",
+      "agent": "campaign_independent",
+      "paths": [
+        "docs/s0-5/campaign/independent_launch_review.md"
+      ],
+      "witness": "Verified evidence and two source repairs, withheld all scientific gates",
+      "status": "REVIEW_COMPLETE"
+    },
+    {
+      "role": "Main integration",
+      "agent": "root",
+      "paths": [
+        "scripts/s0_5_campaign",
+        "docs/s0-5/campaign",
+        "source/dexgym/algorithms/supermimic/dex_reference/engine.py"
+      ],
+      "witness": "Authorization, real execution, compact Replay, backup/release, runtime ledger",
+      "status": "INFRASTRUCTURE_BLOCKED"
+    }
+  ]
+}
