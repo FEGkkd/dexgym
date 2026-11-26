@@ -1,0 +1,94 @@
+{
+  "approval": "DCR-003 research scope only; formal target and phase acceptance pending",
+  "archive": "/home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921",
+  "authorized_p03": false,
+  "baseline_p02_original_artifacts_rehashed": 113,
+  "engineering_blocks": {
+    "C2-RT": "BLOCKED",
+    "Final Test": "BLOCKED",
+    "P01-T": "BLOCKED",
+    "robot-base": "BLOCKED"
+  },
+  "executed_head": "76d0c675423ae5787edfe8f84fdcc33e2e0639a4",
+  "exits": {
+    "budget-01": 0,
+    "constraint_activity": 0,
+    "controls-02": 0,
+    "geometry_train": 0,
+    "geometry_validation": 0,
+    "matched-01": 0,
+    "review-01": 0,
+    "review_tests": 0,
+    "supplement-01": 0
+  },
+  "f1_handoff_sha256": "cc1f21ead157e576113a184dba48a5d2596f4835ffdf53e554823cb67eb3fb97",
+  "failed_attempts": {
+    "functional-01.exit": 1,
+    "geometry-02/train.exit": 1,
+    "red.exit": 1,
+    "semantic_red.exit": 1,
+    "workspace-train.exit": 1
+  },
+  "geometry_count": 114532,
+  "historical_hmb_sha256": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074",
+  "model_audit_sha256": "f298015dc1e531b06029123b8d4c52254ede8c84b8bcad34ee4e5f3d8167db2b",
+  "model_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+  "output_sha256": {
+    "archive_sha256.json": "afa88f107d391acdb0fe8faa1a73c11b2b140f689fe1b348a7c626bc1aae2780",
+    "constraint_activity_summary.json": "d1af018814d82f6514c50001cd59a01d4705fc245b6f8af6f91311157f279b7c",
+    "fitted_candidates.json": "577195a8eb66699e11cf8bcf910383086672c384723d61fa90c13ed90652baa7",
+    "functional_fk_summary.json": "33011a5aff14f5da84e8567d6570eb870e69881287e457e2ce252151554478f4",
+    "minimax_controls_summary.json": "3e601a6065fa6897c816f7a81c4133ce922f66596f51a78de0bb8265088d5da5",
+    "model_assets_sha256.json": "92c44cabe65b278ab8261c2659c2cfa8c670fad07fd7d3a640e8629bc5c06a0d",
+    "mount_ablation_summary.json": "be2b548daca335771f328a90574bb35387c33e57687eb5633a6b66ae53ed315b",
+    "oracle_metrics.png": "62a84a45cf2fd79a50e5e3fc08a7ebc63df8f34c6b494675b319598f0eebcd80",
+    "pinch_statistics_correction.json": "d1b7d1658cd4d8d502c6fbaeddfa38f9ce5eeb38f74b95592c35abe2d3456701",
+    "pinch_transition.png": "11db5be8b2f897e2a22dcc2e348d8ee538ea7773d8331cdb59a612b6201ca36a",
+    "quantitative_summary.json": "9b3301ee54ce075ff9768e8f191a5e138c4bc13351ef35a61195c098a9fae248",
+    "raw_tracker_step_overlap.json": "060a9c22a3507153b310f067a7e13773386b037cdc42093ee62ede95e4eae3a5",
+    "review_tests.txt": "b1bc726e28e3f10264fae692b506d707bc81c93c1b505a54b6e1cf22e3419f85",
+    "scoring_freeze_candidate.json": "96aac52666d7b03d6a3c087cb845f824a2ed4403f1cf35ae87af0264dd5f4f94",
+    "semantic_red.txt": "e01104c591507c75aa4f08d322ef8f3bbc82f7093a8b1db4ff12b24d6b411b7c",
+    "source_sha256.json": "fe50fd50144927dc92d9bcdf5895822a5bdf77d695cfb5b285cb678a3dbd37a6",
+    "train_functional_summary.json": "6c47025cca57b33025f82cf1a8b6697d66d2dcb3122ad0c566ee8acd6a9a6ccd",
+    "train_workspace_summary.json": "c645d3328ceaaa38896e8be141d85a05da152172209871324c193bd39839cd0a",
+    "validation_functional_summary.json": "44ca9f53f3de2b6a1b48f8804c644e16413909f8c37793ec3ba9d8882ddb1d2a",
+    "validation_workspace_summary.json": "77c158b9267e2dea34b6c6b593f79629549621ee930f90ee64c9eb6458748778",
+    "workspace_bounds.png": "3cdcf9947e6541267d810dc187bc7462ec99323ee9412234d4a0b1ee1d8b35e9"
+  },
+  "phases": {
+    "P01": "ACCEPTED",
+    "P02": "READY_FOR_REVIEW",
+    "P03": "NOT_STARTED"
+  },
+  "plan_sha256": "adcdc5dcab422e22cdef188282dba4f559a702d0c641a0f644f4ab935b3f9abf",
+  "resources": {
+    "budget-01.resources": "\tCommand being timed: \"/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python -P docs/s0-5/evidence/P02/refinement/evaluate.py budget /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/budget-01\"\n\tUser time (seconds): 93.38\n\tSystem time (seconds): 0.46\n\tPercent of CPU this job got: 100%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 1:33.13\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 1135476\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 284054\n\tVoluntary context switches: 477\n\tInvoluntary context switches: 302\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 7224\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+    "functional-01.resources": "Command exited with non-zero status 1\n\tCommand being timed: \"/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python -P docs/s0-5/evidence/P02/refinement/evaluate.py functional /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/functional-01 /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/geometry-03\"\n\tUser time (seconds): 34.04\n\tSystem time (seconds): 0.57\n\tPercent of CPU this job got: 102%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:33.85\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 1239740\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 502540\n\tVoluntary context switches: 391\n\tInvoluntary context switches: 280\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 1600\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 1\n",
+    "geometry-02/train.resources": "Command exited with non-zero status 1\n\tCommand being timed: \"/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python -P docs/s0-5/evidence/P02/refinement/workspace.py train /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/geometry-02\"\n\tUser time (seconds): 32.99\n\tSystem time (seconds): 3.44\n\tPercent of CPU this job got: 102%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:35.64\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 1435608\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 2895819\n\tVoluntary context switches: 153\n\tInvoluntary context switches: 96\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 16\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 1\n",
+    "geometry-03/train.resources": "\tCommand being timed: \"/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python -P docs/s0-5/evidence/P02/refinement/workspace.py train /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/geometry-03\"\n\tUser time (seconds): 45.60\n\tSystem time (seconds): 3.67\n\tPercent of CPU this job got: 101%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:48.53\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 2149840\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 1\n\tMinor (reclaiming a frame) page faults: 2987827\n\tVoluntary context switches: 149\n\tInvoluntary context switches: 195\n\tSwaps: 0\n\tFile system inputs: 8\n\tFile system outputs: 89288\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+    "geometry-03/validation.resources": "\tCommand being timed: \"/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python -P docs/s0-5/evidence/P02/refinement/workspace.py validation /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/geometry-03\"\n\tUser time (seconds): 13.68\n\tSystem time (seconds): 1.72\n\tPercent of CPU this job got: 105%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:14.66\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 1219240\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 1511641\n\tVoluntary context switches: 191\n\tInvoluntary context switches: 83\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 31232\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+    "matched-01.resources": "\tCommand being timed: \"/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python -P docs/s0-5/evidence/P02/refinement/evaluate.py matched /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/matched-01 /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/geometry-03 /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/budget-01\"\n\tUser time (seconds): 115.96\n\tSystem time (seconds): 0.95\n\tPercent of CPU this job got: 100%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 1:56.16\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 1253512\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 839626\n\tVoluntary context switches: 334\n\tInvoluntary context switches: 300\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 16648\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+    "supplement-01.resources": "\tCommand being timed: \"/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python -P docs/s0-5/evidence/P02/refinement/supplement.py /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/supplement-01 /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/geometry-03\"\n\tUser time (seconds): 65.24\n\tSystem time (seconds): 3.02\n\tPercent of CPU this job got: 101%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 1:07.54\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 1330188\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 3\n\tMinor (reclaiming a frame) page faults: 2003966\n\tVoluntary context switches: 385\n\tInvoluntary context switches: 343\n\tSwaps: 0\n\tFile system inputs: 368\n\tFile system outputs: 976\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 0\n",
+    "workspace-train.resources": "Command exited with non-zero status 1\n\tCommand being timed: \"/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python -P docs/s0-5/evidence/P02/refinement/workspace.py train /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921\"\n\tUser time (seconds): 0.19\n\tSystem time (seconds): 0.03\n\tPercent of CPU this job got: 99%\n\tElapsed (wall clock) time (h:mm:ss or m:ss): 0:00.23\n\tAverage shared text size (kbytes): 0\n\tAverage unshared data size (kbytes): 0\n\tAverage stack size (kbytes): 0\n\tAverage total size (kbytes): 0\n\tMaximum resident set size (kbytes): 93704\n\tAverage resident set size (kbytes): 0\n\tMajor (requiring I/O) page faults: 0\n\tMinor (reclaiming a frame) page faults: 16704\n\tVoluntary context switches: 13\n\tInvoluntary context switches: 8\n\tSwaps: 0\n\tFile system inputs: 0\n\tFile system outputs: 8\n\tSocket messages sent: 0\n\tSocket messages received: 0\n\tSignals delivered: 0\n\tPage size (bytes): 4096\n\tExit status: 1\n"
+  },
+  "reviewed_baseline": "87539210e60f1134820b9f06fdb084cbc3ec1bf1",
+  "run": "P02-REFINE-20261126-8753921",
+  "runtime": {
+    "import_paths": {
+      "mujoco": "/home/ubuntu/.local/lib/python3.12/site-packages/mujoco/__init__.py",
+      "numpy": "/usr/lib/python3/dist-packages/numpy/__init__.py",
+      "scipy": "/usr/lib/python3/dist-packages/scipy/__init__.py"
+    },
+    "package_versions": {
+      "mujoco": "3.13.0",
+      "numpy": "1.26.4",
+      "scipy": "1.11.4"
+    },
+    "python": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python",
+    "version": "3.12.3"
+  },
+  "schema": "s05.p02.independent_refinement.receipt.v1",
+  "scope": "HISTORICAL_HMB_OFFLINE_STATIC_RESEARCH",
+  "train_frozen_candidates_sha256": "577195a8eb66699e11cf8bcf910383086672c384723d61fa90c13ed90652baa7"
+}

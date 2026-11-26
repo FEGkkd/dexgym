@@ -131,6 +131,8 @@ def phase_states(document):
     require(document['current'] == states, 'Phase replay differs from current state')
     if 'dependency_dcr' in document:
         p01_dependency_states(document)
+    if 'p02_refinement' in document:
+        check_p02_refinement(document['p02_refinement'])
     return states
 
 
@@ -157,6 +159,22 @@ def check_p02_result(event):
                      'F1_handoff_sha256':'evidence/P01_F/p02_handoff_manifest.json',
                      'spec_sha256':'specs/P02_intent_and_feasibility.md','plan_sha256':'evidence/P02/plan.json'}.items():
         require(digest(checked_file(ROOT,name).read_bytes()) == receipt[key], f'P02 frozen evidence differs: {key}')
+
+
+def check_p02_refinement(event):
+    evidence = checked_file(ROOT,event['evidence_ref'])
+    receipt = load_json(evidence)
+    require(digest(evidence.read_bytes()) == event['evidence_sha256'] and
+            receipt['run'] == event['run'] and receipt['reviewed_baseline'] == event['reviewed_baseline'],
+            'P02 refinement review receipt differs')
+    require(receipt['scope'] == 'HISTORICAL_HMB_OFFLINE_STATIC_RESEARCH' and
+            not receipt['authorized_p03'] and event['formal_scoring'] == 'PENDING_HUMAN_APPROVAL',
+            'P02 refinement authorization boundary differs')
+    require(receipt['phases'] == {'P01':'ACCEPTED','P02':'READY_FOR_REVIEW','P03':'NOT_STARTED'} and
+            set(receipt['exits'].values()) == {0}, 'P02 refinement execution results differ')
+    for name,sha in receipt['output_sha256'].items():
+        path = checked_file(ROOT, str(evidence.parent.relative_to(ROOT) / name))
+        require(digest(path.read_bytes()) == sha, f'P02 refinement publication hash differs: {name}')
 
 
 def p01_dependency_states(document):

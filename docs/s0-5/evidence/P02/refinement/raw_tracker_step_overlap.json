@@ -1,0 +1,182 @@
+{
+  "clock": "Historical simulated causal tick, successive valid distinct raw sample indices within a partition",
+  "scope": "A step threshold is a diagnostic observation, not a sensor-artifact classification.",
+  "signed_coverage_sha256": "f1773f3f9261ddf7d6461a4e567426f96dbcb6b4561d0dc899096d13777598de",
+  "splits": {
+    "Train": {
+      "counts": {
+        "('left', 'joint_comparable')": 85139,
+        "('left', 'raw_adjacent_distinct')": 85735,
+        "('left', 'raw_valid')": 85988,
+        "('left', 100, 'M0', 'strict3_joint')": 0,
+        "('left', 100, 'M1', 'strict3_joint')": 0,
+        "('left', 100, 'M2', 'strict3_joint')": 0,
+        "('left', 100, 'all')": 0,
+        "('left', 100, 'joint_valid')": 0,
+        "('left', 25, 'M0', 'strict3_joint')": 0,
+        "('left', 25, 'M1', 'strict3_joint')": 0,
+        "('left', 25, 'M2', 'strict3_joint')": 0,
+        "('left', 25, 'all')": 0,
+        "('left', 25, 'joint_valid')": 0,
+        "('left', 50, 'M0', 'strict3_joint')": 0,
+        "('left', 50, 'M1', 'strict3_joint')": 0,
+        "('left', 50, 'M2', 'strict3_joint')": 0,
+        "('left', 50, 'all')": 0,
+        "('left', 50, 'joint_valid')": 0,
+        "('right', 'joint_comparable')": 85139,
+        "('right', 'raw_adjacent_distinct')": 85735,
+        "('right', 'raw_valid')": 85988,
+        "('right', 100, 'M0', 'strict3_joint')": 0,
+        "('right', 100, 'M1', 'strict3_joint')": 0,
+        "('right', 100, 'M2', 'strict3_joint')": 0,
+        "('right', 100, 'all')": 0,
+        "('right', 100, 'joint_valid')": 0,
+        "('right', 25, 'M0', 'strict3_joint')": 0,
+        "('right', 25, 'M1', 'strict3_joint')": 0,
+        "('right', 25, 'M2', 'strict3_joint')": 0,
+        "('right', 25, 'all')": 2,
+        "('right', 25, 'joint_valid')": 2,
+        "('right', 50, 'M0', 'strict3_joint')": 0,
+        "('right', 50, 'M1', 'strict3_joint')": 0,
+        "('right', 50, 'M2', 'strict3_joint')": 0,
+        "('right', 50, 'all')": 0,
+        "('right', 50, 'joint_valid')": 0,
+        "joint_valid": 85382,
+        "partitions": 228,
+        "planned": 86338
+      },
+      "signed_e1_agreement": true,
+      "top_raw_steps": [
+        {
+          "joint_valid": true,
+          "partition": "recording:366fe9c94a4078f7e0cfb3d5/00002",
+          "raw_source_indices": [
+            5510,
+            5512
+          ],
+          "raw_step_m": 0.031156460003084252,
+          "root": "capture:b87d55215a7b4038f575c980",
+          "side": "right",
+          "tick": 160,
+          "tick_ns": 19200000082
+        },
+        {
+          "joint_valid": true,
+          "partition": "recording:01ee4f951950370ea9ecddae/00004",
+          "raw_source_indices": [
+            5380,
+            5382
+          ],
+          "raw_step_m": 0.02696418856841314,
+          "root": "capture:8c85b5bd93595270f134bf72",
+          "side": "right",
+          "tick": 106,
+          "tick_ns": 34120000099
+        }
+      ]
+    },
+    "Validation": {
+      "counts": {
+        "('left', 'joint_comparable')": 29065,
+        "('left', 'raw_adjacent_distinct')": 29240,
+        "('left', 'raw_valid')": 29330,
+        "('left', 100, 'M0', 'strict3_joint')": 0,
+        "('left', 100, 'M1', 'strict3_joint')": 0,
+        "('left', 100, 'M2', 'strict3_joint')": 0,
+        "('left', 100, 'all')": 0,
+        "('left', 100, 'joint_valid')": 0,
+        "('left', 25, 'M0', 'strict3_joint')": 0,
+        "('left', 25, 'M1', 'strict3_joint')": 0,
+        "('left', 25, 'M2', 'strict3_joint')": 0,
+        "('left', 25, 'all')": 0,
+        "('left', 25, 'joint_valid')": 0,
+        "('left', 50, 'M0', 'strict3_joint')": 0,
+        "('left', 50, 'M1', 'strict3_joint')": 0,
+        "('left', 50, 'M2', 'strict3_joint')": 0,
+        "('left', 50, 'all')": 0,
+        "('left', 50, 'joint_valid')": 0,
+        "('right', 'joint_comparable')": 29065,
+        "('right', 'raw_adjacent_distinct')": 29240,
+        "('right', 'raw_valid')": 29330,
+        "('right', 100, 'M0', 'strict3_joint')": 0,
+        "('right', 100, 'M1', 'strict3_joint')": 0,
+        "('right', 100, 'M2', 'strict3_joint')": 0,
+        "('right', 100, 'all')": 0,
+        "('right', 100, 'joint_valid')": 0,
+        "('right', 25, 'M0', 'strict3_joint')": 1,
+        "('right', 25, 'M1', 'strict3_joint')": 1,
+        "('right', 25, 'M2', 'strict3_joint')": 1,
+        "('right', 25, 'all')": 4,
+        "('right', 25, 'joint_valid')": 3,
+        "('right', 50, 'M0', 'strict3_joint')": 0,
+        "('right', 50, 'M1', 'strict3_joint')": 0,
+        "('right', 50, 'M2', 'strict3_joint')": 0,
+        "('right', 50, 'all')": 2,
+        "('right', 50, 'joint_valid')": 2,
+        "joint_valid": 29150,
+        "partitions": 80,
+        "planned": 30275
+      },
+      "signed_e1_agreement": true,
+      "top_raw_steps": [
+        {
+          "joint_valid": true,
+          "partition": "recording:accb68c9afa37e2c2edce4a0/00005",
+          "raw_source_indices": [
+            5233,
+            5235
+          ],
+          "raw_step_m": 0.08190041588038462,
+          "root": "capture:a0cb71cb6806e10bbcf6cc7a",
+          "side": "right",
+          "tick": 212,
+          "tick_ns": 44240000070
+        },
+        {
+          "joint_valid": true,
+          "partition": "recording:accb68c9afa37e2c2edce4a0/00005",
+          "raw_source_indices": [
+            5198,
+            5200
+          ],
+          "raw_step_m": 0.059868060535882804,
+          "root": "capture:a0cb71cb6806e10bbcf6cc7a",
+          "side": "right",
+          "tick": 193,
+          "tick_ns": 43860000070
+        },
+        {
+          "joint_valid": false,
+          "partition": "recording:accb68c9afa37e2c2edce4a0/00005",
+          "raw_source_indices": [
+            5242,
+            5245
+          ],
+          "raw_step_m": 0.03509028457177408,
+          "root": "capture:a0cb71cb6806e10bbcf6cc7a",
+          "side": "right",
+          "tick": 216,
+          "tick_ns": 44320000070
+        },
+        {
+          "joint_valid": true,
+          "partition": "recording:84794a93081c0b949a469ead/00006",
+          "raw_source_indices": [
+            5176,
+            5179
+          ],
+          "raw_step_m": 0.02739607028193915,
+          "root": "capture:359d7bf76d7a7d4677d6585e",
+          "side": "right",
+          "tick": 21,
+          "tick_ns": 48420000060
+        }
+      ]
+    }
+  },
+  "thresholds_m": [
+    0.025,
+    0.05,
+    0.1
+  ]
+}

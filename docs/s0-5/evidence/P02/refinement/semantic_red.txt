@@ -1,0 +1,33 @@
+test_active_indices_are_counts_and_positions (test_p02_review.PinchStatisticsTests.test_active_indices_are_counts_and_positions) ...
+  test_active_indices_are_counts_and_positions (test_p02_review.PinchStatisticsTests.test_active_indices_are_counts_and_positions) (indices=[0]) ... FAIL
+  test_active_indices_are_counts_and_positions (test_p02_review.PinchStatisticsTests.test_active_indices_are_counts_and_positions) (indices=[1]) ... FAIL
+  test_active_indices_are_counts_and_positions (test_p02_review.PinchStatisticsTests.test_active_indices_are_counts_and_positions) (indices=[0, 2]) ... FAIL
+
+======================================================================
+FAIL: test_active_indices_are_counts_and_positions (test_p02_review.PinchStatisticsTests.test_active_indices_are_counts_and_positions) (indices=[0])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/dexgym_worktrees/s0-5/tests/s0_5/unit/test_p02_review.py", line 18, in test_active_indices_are_counts_and_positions
+    self.assertEqual(summary['near_pinch_pairs'], len(indices))
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_active_indices_are_counts_and_positions (test_p02_review.PinchStatisticsTests.test_active_indices_are_counts_and_positions) (indices=[1])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/dexgym_worktrees/s0-5/tests/s0_5/unit/test_p02_review.py", line 22, in test_active_indices_are_counts_and_positions
+    self.assertEqual(summary['active_pinch_before_m'][-1], max(before))
+AssertionError: 10.0 != 20
+
+======================================================================
+FAIL: test_active_indices_are_counts_and_positions (test_p02_review.PinchStatisticsTests.test_active_indices_are_counts_and_positions) (indices=[0, 2])
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/dexgym_worktrees/s0-5/tests/s0_5/unit/test_p02_review.py", line 22, in test_active_indices_are_counts_and_positions
+    self.assertEqual(summary['active_pinch_before_m'][-1], max(before))
+AssertionError: 20.0 != 30
+
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+FAILED (failures=3)

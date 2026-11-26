@@ -1,0 +1,47 @@
+{
+  "fit_sha256": "577195a8eb66699e11cf8bcf910383086672c384723d61fa90c13ed90652baa7",
+  "forbid_online_actor_or_nominal_from_loading_oracle_q": true,
+  "formal_scoring_freeze": "PENDING_HUMAN_APPROVAL",
+  "model_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+  "p03_authorized": false,
+  "p03_independent_prerequisites": [
+    "P02",
+    "P01-T",
+    "C2-RT",
+    "robot-base"
+  ],
+  "propose": "Keep M0 as a required audit column. Review M1 as a second, rigid simulation-development target. M2 and minimax remain diagnostics; keep all unknown and excluded cases in planned denominators.",
+  "requested_use": "HISTORICAL_STATIC_RESEARCH_ONLY",
+  "reviewed_original_target_retained": true,
+  "separate_projection_and_execution": true,
+  "unknown_masks": "Matched paired-case dispositions retained",
+  "views": {
+    "M0": {
+      "count": 36,
+      "files": {
+        "m0_feasible_target.npz": "605dc7e180d9148defdf1d523b23ccfb211c40a1a8f69b550167a1b3c3377df4",
+        "m0_mapped_intent.npz": "b7bc62227a42a8718c80ce18bc3e99eed218dbb3a4dcbd86009f02a138503475",
+        "m0_oracle_q.npz": "075c1015878ad07510bde7a100db3daca6fb3ace67f4caa398e009c687c0e20d",
+        "m0_projection.npz": "cc8075899cd5f9443a645de80bcbbfac2288863ce15fb0f73cc25dee93a6c0e9"
+      }
+    },
+    "M1": {
+      "count": 36,
+      "files": {
+        "m1_feasible_target.npz": "deb8319c8c6e2b667f412db77a091f41efc51f5f6c5fead15df2113305a88d3c",
+        "m1_mapped_intent.npz": "aed10494080996bf54182282e2098638922b8dddefe7afac287b7c0357d1b01f",
+        "m1_oracle_q.npz": "107b917eaf0d19dbef52afe29e170dc3f2f9d2f3df0b147e91e81f66249c9fc0",
+        "m1_projection.npz": "3fda279376b5e83dd5557d86b9e8eed0f14889d62fc37ec2376f02ebf0cf723a"
+      }
+    },
+    "M2": {
+      "count": 36,
+      "files": {
+        "m2_feasible_target.npz": "f5cad75e371b1292abc40200485ac9548fe17c7e9967f7096222ff5dc7ea6ad3",
+        "m2_mapped_intent.npz": "2f47e668d4e7ed4b8cd1908a8418538356f3b09b1d82fa641cc97499be388d2c",
+        "m2_oracle_q.npz": "08da39c51f2b761e16f7edb504859cacbf10d22e7302fcf426d9c25be623662c",
+        "m2_projection.npz": "97cddfc89d9dc625859477714d3972fa7267ce59ec47415d915312318883934e"
+      }
+    }
+  }
+}

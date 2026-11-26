@@ -1,0 +1,4129 @@
+{
+  "activity_above_margin_m": 1e-05,
+  "collision_model": {
+    "absent_from_compiled_filter": [],
+    "absent_from_oracle": [],
+    "allowed_by_category": {
+      "base_vs_arm": 250,
+      "base_vs_hand": 756,
+      "cross_hand": 441,
+      "environment": 56,
+      "inter_arm": 49,
+      "opposite_side_arm_hand": 294,
+      "same_finger_links": 20,
+      "same_hand_distinct_fingers": 320,
+      "same_hand_palm_or_mount": 38,
+      "same_side_arm_hand": 290,
+      "same_side_arm_links": 28
+    },
+    "compiled_geometries": 191,
+    "explicit_body_excludes": [
+      [
+        "Base_L",
+        "Link1_L"
+      ],
+      [
+        "Link1_L",
+        "Link2_L"
+      ],
+      [
+        "Link2_L",
+        "Link3_L"
+      ],
+      [
+        "Link3_L",
+        "Link4_L"
+      ],
+      [
+        "Link4_L",
+        "Link5_L"
+      ],
+      [
+        "Link5_L",
+        "Link6_L"
+      ],
+      [
+        "Link5_L",
+        "Link7_L"
+      ],
+      [
+        "Link6_L",
+        "Link7_L"
+      ],
+      [
+        "l_wrist",
+        "l_thumb_proximal_abd"
+      ],
+      [
+        "Base_R",
+        "Link1_R"
+      ],
+      [
+        "Link1_R",
+        "Link2_R"
+      ],
+      [
+        "Link2_R",
+        "Link3_R"
+      ],
+      [
+        "Link3_R",
+        "Link4_R"
+      ],
+      [
+        "Link4_R",
+        "Link5_R"
+      ],
+      [
+        "Link5_R",
+        "Link6_R"
+      ],
+      [
+        "Link5_R",
+        "Link7_R"
+      ],
+      [
+        "Link6_R",
+        "Link7_R"
+      ],
+      [
+        "r_wrist",
+        "r_thumb_proximal_abd"
+      ]
+    ],
+    "explicit_geom_pairs": [],
+    "filter_parent": true,
+    "global_contact_disabled": false,
+    "oracle_allowed": 2542,
+    "possible_geom_pairs": 18145,
+    "raw_filter_counts_overlap": {
+      "explicit_body_exclusion": 76,
+      "incompatible_contact_bits": 15370,
+      "parent_weld_component": 544,
+      "same_weld_component": 492
+    },
+    "reconstructed_allowed": 2542
+  },
+  "collision_reference": "https://mujoco.readthedocs.io/en/stable/computation/index.html#collision-detection",
+  "discrepancies": [],
+  "distance_agreement_tolerance_m": 2e-09,
+  "distance_cap_m": 0.015,
+  "execution_git": "3e36782e2c0cb678e69c66b9fb2c4272bb6bd519",
+  "geometry": [
+    {
+      "anatomy_anchor": "world",
+      "body": "world",
+      "body_id": 0,
+      "component": "environment",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 0,
+      "name": "floor",
+      "side": null,
+      "type": 0
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 1,
+      "name": "outrigger_1",
+      "side": null,
+      "type": 6
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 2,
+      "name": "foot_1",
+      "side": null,
+      "type": 5
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 3,
+      "name": "outrigger_2",
+      "side": null,
+      "type": 6
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 4,
+      "name": "foot_2",
+      "side": null,
+      "type": 5
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 5,
+      "name": "outrigger_3",
+      "side": null,
+      "type": 6
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 6,
+      "name": "foot_3",
+      "side": null,
+      "type": 5
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 7,
+      "name": "outrigger_4",
+      "side": null,
+      "type": 6
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 8,
+      "name": "foot_4",
+      "side": null,
+      "type": 5
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 9,
+      "name": "base_plate",
+      "side": null,
+      "type": 6
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 10,
+      "name": "column",
+      "side": null,
+      "type": 6
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 11,
+      "name": "geom#11",
+      "side": null,
+      "type": 6
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 12,
+      "name": "geom#12",
+      "side": null,
+      "type": 6
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 13,
+      "name": "geom#13",
+      "side": null,
+      "type": 6
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 14,
+      "name": "geom#14",
+      "side": null,
+      "type": 6
+    },
+    {
+      "anatomy_anchor": "pedestal",
+      "body": "pedestal",
+      "body_id": 1,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 15,
+      "name": "top_housing",
+      "side": null,
+      "type": 6
+    },
+    {
+      "anatomy_anchor": "center_mount",
+      "body": "center_mount",
+      "body_id": 2,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 16,
+      "name": "cross_mount",
+      "side": null,
+      "type": 6
+    },
+    {
+      "anatomy_anchor": "center_mount",
+      "body": "center_mount",
+      "body_id": 2,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 17,
+      "name": "left_black_ring",
+      "side": null,
+      "type": 5
+    },
+    {
+      "anatomy_anchor": "center_mount",
+      "body": "center_mount",
+      "body_id": 2,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 18,
+      "name": "right_black_ring",
+      "side": null,
+      "type": 5
+    },
+    {
+      "anatomy_anchor": "center_mount",
+      "body": "center_mount",
+      "body_id": 2,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 19,
+      "name": "left_flange",
+      "side": null,
+      "type": 5
+    },
+    {
+      "anatomy_anchor": "center_mount",
+      "body": "center_mount",
+      "body_id": 2,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 20,
+      "name": "right_flange",
+      "side": null,
+      "type": 5
+    },
+    {
+      "anatomy_anchor": "Base_L",
+      "body": "Base_L",
+      "body_id": 3,
+      "component": "base",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 21,
+      "name": "Base_L_visual",
+      "side": null,
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Base_L",
+      "body": "Base_L",
+      "body_id": 3,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 22,
+      "name": "Base_L_collision",
+      "side": null,
+      "type": 5
+    },
+    {
+      "anatomy_anchor": "Link1_L",
+      "body": "Link1_L",
+      "body_id": 4,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 23,
+      "name": "Link1_L_visual",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link1_L",
+      "body": "Link1_L",
+      "body_id": 4,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 24,
+      "name": "Link1_L_collision",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "Link2_L",
+      "body": "Link2_L",
+      "body_id": 5,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 25,
+      "name": "Link2_L_visual",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link2_L",
+      "body": "Link2_L",
+      "body_id": 5,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 26,
+      "name": "Link2_L_collision",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "Link3_L",
+      "body": "Link3_L",
+      "body_id": 6,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 27,
+      "name": "Link3_L_visual",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link3_L",
+      "body": "Link3_L",
+      "body_id": 6,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 28,
+      "name": "Link3_L_collision",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "Link4_L",
+      "body": "Link4_L",
+      "body_id": 7,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 29,
+      "name": "Link4_L_visual",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link4_L",
+      "body": "Link4_L",
+      "body_id": 7,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 30,
+      "name": "Link4_L_collision",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "Link5_L",
+      "body": "Link5_L",
+      "body_id": 8,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 31,
+      "name": "Link5_L_visual",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link5_L",
+      "body": "Link5_L",
+      "body_id": 8,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 32,
+      "name": "Link5_L_collision",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "Link6_L",
+      "body": "Link6_L",
+      "body_id": 9,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 33,
+      "name": "Link6_L_visual",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link6_L",
+      "body": "Link6_L",
+      "body_id": 9,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 34,
+      "name": "Link6_L_collision",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "Link7_L",
+      "body": "Link7_L",
+      "body_id": 10,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 35,
+      "name": "Link7_L_visual",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link7_L",
+      "body": "Link7_L",
+      "body_id": 10,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 36,
+      "name": "Link7_L_collision",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_mount",
+      "body": "l_mount",
+      "body_id": 12,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 37,
+      "name": "l_visual_67",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_mount",
+      "body": "l_mount",
+      "body_id": 12,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 38,
+      "name": "l_mount_collision",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_wrist",
+      "body": "l_wrist",
+      "body_id": 13,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 39,
+      "name": "l_visual_0",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_wrist",
+      "body": "l_wrist",
+      "body_id": 13,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 40,
+      "name": "l_palm_collision",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_thumb_proximal",
+      "body": "l_thumb_proximal",
+      "body_id": 14,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 41,
+      "name": "l_visual_2",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_thumb_proximal",
+      "body": "l_thumb_proximal",
+      "body_id": 14,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 42,
+      "name": "l_finger1_link1_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_thumb_proximal",
+      "body": "l_thumb_proximal",
+      "body_id": 14,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 43,
+      "name": "l_finger1_link1_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_thumb_proximal_abd",
+      "body": "l_thumb_proximal_abd",
+      "body_id": 15,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 44,
+      "name": "l_visual_5",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_thumb_proximal_abd",
+      "body": "l_thumb_proximal_abd",
+      "body_id": 15,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 45,
+      "name": "l_finger1_link2_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_thumb_proximal_abd",
+      "body": "l_thumb_proximal_abd",
+      "body_id": 15,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "thumb",
+      "id": 46,
+      "name": "l_finger1_link2_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_thumb_middle",
+      "body": "l_thumb_middle",
+      "body_id": 16,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 47,
+      "name": "l_visual_8",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_thumb_middle",
+      "body": "l_thumb_middle",
+      "body_id": 16,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 48,
+      "name": "l_finger1_link3_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_thumb_middle",
+      "body": "l_thumb_middle",
+      "body_id": 16,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "thumb",
+      "id": 49,
+      "name": "l_finger1_link3_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_thumb_distal",
+      "body": "l_thumb_distal",
+      "body_id": 17,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 50,
+      "name": "l_visual_11",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_thumb_distal",
+      "body": "l_thumb_distal",
+      "body_id": 17,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "thumb",
+      "id": 51,
+      "name": "l_finger1_link4_col",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_thumb_distal",
+      "body": "l_thumb_tip_sensor_frame",
+      "body_id": 18,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 52,
+      "name": "l_visual_13",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_thumb_distal",
+      "body": "l_thumb_tip_sensor_frame",
+      "body_id": 18,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "thumb",
+      "id": 53,
+      "name": "l_finger1_tip_sensor_col",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_index_finger_proximal",
+      "body": "l_index_finger_proximal",
+      "body_id": 19,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 54,
+      "name": "l_visual_15",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_index_finger_proximal",
+      "body": "l_index_finger_proximal",
+      "body_id": 19,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 55,
+      "name": "l_finger2_link1_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_index_finger_proximal",
+      "body": "l_index_finger_proximal",
+      "body_id": 19,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 56,
+      "name": "l_finger2_link1_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_index_finger_proximal_abd",
+      "body": "l_index_finger_proximal_abd",
+      "body_id": 20,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 57,
+      "name": "l_visual_18",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_index_finger_proximal_abd",
+      "body": "l_index_finger_proximal_abd",
+      "body_id": 20,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 58,
+      "name": "l_finger2_link2_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_index_finger_proximal_abd",
+      "body": "l_index_finger_proximal_abd",
+      "body_id": 20,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "index_finger",
+      "id": 59,
+      "name": "l_finger2_link2_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_index_finger_middle",
+      "body": "l_index_finger_middle",
+      "body_id": 21,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 60,
+      "name": "l_visual_21",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_index_finger_middle",
+      "body": "l_index_finger_middle",
+      "body_id": 21,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 61,
+      "name": "l_finger2_link3_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_index_finger_middle",
+      "body": "l_index_finger_middle",
+      "body_id": 21,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "index_finger",
+      "id": 62,
+      "name": "l_finger2_link3_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_index_finger_distal",
+      "body": "l_index_finger_distal",
+      "body_id": 22,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 63,
+      "name": "l_visual_24",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_index_finger_distal",
+      "body": "l_index_finger_distal",
+      "body_id": 22,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "index_finger",
+      "id": 64,
+      "name": "l_finger2_link4_col",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_index_finger_distal",
+      "body": "l_index_finger_tip_sensor_frame",
+      "body_id": 23,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 65,
+      "name": "l_visual_26",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_index_finger_distal",
+      "body": "l_index_finger_tip_sensor_frame",
+      "body_id": 23,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "index_finger",
+      "id": 66,
+      "name": "l_finger2_tip_sensor_col",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_middle_finger_proximal",
+      "body": "l_middle_finger_proximal",
+      "body_id": 24,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 67,
+      "name": "l_visual_28",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_middle_finger_proximal",
+      "body": "l_middle_finger_proximal",
+      "body_id": 24,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 68,
+      "name": "l_finger3_link1_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_middle_finger_proximal",
+      "body": "l_middle_finger_proximal",
+      "body_id": 24,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 69,
+      "name": "l_finger3_link1_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_middle_finger_proximal_abd",
+      "body": "l_middle_finger_proximal_abd",
+      "body_id": 25,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 70,
+      "name": "l_visual_31",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_middle_finger_proximal_abd",
+      "body": "l_middle_finger_proximal_abd",
+      "body_id": 25,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 71,
+      "name": "l_finger3_link2_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_middle_finger_proximal_abd",
+      "body": "l_middle_finger_proximal_abd",
+      "body_id": 25,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "middle_finger",
+      "id": 72,
+      "name": "l_finger3_link2_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_middle_finger_middle",
+      "body": "l_middle_finger_middle",
+      "body_id": 26,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 73,
+      "name": "l_visual_34",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_middle_finger_middle",
+      "body": "l_middle_finger_middle",
+      "body_id": 26,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 74,
+      "name": "l_finger3_link3_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_middle_finger_middle",
+      "body": "l_middle_finger_middle",
+      "body_id": 26,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "middle_finger",
+      "id": 75,
+      "name": "l_finger3_link3_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_middle_finger_distal",
+      "body": "l_middle_finger_distal",
+      "body_id": 27,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 76,
+      "name": "l_visual_37",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_middle_finger_distal",
+      "body": "l_middle_finger_distal",
+      "body_id": 27,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "middle_finger",
+      "id": 77,
+      "name": "l_finger3_link4_col",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_middle_finger_distal",
+      "body": "l_middle_finger_tip_sensor_frame",
+      "body_id": 28,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 78,
+      "name": "l_visual_39",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_middle_finger_distal",
+      "body": "l_middle_finger_tip_sensor_frame",
+      "body_id": 28,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "middle_finger",
+      "id": 79,
+      "name": "l_finger3_tip_sensor_col",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_ring_finger_proximal",
+      "body": "l_ring_finger_proximal",
+      "body_id": 29,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 80,
+      "name": "l_visual_41",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_ring_finger_proximal",
+      "body": "l_ring_finger_proximal",
+      "body_id": 29,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 81,
+      "name": "l_finger4_link1_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_ring_finger_proximal",
+      "body": "l_ring_finger_proximal",
+      "body_id": 29,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 82,
+      "name": "l_finger4_link1_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_ring_finger_proximal_abd",
+      "body": "l_ring_finger_proximal_abd",
+      "body_id": 30,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 83,
+      "name": "l_visual_44",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_ring_finger_proximal_abd",
+      "body": "l_ring_finger_proximal_abd",
+      "body_id": 30,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 84,
+      "name": "l_finger4_link2_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_ring_finger_proximal_abd",
+      "body": "l_ring_finger_proximal_abd",
+      "body_id": 30,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "ring_finger",
+      "id": 85,
+      "name": "l_finger4_link2_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_ring_finger_middle",
+      "body": "l_ring_finger_middle",
+      "body_id": 31,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 86,
+      "name": "l_visual_47",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_ring_finger_middle",
+      "body": "l_ring_finger_middle",
+      "body_id": 31,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 87,
+      "name": "l_finger4_link3_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_ring_finger_middle",
+      "body": "l_ring_finger_middle",
+      "body_id": 31,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "ring_finger",
+      "id": 88,
+      "name": "l_finger4_link3_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_ring_finger_distal",
+      "body": "l_ring_finger_distal",
+      "body_id": 32,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 89,
+      "name": "l_visual_50",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_ring_finger_distal",
+      "body": "l_ring_finger_distal",
+      "body_id": 32,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "ring_finger",
+      "id": 90,
+      "name": "l_finger4_link4_col",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_ring_finger_distal",
+      "body": "l_ring_finger_tip_sensor_frame",
+      "body_id": 33,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 91,
+      "name": "l_visual_52",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_ring_finger_distal",
+      "body": "l_ring_finger_tip_sensor_frame",
+      "body_id": 33,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "ring_finger",
+      "id": 92,
+      "name": "l_finger4_tip_sensor_col",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_pinky_proximal",
+      "body": "l_pinky_proximal",
+      "body_id": 34,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 93,
+      "name": "l_visual_54",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_pinky_proximal",
+      "body": "l_pinky_proximal",
+      "body_id": 34,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 94,
+      "name": "l_finger5_link1_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_pinky_proximal",
+      "body": "l_pinky_proximal",
+      "body_id": 34,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 95,
+      "name": "l_finger5_link1_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_pinky_proximal_abd",
+      "body": "l_pinky_proximal_abd",
+      "body_id": 35,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 96,
+      "name": "l_visual_57",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_pinky_proximal_abd",
+      "body": "l_pinky_proximal_abd",
+      "body_id": 35,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 97,
+      "name": "l_finger5_link2_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_pinky_proximal_abd",
+      "body": "l_pinky_proximal_abd",
+      "body_id": 35,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "pinky",
+      "id": 98,
+      "name": "l_finger5_link2_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_pinky_middle",
+      "body": "l_pinky_middle",
+      "body_id": 36,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 99,
+      "name": "l_visual_60",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_pinky_middle",
+      "body": "l_pinky_middle",
+      "body_id": 36,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 100,
+      "name": "l_finger5_link3_col_mesh_disabled",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_pinky_middle",
+      "body": "l_pinky_middle",
+      "body_id": 36,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "pinky",
+      "id": 101,
+      "name": "l_finger5_link3_col",
+      "side": "left",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "l_pinky_distal",
+      "body": "l_pinky_distal",
+      "body_id": 37,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 102,
+      "name": "l_visual_63",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_pinky_distal",
+      "body": "l_pinky_distal",
+      "body_id": 37,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "pinky",
+      "id": 103,
+      "name": "l_finger5_link4_col",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_pinky_distal",
+      "body": "l_pinky_tip_sensor_frame",
+      "body_id": 38,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 104,
+      "name": "l_visual_65",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "l_pinky_distal",
+      "body": "l_pinky_tip_sensor_frame",
+      "body_id": 38,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "pinky",
+      "id": 105,
+      "name": "l_finger5_tip_sensor_col",
+      "side": "left",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Base_R",
+      "body": "Base_R",
+      "body_id": 39,
+      "component": "base",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 106,
+      "name": "Base_R_visual",
+      "side": null,
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Base_R",
+      "body": "Base_R",
+      "body_id": 39,
+      "component": "base",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 107,
+      "name": "Base_R_collision",
+      "side": null,
+      "type": 5
+    },
+    {
+      "anatomy_anchor": "Link1_R",
+      "body": "Link1_R",
+      "body_id": 40,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 108,
+      "name": "Link1_R_visual",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link1_R",
+      "body": "Link1_R",
+      "body_id": 40,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 109,
+      "name": "Link1_R_collision",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "Link2_R",
+      "body": "Link2_R",
+      "body_id": 41,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 110,
+      "name": "Link2_R_visual",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link2_R",
+      "body": "Link2_R",
+      "body_id": 41,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 111,
+      "name": "Link2_R_collision",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "Link3_R",
+      "body": "Link3_R",
+      "body_id": 42,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 112,
+      "name": "Link3_R_visual",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link3_R",
+      "body": "Link3_R",
+      "body_id": 42,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 113,
+      "name": "Link3_R_collision",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "Link4_R",
+      "body": "Link4_R",
+      "body_id": 43,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 114,
+      "name": "Link4_R_visual",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link4_R",
+      "body": "Link4_R",
+      "body_id": 43,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 115,
+      "name": "Link4_R_collision",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "Link5_R",
+      "body": "Link5_R",
+      "body_id": 44,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 116,
+      "name": "Link5_R_visual",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link5_R",
+      "body": "Link5_R",
+      "body_id": 44,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 117,
+      "name": "Link5_R_collision",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "Link6_R",
+      "body": "Link6_R",
+      "body_id": 45,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 118,
+      "name": "Link6_R_visual",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link6_R",
+      "body": "Link6_R",
+      "body_id": 45,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 119,
+      "name": "Link6_R_collision",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "Link7_R",
+      "body": "Link7_R",
+      "body_id": 46,
+      "component": "arm",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 120,
+      "name": "Link7_R_visual",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "Link7_R",
+      "body": "Link7_R",
+      "body_id": 46,
+      "component": "arm",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 121,
+      "name": "Link7_R_collision",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_mount",
+      "body": "r_mount",
+      "body_id": 48,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 122,
+      "name": "r_visual_67",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_mount",
+      "body": "r_mount",
+      "body_id": 48,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 123,
+      "name": "r_mount_collision",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_wrist",
+      "body": "r_wrist",
+      "body_id": 49,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": null,
+      "id": 124,
+      "name": "r_visual_0",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_wrist",
+      "body": "r_wrist",
+      "body_id": 49,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": null,
+      "id": 125,
+      "name": "r_palm_collision",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_thumb_proximal",
+      "body": "r_thumb_proximal",
+      "body_id": 50,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 126,
+      "name": "r_visual_2",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_thumb_proximal",
+      "body": "r_thumb_proximal",
+      "body_id": 50,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 127,
+      "name": "r_finger1_link1_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_thumb_proximal",
+      "body": "r_thumb_proximal",
+      "body_id": 50,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 128,
+      "name": "r_finger1_link1_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_thumb_proximal_abd",
+      "body": "r_thumb_proximal_abd",
+      "body_id": 51,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 129,
+      "name": "r_visual_5",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_thumb_proximal_abd",
+      "body": "r_thumb_proximal_abd",
+      "body_id": 51,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 130,
+      "name": "r_finger1_link2_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_thumb_proximal_abd",
+      "body": "r_thumb_proximal_abd",
+      "body_id": 51,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "thumb",
+      "id": 131,
+      "name": "r_finger1_link2_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_thumb_middle",
+      "body": "r_thumb_middle",
+      "body_id": 52,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 132,
+      "name": "r_visual_8",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_thumb_middle",
+      "body": "r_thumb_middle",
+      "body_id": 52,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 133,
+      "name": "r_finger1_link3_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_thumb_middle",
+      "body": "r_thumb_middle",
+      "body_id": 52,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "thumb",
+      "id": 134,
+      "name": "r_finger1_link3_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_thumb_distal",
+      "body": "r_thumb_distal",
+      "body_id": 53,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 135,
+      "name": "r_visual_11",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_thumb_distal",
+      "body": "r_thumb_distal",
+      "body_id": 53,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "thumb",
+      "id": 136,
+      "name": "r_finger1_link4_col",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_thumb_distal",
+      "body": "r_thumb_tip_sensor_frame",
+      "body_id": 54,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "thumb",
+      "id": 137,
+      "name": "r_visual_13",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_thumb_distal",
+      "body": "r_thumb_tip_sensor_frame",
+      "body_id": 54,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "thumb",
+      "id": 138,
+      "name": "r_finger1_tip_sensor_col",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_index_finger_proximal",
+      "body": "r_index_finger_proximal",
+      "body_id": 55,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 139,
+      "name": "r_visual_15",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_index_finger_proximal",
+      "body": "r_index_finger_proximal",
+      "body_id": 55,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 140,
+      "name": "r_finger2_link1_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_index_finger_proximal",
+      "body": "r_index_finger_proximal",
+      "body_id": 55,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 141,
+      "name": "r_finger2_link1_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_index_finger_proximal_abd",
+      "body": "r_index_finger_proximal_abd",
+      "body_id": 56,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 142,
+      "name": "r_visual_18",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_index_finger_proximal_abd",
+      "body": "r_index_finger_proximal_abd",
+      "body_id": 56,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 143,
+      "name": "r_finger2_link2_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_index_finger_proximal_abd",
+      "body": "r_index_finger_proximal_abd",
+      "body_id": 56,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "index_finger",
+      "id": 144,
+      "name": "r_finger2_link2_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_index_finger_middle",
+      "body": "r_index_finger_middle",
+      "body_id": 57,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 145,
+      "name": "r_visual_21",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_index_finger_middle",
+      "body": "r_index_finger_middle",
+      "body_id": 57,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 146,
+      "name": "r_finger2_link3_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_index_finger_middle",
+      "body": "r_index_finger_middle",
+      "body_id": 57,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "index_finger",
+      "id": 147,
+      "name": "r_finger2_link3_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_index_finger_distal",
+      "body": "r_index_finger_distal",
+      "body_id": 58,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 148,
+      "name": "r_visual_24",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_index_finger_distal",
+      "body": "r_index_finger_distal",
+      "body_id": 58,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "index_finger",
+      "id": 149,
+      "name": "r_finger2_link4_col",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_index_finger_distal",
+      "body": "r_index_finger_tip_sensor_frame",
+      "body_id": 59,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "index_finger",
+      "id": 150,
+      "name": "r_visual_26",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_index_finger_distal",
+      "body": "r_index_finger_tip_sensor_frame",
+      "body_id": 59,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "index_finger",
+      "id": 151,
+      "name": "r_finger2_tip_sensor_col",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_middle_finger_proximal",
+      "body": "r_middle_finger_proximal",
+      "body_id": 60,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 152,
+      "name": "r_visual_28",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_middle_finger_proximal",
+      "body": "r_middle_finger_proximal",
+      "body_id": 60,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 153,
+      "name": "r_finger3_link1_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_middle_finger_proximal",
+      "body": "r_middle_finger_proximal",
+      "body_id": 60,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 154,
+      "name": "r_finger3_link1_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_middle_finger_proximal_abd",
+      "body": "r_middle_finger_proximal_abd",
+      "body_id": 61,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 155,
+      "name": "r_visual_31",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_middle_finger_proximal_abd",
+      "body": "r_middle_finger_proximal_abd",
+      "body_id": 61,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 156,
+      "name": "r_finger3_link2_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_middle_finger_proximal_abd",
+      "body": "r_middle_finger_proximal_abd",
+      "body_id": 61,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "middle_finger",
+      "id": 157,
+      "name": "r_finger3_link2_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_middle_finger_middle",
+      "body": "r_middle_finger_middle",
+      "body_id": 62,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 158,
+      "name": "r_visual_34",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_middle_finger_middle",
+      "body": "r_middle_finger_middle",
+      "body_id": 62,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 159,
+      "name": "r_finger3_link3_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_middle_finger_middle",
+      "body": "r_middle_finger_middle",
+      "body_id": 62,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "middle_finger",
+      "id": 160,
+      "name": "r_finger3_link3_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_middle_finger_distal",
+      "body": "r_middle_finger_distal",
+      "body_id": 63,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 161,
+      "name": "r_visual_37",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_middle_finger_distal",
+      "body": "r_middle_finger_distal",
+      "body_id": 63,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "middle_finger",
+      "id": 162,
+      "name": "r_finger3_link4_col",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_middle_finger_distal",
+      "body": "r_middle_finger_tip_sensor_frame",
+      "body_id": 64,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "middle_finger",
+      "id": 163,
+      "name": "r_visual_39",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_middle_finger_distal",
+      "body": "r_middle_finger_tip_sensor_frame",
+      "body_id": 64,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "middle_finger",
+      "id": 164,
+      "name": "r_finger3_tip_sensor_col",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_ring_finger_proximal",
+      "body": "r_ring_finger_proximal",
+      "body_id": 65,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 165,
+      "name": "r_visual_41",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_ring_finger_proximal",
+      "body": "r_ring_finger_proximal",
+      "body_id": 65,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 166,
+      "name": "r_finger4_link1_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_ring_finger_proximal",
+      "body": "r_ring_finger_proximal",
+      "body_id": 65,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 167,
+      "name": "r_finger4_link1_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_ring_finger_proximal_abd",
+      "body": "r_ring_finger_proximal_abd",
+      "body_id": 66,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 168,
+      "name": "r_visual_44",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_ring_finger_proximal_abd",
+      "body": "r_ring_finger_proximal_abd",
+      "body_id": 66,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 169,
+      "name": "r_finger4_link2_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_ring_finger_proximal_abd",
+      "body": "r_ring_finger_proximal_abd",
+      "body_id": 66,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "ring_finger",
+      "id": 170,
+      "name": "r_finger4_link2_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_ring_finger_middle",
+      "body": "r_ring_finger_middle",
+      "body_id": 67,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 171,
+      "name": "r_visual_47",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_ring_finger_middle",
+      "body": "r_ring_finger_middle",
+      "body_id": 67,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 172,
+      "name": "r_finger4_link3_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_ring_finger_middle",
+      "body": "r_ring_finger_middle",
+      "body_id": 67,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "ring_finger",
+      "id": 173,
+      "name": "r_finger4_link3_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_ring_finger_distal",
+      "body": "r_ring_finger_distal",
+      "body_id": 68,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 174,
+      "name": "r_visual_50",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_ring_finger_distal",
+      "body": "r_ring_finger_distal",
+      "body_id": 68,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "ring_finger",
+      "id": 175,
+      "name": "r_finger4_link4_col",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_ring_finger_distal",
+      "body": "r_ring_finger_tip_sensor_frame",
+      "body_id": 69,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "ring_finger",
+      "id": 176,
+      "name": "r_visual_52",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_ring_finger_distal",
+      "body": "r_ring_finger_tip_sensor_frame",
+      "body_id": 69,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "ring_finger",
+      "id": 177,
+      "name": "r_finger4_tip_sensor_col",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_pinky_proximal",
+      "body": "r_pinky_proximal",
+      "body_id": 70,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 178,
+      "name": "r_visual_54",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_pinky_proximal",
+      "body": "r_pinky_proximal",
+      "body_id": 70,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 179,
+      "name": "r_finger5_link1_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_pinky_proximal",
+      "body": "r_pinky_proximal",
+      "body_id": 70,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 180,
+      "name": "r_finger5_link1_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_pinky_proximal_abd",
+      "body": "r_pinky_proximal_abd",
+      "body_id": 71,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 181,
+      "name": "r_visual_57",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_pinky_proximal_abd",
+      "body": "r_pinky_proximal_abd",
+      "body_id": 71,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 182,
+      "name": "r_finger5_link2_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_pinky_proximal_abd",
+      "body": "r_pinky_proximal_abd",
+      "body_id": 71,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "pinky",
+      "id": 183,
+      "name": "r_finger5_link2_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_pinky_middle",
+      "body": "r_pinky_middle",
+      "body_id": 72,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 184,
+      "name": "r_visual_60",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_pinky_middle",
+      "body": "r_pinky_middle",
+      "body_id": 72,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 185,
+      "name": "r_finger5_link3_col_mesh_disabled",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_pinky_middle",
+      "body": "r_pinky_middle",
+      "body_id": 72,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "pinky",
+      "id": 186,
+      "name": "r_finger5_link3_col",
+      "side": "right",
+      "type": 3
+    },
+    {
+      "anatomy_anchor": "r_pinky_distal",
+      "body": "r_pinky_distal",
+      "body_id": 73,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 187,
+      "name": "r_visual_63",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_pinky_distal",
+      "body": "r_pinky_distal",
+      "body_id": 73,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "pinky",
+      "id": 188,
+      "name": "r_finger5_link4_col",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_pinky_distal",
+      "body": "r_pinky_tip_sensor_frame",
+      "body_id": 74,
+      "component": "hand",
+      "conaffinity": 0,
+      "contype": 0,
+      "finger": "pinky",
+      "id": 189,
+      "name": "r_visual_65",
+      "side": "right",
+      "type": 7
+    },
+    {
+      "anatomy_anchor": "r_pinky_distal",
+      "body": "r_pinky_tip_sensor_frame",
+      "body_id": 74,
+      "component": "hand",
+      "conaffinity": 1,
+      "contype": 1,
+      "finger": "pinky",
+      "id": 190,
+      "name": "r_finger5_tip_sensor_col",
+      "side": "right",
+      "type": 7
+    }
+  ],
+  "joint_activity_rad": 1e-05,
+  "matched_sha256": "32b925e0ee28ed1b41565b6c1379b62bbc96e88bf416a720548bd7b3efe0eba3",
+  "method": "Independent compiled static masks and all-pairs MuJoCo narrow phase over archived static q",
+  "model_clearance_m": 0.0005,
+  "model_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+  "mujoco_version": "3.13.0",
+  "original_sha256": "4655024865e000c5ec15339d2e1bd66911a44eec5e4451c9d49a67fefa939df8",
+  "schema": "s05.p02.constraint_activity.v1",
+  "summary": {
+    "M0/minimax": {
+      "active_coupling_by_side": {},
+      "active_pairs": [
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0005000000000004792,
+            "P95": 0.0005000542453906937,
+            "max": 0.00050006780671423,
+            "min": 0.0004999999844996425
+          },
+          "geom_ids": [
+            22,
+            26
+          ],
+          "witnesses": 5
+        },
+        {
+          "category": "same_hand_palm_or_mount",
+          "distance_m": {
+            "P50": 0.0005012040542037837,
+            "P95": 0.0005012040542037837,
+            "max": 0.0005012040542037837,
+            "min": 0.0005012040542037837
+          },
+          "geom_ids": [
+            40,
+            98
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005043618354274841,
+            "P95": 0.0005043618354274841,
+            "max": 0.0005043618354274841,
+            "min": 0.0005043618354274841
+          },
+          "geom_ids": [
+            77,
+            90
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005012549169420783,
+            "P95": 0.0005012549169420783,
+            "max": 0.0005012549169420783,
+            "min": 0.0005012549169420783
+          },
+          "geom_ids": [
+            77,
+            92
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005046196226361644,
+            "P95": 0.0005046196226361644,
+            "max": 0.0005046196226361644,
+            "min": 0.0005046196226361644
+          },
+          "geom_ids": [
+            138,
+            147
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005008674306519437,
+            "P95": 0.0005008674306519437,
+            "max": 0.0005008674306519437,
+            "min": 0.0005008674306519437
+          },
+          "geom_ids": [
+            162,
+            175
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005006940800832589,
+            "P95": 0.0005006940800832589,
+            "max": 0.0005006940800832589,
+            "min": 0.0005006940800832589
+          },
+          "geom_ids": [
+            175,
+            188
+          ],
+          "witnesses": 1
+        }
+      ],
+      "active_range_by_axis_and_boundary": {
+        "l_ring_finger_dip/upper": 1
+      },
+      "closest_pair_by_category": {
+        "base_vs_arm": 10,
+        "same_hand_distinct_fingers": 8,
+        "same_hand_palm_or_mount": 18
+      },
+      "collision_activities_by_category": {
+        "base_vs_arm": 5,
+        "same_hand_distinct_fingers": 5,
+        "same_hand_palm_or_mount": 1
+      },
+      "collision_slack_m": {
+        "P50": 0.0003357844266717474,
+        "P95": 0.0007974219388214472,
+        "max": 0.0008173585148476604,
+        "min": -1.5500357507941542e-11
+      },
+      "measured": 36,
+      "min_coupling_slack_rad": {
+        "P50": 0.4250447259179816,
+        "P95": 1.7107700539274302,
+        "max": 1.7207251554681995,
+        "min": 0.004623816937552316
+      },
+      "min_joint_limit_slack_rad": {
+        "P50": 0.026426821420243662,
+        "P95": 0.06946441681384419,
+        "max": 0.07826579812584367,
+        "min": 3.861433581775486e-06
+      },
+      "min_signed_distance_m": {
+        "P50": 0.0008357844266717474,
+        "P95": 0.0012974219388214472,
+        "max": 0.0013173585148476604,
+        "min": 0.0004999999844996425
+      },
+      "missing": 2,
+      "missing_by_status": {
+        "UNKNOWN_INVALID_GEOMETRIC_COHORT_MEMBER": 2
+      },
+      "planned": 38,
+      "witnesses_with_activity": {
+        "collision": 8,
+        "coupling": 0,
+        "range": 1
+      }
+    },
+    "M0/multitask": {
+      "active_coupling_by_side": {
+        "left": 14,
+        "right": 5
+      },
+      "active_pairs": [
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0004999999999999935,
+            "P95": 0.0005000037538444053,
+            "max": 0.0005000125969084959,
+            "min": 0.0004999402019085497
+          },
+          "geom_ids": [
+            22,
+            26
+          ],
+          "witnesses": 35
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0004999999999999623,
+            "P95": 0.0004999999999999716,
+            "max": 0.0004999999999999727,
+            "min": 0.0004999999999999519
+          },
+          "geom_ids": [
+            107,
+            111
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0004999690510694741,
+            "P95": 0.0004999969430078218,
+            "max": 0.0005000000421120827,
+            "min": 0.0004999380600268655
+          },
+          "geom_ids": [
+            149,
+            162
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0004999999966741331,
+            "P95": 0.0004999999966741331,
+            "max": 0.0004999999966741331,
+            "min": 0.0004999999966741331
+          },
+          "geom_ids": [
+            62,
+            72
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0004999008626136275,
+            "P95": 0.0004999008626136275,
+            "max": 0.0004999008626136275,
+            "min": 0.0004999008626136275
+          },
+          "geom_ids": [
+            64,
+            79
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005000000203988455,
+            "P95": 0.0005000000203988455,
+            "max": 0.0005000000203988455,
+            "min": 0.0005000000203988455
+          },
+          "geom_ids": [
+            77,
+            90
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005003666933190069,
+            "P95": 0.0005003666933190069,
+            "max": 0.0005003666933190069,
+            "min": 0.0005003666933190069
+          },
+          "geom_ids": [
+            77,
+            92
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.000500000004894011,
+            "P95": 0.000500000004894011,
+            "max": 0.000500000004894011,
+            "min": 0.000500000004894011
+          },
+          "geom_ids": [
+            88,
+            101
+          ],
+          "witnesses": 1
+        }
+      ],
+      "active_range_by_axis_and_boundary": {
+        "Joint6_L/upper": 8,
+        "Joint6_R/lower": 1,
+        "Joint7_R/lower": 1,
+        "l_index_finger_dip/upper": 1,
+        "l_pinky_dip/upper": 1,
+        "l_ring_finger_dip/upper": 1,
+        "l_thumb_cmc_flex/upper": 8,
+        "r_index_finger_dip/lower": 2,
+        "r_middle_finger_dip/lower": 1,
+        "r_middle_finger_dip/upper": 1,
+        "r_thumb_cmc_flex/upper": 5,
+        "r_thumb_ip/lower": 1
+      },
+      "closest_pair_by_category": {
+        "base_vs_arm": 33,
+        "same_hand_distinct_fingers": 2,
+        "same_hand_palm_or_mount": 1
+      },
+      "collision_activities_by_category": {
+        "base_vs_arm": 37,
+        "same_hand_distinct_fingers": 7
+      },
+      "collision_slack_m": {
+        "P50": -2.3852447794681098e-17,
+        "P95": 1.5417368792215724e-09,
+        "max": 0.0004439543008706395,
+        "min": -9.913738637250171e-08
+      },
+      "measured": 36,
+      "min_coupling_slack_rad": {
+        "P50": 0.020509974815163257,
+        "P95": 1.1918616161102615,
+        "max": 1.8279542726411284,
+        "min": -5.016431714466307e-12
+      },
+      "min_joint_limit_slack_rad": {
+        "P50": 3.643397328279008e-08,
+        "P95": 0.065300056124723,
+        "max": 0.06530005612699297,
+        "min": 0.0
+      },
+      "min_signed_distance_m": {
+        "P50": 0.0004999999999999762,
+        "P95": 0.0005000015417368792,
+        "max": 0.0009439543008706395,
+        "min": 0.0004999008626136275
+      },
+      "missing": 2,
+      "missing_by_status": {
+        "UNKNOWN_INVALID_GEOMETRIC_COHORT_MEMBER": 2
+      },
+      "planned": 38,
+      "witnesses_with_activity": {
+        "collision": 35,
+        "coupling": 18,
+        "range": 19
+      }
+    },
+    "M1/minimax": {
+      "active_coupling_by_side": {},
+      "active_pairs": [
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0005010832675620726,
+            "P95": 0.0005020582250198049,
+            "max": 0.0005021665536262196,
+            "min": 0.0004999999814979256
+          },
+          "geom_ids": [
+            22,
+            26
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0004999999998034424,
+            "P95": 0.0004999999998034424,
+            "max": 0.0004999999998034424,
+            "min": 0.0004999999998034424
+          },
+          "geom_ids": [
+            107,
+            111
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005000000000148809,
+            "P95": 0.0005000000000148809,
+            "max": 0.0005000000000148809,
+            "min": 0.0005000000000148809
+          },
+          "geom_ids": [
+            134,
+            144
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005000030893057712,
+            "P95": 0.0005000030893057712,
+            "max": 0.0005000030893057712,
+            "min": 0.0005000030893057712
+          },
+          "geom_ids": [
+            138,
+            151
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005013217249734692,
+            "P95": 0.0005013217249734692,
+            "max": 0.0005013217249734692,
+            "min": 0.0005013217249734692
+          },
+          "geom_ids": [
+            160,
+            170
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005021452579762609,
+            "P95": 0.0005021452579762609,
+            "max": 0.0005021452579762609,
+            "min": 0.0005021452579762609
+          },
+          "geom_ids": [
+            162,
+            173
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005035238772991308,
+            "P95": 0.0005035238772991308,
+            "max": 0.0005035238772991308,
+            "min": 0.0005035238772991308
+          },
+          "geom_ids": [
+            175,
+            188
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005041485660442404,
+            "P95": 0.0005041485660442404,
+            "max": 0.0005041485660442404,
+            "min": 0.0005041485660442404
+          },
+          "geom_ids": [
+            175,
+            190
+          ],
+          "witnesses": 1
+        }
+      ],
+      "active_range_by_axis_and_boundary": {
+        "l_ring_finger_dip/upper": 1,
+        "r_index_finger_mcp_abd/upper": 1,
+        "r_pinky_mcp_flex/upper": 1
+      },
+      "closest_pair_by_category": {
+        "base_vs_arm": 13,
+        "same_hand_distinct_fingers": 11,
+        "same_hand_palm_or_mount": 12
+      },
+      "collision_activities_by_category": {
+        "base_vs_arm": 3,
+        "same_hand_distinct_fingers": 6
+      },
+      "collision_slack_m": {
+        "P50": 0.0001574329246871336,
+        "P95": 0.0008981742726893822,
+        "max": 0.0010182778587229505,
+        "min": -1.8502074438514482e-11
+      },
+      "measured": 36,
+      "min_coupling_slack_rad": {
+        "P50": 0.3075001884452231,
+        "P95": 1.6578213594537072,
+        "max": 1.687798085491329,
+        "min": 0.0003467613522287749
+      },
+      "min_joint_limit_slack_rad": {
+        "P50": 0.029772940251662106,
+        "P95": 0.1516122515229387,
+        "max": 0.1940194363551917,
+        "min": 0.0
+      },
+      "min_signed_distance_m": {
+        "P50": 0.0006574329246871336,
+        "P95": 0.0013981742726893822,
+        "max": 0.0015182778587229506,
+        "min": 0.0004999999814979256
+      },
+      "missing": 2,
+      "missing_by_status": {
+        "UNKNOWN_INVALID_GEOMETRIC_COHORT_MEMBER": 2
+      },
+      "planned": 38,
+      "witnesses_with_activity": {
+        "collision": 6,
+        "coupling": 0,
+        "range": 2
+      }
+    },
+    "M1/multitask": {
+      "active_coupling_by_side": {
+        "left": 10,
+        "right": 5
+      },
+      "active_pairs": [
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0004999999999999935,
+            "P95": 0.0005000593965197818,
+            "max": 0.0005001445401382129,
+            "min": 0.0004999226479230345
+          },
+          "geom_ids": [
+            22,
+            26
+          ],
+          "witnesses": 22
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0004999999999999935,
+            "P95": 0.000500004478822387,
+            "max": 0.0005000213024178649,
+            "min": 0.0004999422130731596
+          },
+          "geom_ids": [
+            107,
+            111
+          ],
+          "witnesses": 17
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0005000000000087157,
+            "P95": 0.0005000000421968083,
+            "max": 0.0005000000496391821,
+            "min": 0.0004999873692691781
+          },
+          "geom_ids": [
+            10,
+            30
+          ],
+          "witnesses": 4
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0005000001165178861,
+            "P95": 0.0005000002800202103,
+            "max": 0.0005000002981871352,
+            "min": 0.000499999934848637
+          },
+          "geom_ids": [
+            10,
+            115
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0004999760829571161,
+            "P95": 0.0004999976086531323,
+            "max": 0.0005000000003971342,
+            "min": 0.000499952165517098
+          },
+          "geom_ids": [
+            15,
+            30
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0005000000086705578,
+            "P95": 0.000500000018053727,
+            "max": 0.0005000000190963014,
+            "min": 0.0004999999982448142
+          },
+          "geom_ids": [
+            15,
+            32
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "same_hand_palm_or_mount",
+          "distance_m": {
+            "P50": 0.0005006044424847485,
+            "P95": 0.0005011110261786902,
+            "max": 0.0005011673132557948,
+            "min": 0.0005000415717137021
+          },
+          "geom_ids": [
+            40,
+            98
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005000000001449731,
+            "P95": 0.0005000000003588132,
+            "max": 0.0005000000003825733,
+            "min": 0.0004999999999073729
+          },
+          "geom_ids": [
+            149,
+            162
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0004999999998888879,
+            "P95": 0.0004999999998888879,
+            "max": 0.0004999999998888879,
+            "min": 0.0004999999998888879
+          },
+          "geom_ids": [
+            10,
+            117
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0004999999021375115,
+            "P95": 0.0004999999021375115,
+            "max": 0.0004999999021375115,
+            "min": 0.0004999999021375115
+          },
+          "geom_ids": [
+            15,
+            36
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0005000000629255055,
+            "P95": 0.0005000000629255055,
+            "max": 0.0005000000629255055,
+            "min": 0.0005000000629255055
+          },
+          "geom_ids": [
+            16,
+            36
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.000500014038489021,
+            "P95": 0.000500014038489021,
+            "max": 0.000500014038489021,
+            "min": 0.000500014038489021
+          },
+          "geom_ids": [
+            62,
+            72
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005000021733463864,
+            "P95": 0.0005000021733463864,
+            "max": 0.0005000021733463864,
+            "min": 0.0005000021733463864
+          },
+          "geom_ids": [
+            64,
+            79
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0004999998030314461,
+            "P95": 0.0004999998030314461,
+            "max": 0.0004999998030314461,
+            "min": 0.0004999998030314461
+          },
+          "geom_ids": [
+            75,
+            90
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005011192589938506,
+            "P95": 0.0005011192589938506,
+            "max": 0.0005011192589938506,
+            "min": 0.0005011192589938506
+          },
+          "geom_ids": [
+            77,
+            90
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0004999727354541692,
+            "P95": 0.0004999727354541692,
+            "max": 0.0004999727354541692,
+            "min": 0.0004999727354541692
+          },
+          "geom_ids": [
+            77,
+            92
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0004999359332386617,
+            "P95": 0.0004999359332386617,
+            "max": 0.0004999359332386617,
+            "min": 0.0004999359332386617
+          },
+          "geom_ids": [
+            88,
+            101
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005000001047768352,
+            "P95": 0.0005000001047768352,
+            "max": 0.0005000001047768352,
+            "min": 0.0005000001047768352
+          },
+          "geom_ids": [
+            88,
+            103
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0004999756924383652,
+            "P95": 0.0004999756924383652,
+            "max": 0.0004999756924383652,
+            "min": 0.0004999756924383652
+          },
+          "geom_ids": [
+            92,
+            103
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_palm_or_mount",
+          "distance_m": {
+            "P50": 0.0005088250726428441,
+            "P95": 0.0005088250726428441,
+            "max": 0.0005088250726428441,
+            "min": 0.0005088250726428441
+          },
+          "geom_ids": [
+            125,
+            134
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005011193559525537,
+            "P95": 0.0005011193559525537,
+            "max": 0.0005011193559525537,
+            "min": 0.0005011193559525537
+          },
+          "geom_ids": [
+            162,
+            175
+          ],
+          "witnesses": 1
+        }
+      ],
+      "active_range_by_axis_and_boundary": {
+        "Joint6_L/upper": 4,
+        "Joint6_R/lower": 1,
+        "Joint7_L/lower": 2,
+        "Joint7_R/lower": 6,
+        "l_index_finger_dip/upper": 2,
+        "l_middle_finger_dip/upper": 1,
+        "l_pinky_dip/lower": 1,
+        "l_pinky_dip/upper": 2,
+        "l_ring_finger_dip/upper": 2,
+        "l_thumb_cmc_flex/upper": 8,
+        "r_index_finger_dip/lower": 1,
+        "r_middle_finger_dip/upper": 1,
+        "r_pinky_dip/upper": 1,
+        "r_thumb_cmc_flex/upper": 4
+      },
+      "closest_pair_by_category": {
+        "base_vs_arm": 34,
+        "same_hand_distinct_fingers": 1,
+        "same_hand_palm_or_mount": 1
+      },
+      "collision_activities_by_category": {
+        "base_vs_arm": 52,
+        "same_hand_distinct_fingers": 11,
+        "same_hand_palm_or_mount": 3
+      },
+      "collision_slack_m": {
+        "P50": -8.283304597789254e-17,
+        "P95": 2.6732021544267903e-11,
+        "max": 0.0005033935788474387,
+        "min": -7.735207696547494e-08
+      },
+      "measured": 36,
+      "min_coupling_slack_rad": {
+        "P50": 0.08920494057080075,
+        "P95": 1.157426541766644,
+        "max": 1.7560802810576894,
+        "min": -1.574633756717958e-10
+      },
+      "min_joint_limit_slack_rad": {
+        "P50": 5.7153171084678434e-11,
+        "P95": 0.06530005612303746,
+        "max": 0.06530005612392387,
+        "min": 0.0
+      },
+      "min_signed_distance_m": {
+        "P50": 0.0004999999999999172,
+        "P95": 0.0005000000267320216,
+        "max": 0.0010033935788474387,
+        "min": 0.0004999226479230345
+      },
+      "missing": 2,
+      "missing_by_status": {
+        "UNKNOWN_INVALID_GEOMETRIC_COHORT_MEMBER": 2
+      },
+      "planned": 38,
+      "witnesses_with_activity": {
+        "collision": 35,
+        "coupling": 14,
+        "range": 20
+      }
+    },
+    "M2/minimax": {
+      "active_coupling_by_side": {},
+      "active_pairs": [
+        {
+          "category": "same_hand_palm_or_mount",
+          "distance_m": {
+            "P50": 0.0005015989090542388,
+            "P95": 0.000502976748241469,
+            "max": 0.0005031298414844947,
+            "min": 0.000500067976623983
+          },
+          "geom_ids": [
+            40,
+            98
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0005019763173284911,
+            "P95": 0.0005037550031493088,
+            "max": 0.0005039526349071774,
+            "min": 0.0004999999997498047
+          },
+          "geom_ids": [
+            107,
+            111
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0005000000000069255,
+            "P95": 0.0005000000000069255,
+            "max": 0.0005000000000069255,
+            "min": 0.0005000000000069255
+          },
+          "geom_ids": [
+            22,
+            26
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_palm_or_mount",
+          "distance_m": {
+            "P50": 0.0005000282238219068,
+            "P95": 0.0005000282238219068,
+            "max": 0.0005000282238219068,
+            "min": 0.0005000282238219068
+          },
+          "geom_ids": [
+            40,
+            85
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_palm_or_mount",
+          "distance_m": {
+            "P50": 0.0005001303419106592,
+            "P95": 0.0005001303419106592,
+            "max": 0.0005001303419106592,
+            "min": 0.0005001303419106592
+          },
+          "geom_ids": [
+            125,
+            170
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005003678750174647,
+            "P95": 0.0005003678750174647,
+            "max": 0.0005003678750174647,
+            "min": 0.0005003678750174647
+          },
+          "geom_ids": [
+            138,
+            149
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005067734118542402,
+            "P95": 0.0005067734118542402,
+            "max": 0.0005067734118542402,
+            "min": 0.0005067734118542402
+          },
+          "geom_ids": [
+            160,
+            170
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.000507755297701579,
+            "P95": 0.000507755297701579,
+            "max": 0.000507755297701579,
+            "min": 0.000507755297701579
+          },
+          "geom_ids": [
+            162,
+            173
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0004999999932399745,
+            "P95": 0.0004999999932399745,
+            "max": 0.0004999999932399745,
+            "min": 0.0004999999932399745
+          },
+          "geom_ids": [
+            162,
+            175
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.000499999982103233,
+            "P95": 0.000499999982103233,
+            "max": 0.000499999982103233,
+            "min": 0.000499999982103233
+          },
+          "geom_ids": [
+            175,
+            186
+          ],
+          "witnesses": 1
+        }
+      ],
+      "active_range_by_axis_and_boundary": {
+        "r_index_finger_dip/upper": 2,
+        "r_index_finger_mcp_abd/upper": 1,
+        "r_middle_finger_dip/upper": 1,
+        "r_middle_finger_mcp_abd/upper": 1,
+        "r_pinky_mcp_flex/upper": 1
+      },
+      "closest_pair_by_category": {
+        "base_vs_arm": 14,
+        "same_hand_distinct_fingers": 5,
+        "same_hand_palm_or_mount": 17
+      },
+      "collision_activities_by_category": {
+        "base_vs_arm": 3,
+        "same_hand_distinct_fingers": 5,
+        "same_hand_palm_or_mount": 4
+      },
+      "collision_slack_m": {
+        "P50": 0.00014775909667094677,
+        "P95": 0.0006303260914506423,
+        "max": 0.0007897899766905457,
+        "min": -1.789676696770104e-11
+      },
+      "measured": 36,
+      "min_coupling_slack_rad": {
+        "P50": 0.24382625898284582,
+        "P95": 1.5121486841563714,
+        "max": 1.712943244402421,
+        "min": 0.00023828036888318138
+      },
+      "min_joint_limit_slack_rad": {
+        "P50": 0.02389117276143693,
+        "P95": 0.07390305227172306,
+        "max": 0.09694442231201195,
+        "min": 0.0
+      },
+      "min_signed_distance_m": {
+        "P50": 0.0006477590966709468,
+        "P95": 0.0011303260914506423,
+        "max": 0.0012897899766905457,
+        "min": 0.000499999982103233
+      },
+      "missing": 2,
+      "missing_by_status": {
+        "UNKNOWN_INVALID_GEOMETRIC_COHORT_MEMBER": 2
+      },
+      "planned": 38,
+      "witnesses_with_activity": {
+        "collision": 7,
+        "coupling": 0,
+        "range": 2
+      }
+    },
+    "M2/multitask": {
+      "active_coupling_by_side": {
+        "left": 7,
+        "right": 5
+      },
+      "active_pairs": [
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0005000000000000213,
+            "P95": 0.000500180994344402,
+            "max": 0.0005002389888427369,
+            "min": 0.0004999348037751511
+          },
+          "geom_ids": [
+            22,
+            26
+          ],
+          "witnesses": 22
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0004999999999999866,
+            "P95": 0.0005000004570781564,
+            "max": 0.0005000020601154259,
+            "min": 0.0004999279780426233
+          },
+          "geom_ids": [
+            107,
+            111
+          ],
+          "witnesses": 17
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0004999999999267674,
+            "P95": 0.0005000000545779925,
+            "max": 0.0005000000691515807,
+            "min": 0.0004999096121834148
+          },
+          "geom_ids": [
+            10,
+            30
+          ],
+          "witnesses": 7
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0005000000034720009,
+            "P95": 0.0005001220925854074,
+            "max": 0.0005001356580424526,
+            "min": 0.0004999911757965769
+          },
+          "geom_ids": [
+            15,
+            32
+          ],
+          "witnesses": 3
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0004999999993503083,
+            "P95": 0.0004999999999307847,
+            "max": 0.000499999999995282,
+            "min": 0.0004999999987053347
+          },
+          "geom_ids": [
+            10,
+            115
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0004999648516680575,
+            "P95": 0.0004999968514723803,
+            "max": 0.000500000407006194,
+            "min": 0.000499929296329921
+          },
+          "geom_ids": [
+            77,
+            90
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0004999725212013864,
+            "P95": 0.0005000027084845646,
+            "max": 0.0005000060626271399,
+            "min": 0.0004999389797756329
+          },
+          "geom_ids": [
+            149,
+            162
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0004999911973670099,
+            "P95": 0.0004999911973670099,
+            "max": 0.0004999911973670099,
+            "min": 0.0004999911973670099
+          },
+          "geom_ids": [
+            10,
+            32
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0005000000000843427,
+            "P95": 0.0005000000000843427,
+            "max": 0.0005000000000843427,
+            "min": 0.0005000000000843427
+          },
+          "geom_ids": [
+            15,
+            30
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_palm_or_mount",
+          "distance_m": {
+            "P50": 0.0004999999661584598,
+            "P95": 0.0004999999661584598,
+            "max": 0.0004999999661584598,
+            "min": 0.0004999999661584598
+          },
+          "geom_ids": [
+            40,
+            98
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0004999999991476024,
+            "P95": 0.0004999999991476024,
+            "max": 0.0004999999991476024,
+            "min": 0.0004999999991476024
+          },
+          "geom_ids": [
+            62,
+            72
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005000303602666598,
+            "P95": 0.0005000303602666598,
+            "max": 0.0005000303602666598,
+            "min": 0.0005000303602666598
+          },
+          "geom_ids": [
+            64,
+            79
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005008549756428948,
+            "P95": 0.0005008549756428948,
+            "max": 0.0005008549756428948,
+            "min": 0.0005008549756428948
+          },
+          "geom_ids": [
+            75,
+            88
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005001436311821029,
+            "P95": 0.0005001436311821029,
+            "max": 0.0005001436311821029,
+            "min": 0.0005001436311821029
+          },
+          "geom_ids": [
+            75,
+            90
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005000039398190386,
+            "P95": 0.0005000039398190386,
+            "max": 0.0005000039398190386,
+            "min": 0.0005000039398190386
+          },
+          "geom_ids": [
+            77,
+            92
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005023258896158841,
+            "P95": 0.0005023258896158841,
+            "max": 0.0005023258896158841,
+            "min": 0.0005023258896158841
+          },
+          "geom_ids": [
+            85,
+            101
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005000385184120366,
+            "P95": 0.0005000385184120366,
+            "max": 0.0005000385184120366,
+            "min": 0.0005000385184120366
+          },
+          "geom_ids": [
+            162,
+            175
+          ],
+          "witnesses": 1
+        }
+      ],
+      "active_range_by_axis_and_boundary": {
+        "Joint6_L/upper": 5,
+        "Joint6_R/lower": 1,
+        "Joint7_R/lower": 5,
+        "l_index_finger_dip/upper": 1,
+        "l_middle_finger_dip/upper": 1,
+        "l_pinky_dip/upper": 3,
+        "l_ring_finger_dip/lower": 1,
+        "l_ring_finger_dip/upper": 2,
+        "l_thumb_cmc_flex/upper": 8,
+        "r_middle_finger_dip/upper": 1,
+        "r_thumb_cmc_flex/upper": 4
+      },
+      "closest_pair_by_category": {
+        "base_vs_arm": 33,
+        "same_hand_distinct_fingers": 2,
+        "same_hand_palm_or_mount": 1
+      },
+      "collision_activities_by_category": {
+        "base_vs_arm": 53,
+        "same_hand_distinct_fingers": 11,
+        "same_hand_palm_or_mount": 1
+      },
+      "collision_slack_m": {
+        "P50": -1.1058862159352145e-16,
+        "P95": 7.747239048200294e-12,
+        "max": 0.0005038386757329192,
+        "min": -9.038781658516834e-08
+      },
+      "measured": 36,
+      "min_coupling_slack_rad": {
+        "P50": 0.16099632264227515,
+        "P95": 1.182729756470354,
+        "max": 1.7007664616846079,
+        "min": -1.3279821686751347e-11
+      },
+      "min_joint_limit_slack_rad": {
+        "P50": 0.006913879652340471,
+        "P95": 0.06530005612303957,
+        "max": 0.07690423931702384,
+        "min": 0.0
+      },
+      "min_signed_distance_m": {
+        "P50": 0.0004999999999998894,
+        "P95": 0.0005000000077472391,
+        "max": 0.0010038386757329192,
+        "min": 0.0004999096121834148
+      },
+      "missing": 2,
+      "missing_by_status": {
+        "UNKNOWN_INVALID_GEOMETRIC_COHORT_MEMBER": 2
+      },
+      "planned": 38,
+      "witnesses_with_activity": {
+        "collision": 35,
+        "coupling": 11,
+        "range": 18
+      }
+    },
+    "original/90": {
+      "active_coupling_by_side": {
+        "left": 14,
+        "right": 5
+      },
+      "active_pairs": [
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0004999999999999796,
+            "P95": 0.0005000000064623852,
+            "max": 0.0005005191232246922,
+            "min": 0.0004999058005571849
+          },
+          "geom_ids": [
+            22,
+            26
+          ],
+          "witnesses": 33
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005000072206420484,
+            "P95": 0.0005000137008609309,
+            "max": 0.0005000144208852513,
+            "min": 0.0005000000203988455
+          },
+          "geom_ids": [
+            77,
+            90
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "base_vs_arm",
+          "distance_m": {
+            "P50": 0.0005000000000000178,
+            "P95": 0.0005000000000000209,
+            "max": 0.0005000000000000213,
+            "min": 0.0005000000000000143
+          },
+          "geom_ids": [
+            107,
+            111
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005000008811685557,
+            "P95": 0.0005000016363193813,
+            "max": 0.0005000017202250286,
+            "min": 0.0005000000421120827
+          },
+          "geom_ids": [
+            149,
+            162
+          ],
+          "witnesses": 2
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0004999999792230543,
+            "P95": 0.0004999999792230543,
+            "max": 0.0004999999792230543,
+            "min": 0.0004999999792230543
+          },
+          "geom_ids": [
+            62,
+            72
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005002097923452743,
+            "P95": 0.0005002097923452743,
+            "max": 0.0005002097923452743,
+            "min": 0.0005002097923452743
+          },
+          "geom_ids": [
+            64,
+            79
+          ],
+          "witnesses": 1
+        },
+        {
+          "category": "same_hand_distinct_fingers",
+          "distance_m": {
+            "P50": 0.0005014789460070638,
+            "P95": 0.0005014789460070638,
+            "max": 0.0005014789460070638,
+            "min": 0.0005014789460070638
+          },
+          "geom_ids": [
+            77,
+            92
+          ],
+          "witnesses": 1
+        }
+      ],
+      "active_range_by_axis_and_boundary": {
+        "Joint6_L/upper": 8,
+        "Joint7_R/lower": 1,
+        "l_index_finger_dip/upper": 1,
+        "l_pinky_dip/upper": 1,
+        "l_ring_finger_dip/upper": 1,
+        "l_thumb_cmc_flex/upper": 8,
+        "r_index_finger_dip/lower": 1,
+        "r_middle_finger_dip/upper": 1,
+        "r_thumb_cmc_flex/upper": 5,
+        "r_thumb_ip/lower": 1
+      },
+      "closest_pair_by_category": {
+        "base_vs_arm": 34,
+        "same_hand_distinct_fingers": 1,
+        "same_hand_palm_or_mount": 1
+      },
+      "collision_activities_by_category": {
+        "base_vs_arm": 35,
+        "same_hand_distinct_fingers": 7
+      },
+      "collision_slack_m": {
+        "P50": -1.3444106938820255e-17,
+        "P95": 6.02259951978934e-12,
+        "max": 0.00044390304099199565,
+        "min": -9.419944281508982e-08
+      },
+      "measured": 36,
+      "min_coupling_slack_rad": {
+        "P50": 0.02051002539876834,
+        "P95": 1.1918602742219186,
+        "max": 1.8279542726411284,
+        "min": -6.341838165724312e-11
+      },
+      "min_joint_limit_slack_rad": {
+        "P50": 0.0005293850189336258,
+        "P95": 0.06530005612505863,
+        "max": 0.06530005612699297,
+        "min": 0.0
+      },
+      "min_signed_distance_m": {
+        "P50": 0.0004999999999999866,
+        "P95": 0.0005000000060225995,
+        "max": 0.0009439030409919957,
+        "min": 0.0004999058005571849
+      },
+      "missing": 2,
+      "missing_by_status": {
+        "UNKNOWN_INVALID_GEOMETRIC_COHORT_MEMBER": 2
+      },
+      "planned": 38,
+      "witnesses_with_activity": {
+        "collision": 35,
+        "coupling": 18,
+        "range": 18
+      }
+    }
+  },
+  "technical_status": "PASS"
+}

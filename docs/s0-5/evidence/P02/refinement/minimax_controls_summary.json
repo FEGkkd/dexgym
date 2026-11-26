@@ -1,0 +1,48 @@
+[
+  {
+    "attempts": [
+      "Positive directional derivative for linesearch",
+      "Optimization terminated successfully",
+      "Optimization terminated successfully"
+    ],
+    "known_witness_tip_m": 0.0,
+    "max_tip_m": 0.0,
+    "name": "known_home",
+    "status": "FEASIBLE_AT_TOLERANCE"
+  },
+  {
+    "attempts": [
+      "Optimization terminated successfully",
+      "Optimization terminated successfully",
+      "Optimization terminated successfully"
+    ],
+    "known_witness_tip_m": 0.0,
+    "max_tip_m": 4.6436228977641506e-11,
+    "name": "known_nonhome",
+    "status": "FEASIBLE_AT_TOLERANCE"
+  },
+  {
+    "attempts": [
+      "Positive directional derivative for linesearch",
+      "Optimization terminated successfully",
+      "Optimization terminated successfully"
+    ],
+    "known_witness_tip_m": 0.0,
+    "max_tip_m": 2.8769581823765903e-11,
+    "name": "known_coupling_boundary",
+    "status": "FEASIBLE_AT_TOLERANCE"
+  },
+  {
+    "attempts": [
+      "Optimization terminated successfully",
+      "Optimization terminated successfully",
+      "Optimization terminated successfully"
+    ],
+    "deterministic_goal_value_within_1e_10_m": true,
+    "max_tip_m": 0.9189629826461166,
+    "name": "known_unreachable_translation",
+    "radial_lower_bound_m": 0.9011319130600172,
+    "repeated_q_max_delta_rad": 0.0,
+    "status": "BEST_FOUND_FEASIBLE_WITH_RESIDUAL"
+  }
+]

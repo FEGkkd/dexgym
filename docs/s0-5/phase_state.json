@@ -435,5 +435,21 @@
     "execution_lock_sha256": "da3e1f0759ac010a989d9431f0337371df6fe208914139bd711be15354a453af",
     "run_id": "P01-E-E1-20261126-3f90652",
     "approval_ref": "reports/approvals/P01_E_E0_ACCEPTED_P01_E_E1.md"
+  },
+  "p02_refinement": {
+    "run": "P02-REFINE-20261126-8753921",
+    "reviewed_baseline": "87539210e60f1134820b9f06fdb084cbc3ec1bf1",
+    "at": "2026-11-26T22:51:01+08:00",
+    "scope": "DCR-003 independent static refinement approved by project user",
+    "evidence_ref": "evidence/P02/refinement/execution_receipt.json",
+    "evidence_sha256": "0adfc8976ebfa7ee0845d42e5d291caa70f94cf172e72d4a7d2fcb3c16a15aa0",
+    "formal_scoring": "PENDING_HUMAN_APPROVAL",
+    "p02_status": "READY_FOR_REVIEW",
+    "p03_required": [
+      "P02",
+      "P01-T",
+      "C2-RT",
+      "robot-base"
+    ]
   }
 }

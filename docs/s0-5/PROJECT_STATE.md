@@ -18,7 +18,7 @@
 | 物理 robot-base 注册 | BLOCKED | 缺独立外部测量 |
 | P01-T | BLOCKED | 动态资格为 0，P03 正式启动的强制前置 |
 | Final Test | BLOCKED | 缺乏独立封存证据 |
-| P02 | READY_FOR_REVIEW | 静态研究门通过，工作空间 DCR-003 待审核 |
+| P02 | READY_FOR_REVIEW | DCR-003 专项研究完成，正式评分域待审核 |
 | P03–P10 | NOT_STARTED | 依各自独立前置 |
 
 原 Master Design、Contracts、Evaluation Protocol v0.1.1 和 P01 v0.2.0 留作历史版本。项目用户批准 DCR-001 的依赖范围，活动规格为 P01 v0.2.1 和三份 v0.1.2 设计。QC 数值阈值、时钟参数和全量预算将在 P01-C/D 另行实测和冻结。[DCR-001](dcr/DCR-001_p01_hmb_telemetry_dependencies.md) · [原批准记录](reports/approvals/P00_ACCEPTED_P01_A.md)
@@ -42,3 +42,5 @@ E0 的原技术审核事件和证据继续保留。项目用户独立批准配�
 F1 重算全部拍及有效段，重新校验 1,540 个正式分区文件并从 32 个母源的原始数据复验 4,790 对消息。用户签核 P01-F、P01 数据主线与三类历史用途，独立授权 P02；当前 Run 为 `P02-20261126-54c2e06`。[P01-F 验收](reports/P01_F_acceptance.md) · [P01 历史技术汇总](reports/P01_acceptance.md) · [人工签核和 P02 授权](reports/approvals/P01_ACCEPTED_P02.md)
 
 P02 的受约束静态试验有 36 个已复验 54 DoF 姿态，另有 2 个 UNKNOWN；主队列十指同拍 ≤3 mm 为 0/32。10 个已评分姿态的至少一个原映射指尖超过当前链长的必要可达界。验收只覆盖静态研究，DCR-003 提请裁定工作空间注册与正式评分范围。下一阶段须等待人工审核，且 P03 前继续要求 P01-T、C2-RT 与物理 robot-base 独立 ACCEPTED。[P02 验收](reports/P02_acceptance.md) · [DCR-003](dcr/DCR-003_p02_workspace_registration.md)
+
+用户批准对 DCR-003 做专项研究。独立 P02 复查 Run P02-REFINE-20261126-8753921 完成 114,532 拍检查、冻结 Train 注册、同目标预算和 minimax 诊断。候选 M1 只具历史仿真静态适用域；M0 保留为原目标审计列。原 P02、HMB 文件和资格未变，P02 仍等待人工签核。正式评分域仍待独立批准，P03 前置继续有效。[复查报告](reports/P02_review_refinement.md) · [DCR-003 补证](dcr/DCR-003_workspace_refinement_evidence.md)
