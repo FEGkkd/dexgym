@@ -37,7 +37,7 @@ def transform_target(old,row,cfg,cal,pairs):
         return old
     w,r,_=apply(cfg,row['wrist'][None],old.local[None],cal)
     return target_geometry(w[0],r[0],old.local,
-                 (np.asarray(cal['wrist_to_palm_translation_m']),np.asarray(cal['wrist_to_palm_rotation'])),pairs)
+                 (np.asarray(cal['wrist_to_palm_translation']),np.asarray(cal['wrist_to_palm_rotation'])),pairs)
 
 
 def initial_seeds(robot,config,row,target,recorded):

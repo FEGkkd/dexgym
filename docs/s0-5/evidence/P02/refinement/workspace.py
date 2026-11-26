@@ -159,7 +159,7 @@ def apply(cfg,wrist,local,cal):
     wrist_orientation=Rotation.from_quat(wrist[...,3:].reshape(-1,4)).as_matrix().reshape(-1,2,3,3)
     r_w=r@wrist_orientation@np.array(cfg['mount'])
     r_p=r_w@np.array(cal['wrist_to_palm_rotation'])
-    p_p=w+np.einsum('nsij,sj->nsi',r_w,np.array(cal['wrist_to_palm_translation_m']))
+    p_p=w+np.einsum('nsij,sj->nsi',r_w,np.array(cal['wrist_to_palm_translation']))
     world=np.einsum('nsij,nsfkj->nsfki',r_p,local)+p_p[:,:,None,None,:]
     return w,r_w,world
 
@@ -382,7 +382,7 @@ def from_frame(a,meta,t,robot,cal,cfg,pairs,smooth=False):
     w,r,p=apply(cfg,a['pose'][t:t+1,2:4,0],local,cal)
     from dexgym.tasks.direct.wholebody_s05.p02.intent import target_geometry
     return target_geometry(w[0],r[0],local[0],
-             (np.array(cal['wrist_to_palm_translation_m']),np.array(cal['wrist_to_palm_rotation'])),pairs),fine
+             (np.array(cal['wrist_to_palm_translation']),np.array(cal['wrist_to_palm_rotation'])),pairs),fine
 
 
 if __name__=='__main__':
