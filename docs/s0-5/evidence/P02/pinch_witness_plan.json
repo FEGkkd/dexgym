@@ -1,0 +1,8 @@
+{
+  "schema": "s05.p02.supplemental_pinch.v1",
+  "scope": "Independent functional mapping witness only. Do not fit or change the mapping, QC, primary solver denominator, or scoring target.",
+  "partitions": "For each of the 32 signed F1 root witnesses, inspect only its existing eight-second partition, in frozen root order. Scan joint-valid ticks from beginning to end.",
+  "selection": "Within each split and side count original geometry with at least one thumb-other distance below the frozen 20 mm threshold. Keep the first such witnessed tick for each split/side. Also report the minimum observed raw distance for each stratum.",
+  "acceptance": "Recompute the mapped vectors at those four possible witness strata with the unchanged train-only calibration and the original sample IDs. An unobserved stratum stays NOT_OBSERVED.",
+  "budget": {"max_partitions": 32, "max_ticks": 12800, "max_workers": 1}
+}

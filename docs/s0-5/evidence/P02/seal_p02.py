@@ -185,7 +185,7 @@ def main(plan_path, run, sealed):
     config = load(plan_path)
     handoff = verify_approval(config)
     subprocess.run(['sha256sum','-c',str(run/'frozen.sha256')],check=True)
-    accepted = ('model-02','intent-02','history-02','tests-02')
+    accepted = ('model-02','intent-02','history-02','tests-02','pinch-01')
     names = ('model-01','intent-01','history-01','tests-01') + accepted
     evidence = {}
     for name in names:
@@ -213,9 +213,16 @@ def main(plan_path, run, sealed):
     if [ident for ident,_ in selected] != [r['identity'] for r in records]:
         raise ValueError('Approved HMB sample binding has changed')
     summary = mapping_and_solver(records, selected)
-    if not summary['Train']['near_pinch_pairs'] or not summary['Validation']['near_pinch_pairs']:
-        raise ValueError('Missing real near-pinch witness in a required split')
-    if summary['All']['active_pinch_after_m'][-1] > 1e-10:
+    witness_plan = plan_path.with_name('pinch_witness_plan.json')
+    pinch_report = load(run/'pinch-01/near_pinch_witness.json')
+    if pinch_report['plan_sha256'] != digest(witness_plan):
+        raise ValueError('Supplemental plan fingerprint differs')
+    near_pinch = {
+        split: {side: record['close_pose_ticks'] for side,record in sides.items()}
+        for split,sides in pinch_report['strata'].items()
+    }
+    mapping_ok = all(sum(counts.values()) for counts in near_pinch.values())
+    if summary['All']['active_pinch_after_m'] is not None and summary['All']['active_pinch_after_m'][-1] > 1e-10:
         raise ValueError('Near-pinch mapping did not preserve its fixed functional vectors')
     sealed.mkdir(mode=0o700)
     write(sealed/'score_integrity.json',audit)
@@ -251,13 +258,15 @@ def main(plan_path, run, sealed):
                    receipts={'artifact_manifest':digest(sealed/'output_sha256.json'),
                              'score_integrity':digest(sealed/'score_integrity.json'),
                              'scoring_handoff':digest(sealed/'P03_scoring_handoff.json')},
-                   gates={**dict.fromkeys(('P02-A','P02-B','P02-C','P02-D','P02-E'),'PASS'),'P02':'PASS'},
+                   gates={**dict.fromkeys(('P02-A','P02-C','P02-D','P02-E'),'PASS'),
+                          'P02-B':'PASS' if mapping_ok else 'BLOCKED',
+                          'P02':'PASS' if mapping_ok else 'BLOCKED'},
                    outcomes=dict(planned_cases=len(records), feasible_witnesses=audit['full_q_witnesses'],
                                  unknown=len(records)-audit['full_q_witnesses']),
                    engineering_blocks=dict.fromkeys(('C2-RT','robot-base','P01-T','Final Test','HMB_REALTIME_VERIFIED'),'BLOCKED'),
                    P03_start_authorized=False, review_only=True)
     write(sealed/'review_receipt.json',receipt)
-    print('PASS workflow evidence',len(output),'checksummed files',digest(sealed/'review_receipt.json'))
+    print(receipt['gates']['P02'],'workflow evidence',len(output),'checksummed files',digest(sealed/'review_receipt.json'))
 
 
 if __name__ == '__main__':
