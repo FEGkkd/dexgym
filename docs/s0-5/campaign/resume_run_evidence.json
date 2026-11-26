@@ -109,6 +109,15 @@
       "maximum_qd_difference_rad_s": 0.000006304691851255484,
       "maximum_fingertip_difference_m": 0.0000011234329804210574
     },
+    "cpu_warp_boundary": {
+      "path": "runs/V1-B-boundary-parity-01/result.json",
+      "sha256": "b5c75af93b617bbd9da4381d6811ed9ce2cd619c4e3f20f38f03cd76d17e3536",
+      "exit": 0,
+      "parallel_warp_worlds": 1,
+      "paired_boundary_cases_passed": 8,
+      "physical_intervals_across_both_backends": 18,
+      "scope": "SYNTHETIC_BOUNDARY_DIAGNOSTIC"
+    },
     "synthetic_world_model_smoke": {
       "scope": "PHYSICAL_SYNTHETIC_PREACTOR_SMOKE",
       "cpu": {

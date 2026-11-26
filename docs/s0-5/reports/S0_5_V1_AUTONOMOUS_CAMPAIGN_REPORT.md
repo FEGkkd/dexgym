@@ -8,7 +8,7 @@ Campaign ID 为 `S05-V1-20261127-490770e`。冻结设计为 `490770e1df45832d069
 
 使用单独的内存目录替换触发 SIGBUS 的应用依赖，通过了 CUDA 运算和一环境 Warp 模型初始化。原生 CPU MuJoCo 随后正常退出，实际完成 136 个控制转移，54 轴正负响应、B0 零残差、非法动作回退和 reset 前反馈均通过。该次使用合成目标。G-B 仍需通过签名 RMB 接线、CPU/Warp 物理等价等独立检查。 [恢复证据索引](../campaign/resume_run_evidence.json)
 
-相同模型的 CPU/Warp 自由响应通过 15 组对照，共 170 个实际物理区间，最大指尖差约 0.00112 mm。CPU 与 Warp 分别通过 8 环境合成 World Model 接口烟测，各执行 176 个物理 transition、2 次 WM 更新。两次烟测里 Actor、Critic 和想象轨迹计数均为 0，C0 正式训练及独立模型资格仍未启动。 [CPU/Warp 对照证据](../campaign/evidence/warp-parity-03.json)
+相同模型的 CPU/Warp 自由响应通过 15 组对照，共 170 个实际物理区间，最大指尖差约 0.00112 mm。8 组合成安全边界对照也全部通过，涵盖命令拒绝、硬停和实际仿真自碰撞。CPU 与 Warp 分别通过 8 环境合成 World Model 接口烟测，各执行 176 个物理 transition、2 次 WM 更新。两次烟测里 Actor、Critic 和想象轨迹计数均为 0，C0 正式训练及独立模型资格仍未启动。 [CPU/Warp 自由响应证据](../campaign/evidence/warp-parity-03.json)
 
 全量签名 Train 的 228 个分区、86,338 个计划拍完成腕部可达性审计。在 85,382 个 HMB 联合有效拍中，至少一侧超出原 M1 精确腕姿所需的原生 SDK 连杆上界者有 63,967 拍。将 139 个未探测拍全部计为可能合格，精确双臂 IK 覆盖的数学上限仍为 21,415 / 85,382，即 25.08%，低于冻结的 85% 合法名义覆盖要求。此界限适用于原 M1 腕目标的精确 IK。现有 Teleop 的有界限速首步每侧 192/192 获得原生 SDK 解，该诊断没有证明整段命令合法或跟踪精度。 [全量审计数据](../campaign/evidence/train-radial-07.json) · [恢复阶段独立复核](../campaign/independent_resume_review.md)
 

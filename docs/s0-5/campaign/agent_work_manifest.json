@@ -2,7 +2,8 @@
   "schema": "s05.campaign.work-manifest.v1",
   "campaign_id": "S05-V1-20261127-490770e",
   "design_baseline": "490770e1df45832d0693380563152bd19eefa3f4",
-  "scope": "PARTIAL_ACTUAL_STARTUP_AND_DIAGNOSTICS",
+  "scope": "PARTIAL_ACTUAL_STARTUP_AND_RESUMED_TECHNICAL_DIAGNOSTICS",
+  "resume_evidence": "resume_run_evidence.json",
   "work": [
     {
       "role": "A Data & Reference",
@@ -79,6 +80,37 @@
       ],
       "witness": "Authorization, real execution, compact Replay, backup/release, runtime ledger",
       "status": "INFRASTRUCTURE_BLOCKED"
+    }
+  ],
+  "resume_work": [
+    {
+      "agent": "campaign_reference_recovery",
+      "scope": "Causal Teleop geometry probe and full signed Train exact-wrist necessary bound",
+      "implementation": ["source/dexgym/tasks/direct/wholebody_s05/v1/rmb/probe_nominal.py", "source/dexgym/tasks/direct/wholebody_s05/v1/rmb/audit_nominal_workspace.py"],
+      "observed_runs": ["V1-A-phase1-step-06", "V1-A-train-radial-07"]
+    },
+    {
+      "agent": "campaign_optimization",
+      "scope": "Bounded B/C0 supervision, independent Train continuity, and physical boundary fixtures",
+      "implementation": ["scripts/s0_5_campaign/supervise_c0.py", "source/dexgym/tasks/direct/wholebody_s05/v1/rmb/mapping_continuity.py", "source/dexgym/tasks/direct/wholebody_s05/v1/task/boundary_parity.py"],
+      "observed_runs": ["V1-A-m1-continuity-train-08", "V1-B-wm-contract-cpu-01", "V1-B-wm-contract-warp-01"]
+    },
+    {
+      "agent": "campaign_deployment",
+      "scope": "Pinned existing Teleop source review, read-only MCAP inventory and input timing controls",
+      "implementation": ["scripts/s0_5_campaign_teleop/ACTUAL_TELEOP_SOURCE_AUDIT.md", "scripts/s0_5_campaign_teleop/input_timing.py"],
+      "observed_runs": ["V1-D1-mcap-identity-preflight-01"]
+    },
+    {
+      "agent": "campaign_independent",
+      "scope": "Independent verification of exact Train bound, nominal candidate scope, parity predicates, and determinism controls",
+      "report": "independent_resume_review.md",
+      "scientific_gates_granted": []
+    },
+    {
+      "agent": "root",
+      "scope": "Ubuntu dependency and fault isolation, actual CPU/Warp smoke execution, runtime ledger, dashboard, authenticated evidence and Git publication",
+      "observed_runs": ["V1-A-ik-probe-03", "V1-A-train-roots-05", "V1-B-native-smoke-04", "V1-B-warp-parity-03"]
     }
   ]
 }
