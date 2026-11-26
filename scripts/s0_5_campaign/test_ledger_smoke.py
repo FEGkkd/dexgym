@@ -41,7 +41,7 @@ class PhysicsSmokeBudgetTest(unittest.TestCase):
 
     def test_includes_supervised_smoke_usage_in_stage_cap(self):
         self.state["c0_supervised_runs"] = {"other": {
-            "mode": "b_smoke", "status": "FAILED", "outcome": {"charged_physical_transitions": 2499},
+            "mode": "b_smoke", "status": "FAILED", "charged_physical_transitions": 2499,
         }}
         with self.assertRaises(ValueError):
             self.reserve(23000)

@@ -138,7 +138,7 @@ def record_physics_smoke(state, facts):
     supervised = [run for run in state.get("c0_supervised_runs", {}).values() if run.get("mode") == "b_smoke"]
     if any(run["status"] in {"STARTING", "RUNNING"} for run in supervised):
         raise ValueError("finish the reserved learner smoke before adding a physical smoke")
-    charged = sum(run["outcome"]["charged_physical_transitions"] for run in supervised)
+    charged = sum(run["charged_physical_transitions"] for run in supervised)
     if book["previous_physical_transitions"] + charged + units > cap or any(
         state["remaining_budget"][key] < units for key in accounts
     ):
