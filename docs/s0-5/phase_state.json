@@ -293,5 +293,28 @@
     "receipt_sha256": "4dd4c3ea4c1b22a669c9b6d67ccbb3ec49b7653128ea88c728ed9562319337a4",
     "candidate_config_sha256": "6aeaa203e39bea392bc20d5fceee26ea5f85752d219824f98f96b2c852846317",
     "execution_lock_sha256": "da3e1f0759ac010a989d9431f0337371df6fe208914139bd711be15354a453af"
+  },
+  "p01e_e0_acceptance": {
+    "status": "ACCEPTED",
+    "type": "human",
+    "by": "project_user",
+    "recorded_at": "2026-11-26T14:36:37+08:00",
+    "reviewed_commit": "3f906526edccc108a1ff08e523da9559b16abcb0",
+    "receipt_ref": "evidence/P01_E_E0/review_receipt.json",
+    "receipt_sha256": "4dd4c3ea4c1b22a669c9b6d67ccbb3ec49b7653128ea88c728ed9562319337a4",
+    "approval_ref": "reports/approvals/P01_E_E0_ACCEPTED_P01_E_E1.md"
+  },
+  "p01e_production_authorization": {
+    "type": "human",
+    "by": "project_user",
+    "recorded_at": "2026-11-26T14:36:37+08:00",
+    "scope": "E1_PRODUCTION",
+    "reviewed_commit": "3f906526edccc108a1ff08e523da9559b16abcb0",
+    "candidate_config_ref": "evidence/P01_E_E0/candidate_config.json",
+    "candidate_config_sha256": "6aeaa203e39bea392bc20d5fceee26ea5f85752d219824f98f96b2c852846317",
+    "execution_lock_ref": "evidence/P01_E_E0/execution_lock.json",
+    "execution_lock_sha256": "da3e1f0759ac010a989d9431f0337371df6fe208914139bd711be15354a453af",
+    "run_id": "P01-E-E1-20261126-3f90652",
+    "approval_ref": "reports/approvals/P01_E_E0_ACCEPTED_P01_E_E1.md"
   }
 }

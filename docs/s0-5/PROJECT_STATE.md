@@ -5,14 +5,14 @@
 | 阶段 | 当前状态 | 授权范围 |
 |---|---|---|
 | P00 | ACCEPTED | 用户签核 `09c1c9e3c63797083a82493e2a40dd8bb4b1db6d` |
-| P01 | IN_PROGRESS | P01-D 数据冻结方案获签核，本次授权覆盖 P01-E E0 有界预检 |
+| P01 | IN_PROGRESS | 本次授权覆盖 P01-E 全量 HMB 构建与 E1 技术验收 |
 | P01-A | ACCEPTED | 人工签核仅覆盖 A1 元数据门 |
 | P01-B（历史） | BLOCKED | v0.2.0 原 B1 FAIL / B2 BLOCKED |
 | P01-B-HMB | ACCEPTED | 用户签核 `8b0f399` 的有界解码门 |
 | P01-C（历史结论） | BLOCKED | 原运行与原 C2 真实时钟缺证状态保留 |
 | P01-C（历史 HMB 仿真资格） | ACCEPTED | 项目用户签核 `eb00f25`、最终凭据与 SHA |
 | P01-D | ACCEPTED | 用户签核 `34e44b6`，绑定原 D1 配置和运行凭据 |
-| P01-E | IN_PROGRESS | E0 新实施锁与配置候选待独立签核，E1 NOT_RUN |
+| P01-E | IN_PROGRESS | E0 已由项目用户签核，E1 绑定精确配置、实施锁和正式 Run ID |
 | C2-RT | BLOCKED | 设备物理捕获、控制器接收和跨时钟误差界未证 |
 | 物理 robot-base 注册 | BLOCKED | 缺独立外部测量 |
 | P01-T | BLOCKED | 动态资格为 0，P03 正式启动的强制前置 |
@@ -33,4 +33,4 @@ P01-A 在 `P01-A-20261126-09c1c9e-r03` 完成实测。32 个独立真人捕获�
 
 P01-D Run `P01-D-20261126-eb00f25` 产出已获人工批准的冻结方案与有界成果。32 个母源的 24/8 开发 split、QC、schema 及仿真用途保持已批准的值。[D1 验收](reports/P01_D_acceptance.md) · [原运行凭据](evidence/P01_D/review_receipt.json) · [人工批准](reports/approvals/P01_D_ACCEPTED_P01_E_E0.md)
 
-逐分区资格与原子发布的 E0 证据、恢复台账及新候选 SHA 见预检报告。生产入口仅在另行发布人工签核并绑定两项新 SHA 及正式 Run ID 后可启动 E1。[E0 预检报告](reports/P01_E_preflight.md)
+E0 的原技术审核事件和证据继续保留。项目用户独立批准配置与实施锁的精确 SHA 及正式 Run ID `P01-E-E1-20261126-3f90652`。[E0 预检报告](reports/P01_E_preflight.md) · [E0 签核与 E1 授权](reports/approvals/P01_E_E0_ACCEPTED_P01_E_E1.md)
