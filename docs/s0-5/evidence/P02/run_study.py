@@ -26,8 +26,14 @@ def load(path):
 
 def write(path,data):
     with path.open('x',encoding='utf-8') as p:
-        json.dump(data,p,indent=2,sort_keys=True,allow_nan=False)
+        json.dump(data,p,indent=2,sort_keys=True,allow_nan=False,default=numpy_scalar)
         p.write('\n')
+
+
+def numpy_scalar(value):
+    if isinstance(value,np.generic):
+        return value.item()
+    raise TypeError(f'Unexpected value in P02 evidence: {type(value).__name__}')
 
 
 def verify_approval(config):
