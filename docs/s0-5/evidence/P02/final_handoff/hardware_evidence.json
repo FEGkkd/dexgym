@@ -1,0 +1,118 @@
+{
+  "schema": "s05.p02.hardware_prerequisite_evidence.v1",
+  "candidate_scope": "HW_READINESS_DESIGN_ONLY",
+  "source_snapshot": {
+    "source_root": "/home/ubuntu/teleop_ws",
+    "artifact": "selected source ZIP extracted to implementation/s05-p02-final-teleop-source for read-only review",
+    "archive_sha256": "5ff7f9a7dd6d6a29074ab96b12171d29ef935442b2b2558d13b4b8211ed7e4c0",
+    "worktree_vs_running_binaries": "UNVERIFIED",
+    "worktree_head": "30cf13bdc496c43b3016462cfa0a206334d1ff7f",
+    "branch": "4sensor",
+    "dirty": true,
+    "provenance_sha256": "8d03a59fa99e10508f8020abfe2eee0466b143d47d7c0109f7902b3dc1763c39",
+    "file_count": 19,
+    "differing_from_git_head": 5,
+    "file_sha256": {
+      "src/manus_ros2/src/ManusDataPublisher.cpp": "6c28f9e2b602a3411f1508183855ddcbecdb30ff9c2b0b2223edf2c6b346485e",
+      "src/manus_ros2_msgs/msg/ManusGlove.msg": "b7509eb4ff5ec07e23e499d2a8415c101b9a9ffc7d3e303df63290098b0461c5",
+      "src/manus_ros2_msgs/msg/ManusRawNode.msg": "b6f7ea98786eb0d22385bb4848456b7e0b0c19c35a0098a931088383490ace83",
+      "src/manus_wuji_interfaces/msg/HandCommand.msg": "22ff69186749edc8c41932e2b83e6b2b8b9db993854d1f486c8b4aa61cd70986",
+      "src/manus_wuji_interfaces/msg/HandDiagnostics.msg": "586ca13402fd20e505615cbcf31a8e6f89f5ac59fad2792227068b65cc83109e",
+      "src/manus_wuji_interfaces/msg/HandState.msg": "cba6f85a44a2a12db164b52dbeca42881eaa74b36eb18d3b14b4136c1b7f32ac",
+      "src/tianji_interfaces/msg/RobotState.msg": "7a7b0743de6de68d00c9412de12464f42cd744ff68def289211281cdb4d9e343",
+      "src/tianji_interfaces/msg/TeleopState.msg": "d63c412812e4bafe47f4a3f1f87fa1daf330550d1e4e8e503323f486a742cdd2",
+      "src/tianji_interfaces/msg/TrackerPose.msg": "e3f5262e1e720e0a3a86641c0f070edb5e63b2512b246ff9a7b3392643a7453e",
+      "src/tianji_real_driver/include/tianji_real_driver/command_trace.hpp": "c8e2f0e47f5e1696a1fe5e3c542b714a91d5b87632f41d628892294e4ab2c201",
+      "src/tianji_real_driver/include/tianji_real_driver/real_driver_node.hpp": "6a6094d7466b747d80cbb273cf2e98909fa25fc3196c22307f213f5d417d1b06",
+      "src/tianji_real_driver/src/real_driver_node.cpp": "375d29e02666bd57e9c86508d91a9f52e72d64675246209c8ee0e43f429d5e73",
+      "src/tianji_real_driver/test/test_command_trace.cpp": "72c9eb7d0faa95c36c1c18f96fbfe8966ff42a6ad566b1b1c1e8de3adc622de0",
+      "src/vive_tracker_ros/src/tracker_calibration_node.cpp": "29520c915341d55a9796ae9bda1c3f01d6203e020b73e132317d773dbd63f32d",
+      "src/vive_tracker_ros/src/tracker_pose_transformer_node.cpp": "835a1c5e4dcf993c1cdd8f175a6fcf1d02aea9721da80ce07ebfebf6e354fcdc",
+      "src/vive_tracker_ros/src/vive_tracker_node.cpp": "32b3b75c43a35dc6df495a4b33d22b36d2c8d53b1425b9e47db04de5488a2be0",
+      "src/vive_tracker_ros/src/world_adapter_node.cpp": "7498fef99877b99b8ea47507e7a27b0f27977b43a7fa8f17fc7f92a424fd7711",
+      "src/whole_body_teleop/src/teleop_controller_node.cpp": "fdf40858037d417e684894e3193d52b41e3c8d0b841063a5192182fccd740f6a",
+      "src/wuji_hand2_real_driver/src/node.cpp": "68e3e82ee863022da4acf97c7dd43a4ec55144b4fb15b9b58128f92db0b22224"
+    }
+  },
+  "observed_offline_fixture": {
+    "runtime": {
+      "python": "3.14.3",
+      "numpy": "2.5.4"
+    },
+    "geometry": {
+      "holdout_max_residual_m": 7.734610455448194e-17,
+      "fitted_rot_det": 0.9999999999999991,
+      "plus_y_m": 0.0029999999999999957,
+      "minus_y_m": -0.0030000000000000074,
+      "mirror_proper_fit_max_residual_m": 0.22744108704475488,
+      "synthetic_limit_m": 0.001,
+      "result": "PASS_SYNTHETIC"
+    },
+    "clock": {
+      "unmodified": "PASS_SYNTHETIC",
+      "minus_30_ns": "PASS_SYNTHETIC",
+      "plus_20_ns_cutoff_equal": "PASS_SYNTHETIC",
+      "plus_30_ns": "BLOCK_VISIBLE_AFTER_CUTOFF",
+      "capture_upper_over_tick": "BLOCK_CAPTURE_AFTER_TICK",
+      "restart_generation": "BLOCK_GENERATION",
+      "unobserved_capture": "BLOCK_MISSING",
+      "reversed_bounds": "BLOCK_REVERSED_BOUNDS"
+    },
+    "command_join": {
+      "exact_ack": "PASS_SYNTHETIC",
+      "same_time_wrong_sequence": "BLOCK_ID_MISMATCH",
+      "missing_ack": "BLOCK_MISSING_ACK",
+      "application_after_feedback": "BLOCK_FEEDBACK_BEFORE_APPLICATION",
+      "sdk_return_only": "BLOCK_SUBMISSION_ONLY",
+      "stale_generation": "BLOCK_GENERATION"
+    },
+    "execution_scope": "OBSERVED_OFFLINE_CONTENT_AND_SYNTHETIC_MATH_ONLY",
+    "official_runtime_acceptance": false,
+    "evidence_level": "SYNTHETIC_OFFLINE"
+  },
+  "minimum_field_gaps": {
+    "robot-base": [
+      "external_survey",
+      "mechanical_datum_tf",
+      "TCP_to_palm_witness",
+      "held_out_and_cross_session_uncertainty"
+    ],
+    "C2-RT": [
+      "physical_sensor_capture_bounds",
+      "pre_lock_receipt_and_cache_visibility",
+      "accepted_input_uids_per_cutoff",
+      "independent_paired_anchors",
+      "device_apply_and_feedback_timing"
+    ],
+    "P01-T": [
+      "binding_to_installed_verified_hardware",
+      "strong_apply_or_qualified_estimate",
+      "per_axis_actual_dynamic_response",
+      "cross_session_holdout_acceptance"
+    ]
+  },
+  "current_status": {
+    "robot-base": "BLOCKED",
+    "C2-RT": "BLOCKED",
+    "P01-T": "BLOCKED"
+  },
+  "physical_measurements": null,
+  "hardware_operation_authorized": false,
+  "repro": {
+    "working_directory": "workspace root on Windows",
+    "env": {
+      "S05_HW_SOURCE_SNAPSHOT": "implementation/s05-p02-final-teleop-source",
+      "PYTHONPATH": "implementation/marvin54_runtime"
+    },
+    "command": "$env:S05_HW_SOURCE_SNAPSHOT=(Resolve-Path -LiteralPath 'implementation/s05-p02-final-teleop-source').Path; $env:PYTHONPATH=(Resolve-Path -LiteralPath 'implementation/marvin54_runtime').Path; $e=Get-Content -Raw 'implementation/dexgym-s05-c-review/docs/s0-5/evidence/P02/final_handoff/hardware_evidence.json' | ConvertFrom-Json; $e.repro.python | & 'C:/Python314/python.exe' -B -",
+    "inspection_commands": [
+      "git -C implementation/whole-body-teleop rev-parse HEAD",
+      "git -C implementation/whole-body-teleop status --porcelain=v1 --untracked-files=no",
+      "rg -n 'publishTime|receivedAt' implementation/s05-p02-final-teleop-source/src/manus_ros2/src/ManusDataPublisher.cpp",
+      "rg -n 'GetDeviceToAbsoluteTrackingPose|header.stamp' implementation/s05-p02-final-teleop-source/src/vive_tracker_ros/src/vive_tracker_node.cpp",
+      "rg -n 'TraceEvent|read_feedback|publish_feedback' implementation/s05-p02-final-teleop-source/src/tianji_real_driver/src/real_driver_node.cpp",
+      "rg -n 'applied_command_pub_|feedback_.accept|publish_state' implementation/s05-p02-final-teleop-source/src/wuji_hand2_real_driver/src/node.cpp"
+    ],
+    "python": "import json, os, sys\nfrom hashlib import sha256\nfrom pathlib import Path\nimport numpy as np\n\nroot = Path(os.environ[\"S05_HW_SOURCE_SNAPSHOT\"])\nprovenance = root / \"teleop_code_provenance.json\"\np = json.loads(provenance.read_bytes())\nverified = {}\nfor path, declared in p[\"files\"].items():\n    actual = sha256((root / path).read_bytes()).hexdigest()\n    assert actual == declared[\"sha256\"], path\n    assert (actual == declared[\"head_sha256\"]) == declared[\"is_same_as_head\"], path\n    assert (root / path).stat().st_size == declared[\"bytes\"], path\n    verified[path] = actual\n\ndef align(src, dst):\n    cx, cy = src.mean(0), dst.mean(0)\n    u, _, v = np.linalg.svd((src-cx).T @ (dst-cy))\n    d = np.eye(3)\n    d[2, 2] = np.linalg.det(v.T @ u.T)\n    R = v.T @ d @ u.T\n    return R, cy - R @ cx\n\ntheta = .27\nR_true = np.array([[np.cos(theta), -np.sin(theta), 0.],\n                   [np.sin(theta), np.cos(theta), 0.], [0., 0., 1.]])\nshift = np.array([.035, -.02, .01])\ntrain = np.array([[0.,0.,0.],[.2,0.,0.],[0.,.3,0.],[0.,0.,.4],[.2,.3,.1]])\nholdout = np.array([[.1,.08,.12],[.11,.20,.13],[-.11,.04,.20]])\nfitting = train @ R_true.T + shift\ntest = holdout @ R_true.T + shift\nR,t = align(train,fitting)\npred = holdout @ R.T+t\nbase_err = np.linalg.norm(pred-test,axis=1).max()\ndelta_plus = (test + [0.,0.003,0.] - pred).mean(0)\ndelta_minus = (test - [0.,0.003,0.] - pred).mean(0)\nmirror_train = train * [-1.,1.,1.]\nM,v = align(train,mirror_train)\nmirror_residual = np.linalg.norm(train @ M.T+v-mirror_train,axis=1).max()\nassert base_err < 1e-12 and abs(np.linalg.det(R)-1.) < 1e-12 and abs(np.linalg.det(M)-1.) < 1e-12\nassert delta_plus[1] > .001 and delta_minus[1] < -.001 and mirror_residual > .001\n\ndef causal(capture, visible, tick, cutoff, generation, current_generation):\n    if generation != current_generation:\n        return \"BLOCK_GENERATION\"\n    if capture is None or visible is None:\n        return \"BLOCK_MISSING\"\n    if capture[0] > capture[1] or visible[0] > visible[1]:\n        return \"BLOCK_REVERSED_BOUNDS\"\n    if capture[1] > tick:\n        return \"BLOCK_CAPTURE_AFTER_TICK\"\n    if visible[1] > cutoff:\n        return \"BLOCK_VISIBLE_AFTER_CUTOFF\"\n    return \"PASS_SYNTHETIC\"\n\ncausal_cases = {\n    \"unmodified\": causal((890,900),(950,960),1000,980,7,7),\n    \"minus_30_ns\": causal((890,900),(920,930),1000,980,7,7),\n    \"plus_20_ns_cutoff_equal\": causal((890,900),(970,980),1000,980,7,7),\n    \"plus_30_ns\": causal((890,900),(980,990),1000,980,7,7),\n    \"capture_upper_over_tick\": causal((890,1001),(950,960),1000,980,7,7),\n    \"restart_generation\": causal((890,900),(950,960),1000,980,6,7),\n    \"unobserved_capture\": causal(None,(950,960),1000,980,7,7),\n    \"reversed_bounds\": causal((900,890),(950,960),1000,980,7,7),\n}\nassert causal_cases == dict(unmodified=\"PASS_SYNTHETIC\", minus_30_ns=\"PASS_SYNTHETIC\",\n    plus_20_ns_cutoff_equal=\"PASS_SYNTHETIC\", plus_30_ns=\"BLOCK_VISIBLE_AFTER_CUTOFF\",\n    capture_upper_over_tick=\"BLOCK_CAPTURE_AFTER_TICK\", restart_generation=\"BLOCK_GENERATION\",\n    unobserved_capture=\"BLOCK_MISSING\", reversed_bounds=\"BLOCK_REVERSED_BOUNDS\")\nissue = (\"session-A\",\"boot-1\",7,\"left-arm\",1)\nfeedback_uid = (\"HW-A\", \"axis-group-L\",\"fb-boot-1\",7,71,11_000)\ndef applied(uid, ack_uid, ack_semantics, ack_ns, feedback, device_generation):\n    if ack_uid is None:\n        return \"BLOCK_MISSING_ACK\"\n    if uid[2] != device_generation or feedback[3] != device_generation:\n        return \"BLOCK_GENERATION\"\n    if uid != ack_uid:\n        return \"BLOCK_ID_MISMATCH\"\n    if ack_semantics != \"DEVICE_APPLIED\":\n        return \"BLOCK_SUBMISSION_ONLY\"\n    if feedback[-1] < ack_ns:\n        return \"BLOCK_FEEDBACK_BEFORE_APPLICATION\"\n    return \"PASS_SYNTHETIC\"\n\njoin_cases = {\n    \"exact_ack\": applied(issue,issue,\"DEVICE_APPLIED\",10_500,feedback_uid,7),\n    \"same_time_wrong_sequence\": applied(issue,(*issue[:-1],2),\"DEVICE_APPLIED\",10_500,feedback_uid,7),\n    \"missing_ack\": applied(issue,None,None,10_500,feedback_uid,7),\n    \"application_after_feedback\": applied(issue,issue,\"DEVICE_APPLIED\",11_001,feedback_uid,7),\n    \"sdk_return_only\": applied(issue,issue,\"SDK_SUBMISSION\",10_500,feedback_uid,7),\n    \"stale_generation\": applied(issue,issue,\"DEVICE_APPLIED\",10_500,feedback_uid,8),\n}\nassert join_cases == dict(exact_ack=\"PASS_SYNTHETIC\",same_time_wrong_sequence=\"BLOCK_ID_MISMATCH\",\n    missing_ack=\"BLOCK_MISSING_ACK\",application_after_feedback=\"BLOCK_FEEDBACK_BEFORE_APPLICATION\",\n    sdk_return_only=\"BLOCK_SUBMISSION_ONLY\",stale_generation=\"BLOCK_GENERATION\")\nprint(json.dumps(dict(\n    source_verification=dict(worktree_head=p[\"head\"], branch=p[\"branch\"], dirty=p[\"dirty\"],\n        provenance_sha256=sha256(provenance.read_bytes()).hexdigest(),\n        file_count=len(verified), differing_from_git_head=sum(not x[\"is_same_as_head\"] for x in p[\"files\"].values()),\n        file_sha256=verified),\n    geometry_synthetic=dict(holdout_max_residual_m=float(base_err), fitted_rot_det=float(np.linalg.det(R)),\n        plus_y_m=float(delta_plus[1]), minus_y_m=float(delta_minus[1]), mirror_proper_fit_max_residual_m=float(mirror_residual),\n        synthetic_limit_m=.001, result=\"PASS_SYNTHETIC\"),\n    causal_synthetic=causal_cases, command_application_join_synthetic=join_cases,\n    local_runtime=dict(python=sys.version.split()[0],numpy=np.__version__),\n    execution_scope=\"OBSERVED_OFFLINE_CONTENT_AND_SYNTHETIC_MATH_ONLY\"\n),indent=2))"
+  }
+}

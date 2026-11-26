@@ -133,6 +133,8 @@ def phase_states(document):
         p01_dependency_states(document)
     if 'p02_refinement' in document:
         check_p02_refinement(document['p02_refinement'])
+    if 'p02_final_handoff' in document:
+        check_p02_final_handoff(document['p02_final_handoff'])
     return states
 
 
@@ -175,6 +177,35 @@ def check_p02_refinement(event):
     for name,sha in receipt['output_sha256'].items():
         path = checked_file(ROOT, str(evidence.parent.relative_to(ROOT) / name))
         require(digest(path.read_bytes()) == sha, f'P02 refinement publication hash differs: {name}')
+
+
+def check_p02_final_handoff(event):
+    path = checked_file(ROOT,event['evidence_ref'])
+    receipt = load_json(path)
+    require(receipt['schema']=='s05.p02.final_handoff.receipt.v1'
+            and digest(path.read_bytes()) == event['evidence_sha256']
+            and receipt['run'] == event['run']
+            and receipt['reviewed_baseline'] == event['reviewed_baseline'],
+            'P02 final handoff evidence changed')
+    require(receipt['formal_physical_scoring']=='PENDING_HUMAN_APPROVAL'
+            and event['formal_physical_scoring']=='PENDING_HUMAN_APPROVAL'
+            and receipt['phases']=={'P01':'ACCEPTED','P02':'READY_FOR_REVIEW','P03':'NOT_STARTED'}
+            and set(receipt['hardware_prerequisites'])=={'C2-RT','P01-T','robot-base','Final Test'}
+            and set(receipt['hardware_prerequisites'].values())=={'BLOCKED'}
+            and not any(receipt[k] for k in ('authorized_p03','authorized_robot_motion','rl_training_started')),
+            'P02 final handoff does not authorize physical scoring, P03, RL or actuation')
+    for name,sha in receipt['published_sha256'].items():
+        p = checked_file(ROOT,str(path.parent.relative_to(ROOT)/name))
+        require(digest(p.read_bytes())==sha,f'P02 final handoff publication differs: {name}')
+    manifest = load_json(path.parent/'agent_work_manifest.json')
+    require(manifest['parallel_agents']>=3 and manifest['implementation_and_review_separated']
+            and {w['agent_role'] for w in manifest['work_packages']} ==
+                {'A_M1_match','B_independent_math_score','C_hardware_plan','Main_integrator'},
+            'P02 final handoff agent work manifest is incomplete')
+    for work in manifest['work_packages']:
+        require(len(work['actual_commands']) and work['input_commit']==event['reviewed_baseline']
+                and set(work['output_paths'])==set(work['output_sha256']),
+                f'Incomplete P02 work package: {work["agent_role"]}')
 
 
 def p01_dependency_states(document):
