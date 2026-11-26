@@ -185,7 +185,7 @@ def main(plan_path, run, sealed):
     config = load(plan_path)
     handoff = verify_approval(config)
     subprocess.run(['sha256sum','-c',str(run/'frozen.sha256')],check=True)
-    accepted = ('model-02','intent-02','history-02','tests-02','pinch-01')
+    accepted = ('model-02','intent-02','history-02','tests-02','pinch-01','constraints-01')
     names = ('model-01','intent-01','history-01','tests-01') + accepted
     evidence = {}
     for name in names:
@@ -224,6 +224,9 @@ def main(plan_path, run, sealed):
     mapping_ok = all(sum(counts.values()) for counts in near_pinch.values())
     if summary['All']['active_pinch_after_m'] is not None and summary['All']['active_pinch_after_m'][-1] > 1e-10:
         raise ValueError('Near-pinch mapping did not preserve its fixed functional vectors')
+    probe = load(run/'constraints-01/constraint_probe.json')
+    if probe['plan_sha256'] != digest(plan_path.with_name('constraint_probe_plan.json')) or len(probe['results']) != 2:
+        raise ValueError('Constraint counterfactual provenance differs')
     sealed.mkdir(mode=0o700)
     write(sealed/'score_integrity.json',audit)
     write(sealed/'mapping_and_solver_summary.json',summary)
@@ -248,6 +251,11 @@ def main(plan_path, run, sealed):
     write(sealed/'P03_scoring_handoff.json',contracts)
     paths = [p for name in names for p in (run/name).iterdir() if p.is_file()]
     paths += [run/'frozen_at.txt',run/'frozen.sha256',*sealed.iterdir()]
+    tracked = subprocess.check_output(['git','ls-files','-z',
+        'source/dexgym/tasks/direct/wholebody_s05/p02','tests/s0_5/unit/test_p02_static.py',
+        'docs/s0-5/evidence/P02'], text=True).split('\0')
+    write(sealed/'code_sha256.json',{rel:digest(Path(rel)) for rel in tracked if rel})
+    paths.append(sealed/'code_sha256.json')
     output = {str(p.relative_to(run)):digest(p) for p in sorted(paths)}
     write(sealed/'output_sha256.json',output)
     receipt = dict(schema='s05.p02.review_receipt.v1',run_id=config['run_id'],

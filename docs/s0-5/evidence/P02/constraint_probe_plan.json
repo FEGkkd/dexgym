@@ -1,0 +1,6 @@
+{
+  "schema": "s05.p02.static_constraint_probe.v1",
+  "selection": "From sealed-01, choose the largest 54-DoF max-tip residual with a zero radial lower bound and the largest with a positive radial lower bound, restricted to witnesses within 10 micrometres of the collision margin. Break ties by case_key.",
+  "comparison": "Reoptimize with the same three recorded input initializations and the frozen objective, joint ranges, J6/J7 constraints and budget. Compare clearance 0.5 mm versus zero margin without model penetration.",
+  "scope": "Retrospective limited counterfactual only. Use no new dataset or model. Do not update the mapped or feasible score target."
+}
