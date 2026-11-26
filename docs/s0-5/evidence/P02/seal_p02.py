@@ -193,8 +193,12 @@ def main(plan_path, run, sealed):
         rc = int((p/'exit').read_text())
         if name in accepted and rc:
             raise ValueError(f'Required experiment failed: {name}')
+        logs = ('stdout','stderr','runtime.json','resources.txt')
+        missing = [x for x in logs if not (p/x).is_file()]
+        if name in accepted and missing:
+            raise ValueError(f'Missing required runtime evidence for {name}: {missing}')
         evidence[name] = dict(exit=rc, git=(p/'git_head').read_text().strip(), command=(p/'command').read_text(),
-                             logs={x:digest(p/x) for x in ('stdout','stderr','runtime.json','resources.txt')},
+                             logs={x:digest(p/x) for x in logs if x not in missing}, missing_logs=missing,
                              started=(p/'started_at').read_text().strip(), ended=(p/'ended_at').read_text().strip())
     model_report = load(run/'model-02/model_report.json')
     if not all(report['valid'] for report in model_report.values()):
