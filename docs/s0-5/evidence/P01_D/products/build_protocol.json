@@ -1,0 +1,18 @@
+{
+  "allowed_use": "HISTORICAL_SIMULATION_DEVELOPMENT_ONLY",
+  "arguments": [
+    "--config <approved frozen_config.json>",
+    "--old-a <A1 registry directory>",
+    "--output <new approved P01-E run products directory>",
+    "--approval-state <phase_state.json>"
+  ],
+  "entry": "python -m dexgym.tasks.direct.wholebody_s05.data.p01d_freeze build",
+  "interval": "fixed 8 second records; per-partition context masked, no stitching; monotonic tick axis",
+  "requires": [
+    "P01-D ACCEPTED with frozen_config_sha256",
+    "P01-E IN_PROGRESS with separate human authorization",
+    "locked source/code hash and current resource gate"
+  ],
+  "resume": "Use the same output directory and verified config after an authorized retry. Published partitions are immutable.",
+  "schema": "s05.hmb.simulation.v1"
+}

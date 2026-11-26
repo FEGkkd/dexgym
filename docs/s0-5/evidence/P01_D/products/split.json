@@ -1,0 +1,441 @@
+{
+  "Final_Test": {
+    "roots": [],
+    "status": "BLOCKED"
+  },
+  "Train": [
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:06f3bc9ae8b6df054b6f7538",
+      "root_episode_id": "capture:1bc59d07cb650ee219d5adbf",
+      "sample_rank": "868f2ba872496e854a410fa52adf63acd02de2ffdd623c06e283dbac30d5887c",
+      "session_identity": "UNKNOWN",
+      "task": "hand_pose",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "HISTORICAL_TEST_ASSIGNMENT",
+        "REPEATED_TEST"
+      ],
+      "recording_id": "recording:51adcf9b11cd609ee6efaf88",
+      "root_episode_id": "capture:2151546f1c0b35e04218a1bb",
+      "sample_rank": "9064db5077004a98a3b767b9f59789f3b80a9d3af0f403f1cfefdce51b8cbf7f",
+      "session_identity": "UNKNOWN",
+      "task": "arm_hand",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:4e5319e373fc2a90a1c33861",
+      "root_episode_id": "capture:2edc372773190c61446b634c",
+      "sample_rank": "ee7c822d5d4c52c91ac0b980ff8efa46eba095a685733ec9710b2ef7f68111d9",
+      "session_identity": "UNKNOWN",
+      "task": "arm_motion",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "MODEL_SELECTION",
+        "VAL"
+      ],
+      "recording_id": "recording:732e8344f26f8afea70e2a61",
+      "root_episode_id": "capture:3118754b1d9742a2718048e2",
+      "sample_rank": "d2031cd70f9e4bf055d56765aaac44c0285dddfd9356fd9771a983bccd1f49c4",
+      "session_identity": "UNKNOWN",
+      "task": "arm_motion",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:948b79aeaa123f770309a860",
+      "root_episode_id": "capture:378ae16c5078ff3880ede8d9",
+      "sample_rank": "e999a1ddb87a1f677ac8421cfa64d706d7b6407da375de0c2e0b54f614ee6e9b",
+      "session_identity": "UNKNOWN",
+      "task": "arm_hand",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:89f09cb37b13dc62b5f9eb96",
+      "root_episode_id": "capture:406fe87c6799120301158f3a",
+      "sample_rank": "f399af38156511265d65a8b3eec58ccae6775207ba4509908f13b37ac34e2ef4",
+      "session_identity": "UNKNOWN",
+      "task": "hand_pose",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:28e5a46fe95f2f5803bf377d",
+      "root_episode_id": "capture:5460d9dca502d3924632a907",
+      "sample_rank": "2703b0fe490619c1c74b702b6abf2c8d05067624826e53d2eb675ab209cc1a0b",
+      "session_identity": "UNKNOWN",
+      "task": "hand_pose",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:ee81ae8d41d24c9980f85588",
+      "root_episode_id": "capture:54911698b12e5b40cd8bfe65",
+      "sample_rank": "ac4fcea76874866e019a6d0ca06466263b1a6c5697d9e6c3550e88b806ac5c17",
+      "session_identity": "UNKNOWN",
+      "task": "hand_pose",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "HISTORICAL_TEST_ASSIGNMENT",
+        "REPEATED_TEST"
+      ],
+      "recording_id": "recording:c59e65d7a17e7253670ba0cf",
+      "root_episode_id": "capture:57223e1ea4fd73f5aa16c512",
+      "sample_rank": "f0de1295c0d61b4044ac63d9658b21c0874ab3871f646a6189f65b89a66c1865",
+      "session_identity": "UNKNOWN",
+      "task": "hand_pose",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "MODEL_SELECTION",
+        "VAL"
+      ],
+      "recording_id": "recording:d714302e1f994fd06be08081",
+      "root_episode_id": "capture:6154b09c32ffe84771d612f1",
+      "sample_rank": "154acc4e42bf2b77a12ec828ff70b32eecfb76d0de130d65f6ad97fc7e1c40a2",
+      "session_identity": "UNKNOWN",
+      "task": "hand_pose",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "HISTORICAL_TEST_ASSIGNMENT",
+        "REPEATED_TEST"
+      ],
+      "recording_id": "recording:b3ba693f07cb972d825dfa65",
+      "root_episode_id": "capture:6b3b94ebe706970ec08979e9",
+      "sample_rank": "da8eb7cc28678895ca6c243066c8ae03af91496eedc37edcc53e07fbecf42aa2",
+      "session_identity": "UNKNOWN",
+      "task": "arm_motion",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:189e51a5df45ea33d051ffcf",
+      "root_episode_id": "capture:6fb07249fb5b858f8269a562",
+      "sample_rank": "ca8eb111fc6564c212de8e9800f5532bc2dacd3182088bb4110a10e0a746fc57",
+      "session_identity": "UNKNOWN",
+      "task": "arm_motion",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:91313e7486d06640e3878f8d",
+      "root_episode_id": "capture:7df0193e6cf8cf09cd304b77",
+      "sample_rank": "75294b6bb049834e58f3d016756483a48e41c251f5a6fc791e9c1680746e8ef3",
+      "session_identity": "UNKNOWN",
+      "task": "hand_pose",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "HISTORICAL_TEST_ASSIGNMENT",
+        "REPEATED_TEST"
+      ],
+      "recording_id": "recording:22f122bf51dfc6b4c21ac4b1",
+      "root_episode_id": "capture:84d149ff204d06f24ac72ebc",
+      "sample_rank": "a06ace1ebb90b72366a0cdcf14c00c7c477dd5ff44724c50be27fc2d166e7e17",
+      "session_identity": "UNKNOWN",
+      "task": "arm_hand",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:01ee4f951950370ea9ecddae",
+      "root_episode_id": "capture:8c85b5bd93595270f134bf72",
+      "sample_rank": "e87cfe8a0b249fe320d7b49f35a0b44d1441409ecfb9bc3ba8c9e0a7fb6bd0cd",
+      "session_identity": "UNKNOWN",
+      "task": "hand_pose",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "HISTORICAL_TEST_ASSIGNMENT",
+        "REPEATED_TEST"
+      ],
+      "recording_id": "recording:f2ffe6465a81f11d129442bb",
+      "root_episode_id": "capture:982b9b5f7d882e16937303ce",
+      "sample_rank": "63a008dc7e2827c2a18b19674fb63d8f11bddf8da62f4a694593991c955561f2",
+      "session_identity": "UNKNOWN",
+      "task": "arm_motion",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:69fee6c9daa61d68031317bd",
+      "root_episode_id": "capture:9e230fc5926c7a9444ebdd09",
+      "sample_rank": "9e0a498a19a9f411e8b00bfcecd33cc3dc214e9e81cd2bf543f4db8dd7099758",
+      "session_identity": "UNKNOWN",
+      "task": "arm_hand",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "HISTORICAL_TEST_ASSIGNMENT",
+        "REPEATED_TEST"
+      ],
+      "recording_id": "recording:7f37957cb079709fe04735c8",
+      "root_episode_id": "capture:a94a53f04dab331aad3f21f4",
+      "sample_rank": "cac0a7cab934d04ab98bbdfc9762227559424d3fa5cdf24e480382b5cc899d06",
+      "session_identity": "UNKNOWN",
+      "task": "hand_pose",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "MODEL_SELECTION",
+        "VAL"
+      ],
+      "recording_id": "recording:8d51b482abc64ad7af84b3fe",
+      "root_episode_id": "capture:b63bc72d2e8b2ee395e966f6",
+      "sample_rank": "d9d2598cf9a0e6768cfffa7c6ac8e67c795f508e03ceadc30cc225a0aa1379be",
+      "session_identity": "UNKNOWN",
+      "task": "bi_hand",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-20",
+      "historical_roles": [
+        "USAGE_UNKNOWN"
+      ],
+      "recording_id": "recording:339e9099faa56a79b627fda5",
+      "root_episode_id": "capture:b70297470e5e9fc8d030706e",
+      "sample_rank": "78457f888a4eef2dec2e88eda2cf5c71f89c02a659e48604a22e7eed5f2abf34",
+      "session_identity": "UNKNOWN",
+      "task": "fruit",
+      "teleop_revision": "900fa5f26990600e11436a39d682016c2a42f1dca0086c3489dc45f26c1972f0"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "MODEL_SELECTION",
+        "VAL"
+      ],
+      "recording_id": "recording:366fe9c94a4078f7e0cfb3d5",
+      "root_episode_id": "capture:b87d55215a7b4038f575c980",
+      "sample_rank": "44c14e4dfd7a4e776b222980a14b1b8605ebc6ec214771d67dfe364ecfe93f1f",
+      "session_identity": "UNKNOWN",
+      "task": "arm_motion",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:9080a6d0ace275a01aea0e44",
+      "root_episode_id": "capture:bb5de955239eef5b1d2905ef",
+      "sample_rank": "7c239bec402da6807b5e622bb937265286b94de61c08e936cb1b53bd9b97954a",
+      "session_identity": "UNKNOWN",
+      "task": "arm_motion",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:350666047db83412069f01f0",
+      "root_episode_id": "capture:e9111547768c345fe7e81e0e",
+      "sample_rank": "d090380137d9c397d31fcb48a1ee0a7f424cff473a630945ea4b0cbc92644dde",
+      "session_identity": "UNKNOWN",
+      "task": "arm_motion",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "MODEL_SELECTION",
+        "VAL"
+      ],
+      "recording_id": "recording:bbe207bb28101d8d9455a6eb",
+      "root_episode_id": "capture:ec8bfe090a05041d139cf9f6",
+      "sample_rank": "3c11935fbbb4086cf1e652448adf60c309a8c3868380e818ab643912fb3ef2ee",
+      "session_identity": "UNKNOWN",
+      "task": "hand_pose",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    }
+  ],
+  "Validation": [
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:84794a93081c0b949a469ead",
+      "root_episode_id": "capture:359d7bf76d7a7d4677d6585e",
+      "sample_rank": "11747160ede19b630cc88b952315df827a29bda7be0df723b259e16c6a4e470f",
+      "session_identity": "UNKNOWN",
+      "task": "arm_motion",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:6ba87f16c91a1161b47efa2f",
+      "root_episode_id": "capture:5bf13e82640cd2c5c35e4df1",
+      "sample_rank": "14f4b4e42268e8f37d7812af506f1853044a42bc3cb8746bfecef94d7311dee5",
+      "session_identity": "UNKNOWN",
+      "task": "hand_pose",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:34d9a9976f6e7a566a29c0b8",
+      "root_episode_id": "capture:803fa7655c2b3b01ed771c5b",
+      "sample_rank": "01ead786c1fc8b5429cbd11f6dd0bc594298ea1f2ea47408d14bf8d1475fe55e",
+      "session_identity": "UNKNOWN",
+      "task": "arm_motion",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-20",
+      "historical_roles": [
+        "USAGE_UNKNOWN"
+      ],
+      "recording_id": "recording:30d00a5452b46fe0c89ed936",
+      "root_episode_id": "capture:84d75398497941b2ac85b0f3",
+      "sample_rank": "18d27fd3d875281ced5ebfe6f82f79766b556602bf6e8f9077d6ef99343e9dea",
+      "session_identity": "UNKNOWN",
+      "task": "fruit",
+      "teleop_revision": "900fa5f26990600e11436a39d682016c2a42f1dca0086c3489dc45f26c1972f0"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:accb68c9afa37e2c2edce4a0",
+      "root_episode_id": "capture:a0cb71cb6806e10bbcf6cc7a",
+      "sample_rank": "1204eca3cc658693060f4984e61bfbda8c3a3a7a7d66aeaec54a372c4f1bd4a3",
+      "session_identity": "UNKNOWN",
+      "task": "arm_motion",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-12",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:8800a1148baaa5ee2d0d517b",
+      "root_episode_id": "capture:a34b6b9544d8f84e440282be",
+      "sample_rank": "b164b3bf63f3338df50c966b5d16b981046a645b1be31db72cdeeebdce1a3837",
+      "session_identity": "UNKNOWN",
+      "task": "bi_hand",
+      "teleop_revision": "e050914a6a3ac98744d28c73d4445db621111b9861ba13115a5872ba77cabc7c"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "MODEL_SELECTION",
+        "VAL"
+      ],
+      "recording_id": "recording:4c01f4c2dd26d888138cdc73",
+      "root_episode_id": "capture:b0f31ba1d6c26e94ab2c7289",
+      "sample_rank": "02fb49ac9a7494d9ebb5583ae54a4d7305a16787b3503705277e6d0ba0801da2",
+      "session_identity": "UNKNOWN",
+      "task": "arm_hand",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    },
+    {
+      "calibration_sha256": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84",
+      "capture_date": "2026-11-13",
+      "historical_roles": [
+        "TRAIN"
+      ],
+      "recording_id": "recording:9d0b8a112dcf83a37ec605c8",
+      "root_episode_id": "capture:d0e7ee58285307de8b1a4b93",
+      "sample_rank": "02701f21cb746ad97e78ce179c9c2c454d0a59c7f00038e623733cb373e53a8b",
+      "session_identity": "UNKNOWN",
+      "task": "arm_hand",
+      "teleop_revision": "83d10d3bfb2158d61b112184f5be5de59eeab98d3ac5e6dfaa024e1e7b766644"
+    }
+  ],
+  "rule": "SHA order after max new task/date/config breadth, preserve Train labels when possible; inherit root for derivatives",
+  "schema": "s05.hmb.development_split.v1",
+  "seed": 501091
+}

@@ -87,8 +87,8 @@
     "P01-A": "ACCEPTED",
     "P01-B": "BLOCKED",
     "P01-B-HMB": "ACCEPTED",
-    "P01-C": "READY_FOR_REVIEW",
-    "P01-D": "NOT_STARTED",
+    "P01-C": "ACCEPTED",
+    "P01-D": "READY_FOR_REVIEW",
     "P01-E": "NOT_STARTED",
     "P01-F": "NOT_STARTED",
     "P01-T": "BLOCKED"
@@ -219,6 +219,43 @@
       "evidence_ref": "evidence/P01_C_review/review_receipt.json",
       "evidence_sha256": "21f06148cc7672d5193d7661e3d872e168414290056b23715f512c1693c0fc6e",
       "report_ref": "reports/P01_C_review_fix.md"
+    },
+    {
+      "phase": "P01-C",
+      "from": "READY_FOR_REVIEW",
+      "to": "ACCEPTED",
+      "scope": "HMB_SIM_REVIEW",
+      "at": "2026-11-26T12:37:07+08:00",
+      "reviewed_commit": "eb00f254dc71ac7f6ceef9e2c76a661ac3e912bd",
+      "evidence_ref": "evidence/P01_C_final/final_receipt.json",
+      "evidence_sha256": "d708acdba29e291043de17706e3dc77e51fff42105fa7fe76c1ed08256cef224",
+      "approval": {"type": "human", "by": "project user", "ref": "reports/approvals/P01_C_ACCEPTED_P01_D.md"}
+    },
+    {
+      "phase": "P01-D",
+      "from": "NOT_STARTED",
+      "to": "IN_PROGRESS",
+      "at": "2026-11-26T12:39:43+08:00",
+      "authorization_ref": "reports/approvals/P01_C_ACCEPTED_P01_D.md",
+      "spec_sha256": "1de9df40e11a7c73de3c99fe77c67d878e24635a0303e940639bfd37ee6b69c3",
+      "implementation_spec_ref": "specs/P01_D_dataset_freeze.md",
+      "implementation_spec_sha256": "bc7dfb0a5100a8da6f8291f5f7ba6bca4e2ce3d5494ab6fd414d0d53f15ed4e8",
+      "sample_plan_ref": "evidence/P01_D/sample_plan.json",
+      "sample_plan_sha256": "4d3b17b4eac0edceb83c1c44db8e83d8bc3c7b8012f86907797f97891b8105a4",
+      "run_id": "P01-D-20261126-eb00f25"
+    },
+    {
+      "phase": "P01-D",
+      "from": "IN_PROGRESS",
+      "to": "READY_FOR_REVIEW",
+      "at": "2026-11-26T12:53:43+08:00",
+      "technical_gates": {"D1": "PASS"},
+      "evidence_ref": "evidence/P01_D/review_receipt.json",
+      "evidence_sha256": "40bf56f01337d0ceb32f8977efc80154e40144bbc949becbb7050d12963bed93",
+      "frozen_config_ref": "evidence/P01_D/products/frozen_config.json",
+      "frozen_config_sha256": "f7f2eeba2cfc8adc9d1649618f353956470eb477a6a99448bdbe7332dd5a6d81",
+      "report_ref": "reports/P01_D_acceptance.md",
+      "scope": "development HMB freeze candidate, human approval pending"
     }
   ]
 }

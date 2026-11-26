@@ -1,0 +1,794 @@
+{
+  "Final_Test": "BLOCKED",
+  "extrapolated_50hz_valid_ticks": 112733,
+  "extrapolation": "per parent bounded valid-segment fraction × source duration × 50; P01-E replaces with observed",
+  "groups": {
+    "arm_hand": {
+      "motion": {
+        "dynamic_ticks": 927,
+        "simultaneous_bimanual_ticks": 663,
+        "simultaneous_hand_ticks": 446,
+        "simultaneous_wrist_ticks": 485,
+        "static_ticks": 146,
+        "stop_transitions": 7,
+        "unknown_motion_ticks": 7
+      },
+      "parents": 6,
+      "ticks": 1080
+    },
+    "arm_motion": {
+      "motion": {
+        "dynamic_ticks": 1656,
+        "simultaneous_bimanual_ticks": 1159,
+        "simultaneous_hand_ticks": 490,
+        "simultaneous_wrist_ticks": 924,
+        "static_ticks": 224,
+        "stop_transitions": 11,
+        "unknown_motion_ticks": 100
+      },
+      "parents": 11,
+      "ticks": 1980
+    },
+    "bi_hand": {
+      "motion": {
+        "dynamic_ticks": 257,
+        "simultaneous_bimanual_ticks": 132,
+        "simultaneous_hand_ticks": 78,
+        "simultaneous_wrist_ticks": 85,
+        "static_ticks": 103,
+        "stop_transitions": 4,
+        "unknown_motion_ticks": 0
+      },
+      "parents": 2,
+      "ticks": 360
+    },
+    "fruit": {
+      "motion": {
+        "dynamic_ticks": 316,
+        "simultaneous_bimanual_ticks": 190,
+        "simultaneous_hand_ticks": 66,
+        "simultaneous_wrist_ticks": 123,
+        "static_ticks": 44,
+        "stop_transitions": 1,
+        "unknown_motion_ticks": 0
+      },
+      "parents": 2,
+      "ticks": 360
+    },
+    "hand_pose": {
+      "motion": {
+        "dynamic_ticks": 1611,
+        "simultaneous_bimanual_ticks": 1061,
+        "simultaneous_hand_ticks": 778,
+        "simultaneous_wrist_ticks": 375,
+        "static_ticks": 311,
+        "stop_transitions": 7,
+        "unknown_motion_ticks": 58
+      },
+      "parents": 11,
+      "ticks": 1980
+    }
+  },
+  "motion": {
+    "dynamic_ticks": 4767,
+    "simultaneous_bimanual_ticks": 3205,
+    "simultaneous_hand_ticks": 1858,
+    "simultaneous_wrist_ticks": 1992,
+    "static_ticks": 828,
+    "stop_transitions": 30,
+    "unknown_motion_ticks": 165
+  },
+  "observed_causal_joint": 5598,
+  "observed_offline_joint": 5319,
+  "observed_segment_count": 115,
+  "observed_segment_ticks_distribution": {
+    "10": 3,
+    "12": 1,
+    "14": 1,
+    "15": 2,
+    "17": 1,
+    "19": 2,
+    "21": 1,
+    "22": 2,
+    "23": 1,
+    "25": 1,
+    "27": 1,
+    "28": 1,
+    "29": 1,
+    "31": 1,
+    "32": 2,
+    "33": 1,
+    "34": 1,
+    "35": 1,
+    "37": 1,
+    "38": 1,
+    "39": 1,
+    "40": 2,
+    "42": 1,
+    "45": 1,
+    "46": 1,
+    "49": 2,
+    "5": 2,
+    "50": 1,
+    "54": 1,
+    "55": 2,
+    "58": 2,
+    "6": 1,
+    "60": 71,
+    "9": 1
+  },
+  "observed_ticks": 5760,
+  "observed_unsafe_ticks": 123,
+  "parents": 32,
+  "per_core_moving": {
+    "manus_left": 2727,
+    "manus_right": 3127,
+    "tracker_left": 2703,
+    "tracker_right": 2784
+  },
+  "raw_seconds": 2331.957437948,
+  "scope": "bounded measurements and separate extrapolation",
+  "source_rows": [
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 4,
+      "observed_segment_ticks": [
+        60,
+        19,
+        39,
+        60
+      ],
+      "parent": "capture:8c85b5bd93595270f134bf72",
+      "projection_50hz_valid_ticks": 2520,
+      "raw_source_seconds": 50.964746260000005,
+      "recording_id": "recording:01ee4f951950370ea9ecddae",
+      "sampled_causal_joint_ticks": 179,
+      "sampled_invalid_joint_seconds": 0.02,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.58,
+      "sampled_valid_segment_seconds": 3.56,
+      "sampled_valid_segment_ticks": 178,
+      "task": "hand_pose"
+    },
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 5,
+      "observed_segment_ticks": [
+        25,
+        34,
+        22,
+        37,
+        60
+      ],
+      "parent": "capture:1bc59d07cb650ee219d5adbf",
+      "projection_50hz_valid_ticks": 224,
+      "raw_source_seconds": 4.531459626,
+      "recording_id": "recording:06f3bc9ae8b6df054b6f7538",
+      "sampled_causal_joint_ticks": 178,
+      "sampled_invalid_joint_seconds": 0.04,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.56,
+      "sampled_valid_segment_seconds": 3.56,
+      "sampled_valid_segment_ticks": 178,
+      "task": "hand_pose"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 4,
+      "observed_segment_ticks": [
+        60,
+        60,
+        10,
+        46
+      ],
+      "parent": "capture:6fb07249fb5b858f8269a562",
+      "projection_50hz_valid_ticks": 3760,
+      "raw_source_seconds": 76.915338682,
+      "recording_id": "recording:189e51a5df45ea33d051ffcf",
+      "sampled_causal_joint_ticks": 176,
+      "sampled_invalid_joint_seconds": 0.08,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.52,
+      "sampled_valid_segment_seconds": 3.52,
+      "sampled_valid_segment_ticks": 176,
+      "task": "arm_motion"
+    },
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 4,
+      "observed_segment_ticks": [
+        60,
+        60,
+        19,
+        35
+      ],
+      "parent": "capture:84d149ff204d06f24ac72ebc",
+      "projection_50hz_valid_ticks": 4458,
+      "raw_source_seconds": 92.235938542,
+      "recording_id": "recording:22f122bf51dfc6b4c21ac4b1",
+      "sampled_causal_joint_ticks": 174,
+      "sampled_invalid_joint_seconds": 0.12,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.48,
+      "sampled_valid_segment_seconds": 3.48,
+      "sampled_valid_segment_ticks": 174,
+      "task": "arm_hand"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:5460d9dca502d3924632a907",
+      "projection_50hz_valid_ticks": 3328,
+      "raw_source_seconds": 66.565940693,
+      "recording_id": "recording:28e5a46fe95f2f5803bf377d",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "hand_pose"
+    },
+    {
+      "date": "2026-11-20",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:84d75398497941b2ac85b0f3",
+      "projection_50hz_valid_ticks": 3683,
+      "raw_source_seconds": 73.65434994600001,
+      "recording_id": "recording:30d00a5452b46fe0c89ed936",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "fruit"
+    },
+    {
+      "date": "2026-11-20",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:b70297470e5e9fc8d030706e",
+      "projection_50hz_valid_ticks": 2364,
+      "raw_source_seconds": 47.287449616,
+      "recording_id": "recording:339e9099faa56a79b627fda5",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "fruit"
+    },
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        50,
+        9,
+        58
+      ],
+      "parent": "capture:803fa7655c2b3b01ed771c5b",
+      "projection_50hz_valid_ticks": 2396,
+      "raw_source_seconds": 73.714181069,
+      "recording_id": "recording:34d9a9976f6e7a566a29c0b8",
+      "sampled_causal_joint_ticks": 117,
+      "sampled_invalid_joint_seconds": 1.26,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 2.34,
+      "sampled_valid_segment_seconds": 2.34,
+      "sampled_valid_segment_ticks": 117,
+      "task": "arm_motion"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:e9111547768c345fe7e81e0e",
+      "projection_50hz_valid_ticks": 4586,
+      "raw_source_seconds": 91.720667563,
+      "recording_id": "recording:350666047db83412069f01f0",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "arm_motion"
+    },
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:b87d55215a7b4038f575c980",
+      "projection_50hz_valid_ticks": 3538,
+      "raw_source_seconds": 70.76983761700001,
+      "recording_id": "recording:366fe9c94a4078f7e0cfb3d5",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "arm_motion"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:b0f31ba1d6c26e94ab2c7289",
+      "projection_50hz_valid_ticks": 4191,
+      "raw_source_seconds": 83.829489721,
+      "recording_id": "recording:4c01f4c2dd26d888138cdc73",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "arm_hand"
+    },
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:2edc372773190c61446b634c",
+      "projection_50hz_valid_ticks": 3226,
+      "raw_source_seconds": 64.514950834,
+      "recording_id": "recording:4e5319e373fc2a90a1c33861",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "arm_motion"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 6,
+      "observed_segment_ticks": [
+        22,
+        5,
+        27,
+        60,
+        49,
+        10
+      ],
+      "parent": "capture:2151546f1c0b35e04218a1bb",
+      "projection_50hz_valid_ticks": 4284,
+      "raw_source_seconds": 89.149380448,
+      "recording_id": "recording:51adcf9b11cd609ee6efaf88",
+      "sampled_causal_joint_ticks": 176,
+      "sampled_invalid_joint_seconds": 0.08,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.52,
+      "sampled_valid_segment_seconds": 3.46,
+      "sampled_valid_segment_ticks": 173,
+      "task": "arm_hand"
+    },
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:9e230fc5926c7a9444ebdd09",
+      "projection_50hz_valid_ticks": 3903,
+      "raw_source_seconds": 78.068218723,
+      "recording_id": "recording:69fee6c9daa61d68031317bd",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "arm_hand"
+    },
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        31
+      ],
+      "parent": "capture:5bf13e82640cd2c5c35e4df1",
+      "projection_50hz_valid_ticks": 1908,
+      "raw_source_seconds": 45.487244194000006,
+      "recording_id": "recording:6ba87f16c91a1161b47efa2f",
+      "sampled_causal_joint_ticks": 152,
+      "sampled_invalid_joint_seconds": 0.56,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.04,
+      "sampled_valid_segment_seconds": 3.02,
+      "sampled_valid_segment_ticks": 151,
+      "task": "hand_pose"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 4,
+      "observed_segment_ticks": [
+        60,
+        32,
+        23,
+        58
+      ],
+      "parent": "capture:3118754b1d9742a2718048e2",
+      "projection_50hz_valid_ticks": 4549,
+      "raw_source_seconds": 94.668182059,
+      "recording_id": "recording:732e8344f26f8afea70e2a61",
+      "sampled_causal_joint_ticks": 177,
+      "sampled_invalid_joint_seconds": 0.06,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.54,
+      "sampled_valid_segment_seconds": 3.46,
+      "sampled_valid_segment_ticks": 173,
+      "task": "arm_motion"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 7,
+      "observed_segment_ticks": [
+        15,
+        33,
+        14,
+        45,
+        40,
+        6,
+        12
+      ],
+      "parent": "capture:a94a53f04dab331aad3f21f4",
+      "projection_50hz_valid_ticks": 4050,
+      "raw_source_seconds": 88.35316985700001,
+      "recording_id": "recording:7f37957cb079709fe04735c8",
+      "sampled_causal_joint_ticks": 169,
+      "sampled_invalid_joint_seconds": 0.22,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.38,
+      "sampled_valid_segment_seconds": 3.3000000000000003,
+      "sampled_valid_segment_ticks": 165,
+      "task": "hand_pose"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        55
+      ],
+      "parent": "capture:359d7bf76d7a7d4677d6585e",
+      "projection_50hz_valid_ticks": 3991,
+      "raw_source_seconds": 82.098543566,
+      "recording_id": "recording:84794a93081c0b949a469ead",
+      "sampled_causal_joint_ticks": 179,
+      "sampled_invalid_joint_seconds": 0.02,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.58,
+      "sampled_valid_segment_seconds": 3.5,
+      "sampled_valid_segment_ticks": 175,
+      "task": "arm_motion"
+    },
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:a34b6b9544d8f84e440282be",
+      "projection_50hz_valid_ticks": 3839,
+      "raw_source_seconds": 76.789976032,
+      "recording_id": "recording:8800a1148baaa5ee2d0d517b",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "bi_hand"
+    },
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:406fe87c6799120301158f3a",
+      "projection_50hz_valid_ticks": 2294,
+      "raw_source_seconds": 45.871863659000006,
+      "recording_id": "recording:89f09cb37b13dc62b5f9eb96",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "hand_pose"
+    },
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:b63bc72d2e8b2ee395e966f6",
+      "projection_50hz_valid_ticks": 4843,
+      "raw_source_seconds": 96.86826722900001,
+      "recording_id": "recording:8d51b482abc64ad7af84b3fe",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "bi_hand"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 5,
+      "observed_segment_ticks": [
+        60,
+        15,
+        40,
+        5,
+        54
+      ],
+      "parent": "capture:bb5de955239eef5b1d2905ef",
+      "projection_50hz_valid_ticks": 4554,
+      "raw_source_seconds": 94.22924835900001,
+      "recording_id": "recording:9080a6d0ace275a01aea0e44",
+      "sampled_causal_joint_ticks": 176,
+      "sampled_invalid_joint_seconds": 0.08,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.52,
+      "sampled_valid_segment_seconds": 3.48,
+      "sampled_valid_segment_ticks": 174,
+      "task": "arm_motion"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:7df0193e6cf8cf09cd304b77",
+      "projection_50hz_valid_ticks": 2749,
+      "raw_source_seconds": 54.973481399,
+      "recording_id": "recording:91313e7486d06640e3878f8d",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "hand_pose"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:378ae16c5078ff3880ede8d9",
+      "projection_50hz_valid_ticks": 3820,
+      "raw_source_seconds": 76.392754071,
+      "recording_id": "recording:948b79aeaa123f770309a860",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "arm_hand"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 4,
+      "observed_segment_ticks": [
+        21,
+        38,
+        60,
+        60
+      ],
+      "parent": "capture:d0e7ee58285307de8b1a4b93",
+      "projection_50hz_valid_ticks": 3975,
+      "raw_source_seconds": 79.941177927,
+      "recording_id": "recording:9d0b8a112dcf83a37ec605c8",
+      "sampled_causal_joint_ticks": 179,
+      "sampled_invalid_joint_seconds": 0.02,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.58,
+      "sampled_valid_segment_seconds": 3.58,
+      "sampled_valid_segment_ticks": 179,
+      "task": "arm_hand"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        32,
+        60
+      ],
+      "parent": "capture:a0cb71cb6806e10bbcf6cc7a",
+      "projection_50hz_valid_ticks": 3796,
+      "raw_source_seconds": 89.907840727,
+      "recording_id": "recording:accb68c9afa37e2c2edce4a0",
+      "sampled_causal_joint_ticks": 153,
+      "sampled_invalid_joint_seconds": 0.54,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.06,
+      "sampled_valid_segment_seconds": 3.04,
+      "sampled_valid_segment_ticks": 152,
+      "task": "arm_motion"
+    },
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        55,
+        60,
+        60
+      ],
+      "parent": "capture:6b3b94ebe706970ec08979e9",
+      "projection_50hz_valid_ticks": 3743,
+      "raw_source_seconds": 76.997592665,
+      "recording_id": "recording:b3ba693f07cb972d825dfa65",
+      "sampled_causal_joint_ticks": 178,
+      "sampled_invalid_joint_seconds": 0.04,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.56,
+      "sampled_valid_segment_seconds": 3.5,
+      "sampled_valid_segment_ticks": 175,
+      "task": "arm_motion"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 5,
+      "observed_segment_ticks": [
+        60,
+        29,
+        28,
+        42,
+        17
+      ],
+      "parent": "capture:ec8bfe090a05041d139cf9f6",
+      "projection_50hz_valid_ticks": 4054,
+      "raw_source_seconds": 82.918633509,
+      "recording_id": "recording:bbe207bb28101d8d9455a6eb",
+      "sampled_causal_joint_ticks": 176,
+      "sampled_invalid_joint_seconds": 0.08,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.52,
+      "sampled_valid_segment_seconds": 3.52,
+      "sampled_valid_segment_ticks": 176,
+      "task": "hand_pose"
+    },
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:57223e1ea4fd73f5aa16c512",
+      "projection_50hz_valid_ticks": 2820,
+      "raw_source_seconds": 56.405375246000006,
+      "recording_id": "recording:c59e65d7a17e7253670ba0cf",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "hand_pose"
+    },
+    {
+      "date": "2026-11-12",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:6154b09c32ffe84771d612f1",
+      "projection_50hz_valid_ticks": 2604,
+      "raw_source_seconds": 52.071395959,
+      "recording_id": "recording:d714302e1f994fd06be08081",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "hand_pose"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 4,
+      "observed_segment_ticks": [
+        49,
+        10,
+        60,
+        60
+      ],
+      "parent": "capture:54911698b12e5b40cd8bfe65",
+      "projection_50hz_valid_ticks": 3687,
+      "raw_source_seconds": 74.15002885300001,
+      "recording_id": "recording:ee81ae8d41d24c9980f85588",
+      "sampled_causal_joint_ticks": 179,
+      "sampled_invalid_joint_seconds": 0.02,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.58,
+      "sampled_valid_segment_seconds": 3.58,
+      "sampled_valid_segment_ticks": 179,
+      "task": "hand_pose"
+    },
+    {
+      "date": "2026-11-13",
+      "observed_segment_count": 3,
+      "observed_segment_ticks": [
+        60,
+        60,
+        60
+      ],
+      "parent": "capture:982b9b5f7d882e16937303ce",
+      "projection_50hz_valid_ticks": 4996,
+      "raw_source_seconds": 99.910713297,
+      "recording_id": "recording:f2ffe6465a81f11d129442bb",
+      "sampled_causal_joint_ticks": 180,
+      "sampled_invalid_joint_seconds": 0.0,
+      "sampled_seconds": 3.6,
+      "sampled_valid_joint_seconds": 3.6,
+      "sampled_valid_segment_seconds": 3.6,
+      "sampled_valid_segment_ticks": 180,
+      "task": "arm_motion"
+    }
+  ],
+  "verified_control_ticks": 0,
+  "windows": 96
+}

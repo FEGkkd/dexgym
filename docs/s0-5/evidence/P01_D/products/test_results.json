@@ -1,0 +1,94 @@
+{
+  "checks": {
+    "headroom": true,
+    "lineage_split": true,
+    "production_round_trip": true,
+    "qc_scope": true,
+    "source_coverage": true,
+    "version_identity": true
+  },
+  "current": {
+    "integration": {
+      "command": "-m unittest discover -s tests/s0_5/integration -p test_p01d_real_hmb.py -v",
+      "exit": 0,
+      "fail_tail": [],
+      "hashes": {
+        "integration.command": "170a2737d6657abcdf3f214eed8df0c8b633c73fe6bc477175fcaacee38699e6",
+        "integration.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "integration.stderr": "c94290b3fd5f853c75a4362ec76b9a0b0a5270f451c31f19d743c4e73f99adb7",
+        "integration.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "skipped": false,
+      "status": "PASS",
+      "tests": 3
+    },
+    "study": {
+      "command": "-m dexgym.tasks.direct.wholebody_s05.data.p01d_freeze study --plan docs/s0-5/evidence/P01_D/sample_plan.json --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --old-b /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-20261126-46ed5e2/attempt-04 --old-review /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-REVIEW-20261126-f32d6bb-r02 --resource /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/resource_preflight.json --original-c /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/attempt-03 --review-c /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-REVIEW-20261126-0d9d351/attempt-03 --final-c /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-REVIEW-FINAL-20261126-aecfd2d/attempt-02 --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-D-20261126-eb00f25/attempt-02/products",
+      "exit": 0,
+      "fail_tail": [],
+      "hashes": {
+        "study.command": "2d113e0b0ec0d7122b990174c7a3a4eb3c0ac695735c79df5ba9be0549061fc7",
+        "study.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "study.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "study.stdout": "1bb1c4ed4480d1872204eeb0ebeae9979984c70b109f1c87730a4ddeb1418ab6"
+      },
+      "skipped": false,
+      "status": "PASS",
+      "tests": null
+    },
+    "unit": {
+      "command": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+      "exit": 0,
+      "fail_tail": [],
+      "hashes": {
+        "unit.command": "165be27b27fbb35c7fcd795d50fb4321a5c087efb918ff6c864bb50a9a8a4e36",
+        "unit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "unit.stderr": "e7e7cdd5102277db4f21b04639f4388861fda9a0c6fe16480931064d0e9d5636",
+        "unit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "skipped": false,
+      "status": "PASS",
+      "tests": 84
+    }
+  },
+  "manual_approval": false,
+  "prior_attempts": {
+    "attempt-01": {
+      "integration": {
+        "exit": null,
+        "status": "NOT_RUN"
+      },
+      "study": {
+        "command": "-m dexgym.tasks.direct.wholebody_s05.data.p01d_freeze study --plan docs/s0-5/evidence/P01_D/sample_plan.json --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --old-b /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-20261126-46ed5e2/attempt-04 --old-review /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-REVIEW-20261126-f32d6bb-r02 --resource /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/resource_preflight.json --original-c /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/attempt-03 --review-c /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-REVIEW-20261126-0d9d351/attempt-03 --final-c /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-REVIEW-FINAL-20261126-aecfd2d/attempt-02 --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-D-20261126-eb00f25/attempt-01/products",
+        "exit": 0,
+        "fail_tail": [],
+        "hashes": {
+          "study.command": "5f36b3ab839a4ff2eb861538324e412d209b624989d1e8f9007055300ec37199",
+          "study.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "study.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "study.stdout": "57ab5e88474e8e8a9f0faa1e322c8ca2cc890013111161ba96839482a231a1b4"
+        },
+        "skipped": false,
+        "status": "PASS",
+        "tests": null
+      },
+      "unit": {
+        "command": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+        "exit": 0,
+        "fail_tail": [],
+        "hashes": {
+          "unit.command": "165be27b27fbb35c7fcd795d50fb4321a5c087efb918ff6c864bb50a9a8a4e36",
+          "unit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "unit.stderr": "390ba0cc418ddb1db22f12facb31b8cd4191198f91803f918ce1bb22fd86e0b5",
+          "unit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "skipped": false,
+        "status": "PASS",
+        "tests": 83
+      }
+    }
+  },
+  "technical_gates": {
+    "D1": "PASS"
+  }
+}

@@ -1,0 +1,361 @@
+{
+  "allowed_use": "HISTORICAL_SIMULATION_DEVELOPMENT_ONLY",
+  "arrays": {
+    "causal": {
+      "age_ns": [
+        "int64",
+        "T,S",
+        "ns",
+        "tick minus capture lower, -1 unknown"
+      ],
+      "arrival_bounds_ns": [
+        "int64",
+        "T,S,2",
+        "ns",
+        "arrival lower and upper; simulated"
+      ],
+      "calibration_id": [
+        "int32",
+        "T,S",
+        "index",
+        "-1 unknown; dictionary in metadata"
+      ],
+      "capture_bounds_ns": [
+        "int64",
+        "T,S,2",
+        "ns",
+        "capture lower and upper; simulated"
+      ],
+      "clock_generation": [
+        "int32",
+        "T,S",
+        "index",
+        "-1 unknown; dictionary in metadata"
+      ],
+      "clock_quality": [
+        "uint8",
+        "T,S",
+        "index",
+        "quality enum; never VERIFIED in this format"
+      ],
+      "cutoff_ns": [
+        "int64",
+        "T",
+        "ns",
+        "information cutoff"
+      ],
+      "joint_valid": [
+        "bool",
+        "T",
+        "1",
+        "four core streams; raw wrists diagnostic"
+      ],
+      "node_mask": [
+        "bool",
+        "T,S,N",
+        "1",
+        "populated geometric nodes"
+      ],
+      "pose": [
+        "float64",
+        "T,S,N,7",
+        "m,XYZW",
+        "palm-local for MANUS, recorded frame for raw/registered wrist"
+      ],
+      "pose_valid": [
+        "bool",
+        "T,S",
+        "1",
+        "independent pose validity"
+      ],
+      "reason_code": [
+        "uint8",
+        "T,S",
+        "index",
+        "pose reason registry"
+      ],
+      "safety_permission": [
+        "bool",
+        "T",
+        "1",
+        "qualified safety at tick"
+      ],
+      "safety_source_index": [
+        "int64",
+        "T",
+        "index",
+        "-1 if unavailable; see source table"
+      ],
+      "sdk_common_pose": [
+        "float64",
+        "T,S,N,7",
+        "m,XYZW",
+        "original SDK common frame; MANUS only"
+      ],
+      "segment_id": [
+        "int32",
+        "T",
+        "index",
+        "-1 unassigned, no stitching across blocks"
+      ],
+      "source_index": [
+        "int64",
+        "T,S,2",
+        "index",
+        "-1 missing; ordered endpoints table"
+      ],
+      "tick_ns": [
+        "int64",
+        "T",
+        "ns",
+        "collector monotonic relative to episode start"
+      ],
+      "topology_id": [
+        "int32",
+        "T,S",
+        "index",
+        "-1 unknown; dictionary in metadata"
+      ],
+      "velocity_age_ns": [
+        "int64",
+        "T,S",
+        "ns",
+        "-1 unknown or offline"
+      ],
+      "velocity_m_s": [
+        "float64",
+        "T,S,N,3",
+        "m/s",
+        "same frame as pose"
+      ],
+      "velocity_quality": [
+        "uint8",
+        "T,S",
+        "index",
+        "quality enum; 0 for invalid"
+      ],
+      "velocity_reason_code": [
+        "uint8",
+        "T,S",
+        "index",
+        "independent velocity reason registry"
+      ],
+      "velocity_valid": [
+        "bool",
+        "T,S",
+        "1",
+        "independent velocity validity"
+      ]
+    },
+    "offline": {
+      "bracket_ns": [
+        "int64",
+        "T,S,2",
+        "ns",
+        "same recorder proxy domain source interval"
+      ],
+      "bracket_safe": [
+        "bool",
+        "T,S",
+        "1",
+        "whole bracket has qualified safety"
+      ],
+      "bracket_span_ns": [
+        "int64",
+        "T,S",
+        "ns",
+        "bracket upper minus lower, -1 missing"
+      ],
+      "calibration_id": [
+        "int32",
+        "T,S",
+        "index",
+        "-1 unknown; dictionary in metadata"
+      ],
+      "clock_generation": [
+        "int32",
+        "T,S",
+        "index",
+        "-1 unknown; dictionary in metadata"
+      ],
+      "clock_quality": [
+        "uint8",
+        "T,S",
+        "index",
+        "quality enum; never VERIFIED in this format"
+      ],
+      "interpolation_weight": [
+        "float64",
+        "T,S",
+        "1",
+        "weight of right endpoint"
+      ],
+      "joint_valid": [
+        "bool",
+        "T",
+        "1",
+        "four core streams; raw wrists diagnostic"
+      ],
+      "node_mask": [
+        "bool",
+        "T,S,N",
+        "1",
+        "populated geometric nodes"
+      ],
+      "pose": [
+        "float64",
+        "T,S,N,7",
+        "m,XYZW",
+        "palm-local for MANUS, recorded frame for raw/registered wrist"
+      ],
+      "pose_valid": [
+        "bool",
+        "T,S",
+        "1",
+        "independent pose validity"
+      ],
+      "reason_code": [
+        "uint8",
+        "T,S",
+        "index",
+        "pose reason registry"
+      ],
+      "safety_permission": [
+        "bool",
+        "T",
+        "1",
+        "qualified safety at tick"
+      ],
+      "safety_source_index": [
+        "int64",
+        "T",
+        "index",
+        "-1 if unavailable; see source table"
+      ],
+      "sdk_common_pose": [
+        "float64",
+        "T,S,N,7",
+        "m,XYZW",
+        "original SDK common frame; MANUS only"
+      ],
+      "segment_id": [
+        "int32",
+        "T",
+        "index",
+        "-1 unassigned, no stitching across blocks"
+      ],
+      "source_index": [
+        "int64",
+        "T,S,2",
+        "index",
+        "-1 missing; ordered endpoints table"
+      ],
+      "tick_ns": [
+        "int64",
+        "T",
+        "ns",
+        "collector monotonic relative to episode start"
+      ],
+      "topology_id": [
+        "int32",
+        "T,S",
+        "index",
+        "-1 unknown; dictionary in metadata"
+      ],
+      "velocity_age_ns": [
+        "int64",
+        "T,S",
+        "ns",
+        "-1 unknown or offline"
+      ],
+      "velocity_m_s": [
+        "float64",
+        "T,S,N,3",
+        "m/s",
+        "same frame as pose"
+      ],
+      "velocity_quality": [
+        "uint8",
+        "T,S",
+        "index",
+        "quality enum; 0 for invalid"
+      ],
+      "velocity_reason_code": [
+        "uint8",
+        "T,S",
+        "index",
+        "independent velocity reason registry"
+      ],
+      "velocity_valid": [
+        "bool",
+        "T,S",
+        "1",
+        "independent velocity validity"
+      ]
+    }
+  },
+  "bool_padding": false,
+  "core_streams": [
+    "manus_left",
+    "manus_right",
+    "tracker_left",
+    "tracker_right"
+  ],
+  "files": [
+    "causal.npz",
+    "offline.npz",
+    "metadata.json",
+    "sources.jsonl",
+    "manifest.json"
+  ],
+  "float_padding": "NaN",
+  "integer_padding": -1,
+  "normal_forms": {
+    "XYZW": "quaternion",
+    "nodes": "preserve physical raw order; N varies by partition"
+  },
+  "schema": "s05.hmb.simulation.v1",
+  "streams": [
+    "manus_left",
+    "manus_right",
+    "tracker_left",
+    "tracker_right",
+    "tracker_left_raw",
+    "tracker_right_raw"
+  ],
+  "sync_baseline": "eb00f254dc71ac7f6ceef9e2c76a661ac3e912bd",
+  "sync_source_sha256": "13550058a3114e062c6f7ba2e92b8149659dc5870ae9a97ec256679b7ed571b5",
+  "vocabularies": {
+    "quality": [
+      "UNUSABLE",
+      "SIMULATED",
+      "PROXY",
+      "OFFLINE_PROXY"
+    ],
+    "reason": [
+      "VALID",
+      "HELD",
+      "STALE",
+      "DROPOUT",
+      "DUPLICATE_SOURCE",
+      "OUT_OF_ORDER",
+      "CLOCK_JUMP",
+      "UNSYNC",
+      "UNSAFE",
+      "SAFETY_UNKNOWN",
+      "CALIBRATION_INVALID",
+      "SOURCE_UNKNOWN",
+      "TRACKER_INVALID",
+      "SOURCE_RESTART",
+      "SOURCE_IMMUTABILITY_CONFLICT",
+      "GAP",
+      "VERSION_BOUNDARY",
+      "MANUS_INVALID",
+      "CLOCK_GENERATION",
+      "RECOVERY_FRESHNESS",
+      "FRESHNESS_UNKNOWN",
+      "VELOCITY_HISTORY",
+      "VELOCITY_TIME_UNKNOWN"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "codes": [
+    "VALID",
+    "HELD",
+    "STALE",
+    "DROPOUT",
+    "DUPLICATE_SOURCE",
+    "OUT_OF_ORDER",
+    "CLOCK_JUMP",
+    "UNSYNC",
+    "UNSAFE",
+    "SAFETY_UNKNOWN",
+    "CALIBRATION_INVALID",
+    "SOURCE_UNKNOWN",
+    "TRACKER_INVALID",
+    "SOURCE_RESTART",
+    "SOURCE_IMMUTABILITY_CONFLICT",
+    "GAP",
+    "VERSION_BOUNDARY",
+    "MANUS_INVALID",
+    "CLOCK_GENERATION",
+    "RECOVERY_FRESHNESS",
+    "FRESHNESS_UNKNOWN",
+    "VELOCITY_HISTORY",
+    "VELOCITY_TIME_UNKNOWN"
+  ],
+  "schema": "s05.hmb.simulation.v1"
+}

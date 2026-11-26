@@ -1,0 +1,85 @@
+{
+  "schema": "s05.p01d.preregister.v1",
+  "baseline": "eb00f254dc71ac7f6ceef9e2c76a661ac3e912bd",
+  "seed": 501091,
+  "selector": "All recorded A1 LIVE_TELEOP canonical root candidates; no geometry-based sampling",
+  "window_ns": 1200000000,
+  "context_ns": 250000000,
+  "offset_ns": 450000000,
+  "tick_ns": 20000000,
+  "arrival_delay_ns": 8000000,
+  "diag": {
+    "age_ns": 60000000,
+    "skew_ns": 35000000,
+    "gap_ns": 60000000,
+    "safety_age_ns": 100000000,
+    "tick_ns": 20000000,
+    "arrival_delay_ns": 8000000
+  },
+  "grid_ms": {
+    "age_ns": [
+      30,
+      45,
+      60,
+      90
+    ],
+    "left_right_skew_ns": [
+      15,
+      20,
+      25,
+      35,
+      50
+    ],
+    "wrist_hand_skew_ns": [
+      15,
+      20,
+      25,
+      35,
+      50
+    ],
+    "gap_ns": [
+      20,
+      30,
+      45,
+      60,
+      90
+    ],
+    "safety_age_ns": [
+      40,
+      60,
+      100,
+      150
+    ]
+  },
+  "min_segment_probes": [
+    3,
+    5,
+    10
+  ],
+  "chosen_segment_design_ticks": 5,
+  "min_capture_duration_ns": 2000000000,
+  "archived_clock_pair_limit_ns": 1000000,
+  "min_registered_pairs_per_side": 20,
+  "calibration_error_limits": {
+    "m": 0.00001,
+    "rad": 0.00001
+  },
+  "dynamic_threshold_m_s": 0.02,
+  "stop_dwell_ticks": 3,
+  "retention": {
+    "overall": 0.97,
+    "dynamic": 0.98,
+    "task": 0.9
+  },
+  "budgets": {
+    "input_bytes": 12000000000,
+    "event_count": 230000,
+    "physical_per_part": 400000,
+    "derived_bytes": 600000000,
+    "pilot_windows": 3,
+    "production_partition_seconds": 8,
+    "active_workers": 2,
+    "minimum_free_bytes": 20000000000,
+    "minimum_ram_available_bytes": 8000000000
+  }
+}

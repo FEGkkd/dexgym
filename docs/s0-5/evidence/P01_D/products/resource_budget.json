@@ -1,0 +1,92 @@
+{
+  "cdr_decode_extract_messages_s": 12966.434635031628,
+  "decoded_wire_messages": 270756,
+  "derived_bytes_per_raw_second": 3821580.833333333,
+  "derived_bytes_per_valid_causal_tick": 76858.60893854749,
+  "disk_available_bytes": 683041566720,
+  "highwater_process_rss_bytes": 3374055424,
+  "mcap_index_read_bytes_s": 147341181.8918421,
+  "mcap_index_read_seconds": 15.446271712891757,
+  "observed_pilot_write_amplification": 2.870347138920332,
+  "observed_read_bytes": 2275871930,
+  "pilot": {
+    "archive_peak_count": 2,
+    "causal_joint_ticks": 179,
+    "failed_target_hidden": true,
+    "idempotent_recovery": true,
+    "max_nodes": 25,
+    "parallel_equal_sha": true,
+    "parallel_seconds": 0.7181546639185399,
+    "partial_bytes": 4593637,
+    "partitions": [
+      {
+        "N": 25,
+        "bytes": 4593637,
+        "finite_left_pose": true,
+        "hashes": {
+          "causal.npz": "cb3c1d9ace7752424e1ebf91450a99264e80df6a026ffe571babe4fdd1e83969",
+          "metadata.json": "388b685b4e7751597bb2037210781d4657313676369f659163359637f6de032f",
+          "offline.npz": "301eb529fc044754fe777da320978c684e617d595cf48e152122f22ca16f49fb",
+          "sources.jsonl": "35fc3b3cb5b898e5e8c61b558a1d4f15f3640ee5af17b007da82e4d7f6ce0579"
+        },
+        "name": "01ee4f951950370ea9ecddae-head",
+        "physical_refs": 1428,
+        "ticks": 60
+      },
+      {
+        "N": 25,
+        "bytes": 4581201,
+        "finite_left_pose": true,
+        "hashes": {
+          "causal.npz": "02ccc1740dfaa479ae826e74611ab5f3a13d5cf501eb5eba6fb4d9d343226147",
+          "metadata.json": "76250e35dc48118736e398a1c921b53f212f3d5c46c03d127e3d98ac34678489",
+          "offline.npz": "176e0cac74e87a3a97565ad6b5dfbad5bc29cdd69a2405aeed91192253166223",
+          "sources.jsonl": "fe1bb8cab36f37703fb05ff9cf1d74722180a13062b62e475ff07a73e7e10224"
+        },
+        "name": "06f3bc9ae8b6df054b6f7538-head",
+        "physical_refs": 1428,
+        "ticks": 60
+      },
+      {
+        "N": 25,
+        "bytes": 4582853,
+        "finite_left_pose": true,
+        "hashes": {
+          "causal.npz": "43bd4cc1bae476e084ab5283fcaef55f8e09ccb5b0e3640ed7393245fbf2ef38",
+          "metadata.json": "cb541035d11f8bc9646d69769a203a8aa5f55c43f87bef6742460376478f0172",
+          "offline.npz": "e92537fab69e8ef4910d43fa1c08a4954fa9107622a103a78d0a1a4fdf4a3236",
+          "sources.jsonl": "0ab3edc995ee49d5e834d1f7232ab6cf92a64b222ab6dc89e432cb0d54fc511f"
+        },
+        "name": "189e51a5df45ea33d051ffcf-head",
+        "physical_refs": 1428,
+        "ticks": 60
+      }
+    ],
+    "recovery_bytes": 4593637,
+    "serial_bytes": 13757691,
+    "serial_seconds": 0.6221404471434653,
+    "writes_bytes_total": 39489349
+  },
+  "production": {
+    "conservative_repeated_index_read_bytes": 23476430258,
+    "disk_hard_reserve_bytes": 20000000000,
+    "index_read_time_estimate_seconds": 318.6675979731615,
+    "max_active_workers": 2,
+    "max_topology_nodes": 25,
+    "minimum_available_ram_bytes": 13496221696,
+    "partition_seconds": 8,
+    "pause_on": [
+      "disk/RSS reserve",
+      "unexpected source hash/schema/calibration",
+      "archive or record cap"
+    ],
+    "per_chunk_published_cap_bytes": 368500425,
+    "physical_record_pause_per_part": 400000,
+    "projected_single_pass_archive_bytes": 71610608729,
+    "required_peak_including_staging_bytes": 143221217458
+  },
+  "qualified_sources_measured": 32,
+  "ram_available_bytes": 66769309696,
+  "ram_budget_bytes": 13496221696,
+  "sync_ticks_s": 274.1706522443278
+}

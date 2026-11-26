@@ -4,6 +4,7 @@ from hashlib import sha256
 from pathlib import Path
 import json
 import subprocess
+from time import perf_counter
 
 from mcap.reader import NonSeekingReader
 import yaml
@@ -87,9 +88,10 @@ def recorded_code(snapshot, writer_conf):
     return out
 
 
-def verify_source(row,assets,prior,matrix,writer):
+def verify_source(row,assets,prior,matrix,writer,*,probe_source=False):
+    """Validate native metadata. P01-D probes must still earn bounded data eligibility."""
     if (row['status']!='ADMITTED_CANDIDATE' or row['producer_kind']!='LIVE_TELEOP' or
-            not row['root_episode_id'] or prior.get('status')!='PASS'):
+            not row['root_episode_id'] or (not probe_source and (prior or {}).get('status')!='PASS')):
         raise ValueError('P01-C selected an unverified development source')
     folder=Path(row['canonical_uri'])
     manifest,snapshot=folder/'manifest.yaml',folder/'run_snapshot.json'
@@ -138,8 +140,12 @@ def verify_source(row,assets,prior,matrix,writer):
     return m,parts,details
 
 
-def scan_stream(stream,parts,windows,context_ns,max_messages, *, find_unsafe=False):
+def scan_stream(stream,parts,windows,context_ns,max_messages, *, find_unsafe=False,measurement=None):
+    started=perf_counter()
     bank=EmbeddedDecoders()
+    decode_seconds=0.
+    decoded_messages=0
+    indexed_messages=0
     count=0
     previous_sequence=-1
     kept=[]
@@ -149,6 +155,7 @@ def scan_stream(stream,parts,windows,context_ns,max_messages, *, find_unsafe=Fal
         with path.open('rb') as f:
             reader=NonSeekingReader(f,validate_crcs=True,record_size_limit=32*2**20)
             for i,(schema,channel,msg) in enumerate(reader.iter_messages(log_time_order=False)):
+                indexed_messages+=1
                 if i>=max_messages:
                     raise ValueError(f'Physical index budget reached: {path}')
                 topic=channel.topic
@@ -169,13 +176,20 @@ def scan_stream(stream,parts,windows,context_ns,max_messages, *, find_unsafe=Fal
                     continue
                 idx,raw,raw_schema,raw_channel,selected=pending
                 pending=None
+                t=perf_counter() if measurement is not None else 0.
                 observed,_=message_fields(bank.decode(channel.message_encoding,schema,msg.data))
+                if measurement is not None:
+                    decode_seconds+=perf_counter()-t
                 if (idx+1!=i or raw.log_time!=msg.log_time or raw.log_time!=observed['host_realtime_ns'] or
                         observed['stream_id']!=stream or observed['source_instance_id']!=decl['source_instance_id'] or
                         observed['episode_sample_index']!=count-1 or observed['source_sequence_id']<=previous_sequence):
                     raise ValueError(f'Writer or sample identity mismatch: {path}:{idx}')
                 previous_sequence=observed['source_sequence_id']
+                t=perf_counter() if measurement is not None else 0.
                 fields,nonfinite=message_fields(bank.decode(raw_channel.message_encoding,raw_schema,raw.data))
+                if measurement is not None:
+                    decode_seconds+=perf_counter()-t
+                    decoded_messages+=2
                 if find_unsafe:
                     if fields.get('safe') is False:
                         return raw.log_time
@@ -202,4 +216,8 @@ def scan_stream(stream,parts,windows,context_ns,max_messages, *, find_unsafe=Fal
         return None
     if count!=decl['written']:
         raise ValueError(f'Manifest writer count changed for {stream}: {count}/{decl["written"]}')
+    if measurement is not None:
+        measurement.update(wall_seconds=perf_counter()-started,cdr_and_extract_seconds=decode_seconds,
+                           cdr_messages=decoded_messages,indexed_messages=indexed_messages,
+                           asset_bytes=sum(asset['size_bytes'] for asset,_,_ in parts))
     return kept,count

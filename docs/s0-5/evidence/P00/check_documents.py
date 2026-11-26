@@ -172,11 +172,12 @@ def p01_dependency_states(document):
                         f'{owner} requires the reapproved v0.2.1 spec')
             if owner=='P01-C':
                 scopes[owner]=event.get('scope')
+            if owner in ('P01-C','P01-D'):
                 for field in ('implementation_spec','sample_plan'):
                     artifact=checked_file(ROOT,event[f'{field}_ref'])
                     require(digest(artifact.read_bytes())==event[f'{field}_sha256'],
                             f'{owner} frozen {field} differs')
-                if event.get('scope')=='HMB_SIM_REVIEW':
+                if owner=='P01-C' and event.get('scope')=='HMB_SIM_REVIEW':
                     require(clock_dcr and moment>=datetime.fromisoformat(clock_dcr['approved_at']) and
                             event['implementation_spec_sha256']==clock_dcr['spec_sha256'],
                             'P01-C simulation review requires the approved review spec')
@@ -219,11 +220,32 @@ def p01_dependency_states(document):
                         f'{owner} receipt differs from logged {gate} outcome')
                 require(status!='READY_FOR_REVIEW' or actual=='PASS',
                         f'{owner} receipt does not support {gate} technical PASS')
+            if owner=='P01-D' and status=='READY_FOR_REVIEW':
+                frozen=checked_file(ROOT,event['frozen_config_ref'])
+                require(digest(frozen.read_bytes())==event['frozen_config_sha256']==receipt['candidate_config_sha256'],
+                        'P01-D frozen config must match the reviewed exact bytes')
+                require(load_json(frozen)['approval']=='PROPOSED_PENDING_HUMAN',
+                        'P01-D technical gate does not grant human freeze approval')
         if status=='ACCEPTED':
             approval=event.get('approval',{})
             require(approval.get('type')=='human' and bool(approval.get('by')) and bool(approval.get('ref')),
                     f'{owner} requires human ACCEPTED')
             checked_file(ROOT,approval['ref'])
+            if owner=='P01-C' and scopes.get(owner)=='HMB_SIM_REVIEW':
+                require(event.get('scope')=='HMB_SIM_REVIEW','P01-C acceptance scope differs from review')
+                path=event['evidence_ref']
+                receipt=checked_file(ROOT,path)
+                witness=event['evidence_sha256']
+                require(digest(receipt.read_bytes())==witness,'P01-C final receipt hash mismatch')
+                commit=event.get('reviewed_commit','')
+                require(bool(re.fullmatch(r'[0-9a-f]{40}',commit)),'P01-C acceptance requires the reviewed commit')
+                published=git('show',f'{commit}:docs/s0-5/{path}')
+                require(published.returncode==0 and digest(published.stdout)==witness,
+                        'Final receipt differs from reviewed P01-C commit')
+                technical=load_json(receipt)
+                require(technical['scope']=='HMB_SIM_REVIEW' and
+                        all(technical['technical_gates'].get(k)=='PASS' for k in ('C1-GEO','C2-SIM')),
+                        'P01-C approval requires successful bounded technical gates')
             accepted[owner]=moment
         else:
             accepted.pop(owner,None)
@@ -310,7 +332,8 @@ def structure():
     require(all(len(r)==9 and all(r) for r in matrix) and [r[2] for r in req]==[r[3] for r in matrix],
             'Traceability row/ownership')
     p01_adjuncts={'P01_T_telemetry_acquisition.md','P01_C_calibration_and_causal_sync.md',
-                  'P01_C_RT_clock_qualification.md','P01_C_simulation_review_v0.2.0.md'}
+                  'P01_C_RT_clock_qualification.md','P01_C_simulation_review_v0.2.0.md',
+                  'P01_D_dataset_freeze.md'}
     specs = sorted(s for s in (ROOT / 'specs').glob('P??_*.md') if s.name not in p01_adjuncts)
     require(tuple(s.name[:3] for s in specs) == PHASES, 'Phase spec list')
     for spec in specs:

@@ -1,0 +1,222 @@
+{
+  "attempt": "attempt-02",
+  "baseline": "eb00f254dc71ac7f6ceef9e2c76a661ac3e912bd",
+  "candidate_config_sha256": "f7f2eeba2cfc8adc9d1649618f353956470eb477a6a99448bdbe7332dd5a6d81",
+  "contents": {
+    "build_protocol": "86f2a336ccaeed6b92ff86fc382e78033da6c938784546d5b550e34494891183",
+    "dataset_coverage": "747d713f2aaf1f97f0378ddd9ddfc184a0f5ff454f0f806f6675dae91c2c67c0",
+    "frozen_config": "f7f2eeba2cfc8adc9d1649618f353956470eb477a6a99448bdbe7332dd5a6d81",
+    "hmb_schema": "bf432640a7d02c20a017bcedd27d691b3074e75abac8e8a12f34532359c35fb1",
+    "qc_sensitivity_results": "e47abb6f1481dac5a57a34f87a881b8302e269eff347e0dc0436c6c9d65cafc7",
+    "qc_threshold_report": "1861c0ae2c8af2dc54308aa46eac51c4ffea7e02b938525d5aa68d3b81ed34d3",
+    "reason_code_registry": "46b1dec6008f2b95b0c4fb023300eb4bbc656ace456dff409e9a87cd1bf9c244",
+    "resource_budget": "d3873202a15ebe856f8e9d63beaed568e8d189b4120aa1e14be31a21db24ce68",
+    "source_qualification": "912c4e571bd38a16588b010a9ab24c0ec22630718ce7012acf78df679d71fa2e",
+    "source_whitelist": "1228c92b5ffff81df9058878ab5f555dd933781934f2ca9cc6ff567bfa2dd93b",
+    "split": "606592230ff7a475c475518f8fc1937622cf2ff43471d4694d239be76a853d2c",
+    "split_isolation_report": "c004bf78cfa6e0eb7fd713421e6a72fdfb61caa2cc76ba5097d871b2b5826f50",
+    "test_results": "0a56aa6774bd6d233231d4c9d2fecec9694d00d335cb6c93312c1dfa64b0e747"
+  },
+  "execution_source_sha256": {
+    "run_study.sh": "303b93225886cc165f4fa3f6a8d9d366b392a18d034df9bec1586b555592c376",
+    "seal_study.py": "f7d74be4597957a8e92f985c5cce28323ff6a480d54b6a193ba981ae354b4fb3",
+    "test_p01d_hmb.py": "0442660d6f15a114a6fb6c6bf3060f31712a3ce12cac8a04bd6fdc27fb7c6d21",
+    "test_p01d_real_hmb.py": "0d6ec818c0abc9ad53df7b0945fc57872c2c36e323ea27b244c41342829eb2a0"
+  },
+  "frozen_parameters": {
+    "age_ns": 60000000,
+    "arrival_delay_ns": 8000000,
+    "gap_ns": 60000000,
+    "left_right_skew_ns": 35000000,
+    "safety_age_ns": 100000000,
+    "skew_ns": 35000000,
+    "tick_ns": 20000000,
+    "wrist_hand_skew_ns": 35000000
+  },
+  "frozen_plan_sha256": "4d3b17b4eac0edceb83c1c44db8e83d8bc3c7b8012f86907797f97891b8105a4",
+  "human_approval": false,
+  "observed_at": "2026-11-26T12:53:43+08:00",
+  "observed_ticks": 5760,
+  "observed_windows": 96,
+  "phase": "P01-D",
+  "phase_status": "READY_FOR_REVIEW",
+  "process": {
+    "integration": {
+      "command": "-m unittest discover -s tests/s0_5/integration -p test_p01d_real_hmb.py -v",
+      "exit": 0,
+      "fail_tail": [],
+      "hashes": {
+        "integration.command": "170a2737d6657abcdf3f214eed8df0c8b633c73fe6bc477175fcaacee38699e6",
+        "integration.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "integration.stderr": "c94290b3fd5f853c75a4362ec76b9a0b0a5270f451c31f19d743c4e73f99adb7",
+        "integration.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "skipped": false,
+      "status": "PASS",
+      "tests": 3
+    },
+    "study": {
+      "command": "-m dexgym.tasks.direct.wholebody_s05.data.p01d_freeze study --plan docs/s0-5/evidence/P01_D/sample_plan.json --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --old-b /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-20261126-46ed5e2/attempt-04 --old-review /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-REVIEW-20261126-f32d6bb-r02 --resource /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/resource_preflight.json --original-c /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/attempt-03 --review-c /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-REVIEW-20261126-0d9d351/attempt-03 --final-c /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-REVIEW-FINAL-20261126-aecfd2d/attempt-02 --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-D-20261126-eb00f25/attempt-02/products",
+      "exit": 0,
+      "fail_tail": [],
+      "hashes": {
+        "study.command": "2d113e0b0ec0d7122b990174c7a3a4eb3c0ac695735c79df5ba9be0549061fc7",
+        "study.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "study.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "study.stdout": "1bb1c4ed4480d1872204eeb0ebeae9979984c70b109f1c87730a4ddeb1418ab6"
+      },
+      "skipped": false,
+      "status": "PASS",
+      "tests": null
+    },
+    "unit": {
+      "command": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+      "exit": 0,
+      "fail_tail": [],
+      "hashes": {
+        "unit.command": "165be27b27fbb35c7fcd795d50fb4321a5c087efb918ff6c864bb50a9a8a4e36",
+        "unit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "unit.stderr": "e7e7cdd5102277db4f21b04639f4388861fda9a0c6fe16480931064d0e9d5636",
+        "unit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "skipped": false,
+      "status": "PASS",
+      "tests": 84
+    }
+  },
+  "product_directory": "/home/ubuntu/dexgym_data/s0-5/p01/runs/P01-D-20261126-eb00f25/attempt-02/products",
+  "product_manifest_sha256": "84e8e64716299430b2469762d1643f9e26c664b6e0e830d7216d4df05fd4b225",
+  "resources": {
+    "cdr_decode_extract_messages_s": 12966.434635031628,
+    "decoded_wire_messages": 270756,
+    "derived_bytes_per_raw_second": 3821580.833333333,
+    "derived_bytes_per_valid_causal_tick": 76858.60893854749,
+    "disk_available_bytes": 683041566720,
+    "highwater_process_rss_bytes": 3374055424,
+    "mcap_index_read_bytes_s": 147341181.8918421,
+    "mcap_index_read_seconds": 15.446271712891757,
+    "observed_pilot_write_amplification": 2.870347138920332,
+    "observed_read_bytes": 2275871930,
+    "pilot": {
+      "archive_peak_count": 2,
+      "causal_joint_ticks": 179,
+      "failed_target_hidden": true,
+      "idempotent_recovery": true,
+      "max_nodes": 25,
+      "parallel_equal_sha": true,
+      "parallel_seconds": 0.7181546639185399,
+      "partial_bytes": 4593637,
+      "partitions": [
+        {
+          "N": 25,
+          "bytes": 4593637,
+          "finite_left_pose": true,
+          "hashes": {
+            "causal.npz": "cb3c1d9ace7752424e1ebf91450a99264e80df6a026ffe571babe4fdd1e83969",
+            "metadata.json": "388b685b4e7751597bb2037210781d4657313676369f659163359637f6de032f",
+            "offline.npz": "301eb529fc044754fe777da320978c684e617d595cf48e152122f22ca16f49fb",
+            "sources.jsonl": "35fc3b3cb5b898e5e8c61b558a1d4f15f3640ee5af17b007da82e4d7f6ce0579"
+          },
+          "name": "01ee4f951950370ea9ecddae-head",
+          "physical_refs": 1428,
+          "ticks": 60
+        },
+        {
+          "N": 25,
+          "bytes": 4581201,
+          "finite_left_pose": true,
+          "hashes": {
+            "causal.npz": "02ccc1740dfaa479ae826e74611ab5f3a13d5cf501eb5eba6fb4d9d343226147",
+            "metadata.json": "76250e35dc48118736e398a1c921b53f212f3d5c46c03d127e3d98ac34678489",
+            "offline.npz": "176e0cac74e87a3a97565ad6b5dfbad5bc29cdd69a2405aeed91192253166223",
+            "sources.jsonl": "fe1bb8cab36f37703fb05ff9cf1d74722180a13062b62e475ff07a73e7e10224"
+          },
+          "name": "06f3bc9ae8b6df054b6f7538-head",
+          "physical_refs": 1428,
+          "ticks": 60
+        },
+        {
+          "N": 25,
+          "bytes": 4582853,
+          "finite_left_pose": true,
+          "hashes": {
+            "causal.npz": "43bd4cc1bae476e084ab5283fcaef55f8e09ccb5b0e3640ed7393245fbf2ef38",
+            "metadata.json": "cb541035d11f8bc9646d69769a203a8aa5f55c43f87bef6742460376478f0172",
+            "offline.npz": "e92537fab69e8ef4910d43fa1c08a4954fa9107622a103a78d0a1a4fdf4a3236",
+            "sources.jsonl": "0ab3edc995ee49d5e834d1f7232ab6cf92a64b222ab6dc89e432cb0d54fc511f"
+          },
+          "name": "189e51a5df45ea33d051ffcf-head",
+          "physical_refs": 1428,
+          "ticks": 60
+        }
+      ],
+      "recovery_bytes": 4593637,
+      "serial_bytes": 13757691,
+      "serial_seconds": 0.6221404471434653,
+      "writes_bytes_total": 39489349
+    },
+    "production": {
+      "conservative_repeated_index_read_bytes": 23476430258,
+      "disk_hard_reserve_bytes": 20000000000,
+      "index_read_time_estimate_seconds": 318.6675979731615,
+      "max_active_workers": 2,
+      "max_topology_nodes": 25,
+      "minimum_available_ram_bytes": 13496221696,
+      "partition_seconds": 8,
+      "pause_on": [
+        "disk/RSS reserve",
+        "unexpected source hash/schema/calibration",
+        "archive or record cap"
+      ],
+      "per_chunk_published_cap_bytes": 368500425,
+      "physical_record_pause_per_part": 400000,
+      "projected_single_pass_archive_bytes": 71610608729,
+      "required_peak_including_staging_bytes": 143221217458
+    },
+    "qualified_sources_measured": 32,
+    "ram_available_bytes": 66769309696,
+    "ram_budget_bytes": 13496221696,
+    "sync_ticks_s": 274.1706522443278
+  },
+  "run_id": "P01-D-20261126-eb00f25",
+  "schema": "s05.p01d.review-receipt.v1",
+  "separate_gates": {
+    "C2-RT": "BLOCKED",
+    "Final Test": "BLOCKED",
+    "P01-T": "BLOCKED",
+    "robot-base": "BLOCKED"
+  },
+  "source_counts": {
+    "blocked": 0,
+    "qualified": 32,
+    "train": 24,
+    "validation": 8
+  },
+  "source_scope": {
+    "A_B_B_review_outputs": {
+      "A": 11,
+      "B": 15,
+      "B_review": 20
+    },
+    "B_diagnostics": 9,
+    "B_runtime_modules": 15,
+    "C_products_and_source_files": {
+      "C_final": [
+        4,
+        5
+      ],
+      "C_original": [
+        92,
+        12
+      ],
+      "C_review": [
+        4,
+        16
+      ]
+    }
+  },
+  "sync_source_sha256": "13550058a3114e062c6f7ba2e92b8149659dc5870ae9a97ec256679b7ed571b5",
+  "technical_gates": {
+    "D1": "PASS"
+  }
+}
