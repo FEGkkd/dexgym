@@ -1,0 +1,230 @@
+{
+  "attempt": "attempt-03",
+  "coverage": {
+    "causal_joint_valid": 2248,
+    "clean_recordings": 7,
+    "episode_input_bytes": 490239228,
+    "naive_independent_events_not_claimed": true,
+    "offline_joint_valid": 2248,
+    "raw_window_events": 47983,
+    "real_unsafe_rows": 153,
+    "real_verified_joint_valid": 0,
+    "sample_windows": 23,
+    "scoring_scope": "selected, bounded, mixed motion development diagnostic",
+    "selected": 7,
+    "ticks": 2300,
+    "unresolved_sources": [],
+    "window_seconds": 46.0
+  },
+  "earlier_attempts": {
+    "attempt-01": {
+      "audit": {
+        "command": "-m dexgym.tasks.direct.wholebody_s05.data.sync_audit --plan docs/s0-5/evidence/P01_C/sample_plan.json --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --old-b /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-20261126-46ed5e2/attempt-04 --old-review /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-REVIEW-20261126-f32d6bb-r02 --resource /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/resource_preflight.json --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/attempt-01/products",
+        "evidence_sha256": {
+          "audit.command": "43c654ccee06d4b32849f142245ff23c5890723bd20bd626fd28c5e41345a748",
+          "audit.exit": "53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3",
+          "audit.stderr": "19893549d4bd648acadc7dacc337f9931e3beb0889de1b4e73edec9a0aa643b5",
+          "audit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "failure_excerpt": [
+          "usage: sync_audit.py [-h] --plan PLAN --old-a OLD_A --old-b OLD_B --old-review",
+          "                     OLD_REVIEW --resource RESOURCE --output OUTPUT",
+          "sync_audit.py: error: Output must be isolated in the current P01-C run"
+        ],
+        "process_exit": 2,
+        "skipped": 0,
+        "status": "FAIL",
+        "total_tests": null
+      },
+      "integration": {
+        "process_exit": null,
+        "status": "NOT_RUN"
+      },
+      "unit": {
+        "command": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+        "evidence_sha256": {
+          "unit.command": "165be27b27fbb35c7fcd795d50fb4321a5c087efb918ff6c864bb50a9a8a4e36",
+          "unit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "unit.stderr": "a14c206d794e4b759398b45d8ba47893d680015f9bce3fccff0228252d63abd9",
+          "unit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "failure_excerpt": [],
+        "process_exit": 0,
+        "skipped": 0,
+        "status": "PASS",
+        "total_tests": 55
+      }
+    },
+    "attempt-02": {
+      "audit": {
+        "command": "-m dexgym.tasks.direct.wholebody_s05.data.sync_audit --plan docs/s0-5/evidence/P01_C/sample_plan.json --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --old-b /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-20261126-46ed5e2/attempt-04 --old-review /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-REVIEW-20261126-f32d6bb-r02 --resource /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/resource_preflight.json --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/attempt-02/products",
+        "evidence_sha256": {
+          "audit.command": "a9d422b40dfb97c9f82822cec2b3f52f3b00fce846b62d7d8f094502a920d4b6",
+          "audit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "audit.stderr": "270ce13f819af056742318226002fe96dc15bba27818b6b3ea01fef9ca90b9f9",
+          "audit.stdout": "14857eb377f64a6d380ecd4a04ae01ff54f65d376b6ffd6fb2c27616e441df10"
+        },
+        "failure_excerpt": [],
+        "process_exit": 0,
+        "skipped": 0,
+        "status": "PASS",
+        "total_tests": null
+      },
+      "integration": {
+        "command": "-m unittest discover -s tests/s0_5/integration -p test_p01c_real_sync.py -v",
+        "evidence_sha256": {
+          "integration.command": "562fbedfc3b6e5a32f7c5f050373887c535c8fa9b849988237ef2e41d754a770",
+          "integration.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "integration.stderr": "4aeb124ea77f5a9b32ef60f9d818d36df8ddfc54ac179f71d093816d9ad5f830",
+          "integration.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "failure_excerpt": [],
+        "process_exit": 0,
+        "skipped": 0,
+        "status": "PASS",
+        "total_tests": 3
+      },
+      "unit": {
+        "command": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+        "evidence_sha256": {
+          "unit.command": "165be27b27fbb35c7fcd795d50fb4321a5c087efb918ff6c864bb50a9a8a4e36",
+          "unit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "unit.stderr": "c4dbc8829f9ae95de7094ba20ce411681eccad4fc6235ee24ad388259a79b21a",
+          "unit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "failure_excerpt": [],
+        "process_exit": 0,
+        "skipped": 0,
+        "status": "PASS",
+        "total_tests": 55
+      }
+    }
+  },
+  "eligibility": {
+    "Final_Test": "BLOCKED",
+    "authorizes_next_phase": false,
+    "physical_robot_motion": false,
+    "real_verified": false,
+    "simulated_diagnostic_only": true
+  },
+  "execution_source_sha256": {
+    "docs/s0-5/evidence/P01_C/run_p01_c.sh": "7b36d59a4656a3983caf1e1111028d5b26014f3b9f30d4a0474091e6836ee2b3",
+    "docs/s0-5/evidence/P01_C/seal_p01_c.py": "2441a5f8d86d05b3b52fb1e4a9a84f2f99eb162b1381b310a1cefe6faa260680",
+    "source/dexgym/tasks/direct/wholebody_s05/data/calibration.py": "b4b594dde8427c26a9d3b0bd9d75a65a3f7aff753497ebd43c96f02b290f3015",
+    "source/dexgym/tasks/direct/wholebody_s05/data/capture_windows.py": "27d4fc8c25544d76189b0bc222097c6b512a4de608362d84b9c6cec338a04778",
+    "source/dexgym/tasks/direct/wholebody_s05/data/clock_domains.py": "4963497e6c322ed2c65adc088ee2389c2d95b90ad36fbb4f2dfa6ed3ea960467",
+    "source/dexgym/tasks/direct/wholebody_s05/data/geometry.py": "e042180b9baadbfef063eef88a0a9c3deb771d5fe96244fc3d1f7240d099782a",
+    "source/dexgym/tasks/direct/wholebody_s05/data/sample_identity.py": "6f6878d9ba3ce11c08b51a3c57bd27ea0ddc4eafe0104459984ca6740e6cbab9",
+    "source/dexgym/tasks/direct/wholebody_s05/data/sync_audit.py": "13d01baa6f00965f36a2f7b5f17ffbe582ba7ad9eb0c508656a3b42e9cdc0a72",
+    "source/dexgym/tasks/direct/wholebody_s05/data/sync_evidence.py": "4d6145510e6e9bc621c5d12fe616a94e0ba5142c5263f09fe9c3f30e73adc30d",
+    "source/dexgym/tasks/direct/wholebody_s05/data/synchronize.py": "2b7ea6c5b5a4e685baab3708b3a291a4a4bd66d8c5d17d4133cc0fee89c9f956",
+    "tests/s0_5/integration/test_p01c_real_sync.py": "fd70385fe5c3833aa1c864460455ba607e96bd55f0ab89a611337762a48ace20",
+    "tests/s0_5/unit/test_p01c_geometry_sync.py": "8306830de80cbedf7b4ae16a8d63ee9ab1df82168ac111866093fca96fe93d0e"
+  },
+  "historical_output_counts_verified": {
+    "A": 11,
+    "B": 15,
+    "B_review": 20
+  },
+  "implementation_spec_sha256": "c37e7b609d15f1c45d672d3e8d6d14ad0c6f5f3e43cc8ac08bbac88cb50a4660",
+  "key_product_sha256": {
+    "aligned_causal_sample_manifest.json": "b4a805a22289a466d9d5c759e59b18e4b65c5d2035632cfcc24c9aac65ceeb80",
+    "aligned_offline_sample_manifest.json": "d2f5f04024903170937c28e4b6348a53102b756462377f1289714ffc71692ab0",
+    "calibration_report.json": "a79a0ba86c11b8da35e92c5bbd3fff1d168f2e0895f47aa1ea7639756273a94d",
+    "clock_domain_registry.json": "f70d9200abfb5ab4a2be0615370bc9c10a85a7d78d0db8672c0527e94386f4e0",
+    "clock_mapping_report.json": "daea3e2af568b0d1e2c8243817d55046a7b529c98e1ff323cbaea64fdf5f03a3",
+    "clock_quality.json": "65250106c4db5a6de547ddadbd7f9e2c9bf7321e3a6bdbc409681566efe719c2",
+    "coordinate_frame_report.json": "386375ead3730ef5ecbae2fa2163f95d95f5a987a7f672f1f28481c2e0b10d41",
+    "dataset_coverage.json": "a91c3191f3650ee0698ccd79b93fd027c43e0f45211015eedd018f8e5f1c49e4",
+    "duplicate_source_report.json": "975c877491be2c19cfedfc4e5e1e7ab05f96f479d36319c33a90a791b50129a2",
+    "fixtures_manifest.json": "4145ede9aac9c09f2dfd46c7f01897363bf775f2fd92636ed566bd1e183b5964",
+    "geometry_contract.json": "043bf021bb5c755658bd8d523b4fc6eb358302cfefd4f9a60a6bf199536a43e0",
+    "invalid_rows.jsonl": "ac7f7eb4efaaa102b4b1cf302e3903a4c390793ad671255134cf6a64f477466b",
+    "manus_topology_report.json": "ca80596e132bef73d5a1052f2ed593df179937ea0a3dec76f7bd1d69f147c9d3",
+    "prefix_mutation_results.json": "82e6ae442d6489765ce4658d9c6382d02a89b576c39423de89fd6c0b0c14f0fd",
+    "qc_threshold_candidates.json": "ea9f8aecf73bb72100f65eebd083b868125f42ac37abc5a8e9d530afcbcec05d",
+    "sample_identity_report.json": "6ba3479d283dbcd19b163b66b30b77b159180238be8113c42281f6bea4e96ab1",
+    "source_trace.jsonl": "bd48c221b755aa71b24877414d3d1fa166e65482acca8b559b53769685e526ed",
+    "sync_error_budget.json": "efcf03d6ea2c14cd91a76c9f3da6b1a65fee4f59c130eccc9a02b5949316385b",
+    "technical_gates.json": "9ed00fde0ca8fcb8c7f45b152f093046918d2f7e39cfff195f3d89026448e314",
+    "test_results.json": "3904debca514149fcbb8f5620e283220154708b0f89dede4441dcf81df4a29c3",
+    "validity_report.json": "6fe5d9e8808c1d62973bc7808742f7c228e684409149098673adb942fd054b56"
+  },
+  "observed_at": "2026-11-26T11:29:43+08:00",
+  "observer_identity_by_window_aggregate": {
+    "manus_left:DUPLICATE_SOURCE": 562,
+    "manus_left:NEW": 6337,
+    "manus_right:DUPLICATE_SOURCE": 1230,
+    "manus_right:NEW": 5669,
+    "tracker_left:NEW": 6746,
+    "tracker_left_raw:NEW": 6745,
+    "tracker_right:NEW": 6898,
+    "tracker_right_raw:NEW": 6898,
+    "tracker_safety:NEW": 6898
+  },
+  "path": "/home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/attempt-03/products",
+  "phase": "P01-C",
+  "phase_status": "BLOCKED",
+  "processes": {
+    "audit": {
+      "command": "-m dexgym.tasks.direct.wholebody_s05.data.sync_audit --plan docs/s0-5/evidence/P01_C/sample_plan.json --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --old-b /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-20261126-46ed5e2/attempt-04 --old-review /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-REVIEW-20261126-f32d6bb-r02 --resource /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/resource_preflight.json --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/attempt-03/products",
+      "evidence_sha256": {
+        "audit.command": "9782d745fefc7ff1885e1237914ef8563bbaa235579a81e0aa739767010c5a6f",
+        "audit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "audit.stderr": "270ce13f819af056742318226002fe96dc15bba27818b6b3ea01fef9ca90b9f9",
+        "audit.stdout": "14857eb377f64a6d380ecd4a04ae01ff54f65d376b6ffd6fb2c27616e441df10"
+      },
+      "failure_excerpt": [],
+      "process_exit": 0,
+      "skipped": 0,
+      "status": "PASS",
+      "total_tests": null
+    },
+    "integration": {
+      "command": "-m unittest discover -s tests/s0_5/integration -p test_p01c_real_sync.py -v",
+      "evidence_sha256": {
+        "integration.command": "562fbedfc3b6e5a32f7c5f050373887c535c8fa9b849988237ef2e41d754a770",
+        "integration.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "integration.stderr": "3da623230575f27990c61c5184a9faebabe96fce0103ac7b54e960112033c843",
+        "integration.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "failure_excerpt": [],
+      "process_exit": 0,
+      "skipped": 0,
+      "status": "PASS",
+      "total_tests": 3
+    },
+    "unit": {
+      "command": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+      "evidence_sha256": {
+        "unit.command": "165be27b27fbb35c7fcd795d50fb4321a5c087efb918ff6c864bb50a9a8a4e36",
+        "unit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "unit.stderr": "2125ef62e5b39457192befe49ce52cb97ede28a3fed21301ca43e8219de12c0e",
+        "unit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "failure_excerpt": [],
+      "process_exit": 0,
+      "skipped": 0,
+      "status": "PASS",
+      "total_tests": 55
+    }
+  },
+  "products_manifest_sha256": "a02e34a71410f7edf7e8cc310cf8a02e9831cdcf370ddaa8fc5d1dea7f5f7434",
+  "products_total": 92,
+  "resource_preflight_sha256": "3f333a2b98b16cf1e5db40b5e922270b69eafe6c7f020d48ec9d5c9fa2091471",
+  "run_id": "P01-C-20261126-8b0f399",
+  "sample_plan_sha256": "a742148f9b159409b7fbdeb7e49896f5ee4c8aff3b33b13a6099855fb7daa9da",
+  "schema": "s05.p01c.review-receipt.v1",
+  "source_baseline": "8b0f39916e2fd1104ab39f8a6336c9196fc1c943",
+  "technical_gates": {
+    "C1": "PASS",
+    "C2": "BLOCKED",
+    "C2_algorithm": "PASS",
+    "C2_real_clock": "BLOCKED"
+  },
+  "validity_reasons": {
+    "HELD": 87,
+    "UNSAFE": 300,
+    "VALID": 13413
+  }
+}

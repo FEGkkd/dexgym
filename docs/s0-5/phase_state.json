@@ -74,8 +74,8 @@
   "p01_subphases": {
     "P01-A": "ACCEPTED",
     "P01-B": "BLOCKED",
-    "P01-B-HMB": "READY_FOR_REVIEW",
-    "P01-C": "NOT_STARTED",
+    "P01-B-HMB": "ACCEPTED",
+    "P01-C": "BLOCKED",
     "P01-D": "NOT_STARTED",
     "P01-E": "NOT_STARTED",
     "P01-F": "NOT_STARTED",
@@ -150,6 +150,37 @@
       "evidence_ref": "evidence/P01_B_review/review_receipt.json",
       "spec_ref": "specs/P01_T_telemetry_acquisition.md",
       "reason": "No authenticated hardware, physical response pairing and clock evidence"
+    },
+    {
+      "phase": "P01-B-HMB",
+      "from": "READY_FOR_REVIEW",
+      "to": "ACCEPTED",
+      "at": "2026-11-26T11:12:55+08:00",
+      "approval": {"type": "human", "by": "project user", "ref": "reports/approvals/P01_B_HMB_ACCEPTED_P01_C.md"}
+    },
+    {
+      "phase": "P01-C",
+      "from": "NOT_STARTED",
+      "to": "IN_PROGRESS",
+      "at": "2026-11-26T11:12:55+08:00",
+      "authorization_ref": "reports/approvals/P01_B_HMB_ACCEPTED_P01_C.md",
+      "spec_sha256": "1de9df40e11a7c73de3c99fe77c67d878e24635a0303e940639bfd37ee6b69c3",
+      "implementation_spec_ref": "specs/P01_C_calibration_and_causal_sync.md",
+      "implementation_spec_sha256": "c37e7b609d15f1c45d672d3e8d6d14ad0c6f5f3e43cc8ac08bbac88cb50a4660",
+      "sample_plan_ref": "evidence/P01_C/sample_plan.json",
+      "sample_plan_sha256": "a742148f9b159409b7fbdeb7e49896f5ee4c8aff3b33b13a6099855fb7daa9da",
+      "run_id": "P01-C-20261126-8b0f399"
+    },
+    {
+      "phase": "P01-C",
+      "from": "IN_PROGRESS",
+      "to": "BLOCKED",
+      "at": "2026-11-26T11:29:43+08:00",
+      "technical_gates": {"C1": "PASS", "C2": "BLOCKED", "C2_algorithm": "PASS", "C2_real_clock": "BLOCKED"},
+      "evidence_ref": "evidence/P01_C/review_receipt.json",
+      "evidence_sha256": "46ef7a1f83c0b48f26a7b8a44e72de5ef0ed8841a289c4a2b2c02c411e05b0c1",
+      "report_ref": "reports/P01_C_acceptance.md",
+      "reason": "Physical capture and controller receive bounds not evidenced. Modeled arrival diagnostics only."
     }
   ]
 }

@@ -147,6 +147,8 @@ def p01_dependency_states(document):
     states=dict.fromkeys(owners,'NOT_STARTED')
     prerequisites={'P01-B-HMB':'P01-A','P01-C':'P01-B-HMB','P01-D':'P01-C',
                    'P01-E':'P01-D','P01-F':'P01-E'}
+    technical_requirements={'P01-C':('C1','C2'),'P01-D':('D1',),
+                            'P01-E':('E1',),'P01-F':('F1',)}
     accepted={}
     previous=None
     for event in document['p01_subphase_events']:
@@ -162,9 +164,14 @@ def p01_dependency_states(document):
             require(bool(event.get('authorization_ref')), f'{owner} requires separate start authorization')
             if prior:
                 require(states[prior]=='ACCEPTED', f'{owner} requires {prior} ACCEPTED')
-            if owner in ('P01-C','P01-D','P01-E','P01-F'):
+            if owner in technical_requirements:
                 require(moment>=approved and event.get('spec_sha256')==dcr['active_spec_sha256'],
                         f'{owner} requires the reapproved v0.2.1 spec')
+            if owner=='P01-C':
+                for field in ('implementation_spec','sample_plan'):
+                    artifact=checked_file(ROOT,event[f'{field}_ref'])
+                    require(digest(artifact.read_bytes())==event[f'{field}_sha256'],
+                            f'{owner} frozen {field} differs')
         if status=='READY_FOR_REVIEW' and owner in ('P01-B-HMB','P01-T'):
             evidence=checked_file(ROOT,event['evidence_ref'])
             gate_key='HMB' if owner=='P01-B-HMB' else 'P01-T'
@@ -174,6 +181,21 @@ def p01_dependency_states(document):
             payload=load_json(evidence)
             evidence_gate='new_hmb_gate' if owner=='P01-B-HMB' else 'technical_p01_t_gate'
             require(payload.get(evidence_gate)=='PASS', f'{owner} receipt does not support technical PASS')
+        if (owner in technical_requirements and
+                (status=='READY_FOR_REVIEW' or 'technical_gates' in event)):
+            evidence=checked_file(ROOT,event['evidence_ref'])
+            require(digest(evidence.read_bytes())==event.get('evidence_sha256'),
+                    f'{owner} technical receipt hash mismatch')
+            receipt=load_json(evidence)
+            require(receipt.get('phase')==owner and bool(receipt.get('run_id')),
+                    f'{owner} technical receipt identity mismatch')
+            for gate in technical_requirements[owner]:
+                actual=receipt.get('technical_gates',{}).get(gate)
+                require(actual in {'PASS','FAIL','BLOCKED','NOT_RUN'} and
+                        event.get('technical_gates',{}).get(gate)==actual,
+                        f'{owner} receipt differs from logged {gate} outcome')
+                require(status!='READY_FOR_REVIEW' or actual=='PASS',
+                        f'{owner} receipt does not support {gate} technical PASS')
         if status=='ACCEPTED':
             approval=event.get('approval',{})
             require(approval.get('type')=='human' and bool(approval.get('by')) and bool(approval.get('ref')),
@@ -231,8 +253,8 @@ def structure():
     require(all(len(r)==4 and all(r) and r[2] in PHASES for r in req), 'Requirement row schema')
     require(all(len(r)==9 and all(r) for r in matrix) and [r[2] for r in req]==[r[3] for r in matrix],
             'Traceability row/ownership')
-    specs = sorted(s for s in (ROOT / 'specs').glob('P??_*.md')
-                   if s.name!='P01_T_telemetry_acquisition.md')
+    p01_adjuncts={'P01_T_telemetry_acquisition.md','P01_C_calibration_and_causal_sync.md'}
+    specs = sorted(s for s in (ROOT / 'specs').glob('P??_*.md') if s.name not in p01_adjuncts)
     require(tuple(s.name[:3] for s in specs) == PHASES, 'Phase spec list')
     for spec in specs:
         doc = read(spec)
