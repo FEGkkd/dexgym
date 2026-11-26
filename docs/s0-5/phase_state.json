@@ -89,7 +89,7 @@
     "P01-B-HMB": "ACCEPTED",
     "P01-C": "ACCEPTED",
     "P01-D": "ACCEPTED",
-    "P01-E": "IN_PROGRESS",
+    "P01-E": "READY_FOR_REVIEW",
     "P01-F": "NOT_STARTED",
     "P01-T": "BLOCKED"
   },
@@ -283,6 +283,19 @@
       "sample_plan_ref": "evidence/P01_E_E0/plan.json",
       "sample_plan_sha256": "de230215f950c48192effa7dcb05d5bfb1f8e3977cebdf78d0fd81f2a3528eaf",
       "run_id": "P01-E-E0-20261126-34e44b6"
+    },
+    {
+      "phase": "P01-E",
+      "from": "IN_PROGRESS",
+      "to": "READY_FOR_REVIEW",
+      "scope": "E1_PRODUCTION",
+      "at": "2026-11-26T15:12:46+08:00",
+      "run_id": "P01-E-E1-20261126-3f90652",
+      "evidence_ref": "evidence/P01_E_E1/review_receipt.json",
+      "evidence_sha256": "0930e732e92e6213742e8b48cd1921d980c1315c7c108bda1ea24c0c59de483b",
+      "technical_gates": {
+        "E1": "PASS"
+      }
     }
   ],
   "p01e_preflight": {

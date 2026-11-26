@@ -1,0 +1,59 @@
+{
+  "approval": "AWAITING_HUMAN",
+  "counts": {
+    "duration_ns": 2331957437948,
+    "partitions": 308,
+    "planned_ticks": 116613,
+    "sources": 32
+  },
+  "e0_receipt_sha256": "4dd4c3ea4c1b22a669c9b6d67ccbb3ec49b7653128ea88c728ed9562319337a4",
+  "execution_candidate_sha256": "6aeaa203e39bea392bc20d5fceee26ea5f85752d219824f98f96b2c852846317",
+  "execution_lock_sha256": "da3e1f0759ac010a989d9431f0337371df6fe208914139bd711be15354a453af",
+  "git_during_build": {
+    "session-1": "7a5b10d0efc59bf50fd7436687089c378a4d312a",
+    "session-2": "cb0483a0b1de466dd67f5f6f01a92da1db09487e"
+  },
+  "git_during_review": "93e026c36121569c44fa132661569f6b4e970bde",
+  "phase": "P01-E",
+  "published": 308,
+  "quarantined": 0,
+  "raw_plan_sha256": "0f94b842e2558ec04da257aff94d469ae9b965968fff1a4593382fc2eea09404",
+  "review_artifacts_sha256": {
+    "build_index.json": "fecb0c31ee78c6d3ecc0923fe2101aba2f1b06bd7e878786839fe22d40f7cc1d",
+    "build_log.jsonl": "220db5271d43d6649f597ba2367dac84ec5551a863848bd11405d752134819bc",
+    "full_coverage.json": "f1773f3f9261ddf7d6461a4e567426f96dbcb6b4561d0dc899096d13777598de",
+    "full_qc.json": "54ee59d74153ddd22b83f0c9b96b2c89d5a8ee80d62d1b9a271c18505b541e34",
+    "hmb_manifest.json": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074",
+    "output_sha256.json": "6ac026a9a21585445517512e5cd7dceceafe296480e6b43c94c43a58478493b4",
+    "production_plan.json": "0f94b842e2558ec04da257aff94d469ae9b965968fff1a4593382fc2eea09404",
+    "raw_traceability.json": "d5cae7a13ed31a917d46eb8c6977562d99506ecdb2a4be9330b20ae87454a9c0",
+    "resource_preflight.json": "8743ad5215b7edf9e8b9e00758702c27cbda15ce1e530036c5e87cbe40b9eb0b",
+    "runtime_resources.json": "60f60bec86ef03076e956bf0ec4338014f5aff487dc9f841b4e6ab2fd6d43d71",
+    "segment_statistics.json": "9a0e5bebf9e4091c8b34acb3d469cb9a5f16c5d67cbfcb4bf6f7ebc60883fff6",
+    "source_disposition.json": "ffa75c6d8f33a09f308e073c07d2fb014b0e04938617399f71d2ad945702167f",
+    "split_isolation.json": "0e9da8fba715b892d65ce220e24d7c551ab81d7a2a986ba1864fd783898932ab",
+    "test_results.json": "7c6a0b0094d9a248546166a438f97d8cc8907ac15150d3631fc7adc581c4d2f0"
+  },
+  "review_implementation_sha256": {
+    "audit_metrics.py": "2b7a9eb73fa326b07609ea4a2658bc8c9bd80f350bd5b24cab41b8aef2ea8c6b",
+    "preflight.py": "461e6bccdfdadd6551c37de1548a5b715102c604ca6410669d89c817e9c900bd",
+    "run_e1.sh": "ea91f3e30ca25ed829d7601818ccc2a9b77280d804caa60caaba75f2f2d63dd8",
+    "run_review.sh": "a0b330f354a584e3328093d71cc35fb30714f1ee305e59dd29294aa52d4215e8",
+    "seal_e1.py": "5d1d121045780f2003a8fb70c9859e27ae7a7bf6d2fc12271959772e5155303c",
+    "verify_e1.py": "f8eb18f0411ca52f92c9ebf382e5835d122ee4b4bb526ce0372b5af687e9b009"
+  },
+  "run_id": "P01-E-E1-20261126-3f90652",
+  "schema": "s05.p01e.e1.receipt.v1",
+  "scope": "E1_PRODUCTION",
+  "source_commit": "3f906526edccc108a1ff08e523da9559b16abcb0",
+  "technical_gates": {
+    "C2-RT": "BLOCKED",
+    "E1": "PASS",
+    "Final_Test": "BLOCKED",
+    "P01-T": "BLOCKED",
+    "robot-base": "BLOCKED"
+  },
+  "ubuntu_output": "/home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E1-20261126-3f90652",
+  "ubuntu_review_attempt": "review-1",
+  "verified_control_ticks": 0
+}

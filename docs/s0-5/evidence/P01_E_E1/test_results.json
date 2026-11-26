@@ -1,0 +1,999 @@
+{
+  "document_checks_pass": true,
+  "final_review_scope": "review-1",
+  "processes": {
+    "review-1": {
+      "review": {
+        "command": "docs/s0-5/evidence/P01_E_E1/verify_e1.py /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E1-20261126-3f90652 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E1-20261126-3f90652/review-1 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry docs/s0-5/evidence/P01_E_E0/candidate_config.json docs/s0-5/evidence/P01_E_E0/execution_lock.json",
+        "exit": 0,
+        "files_sha256": {
+          "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "e5bbcea0fa61356a0c8540c69e31b9b522ca6b9724e73fb5f16e0d1cce11e8a3",
+          "time": "11ac39547da0fc6e125a0047f79b5e247eb35e5a41d2584af9cba818719b9dfa"
+        }
+      }
+    },
+    "session-0": {},
+    "session-1": {
+      "preflight": {
+        "command": "docs/s0-5/evidence/P01_E_E1/preflight.py /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E1-20261126-3f90652 1 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry docs/s0-5/evidence/P01_E_E0/candidate_config.json docs/s0-5/evidence/P01_E_E0/execution_lock.json",
+        "exit": 127,
+        "files_sha256": {
+          "stderr": "557eda7adecbb7677ee656199cf825f8db257507f83c1eadb9d76652b0ffb23e",
+          "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "time": "c0036c029346b0c3abe0a1af385d1ccac946101b0f7f1f279449cc6c2692585a"
+        }
+      }
+    },
+    "session-2": {
+      "build": {
+        "command": "-m dexgym.tasks.direct.wholebody_s05.data.p01e_build build --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --config docs/s0-5/evidence/P01_E_E0/candidate_config.json --lock docs/s0-5/evidence/P01_E_E0/execution_lock.json --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E1-20261126-3f90652/products --session 2",
+        "exit": 0,
+        "files_sha256": {
+          "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "cde82e8ecb94445af6c341c04813d82f92b40360bd746a2befa8be67fe5aefa2",
+          "time": "80e25b8dddf1678775790b57e01dab5bc317b83f55756046fc7db668c7b9ae45"
+        }
+      },
+      "preflight": {
+        "command": "docs/s0-5/evidence/P01_E_E1/preflight.py /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E1-20261126-3f90652 2 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry docs/s0-5/evidence/P01_E_E0/candidate_config.json docs/s0-5/evidence/P01_E_E0/execution_lock.json",
+        "exit": 0,
+        "files_sha256": {
+          "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "04cf8648cf9ce2cea7562e8d5933d81eb0bdcd17e2157ab5248863a9393a6069",
+          "time": "4e78f674337ad4b7bbec6bdd255f8335dc23072946844f5ebb07ab48d36f8428"
+        }
+      },
+      "unit": {
+        "command": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+        "exit": 0,
+        "files_sha256": {
+          "stderr": "9a64e8bed6383bc9c0fa3cd2e3bea7db0da06bb203f150e4c0e19853af0ffc19",
+          "stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "time": "4a0d77752d811d6d6b8ed4d4cf5221990051fbdd46345f452cb308e9a5b1a21c"
+        }
+      }
+    },
+    "smoke-1": {
+      "review": {
+        "command": "docs/s0-5/evidence/P01_E_E1/verify_e1.py --smoke /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E1-20261126-3f90652 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry docs/s0-5/evidence/P01_E_E0/candidate_config.json docs/s0-5/evidence/P01_E_E0/execution_lock.json",
+        "exit": 0,
+        "files_sha256": {
+          "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "128b651d558e0e3f63a8a4098c24534e8af3532cc8cc743ea436b3e01574a035",
+          "time": "889a4e39358387a7f463afa5fcedaba7c720d33404414c9166296e8e91e48591"
+        }
+      }
+    },
+    "smoke-2": {
+      "review": {
+        "command": "docs/s0-5/evidence/P01_E_E1/verify_e1.py --smoke /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E1-20261126-3f90652 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry docs/s0-5/evidence/P01_E_E0/candidate_config.json docs/s0-5/evidence/P01_E_E0/execution_lock.json",
+        "exit": 0,
+        "files_sha256": {
+          "stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stdout": "2daf8b5f1f8056a109df93002affc8777071ceea9c565b7a741b2f54e4011899",
+          "time": "85abfc20c16e1738d005c440aa1754b0a67186b6eea591dc38f2a4b53df7c671"
+        }
+      }
+    }
+  },
+  "raw_witness": {
+    "cases": {
+      "invalid": {
+        "matched": [
+          {
+            "geometry": "NOT_USED_FOR_INVALID_OR_SAFETY",
+            "observation_topic": "/dex/collection/observations/tracker_safety",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "9ab95bb5e83da44aa7c440ab92b425af640d30fe8de50e57bbf525f2ade87116",
+              "cdr_sha256": "68cd0eae92f024540bbc7c0bda2e8008c1b4f22cee0cc31cd06aab4b9fbc636a",
+              "collector_mono_ns": 620738539025779,
+              "observation_cdr_sha256": "43cec873eead2eeb8b60be2c376cee2e78616f32b31b8461d6f6b77f98fe5094",
+              "observation_message": 5647,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:daca4f56f8224afb8249e8c9",
+              "physical_message": 5646,
+              "raw_index_token": "asset:daca4f56f8224afb8249e8c9:5646",
+              "schema_sha256": "853429cef94a8c9631dba8ab6dab1b73cf28192c9435bf01c6a07c0bef6d45b2",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_safety",
+              "stream": "tracker_safety",
+              "topic": "/vive/tracker/safety_status",
+              "writer_sequence": 13176257
+            },
+            "safe": false,
+            "sample_index": 2823,
+            "status": "PASS",
+            "stream": "tracker_safety",
+            "tick_index": 378
+          }
+        ],
+        "partition": "recording:01ee4f951950370ea9ecddae/00002",
+        "path": "Train/capture_8c85b5bd93595270f134bf72/00002"
+      },
+      "normal_Train": {
+        "matched": [
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/manus_left",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "d403c2179214a7eaba6a1ca675a0b9ae38a1a330fa508a55e4320d82ca5a86fb",
+              "cdr_sha256": "12e60402bf966ae60723dd8de4b42c53e9391d07885dac1906365c17bcc93912",
+              "collector_mono_ns": 620718997305687,
+              "observation_cdr_sha256": "28ae6008f7716ae56cc7ebfb26c4e1e2c032313adcf7b07cf27dc693fb3f980a",
+              "observation_message": 957,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:881775785d317df29dbe308b",
+              "physical_message": 956,
+              "raw_index_token": "asset:881775785d317df29dbe308b:956",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/manus_left",
+              "stream": "manus_left",
+              "topic": "/manus_glove_left",
+              "writer_sequence": 164234
+            },
+            "safe": null,
+            "sample_index": 478,
+            "status": "PASS",
+            "stream": "manus_left",
+            "tick_index": 201
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/manus_right",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "29a9710133921854ae5be4a09ca770e82c05e816b1c6412b1a0b336a8adaf512",
+              "cdr_sha256": "e84054051df81ab950b9256be01f84c24c65cbfd715589500440ba8259494892",
+              "collector_mono_ns": 620718997296206,
+              "observation_cdr_sha256": "ba5bd6b6a5347cd1fc0fde45c772831c4c3325393f56a6534728c24b66083a05",
+              "observation_message": 957,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:61ab3c86f23ec8219c515b95",
+              "physical_message": 956,
+              "raw_index_token": "asset:61ab3c86f23ec8219c515b95:956",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/manus_right",
+              "stream": "manus_right",
+              "topic": "/manus_glove_right",
+              "writer_sequence": 162497
+            },
+            "safe": null,
+            "sample_index": 478,
+            "status": "PASS",
+            "stream": "manus_right",
+            "tick_index": 201
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_left",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "763ba99a00fbfcf66a1396651229dce07fd457cd885727566bdd79546a3d4582",
+              "cdr_sha256": "b00373a3cd12c977cb6753a9721d068a53fac853981b7a158a03fa13f061def8",
+              "collector_mono_ns": 620718997359625,
+              "observation_cdr_sha256": "2cead059a8a7df0812b174bd667dddaed8df66134b917f7c48c72910d126cf7a",
+              "observation_message": 957,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:591521ed196efb7edfc6c600",
+              "physical_message": 956,
+              "raw_index_token": "asset:591521ed196efb7edfc6c600:956",
+              "schema_sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_left",
+              "stream": "tracker_left",
+              "topic": "/vive/tracker/left_wrist",
+              "writer_sequence": 99233
+            },
+            "safe": null,
+            "sample_index": 478,
+            "status": "PASS",
+            "stream": "tracker_left",
+            "tick_index": 201
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_right",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "b258de1306d503df33cfdea1808ffb46789658937a192dffb6e8d9b2fd3c57ab",
+              "cdr_sha256": "7feba8a1311b7efae6f03c3bb465db39573aa096fe92f846cc3f2a395c260338",
+              "collector_mono_ns": 620718997370067,
+              "observation_cdr_sha256": "d8251543df04807febc1aa52a4a1fb7a6b1eabffb70d486c305e641a01fdee59",
+              "observation_message": 957,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:0166026e59b6aba0e77f73cb",
+              "physical_message": 956,
+              "raw_index_token": "asset:0166026e59b6aba0e77f73cb:956",
+              "schema_sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_right",
+              "stream": "tracker_right",
+              "topic": "/vive/tracker/right_wrist",
+              "writer_sequence": 106963
+            },
+            "safe": null,
+            "sample_index": 478,
+            "status": "PASS",
+            "stream": "tracker_right",
+            "tick_index": 201
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_left_raw",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "35fab51b38a7e3522da5479920879f160c75037b0a12b4318b35b4cf08d747d7",
+              "cdr_sha256": "2f6a2d0248e8bd9c5385a44af937d78f9c637074fd2271fb3563b01b00680c5b",
+              "collector_mono_ns": 620718997296188,
+              "observation_cdr_sha256": "e7c1273879581cbe3cc8a42e4f330ae5f1bd90a82c8125049f5281cdfbbd4f45",
+              "observation_message": 957,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:c5385bdd5b82eb8831f65f0d",
+              "physical_message": 956,
+              "raw_index_token": "asset:c5385bdd5b82eb8831f65f0d:956",
+              "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_left_raw",
+              "stream": "tracker_left_raw",
+              "topic": "/vive/raw/left_wrist",
+              "writer_sequence": 99243
+            },
+            "safe": null,
+            "sample_index": 478,
+            "status": "PASS",
+            "stream": "tracker_left_raw",
+            "tick_index": 201
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_right_raw",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "927a754e85f9ebf77a11a0d4626a460c0a52d4b4b660adf720ebc75faefc42d7",
+              "cdr_sha256": "97eace4742a1ebe785bd42d3e7874dd173c63744356bd011e73256d699ad97b0",
+              "collector_mono_ns": 620718997311892,
+              "observation_cdr_sha256": "6aec4fcbd7b3c6e3ef08f2da69090aa2661e1d2134b8c4d6f7c834785c781e4f",
+              "observation_message": 957,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:5d873d7e2e956aba9e013a2e",
+              "physical_message": 956,
+              "raw_index_token": "asset:5d873d7e2e956aba9e013a2e:956",
+              "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_right_raw",
+              "stream": "tracker_right_raw",
+              "topic": "/vive/raw/right_wrist",
+              "writer_sequence": 106973
+            },
+            "safe": null,
+            "sample_index": 478,
+            "status": "PASS",
+            "stream": "tracker_right_raw",
+            "tick_index": 201
+          },
+          {
+            "geometry": "NOT_USED_FOR_INVALID_OR_SAFETY",
+            "observation_topic": "/dex/collection/observations/tracker_safety",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "9ab95bb5e83da44aa7c440ab92b425af640d30fe8de50e57bbf525f2ade87116",
+              "cdr_sha256": "4d2626bb83f5c7435139b0c66fac5d75fd7866891944db078a4aa760f6829e1f",
+              "collector_mono_ns": 620718997303747,
+              "observation_cdr_sha256": "d23ecc4caee0c36369616864445b4e0702ca8361ae9ea86598a9ef1075b2e07f",
+              "observation_message": 957,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:daca4f56f8224afb8249e8c9",
+              "physical_message": 956,
+              "raw_index_token": "asset:daca4f56f8224afb8249e8c9:956",
+              "schema_sha256": "853429cef94a8c9631dba8ab6dab1b73cf28192c9435bf01c6a07c0bef6d45b2",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_safety",
+              "stream": "tracker_safety",
+              "topic": "/vive/tracker/safety_status",
+              "writer_sequence": 13173912
+            },
+            "safe": true,
+            "sample_index": 478,
+            "status": "PASS",
+            "stream": "tracker_safety",
+            "tick_index": 201
+          }
+        ],
+        "partition": "recording:01ee4f951950370ea9ecddae/00000",
+        "path": "Train/capture_8c85b5bd93595270f134bf72/00000"
+      },
+      "normal_Validation": {
+        "matched": [
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/manus_left",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "283aed904219601401acff5467b1a2c5bee490c2cb3999cea0bfdff3b0c36497",
+              "cdr_sha256": "e92fb5a286cd86575a94a829d8b2a6f0fe84bd0419db54ecc45e61b50122bc95",
+              "collector_mono_ns": 1303370886094111,
+              "observation_cdr_sha256": "9b828874ead3b723794aa52cbbbaf820971d8bc877e5f455cd74ee84fc1b2e1d",
+              "observation_message": 801,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:e82323fe18f7b9761bf0b0b0",
+              "physical_message": 800,
+              "raw_index_token": "asset:e82323fe18f7b9761bf0b0b0:800",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e9b8806a76ab52-3d537043cd22e2d9/manus_left",
+              "stream": "manus_left",
+              "topic": "/manus_glove_left",
+              "writer_sequence": 107030
+            },
+            "safe": null,
+            "sample_index": 400,
+            "status": "PASS",
+            "stream": "manus_left",
+            "tick_index": 170
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/manus_right",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "2c540808da447db7fef93c216e5cd93fd9c973c7982e181496d166668fb5e84e",
+              "cdr_sha256": "3c410a6ba4caaccb0b5dbc41a59dfaad3a89cce4433bc45ea89f3788a6d8e0db",
+              "collector_mono_ns": 1303370886182772,
+              "observation_cdr_sha256": "b85712c56f10d8f7aa023e40883e520e2f606b6c1017e1b4663fe0bccbf76928",
+              "observation_message": 801,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:388c2b9fdef33d09f452adb3",
+              "physical_message": 800,
+              "raw_index_token": "asset:388c2b9fdef33d09f452adb3:800",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e9b8806a76ab52-3d537043cd22e2d9/manus_right",
+              "stream": "manus_right",
+              "topic": "/manus_glove_right",
+              "writer_sequence": 107030
+            },
+            "safe": null,
+            "sample_index": 400,
+            "status": "PASS",
+            "stream": "manus_right",
+            "tick_index": 170
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_left",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "7e9eb6cd29a11087feec9f06979df423214fc8b9b6848019d1d2feeb079655b3",
+              "cdr_sha256": "28621afe5e340dca7b14c0627741541f1b2a9a93b28fff66be5490a5d70bbf06",
+              "collector_mono_ns": 1303370895318105,
+              "observation_cdr_sha256": "61cc641f6247bf0a1aad99c34eb61ba8547765dd84a6f6a7a9ef33c60f9ff379",
+              "observation_message": 803,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:1cb21088a8b1b305cc3f2199",
+              "physical_message": 802,
+              "raw_index_token": "asset:1cb21088a8b1b305cc3f2199:802",
+              "schema_sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+              "source_instance": "18e9b8806a76ab52-3d537043cd22e2d9/tracker_left",
+              "stream": "tracker_left",
+              "topic": "/vive/tracker/left_wrist",
+              "writer_sequence": 73632
+            },
+            "safe": null,
+            "sample_index": 401,
+            "status": "PASS",
+            "stream": "tracker_left",
+            "tick_index": 170
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_right",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "0494d4bd6e4294e2b27278cc6e5a66ab6d82669afa5d2bc7b3581fdc79121f2d",
+              "cdr_sha256": "75f1b80f31a1a89d07e5745c6a5b910e792e93a89642bc0ef015bf92a621aa05",
+              "collector_mono_ns": 1303370895313643,
+              "observation_cdr_sha256": "3ad80e7cfba8da9cf794c699ee2b8e28f126fa441f5447407df60a3c6689eb96",
+              "observation_message": 803,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:81a00f8d6d34742345e6384a",
+              "physical_message": 802,
+              "raw_index_token": "asset:81a00f8d6d34742345e6384a:802",
+              "schema_sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+              "source_instance": "18e9b8806a76ab52-3d537043cd22e2d9/tracker_right",
+              "stream": "tracker_right",
+              "topic": "/vive/tracker/right_wrist",
+              "writer_sequence": 82419
+            },
+            "safe": null,
+            "sample_index": 401,
+            "status": "PASS",
+            "stream": "tracker_right",
+            "tick_index": 170
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_left_raw",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "6c14cba68fbf0474606bdb24be19aeb55e7d115fffb9f4d2d18e270dc36e2ae6",
+              "cdr_sha256": "670c46165659201f6c67e90d91b707c5f8083feb8f96d2ed9b5ace95f755e039",
+              "collector_mono_ns": 1303370895267339,
+              "observation_cdr_sha256": "8acb55f51c39aeb62ed43d388212a2df946bd4dfc25dbf792f869e068365fb4d",
+              "observation_message": 803,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:dee62595508bb822970a6c86",
+              "physical_message": 802,
+              "raw_index_token": "asset:dee62595508bb822970a6c86:802",
+              "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+              "source_instance": "18e9b8806a76ab52-3d537043cd22e2d9/tracker_left_raw",
+              "stream": "tracker_left_raw",
+              "topic": "/vive/raw/left_wrist",
+              "writer_sequence": 73632
+            },
+            "safe": null,
+            "sample_index": 401,
+            "status": "PASS",
+            "stream": "tracker_left_raw",
+            "tick_index": 170
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_right_raw",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "fe5bea794cb79141cad69ce07bef2ef7fdc2e7521b17884359060345775b9d38",
+              "cdr_sha256": "741e2d406301355e1525ebb5c7df0042176c74b8b02563ca0f7a40a7b5732d0d",
+              "collector_mono_ns": 1303370895261962,
+              "observation_cdr_sha256": "269b1ba062f62e51cec9fea8cc9d78ebd6dacb252338c9577ae77f24cbce7112",
+              "observation_message": 803,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:dd609f18e9a4030bf8a43807",
+              "physical_message": 802,
+              "raw_index_token": "asset:dd609f18e9a4030bf8a43807:802",
+              "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+              "source_instance": "18e9b8806a76ab52-3d537043cd22e2d9/tracker_right_raw",
+              "stream": "tracker_right_raw",
+              "topic": "/vive/raw/right_wrist",
+              "writer_sequence": 82419
+            },
+            "safe": null,
+            "sample_index": 401,
+            "status": "PASS",
+            "stream": "tracker_right_raw",
+            "tick_index": 170
+          },
+          {
+            "geometry": "NOT_USED_FOR_INVALID_OR_SAFETY",
+            "observation_topic": "/dex/collection/observations/tracker_safety",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "beb0ca6f3ac27c6c6266d00a3c5089a8f3a6f3ef35cd086cdf0d26daedf53278",
+              "cdr_sha256": "99bc51286dc9659628d7f2408e581d2a7259b7948a85a42ba9bf8c88c71fa8e3",
+              "collector_mono_ns": 1303370895325283,
+              "observation_cdr_sha256": "860b7c3fc5b1b390d6a560c12da716b7e8a00a1966ef4cdf339ee55817a9f46c",
+              "observation_message": 803,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:623d46e7fa3ed0f0c4bb4f2d",
+              "physical_message": 802,
+              "raw_index_token": "asset:623d46e7fa3ed0f0c4bb4f2d:802",
+              "schema_sha256": "853429cef94a8c9631dba8ab6dab1b73cf28192c9435bf01c6a07c0bef6d45b2",
+              "source_instance": "18e9b8806a76ab52-3d537043cd22e2d9/tracker_safety",
+              "stream": "tracker_safety",
+              "topic": "/vive/tracker/safety_status",
+              "writer_sequence": 107028
+            },
+            "safe": true,
+            "sample_index": 401,
+            "status": "PASS",
+            "stream": "tracker_safety",
+            "tick_index": 170
+          }
+        ],
+        "partition": "recording:30d00a5452b46fe0c89ed936/00000",
+        "path": "Validation/capture_84d75398497941b2ac85b0f3/00000"
+      },
+      "recovery": {
+        "matched": [
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/manus_left",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "d403c2179214a7eaba6a1ca675a0b9ae38a1a330fa508a55e4320d82ca5a86fb",
+              "cdr_sha256": "720fd9d969161483bec69c999cbcf55fe2aed47fae06d272ea1a40b7211e5d03",
+              "collector_mono_ns": 620738638821645,
+              "observation_cdr_sha256": "27e73434f47f84f95654cb3617e954587a5145e667b3395fa7305bdc1d69eb8a",
+              "observation_message": 5671,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:881775785d317df29dbe308b",
+              "physical_message": 5670,
+              "raw_index_token": "asset:881775785d317df29dbe308b:5670",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/manus_left",
+              "stream": "manus_left",
+              "topic": "/manus_glove_left",
+              "writer_sequence": 166591
+            },
+            "safe": null,
+            "sample_index": 2835,
+            "status": "PASS",
+            "stream": "manus_left",
+            "tick_index": 383
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/manus_right",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "29a9710133921854ae5be4a09ca770e82c05e816b1c6412b1a0b336a8adaf512",
+              "cdr_sha256": "56f6387a3181785cfaba3fd856ab317f5448478554c9812ee25085a55ee3c638",
+              "collector_mono_ns": 620738630621558,
+              "observation_cdr_sha256": "873ccef802df2432e5702abc4970530f463497b091412ba0dcf2ff295eafe22b",
+              "observation_message": 5669,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:61ab3c86f23ec8219c515b95",
+              "physical_message": 5668,
+              "raw_index_token": "asset:61ab3c86f23ec8219c515b95:5668",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/manus_right",
+              "stream": "manus_right",
+              "topic": "/manus_glove_right",
+              "writer_sequence": 164853
+            },
+            "safe": null,
+            "sample_index": 2834,
+            "status": "PASS",
+            "stream": "manus_right",
+            "tick_index": 383
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_left",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "763ba99a00fbfcf66a1396651229dce07fd457cd885727566bdd79546a3d4582",
+              "cdr_sha256": "21e0c566a54db50d2bc8d74a6ed1f61e5911a6834d355243e6b57531484e17ee",
+              "collector_mono_ns": 620738639072541,
+              "observation_cdr_sha256": "7117ffe67a96f22fae318bad1a1b3fea957139aac21f0ed8b5b4006c41d73f31",
+              "observation_message": 5671,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:591521ed196efb7edfc6c600",
+              "physical_message": 5670,
+              "raw_index_token": "asset:591521ed196efb7edfc6c600:5670",
+              "schema_sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_left",
+              "stream": "tracker_left",
+              "topic": "/vive/tracker/left_wrist",
+              "writer_sequence": 101590
+            },
+            "safe": null,
+            "sample_index": 2835,
+            "status": "PASS",
+            "stream": "tracker_left",
+            "tick_index": 383
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_right",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "b258de1306d503df33cfdea1808ffb46789658937a192dffb6e8d9b2fd3c57ab",
+              "cdr_sha256": "998b09bda2d6a9691670c293ce1f689119f0282139feff777a49fcb9e59a0615",
+              "collector_mono_ns": 620738639074538,
+              "observation_cdr_sha256": "413a57640d4760bf34eb566ddcce0097ef16240b99cfe4f7a5e9246d93c8b5de",
+              "observation_message": 5653,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:0166026e59b6aba0e77f73cb",
+              "physical_message": 5652,
+              "raw_index_token": "asset:0166026e59b6aba0e77f73cb:5652",
+              "schema_sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_right",
+              "stream": "tracker_right",
+              "topic": "/vive/tracker/right_wrist",
+              "writer_sequence": 109311
+            },
+            "safe": null,
+            "sample_index": 2826,
+            "status": "PASS",
+            "stream": "tracker_right",
+            "tick_index": 383
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_left_raw",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "35fab51b38a7e3522da5479920879f160c75037b0a12b4318b35b4cf08d747d7",
+              "cdr_sha256": "716b5a1fe04f0b906ab9b72faf98bbc86e3db34699c493e01dfb71607e5ec1fa",
+              "collector_mono_ns": 620738638913954,
+              "observation_cdr_sha256": "1bb27fe6692a61eb145ffdb6f3a067efa1c617e1a64b70f5cb86108fc34228e2",
+              "observation_message": 5671,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:c5385bdd5b82eb8831f65f0d",
+              "physical_message": 5670,
+              "raw_index_token": "asset:c5385bdd5b82eb8831f65f0d:5670",
+              "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_left_raw",
+              "stream": "tracker_left_raw",
+              "topic": "/vive/raw/left_wrist",
+              "writer_sequence": 101600
+            },
+            "safe": null,
+            "sample_index": 2835,
+            "status": "PASS",
+            "stream": "tracker_left_raw",
+            "tick_index": 383
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_right_raw",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "927a754e85f9ebf77a11a0d4626a460c0a52d4b4b660adf720ebc75faefc42d7",
+              "cdr_sha256": "4a06eb064e0abce23adc00dfa50acb2dfb3dba5b97ed4e86554d540e526d1325",
+              "collector_mono_ns": 620738638909477,
+              "observation_cdr_sha256": "d779d0577eb7bcb9ea22986c8e97462895695d1d0d632d2605a12ce7b8c0f238",
+              "observation_message": 5653,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:5d873d7e2e956aba9e013a2e",
+              "physical_message": 5652,
+              "raw_index_token": "asset:5d873d7e2e956aba9e013a2e:5652",
+              "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_right_raw",
+              "stream": "tracker_right_raw",
+              "topic": "/vive/raw/right_wrist",
+              "writer_sequence": 109321
+            },
+            "safe": null,
+            "sample_index": 2826,
+            "status": "PASS",
+            "stream": "tracker_right_raw",
+            "tick_index": 383
+          },
+          {
+            "geometry": "NOT_USED_FOR_INVALID_OR_SAFETY",
+            "observation_topic": "/dex/collection/observations/tracker_safety",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "9ab95bb5e83da44aa7c440ab92b425af640d30fe8de50e57bbf525f2ade87116",
+              "cdr_sha256": "96fc4fd51388b59da5351717bd04ae331e6bd6a6b977127eea33686a733cfd6d",
+              "collector_mono_ns": 620738638966291,
+              "observation_cdr_sha256": "29de5187837231cbfd2c374b9e708a95148f70cd1e693e9098667d8b2f1b4dca",
+              "observation_message": 5671,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:daca4f56f8224afb8249e8c9",
+              "physical_message": 5670,
+              "raw_index_token": "asset:daca4f56f8224afb8249e8c9:5670",
+              "schema_sha256": "853429cef94a8c9631dba8ab6dab1b73cf28192c9435bf01c6a07c0bef6d45b2",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_safety",
+              "stream": "tracker_safety",
+              "topic": "/vive/tracker/safety_status",
+              "writer_sequence": 13176269
+            },
+            "safe": true,
+            "sample_index": 2835,
+            "status": "PASS",
+            "stream": "tracker_safety",
+            "tick_index": 383
+          }
+        ],
+        "partition": "recording:01ee4f951950370ea9ecddae/00002",
+        "path": "Train/capture_8c85b5bd93595270f134bf72/00002"
+      },
+      "repeated_manus_left": {
+        "equal_raw_geometry": true,
+        "matched": [
+          {
+            "geometry": "RAW_REPEAT_PAIR_MEMBER",
+            "observation_topic": "/dex/collection/observations/manus_left",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "d403c2179214a7eaba6a1ca675a0b9ae38a1a330fa508a55e4320d82ca5a86fb",
+              "cdr_sha256": "76556f36d910ae4f2128b9db7fb1b0a0d5eed78e708dc398736c2fde290ac11c",
+              "collector_mono_ns": 620715172324962,
+              "observation_cdr_sha256": "1b15c7db40a53fd98e4ceb805ed411a8d7042ebe2d3437cdc95fb7f799acd621",
+              "observation_message": 39,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:881775785d317df29dbe308b",
+              "physical_message": 38,
+              "raw_index_token": "asset:881775785d317df29dbe308b:38",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/manus_left",
+              "stream": "manus_left",
+              "topic": "/manus_glove_left",
+              "writer_sequence": 163775
+            },
+            "safe": null,
+            "sample_index": 19,
+            "status": "PASS",
+            "stream": "manus_left",
+            "tick_index": null
+          },
+          {
+            "geometry": "RAW_REPEAT_PAIR_MEMBER",
+            "observation_topic": "/dex/collection/observations/manus_left",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "d403c2179214a7eaba6a1ca675a0b9ae38a1a330fa508a55e4320d82ca5a86fb",
+              "cdr_sha256": "c6afde32f568ab0266c54453ed9cb976f59dd56d5495228fdb56ccf42610f2ba",
+              "collector_mono_ns": 620715180499533,
+              "observation_cdr_sha256": "e0373812e135552fb4cc35ed34f296669a1a42157bd05038319a316a884b862e",
+              "observation_message": 41,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:881775785d317df29dbe308b",
+              "physical_message": 40,
+              "raw_index_token": "asset:881775785d317df29dbe308b:40",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/manus_left",
+              "stream": "manus_left",
+              "topic": "/manus_glove_left",
+              "writer_sequence": 163776
+            },
+            "safe": null,
+            "sample_index": 20,
+            "status": "PASS",
+            "stream": "manus_left",
+            "tick_index": null
+          }
+        ],
+        "partition": "recording:01ee4f951950370ea9ecddae/00000",
+        "path": "Train/capture_8c85b5bd93595270f134bf72/00000",
+        "raw_geometry_sha256": [
+          "c0ab744e4cfc243e4b66beef5ad24d7d8a20d777bebf565cecb42872b100659a",
+          "c0ab744e4cfc243e4b66beef5ad24d7d8a20d777bebf565cecb42872b100659a"
+        ]
+      },
+      "repeated_manus_right": {
+        "equal_raw_geometry": true,
+        "matched": [
+          {
+            "geometry": "RAW_REPEAT_PAIR_MEMBER",
+            "observation_topic": "/dex/collection/observations/manus_right",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "29a9710133921854ae5be4a09ca770e82c05e816b1c6412b1a0b336a8adaf512",
+              "cdr_sha256": "d5d257cf9f4d661446f97e4a7a958b763f6be3855f845747aaaea4b41837e5f6",
+              "collector_mono_ns": 620715055503566,
+              "observation_cdr_sha256": "4e3d065d25e6a233f3a765315f21a00bc4b7000df2d69d7d775b8e1e031909f9",
+              "observation_message": 11,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:61ab3c86f23ec8219c515b95",
+              "physical_message": 10,
+              "raw_index_token": "asset:61ab3c86f23ec8219c515b95:10",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/manus_right",
+              "stream": "manus_right",
+              "topic": "/manus_glove_right",
+              "writer_sequence": 162024
+            },
+            "safe": null,
+            "sample_index": 5,
+            "status": "PASS",
+            "stream": "manus_right",
+            "tick_index": null
+          },
+          {
+            "geometry": "RAW_REPEAT_PAIR_MEMBER",
+            "observation_topic": "/dex/collection/observations/manus_right",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "29a9710133921854ae5be4a09ca770e82c05e816b1c6412b1a0b336a8adaf512",
+              "cdr_sha256": "d921bdf5e9c406439200efab77275caa64890820c871dd6ed0628f658ee21a90",
+              "collector_mono_ns": 620715063875686,
+              "observation_cdr_sha256": "5eab85a4a0511c4120ca5f97d21e76212de49c888a098555167f4cf9e14c23b2",
+              "observation_message": 13,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:61ab3c86f23ec8219c515b95",
+              "physical_message": 12,
+              "raw_index_token": "asset:61ab3c86f23ec8219c515b95:12",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/manus_right",
+              "stream": "manus_right",
+              "topic": "/manus_glove_right",
+              "writer_sequence": 162025
+            },
+            "safe": null,
+            "sample_index": 6,
+            "status": "PASS",
+            "stream": "manus_right",
+            "tick_index": null
+          }
+        ],
+        "partition": "recording:01ee4f951950370ea9ecddae/00000",
+        "path": "Train/capture_8c85b5bd93595270f134bf72/00000",
+        "raw_geometry_sha256": [
+          "1d8a99f9a22dbd7890e9da2fab71baa94bcf5018116a4b67cb95929e9c770233",
+          "1d8a99f9a22dbd7890e9da2fab71baa94bcf5018116a4b67cb95929e9c770233"
+        ]
+      },
+      "tail": {
+        "matched": [
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/manus_left",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "d403c2179214a7eaba6a1ca675a0b9ae38a1a330fa508a55e4320d82ca5a86fb",
+              "cdr_sha256": "982684a59bd6bd61cc24aa6c20e4371c816facdb05c6fa0edaf110daa786119b",
+              "collector_mono_ns": 620764456212298,
+              "observation_cdr_sha256": "a170f62576d7fcbe88e1a7a41a28ffc817737f5a2cec640a32b42def9146b001",
+              "observation_message": 11867,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:881775785d317df29dbe308b",
+              "physical_message": 11866,
+              "raw_index_token": "asset:881775785d317df29dbe308b:11866",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/manus_left",
+              "stream": "manus_left",
+              "topic": "/manus_glove_left",
+              "writer_sequence": 169689
+            },
+            "safe": null,
+            "sample_index": 5933,
+            "status": "PASS",
+            "stream": "manus_left",
+            "tick_index": 74
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/manus_right",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "29a9710133921854ae5be4a09ca770e82c05e816b1c6412b1a0b336a8adaf512",
+              "cdr_sha256": "90eb1301d0366850135ae35035a1148bb5641d908e3ccd8f79e40184eef73c5c",
+              "collector_mono_ns": 620764456500295,
+              "observation_cdr_sha256": "cd8cb46be147204643f9faee1718d5e799b3a4422b1613c48d4921179c950939",
+              "observation_message": 11867,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:61ab3c86f23ec8219c515b95",
+              "physical_message": 11866,
+              "raw_index_token": "asset:61ab3c86f23ec8219c515b95:11866",
+              "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/manus_right",
+              "stream": "manus_right",
+              "topic": "/manus_glove_right",
+              "writer_sequence": 167952
+            },
+            "safe": null,
+            "sample_index": 5933,
+            "status": "PASS",
+            "stream": "manus_right",
+            "tick_index": 74
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_left",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "763ba99a00fbfcf66a1396651229dce07fd457cd885727566bdd79546a3d4582",
+              "cdr_sha256": "a845d0c2dcbe7e7c1959ffd25467afbb0577b2849a5d8630c796ba58492d8774",
+              "collector_mono_ns": 620764456530307,
+              "observation_cdr_sha256": "a0dc837e156866d03edff53390ea60fba6caf39ec7199c75e7ca3a5cadd025de",
+              "observation_message": 11867,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:591521ed196efb7edfc6c600",
+              "physical_message": 11866,
+              "raw_index_token": "asset:591521ed196efb7edfc6c600:11866",
+              "schema_sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_left",
+              "stream": "tracker_left",
+              "topic": "/vive/tracker/left_wrist",
+              "writer_sequence": 104688
+            },
+            "safe": null,
+            "sample_index": 5933,
+            "status": "PASS",
+            "stream": "tracker_left",
+            "tick_index": 74
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_right",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "b258de1306d503df33cfdea1808ffb46789658937a192dffb6e8d9b2fd3c57ab",
+              "cdr_sha256": "5d26592c9f2abdbf6f1343044bfe2d510b6ed0fc1361b036814a93ce33c8c052",
+              "collector_mono_ns": 620764456537117,
+              "observation_cdr_sha256": "e839ae0a29140bf173ac2ad9e666161fafbc4b3db89d45a7fb401fd4b0643495",
+              "observation_message": 11691,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:0166026e59b6aba0e77f73cb",
+              "physical_message": 11690,
+              "raw_index_token": "asset:0166026e59b6aba0e77f73cb:11690",
+              "schema_sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_right",
+              "stream": "tracker_right",
+              "topic": "/vive/tracker/right_wrist",
+              "writer_sequence": 112330
+            },
+            "safe": null,
+            "sample_index": 5845,
+            "status": "PASS",
+            "stream": "tracker_right",
+            "tick_index": 74
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_left_raw",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "35fab51b38a7e3522da5479920879f160c75037b0a12b4318b35b4cf08d747d7",
+              "cdr_sha256": "80809027b04e30b75fab2e6d1a12f7f20cf5d0916f8265ee8e728d2d0d0f1990",
+              "collector_mono_ns": 620764456496052,
+              "observation_cdr_sha256": "e2772bb28c9d55a1ebd7f7d5638961bc0c17eda069af58f7448d01f3d957d245",
+              "observation_message": 11867,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:c5385bdd5b82eb8831f65f0d",
+              "physical_message": 11866,
+              "raw_index_token": "asset:c5385bdd5b82eb8831f65f0d:11866",
+              "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_left_raw",
+              "stream": "tracker_left_raw",
+              "topic": "/vive/raw/left_wrist",
+              "writer_sequence": 104698
+            },
+            "safe": null,
+            "sample_index": 5933,
+            "status": "PASS",
+            "stream": "tracker_left_raw",
+            "tick_index": 74
+          },
+          {
+            "geometry": "RAW_VALUE_EXACT",
+            "observation_topic": "/dex/collection/observations/tracker_right_raw",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "927a754e85f9ebf77a11a0d4626a460c0a52d4b4b660adf720ebc75faefc42d7",
+              "cdr_sha256": "1a0955ebdc54e202b9bff88664d2881b8e3207f38e8e2701c8ad204ce4ed2042",
+              "collector_mono_ns": 620764456506473,
+              "observation_cdr_sha256": "d6d7f4b0ca703718a6ea3bbe48005913d849dea8b93d4267dda692ec5ba8b81b",
+              "observation_message": 11691,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:5d873d7e2e956aba9e013a2e",
+              "physical_message": 11690,
+              "raw_index_token": "asset:5d873d7e2e956aba9e013a2e:11690",
+              "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_right_raw",
+              "stream": "tracker_right_raw",
+              "topic": "/vive/raw/right_wrist",
+              "writer_sequence": 112340
+            },
+            "safe": null,
+            "sample_index": 5845,
+            "status": "PASS",
+            "stream": "tracker_right_raw",
+            "tick_index": 74
+          },
+          {
+            "geometry": "NOT_USED_FOR_INVALID_OR_SAFETY",
+            "observation_topic": "/dex/collection/observations/tracker_safety",
+            "raw_valid": true,
+            "record": {
+              "asset_sha256": "9ab95bb5e83da44aa7c440ab92b425af640d30fe8de50e57bbf525f2ade87116",
+              "cdr_sha256": "ba738b7efdbd0502779568b9096320442c713a26d74768796f6c83090060b626",
+              "collector_mono_ns": 620764456501368,
+              "observation_cdr_sha256": "dea575b60aecac2c181e81c0918a584e07b085ec59fe1016632e0602254a4869",
+              "observation_message": 11867,
+              "observation_schema_sha256": "f2d71b37a6b6415a40dd38745c357d7746f18b8c0072d5504af9f35d5ec58d9a",
+              "part_id": "asset:daca4f56f8224afb8249e8c9",
+              "physical_message": 11866,
+              "raw_index_token": "asset:daca4f56f8224afb8249e8c9:11866",
+              "schema_sha256": "853429cef94a8c9631dba8ab6dab1b73cf28192c9435bf01c6a07c0bef6d45b2",
+              "source_instance": "18e6e5aace070dda-86fdee9f00081cff/tracker_safety",
+              "stream": "tracker_safety",
+              "topic": "/vive/tracker/safety_status",
+              "writer_sequence": 13179367
+            },
+            "safe": true,
+            "sample_index": 5933,
+            "status": "PASS",
+            "stream": "tracker_safety",
+            "tick_index": 74
+          }
+        ],
+        "partition": "recording:01ee4f951950370ea9ecddae/00006",
+        "path": "Train/capture_8c85b5bd93595270f134bf72/00006"
+      }
+    },
+    "decoded_pairs": 33,
+    "missing_scenarios": [],
+    "raw_files": 14
+  },
+  "schema": "s05.p01e.e1.tests.v1",
+  "technical_e1": "PASS"
+}
