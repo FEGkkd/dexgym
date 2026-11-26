@@ -222,6 +222,8 @@ def p01_dependency_states(document):
                         f'{owner} receipt does not support {gate} technical PASS')
             if owner=='P01-E':
                 check_e1_receipt(document,event,evidence,receipt)
+            if owner=='P01-F':
+                check_f1_receipt(document,event,evidence,receipt)
             if owner=='P01-D' and status=='READY_FOR_REVIEW':
                 frozen=checked_file(ROOT,event['frozen_config_ref'])
                 require(digest(frozen.read_bytes())==event['frozen_config_sha256']==receipt['candidate_config_sha256'],
@@ -348,6 +350,25 @@ def check_e1_receipt(document,event,evidence,receipt):
         for name,value in receipt[group].items():
             require(digest(checked_file(evidence.parent,name).read_bytes())==value, f'E1 evidence differs: {name}')
     print('PASS E1 receipt, output and independent audit file hashes')
+
+
+def check_f1_receipt(document,event,evidence,receipt):
+    steps=document['p01_subphase_events']
+    approved=next(x for x in steps if x['phase']=='P01-E' and x['to']=='ACCEPTED')
+    started=next(x for x in steps if x['phase']=='P01-F' and x['to']=='IN_PROGRESS')
+    require(event['scope']==receipt['scope']==started['scope']=='INDEPENDENT_HMB_QUALIFICATION' and
+            event['run_id']==receipt['run_id']==started['run_id'] and
+            receipt['sample_plan_sha256']==started['sample_plan_sha256'] and
+            receipt['approved_e1_commit']==approved['reviewed_commit'],
+            'F1 receipt differs from the approved archive or registered audit')
+    require(all(receipt[f'approved_e1_{k}_sha256']==approved[f'{k}_sha256'] for k in ('manifest','plan','receipt')),
+            'F1 archive hashes differ from human E1 approval')
+    require(receipt['verified_control_ticks']==0 and not receipt['P02_start_authorized'] and
+            all(receipt['technical_gates'][k]=='BLOCKED' for k in ('C2-RT','robot-base','P01-T','Final_Test')),
+            'F1 scope must preserve independent hardware and P02 stage gates')
+    for name,value in receipt['evidence_sha256'].items():
+        require(digest(checked_file(evidence.parent,name).read_bytes())==value, f'F1 evidence differs: {name}')
+    print('PASS F1 receipt, preregistration, scoped handoff and exact evidence hashes')
 
 
 def clock_dependency_state(document,dcr):

@@ -25,3 +25,4 @@
 | I21 | B2、P01-T 均 BLOCKED。可读的 arm/hand 命令与反馈数组缺实机身份及独立配对证明 | 按原包 SHA 绑定硬件、驱动、发令和实测序列，实证时钟误差及动态响应。P03 正式开工前完成独立资格签核。[P01-T](specs/P01_T_telemetry_acquisition.md) |
 | I22 | 七个有界窗口来源没有独立的 MANUS 与 Tracker 物理捕获至控制端可用时刻的上下界。C2-RT BLOCKED | 取得独立 clock anchors、设备采样身份和控制节点接收/截止记录。历史仿真可另审；P03 启动前需独立 C2-RT 签核。[补证规格](specs/P01_C_RT_clock_qualification.md) |
 | I23 | 独立物理 robot-base 注册仍 BLOCKED。已验证的 Tracker 软件重建采用 OpenVR 坐标 | 对实际工位与基座做独立测量、误差和重复性验收，再单独签核。P03 启动前完成 |
+| I24 | P01-F 尾部复现了极短代理差分间隔和双路腕位置突变，实体速度与跟踪/重定位成因待证。双手任务仅两条来源标签，操作者及独立 session 未验证 | 保留原样本与标记。后续用独立采样时间与跟踪状态补证，并扩充标识明确的双手及跨操作者开发样本。[P01-F](reports/P01_F_acceptance.md) |

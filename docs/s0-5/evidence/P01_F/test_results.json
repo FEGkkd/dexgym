@@ -1,0 +1,76 @@
+{
+  "runs": {
+    "archive-01": {
+      "command": "docs/s0-5/evidence/P01_F/scan_archive.py /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E1-20261126-3f90652 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-F-20261126-b22f8be/archive-01",
+      "exit": 1,
+      "implementation_base": "2349da4a26be71590a95006b5bf2ee7f7ed9884a",
+      "sha256": {
+        "run.stderr": "8cca4dcfe4b7ba927b59caaf92e16d1e96991c75ab955a2521a5ccfa2e5aa81a",
+        "run.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "run.time": "e707a7ba4101ba6b83856cc1b38386514efac595a7c390efe13cdba3d1cebc48"
+      }
+    },
+    "archive-02": {
+      "command": "docs/s0-5/evidence/P01_F/scan_archive.py /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E1-20261126-3f90652 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-F-20261126-b22f8be/archive-02",
+      "exit": 0,
+      "implementation_base": "2349da4a26be71590a95006b5bf2ee7f7ed9884a",
+      "sha256": {
+        "run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "run.stdout": "24dbba7678a17415d556a262b3360b7fd76bb39032cb205884847a370d8cd632",
+        "run.time": "d70b2088cb156451dfb21d8323334eca4aa30b883679378370eba46cc79ca2a3"
+      }
+    },
+    "raw-01": {
+      "command": "docs/s0-5/evidence/P01_F/reconstruct.py /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E1-20261126-3f90652 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-F-20261126-b22f8be/archive-02 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-F-20261126-b22f8be/raw-01",
+      "exit": 1,
+      "implementation_base": "2349da4a26be71590a95006b5bf2ee7f7ed9884a",
+      "sha256": {
+        "run.stderr": "d70753cece9ed9c56924045d1d3fa351a7778a7af23285bd96725ca1e377302f",
+        "run.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "run.time": "73d0544104b3f061d4e8a6523c228aa422337a6f5b321d486c78a356f16bbe28"
+      }
+    },
+    "raw-02": {
+      "command": "docs/s0-5/evidence/P01_F/reconstruct.py /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E1-20261126-3f90652 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-F-20261126-b22f8be/archive-02 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-F-20261126-b22f8be/raw-02",
+      "exit": 0,
+      "implementation_base": "ff16021fe8396ff0da232d6c6459638029c9bc77",
+      "sha256": {
+        "run.stderr": "284da84bb2c6d09463d87d6a7f60f9a8abc20389fcfa35ea8d7c2fb0fe4b87e2",
+        "run.stdout": "7385f8edeaf0ee41cc83a31035eeece2e546239d7dc275ea2abdb54542c651fd",
+        "run.time": "4245b7dcb1fe8afc2c281221d29923868353f83e86371a443cbd784924e805a3"
+      }
+    },
+    "raw-03": {
+      "command": "docs/s0-5/evidence/P01_F/reconstruct.py /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E1-20261126-3f90652 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-F-20261126-b22f8be/archive-02 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-F-20261126-b22f8be/raw-03",
+      "exit": 0,
+      "implementation_base": "1cc2d816cd36e7ecd7e091b1777e84b0f7983eea",
+      "sha256": {
+        "run.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "run.stdout": "ba022f4fd91ebc637c0a4b9d9ac9d9cf7684e1712fc0a122a99d65fbbec949ec",
+        "run.time": "dc6e7477bf52fba67d01c4f9efcddc1830ab7b69b5cc71226145476ce2052970"
+      }
+    },
+    "tests-01": {
+      "command": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+      "exit": 1,
+      "implementation_base": "2349da4a26be71590a95006b5bf2ee7f7ed9884a",
+      "sha256": {
+        "run.stderr": "bf2ae464127842fc8b3fb40a95fe6993587f60dfa304ced753beb21e7ce2462f",
+        "run.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "run.time": "631668aa4e9533bb26e2f46de5f00483ad77daa1f33b1145d31f449db03e5f63"
+      }
+    },
+    "tests-02": {
+      "command": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+      "exit": 0,
+      "implementation_base": "2349da4a26be71590a95006b5bf2ee7f7ed9884a",
+      "sha256": {
+        "run.stderr": "0cb67bf344730dd0d222efd5fd3adaa82219fa4a36760c6c766d675cc939b457",
+        "run.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "run.time": "3be1437bfd5c1f05fc208cc7ebf0a8180235129853e9a0ada605109233a9e813"
+      }
+    }
+  },
+  "technical_gate": "PASS",
+  "unit_count": 98
+}

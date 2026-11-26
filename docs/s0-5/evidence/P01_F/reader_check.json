@@ -1,0 +1,109 @@
+{
+  "cases": [
+    {
+      "frames": {
+        "manus_pose": "per-side MANUS root/palm, metres and XYZW",
+        "raw_tracker": "recorded device output frame in source table",
+        "registered_wrist": "recorded software registration, actual frame in source table",
+        "sdk_common_pose": "MANUS recorded SDK common, metres and XYZW"
+      },
+      "number_of_indexed_partitions": 228,
+      "partition": "recording:06f3bc9ae8b6df054b6f7538/00000",
+      "purpose": "HMB_GEOMETRY_DEVELOPMENT",
+      "source_rows": 3780,
+      "split": "Train"
+    },
+    {
+      "feature_names": [
+        "pose",
+        "node_mask",
+        "pose_valid",
+        "velocity_m_s",
+        "velocity_valid",
+        "age_ns",
+        "velocity_age_ns",
+        "safety_permission",
+        "joint_valid"
+      ],
+      "frames": {
+        "manus_pose": "per-side MANUS root/palm, metres and XYZW",
+        "raw_tracker": "recorded device output frame in source table",
+        "registered_wrist": "recorded software registration, actual frame in source table",
+        "sdk_common_pose": "MANUS recorded SDK common, metres and XYZW"
+      },
+      "number_of_indexed_partitions": 228,
+      "partition": "recording:06f3bc9ae8b6df054b6f7538/00000",
+      "prefix_equal": true,
+      "purpose": "HMB_SIMULATED_CAUSAL",
+      "source_rows": 3780,
+      "split": "Train",
+      "tick": 7
+    },
+    {
+      "frames": {
+        "manus_pose": "per-side MANUS root/palm, metres and XYZW",
+        "raw_tracker": "recorded device output frame in source table",
+        "registered_wrist": "recorded software registration, actual frame in source table",
+        "sdk_common_pose": "MANUS recorded SDK common, metres and XYZW"
+      },
+      "number_of_indexed_partitions": 228,
+      "partition": "recording:06f3bc9ae8b6df054b6f7538/00000",
+      "purpose": "HMB_OFFLINE_DIAGNOSTIC",
+      "source_rows": 3780,
+      "split": "Train"
+    },
+    {
+      "frames": {
+        "manus_pose": "per-side MANUS root/palm, metres and XYZW",
+        "raw_tracker": "recorded device output frame in source table",
+        "registered_wrist": "recorded software registration, actual frame in source table",
+        "sdk_common_pose": "MANUS recorded SDK common, metres and XYZW"
+      },
+      "number_of_indexed_partitions": 80,
+      "partition": "recording:84794a93081c0b949a469ead/00005",
+      "purpose": "HMB_GEOMETRY_DEVELOPMENT",
+      "source_rows": 7140,
+      "split": "Validation"
+    },
+    {
+      "feature_names": [
+        "pose",
+        "node_mask",
+        "pose_valid",
+        "velocity_m_s",
+        "velocity_valid",
+        "age_ns",
+        "velocity_age_ns",
+        "safety_permission",
+        "joint_valid"
+      ],
+      "frames": {
+        "manus_pose": "per-side MANUS root/palm, metres and XYZW",
+        "raw_tracker": "recorded device output frame in source table",
+        "registered_wrist": "recorded software registration, actual frame in source table",
+        "sdk_common_pose": "MANUS recorded SDK common, metres and XYZW"
+      },
+      "number_of_indexed_partitions": 80,
+      "partition": "recording:84794a93081c0b949a469ead/00005",
+      "prefix_equal": true,
+      "purpose": "HMB_SIMULATED_CAUSAL",
+      "source_rows": 7140,
+      "split": "Validation",
+      "tick": 4
+    },
+    {
+      "frames": {
+        "manus_pose": "per-side MANUS root/palm, metres and XYZW",
+        "raw_tracker": "recorded device output frame in source table",
+        "registered_wrist": "recorded software registration, actual frame in source table",
+        "sdk_common_pose": "MANUS recorded SDK common, metres and XYZW"
+      },
+      "number_of_indexed_partitions": 80,
+      "partition": "recording:84794a93081c0b949a469ead/00005",
+      "purpose": "HMB_OFFLINE_DIAGNOSTIC",
+      "source_rows": 7140,
+      "split": "Validation"
+    }
+  ],
+  "status": "PASS"
+}

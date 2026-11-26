@@ -1,0 +1,20 @@
+{
+  "P02_start_authorized": false,
+  "P03_required_accepted": [
+    "P02",
+    "P01-T",
+    "C2-RT",
+    "robot-base"
+  ],
+  "in_scope": "historical HMB development",
+  "physical_robot_base": "BLOCKED",
+  "products": {
+    "HMB_GEOMETRY_DEVELOPMENT": "QUALIFIED_AWAITING_HUMAN",
+    "HMB_OFFLINE_DIAGNOSTIC": "QUALIFIED_AWAITING_HUMAN",
+    "HMB_REALTIME_VERIFIED": "BLOCKED",
+    "HMB_SIMULATED_CAUSAL": "QUALIFIED_AWAITING_HUMAN",
+    "Independent_Final_Test": "BLOCKED",
+    "Robot_Telemetry_Bank": "BLOCKED"
+  },
+  "technical_gate": "PASS"
+}

@@ -90,7 +90,7 @@
     "P01-C": "ACCEPTED",
     "P01-D": "ACCEPTED",
     "P01-E": "ACCEPTED",
-    "P01-F": "IN_PROGRESS",
+    "P01-F": "READY_FOR_REVIEW",
     "P01-T": "BLOCKED"
   },
   "p01_subphase_events": [
@@ -327,6 +327,19 @@
       "sample_plan_ref": "evidence/P01_F/sample_plan.json",
       "sample_plan_sha256": "a0900a0ad5491fe5ea5ef152ab9bc888c0ac6629e58c929df2f4bc2a3a4a2548",
       "run_id": "P01-F-20261126-b22f8be"
+    },
+    {
+      "phase": "P01-F",
+      "from": "IN_PROGRESS",
+      "to": "READY_FOR_REVIEW",
+      "at": "2026-11-26T19:38:13+08:00",
+      "scope": "INDEPENDENT_HMB_QUALIFICATION",
+      "run_id": "P01-F-20261126-b22f8be",
+      "evidence_ref": "evidence/P01_F/review_receipt.json",
+      "evidence_sha256": "1957bc5828cc76935f8231f13824b44e5084e6445cfb66f4d5e3b9f76870b039",
+      "technical_gates": {
+        "F1": "PASS"
+      }
     }
   ],
   "p01e_preflight": {
