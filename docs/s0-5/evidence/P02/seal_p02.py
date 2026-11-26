@@ -131,9 +131,9 @@ def mapping_and_solver(records, selected):
                     'relative_wrist_rotation_rad', 'cross_hand_m', 'local_landmark_rmse_m'):
             values = np.array([r['whole54']['metrics'][key] for r in eligible])
             details[key] = pt(values.reshape(-1))
-        result[label] = dict(mapped=len(mapped), near_pinch_pairs=sum(sum(h['near_pinch_pairs']) for h in hands),
-                             active_pinch_before_m=pt([e for h in hands for e, active in zip(h['before_error_m'], h['near_pinch_pairs']) if active]),
-                             active_pinch_after_m=pt([e for h in hands for e, active in zip(h['after_error_m'], h['near_pinch_pairs']) if active]),
+        result[label] = dict(mapped=len(mapped), near_pinch_pairs=sum(len(h['near_pinch_pairs']) for h in hands),
+                             active_pinch_before_m=pt([h['before_error_m'][i] for h in hands for i in h['near_pinch_pairs']]),
+                             active_pinch_after_m=pt([h['after_error_m'][i] for h in hands for i in h['near_pinch_pairs']]),
                              bone_length_abs_delta_m=pt(np.abs(np.array([h['bone_length_delta_m'] for h in hands])).ravel()),
                              wrist_baseline_distortion_m=pt([r['mapping']['relative_wrist_translation_delta_m'] for r in mapped]),
                              geometric_projection=details,

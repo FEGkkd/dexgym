@@ -1,7 +1,7 @@
 """Review regressions for functional statistics, mapping, and minimax."""
 import unittest
 
-from seal_p02 import active_pinch_errors
+from seal_p02 import mapping_and_solver
 
 
 class PinchStatisticsTests(unittest.TestCase):
@@ -11,8 +11,16 @@ class PinchStatisticsTests(unittest.TestCase):
         for indices, before, after in cases:
             with self.subTest(indices=indices):
                 hand = {'near_pinch_pairs': indices, 'before_error_m': [10, 20, 30, 40],
-                        'after_error_m': [1, 2, 3, 4]}
-                self.assertEqual(active_pinch_errors(hand), (len(indices), before, after))
+                        'after_error_m': [1, 2, 3, 4], 'bone_length_delta_m': [0.]}
+                record = dict(identity={'split':'Train','cohort':'ROOT'}, mapped={},
+                              mapping={'hands':[hand],'relative_wrist_translation_delta_m':0.})
+                summary = mapping_and_solver([record],[])['All']
+                self.assertEqual(summary['near_pinch_pairs'], len(indices))
+                self.assertEqual(summary['active_pinch_before_m'] is None, not before)
+                self.assertEqual(summary['active_pinch_after_m'] is None, not after)
+                if before:
+                    self.assertEqual(summary['active_pinch_before_m'][-1], max(before))
+                    self.assertEqual(summary['active_pinch_after_m'][-1], max(after))
 
 
 if __name__ == '__main__':
