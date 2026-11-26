@@ -1,0 +1,273 @@
+{
+  "attempt": "attempt-03",
+  "authorizes_any_followup": false,
+  "counts": {
+    "causal_new": 2248,
+    "causal_old": 2248,
+    "input_file_bytes": 490239228,
+    "joint_gained": 0,
+    "joint_lost": 0,
+    "offline_new": 2211,
+    "offline_old": 2248,
+    "raw_window_events": 47983,
+    "real_unsafe_events": 153,
+    "recordings": 7,
+    "registered_pairs": 13640,
+    "ticks": 2300
+  },
+  "execution_source_sha256": {
+    "docs/s0-5/evidence/P01_C_review/legacy_order_witness.py": "282d7534875025e609a8d2ff5e6d3812c475e4826e38c2457af35a313b0700f9",
+    "docs/s0-5/evidence/P01_C_review/run_review.sh": "d3a8543a44adfab5b2d8459305bae6dba1e097c2bebc017c210f98236855bea1",
+    "docs/s0-5/evidence/P01_C_review/seal_review.py": "0ce8395c2cb04ea5762b43ac7521ab39e8a9c0be71c56592610ad707b57e9a31",
+    "source/dexgym/tasks/direct/wholebody_s05/data/calibration.py": "b4b594dde8427c26a9d3b0bd9d75a65a3f7aff753497ebd43c96f02b290f3015",
+    "source/dexgym/tasks/direct/wholebody_s05/data/capture_windows.py": "f577ae44b2fbf1d0cb571bca20ab95a5907abfc19e7ddbac7c68b28e036a013a",
+    "source/dexgym/tasks/direct/wholebody_s05/data/clock_domains.py": "2a3a569f49f62f8299100daeb043d79fc37a06d62e86d13987fbdc1f42b05e4a",
+    "source/dexgym/tasks/direct/wholebody_s05/data/geometry.py": "e042180b9baadbfef063eef88a0a9c3deb771d5fe96244fc3d1f7240d099782a",
+    "source/dexgym/tasks/direct/wholebody_s05/data/review_audit.py": "bb8c60654d7467d9b032c49606ad9fe6aff87763b1251a8b71e3e7f602d34ca3",
+    "source/dexgym/tasks/direct/wholebody_s05/data/review_metrics.py": "f69f49f97af1192948f08fa23463b9b63f2c98439c811f8c671a462626e3b73e",
+    "source/dexgym/tasks/direct/wholebody_s05/data/sample_identity.py": "6f6878d9ba3ce11c08b51a3c57bd27ea0ddc4eafe0104459984ca6740e6cbab9",
+    "source/dexgym/tasks/direct/wholebody_s05/data/sync_audit.py": "13d01baa6f00965f36a2f7b5f17ffbe582ba7ad9eb0c508656a3b42e9cdc0a72",
+    "source/dexgym/tasks/direct/wholebody_s05/data/sync_evidence.py": "e5f3366143892d5b6fe929defd01de5c00be8244dbed9bb4b1e3d755b16d7cc5",
+    "source/dexgym/tasks/direct/wholebody_s05/data/synchronize.py": "0f54db3b8f711e0d47f03392510f4be9cabde7801c87e9d8143265ac88027100",
+    "tests/s0_5/integration/test_p01c_review_integration.py": "f803e52b7adf9fa52d906b1c34e583b46b3621fea168450f9ef1803931468d38",
+    "tests/s0_5/unit/test_p01c_geometry_sync.py": "9addc8250ae302b3105471c758f3441dcfcac46e81ad2e722cd7ec2db1b4efa2",
+    "tests/s0_5/unit/test_p01c_review_controls.py": "06aff5299bf0570361f6f5a3088eb639be100e4c33107c4fcb099d01873e62c2"
+  },
+  "historical_outputs": {
+    "A": 11,
+    "B": 15,
+    "B_review": 20,
+    "C_original": 92
+  },
+  "observed_at": "2026-11-26T12:02:03+08:00",
+  "old_grid_phase_shift_ns": [
+    59,
+    187
+  ],
+  "paired_observations": {
+    "manus_left:mask_gained": 0,
+    "manus_left:mask_lost": 0,
+    "manus_left:pose_new": 2250,
+    "manus_left:pose_old": 2250,
+    "manus_left:velocity_new": 2249,
+    "manus_left:velocity_old": 2250,
+    "manus_right:mask_gained": 0,
+    "manus_right:mask_lost": 0,
+    "manus_right:pose_new": 2250,
+    "manus_right:pose_old": 2250,
+    "manus_right:velocity_new": 2249,
+    "manus_right:velocity_old": 2250,
+    "safety_neighbor_new_joint_valid": 6,
+    "safety_neighbor_old_joint_valid": 6,
+    "safety_neighbor_ticks": 9,
+    "tracker_left:mask_gained": 0,
+    "tracker_left:mask_lost": 0,
+    "tracker_left:pose_new": 2250,
+    "tracker_left:pose_old": 2250,
+    "tracker_left:velocity_new": 2249,
+    "tracker_left:velocity_old": 2250,
+    "tracker_left_raw:mask_gained": 0,
+    "tracker_left_raw:mask_lost": 0,
+    "tracker_left_raw:pose_new": 2250,
+    "tracker_left_raw:pose_old": 2250,
+    "tracker_left_raw:velocity_new": 2249,
+    "tracker_left_raw:velocity_old": 2250,
+    "tracker_right:mask_gained": 0,
+    "tracker_right:mask_lost": 0,
+    "tracker_right:pose_new": 2250,
+    "tracker_right:pose_old": 2250,
+    "tracker_right:velocity_new": 2249,
+    "tracker_right:velocity_old": 2250,
+    "tracker_right_raw:mask_gained": 0,
+    "tracker_right_raw:mask_lost": 0,
+    "tracker_right_raw:pose_new": 2250,
+    "tracker_right_raw:pose_old": 2250,
+    "tracker_right_raw:velocity_new": 2249,
+    "tracker_right_raw:velocity_old": 2250
+  },
+  "phase": "P01-C",
+  "phase_status": "READY_FOR_REVIEW",
+  "preflight_files_sha256": {
+    "AB-historical.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "AB-historical.log": "0e7f1673d10b24859bce74b9903bd8ebe29cb6b1939f4be18dcef9dcc7999512",
+    "C-historical.log": "bb75181851dc170c3fc2ec8b5381f4b40bcd5781d7bb530c352b64fc131b7de4",
+    "baseline_controls.py": "d86978249d74d2a35b30e9f872db0de85f3e1359520a106dd726e72642ff7dcb",
+    "freeze.sha256": "e39e78ff7c59ce50084473faf5057494e3f9bcf832f7dfaa53c8b96f54e168a6",
+    "frozen_at.txt": "a142dfed98a1769a35789626615d9581e6622546c53055e82b5fbd65d9245483"
+  },
+  "products_manifest_sha256": "cdf543b86078660c0bae92fcbbd303aced54ad0c3c133734b3b542f69a8de186",
+  "products_sha256": {
+    "paired_regression.json": "234b997386df4bf5d741261ce42323b010037d5f4e58c0262e4fecac9cf5eb84",
+    "source_trace.jsonl": "1cb625686145f8b7345b58c0ded19b099a806a8630184a76c5be0fb38bab5a20",
+    "technical_gates.json": "8d02add924351ee6ebfc3525bfd69947d53588302a1fb8f7d24a5d12f2d48835",
+    "test_results.json": "cbc2433e23ca01e46614b8e9e14d19eb8fbebef37603445a74a3b7b91b3ffb5e"
+  },
+  "recorder_clock_max_abs_residual_ns": 4773,
+  "run_id": "P01-C-REVIEW-20261126-0d9d351",
+  "schema": "s05.p01c.review-fix.v1",
+  "scope": "HMB_SIM_REVIEW",
+  "source_baseline": "0d9d351b73e543eab07cfe6fef8f55a7d12d912d",
+  "source_products": "/home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-REVIEW-20261126-0d9d351/attempt-03/products",
+  "technical_gates": {
+    "C1-GEO": "PASS",
+    "C2-RT": "BLOCKED",
+    "C2-SIM": "PASS",
+    "Final_Test": "BLOCKED",
+    "P01-T": "BLOCKED",
+    "robot-base": "BLOCKED"
+  },
+  "tests": {
+    "earlier_attempts": {
+      "attempt-01": {
+        "integration": {
+          "command": "-m unittest discover -s tests/s0_5/integration -p test_p01c_review_integration.py -v",
+          "exit": 0,
+          "failures": 0,
+          "log_sha256": {
+            "integration.command": "31ef6eb018a429b18ad6177273609a07d2fd79bdb1f824321dd51b752da2eec6",
+            "integration.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+            "integration.stderr": "5d7138fe5a05f68332ce7142e51ef4150f29c2406b2781273564b5810eca3fe0",
+            "integration.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "skipped": 0,
+          "tests": 3
+        },
+        "paired": {
+          "command": "-m dexgym.tasks.direct.wholebody_s05.data.review_audit --plan docs/s0-5/evidence/P01_C/sample_plan.json --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --old-b /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-20261126-46ed5e2/attempt-04 --old-review /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-REVIEW-20261126-f32d6bb-r02 --resource /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/resource_preflight.json --legacy /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/attempt-03/products --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-REVIEW-20261126-0d9d351/attempt-01/products",
+          "exit": 0,
+          "failures": 0,
+          "log_sha256": {
+            "paired.command": "52a81bad737816cd9065b8f6d7b2a6d3ddb40347c0aa2fb66b4e0c3a7df76adc",
+            "paired.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+            "paired.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "paired.stdout": "e7d12620730be86e11f107683228b37fd5510a1664516b55fb7b0e37c40c4c7d"
+          },
+          "skipped": 0,
+          "tests": null
+        },
+        "unit": {
+          "command": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+          "exit": 0,
+          "failures": 0,
+          "log_sha256": {
+            "unit.command": "165be27b27fbb35c7fcd795d50fb4321a5c087efb918ff6c864bb50a9a8a4e36",
+            "unit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+            "unit.stderr": "0f45d93c052d7aadfd94e835279c2a03d0cf3e74457c99fcc1b741ec574daffd",
+            "unit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "skipped": 0,
+          "tests": 68
+        }
+      },
+      "attempt-02": {
+        "integration": {
+          "command": "-m unittest discover -s tests/s0_5/integration -p test_p01c_review_integration.py -v",
+          "exit": 0,
+          "failures": 0,
+          "log_sha256": {
+            "integration.command": "31ef6eb018a429b18ad6177273609a07d2fd79bdb1f824321dd51b752da2eec6",
+            "integration.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+            "integration.stderr": "53ee8b6b10b1e2c764f88349d590f0f0164bb1b74e74f8a7f5196cbbca7b2749",
+            "integration.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "skipped": 0,
+          "tests": 3
+        },
+        "paired": {
+          "command": "-m dexgym.tasks.direct.wholebody_s05.data.review_audit --plan docs/s0-5/evidence/P01_C/sample_plan.json --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --old-b /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-20261126-46ed5e2/attempt-04 --old-review /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-REVIEW-20261126-f32d6bb-r02 --resource /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/resource_preflight.json --legacy /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/attempt-03/products --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-REVIEW-20261126-0d9d351/attempt-02/products",
+          "exit": 0,
+          "failures": 0,
+          "log_sha256": {
+            "paired.command": "5de0ee6043d6e43e2b1722c6ff51ce5ac5b44f8a09fb2655e7d0b8d63082e201",
+            "paired.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+            "paired.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "paired.stdout": "e7d12620730be86e11f107683228b37fd5510a1664516b55fb7b0e37c40c4c7d"
+          },
+          "skipped": 0,
+          "tests": null
+        },
+        "unit": {
+          "command": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+          "exit": 0,
+          "failures": 0,
+          "log_sha256": {
+            "unit.command": "165be27b27fbb35c7fcd795d50fb4321a5c087efb918ff6c864bb50a9a8a4e36",
+            "unit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+            "unit.stderr": "5d38a1eedb3bf9a52be69e4a84e1015a63cdebcc9ac704c97932aa1c50ba9cdd",
+            "unit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "skipped": 0,
+          "tests": 69
+        }
+      }
+    },
+    "execution": {
+      "integration": {
+        "command": "-m unittest discover -s tests/s0_5/integration -p test_p01c_review_integration.py -v",
+        "exit": 0,
+        "failures": 0,
+        "log_sha256": {
+          "integration.command": "31ef6eb018a429b18ad6177273609a07d2fd79bdb1f824321dd51b752da2eec6",
+          "integration.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "integration.stderr": "99a40fc951dfda48e944de0a080b87673c7acc777429a175c77e17543d1342c7",
+          "integration.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "skipped": 0,
+        "tests": 3
+      },
+      "legacy_order": {
+        "command": "docs/s0-5/evidence/P01_C_review/legacy_order_witness.py",
+        "exit": 0,
+        "failures": 0,
+        "log_sha256": {
+          "legacy_order.command": "7aab5ab0081c4dcfdbf6260e7595d7681d881c88d2781e710b5c0d68da54c90b",
+          "legacy_order.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "legacy_order.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "legacy_order.stdout": "30522f4e91212e9b45f13f90f0b3025ff1f19e99d389cd364d7a70a45ade6509"
+        },
+        "skipped": 0,
+        "tests": null
+      },
+      "paired": {
+        "command": "-m dexgym.tasks.direct.wholebody_s05.data.review_audit --plan docs/s0-5/evidence/P01_C/sample_plan.json --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --old-b /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-20261126-46ed5e2/attempt-04 --old-review /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-REVIEW-20261126-f32d6bb-r02 --resource /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/resource_preflight.json --legacy /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/attempt-03/products --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-REVIEW-20261126-0d9d351/attempt-03/products",
+        "exit": 0,
+        "failures": 0,
+        "log_sha256": {
+          "paired.command": "f034476f80b2af55c9dcfec6a7f87e1c1e9180a19547ce2aeeab9cfe06078572",
+          "paired.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "paired.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "paired.stdout": "e7d12620730be86e11f107683228b37fd5510a1664516b55fb7b0e37c40c4c7d"
+        },
+        "skipped": 0,
+        "tests": null
+      },
+      "unit": {
+        "command": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+        "exit": 0,
+        "failures": 0,
+        "log_sha256": {
+          "unit.command": "165be27b27fbb35c7fcd795d50fb4321a5c087efb918ff6c864bb50a9a8a4e36",
+          "unit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "unit.stderr": "570e959c156f7a1f01a5e3a13fa109a70780795ac37487c74f454bf73ed487cd",
+          "unit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "skipped": 0,
+        "tests": 70
+      }
+    },
+    "original_negative_controls": {
+      "command": "rev_env -m unittest discover -s tests/s0_5/unit -p test_p01c_review_controls.py -v",
+      "exit": 1,
+      "failures": 6,
+      "log_sha256": {
+        "baseline_controls.command": "093c6ad48a94cfcb87be10d099a92cc82dfac060eeb235b4171649c8be5d0d2c",
+        "baseline_controls.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+        "baseline_controls.stderr": "ea169c0b30839adea22c0ccf692b7ce39abb3b80968df7e081c6df59d97c0004",
+        "baseline_controls.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "skipped": 0,
+      "tests": 7
+    }
+  },
+  "verified_control_ticks": 0
+}

@@ -21,6 +21,8 @@ Human Motion Bank 保留 raw topology 与所有实际节点数。P00 历史样�
 
 ## C2 时钟、同步和缺测
 
+历史数据实现按 v0.2.0 补充契约。pose validity、velocity validity 和 safety permission 独立，安全复位后需重新取得新鲜输入。时钟 reset、标定或拓扑变化分段，HELD 带独立速度年龄和时钟等级。PROXY 与 SIMULATED 只用于明确标记的历史仿真开发。VERIFIED 需要绑定独立实测证据、明确定义的时钟域和保守误差界。[修订实施契约](specs/P01_C_simulation_review_v0.2.0.md) · [真实时钟补证](specs/P01_C_RT_clock_qualification.md)
+
 设 t_k 为控制查询时刻、d_k 为计算输入截止，记录捕获 c、SDK 收包、ROS header、MCAP log/publish、collector receive、controller receive r、tick、发令与物理响应。缺失时间为 UNKNOWN。采集器到达和控制器到达各有域与证据。在线每流只取 c^+≤t_k 且 r^+≤d_k 的有效样本，上标 + 表示时钟映射保守上界。VERIFIED、PROXY、SIMULATED、UNUSABLE 分开标注，只有真实可证时序用于实机时延主张。`aligned_offline` 支持双端插值与两端索引，`aligned_causal` 使用过去索引与有效/保持/年龄字段。在线仅取后者。观测历史按 old→new，reset 以有效初始值及 padding mask，切换或时钟跳变分段。过期、失联和恢复滞回由 P01/P03/P07 依据开发侧测量冻结。[时钟契约与验收](specs/P01_teleop_data.md)
 
 候选 Δt=20 ms，Δt_phys=2 ms，10 子步。读取 q_k、v_k 与 G_k，生成 u_k，积分子步得到 q_{k+1}，reward 与 G_k 绑定。应用态、发令、滤波等效目标分别记录。端到端指标按真实时钟对 s_{k+1} 的意图 G(s_{k+1}) 评分，禁止事后移位。所有控制器的延迟模型、时钟条件、状态采样和失败规则一致。

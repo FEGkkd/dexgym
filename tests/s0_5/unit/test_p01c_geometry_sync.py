@@ -19,7 +19,7 @@ def event(seq,t,stream='manus_left',pos=0,safe=None,recv=None,epoch='same',sourc
     identity=Identity(epoch,seq,t if source is None else source,t if recv is None else recv,repr(pos))
     return Event(stream,identity,{'physical_message':seq},t,(t,t),(t,t),
                  'SIMULATED',np.array([[pos,0,0,0,0,0,1.]],dtype=float),
-                 safe=safe,version=('a','h'))
+                 safe=safe,version=('a','h'),authenticated=True)
 
 
 def safe(seq,t,value=True):
@@ -81,7 +81,7 @@ class CausalTest(unittest.TestCase):
         core.offer(replace(event(1,8),quality='VERIFIED'))
         row=core.step(10,10)['streams']['manus_left']
         self.assertFalse(row['valid'])
-        self.assertEqual(row['reason'],'UNSYNC')
+        self.assertEqual(row['input_reason'],'UNSYNC')
 
     def test_nontrivial_capture_and_arrival_bounds(self):
         c=CausalSynchronizer(PARAMS,'SIMULATED')
@@ -114,8 +114,8 @@ class CausalTest(unittest.TestCase):
         self.assertEqual(row['input_reason'],'OUT_OF_ORDER')
         self.assertEqual(row['pose'][0,0],2)
         c.offer(replace(event(4,7,pos=4),known_ns=16,arrival=(16,16)))
-        self.assertEqual(c.step(16,16)['streams']['manus_left']['input_reason'],'OUT_OF_ORDER')
-        c.offer(event(3,17,pos=3))
+        self.assertEqual(c.step(16,16)['streams']['manus_left']['reason'],'CLOCK_JUMP')
+        c.offer(event(5,17,pos=3))
         self.assertEqual(c.step(17,17)['streams']['manus_left']['pose'][0,0],3)
 
     def test_source_restart_discards_history_and_clock_jump_rebuilds(self):
@@ -134,7 +134,7 @@ class CausalTest(unittest.TestCase):
         for e in (event(1,2),safe(1,4),safe(2,10,False),event(2,11),safe(3,20),event(3,119)):
             c.offer(e)
         self.assertEqual(c.step(3,3)['streams']['manus_left']['reason'],'SAFETY_UNKNOWN')
-        self.assertTrue(c.step(5,5)['streams']['manus_left']['valid'])
+        self.assertFalse(c.step(5,5)['streams']['manus_left']['valid'])
         self.assertEqual(c.step(12,12)['streams']['manus_left']['reason'],'UNSAFE')
         self.assertEqual(c.step(122,122)['streams']['manus_left']['reason'],'SAFETY_UNKNOWN')
 
@@ -166,7 +166,7 @@ class CausalTest(unittest.TestCase):
         p=PrefixClock(evidence='verified fixture')
         p.add(Anchor(10,100,110,15,'real test fixture'))
         p.add(Anchor(13,1000,1010,30,'future test fixture'))
-        self.assertEqual(p.bounds(20,20),((110,120),'VERIFIED',1))
+        self.assertEqual(p.bounds(20,20),((110,120),'MODEL_BOUND',1))
         self.assertEqual(p.bounds(20,31)[1],'CLOCK_JUMP')
 
     def test_offline_bracket_across_safety_invalid_version_or_gap_rejected(self):

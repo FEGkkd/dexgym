@@ -23,4 +23,5 @@
 | I19 | 无捕获证据的合并包与 ZIP 成员已隔离。Marvin54 部分历史路径在 Ubuntu 缺失，Unix 之外的历史快照仅作历史证据 | P01-B 需为来源、内容候选关系和遥测补充有效证据；P01-D 采用保守开发池划分，独立 Final Test 仍受 P09 门禁约束 |
 | I20 | 历史 B1 FAIL 保留。119 条旧 `CollectionStatus` 已用匹配 RIHS 的历史嵌套类型复验恢复 | 原失败及逐条索引保留。该类型若为未来录制的必要准入证明，仍须完成逐源绑定和核验。[复验](reports/P01_B_review_fix.md) |
 | I21 | B2、P01-T 均 BLOCKED。可读的 arm/hand 命令与反馈数组缺实机身份及独立配对证明 | 按原包 SHA 绑定硬件、驱动、发令和实测序列，实证时钟误差及动态响应。P03 正式开工前完成独立资格签核。[P01-T](specs/P01_T_telemetry_acquisition.md) |
-| I22 | 七个有界窗口来源没有独立的 MANUS 与 Tracker 物理捕获至控制端可用时刻的上下界。C2 真实时序资格 BLOCKED | 取得独立 clock anchors、设备采样身份和控制节点单调接收/截止记录，或提交经过人工批准的用途与阶段准入处理。当前代理及模拟只作有界诊断。P01-D 尚未启动 |
+| I22 | 七个有界窗口来源没有独立的 MANUS 与 Tracker 物理捕获至控制端可用时刻的上下界。C2-RT BLOCKED | 取得独立 clock anchors、设备采样身份和控制节点接收/截止记录。历史仿真可另审；P03 启动前需独立 C2-RT 签核。[补证规格](specs/P01_C_RT_clock_qualification.md) |
+| I23 | 独立物理 robot-base 注册仍 BLOCKED。已验证的 Tracker 软件重建采用 OpenVR 坐标 | 对实际工位与基座做独立测量、误差和重复性验收，再单独签核。P03 启动前完成 |

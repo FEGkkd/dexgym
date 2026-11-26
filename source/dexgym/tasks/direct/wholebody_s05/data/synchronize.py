@@ -10,9 +10,13 @@ from .sample_identity import Identity,IdentityHistory
 
 
 STREAMS=('manus_left','manus_right','tracker_left','tracker_right','tracker_left_raw','tracker_right_raw')
+CORE_STREAMS=STREAMS[:4]
+SAFETY='tracker_safety'
+DISCONTINUITIES={'CLOCK_JUMP','CLOCK_GENERATION','SOURCE_RESTART','SOURCE_IMMUTABILITY_CONFLICT'}
 REASONS=('VALID','HELD','STALE','DROPOUT','DUPLICATE_SOURCE','OUT_OF_ORDER','CLOCK_JUMP',
          'UNSYNC','UNSAFE','SAFETY_UNKNOWN','CALIBRATION_INVALID','SOURCE_UNKNOWN','TRACKER_INVALID',
-         'SOURCE_RESTART','SOURCE_IMMUTABILITY_CONFLICT','GAP','VERSION_BOUNDARY','MANUS_INVALID')
+         'SOURCE_RESTART','SOURCE_IMMUTABILITY_CONFLICT','GAP','VERSION_BOUNDARY','MANUS_INVALID',
+         'CLOCK_GENERATION','RECOVERY_FRESHNESS','FRESHNESS_UNKNOWN')
 
 
 def invalid_reason(stream):
@@ -36,9 +40,19 @@ class Event:
     segment: str = 'BODY'
     capture_proof: str | None = None
     arrival_proof: str | None = None
+    authenticated: bool = False
+    clock_generation: str = 'proxy-v1'
+    fresh: bool = True
 
     def qualified(self):
         return qualify(self.capture,self.arrival,self.quality,self.capture_proof,self.arrival_proof)
+
+
+def event_key(event):
+    identity=event.identity
+    return (event.stream!=SAFETY,event.stream,identity.instance,identity.sequence,
+            event.safe is True,event.valid,identity.fingerprint,identity.source_stamp,identity.receive_stamp,
+            event.clock_generation,event.capture or (),event.arrival or (),event.ref.get('physical_message',-1))
 
 
 def batch_causal(events,ticks,params,quality):
@@ -49,102 +63,215 @@ def batch_causal(events,ticks,params,quality):
 
 
 class CausalSynchronizer:
-    """Queue visible emissions independently from their capture and arrival bounds."""
-    def __init__(self,params,quality='VERIFIED'):
-        if quality not in {'VERIFIED','PROXY','SIMULATED'}:
+    """Consume pose and interlock events in a single monotonic replay domain."""
+    def __init__(self, params, quality='VERIFIED'):
+        if quality not in {'VERIFIED', 'PROXY', 'SIMULATED'}:
             raise ValueError('A synchronizer requires an explicit usable time domain')
-        self.params=params
-        self.quality=quality
-        self.arrival=[]
-        self.capture=[]
-        self.counter=0
-        self.current={}
-        self.velocity={}
-        self.histories={}
-        self.last_tick=self.last_cutoff=None
+        self.params = params
+        self.quality = quality
+        self.pending = []
+        self.capture = []
+        self.counter = 0
+        self.current = {}
+        self.velocity = {}
+        self.velocity_reason = {}
+        self.blocked = {}
+        self.histories = {}
+        self.generations = {}
+        self.retired = set()
+        self.latest_bounds = {}
+        self.permission = None
+        self.permission_reason = 'SAFETY_UNKNOWN'
+        self.release_ns = None
+        self.tick_latch = None
+        self.safety_denials = {}
+        self.last_tick = self.last_cutoff = None
 
-    def offer(self,event):
-        valid=event.qualified()==self.quality
-        delivered=max(event.known_ns,event.arrival[1]) if valid else event.known_ns
-        heapq.heappush(self.arrival,(delivered,self.counter,event,valid))
-        self.counter+=1
+    def offer(self, event):
+        if not event.authenticated:
+            return
+        usable = event.qualified() == self.quality
+        delivered = max(event.known_ns, event.arrival[1]) if usable else event.known_ns
+        stable = event_key(event)
+        heapq.heappush(self.pending, (delivered, stable, self.counter, event, usable))
+        self.counter += 1
 
-    def _apply(self,event,quality_ok,updated,reasons):
-        s=event.stream
-        bound=event.capture
-        prev=self.current.get(s)
-        if not quality_ok:
-            reasons[s]='UNSYNC'
-            return
-        # Initial-state data are usable only if bound to original times and independent proofs.
-        if event.segment!='BODY' and (event.segment!='INITIAL_STATE' or self.quality!='VERIFIED'):
-            reasons[s]='SOURCE_UNKNOWN'
-            return
-        if prev and prev.identity.instance==event.identity.instance and bound[1]<prev.capture[1]:
-            reasons[s]='OUT_OF_ORDER'
-            return
-        hist=self.histories.setdefault(s,IdentityHistory())
-        status=hist.observe(event.identity)
-        if status in {'DUPLICATE_SOURCE','OUT_OF_ORDER','SOURCE_UNKNOWN','SOURCE_IMMUTABILITY_CONFLICT'}:
-            reasons[s]=status
-            return
-        self.velocity.pop(s,None)
-        if (prev and status=='NEW' and prev.valid and event.valid and
-                prev.version==event.version and prev.pose is not None and event.pose is not None and
-                prev.calibrated and event.calibrated):
-            elapsed=(bound[1]-prev.capture[1])*1e-9
-            if elapsed>0:
-                self.velocity[s]=(event.pose[:,:3]-prev.pose[:,:3])/elapsed
-        if status in {'CLOCK_JUMP','SOURCE_RESTART'}:
-            reasons[s]=status
-            self.current.pop(s,None)
-            return
-        self.current[s]=event
-        updated.add(s)
-        reasons[s]='VALID'
+    def _revoke(self, stream, reason):
+        self.current.pop(stream, None)
+        self.velocity.pop(stream, None)
+        self.velocity_reason[stream] = reason
+        self.blocked[stream] = reason
 
-    def step(self,tick_ns,cutoff_ns):
-        if self.last_tick is not None and (tick_ns<self.last_tick or cutoff_ns<self.last_cutoff):
+    def _deny(self, reason, evidence=None):
+        self.permission = evidence
+        self.permission_reason = reason
+        self.release_ns = None
+        if self.tick_latch != 'UNSAFE':
+            self.tick_latch = reason
+        for stream in STREAMS:
+            self._revoke(stream, 'RECOVERY_FRESHNESS')
+
+    def _expire_permission(self, at_ns):
+        if self.release_ns is not None and at_ns-self.permission.capture[0] > self.params['safety_age_ns']:
+            self._deny('SAFETY_UNKNOWN', self.permission)
+
+    def _identity_status(self, e, usable):
+        stream, instance = e.stream, e.identity.instance
+        owner = stream, instance
+        if (*owner, e.clock_generation) in self.retired:
+            return 'OUT_OF_ORDER'
+        hist = self.histories.setdefault(stream, IdentityHistory())
+        old = self.generations.get(owner)
+        prior = hist.latest
+        status = hist.observe(e.identity)
+        if status in {'OUT_OF_ORDER', 'SOURCE_UNKNOWN', 'SOURCE_IMMUTABILITY_CONFLICT'}:
+            return status
+        self.generations[owner] = e.clock_generation
+        if old is not None and old != e.clock_generation:
+            self.retired.add((*owner, old))
+            status = 'CLOCK_GENERATION'
+        previous_bound = self.latest_bounds.get(stream)
+        if status != 'DUPLICATE_SOURCE':
+            if (usable and previous_bound is not None and status == 'NEW' and prior is not None
+                    and prior.instance == instance and e.capture[1] < previous_bound):
+                status = 'CLOCK_JUMP'
+            self.latest_bounds[stream] = e.capture[1] if usable else None
+        return status
+
+    def _apply_safety(self, event, usable, status, delivered):
+        if not usable or status in DISCONTINUITIES or status == 'SOURCE_UNKNOWN':
+            self._deny('SAFETY_UNKNOWN', event)
+        elif event.safe is not True or not event.valid:
+            self._deny('UNSAFE' if event.safe is False else 'SAFETY_UNKNOWN', event)
+        elif event.capture[0]+self.params['safety_age_ns'] < delivered:
+            self._deny('SAFETY_UNKNOWN', event)
+        else:
+            if self.release_ns is None:
+                self.release_ns = delivered
+            self.permission = event
+            self.permission_reason = 'SAFE'
+
+    def _accept_late_safety_denial(self,event,usable):
+        if usable and event.valid and event.safe is True:
+            return False
+        instance=event.identity.instance
+        owner=SAFETY,instance
+        key=instance,event.clock_generation
+        active=self.histories[SAFETY].latest
+        return (active is not None and active.instance==instance and
+                self.generations.get(owner)==event.clock_generation and
+                event.identity.sequence>self.safety_denials.get(key,-1))
+
+    def _apply(self, event, usable, delivered, updated, reasons):
+        stream = event.stream
+        if event.segment != 'BODY':
+            reasons[stream] = 'SOURCE_UNKNOWN'
+            return
+        status = self._identity_status(event, usable)
+        reasons[stream] = status
+        late_denial=(status=='OUT_OF_ORDER' and stream==SAFETY and self._accept_late_safety_denial(event,usable))
+        if status=='OUT_OF_ORDER' and not late_denial:
+            return
+        if status == 'DUPLICATE_SOURCE' and usable and event.valid and event.calibrated:
+            if stream != SAFETY or event.safe is True:
+                return
+        if stream == SAFETY:
+            self._apply_safety(event, usable, status, delivered)
+            if self.release_ns is None:
+                key=event.identity.instance,event.clock_generation
+                self.safety_denials[key]=max(event.identity.sequence,self.safety_denials.get(key,-1))
+            return
+        if not usable or status in DISCONTINUITIES or status == 'SOURCE_UNKNOWN':
+            reason = status if status in DISCONTINUITIES else ('UNSYNC' if not usable else status)
+            reasons[stream] = reason
+            self._revoke(stream, reason)
+            return
+        if not event.calibrated or not event.valid or event.pose is None:
+            self._revoke(stream, invalid_reason(stream) if event.calibrated else 'CALIBRATION_INVALID')
+            return
+        if (self.release_ns is None or delivered <= self.release_ns or event.capture[0] < self.release_ns):
+            self._revoke(stream, 'RECOVERY_FRESHNESS')
+            return
+        if not event.fresh:
+            self._revoke(stream, 'FRESHNESS_UNKNOWN')
+            return
+        self._update_velocity(stream, event)
+        self.current[stream] = event
+        self.blocked.pop(stream, None)
+        updated.add(stream)
+
+    def _update_velocity(self, stream, event):
+        prev = self.current.get(stream)
+        self.velocity.pop(stream, None)
+        reason = 'VELOCITY_HISTORY'
+        if prev is not None:
+            dt = event.capture[0]-prev.capture[1]
+            bound_width = event.capture[1]-event.capture[0]+prev.capture[1]-prev.capture[0]
+            if prev.version != event.version or prev.pose.shape != event.pose.shape:
+                reason = 'VERSION_BOUNDARY'
+            elif dt > self.params['age_ns']:
+                reason = 'GAP'
+            elif bound_width or dt <= 0:
+                reason = 'VELOCITY_TIME_UNKNOWN'
+            else:
+                self.velocity[stream] = (event.pose[:,:3]-prev.pose[:,:3])/(dt*1e-9)
+                reason = 'VALID'
+        self.velocity_reason[stream] = reason
+
+    def _output(self, stream, tick_ns, updated, reasons, interlock):
+        item = self.current.get(stream)
+        age = tick_ns-item.capture[0] if item else None
+        reason = self.blocked.get(stream, reasons.get(stream,'DROPOUT'))
+        if item is not None:
+            reason = 'VALID' if stream in updated else 'HELD'
+            if age > self.params['age_ns']:
+                reason = 'STALE'
+                self._revoke(stream, 'STALE')
+        if interlock:
+            reason = interlock
+        valid = item is not None and reason in {'VALID','HELD'}
+        velocity = self.velocity.get(stream) if valid else None
+        velocity_reason = self.velocity_reason.get(stream,'VELOCITY_HISTORY') if valid else reason
+        return dict(valid=valid,reason=reason,ref=item.ref if item else None,
+                    pose=item.pose if valid else None,velocity=velocity,age_ns=age,
+                    capture=item.capture if item else None,arrival=item.arrival if item else None,
+                    input_reason=reasons.get(stream),version=item.version if item else None,
+                    clock_generation=item.clock_generation if item else None,
+                    velocity_valid=velocity is not None,velocity_age_ns=age if velocity is not None else None,
+                    velocity_quality=self.quality if velocity is not None else 'UNUSABLE',
+                    velocity_reason=velocity_reason)
+
+    def step(self, tick_ns, cutoff_ns):
+        if self.last_tick is not None and (tick_ns < self.last_tick or cutoff_ns < self.last_cutoff):
             raise ValueError('Past control ticks are immutable')
-        while self.arrival and self.arrival[0][0]<=cutoff_ns:
-            delivery,seq,e,q=heapq.heappop(self.arrival)
-            capture=e.capture[1] if q else tick_ns
-            heapq.heappush(self.capture,(capture,seq,delivery,e,q))
-        events=[]
-        while self.capture and self.capture[0][0]<=tick_ns:
-            _,seq,delivery,e,q=heapq.heappop(self.capture)
-            events.append((delivery,seq,e,q))
-        updated,reasons=set(),{}
-        for _,_,event,quality_ok in sorted(events):
-            self._apply(event,quality_ok,updated,reasons)
-        self.last_tick,self.last_cutoff=tick_ns,cutoff_ns
-        safety=self.current.get('tracker_safety')
-        safety_reason=None
-        if not safety or safety.safe is None or tick_ns-safety.capture[0]>self.params['safety_age_ns']:
-            safety_reason='SAFETY_UNKNOWN'
-        elif safety.safe is False or not safety.valid:
-            safety_reason='UNSAFE'
-        out={}
-        for s in STREAMS:
-            item=self.current.get(s)
-            if item is None:
-                why=reasons.get(s,'DROPOUT')
-                out[s]=dict(valid=False,reason=why,ref=None,pose=None,velocity=None,age_ns=None,
-                            capture=None,arrival=None,input_reason=why,version=None)
-                continue
-            age=tick_ns-item.capture[0]
-            why=(safety_reason or ('CALIBRATION_INVALID' if not item.calibrated else None) or
-                 (invalid_reason(s) if not item.valid else None) or ('STALE' if age>self.params['age_ns'] else None) or
-                 ('VALID' if s in updated else 'HELD'))
-            valid=why in {'VALID','HELD'}
-            out[s]=dict(valid=valid,reason=why,ref=item.ref,pose=item.pose if valid else None,
-                        velocity=self.velocity.get(s) if valid else None,age_ns=age,
-                        capture=item.capture,arrival=item.arrival,input_reason=reasons.get(s),
-                        version=item.version)
-        joint,spans=joint_mask(out,self.params)
+        while self.pending and self.pending[0][0] <= cutoff_ns:
+            delivery,key,sequence,event,usable = heapq.heappop(self.pending)
+            negative = (event.stream == SAFETY and (not event.valid or event.safe is not True))
+            capture = event.capture[1] if usable and not negative else tick_ns
+            heapq.heappush(self.capture, (capture,delivery,key,sequence,event,usable))
+        visible = []
+        while self.capture and self.capture[0][0] <= tick_ns:
+            _,delivery,key,sequence,event,usable = heapq.heappop(self.capture)
+            visible.append((delivery,key,sequence,event,usable))
+        updated, reasons = set(), {}
+        for delivered,_,_,e,usable in sorted(visible):
+            self._expire_permission(delivered)
+            self._apply(e,usable,delivered,updated,reasons)
+        self._expire_permission(tick_ns)
+        self.last_tick, self.last_cutoff = tick_ns, cutoff_ns
+        interlock = self.tick_latch or (self.permission_reason if self.release_ns is None else None)
+        if interlock:
+            for stream in self.velocity:
+                self.velocity_reason[stream] = 'RECOVERY_FRESHNESS'
+            self.velocity.clear()
+        out = {s:self._output(s,tick_ns,updated,reasons,interlock) for s in STREAMS}
+        self.tick_latch = None
+        joint, spans = joint_mask(out,self.params)
         return dict(tick_ns=tick_ns,cutoff_ns=cutoff_ns,streams=out,joint_valid=joint,
                     joint_reason='VALID' if joint else 'UNSYNC',skew_ns=spans,quality=self.quality,
-                    safety_ref=safety.ref if safety else None)
+                    safety_permission=interlock is None,safety_reason=interlock or 'SAFE',
+                    safety_ref=self.permission.ref if self.permission else None,
+                    safety_release_ns=self.release_ns)
 
 
 def joint_mask(out,params):
@@ -219,7 +346,10 @@ class OfflineAlignment:
             return None,'CALIBRATION_INVALID'
         if not a.valid or not b.valid or a.pose is None or b.pose is None:
             return None,invalid_reason(s)
-        if ae!=be or a.identity.instance!=b.identity.instance or a.version!=b.version or a.pose.shape!=b.pose.shape:
+        if not a.fresh or not b.fresh:
+            return None,'FRESHNESS_UNKNOWN'
+        if (ae!=be or a.identity.instance!=b.identity.instance or a.clock_generation!=b.clock_generation
+                or a.version!=b.version or a.pose.shape!=b.pose.shape):
             return None,'VERSION_BOUNDARY'
         gap=times[j]-times[k]
         if gap>self.params['gap_ns']:
@@ -231,7 +361,7 @@ class OfflineAlignment:
         p=a.pose if not gap else interpolate(a.pose,b.pose,w)
         velocity=None if not gap else (b.pose[:,:3]-a.pose[:,:3])/(gap*1e-9)
         return dict(valid=True,reason='VALID',pose=p,velocity=velocity,refs=[a.ref,b.ref],weight=w,
-                    time_interval=(times[k],times[j]),capture=(tick,tick),version=a.version),None
+                    time_interval=(times[k],times[j]),capture=(times[k],times[j]),version=a.version),None
 
     def step(self,tick_ns):
         out={}

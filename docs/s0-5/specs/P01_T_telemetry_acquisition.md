@@ -10,6 +10,8 @@
 
 ## 记录合同
 
+C2-RT 与本协议共享 recording/part、设备/控制器身份、序列、采样与到达的证据绑定。一个物理设备或实验的历史身份只允许在各自证据合同成立后使用。P03 启动还依赖独立的 C2-RT、物理 robot-base 注册及 P02 签核。[真实时序补证规格](P01_C_RT_clock_qualification.md)
+
 | 记录 | 最低字段和语义 |
 |---|---|
 | 采集 manifest | 不可复用 recording ID、episode/part 顺序和哈希、schema SHA、UTC 及 monotonic 域、配置/标定哈希、信号路由、capture 被审人和授权引用、模式如仿真/影子/真机。 |

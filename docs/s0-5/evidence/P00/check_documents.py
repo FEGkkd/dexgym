@@ -143,6 +143,8 @@ def p01_dependency_states(document):
     checked_file(ROOT,dcr['approval']['ref'])
     spec=checked_file(ROOT,dcr['active_spec_ref'])
     require(digest(spec.read_bytes())==dcr['active_spec_sha256'], 'Active P01 spec hash mismatch')
+    clock_dcr=document.get('dependency_clock_dcr')
+    clock_approval=clock_dependency_state(document,clock_dcr) if clock_dcr else {}
     owners=('P01-A','P01-B','P01-B-HMB','P01-C','P01-D','P01-E','P01-F','P01-T')
     states=dict.fromkeys(owners,'NOT_STARTED')
     prerequisites={'P01-B-HMB':'P01-A','P01-C':'P01-B-HMB','P01-D':'P01-C',
@@ -150,6 +152,7 @@ def p01_dependency_states(document):
     technical_requirements={'P01-C':('C1','C2'),'P01-D':('D1',),
                             'P01-E':('E1',),'P01-F':('F1',)}
     accepted={}
+    scopes={}
     previous=None
     for event in document['p01_subphase_events']:
         owner,status=event['phase'],event['to']
@@ -168,10 +171,15 @@ def p01_dependency_states(document):
                 require(moment>=approved and event.get('spec_sha256')==dcr['active_spec_sha256'],
                         f'{owner} requires the reapproved v0.2.1 spec')
             if owner=='P01-C':
+                scopes[owner]=event.get('scope')
                 for field in ('implementation_spec','sample_plan'):
                     artifact=checked_file(ROOT,event[f'{field}_ref'])
                     require(digest(artifact.read_bytes())==event[f'{field}_sha256'],
                             f'{owner} frozen {field} differs')
+                if event.get('scope')=='HMB_SIM_REVIEW':
+                    require(clock_dcr and moment>=datetime.fromisoformat(clock_dcr['approved_at']) and
+                            event['implementation_spec_sha256']==clock_dcr['spec_sha256'],
+                            'P01-C simulation review requires the approved review spec')
         if status=='READY_FOR_REVIEW' and owner in ('P01-B-HMB','P01-T'):
             evidence=checked_file(ROOT,event['evidence_ref'])
             gate_key='HMB' if owner=='P01-B-HMB' else 'P01-T'
@@ -183,13 +191,28 @@ def p01_dependency_states(document):
             require(payload.get(evidence_gate)=='PASS', f'{owner} receipt does not support technical PASS')
         if (owner in technical_requirements and
                 (status=='READY_FOR_REVIEW' or 'technical_gates' in event)):
+            review_scope=event.get('scope')=='HMB_SIM_REVIEW'
+            if owner=='P01-C':
+                require(scopes.get(owner)==event.get('scope'),'P01-C exit scope differs from the authorized run')
+            if review_scope:
+                require(owner=='P01-C' and clock_dcr and moment>=datetime.fromisoformat(clock_dcr['approved_at']),
+                        'Revised P01-C scope requires DCR-002 approval')
             evidence=checked_file(ROOT,event['evidence_ref'])
             require(digest(evidence.read_bytes())==event.get('evidence_sha256'),
                     f'{owner} technical receipt hash mismatch')
             receipt=load_json(evidence)
             require(receipt.get('phase')==owner and bool(receipt.get('run_id')),
                     f'{owner} technical receipt identity mismatch')
-            for gate in technical_requirements[owner]:
+            gates=('C1-GEO','C2-SIM') if review_scope else technical_requirements[owner]
+            require(not review_scope or receipt.get('scope')=='HMB_SIM_REVIEW',
+                    'P01-C review receipt scope differs')
+            if review_scope:
+                separate=('C2-RT','robot-base','P01-T','Final_Test')
+                require(receipt.get('verified_control_ticks')==0 and
+                        all(receipt['technical_gates'].get(k)=='BLOCKED'==event['technical_gates'].get(k)
+                            for k in separate),
+                        'Bounded simulation review cannot grant independent hardware or final-test qualification')
+            for gate in gates:
                 actual=receipt.get('technical_gates',{}).get(gate)
                 require(actual in {'PASS','FAIL','BLOCKED','NOT_RUN'} and
                         event.get('technical_gates',{}).get(gate)==actual,
@@ -212,7 +235,40 @@ def p01_dependency_states(document):
             require('P01-F' in accepted and accepted['P01-F']<=moment, 'P01 exit requires P01-F ACCEPTED')
         if event['phase']=='P03' and event['to']=='IN_PROGRESS':
             require('P01-T' in accepted and accepted['P01-T']<=moment, 'P03 requires P01-T ACCEPTED')
+            if clock_dcr and moment>=datetime.fromisoformat(clock_dcr['approved_at']):
+                require(all(q in clock_approval and clock_approval[q]<=moment for q in ('C2-RT','robot-base')),
+                        'P03 requires C2-RT and robot-base ACCEPTED')
     print('PASS DCR-001 subphase replay, human gates, active spec and independent P03 dependency')
+
+
+def clock_dependency_state(document,dcr):
+    require(dcr['id']=='DCR-002' and dcr['approval']['type']=='human' and dcr['approval']['by'],
+            'DCR-002 requires independent human dependency authorization')
+    checked_file(ROOT,dcr['approval']['ref'])
+    require(dcr['dependencies']=={'P01-C review':['C1-GEO','C2-SIM'],'P01-D':['P01-C'],
+                                  'P03':['P02','P01-T','C2-RT','robot-base']},
+            'DCR-002 dependencies differ')
+    path=checked_file(ROOT,dcr['spec_ref'])
+    require(digest(path.read_bytes())==dcr['spec_sha256'],'DCR-002 implementation spec hash mismatch')
+    start=datetime.fromisoformat(dcr['approved_at'])
+    require(start.tzinfo is not None,'DCR-002 requires a timezone-aware approval timestamp')
+    states={'C2-RT':'BLOCKED','robot-base':'BLOCKED'}
+    approved={}
+    for event in document['clock_qualification_events']:
+        key=event['qualification']
+        when=datetime.fromisoformat(event['at'])
+        require(key in states and states[key]=='BLOCKED' and event['status']=='ACCEPTED' and when>=start,
+                'Unknown or out-of-order DCR-002 qualification')
+        evidence=checked_file(ROOT,event['evidence_ref'])
+        require(digest(evidence.read_bytes())==event['evidence_sha256'] and
+                load_json(evidence).get('technical_gates',{}).get(key)=='PASS',
+                f'{key} needs independently hashed technical PASS')
+        require(event['approval']['type']=='human' and event['approval']['by'],f'{key} needs human approval')
+        checked_file(ROOT,event['approval']['ref'])
+        approved[key]=when
+        states[key]='ACCEPTED'
+    require(document['clock_qualifications']==states,'DCR-002 qualification state differs from history')
+    return approved
 
 
 def rows(path):
@@ -253,7 +309,8 @@ def structure():
     require(all(len(r)==4 and all(r) and r[2] in PHASES for r in req), 'Requirement row schema')
     require(all(len(r)==9 and all(r) for r in matrix) and [r[2] for r in req]==[r[3] for r in matrix],
             'Traceability row/ownership')
-    p01_adjuncts={'P01_T_telemetry_acquisition.md','P01_C_calibration_and_causal_sync.md'}
+    p01_adjuncts={'P01_T_telemetry_acquisition.md','P01_C_calibration_and_causal_sync.md',
+                  'P01_C_RT_clock_qualification.md','P01_C_simulation_review_v0.2.0.md'}
     specs = sorted(s for s in (ROOT / 'specs').glob('P??_*.md') if s.name not in p01_adjuncts)
     require(tuple(s.name[:3] for s in specs) == PHASES, 'Phase spec list')
     for spec in specs:

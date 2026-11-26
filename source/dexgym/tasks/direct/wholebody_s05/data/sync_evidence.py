@@ -99,7 +99,7 @@ def eventize(rows,offset,params,cal_version,calendar_decoder):
                     ni,nj=(natural['nodes'][k]['node_id'] for k in (i,j))
                     per_edge[(stream,topo_version,ni,nj)].append(length)
                 fingerprint=sha256(z.tobytes()+topo_version.encode()).hexdigest()
-                if canonical_component is None:
+                if canonical_component is None or sdk_receive is None:
                     valid=False
             elif stream!='tracker_safety':
                 pose_arr=pose(dataset['pose'])[None,:]
@@ -124,7 +124,7 @@ def eventize(rows,offset,params,cal_version,calendar_decoder):
         reference=dict(record,raw_index_token=token)
         e=Event(stream,ident,reference,modeled,(mono,mono),(modeled,modeled),'SIMULATED',
                 pose_arr,valid,dataset.get('safe') if stream=='tracker_safety' else None,
-                (cal_version,topo_version))
+                (cal_version,topo_version),authenticated=True,clock_generation='collector-monotonic-v1')
         raw_pose = z if ('manus' in row and pose_arr is not None) else pose_arr
         prepared.append((e,dict(row,scalar_identity={'instance':ident.instance,'writer_sequence':ident.sequence,
                                'sdk_timestamp_raw':sdk_source,'sdk_receive_raw':sdk_receive,
@@ -179,6 +179,25 @@ def stream_statistics(prepared):
                         sdk_duplicate_fraction=counts['DUPLICATE_SOURCE']/n if n and k.startswith('manus') else None,
                         clock_fields=fields,identity_events=dict(counts))
     return reports
+
+
+def audit_freshness(prepared):
+    """A window cannot establish MANUS freshness from its first cache value."""
+    previous={}
+    result=[]
+    for event,row in sorted(prepared,key=lambda x:(x[0].known_ns,x[0].identity.sequence,x[0].stream)):
+        if event.stream.startswith('manus_'):
+            identity=event.identity
+            prior=previous.get(event.stream)
+            consecutive=(prior is not None and prior.instance==identity.instance and
+                         identity.sequence==prior.sequence+1)
+            fresh=(consecutive and (identity.source_stamp,identity.receive_stamp)!=
+                   (prior.source_stamp,prior.receive_stamp))
+            result.append((replace(event,fresh=fresh),row))
+            previous[event.stream]=identity
+        else:
+            result.append((event,row))
+    return result
 
 
 def json_result(value):

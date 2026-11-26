@@ -67,6 +67,18 @@
     "active_spec_sha256": "1de9df40e11a7c73de3c99fe77c67d878e24635a0303e940639bfd37ee6b69c3",
     "mandatory_dependencies": {"P01-C": ["P01-B-HMB"], "P01 exit": ["P01-F"], "P03": ["P02", "P01-T"]}
   },
+  "dependency_clock_dcr": {
+    "id": "DCR-002",
+    "approved_at": "2026-11-26T11:46:52+08:00",
+    "approval": {"type": "human", "by": "project user", "ref": "dcr/DCR-002_simulation_and_real_clock_qualification.md"},
+    "scope": "dependency change and bounded review only, first observed on Ubuntu",
+    "spec_ref": "specs/P01_C_simulation_review_v0.2.0.md",
+    "spec_sha256": "39616ce82a3252f92180d46269d7dd1736d943f326b633ccbd81088d5caf204a",
+    "dependencies": {"P01-C review": ["C1-GEO", "C2-SIM"], "P01-D": ["P01-C"],
+                     "P03": ["P02", "P01-T", "C2-RT", "robot-base"]}
+  },
+  "clock_qualifications": {"C2-RT": "BLOCKED", "robot-base": "BLOCKED"},
+  "clock_qualification_events": [],
   "final_test": {
     "status": "BLOCKED",
     "reason": "independent source lineage and sealed manifest have not been established"
@@ -75,7 +87,7 @@
     "P01-A": "ACCEPTED",
     "P01-B": "BLOCKED",
     "P01-B-HMB": "ACCEPTED",
-    "P01-C": "BLOCKED",
+    "P01-C": "READY_FOR_REVIEW",
     "P01-D": "NOT_STARTED",
     "P01-E": "NOT_STARTED",
     "P01-F": "NOT_STARTED",
@@ -181,6 +193,32 @@
       "evidence_sha256": "46ef7a1f83c0b48f26a7b8a44e72de5ef0ed8841a289c4a2b2c02c411e05b0c1",
       "report_ref": "reports/P01_C_acceptance.md",
       "reason": "Physical capture and controller receive bounds not evidenced. Modeled arrival diagnostics only."
+    },
+    {
+      "phase": "P01-C",
+      "from": "BLOCKED",
+      "to": "IN_PROGRESS",
+      "scope": "HMB_SIM_REVIEW",
+      "at": "2026-11-26T11:49:34+08:00",
+      "authorization_ref": "dcr/DCR-002_simulation_and_real_clock_qualification.md",
+      "spec_sha256": "1de9df40e11a7c73de3c99fe77c67d878e24635a0303e940639bfd37ee6b69c3",
+      "implementation_spec_ref": "specs/P01_C_simulation_review_v0.2.0.md",
+      "implementation_spec_sha256": "39616ce82a3252f92180d46269d7dd1736d943f326b633ccbd81088d5caf204a",
+      "sample_plan_ref": "evidence/P01_C/sample_plan.json",
+      "sample_plan_sha256": "a742148f9b159409b7fbdeb7e49896f5ee4c8aff3b33b13a6099855fb7daa9da",
+      "run_id": "P01-C-REVIEW-20261126-0d9d351"
+    },
+    {
+      "phase": "P01-C",
+      "from": "IN_PROGRESS",
+      "to": "READY_FOR_REVIEW",
+      "scope": "HMB_SIM_REVIEW",
+      "at": "2026-11-26T12:02:03+08:00",
+      "technical_gates": {"C1-GEO": "PASS", "C2-SIM": "PASS", "C2-RT": "BLOCKED", "robot-base": "BLOCKED",
+                          "P01-T": "BLOCKED", "Final_Test": "BLOCKED"},
+      "evidence_ref": "evidence/P01_C_review/review_receipt.json",
+      "evidence_sha256": "21f06148cc7672d5193d7661e3d872e168414290056b23715f512c1693c0fc6e",
+      "report_ref": "reports/P01_C_review_fix.md"
     }
   ]
 }

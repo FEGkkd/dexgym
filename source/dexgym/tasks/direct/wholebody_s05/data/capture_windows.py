@@ -33,6 +33,13 @@ def frozen_windows(start,stop,plan,unsafe_ns=None):
     return output
 
 
+def clock_observations(rows,label):
+    """Same-observation host pairs; realtime remains a raw index, not a tick domain."""
+    return [(row['clock']['collector_realtime']['value'],
+             row['clock']['collector_monotonic']['value'],row['index'])
+            for row in rows if label in row['windows']]
+
+
 def checked_configs(snapshot):
     result={}
     for u in snapshot['units']:
