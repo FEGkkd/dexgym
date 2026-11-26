@@ -96,7 +96,8 @@ def main(run,geometry,out):
     track=[n for n in git('ls-files','-z','docs/s0-5/evidence/P02/refinement','docs/s0-5/evidence/P02/refinement_plan.json',
                            'docs/s0-5/evidence/P02/seal_p02.py','tests/s0_5/unit/test_p02_review.py',
                            'tests/s0_5/unit/test_p02_refinement_geometry.py',
-                           'source/dexgym/tasks/direct/wholebody_s05/p02').decode().split('\0') if n]
+                           'source/dexgym/tasks/direct/wholebody_s05/p02').decode().split('\0')
+           if n.endswith(('.py','/refinement_plan.json'))]
     write(out/'source_sha256.json',{n:digest(n) for n in track})
     failed={str(p.relative_to(run)):int(p.read_text()) for p in run.rglob('*.exit') if p.read_text().strip()!='0'}
     res={str(p.relative_to(run)):p.read_text() for p in run.rglob('*.resources')}
