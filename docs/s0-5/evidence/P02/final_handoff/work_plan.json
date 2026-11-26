@@ -1,0 +1,36 @@
+{
+  "schema": "s05.p02.final_handoff.plan.v1",
+  "run_id": "P02-FINAL-20261126-ecd12ec",
+  "reviewed_baseline": "ecd12ecd6657539e44830dde07c6055c6c507192",
+  "accepted_research_uses": {
+    "M0": "IMMUTABLE_HISTORICAL_INTENT_AUDIT",
+    "M1": "HISTORICAL_STATIC_SIMULATION_DEVELOPMENT_SCALE_1",
+    "M2": "WORKSPACE_COMPRESSION_DIAGNOSTIC",
+    "minimax": "POSITIONAL_REACH_DIAGNOSTIC",
+    "smooth_pinch": "UNFROZEN_CONTINUITY_RESEARCH"
+  },
+  "approved_inputs_sha256": {
+    "execution_receipt.json": "0adfc8976ebfa7ee0845d42e5d291caa70f94cf172e72d4a7d2fcb3c16a15aa0",
+    "fitted_candidates.json": "577195a8eb66699e11cf8bcf910383086672c384723d61fa90c13ed90652baa7",
+    "scoring_freeze_candidate.json": "96aac52666d7b03d6a3c087cb845f824a2ed4403f1cf35ae87af0264dd5f4f94"
+  },
+  "original_runs": ["P02-20261126-54c2e06", "P02-REFINE-20261126-8753921"],
+  "M1_pair": {
+    "cohort": "exact 32 root and 6 tail identities from immutable P02 and refinement archives",
+    "objective": "original multitask position, rotation and functional objective, unchanged",
+    "fixed_hands": "earlier per-sample SDK angles, clamped only to the signed admissible joint ranges and kept bitwise fixed",
+    "seed_rule": "same prior M1 attempt order and identical arm components. The 14 DoF solve substitutes fixed SDK hands in every seed. The ordinary 54 DoF run keeps archived full M1 initialization, with no added seeds",
+    "14_as_54_witness": "independent scoring of the legal q, no extra solve and no overwrite of the ordinary paired 54 DoF outcome",
+    "iterations_per_start": 300,
+    "seconds_per_start": 8,
+    "starts_per_mode": 3,
+    "clearance_m": 0.0005,
+    "matched_M2": "NOT_RUN"
+  },
+  "scope": "Limited P02 static research closure and design-only hardware prerequisite preparation",
+  "formal_physical_scoring": "PENDING_HUMAN_APPROVAL",
+  "phase_status": {"P01": "ACCEPTED", "P02": "READY_FOR_REVIEW", "P03": "NOT_STARTED"},
+  "hardware": {"C2-RT": "BLOCKED", "P01-T": "BLOCKED", "robot-base": "BLOCKED"},
+  "execution_authorizations": {"P03": false, "RL": false, "robot_actions": false},
+  "agent_roles": ["A_M1_match", "B_independent_math_score", "C_hardware_plan"]
+}
