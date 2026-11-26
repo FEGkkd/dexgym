@@ -51,8 +51,14 @@ class Event:
 def event_key(event):
     identity=event.identity
     return (event.stream!=SAFETY,event.stream,identity.instance,identity.sequence,
-            event.safe is True,event.valid,identity.fingerprint,identity.source_stamp,identity.receive_stamp,
+            event.safe is True,event.safe is False,event.valid,event.calibrated,event.fresh,
+            identity.fingerprint,identity.source_stamp,identity.receive_stamp,
             event.clock_generation,event.capture or (),event.arrival or (),event.ref.get('physical_message',-1))
+
+
+def record_signature(event):
+    return (event.identity,event.valid,event.fresh,event.calibrated,event.safe,event.pose is not None,
+            event.version,event.clock_generation,event.quality,event.capture)
 
 
 def batch_causal(events,ticks,params,quality):
@@ -77,6 +83,7 @@ class CausalSynchronizer:
         self.velocity_reason = {}
         self.blocked = {}
         self.histories = {}
+        self.latest_records = {}
         self.generations = {}
         self.retired = set()
         self.latest_bounds = {}
@@ -123,9 +130,14 @@ class CausalSynchronizer:
         hist = self.histories.setdefault(stream, IdentityHistory())
         old = self.generations.get(owner)
         prior = hist.latest
+        last = self.latest_records.get(stream)
+        if (last is not None and last.identity.instance==instance and last.identity.sequence==e.identity.sequence
+                and record_signature(last)!=record_signature(e)):
+            return 'SOURCE_IMMUTABILITY_CONFLICT'
         status = hist.observe(e.identity)
         if status in {'OUT_OF_ORDER', 'SOURCE_UNKNOWN', 'SOURCE_IMMUTABILITY_CONFLICT'}:
             return status
+        self.latest_records[stream] = e
         self.generations[owner] = e.clock_generation
         if old is not None and old != e.clock_generation:
             self.retired.add((*owner, old))
@@ -292,30 +304,111 @@ def joint_mask(out,params):
     return usable,span
 
 
+@dataclass
+class _OfflineBarrier:
+    start_ns: int | None
+    resume_after_ns: int
+    reason: str
+    end_ns: int | None = None
+
+    def intersects(self,lo,hi):
+        return (self.start_ns is None or self.start_ns<=hi) and (self.end_ns is None or lo<self.end_ns)
+
+
 class OfflineAlignment:
     """Segmented interpolation in an explicit offline domain."""
     def __init__(self,events,params):
         self.params=params
-        self.events={s:[] for s in (*STREAMS,'tracker_safety')}
+        self.events={s:[] for s in (*STREAMS,SAFETY)}
+        self.barriers={s:[] for s in self.events}
         self.times={}
-        history={}
-        generation=dict.fromkeys(self.events,0)
-        for event in sorted(events,key=lambda e:(e.known_ns,e.ref.get('physical_message',0))):
-            if event.segment!='BODY' or event.qualified()=='UNUSABLE':
+        by_stream={s:[] for s in self.events}
+        for event in events:
+            if event.segment=='BODY' and event.authenticated:
+                by_stream[event.stream].append(event)
+        for stream,observations in by_stream.items():
+            self._index_stream(stream,observations)
+            self.events[stream].sort(key=lambda x:x[0].capture[1])
+            self.times[stream]=[e.capture[1] for e,_,_ in self.events[stream]]
+
+    def _index_stream(self,stream,observations):
+        records={}
+        conflicts=set()
+        for event in sorted(observations,key=lambda e:(e.known_ns,event_key(e))):
+            key=event.identity.instance,event.identity.sequence
+            if key not in records:
+                records[key]=event
+            elif record_signature(records[key])!=record_signature(event):
+                conflicts.add(key)
+        hist=IdentityHistory()
+        generations={}
+        retired=set()
+        late_denials={}
+        previous=None
+        barrier=None
+        for (instance,seq),event in records.items():
+            clock=event.clock_generation
+            if (instance,clock) in retired:
                 continue
-            hist=history.setdefault(event.stream,IdentityHistory())
+            usable=event.qualified()!='UNUSABLE'
             reason=hist.observe(event.identity)
-            if reason in {'OUT_OF_ORDER','DUPLICATE_SOURCE','SOURCE_UNKNOWN','SOURCE_IMMUTABILITY_CONFLICT'}:
+            failed=_offline_invalid(event,usable)
+            if reason=='OUT_OF_ORDER':
+                active=hist.latest
+                if (stream!=SAFETY or not failed or active is None or active.instance!=instance
+                        or generations.get(instance)!=clock or seq<=late_denials.get((instance,clock),-1)):
+                    continue
+            else:
+                old=generations.get(instance)
+                if old is not None and old!=clock:
+                    retired.add((instance,old))
+                    reason='CLOCK_GENERATION'
+                generations[instance]=clock
+            if reason=='DUPLICATE_SOURCE' and failed in {None,'FRESHNESS_UNKNOWN'} and (instance,seq) not in conflicts:
                 continue
-            if reason in {'CLOCK_JUMP','SOURCE_RESTART'}:
-                generation[event.stream]+=1
-            self.events[event.stream].append((event,reason,generation[event.stream]))
-        for s,items in self.events.items():
-            items.sort(key=lambda x:x[0].capture[1])
-            self.times[s]=[e.capture[1] for e,_,_ in items]
+            if usable and previous is not None and event.capture[1]<previous.capture[1] and reason=='NEW':
+                reason='CLOCK_JUMP'
+            conflict=(instance,seq) in conflicts
+            if conflict:
+                failed='SAFETY_UNKNOWN' if stream==SAFETY else 'SOURCE_IMMUTABILITY_CONFLICT'
+                usable=False
+            elif reason in DISCONTINUITIES or reason=='SOURCE_UNKNOWN':
+                failed='SAFETY_UNKNOWN' if stream==SAFETY else reason
+            if failed:
+                prior=previous.capture[0] if previous is not None else None
+                # Arrival is only a recovery constraint. Unknown capture is never an endpoint.
+                start=event.capture[0] if usable else prior
+                if usable and reason in DISCONTINUITIES and prior is not None:
+                    start=min(start,prior)
+                resume=event.capture[1] if usable else event.known_ns
+                if barrier is None:
+                    barrier=_OfflineBarrier(start,resume,failed)
+                    self.barriers[stream].append(barrier)
+                else:
+                    if start is None or (barrier.start_ns is not None and start<barrier.start_ns):
+                        barrier.start_ns=start
+                    barrier.resume_after_ns=max(barrier.resume_after_ns,resume)
+                    if failed=='UNSAFE':
+                        barrier.reason=failed
+                if stream==SAFETY:
+                    late_denials[instance,clock]=max(seq,late_denials.get((instance,clock),-1))
+                continue
+            if barrier is not None:
+                if event.capture[0]<barrier.resume_after_ns:
+                    continue
+                barrier.end_ns=event.capture[1]
+                barrier=None
+            previous=event
+            self.events[stream].append((event,reason,len(self.barriers[stream])))
+
+    def _blocked(self,stream,lo,hi):
+        return next((b.reason for b in self.barriers[stream] if b.intersects(lo,hi)),None)
 
     def _safe(self,lo,hi):
-        items=self.events['tracker_safety']; times=self.times['tracker_safety']
+        blocked=self._blocked(SAFETY,lo,hi)
+        if blocked:
+            return blocked
+        items=self.events[SAFETY]; times=self.times[SAFETY]
         k=bisect_right(times,lo)-1
         if k<0:
             return 'SAFETY_UNKNOWN'
@@ -333,12 +426,22 @@ class OfflineAlignment:
         return 'SAFETY_UNKNOWN' if hi-last>self.params['safety_age_ns'] else None
 
     def _bracket(self,s,tick):
+        blocked=self._blocked(SAFETY,tick,tick) or self._blocked(s,tick,tick)
+        if blocked:
+            return None,blocked
         times,items=self.times[s],self.events[s]
         k=bisect_right(times,tick)-1
-        if k<0 or (times[k]!=tick and k+1>=len(times)):
+        if k<0:
             return None,'DROPOUT'
+        if times[k]!=tick and k+1>=len(times):
+            # An invalid sample may be the missing right endpoint of this bracket.
+            return None,self._blocked(s,tick,times[k]+self.params['gap_ns']) or 'DROPOUT'
         j=k if times[k]==tick else k+1
         a,ar,ae=items[k]; b,br,be=items[j]
+        lo,hi=a.capture[0],b.capture[1]
+        blocked=self._blocked(SAFETY,lo,hi) or self._blocked(s,lo,hi)
+        if blocked:
+            return None,blocked
         for reason in (ar,br):
             if reason in {'CLOCK_JUMP','SOURCE_RESTART'}:
                 return None,reason
@@ -349,7 +452,7 @@ class OfflineAlignment:
         if not a.fresh or not b.fresh:
             return None,'FRESHNESS_UNKNOWN'
         if (ae!=be or a.identity.instance!=b.identity.instance or a.clock_generation!=b.clock_generation
-                or a.version!=b.version or a.pose.shape!=b.pose.shape):
+                or a.quality!=b.quality or a.version!=b.version or a.pose.shape!=b.pose.shape):
             return None,'VERSION_BOUNDARY'
         gap=times[j]-times[k]
         if gap>self.params['gap_ns']:
@@ -371,3 +474,17 @@ class OfflineAlignment:
                                   weight=None,time_interval=None,capture=None,version=None)
         valid,spans=joint_mask(out,self.params)
         return dict(tick_ns=tick_ns,streams=out,joint_valid=valid,skew_ns=spans,quality='OFFLINE_PROXY')
+
+
+def _offline_invalid(event,usable):
+    if event.stream==SAFETY:
+        if event.safe is False:
+            return 'UNSAFE'
+        return None if usable and event.safe is True and event.valid and event.fresh else 'SAFETY_UNKNOWN'
+    if not usable:
+        return 'UNSYNC'
+    if not event.calibrated:
+        return 'CALIBRATION_INVALID'
+    if not event.valid or event.pose is None:
+        return invalid_reason(event.stream)
+    return None if event.fresh else 'FRESHNESS_UNKNOWN'

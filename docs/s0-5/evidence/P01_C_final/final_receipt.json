@@ -1,0 +1,229 @@
+{
+  "attempt": "attempt-02",
+  "authority": "Independent human approval pending",
+  "base": "aecfd2deff75a564b2ef70538f09fbc997cbd4a3",
+  "baseline": {
+    "causal_new": 2248,
+    "causal_old": 2248,
+    "input_file_bytes": 490239228,
+    "joint_gained": 0,
+    "joint_lost": 0,
+    "offline_new": 2211,
+    "offline_old": 2248,
+    "raw_window_events": 47983,
+    "real_unsafe_events": 153,
+    "recordings": 7,
+    "registered_pairs": 13640,
+    "ticks": 2300
+  },
+  "changes": {
+    "mask_transitions": {
+      "causal": {
+        "joint": {
+          "0->0": 52,
+          "1->1": 2248
+        },
+        "streams": {
+          "manus_left": {
+            "pose:0->0": 50,
+            "pose:1->1": 2250,
+            "velocity:0->0": 51,
+            "velocity:1->1": 2249
+          },
+          "manus_right": {
+            "pose:0->0": 50,
+            "pose:1->1": 2250,
+            "velocity:0->0": 51,
+            "velocity:1->1": 2249
+          },
+          "tracker_left": {
+            "pose:0->0": 50,
+            "pose:1->1": 2250,
+            "velocity:0->0": 51,
+            "velocity:1->1": 2249
+          },
+          "tracker_left_raw": {
+            "pose:0->0": 50,
+            "pose:1->1": 2250,
+            "velocity:0->0": 51,
+            "velocity:1->1": 2249
+          },
+          "tracker_right": {
+            "pose:0->0": 50,
+            "pose:1->1": 2250,
+            "velocity:0->0": 51,
+            "velocity:1->1": 2249
+          },
+          "tracker_right_raw": {
+            "pose:0->0": 50,
+            "pose:1->1": 2250,
+            "velocity:0->0": 51,
+            "velocity:1->1": 2249
+          }
+        }
+      },
+      "offline": {
+        "joint": {
+          "0->0": 89,
+          "1->1": 2211
+        },
+        "streams": {
+          "manus_left": {
+            "pose:0->0": 52,
+            "pose:1->1": 2248,
+            "velocity:0->0": 52,
+            "velocity:1->1": 2248
+          },
+          "manus_right": {
+            "pose:0->0": 52,
+            "pose:1->1": 2248,
+            "velocity:0->0": 52,
+            "velocity:1->1": 2248
+          },
+          "tracker_left": {
+            "pose:0->0": 51,
+            "pose:1->1": 2249,
+            "velocity:0->0": 51,
+            "velocity:1->1": 2249
+          },
+          "tracker_left_raw": {
+            "pose:0->0": 52,
+            "pose:1->1": 2248,
+            "velocity:0->0": 52,
+            "velocity:1->1": 2248
+          },
+          "tracker_right": {
+            "pose:0->0": 51,
+            "pose:1->1": 2249,
+            "velocity:0->0": 51,
+            "velocity:1->1": 2249
+          },
+          "tracker_right_raw": {
+            "pose:0->0": 52,
+            "pose:1->1": 2248,
+            "velocity:0->0": 52,
+            "velocity:1->1": 2248
+          }
+        }
+      }
+    },
+    "reason_changes": {
+      "causal": {},
+      "offline": {
+        "tracker_left": {
+          "DROPOUT->UNSAFE": 49
+        },
+        "tracker_left_raw": {
+          "DROPOUT->UNSAFE": 49
+        }
+      }
+    },
+    "safety_transitions": {
+      "SAFE->SAFE": 2250,
+      "UNSAFE->UNSAFE": 50
+    },
+    "ticks": 2300
+  },
+  "execution_source_sha256": {
+    "docs/s0-5/evidence/P01_C_final/compare_and_seal.py": "499388a9c17e936e638bd9c26b9719b209ca29afeb955f967da175bc2569b058",
+    "docs/s0-5/evidence/P01_C_review/run_review.sh": "d3a8543a44adfab5b2d8459305bae6dba1e097c2bebc017c210f98236855bea1",
+    "source/dexgym/tasks/direct/wholebody_s05/data/review_audit.py": "bb8c60654d7467d9b032c49606ad9fe6aff87763b1251a8b71e3e7f602d34ca3",
+    "source/dexgym/tasks/direct/wholebody_s05/data/synchronize.py": "13550058a3114e062c6f7ba2e92b8149659dc5870ae9a97ec256679b7ed571b5",
+    "tests/s0_5/unit/test_p01c_offline_boundary.py": "c1a15ce51c1997e48a307de34b03ba4a1bed219abf88ab6e113773faaefa1767"
+  },
+  "green": {
+    "integration": {
+      "command": "-m unittest discover -s tests/s0_5/integration -p test_p01c_review_integration.py -v",
+      "exit": 0,
+      "sha256": {
+        "integration.command": "31ef6eb018a429b18ad6177273609a07d2fd79bdb1f824321dd51b752da2eec6",
+        "integration.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "integration.stderr": "693c0551e81371325e0ab55ec42f90e19d5b88532775cb6e1f7a33644e3356b2",
+        "integration.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests": 3
+    },
+    "legacy_order": {
+      "command": "docs/s0-5/evidence/P01_C_review/legacy_order_witness.py",
+      "exit": 0,
+      "sha256": {
+        "legacy_order.command": "7aab5ab0081c4dcfdbf6260e7595d7681d881c88d2781e710b5c0d68da54c90b",
+        "legacy_order.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "legacy_order.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "legacy_order.stdout": "30522f4e91212e9b45f13f90f0b3025ff1f19e99d389cd364d7a70a45ade6509"
+      },
+      "tests": null
+    },
+    "paired": {
+      "command": "-m dexgym.tasks.direct.wholebody_s05.data.review_audit --plan docs/s0-5/evidence/P01_C/sample_plan.json --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --old-b /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-20261126-46ed5e2/attempt-04 --old-review /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-B-REVIEW-20261126-f32d6bb-r02 --resource /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/resource_preflight.json --legacy /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-20261126-8b0f399/attempt-03/products --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-C-REVIEW-FINAL-20261126-aecfd2d/attempt-02/products",
+      "exit": 0,
+      "sha256": {
+        "paired.command": "4f3844d83c5d0c2839cbcf97e1549fe945118f474cc9b8ac21d8c7f0cbd44d5a",
+        "paired.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "paired.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "paired.stdout": "e7d12620730be86e11f107683228b37fd5510a1664516b55fb7b0e37c40c4c7d"
+      },
+      "tests": null
+    },
+    "unit": {
+      "command": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+      "exit": 0,
+      "sha256": {
+        "unit.command": "165be27b27fbb35c7fcd795d50fb4321a5c087efb918ff6c864bb50a9a8a4e36",
+        "unit.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+        "unit.stderr": "d1c430e521dc8a9e9532b94ad6a2d6892937884939c517ff76655e3f7205c453",
+        "unit.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "tests": 78
+    }
+  },
+  "phase": "P01-C",
+  "preflight_sha256": {
+    "freeze.sha256": "f15b1fabe976fa3d1dd11f55c13d3209c9bf45014c754851f135c47c461b7d73",
+    "red_test.sha256": "1974165412d2fbf613f93604099562cc26b7ba6bd252817e98a4cbeaefee552b",
+    "review_preflight.log": "b141d4fb0bdcdd812a49e15fd8204101587a3e4cc03167f8664802fc33fcdefe"
+  },
+  "previous_review_receipt_sha256": "21f06148cc7672d5193d7661e3d872e168414290056b23715f512c1693c0fc6e",
+  "products_manifest_sha256": "2b21ca708918c8cca47f71054523583ccfd48ec81031aea97f3da382f9289f27",
+  "products_sha256": {
+    "final_delta.json": "54e53bc17a827639bb9876408ab6e6da825f0c4db3d8c71c3d89a6f0a96b7f00",
+    "paired_regression.json": "234b997386df4bf5d741261ce42323b010037d5f4e58c0262e4fecac9cf5eb84",
+    "source_trace.jsonl": "2b0d1ebe2a4ddde144403f150d562c4b1d38a2d6122e3888e7be8224746985d0",
+    "technical_gates.json": "8d02add924351ee6ebfc3525bfd69947d53588302a1fb8f7d24a5d12f2d48835"
+  },
+  "red": {
+    "command": "rev_env -m unittest discover -s tests/s0_5/unit -p test_p01c_offline_boundary.py -v",
+    "exit": 1,
+    "sha256": {
+      "red.command": "65040e1fdad252c3f98d44f3cd1af1f8317d7d161b644b3673a4d3a1cb1c8cf1",
+      "red.exit": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "red.stderr": "56b0feb96715998814cc3229d7170c57219472c27d28491b54e833096a205cba",
+      "red.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "tests": 8
+  },
+  "replay": {
+    "causal_new": 2248,
+    "causal_old": 2248,
+    "input_file_bytes": 490239228,
+    "joint_gained": 0,
+    "joint_lost": 0,
+    "offline_new": 2211,
+    "offline_old": 2248,
+    "raw_window_events": 47983,
+    "real_unsafe_events": 153,
+    "recordings": 7,
+    "registered_pairs": 13640,
+    "ticks": 2300
+  },
+  "run_id": "P01-C-REVIEW-FINAL-20261126-aecfd2d",
+  "scope": "HMB_SIM_REVIEW",
+  "technical_gates": {
+    "C1-GEO": "PASS",
+    "C2-RT": "BLOCKED",
+    "C2-SIM": "PASS",
+    "Final_Test": "BLOCKED",
+    "P01-T": "BLOCKED",
+    "robot-base": "BLOCKED"
+  }
+}
