@@ -220,6 +220,8 @@ def p01_dependency_states(document):
                         f'{owner} receipt differs from logged {gate} outcome')
                 require(status!='READY_FOR_REVIEW' or actual=='PASS',
                         f'{owner} receipt does not support {gate} technical PASS')
+            if owner=='P01-E':
+                check_e1_receipt(document,event,evidence,receipt)
             if owner=='P01-D' and status=='READY_FOR_REVIEW':
                 frozen=checked_file(ROOT,event['frozen_config_ref'])
                 require(digest(frozen.read_bytes())==event['frozen_config_sha256']==receipt['candidate_config_sha256'],
@@ -265,6 +267,8 @@ def p01_dependency_states(document):
     require(states==document['p01_subphases'], 'P01 current subphase status differs from history')
     if 'p01e_preflight' in document:
         check_e0_result(document)
+    if 'p01e_production_authorization' in document:
+        check_e1_authorization(document)
     for event in document['events']:
         moment=datetime.fromisoformat(event['at'])
         if event['phase']=='P01' and event['to']=='ACCEPTED':
@@ -295,6 +299,46 @@ def check_e0_result(document):
     starts=[x for x in document['p01_subphase_events'] if x['phase']=='P01-E' and x.get('scope')=='E0_PREFLIGHT']
     require(any(x['run_id']==review['run_id'] for x in starts),'E0 receipt needs a scoped start event')
     print('PASS E0 bounded review receipt and exact execution candidate hashes')
+
+
+def check_e1_authorization(document):
+    e0=document['p01e_preflight']
+    accepted=document['p01e_e0_acceptance']
+    launch=document['p01e_production_authorization']
+    require(accepted['type']==launch['type']=='human' and accepted['by']==launch['by'] and
+            accepted['status']=='ACCEPTED' and launch['scope']=='E1_PRODUCTION' and
+            launch['run_id'].startswith('P01-E-E1-') and
+            accepted['reviewed_commit']==launch['reviewed_commit'] and
+            accepted['approval_ref']==launch['approval_ref'],
+            'E1 requires an independent human authorization of the reviewed E0 implementation')
+    checked_file(ROOT,launch['approval_ref'])
+    require(datetime.fromisoformat(e0['at'])<=datetime.fromisoformat(accepted['recorded_at'])<=
+            datetime.fromisoformat(launch['recorded_at']), 'E1 authorization order differs')
+    for prefix,event in (('receipt',accepted),('candidate_config',launch),('execution_lock',launch)):
+        reference=event[f'{prefix}_ref']
+        version=event[f'{prefix}_sha256']
+        original=git('show',f"{launch['reviewed_commit']}:docs/s0-5/{reference}")
+        require(original.returncode==0 and e0[f'{prefix}_sha256']==version==digest(original.stdout)==
+                digest(checked_file(ROOT,reference).read_bytes()),f'E1 approved {prefix} differs')
+    print('PASS E0 acceptance and independent E1 authorization match the reviewed Git bytes')
+
+
+def check_e1_receipt(document,event,evidence,receipt):
+    authorization=document['p01e_production_authorization']
+    require(event['scope']==receipt['scope']==authorization['scope']=='E1_PRODUCTION' and
+            event['run_id']==receipt['run_id']==authorization['run_id'] and
+            receipt['source_commit']==authorization['reviewed_commit'] and
+            receipt['execution_candidate_sha256']==authorization['candidate_config_sha256'] and
+            receipt['execution_lock_sha256']==authorization['execution_lock_sha256'] and
+            receipt['e0_receipt_sha256']==document['p01e_e0_acceptance']['receipt_sha256'],
+            'E1 receipt does not describe the authorized production run')
+    require(receipt['verified_control_ticks']==0 and
+            all(receipt['technical_gates'][k]=='BLOCKED' for k in ('C2-RT','robot-base','P01-T','Final_Test')),
+            'E1 historical simulation scope cannot qualify physical timing or Final Test')
+    for group in ('review_artifacts_sha256','review_implementation_sha256'):
+        for name,value in receipt[group].items():
+            require(digest(checked_file(evidence.parent,name).read_bytes())==value, f'E1 evidence differs: {name}')
+    print('PASS E1 receipt, output and independent audit file hashes')
 
 
 def clock_dependency_state(document,dcr):
