@@ -15,6 +15,14 @@
 
 当前离线 `Nominal.step()` 同时要求四组有效及全身路径合法才更新 `self.last`。一个世代内没有新合法双侧命令时，每侧 SDK 解算继续使用初始合法姿态作为种子，即使该侧上一拍已取得独立解。逐侧失败数依赖这个状态机。后续诊断须记录单侧是否取得合法解、是否实际接受和提交、以及全身命令能否资格化，并保持持有、回退及局部解的原因分母。[离线名义状态机](../../../source/dexgym/tasks/direct/wholebody_s05/v1/rmb/nominal.py)
 
+### 完整 Train 的原 M1 腕目标上界
+
+`V1-A-train-radial-07` 退出 0。独立复核读取报告原始文件，SHA-256 为 `0658b1e8938b6402da5e001091321350a3a3655afd1718c253764759f084f13c`，逐分区复算 24 个 Train 根、228 分区、86,338 计划拍与 85,382 联合有效拍。按照冻结输入掩码进入探针的 85,243 拍均获得双侧 native workspace 响应。左腕排除 6,169 拍，右腕排除 61,348 拍，双侧同时超界 3,550 拍，并集为 63,967 拍。将 139 个未进入探针的联合有效拍全部按可能合法计，Train 双侧精确直接 IK 覆盖率仍至多为 **21,415 / 85,382 = 25.0814%**。24 个母源中无一达到 85% 的必要上界，最高为 81.3985%。[上界审计源码](../../../source/dexgym/tasks/direct/wholebody_s05/v1/rmb/audit_nominal_workspace.py)
+
+受审桥接在 native base 系计算未投影请求的腕心半径 `||p_TCP − R_TCP·t_tool − p_shoulder||`，只在超过同配置两段有限连杆之和 `0.6020794064 m` 再加 `1 µm` 时作严格排除。该 epsilon 向保留样本的方向扩大上界。夹带实际控制器的 0.5 mm reserve 或 5 mm 平滑过渡会缩小可控半径，因此审计未用它们 For exclusion. 每侧 15 个原生 FK 正控的 MuJoCo 位置差小于 0.215 µm，姿态差小于 0.93 µrad。两个独立 Windows 统计正负控通过（0.77 s，退出 0）。该约束是给定腕姿经 SDK 适配后的姿态可达必要条件。P02 指尖必要界、实际 Servo 动态表现、硬件资格及指尖评分需分别验证。[Native CCS 几何](https://github.com/FEGkkd/whole-body-teleop/blob/6d0b0b5b2601618f1b0052d93ef2403eea9b064a/src/whole_body_teleop/src/marvin_kine_sdk.cpp#L425) · [P02 指尖必要界](../reports/P02_review_refinement.md)
+
+精确腕姿超出本上界时，换 seed、增加因果子拍、START 锚定和 workspace 投影均无法让该原目标精确可达。平滑捏合也不会移动原 M1 腕目标。后续因果 waypoint 或 START 锚定方案可以独立证明命令可执行，并长期保留原 target、实现目标、投影差、硬安全和实际反馈。将这类命令计入原确切目标规格下的正式名义覆盖涉及资格语义变更，需要有限 DCR 和项目用户授权。该 DCR 如获批准，应明确保留冻结的 M1 独立评分目标、计划分母、85% 数值门、全套安全门、直接 IK 失败审计和残差能力域重验。在此之前 G-A 及其训练依赖继续阻塞。[冻结覆盖标准](../specs/V1-A_offline_rmb.md) · [冻结目标契约](../specs/V2_rmb_contract.md)
+
 ## 固定版本的 Teleop 恢复路径
 
 - Coordinator launch 先读 `real.yaml` 再读 MuJoCo `sim.yaml`。该 overlay 选择 `manimux_analytic_ik_position`、Marvin、上一条已接受命令作为种子、START 锁存的 NSP 平面和独立双臂执行。运行参数为 250 Hz、步长 dt 上限 16 ms、平移限速 0.2592 m/s、旋转限速 1.085734 rad/s，重试顺序 `[1.0,0.5,0.25,0.1]` 和单轴投影。基底 YAML 提供 workspace 0.5 mm reserve 和 5 mm 平滑区，overlay 禁用 continuous Servo、radial discard、Ruckig 和 task projection。D1 仍须核对实际生效 YAML、工作区及二进制身份。[启动合并顺序](https://github.com/FEGkkd/whole-body-teleop/blob/6d0b0b5b2601618f1b0052d93ef2403eea9b064a/src/whole_body_teleop/launch/whole_body_teleop.launch.py#L15) · [MuJoCo overlay](https://github.com/FEGkkd/whole-body-teleop/blob/6d0b0b5b2601618f1b0052d93ef2403eea9b064a/src/whole_body_teleop/config/sim.yaml#L10) · [基底 workspace 设置](https://github.com/FEGkkd/whole-body-teleop/blob/6d0b0b5b2601618f1b0052d93ef2403eea9b064a/src/whole_body_teleop/config/real.yaml#L59)
