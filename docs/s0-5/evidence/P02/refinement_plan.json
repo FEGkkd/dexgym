@@ -3,7 +3,7 @@
   "run_id": "P02-REFINE-20261126-8753921",
   "reviewed_commit": "87539210e60f1134820b9f06fdb084cbc3ec1bf1",
   "reference_run_id": "P02-20261126-54c2e06",
-  "reference_review_receipt_sha256": "1f55ed102ad10d5dce1eac0e7c10ed68e2604ccff0f645b74e0432646ede6492b",
+  "reference_review_receipt_sha256": "1f55ed102ad10d5dce1eac0e7c10ed68e2604ccf0f645b74e0432646ede6492b",
   "development_authorization": "User approved DCR-003 research only; P02 stays READY_FOR_REVIEW, formal scoring scope pending.",
   "data_rule": "All signed E1 Train and Validation partitions, all HMB joint-valid geometry ticks. Count invalid and unknown separately. Fit Train once, hash freeze the fitted candidates before reading Validation geometry.",
   "cohort_rule": "Use all 38 frozen original planned identities (32 roots, 6 F1 tails). Replay original full and fixed-hand outcomes as historical evidence. Use the three original recorded initializations on M0 and seeds by the same algorithm on candidate targets. Do not replace ineligible or failed rows.",
