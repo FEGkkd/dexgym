@@ -1,0 +1,20 @@
+{
+  "schema": "s05.hmb.actor_history.v1",
+  "scope": "HISTORICAL_SIMULATION_DEVELOPMENT_ONLY",
+  "tick_offsets": [-4, -3, -2, -1, 0],
+  "streams": ["manus_left", "manus_right", "tracker_left", "tracker_right"],
+  "fields": {
+    "pose": ["5,4,N,7", "m and XYZW"],
+    "node_mask": ["5,4,N", "bool"],
+    "pose_valid": ["5,4", "bool"],
+    "velocity_m_s": ["5,4,N,3", "m/s"],
+    "velocity_valid": ["5,4", "bool"],
+    "age_ns": ["5,4", "ns, -1 unknown"],
+    "velocity_age_ns": ["5,4", "ns, -1 unknown"],
+    "safety_permission": ["5", "bool"],
+    "joint_valid": ["5", "bool"]
+  },
+  "sampler_only": ["segment_id", "partition", "root", "split", "calibration_id", "topology_id", "clock_generation"],
+  "excluded": ["offline", "bracket", "future geometry", "future labels", "whole-trajectory statistics", "raw record identity", "segment boundaries", "episode phase", "raw Tracker streams"],
+  "missing_values": "NaN numeric padding; apply node/pose/velocity masks before downstream normalization. This is an input data contract, independent of a later Actor implementation."
+}

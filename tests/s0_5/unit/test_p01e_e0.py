@@ -10,6 +10,7 @@ import numpy as np
 
 from dexgym.tasks.direct.wholebody_s05.data import hmb_build
 from dexgym.tasks.direct.wholebody_s05.data.p01e_ledger import Ledger
+from dexgym.tasks.direct.wholebody_s05.data import p01e_lock
 from dexgym.tasks.direct.wholebody_s05.data.p01e_lock import authorize,RUN_BASE
 from dexgym.tasks.direct.wholebody_s05.data.p01e_qualification import qualify_partition
 from test_p01d_hmb import synthetic
@@ -126,5 +127,17 @@ class PublicationControls(unittest.TestCase):
             self.assertEqual(len(path.read_bytes().splitlines()),7)
 
     def test_e0_authorization_cannot_start_full_build(self):
-        with self.assertRaisesRegex(ValueError,'E1 requires separate committed human approval'):
-            authorize('E1_PRODUCTION',RUN_BASE/'P01-E-NOT-AUTHORIZED/products','x','y')
+        state={'p01_subphases':{'P01-D':'ACCEPTED','P01-E':'IN_PROGRESS'},
+               'p01_subphase_events':[
+                   {'phase':'P01-D','to':'ACCEPTED','reviewed_commit':p01e_lock.BASE,
+                    'frozen_config_sha256':p01e_lock.D_SHA,'review_receipt_sha256':p01e_lock.D_RECEIPT_SHA,
+                    'approval':{'type':'human'}},
+                   {'phase':'P01-E','to':'IN_PROGRESS','scope':'E0_PREFLIGHT'}]}
+        document=json.dumps(state).encode()
+        with TemporaryDirectory() as directory:
+            folder=Path(directory)
+            (folder/'phase_state.json').write_bytes(document)
+            with patch.object(p01e_lock,'DOCS',folder), patch.object(p01e_lock.subprocess,'run') as run:
+                run.return_value.stdout=document
+                with self.assertRaisesRegex(ValueError,'E1 requires separate committed human approval'):
+                    authorize('E1_PRODUCTION',RUN_BASE/'P01-E-NOT-AUTHORIZED/products','x','y')
