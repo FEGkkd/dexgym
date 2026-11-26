@@ -3,6 +3,7 @@
 import argparse
 from hashlib import sha256
 import json
+from math import isfinite
 from pathlib import Path
 from time import perf_counter
 
@@ -15,6 +16,27 @@ from .physics import ServoProfile, signature
 from .smoke import make_task
 
 
+POSITION_TOLERANCE_RAD = 0.000872664626
+FREE_RESPONSE_LIMITS = {
+    "q_rad": POSITION_TOLERANCE_RAD,
+    "qd_rad_s": .05,
+    "tip_m": .0005,
+    "servo_rad": POSITION_TOLERANCE_RAD,
+    "applied_rad": POSITION_TOLERANCE_RAD,
+    "ctrl_rad": POSITION_TOLERANCE_RAD,
+}
+
+
+def free_response_ok(maxima, *, clean, completed, planned):
+    return clean and completed == planned and all(map(isfinite, maxima.values())) and all(
+        maxima[name] <= limit for name, limit in FREE_RESPONSE_LIMITS.items()
+    )
+
+
+def update_peak(value, observed):
+    return max(value, observed) if isfinite(observed) else float("inf")
+
+
 def compare(robot, envs):
     profile = ServoProfile()
     cpu, home_cpu, cpu_reset = make_task(robot, envs, profile, "B54", "cpu")
@@ -23,12 +45,22 @@ def compare(robot, envs):
     conditions = []
     active_cpu = torch.ones(envs, dtype=torch.bool)
     active_gpu = active_cpu.cuda()
-    cases = ("home_hold", "arm_only", "hand_only", "joint_arm_and_hand")
+    cases = ("home_hold", "arm_only", "hand_only", "joint_arm_and_hand", "moving_initial_state")
     expected = (1, 10, 150)
     for name in cases:
         for steps in expected:
             cpu_reset()
             gpu_reset()
+            if name == "moving_initial_state":
+                position = home_cpu.clone()
+                position[:, 0] += .008
+                position[:, 34] += .007
+                velocity = torch.zeros_like(position)
+                velocity[:, 0] = -.03
+                velocity[:, 34] = .03
+                ids = torch.arange(envs)
+                cpu.physics.reset(ids, position, velocity)
+                gpu.physics.reset(ids.cuda(), position.cuda(), velocity.cuda())
             start = perf_counter()
             remaining = steps
             q = home_cpu.clone()
@@ -39,9 +71,10 @@ def compare(robot, envs):
                 q[:, 14] += .003
                 q[:, 34] += .003
             q_gpu = q.cuda()
-            maxima = dict(q_rad=0., qd_rad_s=0., tip_m=0., servo_rad=0., ctrl_rad=0.)
+            maxima = dict.fromkeys(FREE_RESPONSE_LIMITS, 0.)
+            maxima.update(torque_Nm=0., contact_depth_m=0., minimum_gap_m=0.)
             completed, warp_attempts, real_calls = 0, 0, 0
-            event_match = True
+            event_match, clean = True, True
             events_cpu, events_gpu = [], []
             while remaining:
                 count = min(remaining, 10)
@@ -51,26 +84,33 @@ def compare(robot, envs):
                 events_cpu.append(a.event.tolist())
                 events_gpu.append(b.event.tolist())
                 event_match &= torch.equal(a.event, b.event.cpu())
+                clean &= not bool(a.event.any() or b.event.any() or a.contact.any() or b.contact.any()
+                                  or (a.depth > 0).any() or (b.depth > 0).any())
                 completed += min(int(a.substeps.min()), int(b.substeps.min()))
                 warp_attempts += int(b.substeps.max()) * envs
                 b_state = b.state.cpu()
                 diff = (a.state - b_state).abs()
-                maxima["q_rad"] = max(maxima["q_rad"], diff[:, :JOINTS].max().item())
-                maxima["qd_rad_s"] = max(maxima["qd_rad_s"], diff[:, JOINTS:].max().item())
+                maxima["q_rad"] = update_peak(maxima["q_rad"], diff[:, :JOINTS].max().item())
+                maxima["qd_rad_s"] = update_peak(maxima["qd_rad_s"], diff[:, JOINTS:].max().item())
                 tips = torch.linalg.vector_norm(fk(a.state[:, :JOINTS]).tips - fk(b_state[:, :JOINTS]).tips, dim=-1)
-                maxima["tip_m"] = max(maxima["tip_m"], tips.max().item())
-                maxima["servo_rad"] = max(maxima["servo_rad"], (a.servo - b.servo.cpu()).abs().max().item())
-                maxima["ctrl_rad"] = max(maxima["ctrl_rad"], (a.ctrl - b.ctrl.cpu()).abs().max().item())
+                maxima["tip_m"] = update_peak(maxima["tip_m"], tips.max().item())
+                for key, field in (("servo_rad", "servo"), ("applied_rad", "applied"), ("ctrl_rad", "ctrl"),
+                                   ("torque_Nm", "torque"), ("contact_depth_m", "depth"),
+                                   ("minimum_gap_m", "minimum_gap")):
+                    delta = (getattr(a, field) - getattr(b, field).cpu()).abs()
+                    maxima[key] = update_peak(maxima[key], delta.max().item())
                 remaining -= count
                 if a.event.any() or b.event.any():
                     break
-            limits = {"q_rad": 0.000872664626, "qd_rad_s": .05, "tip_m": .0005}
-            match = (event_match and completed == steps and all(maxima[key] <= cap for key, cap in limits.items()))
+            match = free_response_ok(maxima, clean=clean and event_match, completed=completed, planned=steps)
             conditions.append({"fixture": name, "planned_substeps": steps, "completed_per_world": completed,
                                "warp_executed_kernel_world_substeps_upper": warp_attempts, "real_guarded_intervals": real_calls,
-                               "native_events": events_cpu, "warp_events": events_gpu, "maxima": maxima,
+                               "native_events": events_cpu, "warp_events": events_gpu,
+                               "events_equal": event_match, "event_and_contact_free": clean,
+                               "maxima": {key: value if isfinite(value) else None for key, value in maxima.items()},
                                "seconds": perf_counter() - start, "pass": match})
     return {"test": "S0-5 signed model CPU/Warp free-response parity", "model": signature(robot, profile),
+            "scope": "FREE_RESPONSE_ONLY", "limits": FREE_RESPONSE_LIMITS,
             "warp_parallel_worlds": envs, "conditions": conditions, "pass": all(row["pass"] for row in conditions)}
 
 

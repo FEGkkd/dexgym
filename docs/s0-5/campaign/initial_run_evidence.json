@@ -61,7 +61,7 @@
     },
     "native_smoke_01": {
       "relative": "runs/V1-B-native-smoke-01/cpu-smoke.json",
-      "sha256": "8ca101dbf9d7fd4ea39170be008fb35ec3ba1ca1fffd99ce1d0b1223b11c5c5e0",
+      "sha256": "8ca101dbf9d7fd4ea39170be008fb35ec3ba1ca1ffd99ce1d0b1223b11c5c5e0",
       "exit": 135,
       "actual_mujoco_control_steps": 136,
       "scope": "SYNTHETIC_TARGETS_DIAGNOSTIC"

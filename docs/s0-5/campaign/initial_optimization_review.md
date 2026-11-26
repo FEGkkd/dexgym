@@ -5,7 +5,7 @@
 ## 启动证据
 
 - V1-A 抽检 250 个计划拍，247 拍独立目标有效，双侧合法名义命令 0 拍。左／右原始求解 247／0，硬阈值额外步量最大 17.77 mm，超过 15 mm。两项因果前缀各 99 字段通过。该范围足以定位名义求解及阈值问题，G-A 仍待完整资格。
-- 独立读回两份 Native MuJoCo smoke JSON。各执行 136 个实际仿真 transition，均为一个实际并行环境及合成目标。相关进程退出 135，两份记录共 272 transitions 应计入 B/C0 前置消耗。对应 SHA-256 分别为 `8ca101dbf9d7fd4ea39170be008fb35ec3ba1ca1fffd99ce1d0b1223b11c5c5e0` 和 `f4f99b9945d6badfc521c4a375ae6ea40692b7dc4b2724192f390a2e94e0cbad`。清洁退出、物理等价、签名 RMB 接线与规模爬梯待验证。
+- 独立读回两份 Native MuJoCo smoke JSON。各执行 136 个实际仿真 transition，均为一个实际并行环境及合成目标。相关进程退出 135，两份记录共 272 transitions 应计入 B/C0 前置消耗。对应 SHA-256 分别为 `8ca101dbf9d7fd4ea39170be008fb35ec3ba1ca1ffd99ce1d0b1223b11c5c5e0` 和 `f4f99b9945d6badfc521c4a375ae6ea40692b7dc4b2724192f390a2e94e0cbad`。清洁退出、物理等价、签名 RMB 接线与规模爬梯待验证。
 - RTX 5090 的 PyTorch 有限输出和 Warp 末元素 62 已记录。探针进程退出 135，实际批量 World Model 更新和整体 learner 吞吐均未取得资格。唯一持久设备 `nvme0n1` 记录多个不可恢复读取错误。恢复需先核验健康存储和运行依赖。
 
 ## 资源下限
