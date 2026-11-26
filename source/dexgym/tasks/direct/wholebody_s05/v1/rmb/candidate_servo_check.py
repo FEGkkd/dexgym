@@ -12,7 +12,7 @@ from .domains import RESIDUAL_RAD, realized
 from .schema import TICK_NS
 
 
-TICKS = 50
+TICKS = 100
 SCORE_TICKS = 25
 SUBSTEP_NS = round(PHYSICS_DT * 1_000_000_000)
 COMMAND_TOL_RAD = 2e-6

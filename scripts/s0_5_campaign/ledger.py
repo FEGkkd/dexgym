@@ -150,6 +150,33 @@ def record_physics_smoke(state, facts):
         state["remaining_budget"][key] -= units
 
 
+def record_dcr008_servo(state, facts):
+    """Account for candidate-only paired diagnostics under the shared evaluation ceiling."""
+    if state["execution_authorized"] is not True or state["dcr_review"] != "TECHNICAL_PASS":
+        raise ValueError("DCR-008 diagnostics require the existing authorized campaign")
+    book = state.setdefault("dcr008_candidate_servo", {"reserved": 0, "runs": {}})
+    run_id = facts["run_id"]
+    if not isinstance(run_id, str) or not run_id.startswith("DCR-008-servo-"):
+        raise ValueError("Expected an explicit DCR-008 static Servo Run ID")
+    if facts["action"] == "complete":
+        attempt = book["runs"][run_id]
+        actual = facts["actual"]
+        if (attempt["outcome"] is not None or type(facts["exit"]) is not int
+                or (actual is not None and (type(actual) is not int or not 0 <= actual <= attempt["reserved"]))):
+            raise ValueError("Invalid DCR-008 Servo outcome")
+        attempt["outcome"] = facts
+        return
+    count = facts["reserved"]
+    if (facts["action"] != "reserve" or run_id in book["runs"] or type(count) is not int or count < 1
+            or book["reserved"] + count > 6400 or state["remaining_budget"]["eval_total"] < count
+            or facts.get("scope") != "DCR008_ACTUAL_STATIC_MUJOCO_WITNESS_ONLY"):
+        raise ValueError("DCR-008 paired evaluation exceeds its candidate or cumulative evaluation budget")
+    book["reserved"] += count
+    book["runs"][run_id] = {"reserved": count, "reservation": facts, "outcome": None}
+    state["resource_usage"]["eval_total"] += count
+    state["remaining_budget"]["eval_total"] -= count
+
+
 def record(root, kind, data):
     with lock(root):
         history = event_history(root / "events.jsonl")
@@ -185,6 +212,8 @@ def record(root, kind, data):
             state["dashboard"] = facts
         elif kind == "B_SMOKE_ACCOUNTING":
             record_physics_smoke(state, facts)
+        elif kind == "DCR008_SERVO_ACCOUNTING":
+            record_dcr008_servo(state, facts)
         elif kind == "INFRASTRUCTURE_BLOCKED":
             if not facts.get("mount_is_only_persistent_device") or not facts.get("blocking_evidence"):
                 raise ValueError("blocking record requires device and observed kernel evidence")

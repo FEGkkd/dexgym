@@ -30,8 +30,10 @@ EXACT_ROT_RAD = 1e-5
 MINIMUM_COVERAGE = .85
 EXPECTED = {"Train": (24, 228, 86_338, 85_382), "Validation": (8, 80, 30_275, 29_150)}
 FRAME_NAMES = ("workspace_target", "step_target", "attempt_target")
-NATIVE_FLAGS = ("accepted", "ik_target_accepted", "analytic_braking", "workspace_projected", "rate_limited",
-                "pair_accepted", "pair_hard_fault")
+NATIVE_FLAGS = (
+    "accepted", "ik_target_accepted", "analytic_braking", "workspace_projected", "rate_limited",
+    "analytic_exact_stop_used", "pair_accepted", "pair_hard_fault",
+)
 
 
 class Classification(IntEnum):
@@ -134,6 +136,10 @@ def output_arrays(raw, count):
         projected_axis=np.full((count, ARM_SUBSTEPS, 2), -1, dtype=np.int8),
         backoff_scale=np.ones((count, ARM_SUBSTEPS, 2)),
         limit_applied=np.zeros((count, 54), dtype=bool),
+        native_rate_limit_proposed=np.zeros((count, ARM_SUBSTEPS, 2), dtype=bool),
+        native_rate_limit_applied=np.zeros((count, ARM_SUBSTEPS, 2), dtype=bool),
+        hand_limit_proposed=np.zeros((count, ARM_SUBSTEPS, 40), dtype=bool),
+        hand_limit_applied=np.zeros((count, ARM_SUBSTEPS, 40), dtype=bool),
         hand_raw_rad=np.zeros((count, 2, 20)),
         hand_request_rad=np.zeros((count, 2, 20)),
         hand_raw_valid=np.zeros((count, 2), dtype=bool),
@@ -184,6 +190,8 @@ def record_trace(fields, i, candidate):
         fields["substep_status"][i, j] = step.status
         fields["path_accepted"][i, j] = step.whole_body_path_accepted
         fields["kernel_proposed"][i, j] = step.kernel_proposed
+        fields["hand_limit_proposed"][i, j] = step.hand_candidate_limit
+        fields["hand_limit_applied"][i, j] = step.hand_limit_applied
         fields["limit_applied"][i, 14:] |= step.hand_limit_applied
         for side, arm in enumerate(step.native_arms):
             fields["native_flags"][i, j, side] = [bool(getattr(arm, name)) for name in NATIVE_FLAGS]
@@ -195,12 +203,16 @@ def record_trace(fields, i, candidate):
             fields["backoff_scale"][i, j, side] = arm.backoff_scale
             for name in FRAME_NAMES:
                 fields[name][i, j, side] = getattr(arm, name)
-            limited = (arm.workspace_projected or arm.rate_limited
-                       or arm.backoff_scale < 1 or arm.projected_axis >= 0)
+            rate_limited = arm.rate_limited
+            limited = arm.workspace_projected or arm.backoff_scale < 1 or arm.projected_axis >= 0
             if arm.accepted and arm.ik_target_accepted:
-                change = pose_error(arm.step_target, candidate.native_tcp_target[side])
-                limited |= change[0] > EXACT_M or change[1] > EXACT_ROT_RAD
-            if limited and step.kernel_proposed and step.whole_body_path_accepted:
+                change = pose_error(arm.step_target, arm.workspace_target)
+                rate_limited |= change[0] > EXACT_M or change[1] > EXACT_ROT_RAD
+            admitted = (step.kernel_proposed and step.whole_body_path_accepted
+                        and step.status[side] == CandidateStatus.ACTIVE)
+            fields["native_rate_limit_proposed"][i, j, side] = step.kernel_proposed and rate_limited
+            fields["native_rate_limit_applied"][i, j, side] = admitted and rate_limited
+            if admitted and (limited or rate_limited):
                 fields["limit_applied"][i, GROUPS[side]] = True
 
 
@@ -419,8 +431,13 @@ def count_evidence(fields):
         candidate_five_frame=int(fields["candidate_five_frame"].sum()),
         candidate_active=int(active.sum()), candidate_active_hmb=int((active & hmb).sum()),
         joint_limit_reported=int(fields["limit_applied"].any(axis=1).sum()),
+        native_rate_limit_proposed=int(fields["native_rate_limit_proposed"].any(axis=(1, 2)).sum()),
+        native_rate_limit_applied=int(fields["native_rate_limit_applied"].any(axis=(1, 2)).sum()),
+        hand_slew_or_joint_limit_applied=int(fields["hand_limit_applied"].any(axis=(1, 2)).sum()),
         braking_proposed=int((fields["native_flags"][..., NATIVE_FLAGS.index("analytic_braking")]
                               & fields["kernel_proposed"][..., None]).any(axis=(1, 2)).sum()),
+        exact_stop_proposed=int((fields["native_flags"][..., NATIVE_FLAGS.index("analytic_exact_stop_used")]
+                                & fields["kernel_proposed"][..., None]).any(axis=(1, 2)).sum()),
         witness_selected=int(fields["witness_sampled"].sum()), witness_proven=int(fields["witness_ok"].sum()),
         static_5mm_witness=int((fields["witness_ok"] & (fields["witness_error_m"] <= .005)).sum()),
     )
@@ -624,6 +641,10 @@ def main():
     prefix_receipt = {}
     summaries = {}
     with TeleopNative(args.teleop_bridge, args.marvin_config, args.phase1_repo) as kernel:
+        mapped = {line.split(maxsplit=5)[-1] for line in Path("/proc/self/maps").read_text().splitlines()}
+        loaded_vendor = {Path(path).resolve() for path in mapped if path.endswith("/libKine.so")}
+        if loaded_vendor != {args.marvin_vendor.resolve()}:
+            raise ValueError(f"Actual Marvin library mapping differs from the pinned vendor: {loaded_vendor}")
         frames, frame_witnesses = native_frames(robot, kernel)
         hand = Wuji(args.wuji_sdk)
         try:
