@@ -530,7 +530,8 @@ def structure():
             'Traceability row/ownership')
     p01_adjuncts={'P01_T_telemetry_acquisition.md','P01_C_calibration_and_causal_sync.md',
                   'P01_C_RT_clock_qualification.md','P01_C_simulation_review_v0.2.0.md',
-                  'P01_D_dataset_freeze.md','P01_E_production_preflight.md','P01_F_independent_hmb_acceptance.md'}
+                  'P01_D_dataset_freeze.md','P01_E_production_preflight.md','P01_F_independent_hmb_acceptance.md',
+                  'P03_SIM0_bimanual_intent_mapping.md'}
     specs = sorted(s for s in (ROOT / 'specs').glob('P??_*.md') if s.name not in p01_adjuncts)
     require(tuple(s.name[:3] for s in specs) == PHASES, 'Phase spec list')
     for spec in specs:

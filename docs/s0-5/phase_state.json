@@ -3,7 +3,7 @@
   "current": {
     "P00": "ACCEPTED",
     "P01": "ACCEPTED",
-    "P02": "READY_FOR_REVIEW",
+    "P02": "ACCEPTED",
     "P03": "NOT_STARTED",
     "P04": "NOT_STARTED",
     "P05": "NOT_STARTED",
@@ -70,7 +70,11 @@
       "at": "2026-11-26T20:05:03+08:00",
       "evidence_ref": "reports/approvals/P01_ACCEPTED_P02.md",
       "scope": "HISTORICAL_HMB",
-      "approval": {"type": "human", "by": "project_user", "ref": "reports/approvals/P01_ACCEPTED_P02.md"}
+      "approval": {
+        "type": "human",
+        "by": "project_user",
+        "ref": "reports/approvals/P01_ACCEPTED_P02.md"
+      }
     },
     {
       "phase": "P02",
@@ -102,30 +106,78 @@
         "P02-E": "PASS"
       },
       "authorization_ref": "reports/approvals/P01_ACCEPTED_P02.md"
+    },
+    {
+      "phase": "P02",
+      "from": "READY_FOR_REVIEW",
+      "to": "ACCEPTED",
+      "at": "2026-11-27T00:35:58+08:00",
+      "evidence_ref": "reports/approvals/P02_LIMITED_ACCEPTANCE_SIM0.md",
+      "scope": "HISTORICAL_SIMULATION_STATIC_RESEARCH_ONLY",
+      "approval": {
+        "type": "human",
+        "by": "project_user",
+        "ref": "reports/approvals/P02_LIMITED_ACCEPTANCE_SIM0.md"
+      }
     }
   ],
   "review_fix_ref": "reports/P00_review_fix.md",
   "dependency_dcr": {
     "id": "DCR-001",
     "approved_at": "2026-11-26T02:17:53+08:00",
-    "approval": {"type": "human", "by": "project user", "ref": "dcr/DCR-001_p01_hmb_telemetry_dependencies.md"},
+    "approval": {
+      "type": "human",
+      "by": "project user",
+      "ref": "dcr/DCR-001_p01_hmb_telemetry_dependencies.md"
+    },
     "scope": "dependency change only. Separate technical and start approvals remain required",
     "active_spec_ref": "specs/P01-data-v0.2.1.md",
     "active_spec_version": "0.2.1",
     "active_spec_sha256": "1de9df40e11a7c73de3c99fe77c67d878e24635a0303e940639bfd37ee6b69c3",
-    "mandatory_dependencies": {"P01-C": ["P01-B-HMB"], "P01 exit": ["P01-F"], "P03": ["P02", "P01-T"]}
+    "mandatory_dependencies": {
+      "P01-C": [
+        "P01-B-HMB"
+      ],
+      "P01 exit": [
+        "P01-F"
+      ],
+      "P03": [
+        "P02",
+        "P01-T"
+      ]
+    }
   },
   "dependency_clock_dcr": {
     "id": "DCR-002",
     "approved_at": "2026-11-26T11:46:52+08:00",
-    "approval": {"type": "human", "by": "project user", "ref": "dcr/DCR-002_simulation_and_real_clock_qualification.md"},
+    "approval": {
+      "type": "human",
+      "by": "project user",
+      "ref": "dcr/DCR-002_simulation_and_real_clock_qualification.md"
+    },
     "scope": "dependency change and bounded review only, first observed on Ubuntu",
     "spec_ref": "specs/P01_C_simulation_review_v0.2.0.md",
     "spec_sha256": "39616ce82a3252f92180d46269d7dd1736d943f326b633ccbd81088d5caf204a",
-    "dependencies": {"P01-C review": ["C1-GEO", "C2-SIM"], "P01-D": ["P01-C"],
-                     "P03": ["P02", "P01-T", "C2-RT", "robot-base"]}
+    "dependencies": {
+      "P01-C review": [
+        "C1-GEO",
+        "C2-SIM"
+      ],
+      "P01-D": [
+        "P01-C"
+      ],
+      "P03": [
+        "P02",
+        "P01-T",
+        "C2-RT",
+        "robot-base"
+      ]
+    }
   },
-  "clock_qualifications": {"C2-RT": "BLOCKED", "robot-base": "BLOCKED"},
+  "clock_qualifications": {
+    "C2-RT": "BLOCKED",
+    "robot-base": "BLOCKED"
+  },
   "clock_qualification_events": [],
   "final_test": {
     "status": "BLOCKED",
@@ -163,7 +215,11 @@
       "from": "READY_FOR_REVIEW",
       "to": "ACCEPTED",
       "at": "2026-11-26T01:36:20+08:00",
-      "approval": {"type": "human", "by": "project user", "ref": "reports/approvals/P01_A_ACCEPTED_P01_B.md"}
+      "approval": {
+        "type": "human",
+        "by": "project user",
+        "ref": "reports/approvals/P01_A_ACCEPTED_P01_B.md"
+      }
     },
     {
       "phase": "P01-B",
@@ -178,7 +234,10 @@
       "from": "IN_PROGRESS",
       "to": "BLOCKED",
       "at": "2026-11-26T01:56:49+08:00",
-      "technical_gates": {"B1": "FAIL", "B2": "BLOCKED"},
+      "technical_gates": {
+        "B1": "FAIL",
+        "B2": "BLOCKED"
+      },
       "evidence_ref": "evidence/P01_B/review_receipt.json",
       "evidence_sha256": "edc758262697f982eb15a51093b4d58a29a8025230c3c9643fd1d263b7a927a5",
       "report_ref": "reports/P01_B_acceptance.md"
@@ -196,7 +255,10 @@
       "from": "IN_PROGRESS",
       "to": "READY_FOR_REVIEW",
       "at": "2026-11-26T02:26:28+08:00",
-      "technical_gates": {"HMB": "PASS", "auxiliary_legacy_decode": "RECOVERED"},
+      "technical_gates": {
+        "HMB": "PASS",
+        "auxiliary_legacy_decode": "RECOVERED"
+      },
       "evidence_ref": "evidence/P01_B_review/review_receipt.json",
       "evidence_sha256": "7fd4162a13a27d0d844d437e643913a8bf356f4b19b817c2f615a9344fbb72e9",
       "report_ref": "reports/P01_B_review_fix.md"
@@ -206,7 +268,10 @@
       "from": "NOT_STARTED",
       "to": "BLOCKED",
       "at": "2026-11-26T02:26:28+08:00",
-      "technical_gates": {"P01-T": "BLOCKED", "historical_B2": "BLOCKED"},
+      "technical_gates": {
+        "P01-T": "BLOCKED",
+        "historical_B2": "BLOCKED"
+      },
       "evidence_ref": "evidence/P01_B_review/review_receipt.json",
       "spec_ref": "specs/P01_T_telemetry_acquisition.md",
       "reason": "No authenticated hardware, physical response pairing and clock evidence"
@@ -216,7 +281,11 @@
       "from": "READY_FOR_REVIEW",
       "to": "ACCEPTED",
       "at": "2026-11-26T11:12:55+08:00",
-      "approval": {"type": "human", "by": "project user", "ref": "reports/approvals/P01_B_HMB_ACCEPTED_P01_C.md"}
+      "approval": {
+        "type": "human",
+        "by": "project user",
+        "ref": "reports/approvals/P01_B_HMB_ACCEPTED_P01_C.md"
+      }
     },
     {
       "phase": "P01-C",
@@ -236,7 +305,12 @@
       "from": "IN_PROGRESS",
       "to": "BLOCKED",
       "at": "2026-11-26T11:29:43+08:00",
-      "technical_gates": {"C1": "PASS", "C2": "BLOCKED", "C2_algorithm": "PASS", "C2_real_clock": "BLOCKED"},
+      "technical_gates": {
+        "C1": "PASS",
+        "C2": "BLOCKED",
+        "C2_algorithm": "PASS",
+        "C2_real_clock": "BLOCKED"
+      },
       "evidence_ref": "evidence/P01_C/review_receipt.json",
       "evidence_sha256": "46ef7a1f83c0b48f26a7b8a44e72de5ef0ed8841a289c4a2b2c02c411e05b0c1",
       "report_ref": "reports/P01_C_acceptance.md",
@@ -262,8 +336,14 @@
       "to": "READY_FOR_REVIEW",
       "scope": "HMB_SIM_REVIEW",
       "at": "2026-11-26T12:02:03+08:00",
-      "technical_gates": {"C1-GEO": "PASS", "C2-SIM": "PASS", "C2-RT": "BLOCKED", "robot-base": "BLOCKED",
-                          "P01-T": "BLOCKED", "Final_Test": "BLOCKED"},
+      "technical_gates": {
+        "C1-GEO": "PASS",
+        "C2-SIM": "PASS",
+        "C2-RT": "BLOCKED",
+        "robot-base": "BLOCKED",
+        "P01-T": "BLOCKED",
+        "Final_Test": "BLOCKED"
+      },
       "evidence_ref": "evidence/P01_C_review/review_receipt.json",
       "evidence_sha256": "21f06148cc7672d5193d7661e3d872e168414290056b23715f512c1693c0fc6e",
       "report_ref": "reports/P01_C_review_fix.md"
@@ -277,7 +357,11 @@
       "reviewed_commit": "eb00f254dc71ac7f6ceef9e2c76a661ac3e912bd",
       "evidence_ref": "evidence/P01_C_final/final_receipt.json",
       "evidence_sha256": "d708acdba29e291043de17706e3dc77e51fff42105fa7fe76c1ed08256cef224",
-      "approval": {"type": "human", "by": "project user", "ref": "reports/approvals/P01_C_ACCEPTED_P01_D.md"}
+      "approval": {
+        "type": "human",
+        "by": "project user",
+        "ref": "reports/approvals/P01_C_ACCEPTED_P01_D.md"
+      }
     },
     {
       "phase": "P01-D",
@@ -297,7 +381,9 @@
       "from": "IN_PROGRESS",
       "to": "READY_FOR_REVIEW",
       "at": "2026-11-26T12:53:43+08:00",
-      "technical_gates": {"D1": "PASS"},
+      "technical_gates": {
+        "D1": "PASS"
+      },
       "evidence_ref": "evidence/P01_D/review_receipt.json",
       "evidence_sha256": "40bf56f01337d0ceb32f8977efc80154e40144bbc949becbb7050d12963bed93",
       "frozen_config_ref": "evidence/P01_D/products/frozen_config.json",
@@ -316,7 +402,11 @@
       "frozen_config_sha256": "f7f2eeba2cfc8adc9d1649618f353956470eb477a6a99448bdbe7332dd5a6d81",
       "review_receipt_ref": "evidence/P01_D/review_receipt.json",
       "review_receipt_sha256": "40bf56f01337d0ceb32f8977efc80154e40144bbc949becbb7050d12963bed93",
-      "approval": {"type": "human", "by": "project user", "ref": "reports/approvals/P01_D_ACCEPTED_P01_E_E0.md"}
+      "approval": {
+        "type": "human",
+        "by": "project user",
+        "ref": "reports/approvals/P01_D_ACCEPTED_P01_E_E0.md"
+      }
     },
     {
       "phase": "P01-E",
@@ -400,8 +490,16 @@
       "receipt_sha256": "1957bc5828cc76935f8231f13824b44e5084e6445cfb66f4d5e3b9f76870b039",
       "handoff_sha256": "cc1f21ead157e576113a184dba48a5d2596f4835ffdf53e554823cb67eb3fb97",
       "e1_manifest_sha256": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074",
-      "allowed_use": ["HMB_GEOMETRY_DEVELOPMENT", "HMB_SIMULATED_CAUSAL", "HMB_OFFLINE_DIAGNOSTIC"],
-      "approval": {"type": "human", "by": "project_user", "ref": "reports/approvals/P01_ACCEPTED_P02.md"}
+      "allowed_use": [
+        "HMB_GEOMETRY_DEVELOPMENT",
+        "HMB_SIMULATED_CAUSAL",
+        "HMB_OFFLINE_DIAGNOSTIC"
+      ],
+      "approval": {
+        "type": "human",
+        "by": "project_user",
+        "ref": "reports/approvals/P01_ACCEPTED_P02.md"
+      }
     }
   ],
   "p01e_preflight": {
@@ -469,5 +567,23 @@
       "approved formal scoring",
       "startup authorization"
     ]
+  },
+  "simulation_research": {
+    "dcr": "dcr/DCR-004_bimanual_simulation_research_branch.md",
+    "p03_sim0": "IN_PROGRESS",
+    "p03_sim1": "NOT_STARTED",
+    "p04_sim": "NOT_STARTED",
+    "formal_p03": "NOT_STARTED",
+    "formal_physical_scoring": "PENDING_HUMAN_APPROVAL",
+    "hw_readiness_extension": "PAUSED",
+    "hardware_prerequisites": {
+      "P01-T": "BLOCKED",
+      "C2-RT": "BLOCKED",
+      "robot-base": "BLOCKED",
+      "Final Test": "BLOCKED"
+    },
+    "authorized_scope": "reports/approvals/P02_LIMITED_ACCEPTANCE_SIM0.md",
+    "run_id": "P03-SIM0-20261127-b8d8b40",
+    "plan_sha256": "f03b34a4adb98e233f0bf15374e8d3b40f325d7a26441bca0d1af4991f156368"
   }
 }
