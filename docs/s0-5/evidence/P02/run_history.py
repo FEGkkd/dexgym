@@ -77,7 +77,7 @@ def historical_clip(sources,frame):
 
 def grouping(rows,plan):
     m={}
-    for key in ('A_archived','B_fixed_hand_14','C_bounded_arm_54','D_full_54'):
+    for key in ('A_archived','B_fixed_hand_14','B8_paired_fixed_hand_14','C_bounded_arm_54','D_full_54'):
         e=[r[key]['metrics']['max_tip_m'] for r in rows if 'metrics' in r[key]]
         m[key]=dict(scored=len(e),planned=len(rows),median_m=float(np.median(e)) if e else None,
              maximum_m=max(e) if e else None,
@@ -129,9 +129,10 @@ def run(plan,out,model):
             a=dict(metrics=metrics(goal,robot,q,plan['cross_hand_pairs']),legality=robot.legality(q),
                    status='ORIGINAL_ARCHIVED_SDK_REFERENCE',q=q.tolist())
             b=solve(robot,goal,plan,locked,indices=np.arange(14))
+            b8=solve(robot,goal,plan,locked,indices=np.arange(14),bounds=limits)
             c=solve(robot,goal,plan,starts,bounds=limits)
             d=solve(robot,goal,plan,starts)
-            for candidate in (b,c,d):
+            for candidate in (b,b8,c,d):
                 if candidate['q'] is not None and not check_robot.legality(np.asarray(candidate['q']))['feasible']:
                     raise ValueError('Historical best witness violates constraints on second model instance')
             measured=record['hold'].get(f'case_{id_}_mm')
@@ -139,8 +140,8 @@ def run(plan,out,model):
                 frame=id_,time_ns=int(values['time_ns'][id_]),clip=historical_clip(split['clips'],id_),
                 ref_shape_error_m=shape,archived_target=goal.json(),historical_hold_median_mm=measured,
                 historical_hold_scope='25 terminal dynamics ticks, historical repeated selection',
-                A_archived=a,B_fixed_hand_14=b,C_bounded_arm_54=c,D_full_54=d))
-            print(id_,[round(x.get('metrics',{}).get('max_tip_m',-1)*1000,4) for x in (a,b,c,d)],flush=True)
+                A_archived=a,B_fixed_hand_14=b,B8_paired_fixed_hand_14=b8,C_bounded_arm_54=c,D_full_54=d))
+            print(id_,[round(x.get('metrics',{}).get('max_tip_m',-1)*1000,4) for x in (a,b,b8,c,d)],flush=True)
     result=dict(source_role='HISTORICAL_VALIDATION_AND_DIAGNOSTICS_ONLY',no_final_test_access=True,
                 historical_model=plan['historical_model'],historical_model_sha256=plan['historical_model_sha256'],
                 historical_bank=str(bank),bank_sha256=prov['bank_sha256'],validation_npz_sha256=split['sha256'],
@@ -152,7 +153,9 @@ def run(plan,out,model):
                       original_angles_preserved=manifest['fixed_hand_reachability']['original_angles_preserved'],
                       sdk_reference=manifest['hand_reference_contract']),
                 constraints=dict(margin_m=robot.clearance_m,all_modes_same_model=True,same_target_for_all=True,
-                                 B_fixed_hands_full_legal_arm=True,C_bound_arm_about_original_deg=8),
+                                 B_fixed_hands_full_legal_arm=True,C_bound_arm_about_original_deg=8,
+                                 B8_matches_C_arm_constraint=True,
+                                 B8_role='supplementary paired DOF ablation, original A-D and frozen budgets preserved'),
                 cases=entries,summary=grouping(entries,plan),
                 execution_measurement_scope='HISTORICAL_HOLD_SUMMARY_ONLY_NO_P02_DYNAMIC_REPLAY')
     with (out/'historical_hard_case.json').open('x') as f:

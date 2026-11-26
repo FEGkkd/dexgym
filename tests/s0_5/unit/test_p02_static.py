@@ -11,6 +11,7 @@ from dexgym.tasks.direct.wholebody_s05.p02.intent import (
 )
 from dexgym.tasks.direct.wholebody_s05.p02.model import RobotModel, COUPLING_LIMIT
 from dexgym.tasks.direct.wholebody_s05.p02.oracle import Objective
+from dexgym.tasks.direct.wholebody_s05.p02.scoring import position_errors
 
 
 class IntentTest(unittest.TestCase):
@@ -56,6 +57,17 @@ class IntentTest(unittest.TestCase):
         np.testing.assert_allclose(second.cross,first.cross@yaw.T,atol=1e-12)
         np.testing.assert_allclose(second.relative_wrist,first.relative_wrist,atol=1e-12)
         np.testing.assert_allclose(second.pinch,first.pinch,atol=1e-12)
+
+    def test_scoring_targets_are_independent_of_measured_geometry(self):
+        intent=np.zeros((2,5,3))
+        feasible=np.full_like(intent,.01)
+        measured=np.full_like(intent,.03)
+        static=position_errors(intent,feasible)
+        a=position_errors(intent,feasible,measured)
+        b=position_errors(intent,feasible,-measured)
+        np.testing.assert_array_equal(static['projection_error'],a['projection_error'])
+        np.testing.assert_array_equal(a['projection_error'],b['projection_error'])
+        np.testing.assert_allclose(a['projection_error']+a['execution_error'],a['end_to_end_error'])
 
 
 class ActualModelTest(unittest.TestCase):
