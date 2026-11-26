@@ -1,0 +1,430 @@
+{
+  "candidate_comparison_sha256": "4f418fc020cb8ed41a718a2378a30ab362faf0a0b7b3fe621b16dac5c04761e9",
+  "maximum_authorized_control_transitions": 6400,
+  "planned_control_transitions": 5200,
+  "rule": "Seed 49 hash rank, one pre-proved kinematic witness at most per signed source",
+  "selected": [
+    {
+      "index": 32,
+      "partition": "recording:30d00a5452b46fe0c89ed936/00008",
+      "priority": "02cf78824f707e4aa1efa514ba9281647f98d45ea06868423ba6a0e019bf0f75",
+      "root": "capture:84d75398497941b2ac85b0f3",
+      "split": "Validation",
+      "tick_ns": 64640000122,
+      "trace": "Validation/0008.npz",
+      "trace_sha256": "fb037dd399bb4df5f7262c395dc569c7a9bec81e30c92c14018a7ad23f50437d"
+    },
+    {
+      "index": 238,
+      "partition": "recording:91313e7486d06640e3878f8d/00004",
+      "priority": "0513c93811cab642e7104585b2c252c2fb5ee4473c1d3bf19d3e3fe5090592d6",
+      "root": "capture:7df0193e6cf8cf09cd304b77",
+      "split": "Train",
+      "tick_ns": 36760000080,
+      "trace": "Train/0156.npz",
+      "trace_sha256": "1a4cc871ed6fe10de2bdd792254d03e7c128740b155328de1483d61d21ade0d4"
+    },
+    {
+      "index": 266,
+      "partition": "recording:bbe207bb28101d8d9455a6eb/00005",
+      "priority": "06f1e994a82233aef13ce6806381c0a77494347b7f03576fd891bfe0fbf00f1e",
+      "root": "capture:ec8bfe090a05041d139cf9f6",
+      "split": "Train",
+      "tick_ns": 45320000060,
+      "trace": "Train/0184.npz",
+      "trace_sha256": "1ef323f79f4d0c75e7fc9a5ad6a4603cd3202d4fc216caeb1ce61124572b9486"
+    },
+    {
+      "index": 6,
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00007",
+      "priority": "08fcbff9592a241aff77555b685cbaeeb4c7528cbfcfbed12fc695d2f2e95aa7",
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "split": "Train",
+      "tick_ns": 56120000082,
+      "trace": "Train/0134.npz",
+      "trace_sha256": "ed9b9b6970fce1ef32f5913d32b765b17e6b7484eda77e0ee93a7103a8e9cf31"
+    },
+    {
+      "index": 105,
+      "partition": "recording:4c01f4c2dd26d888138cdc73/00006",
+      "priority": "0d3f8c8a5390dc911cc97481002d44467cb535e25a4a36b7a8fff1d429ea5a9c",
+      "root": "capture:b0f31ba1d6c26e94ab2c7289",
+      "split": "Validation",
+      "tick_ns": 50100000067,
+      "trace": "Validation/0026.npz",
+      "trace_sha256": "95a7f9cb87a1a85e94c19ccdc4bad6acf8888554c063ef4c24a5e09fcd3adf2e"
+    },
+    {
+      "index": 135,
+      "partition": "recording:51adcf9b11cd609ee6efaf88/00009",
+      "priority": "105bd47582b0a4650e091c17b46ae796d3762f101c74ca09573cdaf1922a75d8",
+      "root": "capture:2151546f1c0b35e04218a1bb",
+      "split": "Train",
+      "tick_ns": 74700000058,
+      "trace": "Train/0084.npz",
+      "trace_sha256": "61dba6d344a34843fb1af841009e5eae77c8fabeaae308dfb90afe2dc2130d3a"
+    },
+    {
+      "index": 17,
+      "partition": "recording:366fe9c94a4078f7e0cfb3d5/00001",
+      "priority": "10a4a30f2a440b3b08a4049bad568b40309b04c03310783f20f85095648af5a9",
+      "root": "capture:b87d55215a7b4038f575c980",
+      "split": "Train",
+      "tick_ns": 8340000083,
+      "trace": "Train/0058.npz",
+      "trace_sha256": "f5835f9960c929cf6b71292905e9aff27d739575e9e57e3d0d843b88498d8c82"
+    },
+    {
+      "index": 150,
+      "partition": "recording:7f37957cb079709fe04735c8/00008",
+      "priority": "12af034783a8aec92cc5ed2ec065b2c48d1748312bd6bcb4ac527e63a9365af7",
+      "root": "capture:a94a53f04dab331aad3f21f4",
+      "split": "Train",
+      "tick_ns": 67000000063,
+      "trace": "Train/0117.npz",
+      "trace_sha256": "b4aa858ca5243a8c45e8d735c33700cdec0a0f475983f576db8f4b2eff4cce7f"
+    },
+    {
+      "index": 28,
+      "partition": "recording:28e5a46fe95f2f5803bf377d/00006",
+      "priority": "1a7890638ef08cc9b4f1c42367cab225fc98c88b6fe701f63162cb72164c28d2",
+      "root": "capture:5460d9dca502d3924632a907",
+      "split": "Train",
+      "tick_ns": 48560000056,
+      "trace": "Train/0036.npz",
+      "trace_sha256": "b565f3f7677c2d01ba6c54bf331e3cdc6585db0a518a8d1c34642a13e0856252"
+    },
+    {
+      "index": 358,
+      "partition": "recording:189e51a5df45ea33d051ffcf/00000",
+      "priority": "1fd5ff2e74671f5d22da3623d0c631096fe61c167587e31d9cefaaad35d8e7e3",
+      "root": "capture:6fb07249fb5b858f8269a562",
+      "split": "Train",
+      "tick_ns": 7160000000,
+      "trace": "Train/0008.npz",
+      "trace_sha256": "fb9ed72556152e39df5699f3c17bd34c71e3db8546870e81547f40b295c18235"
+    },
+    {
+      "index": 213,
+      "partition": "recording:6ba87f16c91a1161b47efa2f/00005",
+      "priority": "25a9d0744ecb9570453f8bbdf5e9a7566a95e7466af6ddddad7777292e25dce2",
+      "root": "capture:5bf13e82640cd2c5c35e4df1",
+      "split": "Validation",
+      "tick_ns": 44260000142,
+      "trace": "Validation/0036.npz",
+      "trace_sha256": "ea2663a33b0d8e0f18181ba54dea217acc33933009a17d7918746674c75b63ff"
+    },
+    {
+      "index": 21,
+      "partition": "recording:8800a1148baaa5ee2d0d517b/00003",
+      "priority": "283a27554809fd34b1f4a718a53a8a990e2ab007c0d9cbfb0e03d9a7971bc761",
+      "root": "capture:a34b6b9544d8f84e440282be",
+      "split": "Validation",
+      "tick_ns": 24420000073,
+      "trace": "Validation/0051.npz",
+      "trace_sha256": "8d47fe843948832a5a1cdf12839035cc58372715cdc07691e0e59cee54f73653"
+    },
+    {
+      "index": 264,
+      "partition": "recording:84794a93081c0b949a469ead/00007",
+      "priority": "3068f5feecfd1e578d7fe1ffa713a60f2a95082e46ffae3b7d0aae36ce4e629e",
+      "root": "capture:359d7bf76d7a7d4677d6585e",
+      "split": "Validation",
+      "tick_ns": 61280000075,
+      "trace": "Validation/0044.npz",
+      "trace_sha256": "69898b96819cd6a6fc45c2d78cf6a13a6df76a98b2ab6b03a71f299698f4a29b"
+    },
+    {
+      "index": 289,
+      "partition": "recording:9d0b8a112dcf83a37ec605c8/00006",
+      "priority": "33e9f6169d5e4a137b546f13edbf5c60315cdcd93d460e0a1a3b482849d028d7",
+      "root": "capture:d0e7ee58285307de8b1a4b93",
+      "split": "Validation",
+      "tick_ns": 53780000061,
+      "trace": "Validation/0064.npz",
+      "trace_sha256": "23133bece4976a72d98dfa0412539fde4f6dbf87d18f2e055e0ce127ec914224"
+    },
+    {
+      "index": 1,
+      "partition": "recording:9080a6d0ace275a01aea0e44/00001",
+      "priority": "451ba08851bee4743c2e1f473f54644f6593f0f243e53c703c89d2a7444b733a",
+      "root": "capture:bb5de955239eef5b1d2905ef",
+      "split": "Train",
+      "tick_ns": 8020000059,
+      "trace": "Train/0141.npz",
+      "trace_sha256": "ee468d477fdd617e75d691ebf4a07f34e475070cdb849a01acabab9a9375b3aa"
+    },
+    {
+      "index": 48,
+      "partition": "recording:732e8344f26f8afea70e2a61/00001",
+      "priority": "51b3ccce7c0248849133f6b63e80f3102d18e2d930cade66adc3784c1c2db938",
+      "root": "capture:3118754b1d9742a2718048e2",
+      "split": "Train",
+      "tick_ns": 8960000062,
+      "trace": "Train/0098.npz",
+      "trace_sha256": "bb33ce6fb06089a890657a302b10cc73efa9bb2c816e745269f03d04de96c3ea"
+    },
+    {
+      "index": 316,
+      "partition": "recording:b3ba693f07cb972d825dfa65/00007",
+      "priority": "5fac941247d0853a54f7f995356dff6b3ab253940d30cf79ef48257951bc31e3",
+      "root": "capture:6b3b94ebe706970ec08979e9",
+      "split": "Train",
+      "tick_ns": 62320000079,
+      "trace": "Train/0176.npz",
+      "trace_sha256": "cf0a020bd1d7543c3929733b0e0184fa04f92190c45094aebfe377b963aeda34"
+    },
+    {
+      "index": 152,
+      "partition": "recording:f2ffe6465a81f11d129442bb/00001",
+      "priority": "6904bb8dbeb293e605d81521583c07d8d4431acb7873c78920295115f2a5f380",
+      "root": "capture:982b9b5f7d882e16937303ce",
+      "split": "Train",
+      "tick_ns": 11040000044,
+      "trace": "Train/0216.npz",
+      "trace_sha256": "d883386109bbef913074936bcf4c7cdac18f3d884cb0be5cfcc03d9ae4938c83"
+    },
+    {
+      "index": 397,
+      "partition": "recording:ee81ae8d41d24c9980f85588/00006",
+      "priority": "6ce86fd2a1b40d91738cd25cd7707e59d1445bef655f1bd262dfcc96696d64a4",
+      "root": "capture:54911698b12e5b40cd8bfe65",
+      "split": "Train",
+      "tick_ns": 55940000063,
+      "trace": "Train/0211.npz",
+      "trace_sha256": "1fe70c2f6f246a5bf574de26b6d459e490de1e61c0eab8222c6e1fbb965fef81"
+    },
+    {
+      "index": 31,
+      "partition": "recording:4e5319e373fc2a90a1c33861/00005",
+      "priority": "780ffab7cd88c5eaccb36116194b0adfe6f6998ab34a9a5a17720bf23c927b70",
+      "root": "capture:2edc372773190c61446b634c",
+      "split": "Train",
+      "tick_ns": 40620000138,
+      "trace": "Train/0071.npz",
+      "trace_sha256": "8defd397ae46476d92aa6224ab9270274ac0e6125491ec3193a984cc2c4a3d47"
+    },
+    {
+      "index": 120,
+      "partition": "recording:accb68c9afa37e2c2edce4a0/00003",
+      "priority": "93e4c74b960ccc7d09e4a86cfe10fa8b4b219aec388c14ff726f5fbdcacf839a",
+      "root": "capture:a0cb71cb6806e10bbcf6cc7a",
+      "split": "Validation",
+      "tick_ns": 26400000081,
+      "trace": "Validation/0071.npz",
+      "trace_sha256": "fe2361feb82e9af5a5f3a9cd3694db67637d3f83efd643581d3559d14e1ddf41"
+    },
+    {
+      "index": 4,
+      "partition": "recording:01ee4f951950370ea9ecddae/00000",
+      "priority": "aa6fc972a0d3d5cdef5a83ecfa3c73a48b495a773601718a80d22341c6037448",
+      "root": "capture:8c85b5bd93595270f134bf72",
+      "split": "Train",
+      "tick_ns": 80000000,
+      "trace": "Train/0000.npz",
+      "trace_sha256": "12b4410d5f4c961e816ec1eeaa730c10382b31c1a47b8f344e4ea1b99eaabdf8"
+    },
+    {
+      "index": 45,
+      "partition": "recording:339e9099faa56a79b627fda5/00001",
+      "priority": "aeca7b5a136b974b5b0dd362f4fc9b56313e6eef02a7a1b8cefc3e860aab2075",
+      "root": "capture:b70297470e5e9fc8d030706e",
+      "split": "Train",
+      "tick_ns": 8900000052,
+      "trace": "Train/0040.npz",
+      "trace_sha256": "4b1e1fc9d20e13ce9f69afa8e814e5b0aa95898f82f8aad12a2c92f974f23287"
+    },
+    {
+      "index": 3,
+      "partition": "recording:89f09cb37b13dc62b5f9eb96/00001",
+      "priority": "b30a8cac8984ac0aebe91a9a3d7b3c418e6e784b4cd1fb48606735942e3d32c2",
+      "root": "capture:406fe87c6799120301158f3a",
+      "split": "Train",
+      "tick_ns": 8060000179,
+      "trace": "Train/0122.npz",
+      "trace_sha256": "2dff5e3d673680ae9c440e18921df000f6f25922ecc82c1e5b71b1cde2fa7389"
+    },
+    {
+      "index": 345,
+      "partition": "recording:948b79aeaa123f770309a860/00003",
+      "priority": "d2deba23b3e97a521b15e097903b44e495e334f515095a83918f8abea4aae146",
+      "root": "capture:378ae16c5078ff3880ede8d9",
+      "split": "Train",
+      "tick_ns": 30900000077,
+      "trace": "Train/0162.npz",
+      "trace_sha256": "f8f9b175e49265609933de2d8f92852177aca739e7a45c9a4da077adb1c174e4"
+    },
+    {
+      "index": 392,
+      "partition": "recording:350666047db83412069f01f0/00006",
+      "priority": "dc3213e3ce8fe67a8318e4c80b0f6b65d3b2b02d37fea558561df36118571f5d",
+      "root": "capture:e9111547768c345fe7e81e0e",
+      "split": "Train",
+      "tick_ns": 55840000063,
+      "trace": "Train/0051.npz",
+      "trace_sha256": "2751d249455fa11423cc5cc04e911214bb7ed4a9a30a532022c48ad0e6118eb8"
+    }
+  ],
+  "sources": [
+    {
+      "kinematic_witness_count": 0,
+      "root": "capture:1bc59d07cb650ee219d5adbf",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 5,
+      "root": "capture:2151546f1c0b35e04218a1bb",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 2,
+      "root": "capture:2edc372773190c61446b634c",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 7,
+      "root": "capture:3118754b1d9742a2718048e2",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 2,
+      "root": "capture:378ae16c5078ff3880ede8d9",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 1,
+      "root": "capture:406fe87c6799120301158f3a",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 4,
+      "root": "capture:5460d9dca502d3924632a907",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 3,
+      "root": "capture:54911698b12e5b40cd8bfe65",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 0,
+      "root": "capture:57223e1ea4fd73f5aa16c512",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 0,
+      "root": "capture:6154b09c32ffe84771d612f1",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 10,
+      "root": "capture:6b3b94ebe706970ec08979e9",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 6,
+      "root": "capture:6fb07249fb5b858f8269a562",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 9,
+      "root": "capture:7df0193e6cf8cf09cd304b77",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 0,
+      "root": "capture:84d149ff204d06f24ac72ebc",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 1,
+      "root": "capture:8c85b5bd93595270f134bf72",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 8,
+      "root": "capture:982b9b5f7d882e16937303ce",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 0,
+      "root": "capture:9e230fc5926c7a9444ebdd09",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 6,
+      "root": "capture:a94a53f04dab331aad3f21f4",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 6,
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 1,
+      "root": "capture:b70297470e5e9fc8d030706e",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 3,
+      "root": "capture:b87d55215a7b4038f575c980",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 6,
+      "root": "capture:bb5de955239eef5b1d2905ef",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 1,
+      "root": "capture:e9111547768c345fe7e81e0e",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 2,
+      "root": "capture:ec8bfe090a05041d139cf9f6",
+      "split": "Train"
+    },
+    {
+      "kinematic_witness_count": 3,
+      "root": "capture:359d7bf76d7a7d4677d6585e",
+      "split": "Validation"
+    },
+    {
+      "kinematic_witness_count": 1,
+      "root": "capture:5bf13e82640cd2c5c35e4df1",
+      "split": "Validation"
+    },
+    {
+      "kinematic_witness_count": 0,
+      "root": "capture:803fa7655c2b3b01ed771c5b",
+      "split": "Validation"
+    },
+    {
+      "kinematic_witness_count": 5,
+      "root": "capture:84d75398497941b2ac85b0f3",
+      "split": "Validation"
+    },
+    {
+      "kinematic_witness_count": 1,
+      "root": "capture:a0cb71cb6806e10bbcf6cc7a",
+      "split": "Validation"
+    },
+    {
+      "kinematic_witness_count": 2,
+      "root": "capture:a34b6b9544d8f84e440282be",
+      "split": "Validation"
+    },
+    {
+      "kinematic_witness_count": 4,
+      "root": "capture:b0f31ba1d6c26e94ab2c7289",
+      "split": "Validation"
+    },
+    {
+      "kinematic_witness_count": 5,
+      "root": "capture:d0e7ee58285307de8b1a4b93",
+      "split": "Validation"
+    }
+  ]
+}

@@ -1,0 +1,513 @@
+{
+  "generation_barrier_checked_roots": 31,
+  "ordinary_checked_roots": 32,
+  "protocol": "truncate versus adversarial suffix with identical past",
+  "roots": {
+    "capture:1bc59d07cb650ee219d5adbf": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:06f3bc9ae8b6df054b6f7538/00000",
+        "prefix_ticks": 109,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:06f3bc9ae8b6df054b6f7538/00000",
+        "prefix_ticks": 7,
+        "replacement_differences": []
+      }
+    },
+    "capture:2151546f1c0b35e04218a1bb": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:51adcf9b11cd609ee6efaf88/00000",
+        "prefix_ticks": 53,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:51adcf9b11cd609ee6efaf88/00000",
+        "prefix_ticks": 8,
+        "replacement_differences": []
+      }
+    },
+    "capture:2edc372773190c61446b634c": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:4e5319e373fc2a90a1c33861/00001",
+        "prefix_ticks": 215,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:4e5319e373fc2a90a1c33861/00000",
+        "prefix_ticks": 6,
+        "replacement_differences": []
+      }
+    },
+    "capture:3118754b1d9742a2718048e2": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:732e8344f26f8afea70e2a61/00000",
+        "prefix_ticks": 77,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:732e8344f26f8afea70e2a61/00000",
+        "prefix_ticks": 15,
+        "replacement_differences": []
+      }
+    },
+    "capture:359d7bf76d7a7d4677d6585e": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:84794a93081c0b949a469ead/00000",
+        "prefix_ticks": 27,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:84794a93081c0b949a469ead/00000",
+        "prefix_ticks": 14,
+        "replacement_differences": []
+      }
+    },
+    "capture:378ae16c5078ff3880ede8d9": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:948b79aeaa123f770309a860/00001",
+        "prefix_ticks": 312,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:948b79aeaa123f770309a860/00000",
+        "prefix_ticks": 11,
+        "replacement_differences": []
+      }
+    },
+    "capture:406fe87c6799120301158f3a": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:89f09cb37b13dc62b5f9eb96/00001",
+        "prefix_ticks": 100,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:89f09cb37b13dc62b5f9eb96/00000",
+        "prefix_ticks": 18,
+        "replacement_differences": []
+      }
+    },
+    "capture:5460d9dca502d3924632a907": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:28e5a46fe95f2f5803bf377d/00000",
+        "prefix_ticks": 228,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:28e5a46fe95f2f5803bf377d/00000",
+        "prefix_ticks": 13,
+        "replacement_differences": []
+      }
+    },
+    "capture:54911698b12e5b40cd8bfe65": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:ee81ae8d41d24c9980f85588/00000",
+        "prefix_ticks": 20,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:ee81ae8d41d24c9980f85588/00000",
+        "prefix_ticks": 11,
+        "replacement_differences": []
+      }
+    },
+    "capture:57223e1ea4fd73f5aa16c512": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:c59e65d7a17e7253670ba0cf/00000",
+        "prefix_ticks": 64,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:c59e65d7a17e7253670ba0cf/00000",
+        "prefix_ticks": 17,
+        "replacement_differences": []
+      }
+    },
+    "capture:5bf13e82640cd2c5c35e4df1": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:6ba87f16c91a1161b47efa2f/00001",
+        "prefix_ticks": 240,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:6ba87f16c91a1161b47efa2f/00000",
+        "prefix_ticks": 7,
+        "replacement_differences": []
+      }
+    },
+    "capture:6154b09c32ffe84771d612f1": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:d714302e1f994fd06be08081/00003",
+        "prefix_ticks": 382,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:d714302e1f994fd06be08081/00000",
+        "prefix_ticks": 15,
+        "replacement_differences": []
+      }
+    },
+    "capture:6b3b94ebe706970ec08979e9": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:b3ba693f07cb972d825dfa65/00000",
+        "prefix_ticks": 76,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:b3ba693f07cb972d825dfa65/00000",
+        "prefix_ticks": 6,
+        "replacement_differences": []
+      }
+    },
+    "capture:6fb07249fb5b858f8269a562": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:189e51a5df45ea33d051ffcf/00000",
+        "prefix_ticks": 198,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:189e51a5df45ea33d051ffcf/00000",
+        "prefix_ticks": 12,
+        "replacement_differences": []
+      }
+    },
+    "capture:7df0193e6cf8cf09cd304b77": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:91313e7486d06640e3878f8d/00001",
+        "prefix_ticks": 256,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:91313e7486d06640e3878f8d/00000",
+        "prefix_ticks": 11,
+        "replacement_differences": []
+      }
+    },
+    "capture:803fa7655c2b3b01ed771c5b": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:34d9a9976f6e7a566a29c0b8/00000",
+        "prefix_ticks": 181,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:34d9a9976f6e7a566a29c0b8/00000",
+        "prefix_ticks": 6,
+        "replacement_differences": []
+      }
+    },
+    "capture:84d149ff204d06f24ac72ebc": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:22f122bf51dfc6b4c21ac4b1/00003",
+        "prefix_ticks": 40,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:22f122bf51dfc6b4c21ac4b1/00000",
+        "prefix_ticks": 10,
+        "replacement_differences": []
+      }
+    },
+    "capture:84d75398497941b2ac85b0f3": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:30d00a5452b46fe0c89ed936/00006",
+        "prefix_ticks": 263,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:30d00a5452b46fe0c89ed936/00000",
+        "prefix_ticks": 12,
+        "replacement_differences": []
+      }
+    },
+    "capture:8c85b5bd93595270f134bf72": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:01ee4f951950370ea9ecddae/00001",
+        "prefix_ticks": 52,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:01ee4f951950370ea9ecddae/00000",
+        "prefix_ticks": 10,
+        "replacement_differences": []
+      }
+    },
+    "capture:982b9b5f7d882e16937303ce": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:f2ffe6465a81f11d129442bb/00001",
+        "prefix_ticks": 69,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:f2ffe6465a81f11d129442bb/00000",
+        "prefix_ticks": 8,
+        "replacement_differences": []
+      }
+    },
+    "capture:9e230fc5926c7a9444ebdd09": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:69fee6c9daa61d68031317bd/00002",
+        "prefix_ticks": 305,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:69fee6c9daa61d68031317bd/00000",
+        "prefix_ticks": 10,
+        "replacement_differences": []
+      }
+    },
+    "capture:a0cb71cb6806e10bbcf6cc7a": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:accb68c9afa37e2c2edce4a0/00001",
+        "prefix_ticks": 64,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:accb68c9afa37e2c2edce4a0/00000",
+        "prefix_ticks": 12,
+        "replacement_differences": []
+      }
+    },
+    "capture:a34b6b9544d8f84e440282be": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:8800a1148baaa5ee2d0d517b/00000",
+        "prefix_ticks": 147,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:8800a1148baaa5ee2d0d517b/00000",
+        "prefix_ticks": 15,
+        "replacement_differences": []
+      }
+    },
+    "capture:a94a53f04dab331aad3f21f4": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:7f37957cb079709fe04735c8/00000",
+        "prefix_ticks": 28,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:7f37957cb079709fe04735c8/00000",
+        "prefix_ticks": 11,
+        "replacement_differences": []
+      }
+    },
+    "capture:b0f31ba1d6c26e94ab2c7289": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:4c01f4c2dd26d888138cdc73/00000",
+        "prefix_ticks": 21,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:4c01f4c2dd26d888138cdc73/00000",
+        "prefix_ticks": 7,
+        "replacement_differences": []
+      }
+    },
+    "capture:b63bc72d2e8b2ee395e966f6": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00001",
+        "prefix_ticks": 89,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+        "prefix_ticks": 9,
+        "replacement_differences": []
+      }
+    },
+    "capture:b70297470e5e9fc8d030706e": {
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:339e9099faa56a79b627fda5/00000",
+        "prefix_ticks": 12,
+        "replacement_differences": []
+      }
+    },
+    "capture:b87d55215a7b4038f575c980": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:366fe9c94a4078f7e0cfb3d5/00002",
+        "prefix_ticks": 397,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:366fe9c94a4078f7e0cfb3d5/00000",
+        "prefix_ticks": 8,
+        "replacement_differences": []
+      }
+    },
+    "capture:bb5de955239eef5b1d2905ef": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:9080a6d0ace275a01aea0e44/00000",
+        "prefix_ticks": 147,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:9080a6d0ace275a01aea0e44/00000",
+        "prefix_ticks": 13,
+        "replacement_differences": []
+      }
+    },
+    "capture:d0e7ee58285307de8b1a4b93": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:9d0b8a112dcf83a37ec605c8/00000",
+        "prefix_ticks": 47,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:9d0b8a112dcf83a37ec605c8/00000",
+        "prefix_ticks": 10,
+        "replacement_differences": []
+      }
+    },
+    "capture:e9111547768c345fe7e81e0e": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:350666047db83412069f01f0/00001",
+        "prefix_ticks": 25,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:350666047db83412069f01f0/00000",
+        "prefix_ticks": 15,
+        "replacement_differences": []
+      }
+    },
+    "capture:ec8bfe090a05041d139cf9f6": {
+      "generation_barrier": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:bbe207bb28101d8d9455a6eb/00000",
+        "prefix_ticks": 23,
+        "replacement_differences": []
+      },
+      "ordinary": {
+        "compared_fields": 69,
+        "deletion_differences": [],
+        "partition": "recording:bbe207bb28101d8d9455a6eb/00000",
+        "prefix_ticks": 16,
+        "replacement_differences": []
+      }
+    }
+  },
+  "scope": "DCR_008_CANDIDATE_ONLY"
+}

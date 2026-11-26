@@ -1,0 +1,1315 @@
+{
+  "actual_d10": "NOT_RUN",
+  "candidate_comparison_sha256": "4f418fc020cb8ed41a718a2378a30ab362faf0a0b7b3fe621b16dac5c04761e9",
+  "cases": [
+    {
+      "evidence": "case-00.json",
+      "partition": "recording:30d00a5452b46fe0c89ed936/00008",
+      "root": "capture:84d75398497941b2ac85b0f3",
+      "score": {
+        "b0_p95_m": 0.8590484628756058,
+        "b54_witness_p95_m": 0.7596888319404095,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.0026667638852145847,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.0002933315938221173,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -4.1491475674718075,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.003845616985440836,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.09935963093519629,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.08590484628756058,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "9dba272601e58bc9e2063da01ebc20153fbe247a8a093899597a79752f64d939",
+      "split": "Validation",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 64640000122
+    },
+    {
+      "evidence": "case-01.json",
+      "partition": "recording:91313e7486d06640e3878f8d/00004",
+      "root": "capture:7df0193e6cf8cf09cd304b77",
+      "score": {
+        "b0_p95_m": 0.1834996751435679,
+        "b54_witness_p95_m": 0.1593998860830626,
+        "functional_nondegenerate": false,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.001453719308737722,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": 0.0025503674079395966,
+            "within_limit": false
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -7.393979381897481,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.009450170341638198,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.024099789060505306,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": false,
+        "required_improvement_m": 0.01834996751435679,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "56e64337cc6723722e6c5f2ea747e3913b5e4ea9ecfbc07e0d7bb71e89b92c2d",
+      "split": "Train",
+      "status": "NO_PHYSICAL_WITNESS",
+      "tick_ns": 36760000080
+    },
+    {
+      "evidence": "case-02.json",
+      "partition": "recording:bbe207bb28101d8d9455a6eb/00005",
+      "root": "capture:ec8bfe090a05041d139cf9f6",
+      "score": {
+        "b0_p95_m": 0.35641195148243887,
+        "b54_witness_p95_m": 0.29807775873960773,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.10295232288257744,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.0074530627319349466,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": 0.6271142876212821,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.09306562061135859,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.05833419274283114,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.03564119514824389,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "58d4b6ff094abe7902d21a9a8285363bab655cd4846d623999e4f510370dd7cd",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 45320000060
+    },
+    {
+      "evidence": "case-03.json",
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00007",
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "score": {
+        "b0_p95_m": 0.34330041137156264,
+        "b54_witness_p95_m": 0.3065784250677217,
+        "functional_nondegenerate": false,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.07127874884743174,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": 0.003556203075779557,
+            "within_limit": false
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -7.918844426485151,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.07262518764977816,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.03672198630384094,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": false,
+        "required_improvement_m": 0.034330041137156264,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "f13792ac72d3131e6df9f0992c2e82a841add7766d32e398ffdfb541d51f60e3",
+      "split": "Train",
+      "status": "NO_PHYSICAL_WITNESS",
+      "tick_ns": 56120000082
+    },
+    {
+      "evidence": "case-04.json",
+      "partition": "recording:4c01f4c2dd26d888138cdc73/00006",
+      "root": "capture:b0f31ba1d6c26e94ab2c7289",
+      "score": {
+        "b0_p95_m": 0.3275219879539469,
+        "b54_witness_p95_m": null,
+        "functional_nondegenerate": null,
+        "functions": {},
+        "improvement_m": null,
+        "numeric_gate_met": false,
+        "required_improvement_m": 0.03275219879539469,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "9e7112a460bd312cb34c2957807fe2dbd47d58722a4b12e7bf7c7a9b58a83692",
+      "split": "Validation",
+      "status": "NO_PHYSICAL_WITNESS",
+      "tick_ns": 50100000067
+    },
+    {
+      "evidence": "case-05.json",
+      "partition": "recording:51adcf9b11cd609ee6efaf88/00009",
+      "root": "capture:2151546f1c0b35e04218a1bb",
+      "score": {
+        "b0_p95_m": 0.37518534517449753,
+        "b54_witness_p95_m": 0.32123339141177676,
+        "functional_nondegenerate": false,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.07401824831340648,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": 0.0020563745569551345,
+            "within_limit": false
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -6.346648808192658,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.07748272620715446,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.05395195376272077,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": false,
+        "required_improvement_m": 0.037518534517449756,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "b0a43b76c1c54ec7792eff8f9e26501e2f56406bdc7fd44620f2abd238a08c17",
+      "split": "Train",
+      "status": "NO_PHYSICAL_WITNESS",
+      "tick_ns": 74700000058
+    },
+    {
+      "evidence": "case-06.json",
+      "partition": "recording:366fe9c94a4078f7e0cfb3d5/00001",
+      "root": "capture:b87d55215a7b4038f575c980",
+      "score": {
+        "b0_p95_m": 0.29590314423699465,
+        "b54_witness_p95_m": 0.19378599128506122,
+        "functional_nondegenerate": false,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.1694491496630034,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": 0.002664308318490939,
+            "within_limit": false
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -0.227310549632044,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.1458609127905155,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.10211715295193344,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": false,
+        "required_improvement_m": 0.029590314423699467,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "3debf72a89f19f7bae24af9abcc902ea2e4a1777936a598d970bdfe97fb05cb0",
+      "split": "Train",
+      "status": "NO_PHYSICAL_WITNESS",
+      "tick_ns": 8340000083
+    },
+    {
+      "evidence": "case-07.json",
+      "partition": "recording:7f37957cb079709fe04735c8/00008",
+      "root": "capture:a94a53f04dab331aad3f21f4",
+      "score": {
+        "b0_p95_m": 0.31104418472965184,
+        "b54_witness_p95_m": 0.24099063571170629,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.1402603032336524,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": 0.0016614725955678977,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -0.1870948816678748,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.13569643501151674,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.07005354901794555,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.031104418472965186,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "153e327c759a7adab5db7591e857d2e6629127cbee3fae99d7afc4b30b1096e9",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 67000000063
+    },
+    {
+      "evidence": "case-08.json",
+      "partition": "recording:28e5a46fe95f2f5803bf377d/00006",
+      "root": "capture:5460d9dca502d3924632a907",
+      "score": {
+        "b0_p95_m": 0.19052021975946692,
+        "b54_witness_p95_m": 0.11619951978203494,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.14541455619116062,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.0022686192717207287,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -8.927032184337158,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.10638222496291433,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.07432069997743199,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.019052021975946694,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "ebc884e85770a6506db8a28d368a4f2d73f4fff4b50ca2a918da206be392cf5e",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 48560000056
+    },
+    {
+      "evidence": "case-09.json",
+      "partition": "recording:189e51a5df45ea33d051ffcf/00000",
+      "root": "capture:6fb07249fb5b858f8269a562",
+      "score": {
+        "b0_p95_m": 0.2634933127122106,
+        "b54_witness_p95_m": 0.19264121009244578,
+        "functional_nondegenerate": false,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.08199898577764161,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": 0.002060417141951265,
+            "within_limit": false
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -5.107723361912122,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.02716094203019248,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.07085210261976482,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": false,
+        "required_improvement_m": 0.026349331271221063,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "33533aafdd31ee51bff12b344e8b05c856d3acb791117e9b004ffbc2469c668a",
+      "split": "Train",
+      "status": "NO_PHYSICAL_WITNESS",
+      "tick_ns": 7160000000
+    },
+    {
+      "evidence": "case-10.json",
+      "partition": "recording:6ba87f16c91a1161b47efa2f/00005",
+      "root": "capture:5bf13e82640cd2c5c35e4df1",
+      "score": {
+        "b0_p95_m": 0.38999351213170813,
+        "b54_witness_p95_m": 0.3435387502271607,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.06524430396060887,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.0010640407549666747,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -4.128443590295254,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.06205884943184703,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.04645476190454745,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.038999351213170816,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "2a76744fe958c4360a6ee04783895ce372eb255e328fafab5ff16e523f7a1e61",
+      "split": "Validation",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 44260000142
+    },
+    {
+      "evidence": "case-11.json",
+      "partition": "recording:8800a1148baaa5ee2d0d517b/00003",
+      "root": "capture:a34b6b9544d8f84e440282be",
+      "score": {
+        "b0_p95_m": 0.27409102000025887,
+        "b54_witness_p95_m": 0.17300474567945326,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.22235999508483367,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.0024569298490572516,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -15.56649960374871,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.18327965761244858,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.10108627432080561,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.027409102000025887,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "27220657c1bb3c1f83f50f9cbf42843410812c21887c0947b397f6ee49ab2fed",
+      "split": "Validation",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 24420000073
+    },
+    {
+      "evidence": "case-12.json",
+      "partition": "recording:84794a93081c0b949a469ead/00007",
+      "root": "capture:359d7bf76d7a7d4677d6585e",
+      "score": {
+        "b0_p95_m": 0.6836415828194222,
+        "b54_witness_p95_m": 0.6027799278875444,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.09270084234843057,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.0005032267204593613,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": 0.13139957556147763,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.08354115007256435,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.0808616549318778,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.06836415828194223,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "f049967ba9bea891bb08db4762b59f604c8b76f444b801b943bdd3fe27be7994",
+      "split": "Validation",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 61280000075
+    },
+    {
+      "evidence": "case-13.json",
+      "partition": "recording:9d0b8a112dcf83a37ec605c8/00006",
+      "root": "capture:d0e7ee58285307de8b1a4b93",
+      "score": {
+        "b0_p95_m": 0.3590044047746979,
+        "b54_witness_p95_m": 0.26102154477740797,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.1268388344926379,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": 0.0018674375576105198,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": 0.07231542085300902,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.12210551864524999,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.09798285999728995,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.03590044047746979,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "3a8880cc3959a60d6e6caa7f83e9916b4874511f954d87a2d70cfcfa0d10e4f3",
+      "split": "Validation",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 53780000061
+    },
+    {
+      "evidence": "case-14.json",
+      "partition": "recording:9080a6d0ace275a01aea0e44/00001",
+      "root": "capture:bb5de955239eef5b1d2905ef",
+      "score": {
+        "b0_p95_m": 0.5243562453296634,
+        "b54_witness_p95_m": 0.4186283835419976,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.1272481084879522,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.016881834872034755,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -1.6491257125093703,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.11451427365682365,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.1057278617876658,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.052435624532966345,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "f40ec7992acb90bf1474ab12a827258c9504db540f42cb5a04e224261566dc2d",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 8020000059
+    },
+    {
+      "evidence": "case-15.json",
+      "partition": "recording:732e8344f26f8afea70e2a61/00001",
+      "root": "capture:3118754b1d9742a2718048e2",
+      "score": {
+        "b0_p95_m": 0.19582025904293968,
+        "b54_witness_p95_m": 0.11935885609781532,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.14466624752386506,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.004724561377839907,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -17.122859114229684,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.07298398880335169,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.07646140294512435,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.01958202590429397,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "293e33916345b42561707e4ac1f9ab1273d9e1aedfc09e2a1b5624f4db308609",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 8960000062
+    },
+    {
+      "evidence": "case-16.json",
+      "partition": "recording:b3ba693f07cb972d825dfa65/00007",
+      "root": "capture:6b3b94ebe706970ec08979e9",
+      "score": {
+        "b0_p95_m": 0.1379601567352372,
+        "b54_witness_p95_m": 0.050552460512419815,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.09812455768673697,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": 0.0005877517650153402,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -4.23675435917929,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.11232160098292596,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.08740769622281738,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.013796015673523721,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "bfb64ce171b9d0983ff329c2577ff5ef9188750b8dedc86e94ef6e7126913409",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 62320000079
+    },
+    {
+      "evidence": "case-17.json",
+      "partition": "recording:f2ffe6465a81f11d129442bb/00001",
+      "root": "capture:982b9b5f7d882e16937303ce",
+      "score": {
+        "b0_p95_m": 0.5468892583793903,
+        "b54_witness_p95_m": 0.4459000281275327,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.17189916068754674,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.00876670569743384,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -1.2754860946648279,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.15404954364103896,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.10098923025185758,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.05468892583793903,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "1fb1eb1b7cd4f54aac61945561a661728ac911c958807e89c899cb3cc68c9f9e",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 11040000044
+    },
+    {
+      "evidence": "case-18.json",
+      "partition": "recording:ee81ae8d41d24c9980f85588/00006",
+      "root": "capture:54911698b12e5b40cd8bfe65",
+      "score": {
+        "b0_p95_m": 0.20951861081729198,
+        "b54_witness_p95_m": 0.15857230325508298,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.07904219527751993,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.001097550890537126,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": 0.5317283739944756,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.0608816163841836,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.050946307562209,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.0209518610817292,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "422961b65447a797223b65d4041f7a53827dff62b1dde6d1263d5d7d84a4012b",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 55940000063
+    },
+    {
+      "evidence": "case-19.json",
+      "partition": "recording:4e5319e373fc2a90a1c33861/00005",
+      "root": "capture:2edc372773190c61446b634c",
+      "score": {
+        "b0_p95_m": 0.5874429505193106,
+        "b54_witness_p95_m": 0.45336337971066204,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.1906719292193162,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": 0.0005475555333113793,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": 0.23541343507253387,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.15748117162310926,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.13407957080864857,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.058744295051931066,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "7504d4d3b5876c96a05c3523742a043518a859366e4d0517ff8f6bdf94e39ded",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 40620000138
+    },
+    {
+      "evidence": "case-20.json",
+      "partition": "recording:accb68c9afa37e2c2edce4a0/00003",
+      "root": "capture:a0cb71cb6806e10bbcf6cc7a",
+      "score": {
+        "b0_p95_m": 0.19267113202281552,
+        "b54_witness_p95_m": 0.16746132239743522,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.05953188091220141,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": 0.0016811707888931687,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": 0.6547727822566962,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.056353020034455914,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.025209809625380303,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.019267113202281555,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "a3eeba90bd7085c3d13cfd73000161a56c12586bc5999a6c8d4e61bfde02668e",
+      "split": "Validation",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 26400000081
+    },
+    {
+      "evidence": "case-21.json",
+      "partition": "recording:01ee4f951950370ea9ecddae/00000",
+      "root": "capture:8c85b5bd93595270f134bf72",
+      "score": {
+        "b0_p95_m": 0.47359991545472063,
+        "b54_witness_p95_m": 0.3567945363873014,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.26614639174312016,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.013441471841277072,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -2.2718268835951925,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.17935548967901382,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.11680537906741922,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.04735999154547207,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "5bebe5b4843b3e5dfb8f9a4ec44b4a78baf43de1d27c060b1be8ee69bb2adaa6",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 80000000
+    },
+    {
+      "evidence": "case-22.json",
+      "partition": "recording:339e9099faa56a79b627fda5/00001",
+      "root": "capture:b70297470e5e9fc8d030706e",
+      "score": {
+        "b0_p95_m": 0.8642104179382807,
+        "b54_witness_p95_m": 0.7770241985630287,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": 0.0007353114375188152,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.0023193190777060016,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -2.814923715022804,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.0035613046952782668,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.08718621937525195,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.08642104179382808,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "79c5cb2b7728f8ff4c7882579ca72c528c56e33c104f5b51e2987dec7cd89416",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 8900000052
+    },
+    {
+      "evidence": "case-23.json",
+      "partition": "recording:89f09cb37b13dc62b5f9eb96/00001",
+      "root": "capture:406fe87c6799120301158f3a",
+      "score": {
+        "b0_p95_m": 0.42585829677599013,
+        "b54_witness_p95_m": 0.3771026079262469,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.08444321779962316,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.002877430810812723,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -0.6489782903798806,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.06741438814237222,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.04875568884974324,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.04258582967759902,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "83070085797efa8f23d3859ad1c3b1cbc7f13e55e397931045de09bd1d2ce2a5",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 8060000179
+    },
+    {
+      "evidence": "case-24.json",
+      "partition": "recording:948b79aeaa123f770309a860/00003",
+      "root": "capture:378ae16c5078ff3880ede8d9",
+      "score": {
+        "b0_p95_m": 0.3307525698802649,
+        "b54_witness_p95_m": 0.26278514899955513,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.08004939903075742,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": 0.0017626898466848381,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -0.28252419308656584,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.06798228965423686,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.06796742088070978,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.03307525698802649,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "0d02e0904350b9ac9566e24d8532406affc194906a5e6067ec3286e419a159bc",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 30900000077
+    },
+    {
+      "evidence": "case-25.json",
+      "partition": "recording:350666047db83412069f01f0/00006",
+      "root": "capture:e9111547768c345fe7e81e0e",
+      "score": {
+        "b0_p95_m": 0.19428202863714492,
+        "b54_witness_p95_m": 0.05368644459896044,
+        "functional_nondegenerate": true,
+        "functions": {
+          "max_active_pinch_m": {
+            "allowed_increase": 0.002,
+            "applicable": false,
+            "max_same_tick_increase": null,
+            "within_limit": null
+          },
+          "max_cross_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.146861164231127,
+            "within_limit": true
+          },
+          "p95_local_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": 0.0011953588275534777,
+            "within_limit": true
+          },
+          "relative_wrist_rotation_deg": {
+            "allowed_increase": 1.0,
+            "applicable": true,
+            "max_same_tick_increase": -0.6595642410776961,
+            "within_limit": true
+          },
+          "relative_wrist_translation_m": {
+            "allowed_increase": 0.002,
+            "applicable": true,
+            "max_same_tick_increase": -0.07758221266922097,
+            "within_limit": true
+          }
+        },
+        "improvement_m": 0.14059558403818448,
+        "issued_endpoint_reached": true,
+        "numeric_gate_met": true,
+        "required_improvement_m": 0.019428202863714494,
+        "score_timing": "SAME_COMMAND_TICK_POST_CONTROL"
+      },
+      "sha256": "4328bd363d235b70d901b6e20ec2e60ddf67d177ff208a6dafcc98247d45c75d",
+      "split": "Train",
+      "status": "PHYSICAL_STATIC_WITNESSED",
+      "tick_ns": 55840000063
+    }
+  ],
+  "formal_contract_frozen": false,
+  "observed_source_counts": {
+    "Train": 19,
+    "Validation": 7
+  },
+  "planned_control_transitions": 5200,
+  "planned_pairs": 26,
+  "scope": "DCR008_ACTUAL_STATIC_MUJOCO_WITNESS_ONLY",
+  "scores": {
+    "NO_PHYSICAL_WITNESS": 6,
+    "PHYSICAL_STATIC_WITNESSED": 20,
+    "actual_physical_transitions": 5104,
+    "actual_physics_substeps": 51040
+  },
+  "selection_sha256": "ba22494674e64ab1c287ba783f86b2c5ee05b5bd73602921d7b3003257f21f35"
+}

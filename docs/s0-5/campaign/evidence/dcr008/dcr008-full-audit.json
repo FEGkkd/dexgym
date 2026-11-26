@@ -1,0 +1,33 @@
+{
+  "summary_sha256": "4f418fc020cb8ed41a718a2378a30ab362faf0a0b7b3fe621b16dac5c04761e9",
+  "full_comparison": true,
+  "paired": true,
+  "verified_trace_files": 308,
+  "metadata_only": false,
+  "ordinary_prefix_roots": 32,
+  "barrier_prefix_roots": 31,
+  "splits": {
+    "Train": {
+      "roots": 24,
+      "partitions": 228,
+      "planned": 86338,
+      "hmb_joint_valid": 85382,
+      "hmb_active": 32168,
+      "active_coverage": 0.37675388255135744,
+      "direct_nominal_legal": 226,
+      "shadow_85_percent": false
+    },
+    "Validation": {
+      "roots": 8,
+      "partitions": 80,
+      "planned": 30275,
+      "hmb_joint_valid": 29150,
+      "hmb_active": 10190,
+      "active_coverage": 0.3495711835334477,
+      "direct_nominal_legal": 5,
+      "shadow_85_percent": false
+    }
+  },
+  "official_admission": false,
+  "physical_or_online_qualification": false
+}

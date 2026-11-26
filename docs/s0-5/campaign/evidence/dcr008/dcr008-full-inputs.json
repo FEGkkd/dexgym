@@ -1,0 +1,28 @@
+{
+  "identity_sha256": {
+    "HMB_CONFIG": "6aeaa203e39bea392bc20d5fceee26ea5f85752d219824f98f96b2c852846317",
+    "HMB_E1": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074",
+    "HMB_HANDOFF": "cc1f21ead157e576113a184dba48a5d2596f4835ffdf53e554823cb67eb3fb97",
+    "HMB_PLAN": "0f94b842e2558ec04da257aff94d469ae9b965968fff1a4593382fc2eea09404",
+    "M0_CALIBRATION": "27671adc7f78d29ab282fabcf43d542f16e31e1481e51b2f7f3cd5c4121b5b2b",
+    "M1": "577195a8eb66699e11cf8bcf910383086672c384723d61fa90c13ed90652baa7",
+    "direct_bank": "5ae31fb1d050f9bd88f9a19e30a6cbeb252da46acb5cd41689c2a2f391e973eb",
+    "evaluation_source": "6c68f37003e46e324afbc38cf9927aad92098b0a2c916369e8f4462c2dc217db",
+    "marvin_config": "ce20b1a80974c3ed58cdac4973152625096c8ad93a779e5fd4108c26ce19bd52",
+    "marvin_vendor": "f2aec6ebc1f41302fe0126284076211c044d6c7e1c2276dc919767254e0c597f",
+    "model": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+    "model_assets": "92c44cabe65b278ab8261c2659c2cfa8c670fad07fd7d3a640e8629bc5c06a0d",
+    "review_protocol": "d0a7f6c4ad6a4bde7038845067996b5a0eeba1f7e70d3e0e6279c1af182bfae2",
+    "scheduler_source": "a1d44b1513962cad18c9789de9968bbb0011681b329d1c9fc46c8142afbd3ea4",
+    "teleop_core_bridge": "510b1f10620ac69aa277d85e3399921a9050521aee10b934b62502dbd09ee5d4",
+    "teleop_marvin_kine_sdk_cpp_blob": "86f841f28099af7949da70a99806795c770f9ee6",
+    "teleop_revision": "6d0b0b5b2601618f1b0052d93ef2403eea9b064a",
+    "wuji_sdk": "1bdc160c6c27a9b1bfa727dfb7c33c8b01fbb5acbefc8cfdfa17b2fd84c75282"
+  },
+  "max_partitions": null,
+  "max_ticks": null,
+  "scope": "DCR_008_CANDIDATE_ONLY",
+  "split": "Both",
+  "witness_selection_seed": 49,
+  "witness_stride": 64
+}

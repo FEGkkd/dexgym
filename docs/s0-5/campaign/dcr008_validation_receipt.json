@@ -1,0 +1,35 @@
+{
+  "scope": "DCR008_CANDIDATE_VALIDATION_ONLY",
+  "campaign_id": "S05-V1-20261127-490770e",
+  "execution_source_commit": "9f0e697ea46422ac8a45d93253ae0f2700d9d2e9",
+  "frozen_design_sha256": "cd5bff29a5b5f683fae328898aa9060b40fc4be00e193a22d9bf18cb2d10b60b",
+  "candidate_gate": "BELOW_THRESHOLD_IN_BOTH_SPLITS",
+  "approval_status": "PENDING_HUMAN_REVIEW",
+  "formal_contract_frozen": false,
+  "official_data_or_training_admission": false,
+  "technical_gates_passed": [],
+  "remote_full_run": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/DCR-008-full-paired-01",
+  "remote_servo_run": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/DCR-008-servo-full-01",
+  "validation_runs_exit_codes": {
+    "exact_baseline": 0,
+    "full_paired": 0,
+    "full_trace_audit": 0,
+    "signed_fk_audit": 0,
+    "static_servo": 0
+  },
+  "actual_static_control_transitions": 5104,
+  "reserved_static_evaluation_transitions": 6400,
+  "artifacts_sha256": {
+    "campaign/evidence/dcr008/dcr008-frozen-run.json": "a93899d660fc3865d6a37142c8669be05605fda8b8db12d2b8c8eafa0af9d49f",
+    "campaign/evidence/dcr008/dcr008-full-inputs.json": "535e9f4267682370eab2129f383ec69e97d7073b93b90620b14d2762ca9f2ac1",
+    "campaign/evidence/dcr008/dcr008-full-comparison.json": "4f418fc020cb8ed41a718a2378a30ab362faf0a0b7b3fe621b16dac5c04761e9",
+    "campaign/evidence/dcr008/dcr008-full-prefix.json": "df591431b43ea6ea76f151334ea9f038127d1d5d9eba751e19a371931f4c5133",
+    "campaign/evidence/dcr008/dcr008-full-audit.json": "a09aa690e9375e41f34d34f96b5eea27864037abfef4904c7aa1271b629d87bf",
+    "campaign/evidence/dcr008/dcr008-full-geometry-audit.json": "491d7a989b547d5f86db3fe92ceed58dc90cbc87f795c13ed60bbe9538543207",
+    "campaign/evidence/dcr008/dcr008-full-servo-selection.json": "ba22494674e64ab1c287ba783f86b2c5ee05b5bd73602921d7b3003257f21f35",
+    "campaign/evidence/dcr008/dcr008-full-servo-summary.json": "981850e043f05c95092cfd0d605cec81052e8f839cb82b76762358ba0cd3c3d3",
+    "dcr/DCR-008_causal_teleop_nominal_reference_candidate.md": "fe51dd6289a4839c59a467aff88e0778226d04e8da39229b8d7ae685594926b8",
+    "reports/DCR-008_causal_nominal_candidate_validation.md": "e83286b001be077ffb8fbb93e573355cc51ad407366f947a95c94776618019d4",
+    "campaign/DCR-008_independent_review.md": "c17bf7aeb44f04d8d14c18c048b86941991a8bc4322642586391c3e6359b6caf"
+  }
+}

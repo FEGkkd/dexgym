@@ -16,6 +16,8 @@ Campaign ID 为 `S05-V1-20261127-490770e`。冻结设计为 `490770e1df45832d069
 
 对 1,002 个 Train 切换拍的独立几何审计也发现连续性不足。硬 M1 的额外步量 P95 / 最大值为 22.35 / 29.63 mm，三个预登记平滑候选最低为 17.33 / 23.05 mm。冻结门要求 P95 ≤5 mm 且最大值 ≤15 mm。此次没有选择候选或读取 Validation。 [连续性审计数据](../campaign/evidence/m1-continuity-08.json)
 
+后续获准的 DCR-008 全量候选对照使用另一个固定原生命令提供器，保留原 M1 评分。308 个分区全部处理，候选 Train / Validation 主动覆盖为 37.68% / 34.96%，未达到冻结的 85% 数值门。26 个实际静态 Servo 配对中 20 个满足改善和功能条件。DCR 进入人工审查，签名参考契约与 G-A 保持原状态。 [DCR-008 候选验证与证据](DCR-008_causal_nominal_candidate_validation.md)
+
 两份指定 MCAP 通过只读身份、schema 和记录顺序检查，共 286,327 条消息。START、模式和初态的 payload 尚未核验，实际 T0/T1/T2 闭环未运行。 [录包预检](../campaign/evidence/mcap-inventory-01.json)
 
 ## 首次启动运行与当时资格

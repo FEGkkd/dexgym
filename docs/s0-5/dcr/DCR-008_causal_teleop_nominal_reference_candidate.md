@@ -1,6 +1,6 @@
 # DCR-008 | Causal Teleop nominal reference candidate
 
-**State `CANDIDATE_VALIDATION_AUTHORIZED` · contract approval `PENDING_HUMAN_REVIEW` · official data/training admission disabled.**
+**State `CANDIDATE_VALIDATION_COMPLETED` · coverage `BELOW_THRESHOLD` · contract approval `PENDING_HUMAN_REVIEW` · official data/training admission disabled.**
 
 | Decision item | Record |
 |---|---|
@@ -30,4 +30,4 @@ The paired validation supplies a current canonical goal and previous accepted re
 
 The future online provider must use the identical native seam and measured-state timing contract. For the same canonical input bytes, the same previous accepted command, and the same measured state, compare SDK and issued commands, reasons, timing and reset boundaries before using the policy runtime. Separately quantify differences due to recorded HMB sampling, initial START, per-message Wuji filtering and actual feedback. The cached run provides causal-prefix and same-state native evidence. Actual online equivalence requires the approved MuJoCo Teleop replay with the two designated recordings.
 
-[Frozen V1-A specification](../specs/V1-A_offline_rmb.md) · [Train reachability evidence](../campaign/evidence/train-radial-07.json) · [Independent candidate protocol](../campaign/nominal_candidate_independent_protocol.md) · [Independent recovery review](../campaign/independent_resume_review.md)
+[Frozen V1-A specification](../specs/V1-A_offline_rmb.md) · [Train reachability evidence](../campaign/evidence/train-radial-07.json) · [Independent candidate protocol](../campaign/nominal_candidate_independent_protocol.md) · [Candidate validation report](../reports/DCR-008_causal_nominal_candidate_validation.md) · [Independent candidate review](../campaign/DCR-008_independent_review.md)
