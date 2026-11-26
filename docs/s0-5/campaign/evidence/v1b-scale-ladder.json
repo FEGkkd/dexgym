@@ -1,0 +1,127 @@
+{
+  "scope": "SYNTHETIC_PHYSICS_LADDER_ONLY",
+  "source_commit": "08eccf9d434d7011470176fa5ab58a16a9220bfa",
+  "qualified_learner": false,
+  "rows": [
+    {
+      "run": "V1-B-scale-64-02",
+      "result_sha256": "04ea1063bb0d570d284e234ecbcf0c5cdc1551d202bc9ad099108fadca1df362",
+      "command_sha256": "6331cae069073ab3e8736b2bdf5d74dcf046f8f8c05573b2bc8b6282ac5270ed",
+      "exit": 0,
+      "started_at": "2026-11-27T04:11:03+08:00",
+      "ended_at": "2026-11-27T04:11:08+08:00",
+      "sampled_compute_pids": [
+        185349
+      ],
+      "peak_sampled_process_mib": 758,
+      "backend": "WarpServo",
+      "device": "cuda:0",
+      "constructed_envs": 64,
+      "requested_ticks": 8,
+      "actual_transitions": 512,
+      "actual_substeps": 5120,
+      "valid_transitions": 512,
+      "run_checks_pass": true,
+      "peak_torch_allocated_bytes": 20183552,
+      "peak_torch_reserved_bytes": 29360128,
+      "actual_transitions_per_s": 184.77742542264014,
+      "hard_safety_failures": 0
+    },
+    {
+      "run": "V1-B-scale-256-02",
+      "result_sha256": "21fc4bd127d6c052a22fd6cc6b9c57a6e168d7c9c12466f42e6ff76f250e062a",
+      "command_sha256": "2301b69f85c5b71b5c128957dfa6c29b63696e59f86ac2aa81b6d8eb7397bcd3",
+      "exit": 0,
+      "started_at": "2026-11-27T04:11:08+08:00",
+      "ended_at": "2026-11-27T04:11:18+08:00",
+      "sampled_compute_pids": [
+        185437
+      ],
+      "peak_sampled_process_mib": 1016,
+      "backend": "WarpServo",
+      "device": "cuda:0",
+      "constructed_envs": 256,
+      "requested_ticks": 8,
+      "actual_transitions": 2048,
+      "actual_substeps": 20480,
+      "valid_transitions": 2048,
+      "run_checks_pass": true,
+      "peak_torch_allocated_bytes": 49698816,
+      "peak_torch_reserved_bytes": 75497472,
+      "actual_transitions_per_s": 315.30044698550824,
+      "hard_safety_failures": 0
+    },
+    {
+      "run": "V1-B-scale-1024-02",
+      "result_sha256": "dc73ddc192ce0b0a44f5cdf3d20137d4cc51da96f9e63c04225788ce564a8814",
+      "command_sha256": "f622ac886b02cb2e42da520ee6f02debd05469e372c9b90b7b177b34befc44cb",
+      "exit": 0,
+      "started_at": "2026-11-27T04:11:18+08:00",
+      "ended_at": "2026-11-27T04:11:31+08:00",
+      "sampled_compute_pids": [
+        185566
+      ],
+      "peak_sampled_process_mib": 1992,
+      "backend": "WarpServo",
+      "device": "cuda:0",
+      "constructed_envs": 1024,
+      "requested_ticks": 4,
+      "actual_transitions": 4096,
+      "actual_substeps": 40960,
+      "valid_transitions": 4096,
+      "run_checks_pass": true,
+      "peak_torch_allocated_bytes": 169158144,
+      "peak_torch_reserved_bytes": 195035136,
+      "actual_transitions_per_s": 424.3879472363521,
+      "hard_safety_failures": 0
+    },
+    {
+      "run": "V1-B-scale-2048-02",
+      "result_sha256": "c7e2062cb59ef6696927f44491bc6db2e82bd9b1e95dd9b2f07157d439764af1",
+      "command_sha256": "afe0bfb4b3552c8f7c14426a5386bb7106a64041b4a1b6ca2783a0322fc39be6",
+      "exit": 0,
+      "started_at": "2026-11-27T04:11:31+08:00",
+      "ended_at": "2026-11-27T04:11:40+08:00",
+      "sampled_compute_pids": [
+        185735
+      ],
+      "peak_sampled_process_mib": 3302,
+      "backend": "WarpServo",
+      "device": "cuda:0",
+      "constructed_envs": 2048,
+      "requested_ticks": 2,
+      "actual_transitions": 4096,
+      "actual_substeps": 40960,
+      "valid_transitions": 4096,
+      "run_checks_pass": true,
+      "peak_torch_allocated_bytes": 327857664,
+      "peak_torch_reserved_bytes": 381681664,
+      "actual_transitions_per_s": 572.5484654437666,
+      "hard_safety_failures": 0
+    },
+    {
+      "run": "V1-B-scale-4096-02",
+      "result_sha256": "dce17cdc4b03f3ca24d731bd1d7086f7341206e921ec33670e5aa518a659d295",
+      "command_sha256": "675066f1d41bfa35ca50ed77e371401049b0386f525e890965b5869a9f29afd1",
+      "exit": 0,
+      "started_at": "2026-11-27T04:11:41+08:00",
+      "ended_at": "2026-11-27T04:11:55+08:00",
+      "sampled_compute_pids": [
+        185867
+      ],
+      "peak_sampled_process_mib": 5900,
+      "backend": "WarpServo",
+      "device": "cuda:0",
+      "constructed_envs": 4096,
+      "requested_ticks": 2,
+      "actual_transitions": 8192,
+      "actual_substeps": 81920,
+      "valid_transitions": 8192,
+      "run_checks_pass": true,
+      "peak_torch_allocated_bytes": 646469120,
+      "peak_torch_reserved_bytes": 744488960,
+      "actual_transitions_per_s": 683.5303700027325,
+      "hard_safety_failures": 0
+    }
+  ]
+}

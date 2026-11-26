@@ -1,0 +1,31 @@
+{
+  "Train": {
+    "MARVIN_IK_FAILED": 84564,
+    "PATH_FAILED": 382,
+    "RECOVERING": 71,
+    "UNAVAILABLE": 1095,
+    "five_frame_histories": 148,
+    "hard_ticks": 26,
+    "hmb_joint_valid": 85382,
+    "improvable": 0,
+    "legal_nominal": 226,
+    "mapped_valid": 85243,
+    "planned_ticks": 86338,
+    "static_5mm_witness_ticks": 0,
+    "strictly_excluded_10mm": 9641
+  },
+  "Validation": {
+    "MARVIN_IK_FAILED": 29079,
+    "RECOVERING": 5,
+    "UNAVAILABLE": 1186,
+    "five_frame_histories": 0,
+    "hard_ticks": 0,
+    "hmb_joint_valid": 29150,
+    "improvable": 0,
+    "legal_nominal": 5,
+    "mapped_valid": 29089,
+    "planned_ticks": 30275,
+    "static_5mm_witness_ticks": 0,
+    "strictly_excluded_10mm": 3731
+  }
+}

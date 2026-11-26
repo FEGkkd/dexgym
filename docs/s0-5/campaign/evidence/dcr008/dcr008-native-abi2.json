@@ -1,0 +1,45 @@
+{
+  "scope": "ABI2_NATIVE_SEAM_ONLY",
+  "home": [
+    {
+      "accepted": true,
+      "pair_accepted": true,
+      "pair_hard_fault": false,
+      "reason": ""
+    },
+    {
+      "accepted": true,
+      "pair_accepted": true,
+      "pair_hard_fault": false,
+      "reason": ""
+    }
+  ],
+  "soft_feedback": [
+    {
+      "accepted": false,
+      "pair_accepted": true,
+      "pair_hard_fault": false,
+      "reason": "previous command tracking error 0.2 rad exceeds 0.087266463 rad"
+    },
+    {
+      "accepted": true,
+      "pair_accepted": true,
+      "pair_hard_fault": false,
+      "reason": ""
+    }
+  ],
+  "hard_feedback": [
+    {
+      "accepted": false,
+      "pair_accepted": false,
+      "pair_hard_fault": true,
+      "reason": "previous command tracking error 0.5 rad exceeds 0.087266463 rad"
+    },
+    {
+      "accepted": false,
+      "pair_accepted": false,
+      "pair_hard_fault": true,
+      "reason": "other arm failed dual-arm safety gate"
+    }
+  ]
+}

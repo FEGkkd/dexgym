@@ -1,0 +1,23 @@
+{
+  "summary_sha256": "e9aa8fcc7a9aa46496df5d6f34dea75095382b0196cb49e41c47d51925cd4fa1",
+  "full_comparison": false,
+  "paired": true,
+  "verified_trace_files": 2,
+  "metadata_only": false,
+  "ordinary_prefix_roots": 1,
+  "barrier_prefix_roots": 1,
+  "splits": {
+    "Train": {
+      "roots": 1,
+      "partitions": 2,
+      "planned": 240,
+      "hmb_joint_valid": 236,
+      "hmb_active": 114,
+      "active_coverage": 0.4830508474576271,
+      "direct_nominal_legal": 0,
+      "shadow_85_percent": false
+    }
+  },
+  "official_admission": false,
+  "physical_or_online_qualification": false
+}

@@ -10,6 +10,8 @@ Campaign ID 为 `S05-V1-20261127-490770e`。冻结设计为 `490770e1df45832d069
 
 相同模型的 CPU/Warp 自由响应通过 15 组对照，共 170 个实际物理区间，最大指尖差约 0.00112 mm。8 组合成安全边界对照也全部通过，涵盖命令拒绝、硬停和实际仿真自碰撞。CPU 与 Warp 分别通过 8 环境合成 World Model 接口烟测，各执行 176 个物理 transition、2 次 WM 更新。两次烟测里 Actor、Critic 和想象轨迹计数均为 0，C0 正式训练及独立模型资格仍未启动。 [CPU/Warp 自由响应证据](../campaign/evidence/warp-parity-03.json)
 
+同一签名模型通过 64、256、1,024、2,048、4,096 个实际 Warp 环境的有界物理预检。最大规模实际执行两个控制拍，共 8,192 个有效物理 transition，约 683.53 transition/s，采样进程显存峰值 5,900 MiB。这一组数据覆盖短程物理控制，未包含 4,096 环境的 Replay、WM 或长程 learner 成本。 [规模预检](../campaign/evidence/v1b-scale-ladder.json)
+
 全量签名 Train 的 228 个分区、86,338 个计划拍完成腕部可达性审计。在 85,382 个 HMB 联合有效拍中，至少一侧超出原 M1 精确腕姿所需的原生 SDK 连杆上界者有 63,967 拍。将 139 个未探测拍全部计为可能合格，精确双臂 IK 覆盖的数学上限仍为 21,415 / 85,382，即 25.08%，低于冻结的 85% 合法名义覆盖要求。此界限适用于原 M1 腕目标的精确 IK。现有 Teleop 的有界限速首步每侧 192/192 获得原生 SDK 解，该诊断没有证明整段命令合法或跟踪精度。 [全量审计数据](../campaign/evidence/train-radial-07.json) · [恢复阶段独立复核](../campaign/independent_resume_review.md)
 
 对 1,002 个 Train 切换拍的独立几何审计也发现连续性不足。硬 M1 的额外步量 P95 / 最大值为 22.35 / 29.63 mm，三个预登记平滑候选最低为 17.33 / 23.05 mm。冻结门要求 P95 ≤5 mm 且最大值 ≤15 mm。此次没有选择候选或读取 Validation。 [连续性审计数据](../campaign/evidence/m1-continuity-08.json)

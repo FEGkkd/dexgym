@@ -8,14 +8,19 @@ import numpy as np
 
 # These controls only exercise pure array and classifier routines. No HMB
 # files are opened and no production file-locking capability is replaced.
-overrides = {"fcntl": types.ModuleType("fcntl")} if importlib.util.find_spec("fcntl") is None else {}
-with patch.dict(sys.modules, overrides):
+needs_fcntl_stub = importlib.util.find_spec("fcntl") is None
+if needs_fcntl_stub:
+    sys.modules["fcntl"] = types.ModuleType("fcntl")
+try:
     from dexgym.tasks.direct.wholebody_s05.hmb_reader import VERSION_FIELDS
     from dexgym.tasks.direct.wholebody_s05.v1.rmb import evaluate_teleop_candidate as evaluation
     from dexgym.tasks.direct.wholebody_s05.v1.rmb.evaluate_teleop_candidate import (
         Classification, classify, count_evidence, output_arrays, prefix_candidates, summarize, witness_offset,
     )
     from dexgym.tasks.direct.wholebody_s05.v1.rmb.schema import GEOMETRY_SHAPES, TICK_NS
+finally:
+    if needs_fcntl_stub:
+        del sys.modules["fcntl"]
 
 
 def hmb_fixture():
@@ -95,14 +100,16 @@ class CandidateEvaluationTest(unittest.TestCase):
                 active = np.full(4, evaluation.CandidateStatus.ACTIVE)
                 arm = types.SimpleNamespace(
                     accepted=True, ik_target_accepted=True, analytic_braking=False, workspace_projected=False,
-                    rate_limited=False, pair_accepted=True, pair_hard_fault=False, safety_code=0, safety_reason="",
+                    rate_limited=False, analytic_exact_stop_used=False,
+                    pair_accepted=True, pair_hard_fault=False, safety_code=0, safety_reason="",
                     joint_candidate=np.zeros(7), joint_command=np.zeros(7), projected_axis=-1, backoff_scale=1.,
                     workspace_target=np.eye(4), step_target=np.eye(4), attempt_target=np.eye(4),
                 )
                 steps = [types.SimpleNamespace(
                     issue_tick_ns=tick_ns + j * evaluation.ARM_SUBSTEP_NS, q_issued=self.previous.copy(),
                     arm_branches_rad=np.zeros(2), status=active, whole_body_path_accepted=True,
-                    kernel_proposed=True, hand_limit_applied=np.zeros(40, dtype=bool), native_arms=(arm, arm),
+                    kernel_proposed=True, hand_candidate_limit=np.zeros(40, dtype=bool),
+                    hand_limit_applied=np.zeros(40, dtype=bool), native_arms=(arm, arm),
                 ) for j in range(evaluation.ARM_SUBSTEPS)]
                 return types.SimpleNamespace(
                     q_nominal=self.previous.copy(), qd_nominal=np.ones(54), qd_valid=True, status=active,

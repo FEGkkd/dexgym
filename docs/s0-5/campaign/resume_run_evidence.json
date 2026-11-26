@@ -132,6 +132,20 @@
       "memory_scope": "Torch allocator; direct Warp and device allocation not included",
       "scale_and_learner_qualification": false
     },
+    "physics_scale_ladder": {
+      "path": "preflight/b-scale-ladder-24/summary.json",
+      "committed_exact_mirror": "evidence/v1b-scale-ladder.json",
+      "sha256": "7ee28734a7809bb89c1212725455f1660b880de8086d2a57b9cb5ff67e75d622",
+      "exit": 0,
+      "warp_worlds_observed": [64, 256, 1024, 2048, 4096],
+      "warp_worlds_at_largest_test": 4096,
+      "largest_test_control_ticks": 2,
+      "largest_test_valid_physical_transitions": 8192,
+      "largest_test_transitions_per_second": 683.53,
+      "largest_test_sampled_process_peak_mib": 5900,
+      "scope": "SYNTHETIC_PHYSICS_LADDER_ONLY",
+      "scale_and_learner_qualification": false
+    },
     "synthetic_world_model_smoke": {
       "scope": "PHYSICAL_SYNTHETIC_PREACTOR_SMOKE",
       "cpu": {
