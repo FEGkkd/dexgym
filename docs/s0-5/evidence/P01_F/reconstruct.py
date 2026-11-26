@@ -531,7 +531,8 @@ def visualize(out,partitions,wire,choices):
     plt.close(fig)
     cases=[('normal_motion','normal_motion'),('bimanual_motion','normal_bimanual'),('DUPLICATE_SOURCE','repeat_and_age'),
            ('UNSAFE','unsafe_and_recovery'),('recovery','recovery_transition'),('right_original_tip','tip_error_tail'),
-           ('causal.tracker_right.speed','wrist_speed_tail'),('STALE','stale_age_boundary')]
+           ('causal.tracker_right.speed','wrist_speed_tail'),('STALE','stale_age_boundary'),
+           ('DROPOUT','dropout_boundary')]
     generated=['manus_geometry.png','wrist_trajectories.png']
     for name,label in cases:
         all_goals=[(p,g) for p in partitions for g in p.goals if g['name']==name]
@@ -571,7 +572,8 @@ def visualize(out,partitions,wire,choices):
         ax.set(ylim=(-.05,1.05),ylabel='purple safety / gray joint')
         for ax in axs:
             ax.axvline(0,c='black',alpha=.25)
-            ax.legend(loc='upper right',fontsize=8)
+            if ax.get_legend_handles_labels()[0]:
+                ax.legend(loc='upper right',fontsize=8)
             ax.grid(alpha=.2)
         if name=='DUPLICATE_SOURCE' and g.get('raw_row') is not None:
             x_dup=(p.sources[g['raw_row']]['capture_bounds_ns'][0]-ca['tick_ns'][i])/1e6
@@ -580,8 +582,8 @@ def visualize(out,partitions,wire,choices):
         axs[0].set_ylabel('wrist position norm (m)')
         if name.endswith('.speed'):
             j=STREAMS.index(name.split('.')[1])
-            for data,label,style in ((ca,'simulated','-'),(of,'offline diagnostic',':')):
-                axs[1].plot(x,np.linalg.norm(data['velocity_m_s'][lo:hi,j,g['node']],axis=1),style,label=label)
+            for data,series,style in ((ca,'simulated','-'),(of,'offline diagnostic',':')):
+                axs[1].plot(x,np.linalg.norm(data['velocity_m_s'][lo:hi,j,g['node']],axis=1),style,label=series)
             axs[1].set_ylabel('selected node speed (m/s)')
             axs[1].legend(loc='upper right',fontsize=8)
         elif name.endswith('_original_tip'):
