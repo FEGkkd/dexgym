@@ -1,6 +1,6 @@
-# S0-5 技术契约 v2.0.0
+# S0-5 技术契约 v2.0.1
 
-状态 DRAFT_READY_FOR_REVIEW。各子契约规定可序列化接口、单位、顺序、失败和版本锁；变更由 DCR-005 和 Campaign 协议治理。
+状态 DRAFT_READY_FOR_REVIEW。各子契约规定可序列化接口、单位、顺序、失败和版本锁；变更由 DCR-006 和 Campaign 协议治理。
 
 | 契约 | 唯一责任边界 | 验证 |
 |---|---|---|
@@ -10,6 +10,9 @@
 | C4 共享观测与无 Bank 运行 | 同一 builder、关节 manifest、历史、mask、归一化与导出输入。缓存名义参考为开发资产，运行时由当前流式输入产生在线名义命令。 | [任务契约](specs/V2_residual_task_contract.md) · [运行时](specs/V2_runtime_contract.md) |
 | C5 学习和归因 | 实际 MuJoCo transition 驱动 Replay，区分终止与截断。WM 输入为实际有效控制及状态，分离任务参考并按 causal imagination 推进。Actor 梯度和 Critic lambda-return 按契约验证。 | [学习契约](specs/V2_supermimic_contract.md) · [V1-C0](specs/V1-C0_world_model.md) |
 | C6 版本、恢复、计量和发布 | identity 绑定设计、资产、配置、数据、提交、真实成本、checkpoint 和独立审查证据。变更传播到全部受影响产物，实际幸存分位数和失败复合分位数均保留。 | [自主研发协议](MULTI_AGENT_PROTOCOL.md) · [评估协议](EVALUATION_PROTOCOL.md) · [V1-D](specs/V1-D_evaluation_deployment.md) |
+| C7 离线低误差域与实际 R/T 配对 | 训练前锁见证、支持、完整分母。D0 比较 B0/B54。D1/D3 由指定 MCAP 人端输入及允许事件驱动现有实际 MuJoCo 软件图，T1/T2 共用上下文，历史命令和反馈只读诊断。 | [回放规格](specs/V1-D_teleop_replay_and_refinement.md) |
+| C8 分布扩充、血缘和留出 | Teleop-only 通过后以独立 EgoPro Bank 处理资格、几何、时钟、mask、采样和来源。支持差异、域内模型及原 Teleop 保留分别计量。部署回归源/派生不得新增至训练。 | [数据准入](specs/V1-E_conditional_egopro_augmentation.md) · [E2/E3](specs/V2_1_egopro_training_and_regression.md) |
+| C9 诊断与等级 | 独立诊断导出须通过数据、功能、安全和因果检查。正式现有链路功能授 TELEOP_SIM_VALIDATED，增加 D0 绝对精度和 D3 双回归才可授 TELEOP_SIM_RECOMMENDED。 | [等级和证据](specs/V2_runtime_contract.md) |
 
 术语 `physical rollout` 指执行 MuJoCo 方程并读回状态。P01-T、C2-RT、物理 robot-base、硬件 Servo 和外部测量继续各自独立审核。旧契约及量纲可按固定历史版本查证。
 

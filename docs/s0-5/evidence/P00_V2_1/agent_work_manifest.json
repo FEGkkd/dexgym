@@ -1,0 +1,96 @@
+{
+  "schema": "s05.v2.1.agent-work.v1",
+  "reviewed_baseline": "f78ee27f4762fedca9529bf697560bb267f8c704",
+  "scope": "DESIGN_REVISION_ONLY",
+  "execution_authorized": false,
+  "implemented_or_launched_v1": false,
+  "groups": [
+    {
+      "agent": "v21_data",
+      "scope": "M1, pre-Actor domain, RMB and EgoPro data admission",
+      "outputs": {
+        "specs/V1-A_offline_rmb.md": "993cbf995bd17949417af9f5e7be42c99a8d97e8bcdd32748da0a92ee55f3ebd",
+        "specs/V2_rmb_contract.md": "b3f34e72820656ac85f45b8b2bef039230dd4e8d038bd21887b8958d6eea8b6b",
+        "specs/V1-E_conditional_egopro_augmentation.md": "12b60f2e123141bbc4e5a4461b4bcdfcdac671cc46306700ffad1b55341b6a58"
+      },
+      "actual_checks": "Compared original M1 smoother and audited prior EgoPro preprocessing. Validated UTF-8 and 29 relative links.",
+      "research_runs": "NOT_RUN"
+    },
+    {
+      "agent": "v21_deployment",
+      "scope": "Offline validation, actual graph, two MCAP, diagnostics and regression",
+      "outputs": {
+        "EVALUATION_PROTOCOL.md": "a3b134018599e097aef276144f37840ecfa90d4a5fde71a8fc0894c5cb0be2f5",
+        "specs/V1-D_evaluation_deployment.md": "4ed6868e36cc26d3e57ccca26d8a52bf165cfba369d3094d4f7e7e72719130ee",
+        "specs/V1-D_teleop_replay_and_refinement.md": "e41f72088db33b24e7c602bf4681a71afb01e110aaf3e854481a2283c6e1a8c0",
+        "specs/V2_runtime_contract.md": "98e2d382e1e349d888dc9a60c3c49b2b0f046607ccce0e2c61945347c9241a72",
+        "specs/V2_parameter_registry_evaluation.md": "319c282f4bea21d60bf5403f246dd0f349748e0dafb54b940d55d140f9510e50"
+      },
+      "actual_checks": "Audited existing launch and headers and MCAP roles; checked 31 local links and stage contracts.",
+      "research_runs": "NOT_RUN"
+    },
+    {
+      "agent": "v21_training",
+      "scope": "Mixed-domain model qualification, practice and escrow",
+      "outputs": {
+        "MULTI_AGENT_PROTOCOL.md": "3c8685d8bb4c22326dfb04506e5127eec6cd853c66c0f97f9bd1568a401fcb06",
+        "specs/V1-C3_mixed.md": "38fab83a93447e511a41874b336e645908c7fc005ae7b64cc4f453504363c302",
+        "specs/V2_parameter_registry_training.md": "200af1ecd179c11a145455464e3b0a0d0240fbe6a546fa3ca4a5216cb4baa45a",
+        "specs/V2_supermimic_contract.md": "de05aae69cfdaeca3138c8a97ba06a08d60884bc935a770cd10bb88406c5044b",
+        "specs/V2_1_egopro_training_and_regression.md": "991c38356ef1c73798d1d57549cf89d78514935b6530053c8260fe851db0154f"
+      },
+      "actual_checks": "Audited original C0 acceptance and escrow feasibility, checked assigned syntax and links.",
+      "research_runs": "NOT_RUN"
+    },
+    {
+      "agent": "v21_independent",
+      "scope": "Independent review of all work and actual synthetic tests",
+      "outputs": {
+        "evidence/P00_V2_1/independent_findings.md": "05e70acdc718a43ba8fd8424574055520b94a6b98eba42f75266b890c2ff8cea"
+      },
+      "actual_checks": "Eight findings, rechecked original freeze and 21 old controls, 26 interim controls and 7 independent fixture cases.",
+      "research_runs": "NOT_RUN"
+    },
+    {
+      "agent": "main",
+      "scope": "Integration, UTC+8 read-only repository and MCAP audit, verification, publish",
+      "outputs": {
+        "CONTRACTS.md": "c54957100f5201daa6887f3b00466e5cc5626b00e1f565bfbc39ceac830622b4",
+        "DECISION_LOG.md": "bfd6599b3e137a01e330154a9fd9ce7b9be4bcd414ce3465ec67fd8a523d84de",
+        "MASTER_DESIGN.md": "8cfe4837eef655b86b158ada020dd6826eff2da6a17471dd292d99a0e22521bf",
+        "OPEN_ISSUES.md": "6858ea7a6453f184bc36cf84cd269da0faff466d8ee06ac2bc4cbc0dd6b9fca3",
+        "PROJECT_STATE.md": "543c92cdc4db331d9037a0033f974ad57a6db0af1f9c18cca6d260ac2080ad02",
+        "README.md": "f01a59d086e0a4f020ba1af23d2dd2e1c111c90954e5d778d4910a05e9375643",
+        "REQUIREMENTS.md": "87c0344e7fc21e97209dc514449a602e87059d6e28c4cf88d97d7d4fb23d3e8c",
+        "RISK_REGISTER.md": "ac04941ebfc2f9fa3229a99206df6f15e2578aa8a401ffc0ae04f8487a548cc4",
+        "ROADMAP.md": "7fae14e3fb2eceecbb77a4a3ca04ffd10b1d012ba377a88d2a018077ba8f8d19",
+        "TRACEABILITY_MATRIX.md": "fd7f187a2a798c7bcd4c013e751b33bf35340df802dd12cd204d7518991dcd61",
+        "dcr/DCR-006_teleop_validation_egopro.md": "7e9948ac827eab3197a4f19208ba05b7a91bc28dfa4ab6d3722e722d10703958",
+        "evidence/P00_V2_1/check_design.py": "3dafa8cccc8d9bcab604faa7e9df7a2bbf18f4c53acf517269c62d5a3a8f2adb",
+        "evidence/P00_V2_1/design_policy.json": "b231766fa0bd1d16ab4aaffbcbfa14cd318098fce9ef2995a0b42adbb25a317a",
+        "evidence/P00_V2_1/historical_inputs.json": "bb0153854af27c3217f5b7e518553805708e301bc8eab8733544b536fa2c7297",
+        "evidence/P00_V2_1/requirement_mapping.json": "2c125d23c135f5ebb093a4f6454b9cc1a58065bb36efb0093804a8d68142a6a1",
+        "evidence/P00_V2_1/seal_design.py": "376d6ab837f22b6f4aba9d45e8b020731bedaf12eb534600d4f79e5dc9053cbf",
+        "evidence/P00_V2_1/test_check_design.py": "08b02c46a705784d22d4fa94309899fdf9c0fd18947e18c5d92995aaccff3f8c",
+        "evidence/P00_V2_1/verify_baseline.py": "cfec6844b112f06d4417f337c34b9ed4310b3e8894bafdc53b41d790e3084ba9",
+        "phase_state.json": "16aa4b25dcb67be6c6fe471f06eed144496d1d1003117c67eaed2068779c3041",
+        "reports/P00_V2_1_design_review.md": "69d2b6caff4213b957a279871c21e662ece1786e3f31eec475ab8ab36bc9ee92",
+        "specs/P03_nominal_controller.md": "6b434684d0bbe6af1dde65c6445af7ecce86ce27c5a92128153b23a3e6906651",
+        "specs/P04_rl_environment.md": "3312450b9bcf1c27f2428bb4d8932e58b7ae4fc9cee071a48af4cbcc20880832",
+        "specs/P05_static_precision.md": "f9c5a9a45f784b477182136b482c76f842d67640874be3d48d0c5d7830013e16",
+        "specs/P06_dynamic_tracking.md": "6ebae812d40d0f48ede0dff035e7a4c1a7b9cabe3bdb0c23c529093b9d05a809",
+        "specs/P07_generalist_tracking.md": "8bf29e6368cff40d23e190edc6daa8cbaa422669b785bcf27862c6c37e4aae9d",
+        "specs/P08_robustness.md": "be01719bbc1d5495e1b7a6addc4f5bdb73c85220131d50a4cdb3c146111e1345",
+        "specs/P09_final_evaluation.md": "fe63a4e837c47bec9facb936ab01f2d2c6c635dd9cd6824a07f33ee1f4ab94e6",
+        "specs/P10_deployment.md": "a10e76b29439314e10fcbc82cde7b13bbbc281688b3820236ff5300f9908d654",
+        "specs/V1-B_residual_environment.md": "15601ff72c3d9211fa425d625d39fe0d0fb10fbfca3b69505fb8c2098aadde50",
+        "specs/V1-C0_world_model.md": "bcbb115585ffffb220b22bb2570faf0e7121f404d4039ec1aca15b6c874689c7",
+        "specs/V1-C1_static.md": "38aca18e31a801c8f2db10ad088ccc0061c2414f07e84586d7012f9dbc12f29a",
+        "specs/V1-C2_dynamic.md": "ab3f75235150f91609c2e0804ffb1e4fb1a04c984ed5781cb5f2abd2a097cfb6",
+        "specs/V2_residual_task_contract.md": "a1073ece75f1fdb61a7cad6fcd677e84befb8cb6bc2d113aba89a23130b900f2"
+      },
+      "actual_checks": "Checked Git identities, two file SHA values and recorder metadata. Integrated independent findings and ran full candidate checks.",
+      "research_runs": "NOT_RUN"
+    }
+  ]
+}

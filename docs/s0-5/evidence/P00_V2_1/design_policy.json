@@ -1,0 +1,478 @@
+{
+  "schema": "s05.v2.1.policy.v1",
+  "design_version": "2.0.1",
+  "reviewed_baseline": "f78ee27f4762fedca9529bf697560bb267f8c704",
+  "historical_sim0_commit": "c5af9af94d7b9d3f437c14df128441d1183bec56",
+  "stages": {
+    "V1-A": {
+      "gate": "G-A",
+      "spec": "specs/V1-A_offline_rmb.md",
+      "start_requires": [],
+      "gate_requires": [],
+      "checks": [
+        "archive_identity",
+        "lineage",
+        "causal_prefix",
+        "nominal_continuity",
+        "common_domain"
+      ]
+    },
+    "V1-B": {
+      "gate": "G-B",
+      "spec": "specs/V1-B_residual_environment.md",
+      "start_requires": [],
+      "gate_requires": [
+        "V1-A"
+      ],
+      "checks": [
+        "rmb_join",
+        "axis_54",
+        "zero_b0",
+        "path_safety",
+        "servo_parity",
+        "reward_reset_history",
+        "actual_transition"
+      ]
+    },
+    "V1-C0": {
+      "gate": "G-C0",
+      "spec": "specs/V1-C0_world_model.md",
+      "start_requires": [
+        "V1-A",
+        "V1-B"
+      ],
+      "gate_requires": [
+        "V1-A",
+        "V1-B"
+      ],
+      "checks": [
+        "excitation",
+        "independent_holdout",
+        "one_four_eight",
+        "static",
+        "action_gradients",
+        "failure_boundary",
+        "actor_disabled"
+      ]
+    },
+    "V1-C1": {
+      "gate": "G-C1",
+      "spec": "specs/V1-C1_static.md",
+      "start_requires": [
+        "V1-C0"
+      ],
+      "gate_requires": [
+        "V1-C0"
+      ],
+      "checks": [
+        "static_learning",
+        "hold",
+        "functional",
+        "safety",
+        "world_model_current"
+      ]
+    },
+    "V1-C2": {
+      "gate": "G-C2",
+      "spec": "specs/V1-C2_dynamic.md",
+      "start_requires": [
+        "V1-C0",
+        "V1-C1"
+      ],
+      "gate_requires": [
+        "V1-C0",
+        "V1-C1"
+      ],
+      "checks": [
+        "original_rate",
+        "start_stop_reverse",
+        "static_retention",
+        "safety",
+        "world_model_current"
+      ]
+    },
+    "V1-C3": {
+      "gate": "G-C3",
+      "spec": "specs/V1-C3_mixed.md",
+      "start_requires": [
+        "V1-C0",
+        "V1-C2"
+      ],
+      "gate_requires": [
+        "V1-C0",
+        "V1-C2"
+      ],
+      "checks": [
+        "mixed_coverage",
+        "physical_rollout",
+        "regression_and_fallback",
+        "exploitation_watch",
+        "safety",
+        "world_model_current"
+      ]
+    },
+    "V1-D0": {
+      "gate": "G-D0",
+      "spec": "specs/V1-D_evaluation_deployment.md",
+      "start_requires": [
+        "V1-C0",
+        "V1-C3"
+      ],
+      "gate_requires": [
+        "V1-C0",
+        "V1-C3"
+      ],
+      "checks": [
+        "frozen_pre_actor_support",
+        "physical_offline_precision",
+        "baseline_and_non_degradation",
+        "functional_safety"
+      ]
+    },
+    "V1-D1": {
+      "gate": "G-D1",
+      "spec": "specs/V1-D_teleop_replay_and_refinement.md",
+      "start_requires": [
+        "V1-D0"
+      ],
+      "gate_requires": [
+        "V1-D0"
+      ],
+      "checks": [
+        "artifact_and_schema_readiness",
+        "existing_graph",
+        "input_only_replay",
+        "paired_t0_t1_t2",
+        "cold_start_and_fallback"
+      ]
+    },
+    "V1-D2": {
+      "gate": "G-D2",
+      "spec": "specs/V1-D_teleop_replay_and_refinement.md",
+      "start_requires": [
+        "V1-D1"
+      ],
+      "gate_requires": [
+        "V1-D1"
+      ],
+      "checks": [
+        "interface_first_diagnosis",
+        "round_ledger",
+        "paired_offline_teleop_regression"
+      ]
+    },
+    "V1-E0": {
+      "gate": "G-E0",
+      "spec": "specs/V1-E_conditional_egopro_augmentation.md",
+      "start_requires": [
+        "V1-D0",
+        "V1-D1"
+      ],
+      "gate_requires": [
+        "V1-D0",
+        "V1-D1"
+      ],
+      "checks": [
+        "retained_policy_t",
+        "independent_distribution_gap",
+        "interface_checks",
+        "remaining_escrow"
+      ]
+    },
+    "V1-E1": {
+      "gate": "G-E1",
+      "spec": "specs/V1-E_conditional_egopro_augmentation.md",
+      "start_requires": [
+        "V1-E0"
+      ],
+      "gate_requires": [
+        "V1-E0"
+      ],
+      "checks": [
+        "isolated_bank_and_split",
+        "causal_masks_and_lineage",
+        "safety_and_intent"
+      ]
+    },
+    "V1-E2": {
+      "gate": "G-E2",
+      "spec": "specs/V2_1_egopro_training_and_regression.md",
+      "start_requires": [
+        "V1-E1"
+      ],
+      "gate_requires": [
+        "V1-E1"
+      ],
+      "checks": [
+        "training_pool_admission",
+        "expanded_wm_qualification",
+        "physical_budget_and_checkpoint"
+      ]
+    },
+    "V1-E3": {
+      "gate": "G-E3",
+      "spec": "specs/V2_1_egopro_training_and_regression.md",
+      "start_requires": [
+        "V1-E2"
+      ],
+      "gate_requires": [
+        "V1-E2"
+      ],
+      "checks": [
+        "expansion_gain",
+        "teleop_offline_retention",
+        "both_mcap_retention",
+        "independent_ablation_disposition"
+      ]
+    },
+    "V1-D3": {
+      "gate": "G-D3",
+      "spec": "specs/V1-D_teleop_replay_and_refinement.md",
+      "start_requires": [
+        "V1-D0",
+        "V1-D1",
+        "V1-D2"
+      ],
+      "gate_requires": [
+        "V1-D0",
+        "V1-D1",
+        "V1-D2"
+      ],
+      "checks": [
+        "final_offline_qualification",
+        "both_mcap_performance",
+        "release_grade_and_source"
+      ]
+    }
+  },
+  "proposed_training_configuration": {
+    "status": "PRE_REGISTERED_CANDIDATE",
+    "seed": 49,
+    "initialization": "fresh_actor_world_model_critic",
+    "world_hidden": [
+      1280,
+      1280,
+      1280
+    ],
+    "horizon": 8,
+    "wm_window": 8,
+    "wm_batch": 768,
+    "wm_batches": 3,
+    "policy_batch": 384,
+    "utd": 0.5,
+    "buffer_steps": 1800,
+    "warmup_steps": 66,
+    "wm_only_iterations": 350,
+    "wm_lr": 0.00011,
+    "actor_lr": 4e-05,
+    "actor_bootstrap_weight": 0.65,
+    "gamma": 0.99,
+    "lambda": 0.95,
+    "optimizer": "Fused Adam",
+    "critic_epochs": 3,
+    "physics_hz": 500,
+    "policy_hz": 50,
+    "initial_envs": 64,
+    "max_step_reward": 1,
+    "action_noise": "SEE_PRE_REGISTERED_CANDIDATE_REGISTRY",
+    "optional_b14_budget": 0,
+    "egopro": "CONDITIONAL_E0_E1_AND_E2_WM"
+  },
+  "resource_budget": {
+    "train_total": 20000000,
+    "train_static_bucket": 2000000,
+    "train_smoke_c0": 500000,
+    "train_dynamic": 8000000,
+    "train_mixed": 10000000,
+    "eval_total": 2000000,
+    "eval_c0": 700000,
+    "eval_training_watch": 650000,
+    "eval_release": 650000,
+    "gpu_count": 1,
+    "gpu_seconds": 172800,
+    "wall_seconds": 259200,
+    "blocked_wait_seconds": 86400,
+    "persistent_bytes": 268435456000,
+    "train_mixed_initial": 8000000,
+    "train_deploy_refinement": 1000000,
+    "train_egopro": 1000000,
+    "eval_pre_actor_domain": 100000,
+    "eval_d0": 200000,
+    "eval_d1": 150000,
+    "eval_d2_e": 100000,
+    "eval_d3": 200000
+  },
+  "allowed_autonomous_changes": {
+    "retries_per_stage": 2,
+    "c0_calibration_trials": 3,
+    "learning_variants_per_stage": 2,
+    "lr_multiplier": [
+      0.75,
+      1.25
+    ],
+    "positive_reward_multiplier": [
+      0.75,
+      1.25
+    ],
+    "horizon": [
+      4,
+      6,
+      8
+    ],
+    "exploration_multiplier": [
+      0.5,
+      1.5
+    ],
+    "curriculum_shift_percentage_points": 15,
+    "source": "MULTI_AGENT_PROTOCOL.md",
+    "deployment_rounds": 2,
+    "egopro_wm_trials": 2,
+    "egopro_policy_variants": 2,
+    "egopro_reference_fraction": [
+      0.1,
+      0.3
+    ],
+    "egopro_fraction_initial": 0.2
+  },
+  "forbidden_changes": [
+    "direction",
+    "original_hmb",
+    "split",
+    "scoring_target_or_domain_rules",
+    "acceptance_metrics",
+    "safety_authority",
+    "resource_cap",
+    "real_permissions",
+    "regression_source_or_descendants_into_new_training",
+    "post_actor_domain_or_mapper_selection",
+    "unqualified_egopro_actor",
+    "diagnostic_promoted_as_normal_pass"
+  ],
+  "deployment_grades": {
+    "EXPORTABLE": [
+      "trained_actor",
+      "export_parity"
+    ],
+    "SIM_DEPLOYABLE": [
+      "exportable",
+      "isolated_inference",
+      "causal_prefix",
+      "fallback",
+      "streaming_closed_loop",
+      "no_rmb"
+    ],
+    "SIM_RECOMMENDED": [
+      "sim_deployable",
+      "v1_performance_gate"
+    ],
+    "REAL_DEPLOYABLE": [
+      "physical_robot_base",
+      "C2-RT",
+      "P01-T",
+      "hardware_servo",
+      "external_metrology",
+      "site_safety",
+      "shadow",
+      "hil",
+      "human_real_approval"
+    ],
+    "TELEOP_SIM_VALIDATED": [
+      "sim_deployable",
+      "existing_mujoco_teleop_graph",
+      "both_mcap_functional",
+      "same_zero_residual",
+      "cold_start_and_fallback"
+    ],
+    "TELEOP_SIM_RECOMMENDED": [
+      "teleop_sim_validated",
+      "offline_absolute",
+      "offline_relative_and_non_degradation",
+      "both_mcap_performance",
+      "final_dual_regression"
+    ]
+  },
+  "formal_scoring_requirements": [
+    "physical_robot_base",
+    "C2-RT",
+    "P01-T",
+    "hardware_servo",
+    "external_metrology",
+    "formal_scoring_human_approval"
+  ],
+  "final_test_requirements": [
+    "final_test_sealed",
+    "access_log",
+    "independent_lineage",
+    "final_test_human_approval"
+  ],
+  "approval_status": "PENDING_HUMAN_REVIEW",
+  "execution_authorized": false,
+  "baseline_candidate_sha256": "dda0c8254d0c8e637bbe1ee14d1bdfbf8b6b7309a8209263fc350a0c3e4561ea",
+  "conditional_dependencies": {
+    "V1-E0": [
+      "independently_verified_D2_diagnosis",
+      "policy_T_offline_and_existing_teleop",
+      "remaining_E_escrow",
+      "explicit_optional_E_scope"
+    ],
+    "V1-E2_ACTOR_UPDATE": [
+      "V1-E1",
+      "expanded_wm_qualification",
+      "immutable_train_pool"
+    ],
+    "V1-D3_POLICY_E": [
+      "V1-E3"
+    ],
+    "V1-C1_ACTOR_UPDATE": [
+      "pre_actor_offline_domain_freeze"
+    ],
+    "DIAGNOSTIC_EXPORT": [
+      "trusted_existing_checkpoint",
+      "verified_safety_function_causality",
+      "export_parity",
+      "failed_performance_only"
+    ]
+  },
+  "diagnostic_export_max_grade": "EXPORTABLE",
+  "performance_candidates": {
+    "static_offline_mm": 5.0,
+    "dynamic_offline_mm": 10.0,
+    "primary_offline_relative_gain": 0.1,
+    "teleop_relative_gain": 0.1,
+    "full_domain_max_relative_degradation": 0.05,
+    "control_failure_max_delta": 0.01,
+    "hard_safety_violations": 0,
+    "static_min_targets": 40,
+    "primary_min_validation_roots": 6,
+    "dynamic_min_unique_ticks": 1000,
+    "static_hold_ticks": 100,
+    "static_score_ticks": 25,
+    "minimum_cold_starts_per_bag_method": 2,
+    "timing_protocol": "EVALUATION_PROTOCOL.md",
+    "all_candidates": "PRE_REGISTERED_CANDIDATE",
+    "static_min_fraction": 0.2,
+    "dynamic_min_fraction": 0.1,
+    "teleop_min_unique_ticks": 500,
+    "teleop_min_nonoverlap_windows": 2,
+    "teleop_min_window_ticks": 25,
+    "reference_floor_mm": 0.25,
+    "near_zero_max_delta_mm": 0.25,
+    "aggr": "failure_composite_nearest_rank"
+  },
+  "regression_recordings": [
+    {
+      "id": "s0_sim_20261119_172809",
+      "path": "/home/ubuntu/teleop_ws/data/s0_sim_20261119_172809/s0_sim_20261119_172809_0.mcap",
+      "sha256": "ffd5353918e38e6527b534aa3263baa20d7cb3f8a868d91f33b8644cbd437817",
+      "role": "TELEOP_DEPLOYMENT_REGRESSION",
+      "training_admission": false
+    },
+    {
+      "id": "s0_sim_20261117_181022",
+      "path": "/home/ubuntu/teleop_ws/data/s0_sim_20261117_181022/s0_sim_20261117_181022_0.mcap",
+      "sha256": "cbac62bb6d58ce2fa159d547408cf3534a29c32ca8b0bba1cddc8c4bc99ba1f5",
+      "role": "TELEOP_DEPLOYMENT_REGRESSION",
+      "training_admission": false
+    }
+  ]
+}

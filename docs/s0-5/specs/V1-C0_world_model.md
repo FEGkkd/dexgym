@@ -1,4 +1,4 @@
-# S0-5 v2.0.0 V1-C0 World Model 资格
+# S0-5 v2.0.1 V1-C0 World Model 资格
 
 状态 DRAFT_READY_FOR_REVIEW，技术门 G-C0。负责人 World Model & Training Agent，Reviewer 独立生成比较和分类审计。前置 G-A、G-B、整体授权和预算可用。实际 RMB 的集成必须在拟合前通过有名 54 轴、坐标、mask、相邻历史、Servo 与来源对照。可用合成故障做负控。所有数值为 PRE_REGISTERED_CANDIDATE。
 
@@ -55,3 +55,5 @@
 ## 复现、交付与下游
 
 v1/<campaign_id>/V1-C0/<run_id>/gate_receipt.json 链接 SHA、数据与误差、动作矩阵、日志、物理轨迹、实测显存/时间、测试和 Reviewer 见证。C1 只在 G-C0 通过且当前模型仍合格后开启。
+
+C1 启动前复核预 Actor 的静态/动态绝对门见证清单与连续物理证据，计入 C0 独立评估桶。EgoPro 扩充由 E2 重新资格化，原 C0 单独证据继续有效。 [扩充资格](V2_1_egopro_training_and_regression.md)

@@ -1,4 +1,4 @@
-# S0-5 v2.0.0 V1-C2 原速动态跟踪
+# S0-5 v2.0.1 V1-C2 原速动态跟踪
 
 状态 DRAFT_READY_FOR_REVIEW，技术门 G-C2。主责 WM & Training Agent，Independent Reviewer 核验全计划拍和共同域。前置 C1 技术通过，G-C0 模型仍合格，预算与整体授权有效。
 
@@ -37,3 +37,5 @@ C2 总训练上限 8M 真实 transition，初次和恢复共用，最多两项�
 ## 复现、交付及下游
 
 用 v1/<campaign_id>/V1-C2/<run_id>/gate_receipt.json 链接命令/PID/退出、样本/模型/代码 hash、每源机会与失败、固定对照、复现包和 Reviewer 收据。交付合格的动态 checkpoint 与固定回归套件。剩余预算与 G-C2 状态决定 C3 能否启动。
+
+原速动态绝对低误差域来自预 Actor 连续 Servo 见证与冻结来源，不根据本阶段表现重定义。 [离线验收](V1-D_evaluation_deployment.md)

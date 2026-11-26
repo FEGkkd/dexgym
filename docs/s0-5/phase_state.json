@@ -505,4 +505,39 @@
     "formal_physical_scoring": "PENDING_HUMAN_REVIEW",
     "final_test": "BLOCKED"
   }
+,
+  "policy_first_v2_1": {
+    "schema": "s05.phase-state.v2.1",
+    "design_version": "2.0.1",
+    "design_status": "DRAFT_READY_FOR_REVIEW",
+    "handoff_status": "DESIGN_READY_FOR_REVIEW",
+    "approval_status": "PENDING_HUMAN_REVIEW",
+    "execution_authorized": false,
+    "execution_authorization": null,
+    "campaign_id": null,
+    "stage_states": {
+      "V1-A": "NOT_STARTED",
+      "V1-B": "NOT_STARTED",
+      "V1-C0": "NOT_STARTED",
+      "V1-C1": "NOT_STARTED",
+      "V1-C2": "NOT_STARTED",
+      "V1-C3": "NOT_STARTED",
+      "V1-D0": "NOT_STARTED",
+      "V1-D1": "NOT_STARTED",
+      "V1-D2": "NOT_STARTED",
+      "V1-E0": "NOT_STARTED",
+      "V1-E1": "NOT_STARTED",
+      "V1-E2": "NOT_STARTED",
+      "V1-E3": "NOT_STARTED",
+      "V1-D3": "NOT_STARTED"
+    },
+    "design_approval": null,
+    "egopro_activation": null,
+    "offline_frozen_domain": null,
+    "diagnostic_exports": [],
+    "graded_candidate": null,
+    "real_deployment": "BLOCKED",
+    "formal_physical_scoring": "PENDING_HUMAN_REVIEW",
+    "final_test": "BLOCKED"
+  }
 }

@@ -1,4 +1,4 @@
-# S0-5 v2.0.0 SuperMimic 学习契约
+# S0-5 v2.0.1 SuperMimic 学习契约
 
 状态 DRAFT_READY_FOR_REVIEW。资格门和阈值见 [V1-C0](V1-C0_world_model.md)，参数治理见 [参数登记](V2_parameter_registry_training.md)。
 
@@ -41,7 +41,7 @@ LF 内容 SHA-256。engine 为 8121c53a1bfa436bc8a5c1bb43289fd92cdf234850bfa4fb9
 
 1. 读取当前因果 obs，C0 用独立可重复探索或零动作，后续由 Actor 计算。硬安全和 Servo 驱动物理，先写实际 pre-reset transition，再 reset。独立母源的验证数据不进入归一化和任何参数拟合。
 2. WM 从训练窗口最远递推 8 步，状态 loss 为按掩码归一化的 Δq/Δqd MSE，误差归一化下限初案 0.001 rad、0.01 rad/s。接触用 BCE，可选深度 Huber/FK 误差单列，接触/失败标签和 partial 状态损失使用不同遮罩。采样不断回到 MuJoCo 物理修正 WM。
-3. Actor/Critic 在 C0 通过前保持锁定。之后从同一有效段且有连续可见参考的 replay 状态开始想象，预留 horizon 后一拍合法末值。环境可逐拍推进当前参考，Actor 历史仅更新该想象时刻合法可见字段，禁止把帧号或离线参考透传。
+3. 首次 Teleop-only 学习的 Actor/Critic 在 G-C0 及预登记低误差能力域证据锁定前保持锁定；混合域必须取得自己的当前 E2-WM 资格。之后从同一有效段且有连续可见参考的 replay 状态开始想象，预留 horizon 后一拍合法末值。环境可逐拍推进当前参考，Actor 历史仅更新该想象时刻合法可见字段，禁止把帧号或离线参考透传。
 4. 想象使用可微投影候选与同一 Servo 时间定义计算 u，执行 WM 并对 FK、[几何奖励](V2_residual_task_contract.md) 求梯度。冻结 WM/Critic/FailureHead 参数的更新，保留 Actor 经 u、模型、几何与末值的输入梯度。非有限值停止该批，保留最大和失败计数。
 5. 设 c_t 为存活指示或已验证的存活概率。Actor 最大化 Σγ^t(∏_{j<t}c_j)r_t + βγ^H(∏_{j<H}c_j)V_H，并可扣除预注册有界正则。γ=0.99，β=0.65。真实 terminal 的 c=0，截断使用自己合法 pre-reset 末值，参考段终止原因需预先指定。
 6. Critic 用 G_t=r_t+γc_t[(1−λ)V_{t+1}+λG_{t+1}]，G_H=V_H、λ=0.95。真实 terminal 不 bootstrap，合法时限截断使用自己的末值。Critic 输入、reward/continue、回报与标签对 Actor/WM 梯度 detach，Critic 标注与 Actor bootstrap 均限制到 [0,100] 并记录夹值。验证闭式小序列、真实终止、合法截断、有限差分及参数组隔离。
@@ -52,3 +52,11 @@ LF 内容 SHA-256。engine 为 8121c53a1bfa436bc8a5c1bb43289fd92cdf234850bfa4fb9
 ## Checkpoint 与恢复
 
 保存四网络、各优化器、自动混合精度状态、归一化器、CPU/CUDA/NumPy/Python RNG、采样器与专用 RNG、课程、代码与依赖、数据资产、obs/action/codec/reward hashes、gate 证据、已提交的真实 transition 和 optimizer step、分阶段全部预算及日志游标。单写入者原子写入再登记 SHA，加载前查明兼容和来源。当前引擎保存网络、优化器、RNG 和采样器，但不保存完整 replay/环境，加载后补充采样。默认 RESUME_REFILL，重填计入同一预算，完成暖场和最小复验前锁 Actor；完整保存 replay、仿真物理、Servo 与时钟并通过逐拍对照后才可称 EXACT_CONTINUATION。Actor 导出包无法作完整恢复。中断最后 chunk 若无法核对实际消耗，按保守上界记账。
+
+## 部署反馈与条件扩域
+
+D2 先核对 START、映射、在线名义 IK/SDK、Builder、归一化与历史、时钟、Servo、约束介入、WM 和策略泛化。只在软件接口已定位并合格、剩余缺陷属于策略时用 D2 escrow 补训，保持诊断资料和训练来源物理隔离。变更涉及 Servo、输入分布、动作生效或观测语义时，检查根因影响，撤销过期的 WM、Actor、回归或部署证据。冻结的 Policy-T 和原实际数据可作历史参考，报告适用范围。
+
+进入 EgoPro E2 的已批准候选率 80% Teleop /20% EgoPro 保存在采样登记和 Replay 元数据。只消费 E1 资格的数据、独立 geometry/masks 和因果参考。EgoPro 不模拟 MANUS/VIVE 硬件时间或反馈。训练真实状态、执行与 Servo 来自相同 MuJoCo；变量只在 source/mask/register 层区分，禁止把来源或特权字段塞入 Actor。指定 MCAP 的输入、执行反馈、派生目标及历史重叠身份均由 E0/D1 执行资格排查，回归来源不得用于训练、归一化或 WM 拟合。
+
+原 Teleop G-C0 仅覆盖登记域。E2 先真实探索并 WM-only，分别按两域的 54 轴、1/4/8 步、动作敏感性、Servo/边界、真值和 anti-exploitation 重验。资格绑定数据与模型指纹、实际采样和 checkpoint，不以运行轮数或旧权重继承。Watchdog 失败停 Actor/Critic；基于冻结条件修复再资格后才恢复。E3 和 D3 的真实 offline/Teleop 比较决定选择；E3 的 Policy-E 在任何必要域失败时按资格回到 Policy-T。 [E2-WM 与 E3](V2_1_egopro_training_and_regression.md) · [实际部署回归](V1-D_teleop_replay_and_refinement.md)

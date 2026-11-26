@@ -1,4 +1,4 @@
-# P04 RL 环境 | V2.0.0 迁移
+# P04 RL 环境 | V2.0.1 迁移
 
 状态 DRAFT_READY_FOR_REVIEW。V1-B 实施 54D MuJoCo Warp 残差环境、共享观测、显式 Servo、Reward 与安全；V1-C0 完成 SuperMimic adapter 和 World Model 资格。PPO 留作可选公平对照。
 

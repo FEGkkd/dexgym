@@ -1,105 +1,96 @@
 {
-  "schema": "s05.v2.design-freeze-candidate.v1",
-  "design_version": "2.0.0",
+  "schema": "s05.v2.1.design-freeze-candidate.v1",
+  "design_version": "2.0.1",
   "design_status": "DRAFT_READY_FOR_REVIEW",
-  "reviewed_baseline_commit": "b8d8b401bdda59ad00a37f0a3bf6878b462ed756",
+  "reviewed_baseline_commit": "f78ee27f4762fedca9529bf697560bb267f8c704",
+  "previous_freeze_candidate_sha256": "dda0c8254d0c8e637bbe1ee14d1bdfbf8b6b7309a8209263fc350a0c3e4561ea",
   "active_documents": {
-    "CONTRACTS.md": "49d0b0c7530c11747afcda9a4a1fc99514ef31b338f042b77a5244a665258382",
-    "DECISION_LOG.md": "c23588139352cd97d43892f507fd55f1926d1701da21de1f878cd4bb093c2d06",
-    "EVALUATION_PROTOCOL.md": "b799d2fe8325a49a1fbfb548818c6f8cd5dce92b1b7f74e9172e44f7010e7e53",
-    "MASTER_DESIGN.md": "2584fba78e7dfa7586040d1aa45cbecefe62d7ee607aee5cfe801cc24e86e3a9",
-    "MULTI_AGENT_PROTOCOL.md": "18986ce8224ec9e225274487974fc56ffed21ba890e0199e78f3e8dfa98f2ef9",
-    "OPEN_ISSUES.md": "1dc4ee0f99d08e78fb5b6269c42fc4ea280a310f151758c453351f3ddf961926",
-    "PROJECT_STATE.md": "66d9dfe4c26695d788c69b253d7e955b84eb447ec558356dfc3de9787b4090c5",
-    "README.md": "4077804c9f681de645d9c391af88f7c5f02c46c6bfcd488e64bb051b1c62b800",
-    "REQUIREMENTS.md": "82f4f98a3519f5d0c60ce4e6b549f189c51406452126db7f247501ac12a353ee",
-    "RISK_REGISTER.md": "3877755103c039823388961f2b2502329c07b8862fa00a1d564796af74a64891",
-    "ROADMAP.md": "21504f565105825df4da84626cd1ba5cbd8206fb215f3f449be2cf13a2c9afea",
-    "TRACEABILITY_MATRIX.md": "96f2fb8cd7ae9b6a1cbfe511fdcb9ae0989d855acdb8631456856cdc6fe0207c",
-    "dcr/DCR-005_policy_first_supermimic.md": "3352b316dbf20491088f3c76888886217741552c035d3ff44ebffad60aa1b098",
-    "phase_state.json": "5a05da4244b30368f6788895bf7e3423a375921fa8a92378165eef28cb3af7cc",
-    "reports/P00_V2_design_review.md": "32ba970513519d0ae66925ff2bda91a44cd8672446fe1562f88e8b2eaccead17",
-    "specs/P03_nominal_controller.md": "9ecf40a5c43d9c0737be18a5868bf958a35d51e040796039a45e1f9d5a634ac3",
-    "specs/P04_rl_environment.md": "faec721b4f478fb67737735b2580fd86ecf0756add6b3708a7175e220ba2e0ca",
-    "specs/P05_static_precision.md": "a0fd60d170796329c4490a2dd2b46e98587abe7ac44b26d8dc6816cd39b36aa5",
-    "specs/P06_dynamic_tracking.md": "a769b450dfb7188feb4a68fa835cc72213affa05931114febad2c0a75b84d070",
-    "specs/P07_generalist_tracking.md": "4847cb02c26a42763cd35c8bbb860107ac2fdc3e1a2761494d3ce9de63acf6f0",
-    "specs/P08_robustness.md": "4b4078fad1c0ceb263c9eba3e0b69ea85f92e23647b89c7fef3d8abfd0bf5caf",
-    "specs/P09_final_evaluation.md": "7c660736ed72f93c925f23868e800fdf0049edcd2cd3624040c9ed43f6ea3148",
-    "specs/P10_deployment.md": "40bdbceafa1b7e1b9dbf4e99c394366d34d3deb862da0dcb5dee6f421e9ad18f",
-    "specs/V1-A_offline_rmb.md": "a93978b9c4b44ab912e88a881dc8a6303f4cf9127e59a7d337cb35d42eebc005",
-    "specs/V1-B_residual_environment.md": "5551117ef4653f461ba3259ccc2d3ac286a80c38d0d438cb6f1926597c8488d6",
-    "specs/V1-C0_world_model.md": "529f4f971e6324cc6d123b235139ef8679050222715fba361c445f020c246112",
-    "specs/V1-C1_static.md": "8f68b76df5d7c8fb79fffd443e66a1be180a90d43827d4e5a189fc440e2cb6aa",
-    "specs/V1-C2_dynamic.md": "80019ec4635a551e477407a29525b0191681fb1cf13705db6163916568445c32",
-    "specs/V1-C3_mixed.md": "5bafac3d76f464b1298524e67fb04d70a78d0164452947799ac9e05ec20beab2",
-    "specs/V1-D_evaluation_deployment.md": "00118de06b52e0a436aaab4f667ca7b374f7bb2cc313ff6c296a8883a56235cb",
-    "specs/V2_parameter_registry_evaluation.md": "3b05ecb32b72e5c9982fda0a52b5ec2f1db636f9a2588565a12bbe64e3c908aa",
-    "specs/V2_parameter_registry_training.md": "24a668b4850902ee2b6cf90bb6133695ccafdf365561cae2f726298ab64a4af5",
-    "specs/V2_residual_task_contract.md": "1b2b732ee56db8ad88bd38cb1fc9efa5898b18c2da5fa0824ae8cfd6a2611187",
-    "specs/V2_rmb_contract.md": "5f449461a1e7fdcb74516cf3cfa58c6a19593a83b6836928900297c30b59e937",
-    "specs/V2_runtime_contract.md": "95cd531e7cd56a01e978bef7703356c51a19c0901252d5c43a8c92217263c16b",
-    "specs/V2_supermimic_contract.md": "b4082a3568a2a3773cc81e7a98ce4557288e4599a872f4db2e5511410db0e6eb"
-  },
-  "historical_evidence_identity": {
-    "reviewed_baseline": "b8d8b401bdda59ad00a37f0a3bf6878b462ed756",
-    "ubuntu_s05_head": "b8d8b401bdda59ad00a37f0a3bf6878b462ed756",
-    "ubuntu_s05_clean": true,
-    "sim0": "c5af9af94d7b9d3f437c14df128441d1183bec56",
-    "sim0_approval": "docs/s0-5/reports/approvals/P02_LIMITED_ACCEPTANCE_SIM0.md",
-    "sim0_dcr": "docs/s0-5/dcr/DCR-004_bimanual_simulation_research_branch.md",
-    "sim0_untracked_preserved": true,
-    "teleop_repo": "FEGkkd/whole-body-teleop",
-    "teleop_head": "6d0b0b5b2601618f1b0052d93ef2403eea9b064a",
-    "teleop_ubuntu_runtime_branch": "4sensor",
-    "teleop_runtime_dirty": true,
-    "original_hmb_archive_relative": "review-1/hmb_manifest.json",
-    "p02_final_run": "P02-FINAL-20261126-ecd12ec",
-    "required_evidence": {
-      "evidence/P01_E_E1/hmb_manifest.json": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074",
-      "evidence/P01_F/p02_handoff_manifest.json": "cc1f21ead157e576113a184dba48a5d2596f4835ffdf53e554823cb67eb3fb97",
-      "evidence/P02/final_handoff/execution_receipt.json": "f7c874a48d6be5128f2f895c12038c9fb1057f25be57dab91ce2280478fa1458",
-      "evidence/P02/final_handoff/limited_scope_candidate.json": "9f78b4c3087289859d22eefd71a1b567317b3951488159bff174b2657c10ffa7",
-      "evidence/P02/final_handoff/agent_work_manifest.json": "b45344cd15c08a583eaba84b49bd40ef917d1eb844a0720beb1d11d8e08b2c75"
-    },
-    "source_paths": [
-      "source/dexgym/algorithms/supermimic/dex_reference/engine.py",
-      "source/dexgym/algorithms/supermimic/dex_reference/config.py",
-      "source/dexgym/algorithms/supermimic/dex_reference/buffer.py",
-      "source/dexgym/algorithms/supermimic/dex_reference/networks.py",
-      "source/dexgym/tasks/direct/wholebody_s0_1/supermimic.py",
-      "source/dexgym/tasks/direct/wholebody_s04/train_aligned.py",
-      "source/dexgym/tasks/direct/wholebody_s04/aligned_physics.py",
-      "source/dexgym/tasks/direct/wholebody_s04/aligned_task.py",
-      "source/dexgym/tasks/direct/marvin54_s0/warp_physics.py",
-      "source/dexgym/tasks/direct/wholebody_s05/hmb_reader.py",
-      "source/dexgym/data/wuji_retarget.py"
-    ],
-    "gpu_snapshot": {
-      "name": "NVIDIA GeForce RTX 5090",
-      "total_mib": 32607,
-      "used_mib": 454,
-      "utilization_pct": 0,
-      "filesystem_available_gib_approx": 640
-    },
-    "scope": "READ_ONLY_SOURCE_AND_EVIDENCE_IDENTITY",
-    "sim0_approval_sha256": "b2ac5935ba67adbe5fedb89bb7f52052b1e0320207dcaa5cbba7056d3ef9b8f5"
+    "CONTRACTS.md": "c54957100f5201daa6887f3b00466e5cc5626b00e1f565bfbc39ceac830622b4",
+    "DECISION_LOG.md": "bfd6599b3e137a01e330154a9fd9ce7b9be4bcd414ce3465ec67fd8a523d84de",
+    "EVALUATION_PROTOCOL.md": "a3b134018599e097aef276144f37840ecfa90d4a5fde71a8fc0894c5cb0be2f5",
+    "MASTER_DESIGN.md": "8cfe4837eef655b86b158ada020dd6826eff2da6a17471dd292d99a0e22521bf",
+    "MULTI_AGENT_PROTOCOL.md": "3c8685d8bb4c22326dfb04506e5127eec6cd853c66c0f97f9bd1568a401fcb06",
+    "OPEN_ISSUES.md": "6858ea7a6453f184bc36cf84cd269da0faff466d8ee06ac2bc4cbc0dd6b9fca3",
+    "PROJECT_STATE.md": "543c92cdc4db331d9037a0033f974ad57a6db0af1f9c18cca6d260ac2080ad02",
+    "README.md": "f01a59d086e0a4f020ba1af23d2dd2e1c111c90954e5d778d4910a05e9375643",
+    "REQUIREMENTS.md": "87c0344e7fc21e97209dc514449a602e87059d6e28c4cf88d97d7d4fb23d3e8c",
+    "RISK_REGISTER.md": "ac04941ebfc2f9fa3229a99206df6f15e2578aa8a401ffc0ae04f8487a548cc4",
+    "ROADMAP.md": "7fae14e3fb2eceecbb77a4a3ca04ffd10b1d012ba377a88d2a018077ba8f8d19",
+    "TRACEABILITY_MATRIX.md": "fd7f187a2a798c7bcd4c013e751b33bf35340df802dd12cd204d7518991dcd61",
+    "dcr/DCR-006_teleop_validation_egopro.md": "7e9948ac827eab3197a4f19208ba05b7a91bc28dfa4ab6d3722e722d10703958",
+    "phase_state.json": "16aa4b25dcb67be6c6fe471f06eed144496d1d1003117c67eaed2068779c3041",
+    "reports/P00_V2_1_design_review.md": "69d2b6caff4213b957a279871c21e662ece1786e3f31eec475ab8ab36bc9ee92",
+    "specs/P03_nominal_controller.md": "6b434684d0bbe6af1dde65c6445af7ecce86ce27c5a92128153b23a3e6906651",
+    "specs/P04_rl_environment.md": "3312450b9bcf1c27f2428bb4d8932e58b7ae4fc9cee071a48af4cbcc20880832",
+    "specs/P05_static_precision.md": "f9c5a9a45f784b477182136b482c76f842d67640874be3d48d0c5d7830013e16",
+    "specs/P06_dynamic_tracking.md": "6ebae812d40d0f48ede0dff035e7a4c1a7b9cabe3bdb0c23c529093b9d05a809",
+    "specs/P07_generalist_tracking.md": "8bf29e6368cff40d23e190edc6daa8cbaa422669b785bcf27862c6c37e4aae9d",
+    "specs/P08_robustness.md": "be01719bbc1d5495e1b7a6addc4f5bdb73c85220131d50a4cdb3c146111e1345",
+    "specs/P09_final_evaluation.md": "fe63a4e837c47bec9facb936ab01f2d2c6c635dd9cd6824a07f33ee1f4ab94e6",
+    "specs/P10_deployment.md": "a10e76b29439314e10fcbc82cde7b13bbbc281688b3820236ff5300f9908d654",
+    "specs/V1-A_offline_rmb.md": "993cbf995bd17949417af9f5e7be42c99a8d97e8bcdd32748da0a92ee55f3ebd",
+    "specs/V1-B_residual_environment.md": "15601ff72c3d9211fa425d625d39fe0d0fb10fbfca3b69505fb8c2098aadde50",
+    "specs/V1-C0_world_model.md": "bcbb115585ffffb220b22bb2570faf0e7121f404d4039ec1aca15b6c874689c7",
+    "specs/V1-C1_static.md": "38aca18e31a801c8f2db10ad088ccc0061c2414f07e84586d7012f9dbc12f29a",
+    "specs/V1-C2_dynamic.md": "ab3f75235150f91609c2e0804ffb1e4fb1a04c984ed5781cb5f2abd2a097cfb6",
+    "specs/V1-C3_mixed.md": "38fab83a93447e511a41874b336e645908c7fc005ae7b64cc4f453504363c302",
+    "specs/V1-D_evaluation_deployment.md": "4ed6868e36cc26d3e57ccca26d8a52bf165cfba369d3094d4f7e7e72719130ee",
+    "specs/V1-D_teleop_replay_and_refinement.md": "e41f72088db33b24e7c602bf4681a71afb01e110aaf3e854481a2283c6e1a8c0",
+    "specs/V1-E_conditional_egopro_augmentation.md": "12b60f2e123141bbc4e5a4461b4bcdfcdac671cc46306700ffad1b55341b6a58",
+    "specs/V2_1_egopro_training_and_regression.md": "991c38356ef1c73798d1d57549cf89d78514935b6530053c8260fe851db0154f",
+    "specs/V2_parameter_registry_evaluation.md": "319c282f4bea21d60bf5403f246dd0f349748e0dafb54b940d55d140f9510e50",
+    "specs/V2_parameter_registry_training.md": "200af1ecd179c11a145455464e3b0a0d0240fbe6a546fa3ca4a5216cb4baa45a",
+    "specs/V2_residual_task_contract.md": "a1073ece75f1fdb61a7cad6fcd677e84befb8cb6bc2d113aba89a23130b900f2",
+    "specs/V2_rmb_contract.md": "b3f34e72820656ac85f45b8b2bef039230dd4e8d038bd21887b8958d6eea8b6b",
+    "specs/V2_runtime_contract.md": "98e2d382e1e349d888dc9a60c3c49b2b0f046607ccce0e2c61945347c9241a72",
+    "specs/V2_supermimic_contract.md": "de05aae69cfdaeca3138c8a97ba06a08d60884bc935a770cd10bb88406c5044b"
   },
   "dcr_identity": {
-    "id": "DCR-005",
-    "path": "dcr/DCR-005_policy_first_supermimic.md",
-    "sha256": "3352b316dbf20491088f3c76888886217741552c035d3ff44ebffad60aa1b098"
+    "id": "DCR-006",
+    "path": "dcr/DCR-006_teleop_validation_egopro.md",
+    "sha256": "7e9948ac827eab3197a4f19208ba05b7a91bc28dfa4ab6d3722e722d10703958"
+  },
+  "historical_evidence_identity": {
+    "reviewed_baseline": "f78ee27f4762fedca9529bf697560bb267f8c704",
+    "baseline_candidate_sha256": "dda0c8254d0c8e637bbe1ee14d1bdfbf8b6b7309a8209263fc350a0c3e4561ea",
+    "teleop_git": "6d0b0b5b2601618f1b0052d93ef2403eea9b064a",
+    "teleop_branch": "codex/whole-body-sim-phase1",
+    "ubuntu_teleop_reference": "/home/ubuntu/dexgym_worktrees/teleop-sim0-study",
+    "ubuntu_user_worktree": "/home/ubuntu/teleop_ws",
+    "user_worktree_dirty_4sensor": true,
+    "ubuntu_egopro_directory_observed": "/home/ubuntu/dexgym/data/egopro",
+    "bag_readonly_scope": "stat, readability, SHA-256 and adjacent recorder metadata; no frame decoding, replay, event verification or qualification",
+    "bags": [
+      {
+        "id": "s0_sim_20261119_172809",
+        "sha256": "ffd5353918e38e6527b534aa3263baa20d7cb3f8a868d91f33b8644cbd437817",
+        "bytes": 132641216,
+        "metadata_duration_ns": 69260778050,
+        "metadata_message_count": 103707,
+        "metadata_sha256": "7a25f57ef0f6aa8ff156da7036e08a75e728b430c58e19a95acfc63d09440806"
+      },
+      {
+        "id": "s0_sim_20261117_181022",
+        "sha256": "cbac62bb6d58ce2fa159d547408cf3534a29c32ca8b0bba1cddc8c4bc99ba1f5",
+        "bytes": 229433886,
+        "metadata_duration_ns": 119700535066,
+        "metadata_message_count": 182620,
+        "metadata_sha256": "1c45af7b4d9ca294bb7960fcecd6e3c58875e88e2f6ce614465017295434d26b"
+      }
+    ],
+    "historical_contracts": "evidence/P00_V2/historical_inputs.json",
+    "note": "Teleop metadata lists bilateral ManusGlove and TrackerPose, workflow/control phase, policy status/metrics and command/feedback. Full raw schema, usable event mapping, position initialization and ancestry remain formal D1 preflight obligations."
   },
   "requirement_mapping": [
     {
       "id": "S05-REQ-001",
-      "disposition": "RETAINED",
-      "title": "真人遥操与 HMB 资格",
+      "disposition": "REVISED",
+      "title": "Teleop-only 主线与独立条件扩充",
       "stage": "V1-A",
       "module": "hmb_reader.py",
       "unit": "hmb_only_actor_source",
       "integration": "read_signed_308_partitions",
-      "metric": "仓库与归档 E1/F1 哈希一致，32 个母源，EgoPro/派生仿真源混入 0",
+      "metric": "原 HMB 和 split 字节可验；Teleop-only 阶段 EgoPro 样本 0，扩充在隔离 E 线执行",
       "design": "specs/V1-A_offline_rmb.md",
       "gate": "G-A",
       "evidence": "v1/<campaign>/V1-A/<run>/gate_receipt.json"
@@ -138,7 +129,7 @@
       "module": "v1/rmb/geometry.py",
       "unit": "separate_target_sources",
       "integration": "mapped_m1_continuity_and_reconstruction",
-      "metric": "名义 FK 与 mapped 源身份独立，缺可行见证显式未知",
+      "metric": "名义 FK 与 mapped 源身份独立，缺可行见证显式未知；M1 硬阈值失败后仅用冻结前平滑候选",
       "design": "specs/V1-A_offline_rmb.md",
       "gate": "G-A",
       "evidence": "v1/<campaign>/V1-A/<run>/gate_receipt.json"
@@ -147,14 +138,14 @@
       "id": "S05-REQ-005",
       "disposition": "SUPERSEDED",
       "title": "现有名义链与公平 B0",
-      "stage": "V1-D",
+      "stage": "V1-D0",
       "module": "v1/eval/baselines.py",
       "unit": "baseline_control_identity",
       "integration": "paired_b0_b54_cached_replay",
       "metric": "B0/B54 除残差外同一模型、目标、命令接口、初态和拍序",
       "design": "specs/V1-D_evaluation_deployment.md",
-      "gate": "G-D",
-      "evidence": "v1/<campaign>/V1-D/<run>/gate_receipt.json"
+      "gate": "G-D0",
+      "evidence": "v1/<campaign>/V1-D0/<run>/gate_receipt.json"
     },
     {
       "id": "S05-REQ-006",
@@ -186,27 +177,27 @@
       "id": "S05-REQ-008",
       "disposition": "RETAINED",
       "title": "双手协调",
-      "stage": "V1-D",
+      "stage": "V1-D3",
       "module": "v1/eval/bimanual.py",
       "unit": "relative_se3_and_cross_hand",
       "integration": "side_only_and_bimanual",
       "metric": "V1 功能非退化，最终双手相对 P95 ≤3 mm",
       "design": "specs/V1-D_evaluation_deployment.md",
-      "gate": "G-D",
-      "evidence": "v1/<campaign>/V1-D/<run>/gate_receipt.json"
+      "gate": "G-D3",
+      "evidence": "v1/<campaign>/V1-D3/<run>/gate_receipt.json"
     },
     {
       "id": "S05-REQ-009",
       "disposition": "REVISED",
       "title": "实时推理与时间资格",
-      "stage": "V1-D",
+      "stage": "V1-D1",
       "module": "v1/deploy/timing.py",
       "unit": "timestamp_cutoff",
       "integration": "batch1_target_host",
       "metric": "Actor P99 5 ms 挑战；实物端到端 50 ms 挑战独立取证",
       "design": "specs/V1-D_evaluation_deployment.md",
-      "gate": "G-D",
-      "evidence": "v1/<campaign>/V1-D/<run>/gate_receipt.json"
+      "gate": "G-D1",
+      "evidence": "v1/<campaign>/V1-D1/<run>/gate_receipt.json"
     },
     {
       "id": "S05-REQ-010",
@@ -368,14 +359,14 @@
       "id": "S05-REQ-022",
       "disposition": "REVISED",
       "title": "连续运行与泛化",
-      "stage": "V1-D",
+      "stage": "V1-D3",
       "module": "v1/eval/continuous.py",
       "unit": "end_and_controller_failure",
       "integration": "one_reset_stream",
       "metric": "每条轨迹初始 reset 一次，冻结源级分层和全部后缀失败",
       "design": "specs/V1-D_evaluation_deployment.md",
-      "gate": "G-D",
-      "evidence": "v1/<campaign>/V1-D/<run>/gate_receipt.json"
+      "gate": "G-D3",
+      "evidence": "v1/<campaign>/V1-D3/<run>/gate_receipt.json"
     },
     {
       "id": "S05-REQ-023",
@@ -394,14 +385,14 @@
       "id": "S05-REQ-024",
       "disposition": "RETAINED",
       "title": "独立评分与失败分母",
-      "stage": "V1-D",
+      "stage": "V1-D3",
       "module": "v1/eval/scoring.py",
       "unit": "infinite_failure_quantile",
       "integration": "paired_all_planned_ticks",
       "metric": "原始时间，整段分母、测得分位与失败复合，3/5/10/15 mm 同拍率",
       "design": "specs/V1-D_evaluation_deployment.md",
-      "gate": "G-D",
-      "evidence": "v1/<campaign>/V1-D/<run>/gate_receipt.json"
+      "gate": "G-D3",
+      "evidence": "v1/<campaign>/V1-D3/<run>/gate_receipt.json"
     },
     {
       "id": "S05-REQ-025",
@@ -420,27 +411,27 @@
       "id": "S05-REQ-026",
       "disposition": "REVISED",
       "title": "V1 单种子与最终科研分离",
-      "stage": "V1-D",
+      "stage": "V1-D3",
       "module": "v1/eval/select.py",
       "unit": "no_final_test_and_selection_lock",
       "integration": "frozen_validation_paired_reports",
       "metric": "B54 单种子工程结果；后续 ≥3 种子候选及独立封存测试",
       "design": "specs/V1-D_evaluation_deployment.md",
-      "gate": "G-D",
-      "evidence": "v1/<campaign>/V1-D/<run>/gate_receipt.json"
+      "gate": "G-D3",
+      "evidence": "v1/<campaign>/V1-D3/<run>/gate_receipt.json"
     },
     {
       "id": "S05-REQ-027",
       "disposition": "REVISED",
       "title": "独立 Actor 导出、SIM 运行",
-      "stage": "V1-D",
+      "stage": "V1-D1",
       "module": "v1/deploy/runtime.py",
       "unit": "export_and_builder_roundtrip",
       "integration": "offline_stream_no_rmb",
       "metric": "同 builder、独立进程、无 Bank、仿真闭环与确定性回退",
       "design": "specs/V1-D_evaluation_deployment.md",
-      "gate": "G-D",
-      "evidence": "v1/<campaign>/V1-D/<run>/gate_receipt.json"
+      "gate": "G-D1",
+      "evidence": "v1/<campaign>/V1-D1/<run>/gate_receipt.json"
     },
     {
       "id": "S05-REQ-028",
@@ -472,14 +463,14 @@
       "id": "S05-REQ-030",
       "disposition": "REVISED",
       "title": "工程性能及最终挑战分门",
-      "stage": "V1-D",
+      "stage": "V1-D0",
       "module": "v1/eval/gates.py",
       "unit": "zero_near_zero_infinite_rules",
       "integration": "full_denominator_paired_gate",
       "metric": "静态/动态 ≥10%，完整 P95 ≤+5%，失败差 ≤1pp，功能门独立",
       "design": "specs/V1-D_evaluation_deployment.md",
-      "gate": "G-D",
-      "evidence": "v1/<campaign>/V1-D/<run>/gate_receipt.json"
+      "gate": "G-D0",
+      "evidence": "v1/<campaign>/V1-D0/<run>/gate_receipt.json"
     },
     {
       "id": "S05-REQ-031",
@@ -524,14 +515,14 @@
       "id": "S05-REQ-034",
       "disposition": "NEW",
       "title": "离线到实时名义映射差异",
-      "stage": "V1-D",
+      "stage": "V1-D1",
       "module": "v1/deploy/nominal.py",
       "unit": "stream_clock_and_zero_residual",
       "integration": "stream_nominal_vs_cached_and_bypass",
       "metric": "报告缓存/实时的命令、几何、状态和回退差异，独立资格",
       "design": "specs/V1-D_evaluation_deployment.md",
-      "gate": "G-D",
-      "evidence": "v1/<campaign>/V1-D/<run>/gate_receipt.json"
+      "gate": "G-D1",
+      "evidence": "v1/<campaign>/V1-D1/<run>/gate_receipt.json"
     },
     {
       "id": "S05-REQ-035",
@@ -545,412 +536,576 @@
       "design": "MULTI_AGENT_PROTOCOL.md",
       "gate": "GOVERNANCE",
       "evidence": "v1/<campaign>/<stage>/<run>/gate_receipt.json"
+    },
+    {
+      "id": "S05-REQ-036",
+      "disposition": "NEW",
+      "title": "离线绝对精度与预 Actor 低误差域",
+      "stage": "V1-D0",
+      "module": "v1/eval/offline_precision.py",
+      "unit": "static_dynamic_and_improvable_are_distinct",
+      "integration": "paired_physics_absolute_and_full_domain",
+      "metric": "静态≤5 mm且≥40目标/6根；动态≤10 mm且≥1000唯一拍/6根；原收益及非退化门同用",
+      "design": "specs/V1-D_evaluation_deployment.md",
+      "gate": "G-D0",
+      "evidence": "v1/<campaign>/V1-D0/<run>/gate_receipt.json"
+    },
+    {
+      "id": "S05-REQ-037",
+      "disposition": "NEW",
+      "title": "实际现有 MuJoCo Teleop 软件链路",
+      "stage": "V1-D1",
+      "module": "v1/deploy/teleop_graph.py",
+      "unit": "reject_surrogate_and_real_driver",
+      "integration": "existing_graph_bypass_cold_start",
+      "metric": "模型/图/编译锁；真实图≥2次冷启动，硬违规及迟到发令0",
+      "design": "specs/V1-D_teleop_replay_and_refinement.md",
+      "gate": "G-D1",
+      "evidence": "v1/<campaign>/V1-D1/<run>/gate_receipt.json"
+    },
+    {
+      "id": "S05-REQ-038",
+      "disposition": "NEW",
+      "title": "两份指定 MCAP 因果闭环回归",
+      "stage": "V1-D1",
+      "module": "v1/eval/teleop_replay.py",
+      "unit": "reject_recorded_commands_feedback_rmb",
+      "integration": "both_recordings_t0_t1_t2",
+      "metric": "两包同目标T1/T2，≥2次每包每方法冷启动；分包主指标及完整失败",
+      "design": "specs/V1-D_teleop_replay_and_refinement.md",
+      "gate": "G-D1",
+      "evidence": "v1/<campaign>/V1-D1/<run>/gate_receipt.json"
+    },
+    {
+      "id": "S05-REQ-039",
+      "disposition": "NEW",
+      "title": "部署反馈驱动的有界修订",
+      "stage": "V1-D2",
+      "module": "v1/deploy/diagnosis.py",
+      "unit": "reject_data_before_interface_fixes",
+      "integration": "retained_checkpoint_and_dual_replay",
+      "metric": "归因证据与接口优先；≤2轮，修订实采≤1M且两类回归",
+      "design": "specs/V1-D_teleop_replay_and_refinement.md",
+      "gate": "G-D2",
+      "evidence": "v1/<campaign>/V1-D2/<run>/gate_receipt.json"
+    },
+    {
+      "id": "S05-REQ-040",
+      "disposition": "NEW",
+      "title": "条件 EgoPro 独立准入与 WM 再资格",
+      "stage": "V1-E2",
+      "module": "v1/learning/egopro_mixture.py",
+      "unit": "deny_mixed_without_bank_or_wm_receipt",
+      "integration": "source_isolated_actual_wm_requalification",
+      "metric": "E0/E1独立通过；EgoPro有效采样10%–30%；54轴 1/4/8 步及真实梯度",
+      "design": "specs/V2_1_egopro_training_and_regression.md",
+      "gate": "G-E2",
+      "evidence": "v1/<campaign>/V1-E2/<run>/gate_receipt.json"
+    },
+    {
+      "id": "S05-REQ-041",
+      "disposition": "NEW",
+      "title": "EgoPro 增益与原 Teleop 保留",
+      "stage": "V1-E3",
+      "module": "v1/eval/egopro_retention.py",
+      "unit": "reject_teleop_regression_and_leaked_sources",
+      "integration": "pair_t_e_offline_and_both_mcap",
+      "metric": "EgoPro 增益与 Teleop 保留分别通过；两包不退化，否则退回Policy-T",
+      "design": "specs/V2_1_egopro_training_and_regression.md",
+      "gate": "G-E3",
+      "evidence": "v1/<campaign>/V1-E3/<run>/gate_receipt.json"
     }
   ],
-  "stage_dag": {
-    "V1-A": {
-      "gate": "G-A",
-      "spec": "specs/V1-A_offline_rmb.md",
-      "start_requires": [],
-      "gate_requires": [],
-      "checks": [
-        "archive_identity",
-        "lineage",
-        "causal_prefix",
-        "nominal_continuity",
-        "common_domain"
-      ]
-    },
-    "V1-B": {
-      "gate": "G-B",
-      "spec": "specs/V1-B_residual_environment.md",
-      "start_requires": [],
-      "gate_requires": [
-        "V1-A"
-      ],
-      "checks": [
-        "rmb_join",
-        "axis_54",
-        "zero_b0",
-        "path_safety",
-        "servo_parity",
-        "reward_reset_history",
-        "actual_transition"
-      ]
-    },
-    "V1-C0": {
-      "gate": "G-C0",
-      "spec": "specs/V1-C0_world_model.md",
-      "start_requires": [
-        "V1-A",
-        "V1-B"
-      ],
-      "gate_requires": [
-        "V1-A",
-        "V1-B"
-      ],
-      "checks": [
-        "excitation",
-        "independent_holdout",
-        "one_four_eight",
-        "static",
-        "action_gradients",
-        "failure_boundary",
-        "actor_disabled"
-      ]
-    },
-    "V1-C1": {
-      "gate": "G-C1",
-      "spec": "specs/V1-C1_static.md",
-      "start_requires": [
-        "V1-C0"
-      ],
-      "gate_requires": [
-        "V1-C0"
-      ],
-      "checks": [
-        "static_learning",
-        "hold",
-        "functional",
-        "safety",
-        "world_model_current"
-      ]
-    },
-    "V1-C2": {
-      "gate": "G-C2",
-      "spec": "specs/V1-C2_dynamic.md",
-      "start_requires": [
-        "V1-C0",
-        "V1-C1"
-      ],
-      "gate_requires": [
-        "V1-C0",
-        "V1-C1"
-      ],
-      "checks": [
-        "original_rate",
-        "start_stop_reverse",
-        "static_retention",
-        "safety",
-        "world_model_current"
-      ]
-    },
-    "V1-C3": {
-      "gate": "G-C3",
-      "spec": "specs/V1-C3_mixed.md",
-      "start_requires": [
-        "V1-C0",
-        "V1-C2"
-      ],
-      "gate_requires": [
-        "V1-C0",
-        "V1-C2"
-      ],
-      "checks": [
-        "mixed_coverage",
-        "physical_rollout",
-        "regression_and_fallback",
-        "exploitation_watch",
-        "safety",
-        "world_model_current"
-      ]
-    },
-    "V1-D": {
-      "gate": "G-D",
-      "spec": "specs/V1-D_evaluation_deployment.md",
-      "start_requires": [
-        "V1-C0",
-        "V1-C3"
-      ],
-      "gate_requires": [
-        "V1-C0",
-        "V1-C3"
-      ],
-      "checks": [
-        "actual_paired_evaluation",
-        "release_grade_evidence",
-        "final_test_separation",
-        "independent_review"
-      ]
-    }
-  },
-  "technical_gate_definitions": {
-    "V1-A": {
-      "gate": "G-A",
-      "spec": "specs/V1-A_offline_rmb.md",
-      "start_requires": [],
-      "gate_requires": [],
-      "checks": [
-        "archive_identity",
-        "lineage",
-        "causal_prefix",
-        "nominal_continuity",
-        "common_domain"
-      ]
-    },
-    "V1-B": {
-      "gate": "G-B",
-      "spec": "specs/V1-B_residual_environment.md",
-      "start_requires": [],
-      "gate_requires": [
-        "V1-A"
-      ],
-      "checks": [
-        "rmb_join",
-        "axis_54",
-        "zero_b0",
-        "path_safety",
-        "servo_parity",
-        "reward_reset_history",
-        "actual_transition"
-      ]
-    },
-    "V1-C0": {
-      "gate": "G-C0",
-      "spec": "specs/V1-C0_world_model.md",
-      "start_requires": [
-        "V1-A",
-        "V1-B"
-      ],
-      "gate_requires": [
-        "V1-A",
-        "V1-B"
-      ],
-      "checks": [
-        "excitation",
-        "independent_holdout",
-        "one_four_eight",
-        "static",
-        "action_gradients",
-        "failure_boundary",
-        "actor_disabled"
-      ]
-    },
-    "V1-C1": {
-      "gate": "G-C1",
-      "spec": "specs/V1-C1_static.md",
-      "start_requires": [
-        "V1-C0"
-      ],
-      "gate_requires": [
-        "V1-C0"
-      ],
-      "checks": [
-        "static_learning",
-        "hold",
-        "functional",
-        "safety",
-        "world_model_current"
-      ]
-    },
-    "V1-C2": {
-      "gate": "G-C2",
-      "spec": "specs/V1-C2_dynamic.md",
-      "start_requires": [
-        "V1-C0",
-        "V1-C1"
-      ],
-      "gate_requires": [
-        "V1-C0",
-        "V1-C1"
-      ],
-      "checks": [
-        "original_rate",
-        "start_stop_reverse",
-        "static_retention",
-        "safety",
-        "world_model_current"
-      ]
-    },
-    "V1-C3": {
-      "gate": "G-C3",
-      "spec": "specs/V1-C3_mixed.md",
-      "start_requires": [
-        "V1-C0",
-        "V1-C2"
-      ],
-      "gate_requires": [
-        "V1-C0",
-        "V1-C2"
-      ],
-      "checks": [
-        "mixed_coverage",
-        "physical_rollout",
-        "regression_and_fallback",
-        "exploitation_watch",
-        "safety",
-        "world_model_current"
-      ]
-    },
-    "V1-D": {
-      "gate": "G-D",
-      "spec": "specs/V1-D_evaluation_deployment.md",
-      "start_requires": [
-        "V1-C0",
-        "V1-C3"
-      ],
-      "gate_requires": [
-        "V1-C0",
-        "V1-C3"
-      ],
-      "checks": [
-        "actual_paired_evaluation",
-        "release_grade_evidence",
-        "final_test_separation",
-        "independent_review"
-      ]
-    }
-  },
-  "audited_source_sha256": {
-    "source/dexgym/algorithms/supermimic/dex_reference/engine.py": "8121c53a1bfa436bc8a5c1bb43289fd92cdf234850bfa4fb9a4d6bbfc1f10fa4",
-    "source/dexgym/algorithms/supermimic/dex_reference/config.py": "68376519564e170b0a510482bc1a54a291bf23c5685c4687d8db02c1eba773f4",
-    "source/dexgym/algorithms/supermimic/dex_reference/buffer.py": "8837b7d86af4695fcf0f7110f6a012fcafd2c67b9e71b833d999951457080845",
-    "source/dexgym/algorithms/supermimic/dex_reference/networks.py": "633cfe173fb4988e86ca3f6117cda6c6a7abb0072d831c76ecbb8d0001108341",
-    "source/dexgym/tasks/direct/wholebody_s0_1/supermimic.py": "340c5b4604016835b0a06a091812d37967a2696030f77ea365791ca3411ec76d",
-    "source/dexgym/tasks/direct/wholebody_s04/train_aligned.py": "d9634e9a420d68ec961942d0abfae1699423b83562a85c6b40505e114af210fb",
-    "source/dexgym/tasks/direct/wholebody_s04/aligned_physics.py": "633b7cd4c3a0b0c5da49fe7e472ab363146e1901ff5a61041b398822bee1e0cb",
-    "source/dexgym/tasks/direct/wholebody_s04/aligned_task.py": "b5c3579db989036250f06e6128c44b161635d3487f21d82bda62a571ed1a6bc7",
-    "source/dexgym/tasks/direct/marvin54_s0/warp_physics.py": "7f3e71c0991246941df496054015ee06d0611b266cb1eb82d25c50d0d7ddbb8a",
-    "source/dexgym/tasks/direct/wholebody_s05/hmb_reader.py": "4496d6e518a6341cf3fa9c47e03f0aba2bbc91a0d809175d08f4328b50785e1b",
-    "source/dexgym/data/wuji_retarget.py": "9a103f6ed4370753f4b4dd71f526b834b1ce17b071e789099a4a6d2c78de3d88"
-  },
   "verification_artifacts": {
-    "evidence/P00_V2/check_design.py": "cc020d9d7f601ae6cf29b7b90e147c692827e84119be8bfcad62c7113bec7311",
-    "evidence/P00_V2/test_check_design.py": "999d69c25a802e84251de0da4efdcdfbe694e52adf175bc2ba483f4597051190",
-    "evidence/P00_V2/seal_design.py": "6b663683c253def102c2e6419a6c7d61892b477f4235e0c3ffced17a122863bc",
-    "evidence/P00_V2/verify_legacy.py": "02832e77655b3799bd47fbffd5f8f06f4f5a602bf3a91004e8eca6b2f9894bd0",
-    "evidence/P00_V2/design_policy.json": "4c96bb6c80946e6d4a3867a63bcd0b88c76525d211650dab3d84bbd66e5bc9d9",
-    "evidence/P00_V2/requirement_mapping.json": "06eb3872de1e8e42a7b8e7ab3b8d1c63c01989a9ab3d38955a7c7bc1b03649b2",
-    "evidence/P00_V2/historical_inputs.json": "9a34f1e970b7a1a7918562ba0e87cf7c21ba894a920a495ff34b641d5dd73037",
-    "evidence/P00_V2/independent_findings.md": "8a274bf9712b938b05f192e3a0c3dd78d296039a31bb67f0554f09831ee93baa",
-    "evidence/P00_V2/verification_results.json": "1b04268392db9b55fc288ce8cf06d5668d250804bdab72bee9ad6b3b122828de",
-    "agent_work_manifest.json": "dc31da487c3fce37a9c8ce691e513609a177761629f0af0356103145d9e195f9"
+    "evidence/P00_V2_1/agent_work_manifest.json": "b9fbaa9ee0e5774f87fd120448acbf1437697aa221f074952d92df7cd3b518fb",
+    "evidence/P00_V2_1/check_design.py": "3dafa8cccc8d9bcab604faa7e9df7a2bbf18f4c53acf517269c62d5a3a8f2adb",
+    "evidence/P00_V2_1/design_policy.json": "b231766fa0bd1d16ab4aaffbcbfa14cd318098fce9ef2995a0b42adbb25a317a",
+    "evidence/P00_V2_1/historical_inputs.json": "bb0153854af27c3217f5b7e518553805708e301bc8eab8733544b536fa2c7297",
+    "evidence/P00_V2_1/independent_findings.md": "05e70acdc718a43ba8fd8424574055520b94a6b98eba42f75266b890c2ff8cea",
+    "evidence/P00_V2_1/requirement_mapping.json": "2c125d23c135f5ebb093a4f6454b9cc1a58065bb36efb0093804a8d68142a6a1",
+    "evidence/P00_V2_1/seal_design.py": "376d6ab837f22b6f4aba9d45e8b020731bedaf12eb534600d4f79e5dc9053cbf",
+    "evidence/P00_V2_1/test_check_design.py": "08b02c46a705784d22d4fa94309899fdf9c0fd18947e18c5d92995aaccff3f8c",
+    "evidence/P00_V2_1/verification_results.json": "7bc802d92c46bf0fd97e10198c34ac2c81f57632059dedad158f2e31af829e6c",
+    "evidence/P00_V2_1/verify_baseline.py": "cfec6844b112f06d4417f337c34b9ed4310b3e8894bafdc53b41d790e3084ba9"
   },
-  "approval_status": "PENDING_HUMAN_REVIEW",
-  "execution_authorized": false,
-  "proposed_training_configuration": {
-    "status": "PRE_REGISTERED_CANDIDATE",
-    "seed": 49,
-    "initialization": "fresh_actor_world_model_critic",
-    "world_hidden": [
-      1280,
-      1280,
-      1280
+  "policy": {
+    "schema": "s05.v2.1.policy.v1",
+    "design_version": "2.0.1",
+    "reviewed_baseline": "f78ee27f4762fedca9529bf697560bb267f8c704",
+    "historical_sim0_commit": "c5af9af94d7b9d3f437c14df128441d1183bec56",
+    "stages": {
+      "V1-A": {
+        "gate": "G-A",
+        "spec": "specs/V1-A_offline_rmb.md",
+        "start_requires": [],
+        "gate_requires": [],
+        "checks": [
+          "archive_identity",
+          "lineage",
+          "causal_prefix",
+          "nominal_continuity",
+          "common_domain"
+        ]
+      },
+      "V1-B": {
+        "gate": "G-B",
+        "spec": "specs/V1-B_residual_environment.md",
+        "start_requires": [],
+        "gate_requires": [
+          "V1-A"
+        ],
+        "checks": [
+          "rmb_join",
+          "axis_54",
+          "zero_b0",
+          "path_safety",
+          "servo_parity",
+          "reward_reset_history",
+          "actual_transition"
+        ]
+      },
+      "V1-C0": {
+        "gate": "G-C0",
+        "spec": "specs/V1-C0_world_model.md",
+        "start_requires": [
+          "V1-A",
+          "V1-B"
+        ],
+        "gate_requires": [
+          "V1-A",
+          "V1-B"
+        ],
+        "checks": [
+          "excitation",
+          "independent_holdout",
+          "one_four_eight",
+          "static",
+          "action_gradients",
+          "failure_boundary",
+          "actor_disabled"
+        ]
+      },
+      "V1-C1": {
+        "gate": "G-C1",
+        "spec": "specs/V1-C1_static.md",
+        "start_requires": [
+          "V1-C0"
+        ],
+        "gate_requires": [
+          "V1-C0"
+        ],
+        "checks": [
+          "static_learning",
+          "hold",
+          "functional",
+          "safety",
+          "world_model_current"
+        ]
+      },
+      "V1-C2": {
+        "gate": "G-C2",
+        "spec": "specs/V1-C2_dynamic.md",
+        "start_requires": [
+          "V1-C0",
+          "V1-C1"
+        ],
+        "gate_requires": [
+          "V1-C0",
+          "V1-C1"
+        ],
+        "checks": [
+          "original_rate",
+          "start_stop_reverse",
+          "static_retention",
+          "safety",
+          "world_model_current"
+        ]
+      },
+      "V1-C3": {
+        "gate": "G-C3",
+        "spec": "specs/V1-C3_mixed.md",
+        "start_requires": [
+          "V1-C0",
+          "V1-C2"
+        ],
+        "gate_requires": [
+          "V1-C0",
+          "V1-C2"
+        ],
+        "checks": [
+          "mixed_coverage",
+          "physical_rollout",
+          "regression_and_fallback",
+          "exploitation_watch",
+          "safety",
+          "world_model_current"
+        ]
+      },
+      "V1-D0": {
+        "gate": "G-D0",
+        "spec": "specs/V1-D_evaluation_deployment.md",
+        "start_requires": [
+          "V1-C0",
+          "V1-C3"
+        ],
+        "gate_requires": [
+          "V1-C0",
+          "V1-C3"
+        ],
+        "checks": [
+          "frozen_pre_actor_support",
+          "physical_offline_precision",
+          "baseline_and_non_degradation",
+          "functional_safety"
+        ]
+      },
+      "V1-D1": {
+        "gate": "G-D1",
+        "spec": "specs/V1-D_teleop_replay_and_refinement.md",
+        "start_requires": [
+          "V1-D0"
+        ],
+        "gate_requires": [
+          "V1-D0"
+        ],
+        "checks": [
+          "artifact_and_schema_readiness",
+          "existing_graph",
+          "input_only_replay",
+          "paired_t0_t1_t2",
+          "cold_start_and_fallback"
+        ]
+      },
+      "V1-D2": {
+        "gate": "G-D2",
+        "spec": "specs/V1-D_teleop_replay_and_refinement.md",
+        "start_requires": [
+          "V1-D1"
+        ],
+        "gate_requires": [
+          "V1-D1"
+        ],
+        "checks": [
+          "interface_first_diagnosis",
+          "round_ledger",
+          "paired_offline_teleop_regression"
+        ]
+      },
+      "V1-E0": {
+        "gate": "G-E0",
+        "spec": "specs/V1-E_conditional_egopro_augmentation.md",
+        "start_requires": [
+          "V1-D0",
+          "V1-D1"
+        ],
+        "gate_requires": [
+          "V1-D0",
+          "V1-D1"
+        ],
+        "checks": [
+          "retained_policy_t",
+          "independent_distribution_gap",
+          "interface_checks",
+          "remaining_escrow"
+        ]
+      },
+      "V1-E1": {
+        "gate": "G-E1",
+        "spec": "specs/V1-E_conditional_egopro_augmentation.md",
+        "start_requires": [
+          "V1-E0"
+        ],
+        "gate_requires": [
+          "V1-E0"
+        ],
+        "checks": [
+          "isolated_bank_and_split",
+          "causal_masks_and_lineage",
+          "safety_and_intent"
+        ]
+      },
+      "V1-E2": {
+        "gate": "G-E2",
+        "spec": "specs/V2_1_egopro_training_and_regression.md",
+        "start_requires": [
+          "V1-E1"
+        ],
+        "gate_requires": [
+          "V1-E1"
+        ],
+        "checks": [
+          "training_pool_admission",
+          "expanded_wm_qualification",
+          "physical_budget_and_checkpoint"
+        ]
+      },
+      "V1-E3": {
+        "gate": "G-E3",
+        "spec": "specs/V2_1_egopro_training_and_regression.md",
+        "start_requires": [
+          "V1-E2"
+        ],
+        "gate_requires": [
+          "V1-E2"
+        ],
+        "checks": [
+          "expansion_gain",
+          "teleop_offline_retention",
+          "both_mcap_retention",
+          "independent_ablation_disposition"
+        ]
+      },
+      "V1-D3": {
+        "gate": "G-D3",
+        "spec": "specs/V1-D_teleop_replay_and_refinement.md",
+        "start_requires": [
+          "V1-D0",
+          "V1-D1",
+          "V1-D2"
+        ],
+        "gate_requires": [
+          "V1-D0",
+          "V1-D1",
+          "V1-D2"
+        ],
+        "checks": [
+          "final_offline_qualification",
+          "both_mcap_performance",
+          "release_grade_and_source"
+        ]
+      }
+    },
+    "proposed_training_configuration": {
+      "status": "PRE_REGISTERED_CANDIDATE",
+      "seed": 49,
+      "initialization": "fresh_actor_world_model_critic",
+      "world_hidden": [
+        1280,
+        1280,
+        1280
+      ],
+      "horizon": 8,
+      "wm_window": 8,
+      "wm_batch": 768,
+      "wm_batches": 3,
+      "policy_batch": 384,
+      "utd": 0.5,
+      "buffer_steps": 1800,
+      "warmup_steps": 66,
+      "wm_only_iterations": 350,
+      "wm_lr": 0.00011,
+      "actor_lr": 4e-05,
+      "actor_bootstrap_weight": 0.65,
+      "gamma": 0.99,
+      "lambda": 0.95,
+      "optimizer": "Fused Adam",
+      "critic_epochs": 3,
+      "physics_hz": 500,
+      "policy_hz": 50,
+      "initial_envs": 64,
+      "max_step_reward": 1,
+      "action_noise": "SEE_PRE_REGISTERED_CANDIDATE_REGISTRY",
+      "optional_b14_budget": 0,
+      "egopro": "CONDITIONAL_E0_E1_AND_E2_WM"
+    },
+    "resource_budget": {
+      "train_total": 20000000,
+      "train_static_bucket": 2000000,
+      "train_smoke_c0": 500000,
+      "train_dynamic": 8000000,
+      "train_mixed": 10000000,
+      "eval_total": 2000000,
+      "eval_c0": 700000,
+      "eval_training_watch": 650000,
+      "eval_release": 650000,
+      "gpu_count": 1,
+      "gpu_seconds": 172800,
+      "wall_seconds": 259200,
+      "blocked_wait_seconds": 86400,
+      "persistent_bytes": 268435456000,
+      "train_mixed_initial": 8000000,
+      "train_deploy_refinement": 1000000,
+      "train_egopro": 1000000,
+      "eval_pre_actor_domain": 100000,
+      "eval_d0": 200000,
+      "eval_d1": 150000,
+      "eval_d2_e": 100000,
+      "eval_d3": 200000
+    },
+    "allowed_autonomous_changes": {
+      "retries_per_stage": 2,
+      "c0_calibration_trials": 3,
+      "learning_variants_per_stage": 2,
+      "lr_multiplier": [
+        0.75,
+        1.25
+      ],
+      "positive_reward_multiplier": [
+        0.75,
+        1.25
+      ],
+      "horizon": [
+        4,
+        6,
+        8
+      ],
+      "exploration_multiplier": [
+        0.5,
+        1.5
+      ],
+      "curriculum_shift_percentage_points": 15,
+      "source": "MULTI_AGENT_PROTOCOL.md",
+      "deployment_rounds": 2,
+      "egopro_wm_trials": 2,
+      "egopro_policy_variants": 2,
+      "egopro_reference_fraction": [
+        0.1,
+        0.3
+      ],
+      "egopro_fraction_initial": 0.2
+    },
+    "forbidden_changes": [
+      "direction",
+      "original_hmb",
+      "split",
+      "scoring_target_or_domain_rules",
+      "acceptance_metrics",
+      "safety_authority",
+      "resource_cap",
+      "real_permissions",
+      "regression_source_or_descendants_into_new_training",
+      "post_actor_domain_or_mapper_selection",
+      "unqualified_egopro_actor",
+      "diagnostic_promoted_as_normal_pass"
     ],
-    "horizon": 8,
-    "wm_window": 8,
-    "wm_batch": 768,
-    "wm_batches": 3,
-    "policy_batch": 384,
-    "utd": 0.5,
-    "buffer_steps": 1800,
-    "warmup_steps": 66,
-    "wm_only_iterations": 350,
-    "wm_lr": 0.00011,
-    "actor_lr": 4e-05,
-    "actor_bootstrap_weight": 0.65,
-    "gamma": 0.99,
-    "lambda": 0.95,
-    "optimizer": "Fused Adam",
-    "critic_epochs": 3,
-    "physics_hz": 500,
-    "policy_hz": 50,
-    "initial_envs": 64,
-    "max_step_reward": 1,
-    "action_noise": "SEE_PRE_REGISTERED_CANDIDATE_REGISTRY",
-    "optional_b14_budget": 0
-  },
-  "resource_budget": {
-    "train_total": 20000000,
-    "train_static_bucket": 2000000,
-    "train_smoke_c0": 500000,
-    "train_dynamic": 8000000,
-    "train_mixed": 10000000,
-    "eval_total": 2000000,
-    "eval_c0": 700000,
-    "eval_training_watch": 650000,
-    "eval_release": 650000,
-    "gpu_count": 1,
-    "gpu_seconds": 172800,
-    "wall_seconds": 259200,
-    "blocked_wait_seconds": 86400,
-    "persistent_bytes": 268435456000
-  },
-  "allowed_autonomous_changes": {
-    "retries_per_stage": 2,
-    "c0_calibration_trials": 3,
-    "learning_variants_per_stage": 2,
-    "lr_multiplier": [
-      0.75,
-      1.25
-    ],
-    "positive_reward_multiplier": [
-      0.75,
-      1.25
-    ],
-    "horizon": [
-      4,
-      6,
-      8
-    ],
-    "exploration_multiplier": [
-      0.5,
-      1.5
-    ],
-    "curriculum_shift_percentage_points": 15,
-    "source": "MULTI_AGENT_PROTOCOL.md"
-  },
-  "forbidden_changes": [
-    "direction",
-    "original_hmb",
-    "split",
-    "scoring_target_or_domain_rules",
-    "acceptance_metrics",
-    "safety_authority",
-    "resource_cap",
-    "real_permissions"
-  ],
-  "deployment_grades": {
-    "EXPORTABLE": [
-      "trained_actor",
-      "export_parity"
-    ],
-    "SIM_DEPLOYABLE": [
-      "exportable",
-      "isolated_inference",
-      "causal_prefix",
-      "fallback",
-      "streaming_closed_loop",
-      "no_rmb"
-    ],
-    "SIM_RECOMMENDED": [
-      "sim_deployable",
-      "v1_performance_gate"
-    ],
-    "REAL_DEPLOYABLE": [
+    "deployment_grades": {
+      "EXPORTABLE": [
+        "trained_actor",
+        "export_parity"
+      ],
+      "SIM_DEPLOYABLE": [
+        "exportable",
+        "isolated_inference",
+        "causal_prefix",
+        "fallback",
+        "streaming_closed_loop",
+        "no_rmb"
+      ],
+      "SIM_RECOMMENDED": [
+        "sim_deployable",
+        "v1_performance_gate"
+      ],
+      "REAL_DEPLOYABLE": [
+        "physical_robot_base",
+        "C2-RT",
+        "P01-T",
+        "hardware_servo",
+        "external_metrology",
+        "site_safety",
+        "shadow",
+        "hil",
+        "human_real_approval"
+      ],
+      "TELEOP_SIM_VALIDATED": [
+        "sim_deployable",
+        "existing_mujoco_teleop_graph",
+        "both_mcap_functional",
+        "same_zero_residual",
+        "cold_start_and_fallback"
+      ],
+      "TELEOP_SIM_RECOMMENDED": [
+        "teleop_sim_validated",
+        "offline_absolute",
+        "offline_relative_and_non_degradation",
+        "both_mcap_performance",
+        "final_dual_regression"
+      ]
+    },
+    "formal_scoring_requirements": [
       "physical_robot_base",
       "C2-RT",
       "P01-T",
       "hardware_servo",
       "external_metrology",
-      "site_safety",
-      "shadow",
-      "hil",
-      "human_real_approval"
+      "formal_scoring_human_approval"
+    ],
+    "final_test_requirements": [
+      "final_test_sealed",
+      "access_log",
+      "independent_lineage",
+      "final_test_human_approval"
+    ],
+    "approval_status": "PENDING_HUMAN_REVIEW",
+    "execution_authorized": false,
+    "baseline_candidate_sha256": "dda0c8254d0c8e637bbe1ee14d1bdfbf8b6b7309a8209263fc350a0c3e4561ea",
+    "conditional_dependencies": {
+      "V1-E0": [
+        "independently_verified_D2_diagnosis",
+        "policy_T_offline_and_existing_teleop",
+        "remaining_E_escrow",
+        "explicit_optional_E_scope"
+      ],
+      "V1-E2_ACTOR_UPDATE": [
+        "V1-E1",
+        "expanded_wm_qualification",
+        "immutable_train_pool"
+      ],
+      "V1-D3_POLICY_E": [
+        "V1-E3"
+      ],
+      "V1-C1_ACTOR_UPDATE": [
+        "pre_actor_offline_domain_freeze"
+      ],
+      "DIAGNOSTIC_EXPORT": [
+        "trusted_existing_checkpoint",
+        "verified_safety_function_causality",
+        "export_parity",
+        "failed_performance_only"
+      ]
+    },
+    "diagnostic_export_max_grade": "EXPORTABLE",
+    "performance_candidates": {
+      "static_offline_mm": 5.0,
+      "dynamic_offline_mm": 10.0,
+      "primary_offline_relative_gain": 0.1,
+      "teleop_relative_gain": 0.1,
+      "full_domain_max_relative_degradation": 0.05,
+      "control_failure_max_delta": 0.01,
+      "hard_safety_violations": 0,
+      "static_min_targets": 40,
+      "primary_min_validation_roots": 6,
+      "dynamic_min_unique_ticks": 1000,
+      "static_hold_ticks": 100,
+      "static_score_ticks": 25,
+      "minimum_cold_starts_per_bag_method": 2,
+      "timing_protocol": "EVALUATION_PROTOCOL.md",
+      "all_candidates": "PRE_REGISTERED_CANDIDATE",
+      "static_min_fraction": 0.2,
+      "dynamic_min_fraction": 0.1,
+      "teleop_min_unique_ticks": 500,
+      "teleop_min_nonoverlap_windows": 2,
+      "teleop_min_window_ticks": 25,
+      "reference_floor_mm": 0.25,
+      "near_zero_max_delta_mm": 0.25,
+      "aggr": "failure_composite_nearest_rank"
+    },
+    "regression_recordings": [
+      {
+        "id": "s0_sim_20261119_172809",
+        "path": "/home/ubuntu/teleop_ws/data/s0_sim_20261119_172809/s0_sim_20261119_172809_0.mcap",
+        "sha256": "ffd5353918e38e6527b534aa3263baa20d7cb3f8a868d91f33b8644cbd437817",
+        "role": "TELEOP_DEPLOYMENT_REGRESSION",
+        "training_admission": false
+      },
+      {
+        "id": "s0_sim_20261117_181022",
+        "path": "/home/ubuntu/teleop_ws/data/s0_sim_20261117_181022/s0_sim_20261117_181022_0.mcap",
+        "sha256": "cbac62bb6d58ce2fa159d547408cf3534a29c32ca8b0bba1cddc8c4bc99ba1f5",
+        "role": "TELEOP_DEPLOYMENT_REGRESSION",
+        "training_admission": false
+      }
     ]
   },
-  "formal_scoring_requirements": [
-    "physical_robot_base",
-    "C2-RT",
-    "P01-T",
-    "hardware_servo",
-    "external_metrology",
-    "formal_scoring_human_approval"
-  ],
-  "final_test_requirements": [
-    "final_test_sealed",
-    "access_log",
-    "independent_lineage",
-    "final_test_human_approval"
-  ]
+  "approval_status": "PENDING_HUMAN_REVIEW",
+  "execution_authorized": false
 }

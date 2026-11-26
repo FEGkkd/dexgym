@@ -1,0 +1,31 @@
+{
+  "reviewed_baseline": "f78ee27f4762fedca9529bf697560bb267f8c704",
+  "baseline_candidate_sha256": "dda0c8254d0c8e637bbe1ee14d1bdfbf8b6b7309a8209263fc350a0c3e4561ea",
+  "teleop_git": "6d0b0b5b2601618f1b0052d93ef2403eea9b064a",
+  "teleop_branch": "codex/whole-body-sim-phase1",
+  "ubuntu_teleop_reference": "/home/ubuntu/dexgym_worktrees/teleop-sim0-study",
+  "ubuntu_user_worktree": "/home/ubuntu/teleop_ws",
+  "user_worktree_dirty_4sensor": true,
+  "ubuntu_egopro_directory_observed": "/home/ubuntu/dexgym/data/egopro",
+  "bag_readonly_scope": "stat, readability, SHA-256 and adjacent recorder metadata; no frame decoding, replay, event verification or qualification",
+  "bags": [
+    {
+      "id": "s0_sim_20261119_172809",
+      "sha256": "ffd5353918e38e6527b534aa3263baa20d7cb3f8a868d91f33b8644cbd437817",
+      "bytes": 132641216,
+      "metadata_duration_ns": 69260778050,
+      "metadata_message_count": 103707,
+      "metadata_sha256": "7a25f57ef0f6aa8ff156da7036e08a75e728b430c58e19a95acfc63d09440806"
+    },
+    {
+      "id": "s0_sim_20261117_181022",
+      "sha256": "cbac62bb6d58ce2fa159d547408cf3534a29c32ca8b0bba1cddc8c4bc99ba1f5",
+      "bytes": 229433886,
+      "metadata_duration_ns": 119700535066,
+      "metadata_message_count": 182620,
+      "metadata_sha256": "1c45af7b4d9ca294bb7960fcecd6e3c58875e88e2f6ce614465017295434d26b"
+    }
+  ],
+  "historical_contracts": "evidence/P00_V2/historical_inputs.json",
+  "note": "Teleop metadata lists bilateral ManusGlove and TrackerPose, workflow/control phase, policy status/metrics and command/feedback. Full raw schema, usable event mapping, position initialization and ancestry remain formal D1 preflight obligations."
+}

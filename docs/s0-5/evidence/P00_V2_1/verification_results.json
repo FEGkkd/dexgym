@@ -1,0 +1,129 @@
+{
+  "schema": "s05.v2.1.design-verification.v1",
+  "scope": "DESIGN_REVISION_ONLY",
+  "execution_authorized": false,
+  "checked_baseline": "f78ee27f4762fedca9529bf697560bb267f8c704",
+  "commands": [
+    {
+      "command": "python -B docs/s0-5/evidence/P00_V2_1/check_design.py",
+      "exit": 0,
+      "output": [
+        "PASS historical P00–P02: 274 preserved paths, scoped SIM0 object, 11 audited source SHAs",
+        "PASS immutable v2.0.0 freeze, original evidence and two MCAP identities",
+        "PASS 39 active files, 41 requirements, 14 stages, 327 links",
+        "PASS DESIGN_READY_FOR_REVIEW; execution_authorized=false; all stages NOT_STARTED",
+        "External target: https://github.com/FEGkkd/whole-body-teleop/tree/6d0b0b5b2601618f1b0052d93ef2403eea9b064a",
+        "External target: https://github.com/FEGkkd/whole-body-teleop/tree/codex/whole-body-sim-phase1"
+      ]
+    },
+    {
+      "command": "python -B docs/s0-5/evidence/P00_V2_1/test_check_design.py",
+      "exit": 0,
+      "synthetic_cases": 30,
+      "output": [
+        "test_changed_final_target_rejected (__main__.SyntheticCampaign.test_changed_final_target_rejected) ... ok",
+        "test_changed_gates_cannot_use_old_approval (__main__.SyntheticCampaign.test_changed_gates_cannot_use_old_approval) ... ok",
+        "test_changed_pre_actor_domain_rejected (__main__.SyntheticCampaign.test_changed_pre_actor_domain_rejected) ... ok",
+        "test_d0_before_d1_and_exact_candidate (__main__.SyntheticCampaign.test_d0_before_d1_and_exact_candidate) ... ok",
+        "test_d0_failed_precision_cannot_recommend (__main__.SyntheticCampaign.test_d0_failed_precision_cannot_recommend) ... ok",
+        "test_d1_functional_grade_without_d3_performance (__main__.SyntheticCampaign.test_d1_functional_grade_without_d3_performance) ... ok",
+        "test_d3_policy_e_start_requires_completed_retention (__main__.SyntheticCampaign.test_d3_policy_e_start_requires_completed_retention) ... ok",
+        "test_diagnostic_export_is_isolated (__main__.SyntheticCampaign.test_diagnostic_export_is_isolated) ... ok",
+        "test_ego_cannot_charge_other_training_escrow (__main__.SyntheticCampaign.test_ego_cannot_charge_other_training_escrow) ... ok",
+        "test_egopro_wm_only_then_actor_update (__main__.SyntheticCampaign.test_egopro_wm_only_then_actor_update) ... ok",
+        "test_exhausted_egopro_escrow_cannot_trigger (__main__.SyntheticCampaign.test_exhausted_egopro_escrow_cannot_trigger) ... ok",
+        "test_expansion_must_retain_original_teleop (__main__.SyntheticCampaign.test_expansion_must_retain_original_teleop) ... ok",
+        "test_expansion_start_needs_e1_bank_qualification (__main__.SyntheticCampaign.test_expansion_start_needs_e1_bank_qualification) ... ok",
+        "test_frozen_design_status_and_immutable_past (__main__.SyntheticCampaign.test_frozen_design_status_and_immutable_past) ... ok",
+        "test_low_error_support_cannot_cherry_pick (__main__.SyntheticCampaign.test_low_error_support_cannot_cherry_pick) ... ok",
+        "test_missing_cold_restart_rejected (__main__.SyntheticCampaign.test_missing_cold_restart_rejected) ... ok",
+        "test_near_zero_baseline_not_relative_pass (__main__.SyntheticCampaign.test_near_zero_baseline_not_relative_pass) ... ok",
+        "test_nested_budget_overrun_despite_total_headroom (__main__.SyntheticCampaign.test_nested_budget_overrun_despite_total_headroom) ... ok",
+        "test_original_design_cannot_activate_optional_ego (__main__.SyntheticCampaign.test_original_design_cannot_activate_optional_ego) ... ok",
+        "test_policy_e_pass_and_policy_t_remains_valid_path (__main__.SyntheticCampaign.test_policy_e_pass_and_policy_t_remains_valid_path) ... ok",
+        "test_policy_e_requires_training_checkpoint_identity (__main__.SyntheticCampaign.test_policy_e_requires_training_checkpoint_identity) ... ok",
+        "test_pooled_gain_and_separate_bags (__main__.SyntheticCampaign.test_pooled_gain_and_separate_bags) ... ok",
+        "test_recorded_commands_feedback_or_rmb_are_rejected (__main__.SyntheticCampaign.test_recorded_commands_feedback_or_rmb_are_rejected) ... ok",
+        "test_regression_source_or_derivative_denied_in_training (__main__.SyntheticCampaign.test_regression_source_or_derivative_denied_in_training) ... ok",
+        "test_simple_simulator_is_not_teleop_acceptance (__main__.SyntheticCampaign.test_simple_simulator_is_not_teleop_acceptance) ... ok",
+        "test_standalone_runtime_is_separately_proven (__main__.SyntheticCampaign.test_standalone_runtime_is_separately_proven) ... ok",
+        "test_unauthorized_real_robot_rejected (__main__.SyntheticCampaign.test_unauthorized_real_robot_rejected) ... ok",
+        "test_unsigned_execution_rejected (__main__.SyntheticCampaign.test_unsigned_execution_rejected) ... ok",
+        "test_verified_d2_e0_trigger (__main__.SyntheticCampaign.test_verified_d2_e0_trigger) ... ok",
+        "test_wrong_post_refinement_artifact_rejected (__main__.SyntheticCampaign.test_wrong_post_refinement_artifact_rejected) ... ok",
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 30 tests in 3.024s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "command": "python -B docs/s0-5/evidence/P00_V2_1/verify_baseline.py",
+      "exit": 0,
+      "legacy_synthetic_cases": 21,
+      "output": [
+        "Original candidate f78ee27f4762fedca9529bf697560bb267f8c704: check_design.py",
+        "PASS historical P00–P02: 274 preserved paths, scoped SIM0 object, 11 audited source SHAs",
+        "PASS 36 active files, 291 links, 35 requirements, 7 V1 stages",
+        "PASS evidence/hash integrity and design-only state; external URLs: 2",
+        "  https://github.com/FEGkkd/whole-body-teleop/tree/6d0b0b5b2601618f1b0052d93ef2403eea9b064a",
+        "  https://github.com/FEGkkd/whole-body-teleop/tree/codex/whole-body-sim-phase1",
+        "Original candidate f78ee27f4762fedca9529bf697560bb267f8c704: test_check_design.py",
+        "test_agent_cannot_mint_approval (__main__.DesignControls.test_agent_cannot_mint_approval) ... ok",
+        "test_b_preparation_but_no_formal_gate_before_a (__main__.DesignControls.test_b_preparation_but_no_formal_gate_before_a) ... ok",
+        "test_c0_requires_a_and_b (__main__.DesignControls.test_c0_requires_a_and_b) ... ok",
+        "test_changed_scoring_threshold_hash_is_rejected (__main__.DesignControls.test_changed_scoring_threshold_hash_is_rejected) ... ok",
+        "test_changed_upstream_invalidates_transitive_gate (__main__.DesignControls.test_changed_upstream_invalidates_transitive_gate) ... ok",
+        "test_d_cannot_bypass_c3 (__main__.DesignControls.test_d_cannot_bypass_c3) ... ok",
+        "test_design_dag_cannot_drop_c3 (__main__.DesignControls.test_design_dag_cannot_drop_c3) ... ok",
+        "test_design_only_fixture_has_no_capability (__main__.DesignControls.test_design_only_fixture_has_no_capability) ... ok",
+        "test_final_test_and_formal_scoring_are_separate_gates (__main__.DesignControls.test_final_test_and_formal_scoring_are_separate_gates) ... ok",
+        "test_historical_phase_events_are_immutable (__main__.DesignControls.test_historical_phase_events_are_immutable) ... ok",
+        "test_m1_static_approval_does_not_authorize_continuous (__main__.DesignControls.test_m1_static_approval_does_not_authorize_continuous) ... ok",
+        "test_qualified_actor_stage (__main__.DesignControls.test_qualified_actor_stage) ... ok",
+        "test_real_deploy_needs_independent_hardware_evidence (__main__.DesignControls.test_real_deploy_needs_independent_hardware_evidence) ... ok",
+        "test_resource_cap_includes_reservations (__main__.DesignControls.test_resource_cap_includes_reservations) ... ok",
+        "test_resource_totals_cannot_hide_subbuckets (__main__.DesignControls.test_resource_totals_cannot_hide_subbuckets) ... ok",
+        "test_retry_exhaustion (__main__.DesignControls.test_retry_exhaustion) ... ok",
+        "test_same_author_review_rejected (__main__.DesignControls.test_same_author_review_rejected) ... ok",
+        "test_scoped_human_authorization_allows_a (__main__.DesignControls.test_scoped_human_authorization_allows_a) ... ok",
+        "test_stale_world_model_inputs_rejected (__main__.DesignControls.test_stale_world_model_inputs_rejected) ... ok",
+        "test_tampered_gate_metric_evidence (__main__.DesignControls.test_tampered_gate_metric_evidence) ... ok",
+        "test_tampered_historical_receipt_rejected (__main__.DesignControls.test_tampered_historical_receipt_rejected) ... ok",
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 21 tests in 0.217s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0
+    }
+  ],
+  "independent_review": {
+    "work_package": "v21_independent",
+    "findings": 8,
+    "interim_synthetic_cases": 26,
+    "independent_additional_boundary_fixtures": 7,
+    "findings_path": "evidence/P00_V2_1/independent_findings.md"
+  },
+  "read_only_ubuntu_checks": [
+    "existing Git/source identities",
+    "two MCAP file identities and metadata",
+    "historical EgoPro directory existence"
+  ],
+  "execution": "NOT_RUN",
+  "integration_corrections": [
+    {
+      "finding": "Mixed line endings in independent review caused three staged whitespace reports",
+      "disposition": "Normalized only formatting, then regenerated document and release hashes"
+    },
+    {
+      "finding": "D3 selection of Policy-E needed an explicit E3 dependency before allocating final regression work",
+      "disposition": "Check conditional gate at START as well as PASS/RELEASE, add positive and negative fixture"
+    }
+  ]
+}

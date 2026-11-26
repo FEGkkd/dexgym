@@ -1,4 +1,4 @@
-# S0-5 v2.0.0 V1-C1 静态精度训练
+# S0-5 v2.0.1 V1-C1 静态精度训练
 
 状态 DRAFT_READY_FOR_REVIEW，技术门 G-C1。主责 WM & Training Agent，Independent Reviewer 复算 B0、B54 和阶段门。前置 G-C0 通过且当前合格 WM、G-A/B 证据及整体授权有效。
 
@@ -37,3 +37,5 @@ C0+B 已耗从 C0+C1 共 2M 物理训练预算扣除，暖场、恢复和失败�
 ## 复现、交付及下游
 
 用 v1/<campaign_id>/V1-C1/<run_id>/gate_receipt.json 链接实际 SHA、样本身份/分母、动作日志、误差失败、进程状态、checkpoint、评分脚本和 Reviewer 记录。交付通过门的完整 checkpoint、静态守门集合和困难索引，C2 续用，关键问题未关闭时阻塞。
+
+本阶段承接正式 Actor 前的绝对静态能力域 SHA 与来源，后续 D0 用独立实际闭环验证绝对精度。 [验收](V1-D_evaluation_deployment.md)

@@ -1,4 +1,4 @@
-# S0-5 v2.0.0 V1-B 残差环境与 SuperMimic 适配
+# S0-5 v2.0.1 V1-B 残差环境与 SuperMimic 适配
 
 状态 DRAFT_READY_FOR_REVIEW，技术门 G-B。负责 Physics & Task Agent，独立 Reviewer 查验实际执行。依赖整体 Campaign 授权、锁定 V2.0 配置与技术证据。获授权后可与 V1-A 并行使用有身份的合成输入。正式 G-B 需 G-A 已通过，并完成真实 RMB 接线及实样本检查。
 
@@ -45,3 +45,5 @@
 固定 fixture、模型、seed、执行命令、退出状态、源与配置 SHA、日志、测试均由 v1/<campaign_id>/V1-B/<run_id>/gate_receipt.json 链接。交付运行 SHA、Builder 和真实 RMB 兼容记录。C0 拟合前再次确认身份和可控性。
 
 计划任务模块命名采用追踪矩阵的 `wholebody_s05/v1/task/`，学习 adapter 由 `wholebody_s05/v1/learning/` 管理。
+
+G-B 预留同一 CPU/Warp 模型、Servo、安全和初始状态供预 Actor 的连续低误差见证。见证采样属于真实仿真评估，计入 C0 评估分池，与 Actor 成绩隔离。 [冻结规则](V1-A_offline_rmb.md)
