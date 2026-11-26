@@ -1,0 +1,217 @@
+{
+  "implementation_and_review_separated": true,
+  "input_commit": "ecd12ecd6657539e44830dde07c6055c6c507192",
+  "main_executed_authoritative_ubuntu_jobs": [
+    "A_M1_match",
+    "B_independent_math_score"
+  ],
+  "parallel_agents": 3,
+  "run": "P02-FINAL-20261126-ecd12ec",
+  "schema": "s05.agent_work_manifest.v1",
+  "work_packages": [
+    {
+      "actual_commands": [
+        "/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python -P docs/s0-5/evidence/P02/final_handoff/m1_pairing.py --refinement-receipt docs/s0-5/evidence/P02/refinement/execution_receipt.json --matched /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/matched-01/matched_candidates.json --original /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/intent-02/study_records.json --output /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-FINAL-20261126-ecd12ec/m1-01/m1_pairing.json",
+        ".venv/bin/python -P -m unittest discover -s tests/s0_5/unit -p test_p02*.py -v"
+      ],
+      "agent_role": "A_M1_match",
+      "engineering_basis": "Apply identical arm seed vectors to the same multi-task constrained problem. Rerun 3 starts per mode.",
+      "findings": [
+        "fixed-hand guard checks every evaluated 14-mode state",
+        "no optional 14→54 extra solve"
+      ],
+      "input_commit": "ecd12ecd6657539e44830dde07c6055c6c507192",
+      "negative_tests": [
+        "unit negatives reject swapped identity and changes to an SDK hold. Timeout and unavailable source rows kept"
+      ],
+      "output_paths": [
+        "reports/P02_M1_dof_pairing.md",
+        "evidence/P02/final_handoff/m1_pairing_summary.json",
+        "evidence/P02/final_handoff/p02_unit_tests.txt",
+        "m1-01/m1_pairing.json",
+        "m1-01/stderr",
+        "m1-01/resources.txt",
+        "docs/s0-5/evidence/P02/final_handoff/m1_pairing.py",
+        "tests/s0_5/unit/test_p02_m1_pairing.py"
+      ],
+      "output_sha256": {
+        "docs/s0-5/evidence/P02/final_handoff/m1_pairing.py": "abfff3cdba428f144be227934a510e5e5a13b6fb9adaa4c5b00cc2c6a6980f4e",
+        "evidence/P02/final_handoff/m1_pairing_summary.json": "466d77ee749d20b04f17fcaa171918b1b4270a789f059bfdf3d580a00e2f9edd",
+        "evidence/P02/final_handoff/p02_unit_tests.txt": "9c677c312fbca6579cd7c17ce1ccfbf4e31e90a0cc92b16aacfba750d56f8ede",
+        "m1-01/m1_pairing.json": "0cf1cd2b3c4f1c42cadd6580ea397594db70136de5b81fe073d7b8823b906f21",
+        "m1-01/resources.txt": "6529395115e92419b2e5962eae97fa783ad6d12f57c0b4c0cab5c8513c7eb285",
+        "m1-01/stderr": "bcf7f4c85268727f370854b874bf927bd064be28d6ee3cdf47646859004112ea",
+        "reports/P02_M1_dof_pairing.md": "f13653770dea0286b686af86cda85e1aea18671d1138a1b0547691ac727a9d51",
+        "tests/s0_5/unit/test_p02_m1_pairing.py": "90367ffa34c87428bcac81f2ab13fb9eea6917756b5d160a755a06050d1d4fc1"
+      },
+      "positive_tests": [
+        "Ubuntu total 20 P02 unit tests PASS",
+        "A emitted 35 strict matched legal pairs with repeated model checks"
+      ],
+      "read_ownership": [
+        "reviewed M0 original and M1 matching archives",
+        "signed model assets"
+      ],
+      "remaining_uncertainty": [
+        "static nonconvex witness search and independent practical Servo remain separate"
+      ],
+      "role": "Experiment implementation",
+      "task_scope": "M1 only, matched frozen fixed SDK arms14 and whole54 study",
+      "write_ownership": [
+        "docs/s0-5/evidence/P02/final_handoff/m1_pairing.py",
+        "tests/s0_5/unit/test_p02_m1_pairing.py"
+      ]
+    },
+    {
+      "actual_commands": [
+        "/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python -P docs/s0-5/evidence/P02/final_handoff/independent_audit.py --repo /home/ubuntu/dexgym_worktrees/s0-5 --original /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/intent-02/study_records.json --matched /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/matched-01/matched_candidates.json --pairing /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-FINAL-20261126-ecd12ec/m1-01/m1_pairing.json --output /home/ubuntu/dexgym_data/s0-5/p02/runs/P02-FINAL-20261126-ecd12ec/audit-01/independent_audit.json"
+      ],
+      "agent_role": "B_independent_math_score",
+      "engineering_basis": "Independent FK metrics, exhaustive oracle-pair distance recheck and constructive legal upper bound",
+      "findings": [
+        "PASS_STATIC_RESEARCH_ONLY",
+        "H1–H4 control algorithm candidate documented without P03 implementation"
+      ],
+      "input_commit": "ecd12ecd6657539e44830dde07c6055c6c507192",
+      "negative_tests": [
+        "synthetic translated target positive radial rejection in local audit",
+        "scope checks reject formal or P03 authorization"
+      ],
+      "output_paths": [
+        "reports/P02_final_independent_audit.md",
+        "evidence/P02/final_handoff/independent_audit_summary.json",
+        "audit-01/independent_audit.json",
+        "audit-01/stdout",
+        "audit-01/resources.txt",
+        "docs/s0-5/evidence/P02/final_handoff/independent_audit.py"
+      ],
+      "output_sha256": {
+        "audit-01/independent_audit.json": "2cb9acb8148a87354c797805e4a9a8219be5dcbc5dc990079d98ef0bc102650f",
+        "audit-01/resources.txt": "96d47b0bf5ddc7e5d34d33af84545c7f543fd0afa1627054c3d8f5994d29c9ce",
+        "audit-01/stdout": "d1a771e40702041ed6f8ad35f9eb3a13bce9897c3b21d034f70acbf09a1d3ced",
+        "docs/s0-5/evidence/P02/final_handoff/independent_audit.py": "0fa5d14dc8008fe5b9a2350f87c71f9aac840f3a7ba5c4e41363902658126630",
+        "evidence/P02/final_handoff/independent_audit_summary.json": "5c6fec9de7af2df03654baaeb3c41a58390f7bab218c85a9e34225ac3d55e398",
+        "reports/P02_final_independent_audit.md": "fee147e184630de9a388ba1136cf3b190244b17a57092a2c04230b742532c66a"
+      },
+      "positive_tests": [
+        "full independent recheck of 35 strict paired cases and 71 model assets on Ubuntu"
+      ],
+      "read_ownership": [
+        "A result and program",
+        "signed original, refinement, model and scoring candidate"
+      ],
+      "remaining_uncertainty": [
+        "external physical scoring and future nominal-control empirical feasibility remain pending"
+      ],
+      "role": "Independent reviewer",
+      "task_scope": "Independent signed-source, collision, per-mode fairness and scoring-boundary audit",
+      "write_ownership": [
+        "docs/s0-5/evidence/P02/final_handoff/independent_audit.py",
+        "docs/s0-5/reports/P02_final_independent_audit.md"
+      ]
+    },
+    {
+      "actual_commands": [
+        "git -C implementation/whole-body-teleop rev-parse HEAD",
+        "git -C implementation/whole-body-teleop status --porcelain=v1 --untracked-files=no",
+        "rg -n 'publishTime|receivedAt' implementation/s05-p02-final-teleop-source/src/manus_ros2/src/ManusDataPublisher.cpp",
+        "rg -n 'GetDeviceToAbsoluteTrackingPose|header.stamp' implementation/s05-p02-final-teleop-source/src/vive_tracker_ros/src/vive_tracker_node.cpp",
+        "rg -n 'TraceEvent|read_feedback|publish_feedback' implementation/s05-p02-final-teleop-source/src/tianji_real_driver/src/real_driver_node.cpp",
+        "rg -n 'applied_command_pub_|feedback_.accept|publish_state' implementation/s05-p02-final-teleop-source/src/wuji_hand2_real_driver/src/node.cpp",
+        "$env:S05_HW_SOURCE_SNAPSHOT=(Resolve-Path -LiteralPath 'implementation/s05-p02-final-teleop-source').Path; $env:PYTHONPATH=(Resolve-Path -LiteralPath 'implementation/marvin54_runtime').Path; $e=Get-Content -Raw 'implementation/dexgym-s05-c-review/docs/s0-5/evidence/P02/final_handoff/hardware_evidence.json' | ConvertFrom-Json; $e.repro.python | & 'C:/Python314/python.exe' -B -"
+      ],
+      "agent_role": "C_hardware_plan",
+      "engineering_basis": "Physical reference, explicit clock error bounds, actual application identity, disjoint system-ID validation",
+      "findings": [
+        "three hardware prerequisites independently BLOCKED",
+        "shared capture and site checklists prepared"
+      ],
+      "input_commit": "ecd12ecd6657539e44830dde07c6055c6c507192",
+      "negative_tests": [
+        "signed transform and reflection, timestamp and command-identity counterexamples, see hardware_evidence"
+      ],
+      "output_paths": [
+        "reports/P02_hardware_prerequisite_readiness.md",
+        "specs/HARDWARE_SHARED_MEASUREMENT_PLAN.md",
+        "evidence/P02/final_handoff/hardware_evidence.json",
+        "evidence/P02/final_handoff/teleop_code_provenance.json",
+        "teleop_code_provenance.json"
+      ],
+      "output_sha256": {
+        "evidence/P02/final_handoff/hardware_evidence.json": "900aa4aed15c6e718049e7eb45ed5c4541f3d013308c5a75072c0b3fba0c0614",
+        "evidence/P02/final_handoff/teleop_code_provenance.json": "8d03a59fa99e10508f8020abfe2eee0466b143d47d7c0109f7902b3dc1763c39",
+        "reports/P02_hardware_prerequisite_readiness.md": "14bf541ff7a90dc97a8179001516817e85845b0794cce088c510161cb3cb13ed",
+        "specs/HARDWARE_SHARED_MEASUREMENT_PLAN.md": "51a47014c692047718c399d4035b7108ff0a71adc04f92ebbea1e4806ad56d47",
+        "teleop_code_provenance.json": "8d03a59fa99e10508f8020abfe2eee0466b143d47d7c0109f7902b3dc1763c39"
+      },
+      "positive_tests": [
+        "source snapshot byte checks and pure offline synthetic calibration/joins, see hardware_evidence"
+      ],
+      "read_ownership": [
+        "19 selected actual Teleop working-tree sources",
+        "existing read-only design and historical evidence"
+      ],
+      "remaining_uncertainty": [
+        "installed runtime, device trace, calibrated tools and site approval still unverified"
+      ],
+      "role": "Independent hardware evidence design",
+      "task_scope": "Physical robot-base registration, C2-RT and P01-T shared acquisition specification",
+      "write_ownership": [
+        "docs/s0-5/reports/P02_hardware_prerequisite_readiness.md",
+        "docs/s0-5/specs/HARDWARE_SHARED_MEASUREMENT_PLAN.md",
+        "docs/s0-5/evidence/P02/final_handoff/hardware_evidence.json"
+      ]
+    },
+    {
+      "actual_commands": [
+        "git rev-parse HEAD origin/s0-5",
+        "python3 -B docs/s0-5/evidence/P00/check_documents.py --require-history",
+        "python -P docs/s0-5/evidence/P02/final_handoff/seal_final_handoff.py NEW ORIGINAL REFINE OUT"
+      ],
+      "agent_role": "Main_integrator",
+      "engineering_basis": "Separate approval, technical evidence, commands and evidence provenance",
+      "findings": [
+        "submit limited static research candidate and separate hardware execution request"
+      ],
+      "input_commit": "ecd12ecd6657539e44830dde07c6055c6c507192",
+      "negative_tests": [
+        "committed input hash mismatch or P03 authorization stop the seal"
+      ],
+      "output_paths": [
+        "reports/P02_final_handoff.md",
+        "MULTI_AGENT_PROTOCOL.md",
+        "evidence/P02/final_handoff/limited_scope_candidate.json",
+        "preflight.stdout",
+        "approved_inputs.sha256",
+        "docs/s0-5/evidence/P02/final_handoff/work_plan.json",
+        "docs/s0-5/evidence/P02/final_handoff/seal_final_handoff.py"
+      ],
+      "output_sha256": {
+        "MULTI_AGENT_PROTOCOL.md": "f89b2cd50936ba31f661bdacb38c93e7ccefb392154513d52b77c52c2bdea297",
+        "approved_inputs.sha256": "1a28b958d30fd9c53351e1e71c82f5cb7de13dfd6ecdfb48f5209c2ca03eb53e",
+        "docs/s0-5/evidence/P02/final_handoff/seal_final_handoff.py": "bb5ddbf40a33748209b6a768d7b05d67a9c9488aa6c7b2146bb9e76078d45162",
+        "docs/s0-5/evidence/P02/final_handoff/work_plan.json": "f5e47035b050d07808315298b3581f5ce528ea62452d35991ec8ab4f55070a90",
+        "evidence/P02/final_handoff/limited_scope_candidate.json": "9f78b4c3087289859d22eefd71a1b567317b3951488159bff174b2657c10ffa7",
+        "preflight.stdout": "6a05db07fd3d43d1b15ece31b198993f2d829a8e4d9e88f8a8eefa0d10b7387c",
+        "reports/P02_final_handoff.md": "2af64234c13786ccaa66603b3fb6046f6c7897ce5d221f551d270b0c92bd6542"
+      },
+      "positive_tests": [
+        "protected archive rehashes and A/B provenance cross-bindings"
+      ],
+      "read_ownership": [
+        "A/B/C outputs, approved work plan and prior archive manifests"
+      ],
+      "remaining_uncertainty": [
+        "P02 remains READY_FOR_REVIEW; no C prerequisite has moved"
+      ],
+      "role": "Scope, execution and integration",
+      "task_scope": "Freeze run and dependencies. Execute A/B on official Ubuntu environment. Preserve prior results and seal candidate.",
+      "write_ownership": [
+        "docs/s0-5/reports/P02_final_handoff.md",
+        "docs/s0-5/MULTI_AGENT_PROTOCOL.md",
+        "docs/s0-5/evidence/P02/final_handoff/work_plan.json",
+        "docs/s0-5/evidence/P02/final_handoff/seal_final_handoff.py"
+      ]
+    }
+  ]
+}

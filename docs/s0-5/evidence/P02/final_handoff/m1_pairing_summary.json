@@ -1,0 +1,3531 @@
+{
+  "admissible_embedded_no_extra_solve": 35,
+  "approved_input_commit": "ecd12ecd6657539e44830dde07c6055c6c507192",
+  "command": [
+    "docs/s0-5/evidence/P02/final_handoff/m1_pairing.py",
+    "--refinement-receipt",
+    "docs/s0-5/evidence/P02/refinement/execution_receipt.json",
+    "--matched",
+    "/home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/matched-01/matched_candidates.json",
+    "--original",
+    "/home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/intent-02/study_records.json",
+    "--output",
+    "/home/ubuntu/dexgym_data/s0-5/p02/runs/P02-FINAL-20261126-ecd12ec/m1-01/m1_pairing.json"
+  ],
+  "dataset_scope": "HISTORICAL_HMB_OFFLINE_STATIC_RESEARCH",
+  "elapsed_s": 58.06916214800003,
+  "ended_utc": "2026-11-26T15:25:14.330608+00:00",
+  "execution_git": "f393d3cd20bf607f876731932063a8783c916dfa",
+  "formal_score_authorized": false,
+  "guarded_state_evaluations": 60352,
+  "input_paths": {
+    "matched": "/home/ubuntu/dexgym_data/s0-5/p02/runs/P02-REFINE-20261126-8753921/matched-01/matched_candidates.json",
+    "original": "/home/ubuntu/dexgym_data/s0-5/p02/runs/P02-20261126-54c2e06/intent-02/study_records.json",
+    "refinement_receipt": "docs/s0-5/evidence/P02/refinement/execution_receipt.json"
+  },
+  "p03_authorized": false,
+  "paired_delta": "54 minus 14. Negative means lower error or cost.",
+  "paired_delta_tie": 1e-09,
+  "percentile_denominator": "Successful legal witnesses per metric. Paired deltas require both witnesses.",
+  "raw_result_sha256": "0cf1cd2b3c4f1c42cadd6580ea397594db70136de5b81fe073d7b8823b906f21",
+  "runtime": {
+    "mujoco": "3.13.0",
+    "numpy": "1.26.4",
+    "platform": "Linux-7.0.0-43-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "python_path": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python",
+    "scipy": "1.11.4"
+  },
+  "schema": "s05.p02.m1_pairing.v1",
+  "seed_protocol": {
+    "arm_ranges": "Full legal compiled arm joint / actuator range intersections with J6/J7 coupling",
+    "arms14": "Use the same 14 arm coordinates and hold clipped SDK hand coordinates in all evaluations",
+    "clearance_m": 0.0005,
+    "identity": "Exact archived signed M1 multitask input seeds",
+    "iterations_per_start": 300,
+    "labels": [
+      "SDK_AND_WRIST_IK",
+      "JOINT_RESIDUAL_SEED",
+      "PERTURBED_HOME"
+    ],
+    "selected_by": "Frozen multi-task objective",
+    "source_seed_not_regenerated": true,
+    "wall_seconds_per_start": 8.0,
+    "whole54": "Use the full native archived 54 seed for each matched label"
+  },
+  "source_sha256": {
+    "final_handoff_work_plan": "f5e47035b050d07808315298b3581f5ce528ea62452d35991ec8ab4f55070a90",
+    "fitted_candidates": "577195a8eb66699e11cf8bcf910383086672c384723d61fa90c13ed90652baa7",
+    "matched": "32b925e0ee28ed1b41565b6c1379b62bbc96e88bf416a720548bd7b3efe0eba3",
+    "model": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+    "model_assets": "92c44cabe65b278ab8261c2659c2cfa8c670fad07fd7d3a640e8629bc5c06a0d",
+    "original": "4655024865e000c5ec15339d2e1bd66911a44eec5e4451c9d49a67fefa939df8",
+    "original_receipt": "1f55ed102ad10d5dce1eac0e7c10ed68e2604ccf0f645b74e0432646ede6492b",
+    "pairing_script": "abfff3cdba428f144be227934a510e5e5a13b6fb9adaa4c5b00cc2c6a6980f4e",
+    "plan": "e9e292c8a852a913b37f10ac7a2a83ba0c19295e3cb7ab0c272620b0e56a9e19",
+    "refinement_archive": "afa88f107d391acdb0fe8faa1a73c11b2b140f689fe1b348a7c626bc1aae2780",
+    "refinement_plan": "adcdc5dcab422e22cdef188282dba4f559a702d0c641a0f644f4ab935b3f9abf",
+    "refinement_receipt": "0adfc8976ebfa7ee0845d42e5d291caa70f94cf172e72d4a7d2fcb3c16a15aa0",
+    "refinement_scoring_candidate": "96aac52666d7b03d6a3c087cb845f824a2ed4403f1cf35ae87af0264dd5f4f94"
+  },
+  "started_utc": "2026-11-26T15:24:16.261460+00:00",
+  "summary": {
+    "All": {
+      "modes": {
+        "arms14": {
+          "attempts": {
+            "budget_exhausted": 3,
+            "converged": 105,
+            "feasible": 105,
+            "iterations": {
+              "P50": 78.0,
+              "P95": 205.89999999999995,
+              "P99": 298.0
+            },
+            "n": 108,
+            "seconds": {
+              "P50": 0.1494438404988614,
+              "P95": 0.33013380124884856,
+              "P99": 1.2308759210697091
+            },
+            "termination_codes": {
+              "Iteration limit reached": 3,
+              "Optimization terminated successfully": 105
+            }
+          },
+          "hits_mm": {
+            "10": 0,
+            "15": 0,
+            "3": 0,
+            "5": 0
+          },
+          "metrics": {
+            "active_pinch_distance_max_m": {
+              "n": 2,
+              "percentiles": {
+                "P50": 0.0023725215166951166,
+                "P95": 0.0028232970481093748,
+                "P99": 0.0028633659842350863
+              }
+            },
+            "active_pinch_vector_max_m": {
+              "n": 2,
+              "percentiles": {
+                "P50": 0.004375349734412426,
+                "P95": 0.005345393441058975,
+                "P99": 0.0054316195483164464
+              }
+            },
+            "cross_hand_max_m": {
+              "n": 35,
+              "percentiles": {
+                "P50": 0.045178262071269154,
+                "P95": 0.12988616562784103,
+                "P99": 0.17851587122121043
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 35,
+              "percentiles": {
+                "P50": 0.022700180971217922,
+                "P95": 0.02454548706279133,
+                "P99": 0.024872865541150223
+              }
+            },
+            "max_tip_m": {
+              "n": 35,
+              "percentiles": {
+                "P50": 0.03735591518543924,
+                "P95": 0.1445485264000935,
+                "P99": 0.2024055493702519
+              }
+            },
+            "mean_tip_m": {
+              "n": 35,
+              "percentiles": {
+                "P50": 0.014817847796217915,
+                "P95": 0.07923814771774382,
+                "P99": 0.12437701869358712
+              }
+            },
+            "multitask_cost": {
+              "n": 35,
+              "percentiles": {
+                "P50": 161.4739720942333,
+                "P95": 605.3223474092595,
+                "P99": 1268.414627666859
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 35,
+              "percentiles": {
+                "P50": 0.01120787048378899,
+                "P95": 0.02411034665148051,
+                "P99": 0.02959039997556761
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 35,
+              "percentiles": {
+                "P50": 0.06745021987707055,
+                "P95": 0.08589122367039365,
+                "P99": 0.0895886203565664
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 35,
+              "percentiles": {
+                "P50": 0.5545282845297586,
+                "P95": 1.4186180458352082,
+                "P99": 1.436086163959417
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 35,
+              "percentiles": {
+                "P50": 0.12481961630681063,
+                "P95": 0.23341799116496167,
+                "P99": 0.2781461678210171
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 35,
+              "percentiles": {
+                "P50": 0.3823999425975839,
+                "P95": 1.1744804676006715,
+                "P99": 1.5930010023355257
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 35,
+              "percentiles": {
+                "P50": 0.06396313215422916,
+                "P95": 0.24134559575988807,
+                "P99": 0.2664584142710694
+              }
+            }
+          },
+          "qualified_denominator": 38,
+          "solved": 35,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 35,
+            "SOLVER_TIMEOUT": 1,
+            "UNKNOWN_INPUT": 2
+          }
+        },
+        "whole54": {
+          "attempts": {
+            "budget_exhausted": 7,
+            "converged": 101,
+            "feasible": 107,
+            "iterations": {
+              "P50": 113.0,
+              "P95": 300.0,
+              "P99": 300.0
+            },
+            "n": 108,
+            "seconds": {
+              "P50": 0.2713771269991412,
+              "P95": 0.5708394359515295,
+              "P99": 1.1040372470123458
+            },
+            "termination_codes": {
+              "Iteration limit reached": 7,
+              "Optimization terminated successfully": 101
+            }
+          },
+          "hits_mm": {
+            "10": 17,
+            "15": 18,
+            "3": 5,
+            "5": 9
+          },
+          "metrics": {
+            "active_pinch_distance_max_m": {
+              "n": 2,
+              "percentiles": {
+                "P50": 0.002140439459662213,
+                "P95": 0.003190003988854981,
+                "P99": 0.0032832986136721158
+              }
+            },
+            "active_pinch_vector_max_m": {
+              "n": 2,
+              "percentiles": {
+                "P50": 0.0031292933080449416,
+                "P95": 0.004431804406862212,
+                "P99": 0.004547583171201524
+              }
+            },
+            "cross_hand_max_m": {
+              "n": 36,
+              "percentiles": {
+                "P50": 0.012291333071283255,
+                "P95": 0.104032289104933,
+                "P99": 0.1550551617196834
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 36,
+              "percentiles": {
+                "P50": 0.004798771091233223,
+                "P95": 0.013883611246018035,
+                "P99": 0.016765148068485492
+              }
+            },
+            "max_tip_m": {
+              "n": 36,
+              "percentiles": {
+                "P50": 0.012707502227071822,
+                "P95": 0.1274511008387382,
+                "P99": 0.19404226776846173
+              }
+            },
+            "mean_tip_m": {
+              "n": 36,
+              "percentiles": {
+                "P50": 0.0035598927866083863,
+                "P95": 0.0636227606268314,
+                "P99": 0.10295330072846072
+              }
+            },
+            "multitask_cost": {
+              "n": 36,
+              "percentiles": {
+                "P50": 8.692465312968393,
+                "P95": 372.0878684091118,
+                "P99": 878.2622850037978
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 36,
+              "percentiles": {
+                "P50": 0.00257181240747802,
+                "P95": 0.015473233213448952,
+                "P99": 0.027904948975086396
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 36,
+              "percentiles": {
+                "P50": 0.005090849951157397,
+                "P95": 0.027817495230173434,
+                "P99": 0.040122499656101686
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 36,
+              "percentiles": {
+                "P50": 0.313587764050968,
+                "P95": 1.4256998226934368,
+                "P99": 1.556909019333212
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 36,
+              "percentiles": {
+                "P50": 0.0420656930007621,
+                "P95": 0.1994791032699472,
+                "P99": 0.23632818850626694
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 36,
+              "percentiles": {
+                "P50": 0.32661719634259134,
+                "P95": 1.1799516642563992,
+                "P99": 1.7129683774285205
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 36,
+              "percentiles": {
+                "P50": 0.057019615371974766,
+                "P95": 0.23685541283356304,
+                "P99": 0.2624203111973478
+              }
+            }
+          },
+          "qualified_denominator": 38,
+          "solved": 36,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 27,
+            "FEASIBLE_AT_TOLERANCE": 9,
+            "UNKNOWN_INPUT": 2
+          }
+        }
+      },
+      "paired_metrics": {
+        "active_pinch_distance_max_m": {
+          "improves": 1,
+          "n": 2,
+          "percentiles": {
+            "P50": -0.00023208205703290378,
+            "P95": 0.0012682580035741219,
+            "P99": 0.0014016215645169688
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "active_pinch_vector_max_m": {
+          "improves": 1,
+          "n": 2,
+          "percentiles": {
+            "P50": -0.001246056426367484,
+            "P95": 0.001026498379096336,
+            "P99": 0.0012285032506931203
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "cross_hand_max_m": {
+          "improves": 34,
+          "n": 35,
+          "percentiles": {
+            "P50": -0.02892129468028524,
+            "P95": -0.011000442443282937,
+            "P99": -0.0016100949522847422
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "local_landmark_rmse_m": {
+          "improves": 35,
+          "n": 35,
+          "percentiles": {
+            "P50": -0.017622218650597602,
+            "P95": -0.007132033851464759,
+            "P99": -0.005411238322824662
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "max_tip_m": {
+          "improves": 34,
+          "n": 35,
+          "percentiles": {
+            "P50": -0.022092272572129104,
+            "P95": -0.0036891408345821218,
+            "P99": 0.004224211954707927
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "mean_tip_m": {
+          "improves": 35,
+          "n": 35,
+          "percentiles": {
+            "P50": -0.010903922465779578,
+            "P95": -0.0059035216931462835,
+            "P99": -0.0037784346582515
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "multitask_cost": {
+          "improves": 35,
+          "n": 35,
+          "percentiles": {
+            "P50": -138.28879609396193,
+            "P95": -91.90193097722461,
+            "P99": -68.84328062400454
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "pinch_distance_max_m": {
+          "improves": 30,
+          "n": 35,
+          "percentiles": {
+            "P50": -0.007868001342455189,
+            "P95": 0.00576128495231498,
+            "P99": 0.01870186499481662
+          },
+          "stable": 0,
+          "worsens": 5
+        },
+        "pinch_vector_max_m": {
+          "improves": 35,
+          "n": 35,
+          "percentiles": {
+            "P50": -0.060034817402670984,
+            "P95": -0.031224973831585196,
+            "P99": -0.014850800766203359
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "relative_wrist_rotation_rad": {
+          "improves": 30,
+          "n": 35,
+          "percentiles": {
+            "P50": -0.13384860548394661,
+            "P95": 0.1323956589572748,
+            "P99": 0.22270415322163256
+          },
+          "stable": 0,
+          "worsens": 5
+        },
+        "relative_wrist_translation_m": {
+          "improves": 33,
+          "n": 35,
+          "percentiles": {
+            "P50": -0.05659070706401381,
+            "P95": -0.005612702604198366,
+            "P99": 0.0365026503089663
+          },
+          "stable": 0,
+          "worsens": 2
+        },
+        "wrist_rotation_max_rad": {
+          "improves": 26,
+          "n": 35,
+          "percentiles": {
+            "P50": -0.032723522072914735,
+            "P95": 0.13396911258576136,
+            "P99": 0.2002902676464579
+          },
+          "stable": 0,
+          "worsens": 9
+        },
+        "wrist_translation_max_m": {
+          "improves": 30,
+          "n": 35,
+          "percentiles": {
+            "P50": -0.005305783099669344,
+            "P95": 0.01338506255643741,
+            "P99": 0.020966936868090955
+          },
+          "stable": 0,
+          "worsens": 5
+        }
+      },
+      "planned": 38,
+      "sdk_clips": {
+        "cases": 0,
+        "coordinates": 0
+      },
+      "strictly_paired": 35
+    },
+    "ROOT": {
+      "modes": {
+        "arms14": {
+          "attempts": {
+            "budget_exhausted": 3,
+            "converged": 93,
+            "feasible": 93,
+            "iterations": {
+              "P50": 78.0,
+              "P95": 210.25,
+              "P99": 298.1
+            },
+            "n": 96,
+            "seconds": {
+              "P50": 0.14773577699816087,
+              "P95": 0.34709316449971084,
+              "P99": 1.247418436599582
+            },
+            "termination_codes": {
+              "Iteration limit reached": 3,
+              "Optimization terminated successfully": 93
+            }
+          },
+          "hits_mm": {
+            "10": 0,
+            "15": 0,
+            "3": 0,
+            "5": 0
+          },
+          "metrics": {
+            "active_pinch_distance_max_m": {
+              "n": 2,
+              "percentiles": {
+                "P50": 0.0023725215166951166,
+                "P95": 0.0028232970481093748,
+                "P99": 0.0028633659842350863
+              }
+            },
+            "active_pinch_vector_max_m": {
+              "n": 2,
+              "percentiles": {
+                "P50": 0.004375349734412426,
+                "P95": 0.005345393441058975,
+                "P99": 0.0054316195483164464
+              }
+            },
+            "cross_hand_max_m": {
+              "n": 31,
+              "percentiles": {
+                "P50": 0.045178262071269154,
+                "P95": 0.1310064469785842,
+                "P99": 0.1809048627478775
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 31,
+              "percentiles": {
+                "P50": 0.022734483284297457,
+                "P95": 0.024617008392266215,
+                "P99": 0.02487753546995003
+              }
+            },
+            "max_tip_m": {
+              "n": 31,
+              "percentiles": {
+                "P50": 0.037429444794134,
+                "P95": 0.13421987889223683,
+                "P99": 0.2014555098597323
+              }
+            },
+            "mean_tip_m": {
+              "n": 31,
+              "percentiles": {
+                "P50": 0.014817847796217915,
+                "P95": 0.06940323198578137,
+                "P99": 0.11748746157973008
+              }
+            },
+            "multitask_cost": {
+              "n": 31,
+              "percentiles": {
+                "P50": 161.4739720942333,
+                "P95": 528.8562064690625,
+                "P99": 1231.8695005282143
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 31,
+              "percentiles": {
+                "P50": 0.011256007470004298,
+                "P95": 0.024264381097914726,
+                "P99": 0.029889850445965656
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 31,
+              "percentiles": {
+                "P50": 0.06745021987707055,
+                "P95": 0.08257902983287436,
+                "P99": 0.0896609418855605
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 31,
+              "percentiles": {
+                "P50": 0.5545282845297586,
+                "P95": 1.4219095117892266,
+                "P99": 1.4364466480373046
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 31,
+              "percentiles": {
+                "P50": 0.12342521936038554,
+                "P95": 0.2383170745116806,
+                "P99": 0.27981776690844384
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 31,
+              "percentiles": {
+                "P50": 0.4130323447277764,
+                "P95": 1.28137323249224,
+                "P99": 1.5956916603727602
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 31,
+              "percentiles": {
+                "P50": 0.06460346090181983,
+                "P95": 0.2457540385569138,
+                "P99": 0.26704527904207503
+              }
+            }
+          },
+          "qualified_denominator": 32,
+          "solved": 31,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 31,
+            "SOLVER_TIMEOUT": 1
+          }
+        },
+        "whole54": {
+          "attempts": {
+            "budget_exhausted": 6,
+            "converged": 90,
+            "feasible": 95,
+            "iterations": {
+              "P50": 106.5,
+              "P95": 300.0,
+              "P99": 300.0
+            },
+            "n": 96,
+            "seconds": {
+              "P50": 0.2556131724995794,
+              "P95": 0.5756205145007698,
+              "P99": 1.2035865568524922
+            },
+            "termination_codes": {
+              "Iteration limit reached": 6,
+              "Optimization terminated successfully": 90
+            }
+          },
+          "hits_mm": {
+            "10": 14,
+            "15": 15,
+            "3": 5,
+            "5": 8
+          },
+          "metrics": {
+            "active_pinch_distance_max_m": {
+              "n": 2,
+              "percentiles": {
+                "P50": 0.002140439459662213,
+                "P95": 0.003190003988854981,
+                "P99": 0.0032832986136721158
+              }
+            },
+            "active_pinch_vector_max_m": {
+              "n": 2,
+              "percentiles": {
+                "P50": 0.0031292933080449416,
+                "P95": 0.004431804406862212,
+                "P99": 0.004547583171201524
+              }
+            },
+            "cross_hand_max_m": {
+              "n": 32,
+              "percentiles": {
+                "P50": 0.015331741197887772,
+                "P95": 0.09934731020824256,
+                "P99": 0.15432415202789573
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 32,
+              "percentiles": {
+                "P50": 0.004460264583773359,
+                "P95": 0.014056844797419844,
+                "P99": 0.016773724400894658
+              }
+            },
+            "max_tip_m": {
+              "n": 32,
+              "percentiles": {
+                "P50": 0.0159962361313592,
+                "P95": 0.11908780308854668,
+                "P99": 0.18995056286429254
+              }
+            },
+            "mean_tip_m": {
+              "n": 32,
+              "percentiles": {
+                "P50": 0.003935603472909884,
+                "P95": 0.05458390755971019,
+                "P99": 0.09591452824866753
+              }
+            },
+            "multitask_cost": {
+              "n": 32,
+              "percentiles": {
+                "P50": 10.294462652852665,
+                "P95": 300.11941067870873,
+                "P99": 842.648358922827
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 32,
+              "percentiles": {
+                "P50": 0.002995132861275034,
+                "P95": 0.01476133135470965,
+                "P99": 0.02864228736812366
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 32,
+              "percentiles": {
+                "P50": 0.005584431657516859,
+                "P95": 0.027941006258233987,
+                "P99": 0.04085122815276027
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 32,
+              "percentiles": {
+                "P50": 0.3286134188327409,
+                "P95": 1.4583052015907096,
+                "P99": 1.557459113227058
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 32,
+              "percentiles": {
+                "P50": 0.0420656930007621,
+                "P95": 0.19355728791884685,
+                "P99": 0.23075327771499832
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 32,
+              "percentiles": {
+                "P50": 0.3577606468200857,
+                "P95": 1.3166684135169002,
+                "P99": 1.7142193868713047
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 32,
+              "percentiles": {
+                "P50": 0.05955167381012906,
+                "P95": 0.24170700502833029,
+                "P99": 0.2628739375132499
+              }
+            }
+          },
+          "qualified_denominator": 32,
+          "solved": 32,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 24,
+            "FEASIBLE_AT_TOLERANCE": 8
+          }
+        }
+      },
+      "paired_metrics": {
+        "active_pinch_distance_max_m": {
+          "improves": 1,
+          "n": 2,
+          "percentiles": {
+            "P50": -0.00023208205703290378,
+            "P95": 0.0012682580035741219,
+            "P99": 0.0014016215645169688
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "active_pinch_vector_max_m": {
+          "improves": 1,
+          "n": 2,
+          "percentiles": {
+            "P50": -0.001246056426367484,
+            "P95": 0.001026498379096336,
+            "P99": 0.0012285032506931203
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "cross_hand_max_m": {
+          "improves": 30,
+          "n": 31,
+          "percentiles": {
+            "P50": -0.02652829273812364,
+            "P95": -0.01014083640352623,
+            "P99": -0.0012233236582332141
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "local_landmark_rmse_m": {
+          "improves": 31,
+          "n": 31,
+          "percentiles": {
+            "P50": -0.01777849101917652,
+            "P95": -0.006807428092376292,
+            "P99": -0.00537580345180463
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "max_tip_m": {
+          "improves": 30,
+          "n": 31,
+          "percentiles": {
+            "P50": -0.022092272572129104,
+            "P95": -0.00335102154057634,
+            "P99": 0.0046320868189667335
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "mean_tip_m": {
+          "improves": 31,
+          "n": 31,
+          "percentiles": {
+            "P50": -0.01067867415904726,
+            "P95": -0.005595077728177797,
+            "P99": -0.003715069012342096
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "multitask_cost": {
+          "improves": 31,
+          "n": 31,
+          "percentiles": {
+            "P50": -137.54468853777178,
+            "P95": -88.92153742232583,
+            "P99": -68.07799135666664
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "pinch_distance_max_m": {
+          "improves": 27,
+          "n": 31,
+          "percentiles": {
+            "P50": -0.008185144343756959,
+            "P95": 0.005235946079297513,
+            "P99": 0.019349285922932554
+          },
+          "stable": 0,
+          "worsens": 4
+        },
+        "pinch_vector_max_m": {
+          "improves": 31,
+          "n": 31,
+          "percentiles": {
+            "P50": -0.060034817402670984,
+            "P95": -0.0307859500964422,
+            "P99": -0.01395155288787715
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "relative_wrist_rotation_rad": {
+          "improves": 26,
+          "n": 31,
+          "percentiles": {
+            "P50": -0.09422690707041524,
+            "P95": 0.1329366554420619,
+            "P99": 0.22806263846815433
+          },
+          "stable": 0,
+          "worsens": 5
+        },
+        "relative_wrist_translation_m": {
+          "improves": 30,
+          "n": 31,
+          "percentiles": {
+            "P50": -0.05659070706401381,
+            "P95": -0.024474215851918113,
+            "P99": 0.017526157672054118
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "wrist_rotation_max_rad": {
+          "improves": 22,
+          "n": 31,
+          "percentiles": {
+            "P50": -0.01851889065813972,
+            "P95": 0.13684488877900747,
+            "P99": 0.20369971845763
+          },
+          "stable": 0,
+          "worsens": 9
+        },
+        "wrist_translation_max_m": {
+          "improves": 27,
+          "n": 31,
+          "percentiles": {
+            "P50": -0.00660337010767181,
+            "P95": 0.015294061322649679,
+            "P99": 0.021021505269903727
+          },
+          "stable": 0,
+          "worsens": 4
+        }
+      },
+      "planned": 32,
+      "sdk_clips": {
+        "cases": 0,
+        "coordinates": 0
+      },
+      "strictly_paired": 31
+    },
+    "TAIL": {
+      "modes": {
+        "arms14": {
+          "attempts": {
+            "budget_exhausted": 0,
+            "converged": 12,
+            "feasible": 12,
+            "iterations": {
+              "P50": 80.5,
+              "P95": 163.49999999999994,
+              "P99": 194.30000000000004
+            },
+            "n": 12,
+            "seconds": {
+              "P50": 0.1621744709991617,
+              "P95": 0.26472186764767675,
+              "P99": 0.31213076632797315
+            },
+            "termination_codes": {
+              "Optimization terminated successfully": 12
+            }
+          },
+          "hits_mm": {
+            "10": 0,
+            "15": 0,
+            "3": 0,
+            "5": 0
+          },
+          "metrics": {
+            "cross_hand_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.04390700222927651,
+                "P95": 0.11420765511113494,
+                "P99": 0.12359228795763173
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.022250721023779497,
+                "P95": 0.022706381333292155,
+                "P99": 0.022724583396912752
+              }
+            },
+            "max_tip_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.03058038210641652,
+                "P95": 0.13524496314942316,
+                "P99": 0.1499760080757102
+              }
+            },
+            "mean_tip_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.015009747727196515,
+                "P95": 0.08648825765730443,
+                "P99": 0.09642928040981744
+              }
+            },
+            "multitask_cost": {
+              "n": 4,
+              "percentiles": {
+                "P50": 161.83973888522613,
+                "P95": 674.7977845354684,
+                "P99": 744.7056917735016
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.00961486447448582,
+                "P95": 0.011187520966433979,
+                "P99": 0.011362577307503393
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.067566784547507,
+                "P95": 0.08363800110775178,
+                "P99": 0.0856887722935027
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.5685996612839028,
+                "P95": 1.1311117926128986,
+                "P99": 1.2084412682844514
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.13597246855759038,
+                "P95": 0.17392295371287697,
+                "P99": 0.1777092152153007
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.33448888490432815,
+                "P95": 0.9027887595755756,
+                "P99": 0.9820011327148599
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.056249135969730156,
+                "P95": 0.19845507854601285,
+                "P99": 0.21821237949596584
+              }
+            }
+          },
+          "qualified_denominator": 6,
+          "solved": 4,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 4,
+            "UNKNOWN_INPUT": 2
+          }
+        },
+        "whole54": {
+          "attempts": {
+            "budget_exhausted": 1,
+            "converged": 11,
+            "feasible": 12,
+            "iterations": {
+              "P50": 125.0,
+              "P95": 272.49999999999994,
+              "P99": 294.5
+            },
+            "n": 12,
+            "seconds": {
+              "P50": 0.3594246180000482,
+              "P95": 0.5585013749008795,
+              "P99": 0.5622582453813084
+            },
+            "termination_codes": {
+              "Iteration limit reached": 1,
+              "Optimization terminated successfully": 11
+            }
+          },
+          "hits_mm": {
+            "10": 3,
+            "15": 3,
+            "3": 0,
+            "5": 1
+          },
+          "metrics": {
+            "cross_hand_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.006558812490954335,
+                "P95": 0.09651151634051074,
+                "P99": 0.10904926942268042
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.005490632480570655,
+                "P95": 0.011852509618098354,
+                "P99": 0.012746145208215832
+              }
+            },
+            "max_tip_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.005623012893116602,
+                "P95": 0.12392316815937766,
+                "P99": 0.14054228717085498
+              }
+            },
+            "mean_tip_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.002660134936342203,
+                "P95": 0.07141980676155472,
+                "P99": 0.08111760929031382
+              }
+            },
+            "multitask_cost": {
+              "n": 4,
+              "percentiles": {
+                "P50": 6.272184514703052,
+                "P95": 436.79336005200724,
+                "P99": 497.50247503078725
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.0023692702199302404,
+                "P95": 0.013383726328421351,
+                "P99": 0.014935340669834686
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.003985608677474387,
+                "P95": 0.013815288323114254,
+                "P99": 0.015197736940573732
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.2333581302333807,
+                "P95": 0.9378004684798552,
+                "P99": 1.034391526852794
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.04230562641206018,
+                "P95": 0.19001805691187013,
+                "P99": 0.21079895989149147
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.29802244145159523,
+                "P95": 0.8566065965835876,
+                "P99": 0.9349757511591867
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.049831419161308024,
+                "P95": 0.19597388949072422,
+                "P99": 0.21651095787198144
+              }
+            }
+          },
+          "qualified_denominator": 6,
+          "solved": 4,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 3,
+            "FEASIBLE_AT_TOLERANCE": 1,
+            "UNKNOWN_INPUT": 2
+          }
+        }
+      },
+      "paired_metrics": {
+        "cross_hand_max_m": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.030649847340956667,
+            "P95": -0.016029721906670905,
+            "P99": -0.014209735162160645
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "local_landmark_rmse_m": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.015515590233097645,
+            "P95": -0.010480522222160442,
+            "P99": -0.009903768290090247
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "max_tip_m": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.02349388197514981,
+            "P95": -0.01088274881860045,
+            "P99": -0.009345911670566231
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "mean_tip_m": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.012463080052159355,
+            "P95": -0.00724714455120467,
+            "P99": -0.006667411837838395
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "multitask_cost": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -155.56755437052306,
+            "P95": -104.47881892947491,
+            "P99": -99.7056456827238
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "pinch_distance_max_m": {
+          "improves": 3,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.007147262585442592,
+            "P95": 0.004123879073665238,
+            "P99": 0.005657618900126658
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "pinch_vector_max_m": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.06036138615574024,
+            "P95": -0.0543416805528714,
+            "P99": -0.05372302100156963
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "relative_wrist_rotation_rad": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.26036175478688384,
+            "P95": -0.17249559008875062,
+            "P99": -0.16988659462279895
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "relative_wrist_translation_m": {
+          "improves": 3,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.07259321919257136,
+            "P95": 0.02384075211703865,
+            "P99": 0.034638874459799886
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "wrist_rotation_max_rad": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.043722775514572765,
+            "P95": -0.03384639848686019,
+            "P99": -0.03294809735570383
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "wrist_translation_max_m": {
+          "improves": 3,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.003168685844654441,
+            "P95": 0.0013146019416672141,
+            "P99": 0.0017128723004190569
+          },
+          "stable": 0,
+          "worsens": 1
+        }
+      },
+      "planned": 6,
+      "sdk_clips": {
+        "cases": 0,
+        "coordinates": 0
+      },
+      "strictly_paired": 4
+    },
+    "Train": {
+      "modes": {
+        "arms14": {
+          "attempts": {
+            "budget_exhausted": 3,
+            "converged": 81,
+            "feasible": 81,
+            "iterations": {
+              "P50": 79.5,
+              "P95": 215.64999999999995,
+              "P99": 298.34000000000003
+            },
+            "n": 84,
+            "seconds": {
+              "P50": 0.15112473350018263,
+              "P95": 0.33202635824909515,
+              "P99": 1.2716652636397705
+            },
+            "termination_codes": {
+              "Iteration limit reached": 3,
+              "Optimization terminated successfully": 81
+            }
+          },
+          "hits_mm": {
+            "10": 0,
+            "15": 0,
+            "3": 0,
+            "5": 0
+          },
+          "metrics": {
+            "active_pinch_distance_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0028733832182665144,
+                "P95": 0.0028733832182665144,
+                "P99": 0.0028733832182665144
+              }
+            },
+            "active_pinch_vector_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0054531760751308144,
+                "P95": 0.0054531760751308144,
+                "P99": 0.0054531760751308144
+              }
+            },
+            "cross_hand_max_m": {
+              "n": 27,
+              "percentiles": {
+                "P50": 0.04570396036857021,
+                "P95": 0.1351497915726212,
+                "P99": 0.1832938542745444
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 27,
+              "percentiles": {
+                "P50": 0.022700180971217922,
+                "P95": 0.024688529721741105,
+                "P99": 0.024882205398749836
+              }
+            },
+            "max_tip_m": {
+              "n": 27,
+              "percentiles": {
+                "P50": 0.037429444794134,
+                "P95": 0.14975437948991552,
+                "P99": 0.2083142499839454
+              }
+            },
+            "mean_tip_m": {
+              "n": 27,
+              "percentiles": {
+                "P50": 0.014340381200871782,
+                "P95": 0.09048179822071634,
+                "P99": 0.12746338022033163
+              }
+            },
+            "multitask_cost": {
+              "n": 27,
+              "percentiles": {
+                "P50": 170.33712691487625,
+                "P95": 694.9568166514027,
+                "P99": 1329.7760772527818
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 27,
+              "percentiles": {
+                "P50": 0.010364851515578442,
+                "P95": 0.022216038459846744,
+                "P99": 0.02444922243363578
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 27,
+              "percentiles": {
+                "P50": 0.06785695918855861,
+                "P95": 0.08606850448156324,
+                "P99": 0.08999918463130895
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 27,
+              "percentiles": {
+                "P50": 0.5606562863220046,
+                "P95": 1.3579086839936283,
+                "P99": 1.4325282263749681
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 27,
+              "percentiles": {
+                "P50": 0.1248413357111385,
+                "P95": 0.23499572386886602,
+                "P99": 0.28148936599587043
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 27,
+              "percentiles": {
+                "P50": 0.36756509028998174,
+                "P95": 1.0104401919842303,
+                "P99": 1.459421724050957
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 27,
+              "percentiles": {
+                "P50": 0.058507530150512896,
+                "P95": 0.23125856351508092,
+                "P99": 0.2510441699133446
+              }
+            }
+          },
+          "qualified_denominator": 28,
+          "solved": 27,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 27,
+            "SOLVER_TIMEOUT": 1
+          }
+        },
+        "whole54": {
+          "attempts": {
+            "budget_exhausted": 3,
+            "converged": 81,
+            "feasible": 84,
+            "iterations": {
+              "P50": 105.0,
+              "P95": 255.94999999999996,
+              "P99": 300.0
+            },
+            "n": 84,
+            "seconds": {
+              "P50": 0.2556131724995794,
+              "P95": 0.5203872408481401,
+              "P99": 0.5753913220210234
+            },
+            "termination_codes": {
+              "Iteration limit reached": 3,
+              "Optimization terminated successfully": 81
+            }
+          },
+          "hits_mm": {
+            "10": 15,
+            "15": 16,
+            "3": 4,
+            "5": 7
+          },
+          "metrics": {
+            "active_pinch_distance_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0009742566494480263,
+                "P95": 0.0009742566494480263,
+                "P99": 0.0009742566494480263
+              }
+            },
+            "active_pinch_vector_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0016820587538035302,
+                "P95": 0.0016820587538035302,
+                "P99": 0.0016820587538035302
+              }
+            },
+            "cross_hand_max_m": {
+              "n": 28,
+              "percentiles": {
+                "P50": 0.009622884055708835,
+                "P95": 0.10837971235202093,
+                "P99": 0.16033164836909405
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 28,
+              "percentiles": {
+                "P50": 0.004491080181710015,
+                "P95": 0.015346102670454562,
+                "P99": 0.016782300733303824
+              }
+            },
+            "max_tip_m": {
+              "n": 28,
+              "percentiles": {
+                "P50": 0.008892763723856605,
+                "P95": 0.13664894941739744,
+                "P99": 0.20011552325704493
+              }
+            },
+            "mean_tip_m": {
+              "n": 28,
+              "percentiles": {
+                "P50": 0.0033108690147683516,
+                "P95": 0.07424638691785655,
+                "P99": 0.1053423765199632
+              }
+            },
+            "multitask_cost": {
+              "n": 28,
+              "percentiles": {
+                "P50": 6.990597471163296,
+                "P95": 447.07020727117583,
+                "P99": 923.2570580780532
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 28,
+              "percentiles": {
+                "P50": 0.0024265530528463086,
+                "P95": 0.014793857784511992,
+                "P99": 0.015761212013309937
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 28,
+              "percentiles": {
+                "P50": 0.005090849951157397,
+                "P95": 0.027466450108373768,
+                "P99": 0.02811392169751876
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 28,
+              "percentiles": {
+                "P50": 0.2708541912265024,
+                "P95": 1.270701766402809,
+                "P99": 1.503952732046892
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 28,
+              "percentiles": {
+                "P50": 0.041804679737639044,
+                "P95": 0.20828714719872032,
+                "P99": 0.2388308350133279
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 28,
+              "percentiles": {
+                "P50": 0.29956297602893744,
+                "P95": 0.9899850369235824,
+                "P99": 1.5309027848124122
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 28,
+              "percentiles": {
+                "P50": 0.050843408021625965,
+                "P95": 0.22758992842212106,
+                "P99": 0.24849923410100452
+              }
+            }
+          },
+          "qualified_denominator": 28,
+          "solved": 28,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 21,
+            "FEASIBLE_AT_TOLERANCE": 7
+          }
+        }
+      },
+      "paired_metrics": {
+        "active_pinch_distance_max_m": {
+          "improves": 1,
+          "n": 1,
+          "percentiles": {
+            "P50": -0.001899126568818488,
+            "P95": -0.001899126568818488,
+            "P99": -0.001899126568818488
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "active_pinch_vector_max_m": {
+          "improves": 1,
+          "n": 1,
+          "percentiles": {
+            "P50": -0.0037711173213272843,
+            "P95": -0.0037711173213272843,
+            "P99": -0.0037711173213272843
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "cross_hand_max_m": {
+          "improves": 27,
+          "n": 27,
+          "percentiles": {
+            "P50": -0.02487801333277491,
+            "P95": -0.012729317594852503,
+            "P99": -0.009109309155818202
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "local_landmark_rmse_m": {
+          "improves": 27,
+          "n": 27,
+          "percentiles": {
+            "P50": -0.01777849101917652,
+            "P95": -0.007125013528380408,
+            "P99": -0.005340368580784602
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "max_tip_m": {
+          "improves": 27,
+          "n": 27,
+          "percentiles": {
+            "P50": -0.019868502690940176,
+            "P95": -0.005275779949719414,
+            "P99": -0.0031563720711219475
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "mean_tip_m": {
+          "improves": 27,
+          "n": 27,
+          "percentiles": {
+            "P50": -0.01135358460421578,
+            "P95": -0.006446521747518726,
+            "P99": -0.006378610738206285
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "multitask_cost": {
+          "improves": 27,
+          "n": 27,
+          "percentiles": {
+            "P50": -145.50870495367644,
+            "P95": -86.58309318586612,
+            "P99": -67.31270208932881
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "pinch_distance_max_m": {
+          "improves": 23,
+          "n": 27,
+          "percentiles": {
+            "P50": -0.007868001342455189,
+            "P95": 0.0053981212448884364,
+            "P99": 0.0059371396922405445
+          },
+          "stable": 0,
+          "worsens": 4
+        },
+        "pinch_vector_max_m": {
+          "improves": 27,
+          "n": 27,
+          "percentiles": {
+            "P50": -0.06059336305372034,
+            "P95": -0.03384104717359669,
+            "P99": -0.03025912161427062
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "relative_wrist_rotation_rad": {
+          "improves": 25,
+          "n": 27,
+          "percentiles": {
+            "P50": -0.17735668202607058,
+            "P95": 0.09139600997346911,
+            "P99": 0.23342112371467563
+          },
+          "stable": 0,
+          "worsens": 2
+        },
+        "relative_wrist_translation_m": {
+          "improves": 26,
+          "n": 27,
+          "percentiles": {
+            "P50": -0.06558575682431689,
+            "P95": -0.023871268635705857,
+            "P99": 0.02165903930270192
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "wrist_rotation_max_rad": {
+          "improves": 21,
+          "n": 27,
+          "percentiles": {
+            "P50": -0.032723522072914735,
+            "P95": 0.1021194039725933,
+            "P99": 0.197751453404874
+          },
+          "stable": 0,
+          "worsens": 6
+        },
+        "wrist_translation_max_m": {
+          "improves": 24,
+          "n": 27,
+          "percentiles": {
+            "P50": -0.005305783099669344,
+            "P95": 0.00274311854503885,
+            "P99": 0.015666168110941604
+          },
+          "stable": 0,
+          "worsens": 3
+        }
+      },
+      "planned": 28,
+      "sdk_clips": {
+        "cases": 0,
+        "coordinates": 0
+      },
+      "strictly_paired": 27
+    },
+    "Train_ROOT": {
+      "modes": {
+        "arms14": {
+          "attempts": {
+            "budget_exhausted": 3,
+            "converged": 69,
+            "feasible": 69,
+            "iterations": {
+              "P50": 79.5,
+              "P95": 217.45,
+              "P99": 298.58000000000004
+            },
+            "n": 72,
+            "seconds": {
+              "P50": 0.1494438404988614,
+              "P95": 0.35801107530005555,
+              "P99": 1.2959120906799593
+            },
+            "termination_codes": {
+              "Iteration limit reached": 3,
+              "Optimization terminated successfully": 69
+            }
+          },
+          "hits_mm": {
+            "10": 0,
+            "15": 0,
+            "3": 0,
+            "5": 0
+          },
+          "metrics": {
+            "active_pinch_distance_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0028733832182665144,
+                "P95": 0.0028733832182665144,
+                "P99": 0.0028733832182665144
+              }
+            },
+            "active_pinch_vector_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0054531760751308144,
+                "P95": 0.0054531760751308144,
+                "P99": 0.0054531760751308144
+              }
+            },
+            "cross_hand_max_m": {
+              "n": 23,
+              "percentiles": {
+                "P50": 0.04570396036857021,
+                "P95": 0.13747929822068186,
+                "P99": 0.18568284580121147
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 23,
+              "percentiles": {
+                "P50": 0.022734483284297457,
+                "P95": 0.02476005105121599,
+                "P99": 0.02488687532754964
+              }
+            },
+            "max_tip_m": {
+              "n": 23,
+              "percentiles": {
+                "P50": 0.04029011076664072,
+                "P95": 0.13935928504462897,
+                "P99": 0.2084053810913902
+              }
+            },
+            "mean_tip_m": {
+              "n": 23,
+              "percentiles": {
+                "P50": 0.014340381200871782,
+                "P95": 0.07052497426956791,
+                "P99": 0.12282255320706913
+              }
+            },
+            "multitask_cost": {
+              "n": 23,
+              "percentiles": {
+                "P50": 170.33712691487625,
+                "P95": 536.2484376759348,
+                "P99": 1311.1578439625662
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 23,
+              "percentiles": {
+                "P50": 0.011004072960040925,
+                "P95": 0.02332487614116837,
+                "P99": 0.024480029322922623
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 23,
+              "percentiles": {
+                "P50": 0.06785695918855861,
+                "P95": 0.08512241641618802,
+                "P99": 0.09010696232253695
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 23,
+              "percentiles": {
+                "P50": 0.5606562863220046,
+                "P95": 1.3637669896545692,
+                "P99": 1.4335470036436595
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 23,
+              "percentiles": {
+                "P50": 0.12481961630681063,
+                "P95": 0.24537509654194045,
+                "P99": 0.2831609650832972
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 23,
+              "percentiles": {
+                "P50": 0.3823999425975839,
+                "P95": 0.989110691925203,
+                "P99": 1.4834909350665064
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 23,
+              "percentiles": {
+                "P50": 0.06396313215422916,
+                "P95": 0.22879304742576725,
+                "P99": 0.25192585847274984
+              }
+            }
+          },
+          "qualified_denominator": 24,
+          "solved": 23,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 23,
+            "SOLVER_TIMEOUT": 1
+          }
+        },
+        "whole54": {
+          "attempts": {
+            "budget_exhausted": 2,
+            "converged": 70,
+            "feasible": 72,
+            "iterations": {
+              "P50": 99.5,
+              "P95": 253.15000000000003,
+              "P99": 300.0
+            },
+            "n": 72,
+            "seconds": {
+              "P50": 0.25125932850096433,
+              "P95": 0.4982092236006793,
+              "P99": 0.575735110740643
+            },
+            "termination_codes": {
+              "Iteration limit reached": 2,
+              "Optimization terminated successfully": 70
+            }
+          },
+          "hits_mm": {
+            "10": 12,
+            "15": 13,
+            "3": 4,
+            "5": 6
+          },
+          "metrics": {
+            "active_pinch_distance_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0009742566494480263,
+                "P95": 0.0009742566494480263,
+                "P99": 0.0009742566494480263
+              }
+            },
+            "active_pinch_vector_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0016820587538035302,
+                "P95": 0.0016820587538035302,
+                "P99": 0.0016820587538035302
+              }
+            },
+            "cross_hand_max_m": {
+              "n": 24,
+              "percentiles": {
+                "P50": 0.010233313796595145,
+                "P95": 0.10077846611170473,
+                "P99": 0.16047012332672372
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 24,
+              "percentiles": {
+                "P50": 0.0040971818999248726,
+                "P95": 0.0159251632479047,
+                "P99": 0.016790877065712993
+              }
+            },
+            "max_tip_m": {
+              "n": 24,
+              "percentiles": {
+                "P50": 0.009830506875858652,
+                "P95": 0.12098936118929539,
+                "P99": 0.19786338806860732
+              }
+            },
+            "mean_tip_m": {
+              "n": 24,
+              "percentiles": {
+                "P50": 0.003707884563686812,
+                "P95": 0.0563286978398778,
+                "P99": 0.10042832929837489
+              }
+            },
+            "multitask_cost": {
+              "n": 24,
+              "percentiles": {
+                "P50": 8.779076368171888,
+                "P95": 318.3772259089726,
+                "P99": 902.6395997694929
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 24,
+              "percentiles": {
+                "P50": 0.003018197925390209,
+                "P95": 0.013582089019343897,
+                "P99": 0.015437327708758865
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 24,
+              "percentiles": {
+                "P50": 0.005584431657516859,
+                "P95": 0.027578825157930323,
+                "P99": 0.02813862390313087
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 24,
+              "percentiles": {
+                "P50": 0.3026008601200135,
+                "P95": 1.2991366784075502,
+                "P99": 1.5104738078263464
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 24,
+              "percentiles": {
+                "P50": 0.040754512537711715,
+                "P95": 0.19048120972949206,
+                "P99": 0.23501753300781378
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 24,
+              "percentiles": {
+                "P50": 0.32210806505588024,
+                "P95": 0.9712815229653713,
+                "P99": 1.5594971441072958
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 24,
+              "percentiles": {
+                "P50": 0.05525595739922134,
+                "P95": 0.220194712791942,
+                "P99": 0.24946955253995795
+              }
+            }
+          },
+          "qualified_denominator": 24,
+          "solved": 24,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 18,
+            "FEASIBLE_AT_TOLERANCE": 6
+          }
+        }
+      },
+      "paired_metrics": {
+        "active_pinch_distance_max_m": {
+          "improves": 1,
+          "n": 1,
+          "percentiles": {
+            "P50": -0.001899126568818488,
+            "P95": -0.001899126568818488,
+            "P99": -0.001899126568818488
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "active_pinch_vector_max_m": {
+          "improves": 1,
+          "n": 1,
+          "percentiles": {
+            "P50": -0.0037711173213272843,
+            "P95": -0.0037711173213272843,
+            "P99": -0.0037711173213272843
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "cross_hand_max_m": {
+          "improves": 23,
+          "n": 23,
+          "percentiles": {
+            "P50": -0.022900748389361132,
+            "P95": -0.012531684945112202,
+            "P99": -0.008937387947866852
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "local_landmark_rmse_m": {
+          "improves": 23,
+          "n": 23,
+          "percentiles": {
+            "P50": -0.01795701690725397,
+            "P95": -0.006542885322649804,
+            "P99": -0.00530493370976457
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "max_tip_m": {
+          "improves": 23,
+          "n": 23,
+          "percentiles": {
+            "P50": -0.0191550436292672,
+            "P95": -0.005097405688383755,
+            "P99": -0.00305627226103578
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "mean_tip_m": {
+          "improves": 23,
+          "n": 23,
+          "percentiles": {
+            "P50": -0.010903922465779578,
+            "P95": -0.0066520520466565244,
+            "P99": -0.006376699492420548
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "multitask_cost": {
+          "improves": 23,
+          "n": 23,
+          "percentiles": {
+            "P50": -145.50870495367644,
+            "P95": -83.76261240265589,
+            "P99": -66.5474128219909
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "pinch_distance_max_m": {
+          "improves": 20,
+          "n": 23,
+          "percentiles": {
+            "P50": -0.008185144343756959,
+            "P95": 0.004814176610610926,
+            "P99": 0.005462991311124808
+          },
+          "stable": 0,
+          "worsens": 3
+        },
+        "pinch_vector_max_m": {
+          "improves": 23,
+          "n": 23,
+          "percentiles": {
+            "P50": -0.06059336305372034,
+            "P95": -0.03253602201406535,
+            "P99": -0.030171316867242014
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "relative_wrist_rotation_rad": {
+          "improves": 21,
+          "n": 23,
+          "percentiles": {
+            "P50": -0.13384860548394661,
+            "P95": 0.119991434427176,
+            "P99": 0.2387796089611974
+          },
+          "stable": 0,
+          "worsens": 2
+        },
+        "relative_wrist_translation_m": {
+          "improves": 23,
+          "n": 23,
+          "percentiles": {
+            "P50": -0.06558575682431689,
+            "P95": -0.02605867512179955,
+            "P99": -0.02363008974922095
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "wrist_rotation_max_rad": {
+          "improves": 17,
+          "n": 23,
+          "percentiles": {
+            "P50": -0.01851889065813972,
+            "P95": 0.1060685442581059,
+            "P99": 0.2026005528104966
+          },
+          "stable": 0,
+          "worsens": 6
+        },
+        "wrist_translation_max_m": {
+          "improves": 21,
+          "n": 23,
+          "percentiles": {
+            "P50": -0.00660337010767181,
+            "P95": 0.002655156544597752,
+            "P99": 0.016343151207439906
+          },
+          "stable": 0,
+          "worsens": 2
+        }
+      },
+      "planned": 24,
+      "sdk_clips": {
+        "cases": 0,
+        "coordinates": 0
+      },
+      "strictly_paired": 23
+    },
+    "Train_TAIL": {
+      "modes": {
+        "arms14": {
+          "attempts": {
+            "budget_exhausted": 0,
+            "converged": 12,
+            "feasible": 12,
+            "iterations": {
+              "P50": 80.5,
+              "P95": 163.49999999999994,
+              "P99": 194.30000000000004
+            },
+            "n": 12,
+            "seconds": {
+              "P50": 0.1621744709991617,
+              "P95": 0.26472186764767675,
+              "P99": 0.31213076632797315
+            },
+            "termination_codes": {
+              "Optimization terminated successfully": 12
+            }
+          },
+          "hits_mm": {
+            "10": 0,
+            "15": 0,
+            "3": 0,
+            "5": 0
+          },
+          "metrics": {
+            "cross_hand_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.04390700222927651,
+                "P95": 0.11420765511113494,
+                "P99": 0.12359228795763173
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.022250721023779497,
+                "P95": 0.022706381333292155,
+                "P99": 0.022724583396912752
+              }
+            },
+            "max_tip_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.03058038210641652,
+                "P95": 0.13524496314942316,
+                "P99": 0.1499760080757102
+              }
+            },
+            "mean_tip_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.015009747727196515,
+                "P95": 0.08648825765730443,
+                "P99": 0.09642928040981744
+              }
+            },
+            "multitask_cost": {
+              "n": 4,
+              "percentiles": {
+                "P50": 161.83973888522613,
+                "P95": 674.7977845354684,
+                "P99": 744.7056917735016
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.00961486447448582,
+                "P95": 0.011187520966433979,
+                "P99": 0.011362577307503393
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.067566784547507,
+                "P95": 0.08363800110775178,
+                "P99": 0.0856887722935027
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.5685996612839028,
+                "P95": 1.1311117926128986,
+                "P99": 1.2084412682844514
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.13597246855759038,
+                "P95": 0.17392295371287697,
+                "P99": 0.1777092152153007
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.33448888490432815,
+                "P95": 0.9027887595755756,
+                "P99": 0.9820011327148599
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.056249135969730156,
+                "P95": 0.19845507854601285,
+                "P99": 0.21821237949596584
+              }
+            }
+          },
+          "qualified_denominator": 4,
+          "solved": 4,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 4
+          }
+        },
+        "whole54": {
+          "attempts": {
+            "budget_exhausted": 1,
+            "converged": 11,
+            "feasible": 12,
+            "iterations": {
+              "P50": 125.0,
+              "P95": 272.49999999999994,
+              "P99": 294.5
+            },
+            "n": 12,
+            "seconds": {
+              "P50": 0.3594246180000482,
+              "P95": 0.5585013749008795,
+              "P99": 0.5622582453813084
+            },
+            "termination_codes": {
+              "Iteration limit reached": 1,
+              "Optimization terminated successfully": 11
+            }
+          },
+          "hits_mm": {
+            "10": 3,
+            "15": 3,
+            "3": 0,
+            "5": 1
+          },
+          "metrics": {
+            "cross_hand_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.006558812490954335,
+                "P95": 0.09651151634051074,
+                "P99": 0.10904926942268042
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.005490632480570655,
+                "P95": 0.011852509618098354,
+                "P99": 0.012746145208215832
+              }
+            },
+            "max_tip_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.005623012893116602,
+                "P95": 0.12392316815937766,
+                "P99": 0.14054228717085498
+              }
+            },
+            "mean_tip_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.002660134936342203,
+                "P95": 0.07141980676155472,
+                "P99": 0.08111760929031382
+              }
+            },
+            "multitask_cost": {
+              "n": 4,
+              "percentiles": {
+                "P50": 6.272184514703052,
+                "P95": 436.79336005200724,
+                "P99": 497.50247503078725
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.0023692702199302404,
+                "P95": 0.013383726328421351,
+                "P99": 0.014935340669834686
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.003985608677474387,
+                "P95": 0.013815288323114254,
+                "P99": 0.015197736940573732
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.2333581302333807,
+                "P95": 0.9378004684798552,
+                "P99": 1.034391526852794
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.04230562641206018,
+                "P95": 0.19001805691187013,
+                "P99": 0.21079895989149147
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.29802244145159523,
+                "P95": 0.8566065965835876,
+                "P99": 0.9349757511591867
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 4,
+              "percentiles": {
+                "P50": 0.049831419161308024,
+                "P95": 0.19597388949072422,
+                "P99": 0.21651095787198144
+              }
+            }
+          },
+          "qualified_denominator": 4,
+          "solved": 4,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 3,
+            "FEASIBLE_AT_TOLERANCE": 1
+          }
+        }
+      },
+      "paired_metrics": {
+        "cross_hand_max_m": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.030649847340956667,
+            "P95": -0.016029721906670905,
+            "P99": -0.014209735162160645
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "local_landmark_rmse_m": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.015515590233097645,
+            "P95": -0.010480522222160442,
+            "P99": -0.009903768290090247
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "max_tip_m": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.02349388197514981,
+            "P95": -0.01088274881860045,
+            "P99": -0.009345911670566231
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "mean_tip_m": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.012463080052159355,
+            "P95": -0.00724714455120467,
+            "P99": -0.006667411837838395
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "multitask_cost": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -155.56755437052306,
+            "P95": -104.47881892947491,
+            "P99": -99.7056456827238
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "pinch_distance_max_m": {
+          "improves": 3,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.007147262585442592,
+            "P95": 0.004123879073665238,
+            "P99": 0.005657618900126658
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "pinch_vector_max_m": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.06036138615574024,
+            "P95": -0.0543416805528714,
+            "P99": -0.05372302100156963
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "relative_wrist_rotation_rad": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.26036175478688384,
+            "P95": -0.17249559008875062,
+            "P99": -0.16988659462279895
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "relative_wrist_translation_m": {
+          "improves": 3,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.07259321919257136,
+            "P95": 0.02384075211703865,
+            "P99": 0.034638874459799886
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "wrist_rotation_max_rad": {
+          "improves": 4,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.043722775514572765,
+            "P95": -0.03384639848686019,
+            "P99": -0.03294809735570383
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "wrist_translation_max_m": {
+          "improves": 3,
+          "n": 4,
+          "percentiles": {
+            "P50": -0.003168685844654441,
+            "P95": 0.0013146019416672141,
+            "P99": 0.0017128723004190569
+          },
+          "stable": 0,
+          "worsens": 1
+        }
+      },
+      "planned": 4,
+      "sdk_clips": {
+        "cases": 0,
+        "coordinates": 0
+      },
+      "strictly_paired": 4
+    },
+    "Validation": {
+      "modes": {
+        "arms14": {
+          "attempts": {
+            "budget_exhausted": 0,
+            "converged": 24,
+            "feasible": 24,
+            "iterations": {
+              "P50": 69.0,
+              "P95": 148.0,
+              "P99": 169.56
+            },
+            "n": 24,
+            "seconds": {
+              "P50": 0.1411977059997298,
+              "P95": 0.2708385806494334,
+              "P99": 0.3911416096200627
+            },
+            "termination_codes": {
+              "Optimization terminated successfully": 24
+            }
+          },
+          "hits_mm": {
+            "10": 0,
+            "15": 0,
+            "3": 0,
+            "5": 0
+          },
+          "metrics": {
+            "active_pinch_distance_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0018716598151237189,
+                "P95": 0.0018716598151237189,
+                "P99": 0.0018716598151237189
+              }
+            },
+            "active_pinch_vector_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0032975233936940367,
+                "P95": 0.0032975233936940367,
+                "P99": 0.0032975233936940367
+              }
+            },
+            "cross_hand_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.043681904396017775,
+                "P95": 0.08636395744144162,
+                "P99": 0.09861435304392467
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.022262540451600435,
+                "P95": 0.023644036824120022,
+                "P99": 0.023832502023301574
+              }
+            },
+            "max_tip_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.0338583121902709,
+                "P95": 0.08328554613467004,
+                "P99": 0.09951350532424721
+              }
+            },
+            "mean_tip_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.015406169985765883,
+                "P95": 0.029374219129377793,
+                "P99": 0.03357637376601094
+              }
+            },
+            "multitask_cost": {
+              "n": 8,
+              "percentiles": {
+                "P50": 152.29083794964845,
+                "P95": 276.27573014399746,
+                "P99": 313.59604032827883
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.011990727072964176,
+                "P95": 0.026453257735019598,
+                "P99": 0.030999234726164584
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.06297319571532112,
+                "P95": 0.07684435605996812,
+                "P99": 0.0782202531691864
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.5006183557184465,
+                "P95": 1.2180699937437516,
+                "P99": 1.3877245400881681
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.10741476007670503,
+                "P95": 0.20236267986065415,
+                "P99": 0.2213280288880376
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.4290779439951489,
+                "P95": 1.2487883456406608,
+                "P99": 1.4886417849050575
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.06907434027280865,
+                "P95": 0.20756569815165665,
+                "P99": 0.2586705514900246
+              }
+            }
+          },
+          "qualified_denominator": 10,
+          "solved": 8,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 8,
+            "UNKNOWN_INPUT": 2
+          }
+        },
+        "whole54": {
+          "attempts": {
+            "budget_exhausted": 4,
+            "converged": 20,
+            "feasible": 23,
+            "iterations": {
+              "P50": 122.5,
+              "P95": 300.0,
+              "P99": 300.0
+            },
+            "n": 24,
+            "seconds": {
+              "P50": 0.3469169205000071,
+              "P95": 1.0852172104519917,
+              "P99": 2.3999641578901714
+            },
+            "termination_codes": {
+              "Iteration limit reached": 4,
+              "Optimization terminated successfully": 20
+            }
+          },
+          "hits_mm": {
+            "10": 2,
+            "15": 2,
+            "3": 1,
+            "5": 2
+          },
+          "metrics": {
+            "active_pinch_distance_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0033066222698763994,
+                "P95": 0.0033066222698763994,
+                "P99": 0.0033066222698763994
+              }
+            },
+            "active_pinch_vector_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.004576527862286353,
+                "P95": 0.004576527862286353,
+                "P99": 0.004576527862286353
+              }
+            },
+            "cross_hand_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.017294160349580673,
+                "P95": 0.06298128130509632,
+                "P99": 0.0727151836261567
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.005733001724708359,
+                "P95": 0.010411017328600329,
+                "P99": 0.011190652443724816
+              }
+            },
+            "max_tip_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.01799353002559613,
+                "P95": 0.06530355753259354,
+                "P99": 0.07824050605737588
+              }
+            },
+            "mean_tip_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.004838628415693367,
+                "P95": 0.021194809588564564,
+                "P99": 0.02483056396203572
+              }
+            },
+            "multitask_cost": {
+              "n": 8,
+              "percentiles": {
+                "P50": 13.5850709322176,
+                "P95": 153.57347855145215,
+                "P99": 194.8881994032847
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.002995132861275034,
+                "P95": 0.024685641469416646,
+                "P99": 0.03242245622521294
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.008655993780274356,
+                "P95": 0.037340484008854015,
+                "P99": 0.04466719600326192
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.4295366583392581,
+                "P95": 1.2942507447634655,
+                "P99": 1.5082280216761863
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.04792636417868493,
+                "P95": 0.18679076588847263,
+                "P99": 0.19193117689018627
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.4528675431217842,
+                "P95": 1.3476409899799704,
+                "P99": 1.6236397771826174
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.06587454260335539,
+                "P95": 0.20629234224261733,
+                "P99": 0.2543701016177157
+              }
+            }
+          },
+          "qualified_denominator": 10,
+          "solved": 8,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 6,
+            "FEASIBLE_AT_TOLERANCE": 2,
+            "UNKNOWN_INPUT": 2
+          }
+        }
+      },
+      "paired_metrics": {
+        "active_pinch_distance_max_m": {
+          "improves": 0,
+          "n": 1,
+          "percentiles": {
+            "P50": 0.0014349624547526805,
+            "P95": 0.0014349624547526805,
+            "P99": 0.0014349624547526805
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "active_pinch_vector_max_m": {
+          "improves": 0,
+          "n": 1,
+          "percentiles": {
+            "P50": 0.0012790044685923162,
+            "P95": 0.0012790044685923162,
+            "P99": 0.0012790044685923162
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "cross_hand_max_m": {
+          "improves": 7,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.03190357384739169,
+            "P95": -0.00394531249358999,
+            "P99": 0.0005529063390044449
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "local_landmark_rmse_m": {
+          "improves": 8,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.016381650194089464,
+            "P95": -0.009315380336625441,
+            "P99": -0.007958230059403047
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "max_tip_m": {
+          "improves": 7,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.0229595228629685,
+            "P95": 0.0035305344741331504,
+            "P99": 0.006859025535552696
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "mean_tip_m": {
+          "improves": 8,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.009835725111341894,
+            "P95": -0.0037942760697288456,
+            "P99": -0.003350716548363046
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "multitask_cost": {
+          "improves": 8,
+          "n": 8,
+          "percentiles": {
+            "P50": -125.01204701795189,
+            "P95": -103.40624651568578,
+            "P99": -97.77926635079528
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "pinch_distance_max_m": {
+          "improves": 7,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.009512410268949563,
+            "P95": 0.014694087087737994,
+            "P99": 0.023118098246062015
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "pinch_vector_max_m": {
+          "improves": 8,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.05329056862926422,
+            "P95": -0.01903132390042382,
+            "P99": -0.009572019820429586
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "relative_wrist_rotation_rad": {
+          "improves": 5,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.05616133594501224,
+            "P95": 0.12956818052890545,
+            "P99": 0.1311809674898564
+          },
+          "stable": 0,
+          "worsens": 3
+        },
+        "relative_wrist_translation_m": {
+          "improves": 7,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.0510813121914513,
+            "P95": 0.008699094561118403,
+            "P99": 0.02964406121561841
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "wrist_rotation_max_rad": {
+          "improves": 5,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.02699654280277544,
+            "P95": 0.13900172092394203,
+            "P99": 0.14302780759448655
+          },
+          "stable": 0,
+          "worsens": 3
+        },
+        "wrist_translation_max_m": {
+          "improves": 6,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.006176788779610684,
+            "P95": 0.017612546926766337,
+            "P99": 0.020667124012152857
+          },
+          "stable": 0,
+          "worsens": 2
+        }
+      },
+      "planned": 10,
+      "sdk_clips": {
+        "cases": 0,
+        "coordinates": 0
+      },
+      "strictly_paired": 8
+    },
+    "Validation_ROOT": {
+      "modes": {
+        "arms14": {
+          "attempts": {
+            "budget_exhausted": 0,
+            "converged": 24,
+            "feasible": 24,
+            "iterations": {
+              "P50": 69.0,
+              "P95": 148.0,
+              "P99": 169.56
+            },
+            "n": 24,
+            "seconds": {
+              "P50": 0.1411977059997298,
+              "P95": 0.2708385806494334,
+              "P99": 0.3911416096200627
+            },
+            "termination_codes": {
+              "Optimization terminated successfully": 24
+            }
+          },
+          "hits_mm": {
+            "10": 0,
+            "15": 0,
+            "3": 0,
+            "5": 0
+          },
+          "metrics": {
+            "active_pinch_distance_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0018716598151237189,
+                "P95": 0.0018716598151237189,
+                "P99": 0.0018716598151237189
+              }
+            },
+            "active_pinch_vector_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0032975233936940367,
+                "P95": 0.0032975233936940367,
+                "P99": 0.0032975233936940367
+              }
+            },
+            "cross_hand_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.043681904396017775,
+                "P95": 0.08636395744144162,
+                "P99": 0.09861435304392467
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.022262540451600435,
+                "P95": 0.023644036824120022,
+                "P99": 0.023832502023301574
+              }
+            },
+            "max_tip_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.0338583121902709,
+                "P95": 0.08328554613467004,
+                "P99": 0.09951350532424721
+              }
+            },
+            "mean_tip_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.015406169985765883,
+                "P95": 0.029374219129377793,
+                "P99": 0.03357637376601094
+              }
+            },
+            "multitask_cost": {
+              "n": 8,
+              "percentiles": {
+                "P50": 152.29083794964845,
+                "P95": 276.27573014399746,
+                "P99": 313.59604032827883
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.011990727072964176,
+                "P95": 0.026453257735019598,
+                "P99": 0.030999234726164584
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.06297319571532112,
+                "P95": 0.07684435605996812,
+                "P99": 0.0782202531691864
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.5006183557184465,
+                "P95": 1.2180699937437516,
+                "P99": 1.3877245400881681
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.10741476007670503,
+                "P95": 0.20236267986065415,
+                "P99": 0.2213280288880376
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.4290779439951489,
+                "P95": 1.2487883456406608,
+                "P99": 1.4886417849050575
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.06907434027280865,
+                "P95": 0.20756569815165665,
+                "P99": 0.2586705514900246
+              }
+            }
+          },
+          "qualified_denominator": 8,
+          "solved": 8,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 8
+          }
+        },
+        "whole54": {
+          "attempts": {
+            "budget_exhausted": 4,
+            "converged": 20,
+            "feasible": 23,
+            "iterations": {
+              "P50": 122.5,
+              "P95": 300.0,
+              "P99": 300.0
+            },
+            "n": 24,
+            "seconds": {
+              "P50": 0.3469169205000071,
+              "P95": 1.0852172104519917,
+              "P99": 2.3999641578901714
+            },
+            "termination_codes": {
+              "Iteration limit reached": 4,
+              "Optimization terminated successfully": 20
+            }
+          },
+          "hits_mm": {
+            "10": 2,
+            "15": 2,
+            "3": 1,
+            "5": 2
+          },
+          "metrics": {
+            "active_pinch_distance_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.0033066222698763994,
+                "P95": 0.0033066222698763994,
+                "P99": 0.0033066222698763994
+              }
+            },
+            "active_pinch_vector_max_m": {
+              "n": 1,
+              "percentiles": {
+                "P50": 0.004576527862286353,
+                "P95": 0.004576527862286353,
+                "P99": 0.004576527862286353
+              }
+            },
+            "cross_hand_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.017294160349580673,
+                "P95": 0.06298128130509632,
+                "P99": 0.0727151836261567
+              }
+            },
+            "local_landmark_rmse_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.005733001724708359,
+                "P95": 0.010411017328600329,
+                "P99": 0.011190652443724816
+              }
+            },
+            "max_tip_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.01799353002559613,
+                "P95": 0.06530355753259354,
+                "P99": 0.07824050605737588
+              }
+            },
+            "mean_tip_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.004838628415693367,
+                "P95": 0.021194809588564564,
+                "P99": 0.02483056396203572
+              }
+            },
+            "multitask_cost": {
+              "n": 8,
+              "percentiles": {
+                "P50": 13.5850709322176,
+                "P95": 153.57347855145215,
+                "P99": 194.8881994032847
+              }
+            },
+            "pinch_distance_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.002995132861275034,
+                "P95": 0.024685641469416646,
+                "P99": 0.03242245622521294
+              }
+            },
+            "pinch_vector_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.008655993780274356,
+                "P95": 0.037340484008854015,
+                "P99": 0.04466719600326192
+              }
+            },
+            "relative_wrist_rotation_rad": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.4295366583392581,
+                "P95": 1.2942507447634655,
+                "P99": 1.5082280216761863
+              }
+            },
+            "relative_wrist_translation_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.04792636417868493,
+                "P95": 0.18679076588847263,
+                "P99": 0.19193117689018627
+              }
+            },
+            "wrist_rotation_max_rad": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.4528675431217842,
+                "P95": 1.3476409899799704,
+                "P99": 1.6236397771826174
+              }
+            },
+            "wrist_translation_max_m": {
+              "n": 8,
+              "percentiles": {
+                "P50": 0.06587454260335539,
+                "P95": 0.20629234224261733,
+                "P99": 0.2543701016177157
+              }
+            }
+          },
+          "qualified_denominator": 8,
+          "solved": 8,
+          "statuses": {
+            "BEST_FOUND_FEASIBLE_WITH_RESIDUAL": 6,
+            "FEASIBLE_AT_TOLERANCE": 2
+          }
+        }
+      },
+      "paired_metrics": {
+        "active_pinch_distance_max_m": {
+          "improves": 0,
+          "n": 1,
+          "percentiles": {
+            "P50": 0.0014349624547526805,
+            "P95": 0.0014349624547526805,
+            "P99": 0.0014349624547526805
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "active_pinch_vector_max_m": {
+          "improves": 0,
+          "n": 1,
+          "percentiles": {
+            "P50": 0.0012790044685923162,
+            "P95": 0.0012790044685923162,
+            "P99": 0.0012790044685923162
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "cross_hand_max_m": {
+          "improves": 7,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.03190357384739169,
+            "P95": -0.00394531249358999,
+            "P99": 0.0005529063390044449
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "local_landmark_rmse_m": {
+          "improves": 8,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.016381650194089464,
+            "P95": -0.009315380336625441,
+            "P99": -0.007958230059403047
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "max_tip_m": {
+          "improves": 7,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.0229595228629685,
+            "P95": 0.0035305344741331504,
+            "P99": 0.006859025535552696
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "mean_tip_m": {
+          "improves": 8,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.009835725111341894,
+            "P95": -0.0037942760697288456,
+            "P99": -0.003350716548363046
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "multitask_cost": {
+          "improves": 8,
+          "n": 8,
+          "percentiles": {
+            "P50": -125.01204701795189,
+            "P95": -103.40624651568578,
+            "P99": -97.77926635079528
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "pinch_distance_max_m": {
+          "improves": 7,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.009512410268949563,
+            "P95": 0.014694087087737994,
+            "P99": 0.023118098246062015
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "pinch_vector_max_m": {
+          "improves": 8,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.05329056862926422,
+            "P95": -0.01903132390042382,
+            "P99": -0.009572019820429586
+          },
+          "stable": 0,
+          "worsens": 0
+        },
+        "relative_wrist_rotation_rad": {
+          "improves": 5,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.05616133594501224,
+            "P95": 0.12956818052890545,
+            "P99": 0.1311809674898564
+          },
+          "stable": 0,
+          "worsens": 3
+        },
+        "relative_wrist_translation_m": {
+          "improves": 7,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.0510813121914513,
+            "P95": 0.008699094561118403,
+            "P99": 0.02964406121561841
+          },
+          "stable": 0,
+          "worsens": 1
+        },
+        "wrist_rotation_max_rad": {
+          "improves": 5,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.02699654280277544,
+            "P95": 0.13900172092394203,
+            "P99": 0.14302780759448655
+          },
+          "stable": 0,
+          "worsens": 3
+        },
+        "wrist_translation_max_m": {
+          "improves": 6,
+          "n": 8,
+          "percentiles": {
+            "P50": -0.006176788779610684,
+            "P95": 0.017612546926766337,
+            "P99": 0.020667124012152857
+          },
+          "stable": 0,
+          "worsens": 2
+        }
+      },
+      "planned": 8,
+      "sdk_clips": {
+        "cases": 0,
+        "coordinates": 0
+      },
+      "strictly_paired": 8
+    },
+    "Validation_TAIL": {
+      "modes": {
+        "arms14": {
+          "attempts": {
+            "budget_exhausted": 0,
+            "converged": 0,
+            "feasible": 0,
+            "iterations": null,
+            "n": 0,
+            "seconds": null,
+            "termination_codes": {}
+          },
+          "hits_mm": {
+            "10": 0,
+            "15": 0,
+            "3": 0,
+            "5": 0
+          },
+          "metrics": {},
+          "qualified_denominator": 2,
+          "solved": 0,
+          "statuses": {
+            "UNKNOWN_INPUT": 2
+          }
+        },
+        "whole54": {
+          "attempts": {
+            "budget_exhausted": 0,
+            "converged": 0,
+            "feasible": 0,
+            "iterations": null,
+            "n": 0,
+            "seconds": null,
+            "termination_codes": {}
+          },
+          "hits_mm": {
+            "10": 0,
+            "15": 0,
+            "3": 0,
+            "5": 0
+          },
+          "metrics": {},
+          "qualified_denominator": 2,
+          "solved": 0,
+          "statuses": {
+            "UNKNOWN_INPUT": 2
+          }
+        }
+      },
+      "paired_metrics": {},
+      "planned": 2,
+      "sdk_clips": {
+        "cases": 0,
+        "coordinates": 0
+      },
+      "strictly_paired": 0
+    }
+  },
+  "thresholds_denominator": "All planned cases in each stratum",
+  "thresholds_mm": [
+    3,
+    5,
+    10,
+    15
+  ],
+  "unknown_and_no_solution_rows": [
+    {
+      "key": "root:capture:378ae16c5078ff3880ede8d9",
+      "statuses": {
+        "arms14": "SOLVER_TIMEOUT",
+        "whole54": "FEASIBLE_AT_TOLERANCE"
+      }
+    },
+    {
+      "key": "tail:causal.tracker_right.speed",
+      "statuses": {
+        "arms14": "UNKNOWN_INPUT",
+        "whole54": "UNKNOWN_INPUT"
+      }
+    },
+    {
+      "key": "tail:causal.tracker_right_raw.speed",
+      "statuses": {
+        "arms14": "UNKNOWN_INPUT",
+        "whole54": "UNKNOWN_INPUT"
+      }
+    }
+  ]
+}

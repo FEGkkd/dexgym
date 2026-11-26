@@ -1,0 +1,25 @@
+test_recorded_witness_hand_change_is_rejected (test_p02_m1_pairing.M1PairingTests.test_recorded_witness_hand_change_is_rejected) ... ok
+test_seed_arms_match_and_hand_clips_are_enumerated (test_p02_m1_pairing.M1PairingTests.test_seed_arms_match_and_hand_clips_are_enumerated) ... ok
+test_signed_zero_change_is_rejected_during_solver_state_access (test_p02_m1_pairing.M1PairingTests.test_signed_zero_change_is_rejected_during_solver_state_access) ... ok
+test_unknown_counts_in_full_threshold_denominator_only (test_p02_m1_pairing.M1PairingTests.test_unknown_counts_in_full_threshold_denominator_only) ... ok
+test_exact_legal_witness_is_retained_by_minimax (test_p02_refinement_geometry.EpigraphTest.test_exact_legal_witness_is_retained_by_minimax) ... ok
+test_named_tip_epigraph_and_jacobian_match_independent_fk (test_p02_refinement_geometry.EpigraphTest.test_named_tip_epigraph_and_jacobian_match_independent_fk) ... ok
+test_so3_log_jacobian_near_pi_matches_world_angular_velocity (test_p02_refinement_geometry.EpigraphTest.test_so3_log_jacobian_near_pi_matches_world_angular_velocity) ... ok
+test_binary_pinch_is_the_exact_minimum_displacement_projection (test_p02_refinement_geometry.FunctionalPinchTest.test_binary_pinch_is_the_exact_minimum_displacement_projection) ... ok
+test_enter_and_exit_threshold_are_continuous_with_continuous_slope (test_p02_refinement_geometry.FunctionalPinchTest.test_enter_and_exit_threshold_are_continuous_with_continuous_slope) ... ok
+test_fractional_pinch_agrees_with_independent_penalized_least_squares (test_p02_refinement_geometry.FunctionalPinchTest.test_fractional_pinch_agrees_with_independent_penalized_least_squares) ... ok
+test_m0_rigid_registration_preserves_relative_geometry_and_named_frames (test_p02_refinement_geometry.RegistrationTest.test_m0_rigid_registration_preserves_relative_geometry_and_named_frames) ... ok
+test_m2_scales_wrist_spacing_only (test_p02_refinement_geometry.RegistrationTest.test_m2_scales_wrist_spacing_only) ... ok
+test_mirrored_node_identity_and_right_handed_frames (test_p02_refinement_geometry.RegistrationTest.test_mirrored_node_identity_and_right_handed_frames) ... ok
+test_active_indices_are_counts_and_positions (test_p02_review.PinchStatisticsTests.test_active_indices_are_counts_and_positions) ... ok
+test_named_actuators_and_coupling (test_p02_static.ActualModelTest.test_named_actuators_and_coupling) ... ok
+test_static_objective_matches_independent_directional_derivative (test_p02_static.ActualModelTest.test_static_objective_matches_independent_directional_derivative) ... ok
+test_near_pinch_exact_preservation_and_rigid_equivariance (test_p02_static.IntentTest.test_near_pinch_exact_preservation_and_rigid_equivariance) ... ok
+test_scoring_targets_are_independent_of_measured_geometry (test_p02_static.IntentTest.test_scoring_targets_are_independent_of_measured_geometry) ... ok
+test_semantic_order_ignores_record_order_and_follows_parent_ids (test_p02_static.IntentTest.test_semantic_order_ignores_record_order_and_follows_parent_ids) ... ok
+test_shared_world_preserves_relative_vectors (test_p02_static.IntentTest.test_shared_world_preserves_relative_vectors) ... ok
+
+----------------------------------------------------------------------
+Ran 20 tests in 0.413s
+
+OK

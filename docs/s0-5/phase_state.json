@@ -451,5 +451,23 @@
       "C2-RT",
       "robot-base"
     ]
+  },
+  "p02_final_handoff": {
+    "run": "P02-FINAL-20261126-ecd12ec",
+    "reviewed_baseline": "ecd12ecd6657539e44830dde07c6055c6c507192",
+    "at": "2026-11-26T23:32:12+08:00",
+    "evidence_ref": "evidence/P02/final_handoff/execution_receipt.json",
+    "evidence_sha256": "f7c874a48d6be5128f2f895c12038c9fb1057f25be57dab91ce2280478fa1458",
+    "formal_physical_scoring": "PENDING_HUMAN_APPROVAL",
+    "p02_limited_signoff": "PENDING_PROJECT_USER",
+    "hardware_execution_application": "A1_A2_NO_MOTION_PENDING_SITE_AND_PROJECT_APPROVAL",
+    "p03_requires": [
+      "P02",
+      "P01-T",
+      "C2-RT",
+      "robot-base",
+      "approved formal scoring",
+      "startup authorization"
+    ]
   }
 }

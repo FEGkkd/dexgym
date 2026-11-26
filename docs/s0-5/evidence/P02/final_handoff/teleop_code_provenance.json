@@ -1,0 +1,123 @@
+{
+  "branch": "4sensor",
+  "dirty": true,
+  "files": {
+    "src/manus_ros2/src/ManusDataPublisher.cpp": {
+      "bytes": 43204,
+      "head_sha256": "6c28f9e2b602a3411f1508183855ddcbecdb30ff9c2b0b2223edf2c6b346485e",
+      "is_same_as_head": true,
+      "sha256": "6c28f9e2b602a3411f1508183855ddcbecdb30ff9c2b0b2223edf2c6b346485e"
+    },
+    "src/manus_ros2_msgs/msg/ManusGlove.msg": {
+      "bytes": 306,
+      "head_sha256": "b7509eb4ff5ec07e23e499d2a8415c101b9a9ffc7d3e303df63290098b0461c5",
+      "is_same_as_head": true,
+      "sha256": "b7509eb4ff5ec07e23e499d2a8415c101b9a9ffc7d3e303df63290098b0461c5"
+    },
+    "src/manus_ros2_msgs/msg/ManusRawNode.msg": {
+      "bytes": 100,
+      "head_sha256": "b6f7ea98786eb0d22385bb4848456b7e0b0c19c35a0098a931088383490ace83",
+      "is_same_as_head": true,
+      "sha256": "b6f7ea98786eb0d22385bb4848456b7e0b0c19c35a0098a931088383490ace83"
+    },
+    "src/manus_wuji_interfaces/msg/HandCommand.msg": {
+      "bytes": 95,
+      "head_sha256": "22ff69186749edc8c41932e2b83e6b2b8b9db993854d1f486c8b4aa61cd70986",
+      "is_same_as_head": true,
+      "sha256": "22ff69186749edc8c41932e2b83e6b2b8b9db993854d1f486c8b4aa61cd70986"
+    },
+    "src/manus_wuji_interfaces/msg/HandDiagnostics.msg": {
+      "bytes": 903,
+      "head_sha256": "586ca13402fd20e505615cbcf31a8e6f89f5ac59fad2792227068b65cc83109e",
+      "is_same_as_head": true,
+      "sha256": "586ca13402fd20e505615cbcf31a8e6f89f5ac59fad2792227068b65cc83109e"
+    },
+    "src/manus_wuji_interfaces/msg/HandState.msg": {
+      "bytes": 1071,
+      "head_sha256": "cba6f85a44a2a12db164b52dbeca42881eaa74b36eb18d3b14b4136c1b7f32ac",
+      "is_same_as_head": true,
+      "sha256": "cba6f85a44a2a12db164b52dbeca42881eaa74b36eb18d3b14b4136c1b7f32ac"
+    },
+    "src/tianji_interfaces/msg/RobotState.msg": {
+      "bytes": 364,
+      "head_sha256": "7a7b0743de6de68d00c9412de12464f42cd744ff68def289211281cdb4d9e343",
+      "is_same_as_head": true,
+      "sha256": "7a7b0743de6de68d00c9412de12464f42cd744ff68def289211281cdb4d9e343"
+    },
+    "src/tianji_interfaces/msg/TeleopState.msg": {
+      "bytes": 112,
+      "head_sha256": "d63c412812e4bafe47f4a3f1f87fa1daf330550d1e4e8e503323f486a742cdd2",
+      "is_same_as_head": true,
+      "sha256": "d63c412812e4bafe47f4a3f1f87fa1daf330550d1e4e8e503323f486a742cdd2"
+    },
+    "src/tianji_interfaces/msg/TrackerPose.msg": {
+      "bytes": 86,
+      "head_sha256": "e3f5262e1e720e0a3a86641c0f070edb5e63b2512b246ff9a7b3392643a7453e",
+      "is_same_as_head": true,
+      "sha256": "e3f5262e1e720e0a3a86641c0f070edb5e63b2512b246ff9a7b3392643a7453e"
+    },
+    "src/tianji_real_driver/include/tianji_real_driver/command_trace.hpp": {
+      "bytes": 4771,
+      "head_sha256": "a96b5200537c57cb7294725f77807673194a45865f8fb86ddb1d5a50ac3df81b",
+      "is_same_as_head": false,
+      "sha256": "c8e2f0e47f5e1696a1fe5e3c542b714a91d5b87632f41d628892294e4ab2c201"
+    },
+    "src/tianji_real_driver/include/tianji_real_driver/real_driver_node.hpp": {
+      "bytes": 15302,
+      "head_sha256": "5c72d136dcd24c625f38d2b6d0195f52dfc8a84ed107760c86b6a07635da0957",
+      "is_same_as_head": false,
+      "sha256": "6a6094d7466b747d80cbb273cf2e98909fa25fc3196c22307f213f5d417d1b06"
+    },
+    "src/tianji_real_driver/src/real_driver_node.cpp": {
+      "bytes": 82015,
+      "head_sha256": "f7e727332b2ec3eb826c587f7c5b413b784595a6e312afe6693b4b07a17ae571",
+      "is_same_as_head": false,
+      "sha256": "375d29e02666bd57e9c86508d91a9f52e72d64675246209c8ee0e43f429d5e73"
+    },
+    "src/tianji_real_driver/test/test_command_trace.cpp": {
+      "bytes": 12116,
+      "head_sha256": "70185ea54b750fe5ede2dabb7776db668420a4c6ab0020077b98e7bb5ef641d1",
+      "is_same_as_head": false,
+      "sha256": "72c9eb7d0faa95c36c1c18f96fbfe8966ff42a6ad566b1b1c1e8de3adc622de0"
+    },
+    "src/vive_tracker_ros/src/tracker_calibration_node.cpp": {
+      "bytes": 2462,
+      "head_sha256": "29520c915341d55a9796ae9bda1c3f01d6203e020b73e132317d773dbd63f32d",
+      "is_same_as_head": true,
+      "sha256": "29520c915341d55a9796ae9bda1c3f01d6203e020b73e132317d773dbd63f32d"
+    },
+    "src/vive_tracker_ros/src/tracker_pose_transformer_node.cpp": {
+      "bytes": 6625,
+      "head_sha256": "835a1c5e4dcf993c1cdd8f175a6fcf1d02aea9721da80ce07ebfebf6e354fcdc",
+      "is_same_as_head": true,
+      "sha256": "835a1c5e4dcf993c1cdd8f175a6fcf1d02aea9721da80ce07ebfebf6e354fcdc"
+    },
+    "src/vive_tracker_ros/src/vive_tracker_node.cpp": {
+      "bytes": 14310,
+      "head_sha256": "32b3b75c43a35dc6df495a4b33d22b36d2c8d53b1425b9e47db04de5488a2be0",
+      "is_same_as_head": true,
+      "sha256": "32b3b75c43a35dc6df495a4b33d22b36d2c8d53b1425b9e47db04de5488a2be0"
+    },
+    "src/vive_tracker_ros/src/world_adapter_node.cpp": {
+      "bytes": 1087,
+      "head_sha256": "7498fef99877b99b8ea47507e7a27b0f27977b43a7fa8f17fc7f92a424fd7711",
+      "is_same_as_head": true,
+      "sha256": "7498fef99877b99b8ea47507e7a27b0f27977b43a7fa8f17fc7f92a424fd7711"
+    },
+    "src/whole_body_teleop/src/teleop_controller_node.cpp": {
+      "bytes": 185012,
+      "head_sha256": "9fcca3b1badf3a1db981d74495aa0be1760e8b524fe5bfa8f072b5252797710b",
+      "is_same_as_head": false,
+      "sha256": "fdf40858037d417e684894e3193d52b41e3c8d0b841063a5192182fccd740f6a"
+    },
+    "src/wuji_hand2_real_driver/src/node.cpp": {
+      "bytes": 38985,
+      "head_sha256": "68e3e82ee863022da4acf97c7dd43a4ec55144b4fb15b9b58128f92db0b22224",
+      "is_same_as_head": true,
+      "sha256": "68e3e82ee863022da4acf97c7dd43a4ec55144b4fb15b9b58128f92db0b22224"
+    }
+  },
+  "head": "30cf13bdc496c43b3016462cfa0a206334d1ff7f",
+  "root": "/home/ubuntu/teleop_ws",
+  "scope": "Read-only selected source worktree bytes, not loaded binary fidelity or hardware qualification"
+}

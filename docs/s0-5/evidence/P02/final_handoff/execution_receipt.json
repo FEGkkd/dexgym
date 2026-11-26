@@ -1,0 +1,48 @@
+{
+  "approved_inputs_sha256": {
+    "execution_receipt.json": "0adfc8976ebfa7ee0845d42e5d291caa70f94cf172e72d4a7d2fcb3c16a15aa0",
+    "fitted_candidates.json": "577195a8eb66699e11cf8bcf910383086672c384723d61fa90c13ed90652baa7",
+    "scoring_freeze_candidate.json": "96aac52666d7b03d6a3c087cb845f824a2ed4403f1cf35ae87af0264dd5f4f94"
+  },
+  "archive_root": "/home/ubuntu/dexgym_data/s0-5/p02/runs/P02-FINAL-20261126-ecd12ec",
+  "authorized_p03": false,
+  "authorized_robot_motion": false,
+  "authorized_scope": "Limited P02 static research closure and design-only hardware prerequisite preparation",
+  "execution_head": "edd9974e88a47412192c8b3f8d93415a974a7fec",
+  "exit_codes": {
+    "audit-01/exit": 0,
+    "m1-01/exit": 0,
+    "m1-01/tests.exit": 0
+  },
+  "formal_physical_scoring": "PENDING_HUMAN_APPROVAL",
+  "hardware_prerequisites": {
+    "C2-RT": "BLOCKED",
+    "Final Test": "BLOCKED",
+    "P01-T": "BLOCKED",
+    "robot-base": "BLOCKED"
+  },
+  "historical_artifacts_rehashed": {
+    "P02-20261126-54c2e06": 113,
+    "P02-REFINE-20261126-8753921": 138
+  },
+  "phases": {
+    "P01": "ACCEPTED",
+    "P02": "READY_FOR_REVIEW",
+    "P03": "NOT_STARTED"
+  },
+  "published_sha256": {
+    "agent_work_manifest.json": "b45344cd15c08a583eaba84b49bd40ef917d1eb844a0720beb1d11d8e08b2c75",
+    "archive_sha256.json": "27c2d303cea93113cbab239cbe4a6a70cfbd24dae1fae09fcb323ca13056df7a",
+    "independent_audit_summary.json": "5c6fec9de7af2df03654baaeb3c41a58390f7bab218c85a9e34225ac3d55e398",
+    "limited_scope_candidate.json": "9f78b4c3087289859d22eefd71a1b567317b3951488159bff174b2657c10ffa7",
+    "m1_pairing_summary.json": "466d77ee749d20b04f17fcaa171918b1b4270a789f059bfdf3d580a00e2f9edd",
+    "p02_unit_tests.txt": "9c677c312fbca6579cd7c17ce1ccfbf4e31e90a0cc92b16aacfba750d56f8ede",
+    "teleop_code_provenance.json": "8d03a59fa99e10508f8020abfe2eee0466b143d47d7c0109f7902b3dc1763c39"
+  },
+  "reviewed_baseline": "ecd12ecd6657539e44830dde07c6055c6c507192",
+  "rl_training_started": false,
+  "run": "P02-FINAL-20261126-ecd12ec",
+  "schema": "s05.p02.final_handoff.receipt.v1",
+  "tests": 20,
+  "work_plan_sha256": "f5e47035b050d07808315298b3581f5ce528ea62452d35991ec8ab4f55070a90"
+}

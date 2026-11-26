@@ -1,0 +1,35 @@
+{
+  "accepted_research_uses": {
+    "M0": "IMMUTABLE_HISTORICAL_INTENT_AUDIT",
+    "M1": "HISTORICAL_STATIC_SIMULATION_DEVELOPMENT_SCALE_1",
+    "M2": "WORKSPACE_COMPRESSION_DIAGNOSTIC",
+    "minimax": "POSITIONAL_REACH_DIAGNOSTIC",
+    "smooth_pinch": "UNFROZEN_CONTINUITY_RESEARCH"
+  },
+  "case_denominator": "32 root + 6 tail; paired winners separately counted",
+  "evidence_sha256": {
+    "hardware_evidence.json": "900aa4aed15c6e718049e7eb45ed5c4541f3d013308c5a75072c0b3fba0c0614",
+    "independent_audit_summary.json": "5c6fec9de7af2df03654baaeb3c41a58390f7bab218c85a9e34225ac3d55e398",
+    "m1_pairing_summary.json": "466d77ee749d20b04f17fcaa171918b1b4270a789f059bfdf3d580a00e2f9edd"
+  },
+  "exact_hardware_motion_authorized": false,
+  "formal_physical_scoring": "PENDING_HUMAN_APPROVAL",
+  "original_scoring_candidate_sha256": "96aac52666d7b03d6a3c087cb845f824a2ed4403f1cf35ae87af0264dd5f4f94",
+  "p03_requires": [
+    "P02_ACCEPTED",
+    "P01-T_ACCEPTED",
+    "C2-RT_ACCEPTED",
+    "robot-base_ACCEPTED",
+    "APPROVED_FORMAL_SCORING_SCOPE",
+    "P03_START_AUTHORIZATION"
+  ],
+  "physical_readiness": {
+    "C2-RT": "BLOCKED",
+    "P01-T": "BLOCKED",
+    "robot-base": "BLOCKED"
+  },
+  "retain_M0_intent_and_excluded_targets": true,
+  "schema": "s05.p02.limited_research_handoff.v1",
+  "startup_authorized": false,
+  "status": "PENDING_HUMAN_LIMITED_SIGNOFF"
+}
