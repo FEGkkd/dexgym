@@ -88,8 +88,8 @@
     "P01-B": "BLOCKED",
     "P01-B-HMB": "ACCEPTED",
     "P01-C": "ACCEPTED",
-    "P01-D": "READY_FOR_REVIEW",
-    "P01-E": "NOT_STARTED",
+    "P01-D": "ACCEPTED",
+    "P01-E": "IN_PROGRESS",
     "P01-F": "NOT_STARTED",
     "P01-T": "BLOCKED"
   },
@@ -256,6 +256,42 @@
       "frozen_config_sha256": "f7f2eeba2cfc8adc9d1649618f353956470eb477a6a99448bdbe7332dd5a6d81",
       "report_ref": "reports/P01_D_acceptance.md",
       "scope": "development HMB freeze candidate, human approval pending"
+    },
+    {
+      "phase": "P01-D",
+      "from": "READY_FOR_REVIEW",
+      "to": "ACCEPTED",
+      "scope": "D1 freeze and bounded results",
+      "at": "2026-11-26T14:05:10+08:00",
+      "reviewed_commit": "34e44b6debcd4bb6f10be53a36dc8fec8bc4e7b2",
+      "frozen_config_ref": "evidence/P01_D/products/frozen_config.json",
+      "frozen_config_sha256": "f7f2eeba2cfc8adc9d1649618f353956470eb477a6a99448bdbe7332dd5a6d81",
+      "review_receipt_ref": "evidence/P01_D/review_receipt.json",
+      "review_receipt_sha256": "40bf56f01337d0ceb32f8977efc80154e40144bbc949becbb7050d12963bed93",
+      "approval": {"type": "human", "by": "project user", "ref": "reports/approvals/P01_D_ACCEPTED_P01_E_E0.md"}
+    },
+    {
+      "phase": "P01-E",
+      "from": "NOT_STARTED",
+      "to": "IN_PROGRESS",
+      "scope": "E0_PREFLIGHT",
+      "at": "2026-11-26T14:07:57+08:00",
+      "authorization_ref": "reports/approvals/P01_D_ACCEPTED_P01_E_E0.md",
+      "spec_sha256": "1de9df40e11a7c73de3c99fe77c67d878e24635a0303e940639bfd37ee6b69c3",
+      "implementation_spec_ref": "specs/P01_E_production_preflight.md",
+      "implementation_spec_sha256": "cb7f1783da9f667e8f7fd90abc5a27ccc58433196a5de277c27dcf6fa4ea6e13",
+      "sample_plan_ref": "evidence/P01_E_E0/plan.json",
+      "sample_plan_sha256": "de230215f950c48192effa7dcb05d5bfb1f8e3977cebdf78d0fd81f2a3528eaf",
+      "run_id": "P01-E-E0-20261126-34e44b6"
     }
-  ]
+  ],
+  "p01e_preflight": {
+    "status": "READY_FOR_REVIEW",
+    "at": "2026-11-26T14:22:01+08:00",
+    "run_id": "P01-E-E0-20261126-34e44b6",
+    "receipt_ref": "evidence/P01_E_E0/review_receipt.json",
+    "receipt_sha256": "4dd4c3ea4c1b22a669c9b6d67ccbb3ec49b7653128ea88c728ed9562319337a4",
+    "candidate_config_sha256": "6aeaa203e39bea392bc20d5fceee26ea5f85752d219824f98f96b2c852846317",
+    "execution_lock_sha256": "da3e1f0759ac010a989d9431f0337371df6fe208914139bd711be15354a453af"
+  }
 }

@@ -20,6 +20,10 @@ from .sync_evidence import audit_freshness,compare_prefix,eventize,stream_statis
 from .synchronize import CORE_STREAMS,OfflineAlignment,STREAMS,batch_causal
 
 
+class InsufficientSourceEvidence(ValueError):
+    pass
+
+
 @dataclass
 class Window:
     recording_id: str
@@ -77,9 +81,11 @@ def read_recording(record,assets,matrix,writer,sdk,plan,windows,*,production=Fal
         groups[stream],_=scan_stream(stream,shards,windows,plan['context_ns'],limits['physical_per_part'],measurement=m)
         scan[stream]=m
         if not groups[stream]:
-            raise ValueError(f'{stream} has no required bounded proof')
+            raise InsufficientSourceEvidence(f'{stream} has no required bounded proof')
         rule=audit[groups[stream][0]['index']['topic']]
-        invalid=sum(not validates_shape(row,rule['role']) or bool(row['nonfinite']) for row in groups[stream])
+        known_invalid=lambda r: production and rule['role']=='registered_tracker' and r['fields'].get('valid') is False
+        invalid=sum((not validates_shape(row,rule['role']) or bool(row['nonfinite'])) and not known_invalid(row)
+                    for row in groups[stream])
         m.update(source_records=len(groups[stream]),invalid_schema_rows=invalid,
                  schema_sha256=rule['schema_sha256'],
                  writer_source_ids=sorted({row['index']['source_instance'] for row in groups[stream]}),
@@ -91,10 +97,17 @@ def read_recording(record,assets,matrix,writer,sdk,plan,windows,*,production=Fal
     target=yaml.safe_load(Path(target_file['path']).read_bytes())['tracker_pose_transformer']['ros__parameters']['target_frame']
     ext=extrinsics(Path(config['path']))
     pair=[]
+    body={}
+    def inside(rows,lo,hi):
+        return [r for r in rows if lo<=r['clock']['collector_realtime']['value']<hi]
     for side in ('left','right'):
         main='tracker_'+side
         result=verify_pairs(groups[main+'_raw'],groups[main],ext[side]['transform'],target)
         pair.append(dict(side=side,**result))
+        if production:
+            for name,(lo,hi) in windows.items():
+                local=verify_pairs(inside(groups[main+'_raw'],lo,hi),inside(groups[main],lo,hi),ext[side]['transform'],target)
+                body.setdefault(name,[]).append(dict(side=side,**local))
     sources=[r for rows in groups.values() for r in rows]
     origin=metadata['start_monotonic_ns']
     observed,topologies,invalid,geom=eventize(sources,origin,plan['diag'],config['sha256'],sdk)
@@ -130,6 +143,17 @@ def read_recording(record,assets,matrix,writer,sdk,plan,windows,*,production=Fal
                   source_calibration_scope='recorded software registration only',invalid_record_count=len(invalid),
                   invalid_record_examples=invalid[:12],
                   run_clocks=[dict(window=w.label,**w.clock) for w in selected])
+    if production:
+        registered_invalid={(r['index']['part_id'],r['index']['physical_message']) for stream in ('tracker_left','tracker_right')
+                            for r in groups[stream] if r['fields'].get('valid') is False}
+        evidence['production_witness']=dict(body_calibration=body,
+            invalid_geometry=[r for r in invalid if r['reason']=='GEOMETRY_INVALID' and
+                (r['index']['part_id'],r['index']['physical_message']) not in registered_invalid],
+            observed_clock_generations=sorted({e.clock_generation for e,_ in observed}),
+            monotonic_regressions={key:sum(
+                b['clock']['collector_monotonic']['value']<a['clock']['collector_monotonic']['value']
+                for a,b in zip(values,values[1:])) for key,values in groups.items()},
+            known_registered_invalid=len(registered_invalid))
     return selected,evidence
 
 

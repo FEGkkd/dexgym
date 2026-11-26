@@ -1,0 +1,129 @@
+{
+  "commands": {
+    "attempt-01": {
+      "unit": {
+        "argv_shell": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+        "exit": 1,
+        "stderr_sha256": "11b06fb9b66f3ff09ff43f2f58fd714b57e49dcc4941101b50d2c1e7c86afd07",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "attempt-02": {
+      "prepare": {
+        "argv_shell": "-m dexgym.tasks.direct.wholebody_s05.data.p01e_build prepare --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-02/candidate",
+        "exit": 1,
+        "stderr_sha256": "2660e1770fbd333780e6411765ffac2044c7de8f67ffac9d8eaeb0b53084d92d",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "unit": {
+        "argv_shell": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+        "exit": 0,
+        "stderr_sha256": "f2818551dd774c472563782d0a9d91c3132b5890f811e71aaab8108863981196",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "attempt-03": {
+      "prepare": {
+        "argv_shell": "-m dexgym.tasks.direct.wholebody_s05.data.p01e_build prepare --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-03/candidate",
+        "exit": 1,
+        "stderr_sha256": "f46c40b908fe68ff67d06110dad74dcd8a0d59e0dbdf9dfc6e23fc28be6115fd",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "unit": {
+        "argv_shell": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+        "exit": 0,
+        "stderr_sha256": "6d069f710824c0798f9b155dd6635fc74e4382d5c1bf05af5e06ca2afa9929cb",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "attempt-04": {
+      "interrupted": {
+        "argv_shell": "-m dexgym.tasks.direct.wholebody_s05.data.p01e_build probe --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --config /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-04/candidate/candidate_config.json --lock /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-04/candidate/execution_lock.json --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-04/trial_products --fixture /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/fixture_plan.json --session 1 --inject-index 1",
+        "exit": 1,
+        "stderr_sha256": "54adf37780e8fa0dcfe91eebc50c246a784927c8df984c413fabcb3c49e9418f",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "prepare": {
+        "argv_shell": "-m dexgym.tasks.direct.wholebody_s05.data.p01e_build prepare --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-04/candidate",
+        "exit": 0,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "resume": {
+        "argv_shell": "-m dexgym.tasks.direct.wholebody_s05.data.p01e_build probe --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --config /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-04/candidate/candidate_config.json --lock /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-04/candidate/execution_lock.json --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-04/trial_products --fixture /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/fixture_plan.json --session 2",
+        "exit": 1,
+        "stderr_sha256": "54adf37780e8fa0dcfe91eebc50c246a784927c8df984c413fabcb3c49e9418f",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "unit": {
+        "argv_shell": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+        "exit": 0,
+        "stderr_sha256": "f8636fd7abc24a071a91398fe6b262daa7ede50ffa3be627a02433b4b7c287af",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "attempt-05": {
+      "interrupted": {
+        "argv_shell": "-m dexgym.tasks.direct.wholebody_s05.data.p01e_build probe --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --config /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-05/candidate/candidate_config.json --lock /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-05/candidate/execution_lock.json --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-05/trial_products --fixture /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/fixture_plan.json --session 1 --inject-index 1",
+        "exit": 0,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "5ddacd34fccff283ecf4df12ed962c2bd20fba8591be8d047e35eebd25e286d8"
+      },
+      "prepare": {
+        "argv_shell": "-m dexgym.tasks.direct.wholebody_s05.data.p01e_build prepare --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-05/candidate",
+        "exit": 0,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "unit": {
+        "argv_shell": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+        "exit": 0,
+        "stderr_sha256": "8240b1a4035245dee958a5ac0d2168e3b11e652a9f4e07250f276065320656ed",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "attempt-06": {
+      "idempotent": {
+        "argv_shell": "-m dexgym.tasks.direct.wholebody_s05.data.p01e_build probe --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --config /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-06/candidate/candidate_config.json --lock /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-06/candidate/execution_lock.json --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-06/trial_products --fixture /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/fixture_plan.json --session 3",
+        "exit": 0,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "bc103baff9656ace49b4bb595dea86f8032017a362b960062cb58edf1ed64811"
+      },
+      "integration": {
+        "argv_shell": "docs/s0-5/evidence/P01_E_E0/verify_e0.py /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-06 /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry",
+        "exit": 0,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "bb747df85fd2c86330761a49392257615a189e605f7004aa8e0f7a1d58caf882"
+      },
+      "interrupted": {
+        "argv_shell": "-m dexgym.tasks.direct.wholebody_s05.data.p01e_build probe --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --config /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-06/candidate/candidate_config.json --lock /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-06/candidate/execution_lock.json --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-06/trial_products --fixture /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/fixture_plan.json --session 1 --inject-index 1",
+        "exit": 1,
+        "stderr_sha256": "984873a9fb0a584f8d870f38c72f41e9f5f0cdbd15f70f0521212f33e58bf837",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "prepare": {
+        "argv_shell": "-m dexgym.tasks.direct.wholebody_s05.data.p01e_build prepare --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-06/candidate",
+        "exit": 0,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "resume": {
+        "argv_shell": "-m dexgym.tasks.direct.wholebody_s05.data.p01e_build probe --old-a /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-A-20261126-09c1c9e-r03/registry --config /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-06/candidate/candidate_config.json --lock /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-06/candidate/execution_lock.json --output /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/attempt-06/trial_products --fixture /home/ubuntu/dexgym_data/s0-5/p01/runs/P01-E-E0-20261126-34e44b6/fixture_plan.json --session 2",
+        "exit": 0,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_sha256": "f71f5ddeff579bb552219934f1b5255c0c5d24ca53640a91914b6b9dddfa67c4"
+      },
+      "unit": {
+        "argv_shell": "-m unittest discover -s tests/s0_5/unit -p test_p01\\*.py -v",
+        "exit": 0,
+        "stderr_sha256": "90212b818163ab68889fc56bc0c2a689041868d004f17a026fdf2bf5e28d4ba6",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "controlled_expected_exit": {
+    "interrupted": 1
+  },
+  "schema": "s05.p01e.e0_commands.v1",
+  "successful_attempt": "attempt-06"
+}

@@ -415,60 +415,7 @@ def approved(config_path,phase_path,destination):
 
 
 def build(args):
-    config=approved(args.config,args.approval_state,args.output)
-    plan=config['plan']
-    if digest(args.old_a/'registry.jsonl')!=config['registry_sha256']:
-        raise ValueError('Original registry changed')
-    matrix,writer=hints()
-    sdk=CalendarDecoder(SDK)
-    reg,_=registry(args.old_a)
-    budget=read(args.config.parent/'resource_budget.json')['production']
-    pool=read(args.config.parent/'source_whitelist.json')['sources']
-    guard=resources(plan,budget['required_peak_including_staging_bytes'])
-    if guard['ram_available_bytes']<budget['minimum_available_ram_bytes']:
-        raise ValueError('Resource pause: approved RSS budget exceeds RAM headroom')
-    params=config['parameters']
-    published=[]
-    for source in pool:
-        row=reg[source['recording_id']]
-        start,stop=row['recorded_interval_ns']
-        window_size=budget['partition_seconds']*1_000_000_000
-        for chunk,lo in enumerate(range(start,stop,window_size)):
-            hi=min(stop,lo+window_size)
-            guard=resources(plan,budget['per_chunk_published_cap_bytes'])
-            if guard['ram_available_bytes']<budget['minimum_available_ram_bytes']:
-                raise ValueError('Resource pause before source partition')
-            label=f'{chunk:05}'
-            windows,witness=read_recording(row,asset_records(reg,row),matrix,writer,sdk,plan,{label:(lo,hi)},production=True)
-            if any(witness[k]!=source[k] for k in ('episode_id','collector_instance_id','manifest_sha256',
-                                                   'snapshot_sha256','calibration_sha256','assets')):
-                raise ValueError('Published source identity differs from the approved whitelist')
-            # Qualification used strata; preserve later sensor-invalid data as masks or explicit failures.
-            if witness['status']!='QUALIFIED' and any('Host recorder' in msg or 'schema' in msg for msg in witness['issues']):
-                raise ValueError('Unqualified production partition; keep P01-E failure for review')
-            item=windows[0]
-            if any(len(t['joints'])>budget['max_topology_nodes'] for t in item.topologies):
-                raise ValueError('Observed topology exceeds budgeted node count; isolated')
-            if any(t not in source['topologies'] for t in item.topologies):
-                raise ValueError('Source topology/configuration drift; isolated explicitly')
-            item.bind_quaternion_qc(config['numerical_qc']['quaternion_tolerance'])
-            ca,off,alignment,_=item.replay(params)
-            dest=args.output/source['split']/source['root_episode_id'].replace(':','_')/label
-            write_partition(dest,max_partition_bytes=budget['per_chunk_published_cap_bytes'],
-                            **publish_args(item,(ca,off,alignment),witness,params,source['split'],
-                                           plan['chosen_segment_design_ticks']))
-            read_partition(dest,'causal')
-            read_partition(dest,'offline')
-            published.append(dict(recording_id=source['recording_id'],block=label,path=str(dest.relative_to(args.output)),
-                                  manifest_sha256=digest(dest/'manifest.json'),ticks=len(ca)))
-    index=args.output/'build_index.json'
-    if index.exists():
-        if read(index)!=published:
-            raise ValueError('Existing run index differs')
-    else:
-        pending=args.output/'.build_index.pending'
-        pending.write_bytes(json_bytes(published))
-        pending.rename(index)
+    raise ValueError('The archived D1 builder is retired. Use the separately reviewed P01-E entry.')
 
 
 def main():

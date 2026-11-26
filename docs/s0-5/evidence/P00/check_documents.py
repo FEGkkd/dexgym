@@ -172,7 +172,7 @@ def p01_dependency_states(document):
                         f'{owner} requires the reapproved v0.2.1 spec')
             if owner=='P01-C':
                 scopes[owner]=event.get('scope')
-            if owner in ('P01-C','P01-D'):
+            if owner in ('P01-C','P01-D') or (owner=='P01-E' and event.get('scope')=='E0_PREFLIGHT'):
                 for field in ('implementation_spec','sample_plan'):
                     artifact=checked_file(ROOT,event[f'{field}_ref'])
                     require(digest(artifact.read_bytes())==event[f'{field}_sha256'],
@@ -231,6 +231,18 @@ def p01_dependency_states(document):
             require(approval.get('type')=='human' and bool(approval.get('by')) and bool(approval.get('ref')),
                     f'{owner} requires human ACCEPTED')
             checked_file(ROOT,approval['ref'])
+            if owner=='P01-D':
+                commit=event.get('reviewed_commit','')
+                require(bool(re.fullmatch(r'[0-9a-f]{40}',commit)),'P01-D acceptance requires the reviewed commit')
+                for prefix in ('frozen_config','review_receipt'):
+                    reference=event[f'{prefix}_ref']
+                    current_file=checked_file(ROOT,reference)
+                    witness=event[f'{prefix}_sha256']
+                    published=git('show',f'{commit}:docs/s0-5/{reference}')
+                    require(published.returncode==0 and digest(published.stdout)==digest(current_file.read_bytes())==witness,
+                            f'P01-D approval differs from reviewed {prefix}')
+                require(load_json(checked_file(ROOT,event['review_receipt_ref']))['technical_gates']['D1']=='PASS',
+                        'P01-D approval requires D1 PASS')
             if owner=='P01-C' and scopes.get(owner)=='HMB_SIM_REVIEW':
                 require(event.get('scope')=='HMB_SIM_REVIEW','P01-C acceptance scope differs from review')
                 path=event['evidence_ref']
@@ -251,6 +263,8 @@ def p01_dependency_states(document):
             accepted.pop(owner,None)
         states[owner],previous=status,moment
     require(states==document['p01_subphases'], 'P01 current subphase status differs from history')
+    if 'p01e_preflight' in document:
+        check_e0_result(document)
     for event in document['events']:
         moment=datetime.fromisoformat(event['at'])
         if event['phase']=='P01' and event['to']=='ACCEPTED':
@@ -261,6 +275,26 @@ def p01_dependency_states(document):
                 require(all(q in clock_approval and clock_approval[q]<=moment for q in ('C2-RT','robot-base')),
                         'P03 requires C2-RT and robot-base ACCEPTED')
     print('PASS DCR-001 subphase replay, human gates, active spec and independent P03 dependency')
+
+
+def check_e0_result(document):
+    review=document['p01e_preflight']
+    path=checked_file(ROOT,review['receipt_ref'])
+    require(digest(path.read_bytes())==review['receipt_sha256'],'E0 receipt hash mismatch')
+    receipt=load_json(path)
+    require(review['status']=='READY_FOR_REVIEW' and review['run_id']==receipt['run_id'] and
+            receipt['scope']=='E0_TRANSIENT_NON_PRODUCTION' and
+            receipt['technical_gates']=={'E0':'PASS','E1':'NOT_RUN'} and receipt['approval']=='AWAITING_HUMAN',
+            'E0 trial technical evidence cannot authorize E1')
+    for name,value in receipt['repository_evidence_sha256'].items():
+        require(digest(checked_file(path.parent,name).read_bytes())==value,f'E0 evidence differs: {name}')
+    for key,filename in (('candidate_config_sha256','candidate_config.json'),
+                         ('execution_lock_sha256','execution_lock.json')):
+        require(review[key]==receipt[key]==receipt['repository_evidence_sha256'][filename],
+                f'E0 candidate hash mismatch: {key}')
+    starts=[x for x in document['p01_subphase_events'] if x['phase']=='P01-E' and x.get('scope')=='E0_PREFLIGHT']
+    require(any(x['run_id']==review['run_id'] for x in starts),'E0 receipt needs a scoped start event')
+    print('PASS E0 bounded review receipt and exact execution candidate hashes')
 
 
 def clock_dependency_state(document,dcr):
@@ -333,7 +367,7 @@ def structure():
             'Traceability row/ownership')
     p01_adjuncts={'P01_T_telemetry_acquisition.md','P01_C_calibration_and_causal_sync.md',
                   'P01_C_RT_clock_qualification.md','P01_C_simulation_review_v0.2.0.md',
-                  'P01_D_dataset_freeze.md'}
+                  'P01_D_dataset_freeze.md','P01_E_production_preflight.md'}
     specs = sorted(s for s in (ROOT / 'specs').glob('P??_*.md') if s.name not in p01_adjuncts)
     require(tuple(s.name[:3] for s in specs) == PHASES, 'Phase spec list')
     for spec in specs:

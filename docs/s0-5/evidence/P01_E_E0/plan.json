@@ -1,0 +1,19 @@
+{
+  "schema": "s05.p01e.e0_plan.v1",
+  "approved_base": "34e44b6debcd4bb6f10be53a36dc8fec8bc4e7b2",
+  "approved_d_config_sha256": "f7f2eeba2cfc8adc9d1649618f353956470eb477a6a99448bdbe7332dd5a6d81",
+  "approved_d_receipt_sha256": "40bf56f01337d0ceb32f8977efc80154e40144bbc949becbb7050d12963bed93",
+  "window_ns": 8000000000,
+  "tail_inheritance_max_ns": 1250000000,
+  "min_tail_ns": 20000000,
+  "target_tail_ns": 155000000,
+  "min_full_blocks": 2,
+  "split": "Train",
+  "fixture_rank": "Among authorized Train parents with at least two full blocks and tail in [20 ms,1.25 s], prefer a tail below 155 ms, then fewer blocks, then shortest tail and recording ID. Metadata only.",
+  "injected_before_publication_index": 1,
+  "allowed_clock_generations": [
+    "collector-monotonic-v1"
+  ],
+  "max_fixture_count": 1,
+  "scope": "E0_TRANSIENT_NON_PRODUCTION"
+}

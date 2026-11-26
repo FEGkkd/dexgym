@@ -9,6 +9,7 @@ from uuid import uuid4
 import numpy as np
 
 from .geometry import interpolate
+from .hmb_validation import validate_semantics
 from .registry_gate import digest
 from .synchronize import CORE_STREAMS,REASONS,SAFETY,STREAMS
 
@@ -21,6 +22,12 @@ REASONS_V1=tuple(dict.fromkeys(REASONS_V1))
 BASE='eb00f254dc71ac7f6ceef9e2c76a661ac3e912bd'
 SYNC_HASH='13550058a3114e062c6f7ba2e92b8149659dc5870ae9a97ec256679b7ed571b5'
 SYNC_PATH=Path(__file__).with_name('synchronize.py')
+
+
+class InjectedPublicationError(RuntimeError):
+    pass
+
+
 COMMON_FIELDS={
     'tick_ns':('int64','T','ns','collector monotonic relative to episode start'),
     'pose':('float64','T,S,N,7','m,XYZW','palm-local for MANUS, recorded frame for raw/registered wrist'),
@@ -127,6 +134,7 @@ def _reference_table(prepared):
         transforms[token]=row['raw_pose']
         data.append(dict(record=event.ref,identity=row['scalar_identity'],raw_clock=row['clock'],
                          recorded_frame=(row['fields'].get('header') or {}).get('frame_id'),
+                         stream=event.stream,capture_bounds_ns=event.capture,arrival_bounds_ns=event.arrival,
                          calibration_id=event.version[0],topology_id=event.version[1],clock_generation=event.clock_generation,
                          source_eligible=event.authenticated,fresh=event.fresh,raw_valid=event.valid,safe=event.safe))
     return refs,data,transforms
@@ -267,10 +275,20 @@ def read_partition(path,mode):
                 np.any(pointers[...,1]>=0) or np.any(data['velocity_age_ns'][vel]<0)):
             raise ValueError('Causal partition violates source availability')
     elif (np.any(pointers[...,1][pose]<0) or np.any(data['bracket_span_ns'][pose]<0) or
-          np.any(~data['bracket_safe'][pose]) or np.any(data['interpolation_weight'][pose]<0) or
+          np.any(~data['bracket_safe'][pose]) or not np.isfinite(data['interpolation_weight'][pose]).all() or
+          np.any(data['interpolation_weight'][pose]<0) or
           np.any(data['interpolation_weight'][pose]>1)):
         raise ValueError('Offline partition lacks safe auditable brackets')
+    validate_semantics(data,meta,sources,mode,QUALITY,REASONS_V1)
     return data,meta,sources
+
+
+def validate_partition_pair(path):
+    causal,_,_=read_partition(path,'causal')
+    offline,_,_=read_partition(path,'offline')
+    if not np.array_equal(causal['tick_ns'],offline['tick_ns']):
+        raise ValueError('Causal and offline grids disagree')
+    return inspect_partition(path)
 
 
 def write_partition(destination,*,identity,prepared,topologies,causal,offline,alignment,min_segment,
@@ -283,9 +301,10 @@ def write_partition(destination,*,identity,prepared,topologies,causal,offline,al
     with (destination.parent/f'.{destination.name}.lock').open('ab') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX)
         if destination.exists():
-            if inspect_partition(destination)['identity_sha256']!=identity_hash:
+            manifest=validate_partition_pair(destination)
+            if manifest['identity_sha256']!=identity_hash:
                 raise ValueError('Existing partition has a different identity')
-            return inspect_partition(destination),0
+            return manifest,0
         stage=destination.parent/f'.{destination.name}.{uuid4().hex}.partial'
         stage.mkdir(mode=0o700)
         references,sources,vals=_reference_table(prepared)
@@ -301,18 +320,21 @@ def write_partition(destination,*,identity,prepared,topologies,causal,offline,al
                 f.flush()
                 os.fsync(f.fileno())
         _write_fsynced(stage/'sources.jsonl',b''.join(json_bytes(row) for row in sources))
+        cuts=[i for i in range(1,len(causal))
+              if _bounds_crossed(alignment,causal[i-1]['tick_ns'],causal[i]['tick_ns'])]
         _write_fsynced(stage/'metadata.json',json_bytes(dict(schema=SCHEMA,allowed_use=USE,
             sync_source_sha256=SYNC_HASH,sync_baseline=BASE,identity=identity,topologies=topologies,
-            dictionary=dictionaries,segments=segment_index,ticks=len(causal),N=n)))
+            dictionary=dictionaries,segments=segment_index,ticks=len(causal),N=n,
+            diagnostic_non_actor={'boundary_cut_indices':cuts})))
         manifest=dict(schema=SCHEMA,identity_sha256=identity_hash,files={file.name:digest(file) for file in stage.iterdir()})
         _write_fsynced(stage/'manifest.json',json_bytes(manifest))
         footprint=sum(file.stat().st_size for file in stage.iterdir())
         if max_partition_bytes is not None and footprint>max_partition_bytes:
             raise ValueError('Staged shard exceeds the approved partition budget')
-        inspect_partition(stage)
+        validate_partition_pair(stage)
         _fsync_dir(stage)
         if fail_before_publish:
-            raise RuntimeError('Injected stop after fsync before atomic publication')
+            raise InjectedPublicationError('Injected stop after fsync before atomic publication')
         stage.rename(destination)
         _fsync_dir(destination.parent)
         return manifest,footprint
