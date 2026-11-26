@@ -55,7 +55,12 @@ class Kernel:
     def __init__(self):
         self.frames = []
         self.stationary = False
+        self.projected_stationary_goal = False
+        self.command_jitter = 0.
         self.failing_side = None
+        self.accepted_fallback_side = None
+        self.pair_denied = False
+        self.pair_hard_fault = False
         self.resets = 0
 
     def home_reference(self, home):
@@ -71,15 +76,19 @@ class Kernel:
         np.testing.assert_array_equal(measured, previous)
         rows = []
         for side in range(2):
-            valid = side != self.failing_side
+            valid = side != self.failing_side and not self.pair_denied
             command = previous[side * 7:(side + 1) * 7].copy()
             if not self.stationary:
                 command[0] += .001
+            command[0] += self.command_jitter
+            fallback = side == self.accepted_fallback_side
             rows.append(SimpleNamespace(
-                accepted=valid, ik_target_accepted=valid, analytic_braking=not valid,
+                accepted=valid, ik_target_accepted=valid and not fallback,
+                analytic_braking=not valid or fallback, analytic_exact_stop_used=False,
+                pair_accepted=not self.pair_denied, pair_hard_fault=self.pair_hard_fault,
                 joint_command=command, arm_angle_command_rad=branch[side] + .002,
                 workspace_projected=True, rate_limited=True, backoff_scale=.5,
-                step_target=goals[side].copy(),
+                step_target=np.eye(4) if self.projected_stationary_goal else goals[side].copy(),
             ))
         return rows
 
@@ -162,3 +171,47 @@ class TeleopCandidateTests(unittest.TestCase):
         self.assertFalse(repeated.q_valid)
         with self.assertRaisesRegex(ValueError, "generation cut"):
             self.tick(.6, 3)
+
+    def test_projected_stationarity_and_submicroradian_jitter_do_not_count_as_tracking(self):
+        self.kernel.stationary = True
+        self.kernel.projected_stationary_goal = True
+        self.kernel.command_jitter = .1e-6
+        first = self.tick(.5, 0)
+        next_tick = self.tick(.5, 1)
+        self.assertTrue(np.all(first.status[:2] == CandidateStatus.NATIVE_ARM_HOLD))
+        self.assertTrue(np.all(next_tick.status[:2] == CandidateStatus.NATIVE_ARM_HOLD))
+        np.testing.assert_array_equal(next_tick.q_nominal[:14], np.zeros(14))
+
+    def test_hand_limit_plateau_is_a_hold_and_accepted_braking_is_fallback(self):
+        self.candidate.robot.bounds = self.candidate.robot.bounds.copy()
+        self.candidate.robot.bounds[14:34, 1] = .04
+        self.kernel.accepted_fallback_side = 1
+        result = self.tick(.5, 0)
+        self.assertEqual(result.status[1], CandidateStatus.NATIVE_ARM_FALLBACK)
+        self.assertEqual(result.status[2], CandidateStatus.WUJI_LIMIT_HOLD)
+        self.assertFalse(result.q_valid)
+        np.testing.assert_allclose(result.q_nominal[[7, 14]], [.005, .04])
+        self.assertTrue(result.substeps[-1].hand_candidate_limit[0])
+        self.assertFalse(result.substeps[-1].hand_limit_applied[0])
+
+    def test_atomic_fault_freezes_all_commands_and_latches_until_generation_cut(self):
+        self.kernel.pair_denied = self.kernel.pair_hard_fault = True
+        fault = self.tick(.5, 0)
+        latched = self.tick(.6, 1, source=(21, 41))
+        self.assertTrue(np.all(fault.status == CandidateStatus.NATIVE_PAIR_FAILED))
+        self.assertTrue(np.all(latched.status == CandidateStatus.NATIVE_PAIR_FAILED))
+        self.assertEqual(len(self.kernel.frames), 1)
+        self.assertEqual(len(self.hand.steps), 2)
+        self.assertEqual([s.kernel_proposed for s in fault.substeps], [True, False, False, False, False])
+        np.testing.assert_array_equal(latched.q_nominal, np.zeros(54))
+        self.kernel.pair_denied = self.kernel.pair_hard_fault = False
+        self.candidate.cut()
+        self.tick(.5, 2)
+        self.assertTrue(self.tick(.5, 3).q_valid)
+
+    def test_two_local_arm_holds_do_not_emit_hand_motion(self):
+        self.kernel.pair_denied = True
+        held = self.tick(.5, 0)
+        self.assertTrue(np.all(held.status == CandidateStatus.NATIVE_PAIR_HOLD))
+        self.assertTrue(all(substep.kernel_proposed for substep in held.substeps))
+        np.testing.assert_array_equal(held.q_nominal, np.zeros(54))

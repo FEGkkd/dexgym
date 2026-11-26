@@ -17,8 +17,9 @@ ARM_SUBSTEP_NS = 4_000_000
 ARM_SUBSTEPS = TICK_NS // ARM_SUBSTEP_NS
 ARM_DT_S = ARM_SUBSTEP_NS / 1e9
 ARM_COMMAND_STEP_RAD = ARM_RATE_RAD_S * ARM_DT_S
-ARM_FK_POSITION_TOLERANCE_M = 0.00001
-ARM_FK_ROTATION_TOLERANCE_RAD = 0.003490658503988659
+ARM_FK_POSITION_TOLERANCE_M = 1e-6
+ARM_FK_ROTATION_TOLERANCE_RAD = 1e-5
+COMMAND_CHANGE_TOLERANCE_RAD = 1e-6
 HAND_COMMAND_STEP_RAD = 0.10 / ARM_SUBSTEPS
 HAND_FILTER_ALPHA = 0.30
 RECOVERY_TICKS = 2
@@ -30,6 +31,10 @@ class CandidateStatus(IntEnum):
     NATIVE_ARM_HOLD = 3
     WUJI_SDK_HOLD = 4
     WHOLE_BODY_PATH_HOLD = 5
+    WUJI_LIMIT_HOLD = 6
+    NATIVE_ARM_FALLBACK = 7
+    NATIVE_PAIR_HOLD = 8
+    NATIVE_PAIR_FAILED = 9
 
 
 @dataclass(frozen=True)
@@ -42,6 +47,7 @@ class CandidateSubstep:
     hand_limit_applied: np.ndarray
     native_arms: tuple
     whole_body_path_accepted: bool
+    kernel_proposed: bool
 
 
 @dataclass(frozen=True)
@@ -112,6 +118,8 @@ class TeleopCandidate:
         self.previous_tick_ns = None
         self.previous_tick_active = False
         self.consecutive_active = 0
+        self.hard_fault = False
+        self.last_native = ()
 
     def _path_admitted(self, start, end):
         return self.robot.legality(end)["feasible"] and self.swept_proof.permits(start, end)
@@ -160,12 +168,20 @@ class TeleopCandidate:
         target = np.asarray(target, dtype=float)
         if (realized.shape != (4, 4) or target.shape != (4, 4)
                 or not np.isfinite(realized).all() or not np.isfinite(target).all()):
-            raise ValueError("Native Teleop returned an invalid FK or step target for a stationary command")
+            raise ValueError("Native Teleop returned an invalid FK or original target for a stationary command")
         distance = np.linalg.norm(realized[:3, 3] - target[:3, 3])
         angle = Rotation.from_matrix(realized[:3, :3].T @ target[:3, :3]).magnitude()
         return distance <= ARM_FK_POSITION_TOLERANCE_M and angle <= ARM_FK_ROTATION_TOLERANCE_RAD
 
+    def _held_substep(self, issue_tick_ns, status, proposed):
+        limits = np.zeros(40, dtype=bool)
+        return CandidateSubstep(issue_tick_ns, self.previous.copy(), self.branch_rad.copy(),
+                                np.full(4, status, dtype=np.uint16), limits, limits.copy(),
+                                self.last_native, self._path_admitted(self.previous, self.previous), proposed)
+
     def _advance_substep(self, wrist_target, issue_tick_ns):
+        if self.hard_fault:
+            return self._held_substep(issue_tick_ns, CandidateStatus.NATIVE_PAIR_FAILED, False)
         previous = self.previous
         command = previous.copy()
         status = np.full(4, CandidateStatus.ACTIVE, dtype=np.uint16)
@@ -175,20 +191,35 @@ class TeleopCandidate:
                                            branch.copy(), dt_s=ARM_DT_S))
         if len(native) != 2:
             raise ValueError("Native Teleop candidate must return two per-arm records")
+        self.last_native = native
+        pair_accepted = native[0].pair_accepted
+        pair_hard_fault = native[0].pair_hard_fault
+        if (native[1].pair_accepted != pair_accepted or native[1].pair_hard_fault != pair_hard_fault
+                or (pair_accepted and pair_hard_fault)):
+            raise ValueError("Native Teleop returned inconsistent paired admission")
+        if pair_hard_fault:
+            self.hard_fault = True
+            return self._held_substep(issue_tick_ns, CandidateStatus.NATIVE_PAIR_FAILED, True)
+        if not pair_accepted:
+            return self._held_substep(issue_tick_ns, CandidateStatus.NATIVE_PAIR_HOLD, True)
         for side, row in enumerate(native):
             arm = GROUPS[side]
-            if not row.accepted or not row.ik_target_accepted or row.analytic_braking:
+            fallback = row.analytic_braking or row.analytic_exact_stop_used
+            if not row.accepted or (not row.ik_target_accepted and not fallback):
                 status[side] = CandidateStatus.NATIVE_ARM_HOLD
                 continue
             q = np.asarray(row.joint_command, dtype=float)
             if (q.shape != (7,) or not np.isfinite(q).all() or not np.isfinite(row.arm_angle_command_rad)
                     or np.max(np.abs(q - previous[arm])) > ARM_COMMAND_STEP_RAD + 1e-9):
                 raise ValueError("Native Teleop command violates candidate shape, finite or 4 ms rate contract")
-            if np.array_equal(q, previous[arm]) and not self._settled(side, previous[arm], row.step_target):
+            changed = np.max(np.abs(q - previous[arm])) > COMMAND_CHANGE_TOLERANCE_RAD
+            if not fallback and not changed and not self._settled(side, q, wrist_target[side]):
                 status[side] = CandidateStatus.NATIVE_ARM_HOLD
                 continue
             command[arm] = q
             branch[side] = row.arm_angle_command_rad
+            if fallback:
+                status[side] = CandidateStatus.NATIVE_ARM_FALLBACK
         low, high = self.robot.bounds.T
         for side in range(2):
             hand = GROUPS[side + 2]
@@ -199,22 +230,31 @@ class TeleopCandidate:
             command[hand] = np.clip(desired, np.maximum(low[hand], previous[hand] - HAND_COMMAND_STEP_RAD),
                                     np.minimum(high[hand], previous[hand] + HAND_COMMAND_STEP_RAD))
             limited[side * 20:(side + 1) * 20] = np.abs(command[hand] - desired) > 1e-10
+            if (np.max(np.abs(command[hand] - previous[hand])) <= COMMAND_CHANGE_TOLERANCE_RAD
+                    and np.max(np.abs(command[hand] - desired)) > COMMAND_CHANGE_TOLERANCE_RAD):
+                status[side + 2] = CandidateStatus.WUJI_LIMIT_HOLD
+                command[hand] = previous[hand]
         # A previously certified identical configuration needs no new path.
         allowed = np.array_equal(command, previous) or self._path_admitted(previous, command)
         if allowed:
             self.previous = command
             self.branch_rad = branch
         else:
-            status[status == CandidateStatus.ACTIVE] = CandidateStatus.WHOLE_BODY_PATH_HOLD
+            rejected_movement = (status == CandidateStatus.ACTIVE) | (status == CandidateStatus.NATIVE_ARM_FALLBACK)
+            status[rejected_movement] = CandidateStatus.WHOLE_BODY_PATH_HOLD
+        applied = limited.copy() if allowed else np.zeros_like(limited)
+        for side in np.flatnonzero(status[2:] == CandidateStatus.WUJI_LIMIT_HOLD):
+            applied[side * 20:(side + 1) * 20] = False
         return CandidateSubstep(issue_tick_ns, self.previous.copy(), self.branch_rad.copy(), status, limited,
-                                limited.copy() if allowed else np.zeros_like(limited), native, bool(allowed))
+                                applied, native, bool(allowed), True)
 
     def step(self, target, common, order, source_index, *, tick_ns):
         tick_ns = int(tick_ns)
         if self.previous_tick_ns is not None and tick_ns != self.previous_tick_ns + TICK_NS:
             raise ValueError("Discontinuous HMB tick requires an explicit candidate generation cut")
         wrist_target = self._wrist_targets(target)
-        self._advance_hand_input(common, order, source_index)
+        if not self.hard_fault:
+            self._advance_hand_input(common, order, source_index)
         before = self.previous.copy()
         status = np.full(4, CandidateStatus.ACTIVE, dtype=np.uint16)
         substeps = []
@@ -223,6 +263,8 @@ class TeleopCandidate:
             substeps.append(substep)
             first_failure = status == CandidateStatus.ACTIVE
             status[first_failure] = substep.status[first_failure]
+            status[substep.status == CandidateStatus.NATIVE_ARM_FALLBACK] = CandidateStatus.NATIVE_ARM_FALLBACK
+            status[substep.status == CandidateStatus.NATIVE_PAIR_FAILED] = CandidateStatus.NATIVE_PAIR_FAILED
         both_arms_and_hands_active = bool(np.all(status == CandidateStatus.ACTIVE))
         self.consecutive_active = self.consecutive_active + 1 if both_arms_and_hands_active else 0
         if self.consecutive_active < RECOVERY_TICKS:

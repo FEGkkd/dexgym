@@ -92,7 +92,28 @@ void put_pose(double * destination, const Transform & value) {
   mapped = value.matrix();
 }
 
-void export_arm(ArmOutput & out, const ArmCommandResult & arm) {
+// See the pinned TeleopCore local_arm_block. This only labels the final
+// aggregate denial and cannot grant authority the native kernel withheld.
+bool local_code(SafetyCode code) {
+  switch (code) {
+    case SafetyCode::OK:
+    case SafetyCode::IK_FAILURE:
+    case SafetyCode::FK_POSITION_RESIDUAL:
+    case SafetyCode::FK_ORIENTATION_RESIDUAL:
+    case SafetyCode::JOINT_LIMITING:
+    case SafetyCode::JOINT_LIMIT:
+    case SafetyCode::COUPLED_JOINT_LIMIT:
+    case SafetyCode::JOINT_DISCONTINUITY:
+    case SafetyCode::ELBOW_BRANCH:
+    case SafetyCode::ELBOW_WORKSPACE:
+    case SafetyCode::TRACKER_INVALID:
+    case SafetyCode::STALE_TRACKER:
+    case SafetyCode::TRACKING_ERROR: return true;
+    default: return false;
+  }
+}
+
+void export_arm(ArmOutput & out, const ArmCommandResult & arm, bool pair_accepted, bool pair_hard_fault) {
   std::copy_n(arm.joint_candidate.data(), 7, out.joint_candidate);
   std::copy_n(arm.joint_command.data(), 7, out.joint_command);
   put_pose(out.step_target, arm.step_target);
@@ -107,7 +128,8 @@ void export_arm(ArmOutput & out, const ArmCommandResult & arm) {
   out.safety_code = static_cast<int>(arm.safety.code);
   out.flags = std::uint32_t(arm.accepted) | (std::uint32_t(arm.ik_target_accepted) << 1)
       | (std::uint32_t(arm.analytic_braking) << 2) | (std::uint32_t(arm.workspace_projected) << 3)
-      | (std::uint32_t(arm.rate_limited) << 4) | (std::uint32_t(arm.analytic_exact_stop_used) << 5);
+      | (std::uint32_t(arm.rate_limited) << 4) | (std::uint32_t(arm.analytic_exact_stop_used) << 5)
+      | (std::uint32_t(pair_accepted) << 6) | (std::uint32_t(pair_hard_fault) << 7);
 }
 
 ArmCommandResult target(const double * pose) {
@@ -122,6 +144,7 @@ ArmCommandResult target(const double * pose) {
 
 extern "C" std::size_t s05_candidate_arm_output_size() noexcept { return sizeof(ArmOutput); }
 extern "C" std::size_t s05_candidate_profile_size() noexcept { return sizeof(Profile); }
+extern "C" int s05_candidate_abi_version() noexcept { return 2; }
 
 extern "C" void * s05_candidate_open(const char * config, const Profile * profile) noexcept {
   try {
@@ -188,8 +211,10 @@ extern "C" int s05_candidate_propose(
     DualCommandResult request{false, target(goals), target(goals + 16), b.reference.session_id};
     auto solved = b.core.process_targets(b.reference, std::move(request), lm, rm, lp, rp, dt, angles[0], angles[1]);
     auto final = b.core.finalize_command(std::move(solved), lm, rm, lp, rp, dt);
-    export_arm(outputs[0], final.left);
-    export_arm(outputs[1], final.right);
+    const bool hard_fault = !final.accepted
+        && (!local_code(final.left.safety.code) || !local_code(final.right.safety.code));
+    export_arm(outputs[0], final.left, final.accepted, hard_fault);
+    export_arm(outputs[1], final.right, final.accepted, hard_fault);
     b.reasons[0] = std::move(final.left.safety.reason);
     b.reasons[1] = std::move(final.right.safety.reason);
     return 0;

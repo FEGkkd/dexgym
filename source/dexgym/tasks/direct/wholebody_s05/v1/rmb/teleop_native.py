@@ -52,6 +52,8 @@ class NativeArmProposal:
     workspace_projected: bool
     rate_limited: bool
     analytic_exact_stop_used: bool
+    pair_accepted: bool
+    pair_hard_fault: bool
     joint_candidate: np.ndarray
     joint_command: np.ndarray
     step_target: np.ndarray
@@ -140,6 +142,7 @@ class TeleopNative:
         self.lib = C.CDLL(str(Path(bridge_path).resolve()))
         definitions = {
             "arm_output_size": ([], C.c_size_t), "profile_size": ([], C.c_size_t),
+            "abi_version": ([], C.c_int),
             "open": ([C.c_char_p, C.POINTER(_Profile)], C.c_void_p),
             "close": ([C.c_void_p], None),
             "home": ([C.c_void_p, _P], C.c_int),
@@ -150,7 +153,8 @@ class TeleopNative:
         for name, (arguments, returns) in definitions.items():
             function = getattr(self.lib, "s05_candidate_" + name)
             function.argtypes, function.restype = arguments, returns
-        if (self.lib.s05_candidate_profile_size() != C.sizeof(_Profile)
+        if (self.lib.s05_candidate_abi_version() != 2
+                or self.lib.s05_candidate_profile_size() != C.sizeof(_Profile)
                 or self.lib.s05_candidate_arm_output_size() != C.sizeof(_Arm)):
             raise RuntimeError("Native Teleop bridge ABI size differs")
         self.handle = self.lib.s05_candidate_open(bytes(config), C.byref(profile))
@@ -197,7 +201,7 @@ class TeleopNative:
         results = []
         for side, row in enumerate(outputs):
             results.append(NativeArmProposal(
-                *(bool(row.flags & (1 << bit)) for bit in range(6)),
+                *(bool(row.flags & (1 << bit)) for bit in range(8)),
                 _view(row.joint_candidate, (7,)), _view(row.joint_command, (7,)),
                 _view(row.step_target, (4, 4)), _view(row.workspace_target, (4, 4)), _view(row.attempt_target, (4, 4)),
                 row.arm_angle_command_rad, row.workspace_projection_m, row.position_lag_m,
