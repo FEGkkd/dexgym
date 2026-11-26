@@ -22,7 +22,9 @@ execute() {
   local name=$1 status=0
   shift
   printf '%q ' "$@" > "$step/$name.command"
-  /usr/bin/time -v -o "$step/$name.time" +    env -i HOME=/home/ubuntu PATH=/usr/bin:/bin LANG=C.UTF-8 PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 GIT_OPTIONAL_LOCKS=0 +    bash --noprofile --norc -c '
+  local runtime=(env -i HOME=/home/ubuntu PATH=/usr/bin:/bin LANG=C.UTF-8
+    PYTHONDONTWRITEBYTECODE=1 PYTHONNOUSERSITE=1 GIT_OPTIONAL_LOCKS=0 bash --noprofile --norc)
+  /usr/bin/time -v -o "$step/$name.time" "${runtime[@]}" -c '
       source /opt/ros/jazzy/setup.bash &&
       source "$HOME/teleop_ws/install/local_setup.bash" &&
       source "$HOME/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/install/local_setup.bash" &&
@@ -34,8 +36,7 @@ execute() {
   return "$status"
 }
 execute preflight "$evidence/P01_E_E1/preflight.py" "$run" "$session" "$old_a" "$config" "$lock"
-if [ "$session" = 1 ]; then
-  execute unit -m unittest discover -s tests/s0_5/unit -p 'test_p01*.py' -v
-fi
-execute build -m dexgym.tasks.direct.wholebody_s05.data.p01e_build build --old-a "$old_a" +  --config "$config" --lock "$lock" --output "$run/products" --session "$session"
+execute unit -m unittest discover -s tests/s0_5/unit -p 'test_p01*.py' -v
+args=(--old-a "$old_a" --config "$config" --lock "$lock" --output "$run/products" --session "$session")
+execute build -m dexgym.tasks.direct.wholebody_s05.data.p01e_build build "${args[@]}"
 date --iso-8601=seconds > "$step/finished_at.txt"
