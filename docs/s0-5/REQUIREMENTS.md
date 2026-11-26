@@ -1,36 +1,43 @@
-# S0-5 Requirements v0.1.2
+# S0-5 需求 v2.0.0
 
-ID 长期稳定，语义变化保留追踪与 DCR。挑战目标的适用范围和验收统计见 [评估协议](EVALUATION_PROTOCOL.md)。
+状态 DRAFT_READY_FOR_REVIEW。RETAINED 保持原技术义务，REVISED 修改责任或条件，DEFERRED 将原完整义务移到后续，SUPERSEDED 替换原主线义务，NEW 为新增。编号保持稳定。 [原 001–030](https://github.com/FEGkkd/dexgym/blob/b8d8b401bdda59ad00a37f0a3bf6878b462ed756/docs/s0-5/REQUIREMENTS.md)
 
-| ID | 需求 | 归属 | 验收定义 |
+| ID | 迁移 | 需求 | 责任 |
 |---|---|---|---|
-| S05-REQ-001 | Teleop-only 数据 | P01 | 两种原包格式查证真人来源与父录制，保留全部原始节点，分别交付 Human Motion 与有硬件反馈资格的 Telemetry 索引。EgoPro/仿真衍生准入为 0。 |
-| S05-REQ-002 | 54 DoF 联合残差 | P04 | 54 个独立动作作用及顺序实测，合法零动作等价 B1+。 |
-| S05-REQ-003 | 实时因果 Actor | P04 | 相同可用输入前缀输出相同，Actor 字段白名单及 Critic 隔离。 |
-| S05-REQ-004 | 三层人意图保真 | P02 | 原始、映射、可行各自保存。位置误差分解可重建，对捏与相对几何通过分层验证。 |
-| S05-REQ-005 | 公平强传统基线 | P03 | B0/B1/B1+ 同 Servo、独立目标和限制，在线名义控制凭因果输入运行，验证无 Oracle 轨迹与训练 Bank 依赖。 |
-| S05-REQ-006 | 静态精度与收敛 | P05 | 末窗 max-ten P95 挑战 ≤3 mm，速度 RMS ≤1 mm/s，另报收敛。 |
-| S05-REQ-007 | 原速动态高精度 | P06 | 动态 max-ten P50/P95/P99 ≤2/5/10 mm，困难 P95 ≤10 mm 挑战。 |
-| S05-REQ-008 | 双手协调 | P06 | 双手相对 P95 ≤3 mm 挑战，左右独动与同动分报。 |
-| S05-REQ-009 | 实时执行 | P10 | P03 比较完整链路 P50/P95/P99、各频率精度、deadline miss 与回退；P10 在目标平台实测 Actor P99 ≤5 ms、端到端 ≤50 ms 挑战。 |
-| S05-REQ-010 | 安全、回退和恢复 | P03 | 可行命令满足显式限制，超时/不可行触发确定回退，记录介入与失败。 |
-| S05-REQ-011 | 按来源 split 和 provenance | P01 | 根级 lineage、历史使用和否决计数可核验；Train/Val/Final Test 根零重叠。无法证明 Test 独立时显式阻塞 P09。 |
-| S05-REQ-012 | 时间、单位和标定语义 | P01 | 单位和标定往返，离线／因果对齐独立，真实与代理到达分开。逐因果帧可回溯，未来替换／删除均不改变过去。 |
-| S05-REQ-013 | 离线可达性 Oracle | P02 | 记录无解、超时和多初值，区分静态可达与动态能力。 |
-| S05-REQ-014 | FK 和 Jacobian 正确 | P02 | 独立 CPU 模型与 Torch FK、解析 Jacobian 与有限差分匹配，容差有来源。 |
-| S05-REQ-015 | Servo 硬件对齐与仿真一致 | P03 | P01-T 先独立验收真实命令、测量、时钟和响应。CPU/GPU 滤波、跟踪与响应一致，臂与手的物理对齐独立定量。 |
-| S05-REQ-016 | 奖励数学与时序 | P04 | 各项单调且大误差可区分、完美姿态为最优，证明无早退收益。 |
-| S05-REQ-017 | 真实闭环环境语义 | P04 | 命令后状态与当拍目标一致，reset、失败、截断、真实 transition 计数正确。 |
-| S05-REQ-018 | PPO 概率与 bootstrap | P04 | 54 维概率稳定，terminal=0，truncation 使用 final_obs，拆分 reset 状态。 |
-| S05-REQ-019 | checkpoint、导出和证据版本 | P04 | Run ID、权重/数据/模型/Servo 契约可验证，预算和实际 transition 可复盘。 |
-| S05-REQ-020 | 指级与对捏 | P05 | 对捏/单指/臂手补偿测试，包括 ≤2 mm 对捏挑战。 |
-| S05-REQ-021 | 实时变化、丢失、恢复 | P07 | 实时 hold/stop/reverse/switch 等无未来输入，小扰动恢复 ≤300 ms 挑战。 |
-| S05-REQ-022 | 泛化与长时连续执行 | P07 | 源 episode 隔离，长时只初始 reset，报告失败/覆盖。 |
-| S05-REQ-023 | 物理域随机化有效 | P08 | 臂手分别改变增益、阻尼、摩擦、负载、时延、抖动、偏置、外扰并见证效果。 |
-| S05-REQ-024 | 监督评分和完整失败披露 | P03 | 冻结共同目标，分报执行、投影、端到端意图、对捏/双手误差。指级、同拍率、失败与覆盖分母一致。 |
-| S05-REQ-025 | PPO/SuperMimic 对照 | P09 | 共用 R/O/A、数据、环境、指标，WM 多步/静态/局部动作梯度与真实回放。 |
-| S05-REQ-026 | 消融、检验与 Test 隔离 | P09 | 预注册全面消融、多种子、冻结后评 Test，强基线相对收益与不确定性。 |
-| S05-REQ-027 | 部署等价与无 Bank 控制 | P10 | 导出前后逐项等价，证明脱离 Motion Bank，长时在线与看门狗通过。 |
-| S05-REQ-028 | 真机审核及独立物理精度 | P10 | Shadow/HIL/真机分别授权，外部计量和编码器 FK 分开报告。 |
-| S05-REQ-029 | 阶段治理、变更、可复现 | P00 | 记录验证命令、退出、证据哈希和实际执行解析路径。历史快照与当前阶段状态独立验证，后续正式阶段由人工授权。 |
-| S05-REQ-030 | 物理上限及相对收益定标 | P03 | P02/P03 验证挑战可行性；正式 RL 前冻结相对门槛与退化界限，标准变化需审批。 |
+| S05-REQ-001 | RETAINED | 真人遥操与 HMB 资格 | V1-A |
+| S05-REQ-002 | REVISED | 54 DoF 动作与零残差 B0 | V1-B |
+| S05-REQ-003 | RETAINED | 共享因果 Actor | V1-B |
+| S05-REQ-004 | REVISED | 独立映射、名义及可选可行层 | V1-A |
+| S05-REQ-005 | SUPERSEDED | 现有名义链与公平 B0 | V1-D |
+| S05-REQ-006 | REVISED | 静态精度和收敛 | V1-C1 |
+| S05-REQ-007 | REVISED | 原速动态和困难段 | V1-C2 |
+| S05-REQ-008 | RETAINED | 双手协调 | V1-D |
+| S05-REQ-009 | REVISED | 实时推理与时间资格 | V1-D |
+| S05-REQ-010 | RETAINED | 路径安全、回退与恢复 | V1-B |
+| S05-REQ-011 | RETAINED | 来源、分区及可审计性 | V1-A |
+| S05-REQ-012 | RETAINED | 标定、单位、时序和时钟资格 | V1-A |
+| S05-REQ-013 | REVISED | 离线必要界与合法改善见证 | V1-A |
+| S05-REQ-014 | RETAINED | 独立 FK 与 Jacobian 核对 | V1-B |
+| S05-REQ-015 | REVISED | 仿真 Servo 与硬件对齐分门 | V1-B |
+| S05-REQ-016 | RETAINED | Reward 单调、绑定拍和早退 | V1-B |
+| S05-REQ-017 | RETAINED | 真实仿真 transition | V1-B |
+| S05-REQ-018 | SUPERSEDED | SuperMimic 梯度及 bootstrap | V1-C0 |
+| S05-REQ-019 | REVISED | 完整 checkpoint 与恢复身份 | V1-C0 |
+| S05-REQ-020 | RETAINED | 单指、手型和对捏 | V1-C1 |
+| S05-REQ-021 | REVISED | 变化、掉线与恢复 | V1-C3 |
+| S05-REQ-022 | REVISED | 连续运行与泛化 | V1-D |
+| S05-REQ-023 | DEFERRED | 全硬件分组随机化 | V1-C3 |
+| S05-REQ-024 | RETAINED | 独立评分与失败分母 | V1-D |
+| S05-REQ-025 | SUPERSEDED | SuperMimic 主线，PPO 可选对照 | V1-C0 |
+| S05-REQ-026 | REVISED | V1 单种子与最终科研分离 | V1-D |
+| S05-REQ-027 | REVISED | 独立 Actor 导出、SIM 运行 | V1-D |
+| S05-REQ-028 | DEFERRED | 物理测量、遥测及真实部署 | 后续硬件 |
+| S05-REQ-029 | REVISED | 一次授权、可审计推进与恢复 | 全阶段 |
+| S05-REQ-030 | REVISED | 工程性能及最终挑战分门 | V1-D |
+| S05-REQ-031 | NEW | RMB schema、覆盖和因果等价 | V1-A |
+| S05-REQ-032 | NEW | WM 质量及真实有限差分 | V1-C0 |
+| S05-REQ-033 | NEW | 模型漏洞利用检测和停训 | V1-C3 |
+| S05-REQ-034 | NEW | 离线到实时名义映射差异 | V1-D |
+| S05-REQ-035 | NEW | 有界自主调整和重试证据 | 全阶段 |
+
+原 P02 静态结论和物理门均由原记录定义。完整验证方法、量纲、模块和证据见 [追踪矩阵](TRACEABILITY_MATRIX.md) 及 [评估协议](EVALUATION_PROTOCOL.md)。

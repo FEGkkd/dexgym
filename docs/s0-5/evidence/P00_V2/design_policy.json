@@ -1,0 +1,260 @@
+{
+  "schema": "s05.v2.policy.v1",
+  "design_version": "2.0.0",
+  "reviewed_baseline": "b8d8b401bdda59ad00a37f0a3bf6878b462ed756",
+  "historical_sim0_commit": "c5af9af94d7b9d3f437c14df128441d1183bec56",
+  "stages": {
+    "V1-A": {
+      "gate": "G-A",
+      "spec": "specs/V1-A_offline_rmb.md",
+      "start_requires": [],
+      "gate_requires": [],
+      "checks": [
+        "archive_identity",
+        "lineage",
+        "causal_prefix",
+        "nominal_continuity",
+        "common_domain"
+      ]
+    },
+    "V1-B": {
+      "gate": "G-B",
+      "spec": "specs/V1-B_residual_environment.md",
+      "start_requires": [],
+      "gate_requires": [
+        "V1-A"
+      ],
+      "checks": [
+        "rmb_join",
+        "axis_54",
+        "zero_b0",
+        "path_safety",
+        "servo_parity",
+        "reward_reset_history",
+        "actual_transition"
+      ]
+    },
+    "V1-C0": {
+      "gate": "G-C0",
+      "spec": "specs/V1-C0_world_model.md",
+      "start_requires": [
+        "V1-A",
+        "V1-B"
+      ],
+      "gate_requires": [
+        "V1-A",
+        "V1-B"
+      ],
+      "checks": [
+        "excitation",
+        "independent_holdout",
+        "one_four_eight",
+        "static",
+        "action_gradients",
+        "failure_boundary",
+        "actor_disabled"
+      ]
+    },
+    "V1-C1": {
+      "gate": "G-C1",
+      "spec": "specs/V1-C1_static.md",
+      "start_requires": [
+        "V1-C0"
+      ],
+      "gate_requires": [
+        "V1-C0"
+      ],
+      "checks": [
+        "static_learning",
+        "hold",
+        "functional",
+        "safety",
+        "world_model_current"
+      ]
+    },
+    "V1-C2": {
+      "gate": "G-C2",
+      "spec": "specs/V1-C2_dynamic.md",
+      "start_requires": [
+        "V1-C0",
+        "V1-C1"
+      ],
+      "gate_requires": [
+        "V1-C0",
+        "V1-C1"
+      ],
+      "checks": [
+        "original_rate",
+        "start_stop_reverse",
+        "static_retention",
+        "safety",
+        "world_model_current"
+      ]
+    },
+    "V1-C3": {
+      "gate": "G-C3",
+      "spec": "specs/V1-C3_mixed.md",
+      "start_requires": [
+        "V1-C0",
+        "V1-C2"
+      ],
+      "gate_requires": [
+        "V1-C0",
+        "V1-C2"
+      ],
+      "checks": [
+        "mixed_coverage",
+        "physical_rollout",
+        "regression_and_fallback",
+        "exploitation_watch",
+        "safety",
+        "world_model_current"
+      ]
+    },
+    "V1-D": {
+      "gate": "G-D",
+      "spec": "specs/V1-D_evaluation_deployment.md",
+      "start_requires": [
+        "V1-C0",
+        "V1-C3"
+      ],
+      "gate_requires": [
+        "V1-C0",
+        "V1-C3"
+      ],
+      "checks": [
+        "actual_paired_evaluation",
+        "release_grade_evidence",
+        "final_test_separation",
+        "independent_review"
+      ]
+    }
+  },
+  "proposed_training_configuration": {
+    "status": "PRE_REGISTERED_CANDIDATE",
+    "seed": 49,
+    "initialization": "fresh_actor_world_model_critic",
+    "world_hidden": [
+      1280,
+      1280,
+      1280
+    ],
+    "horizon": 8,
+    "wm_window": 8,
+    "wm_batch": 768,
+    "wm_batches": 3,
+    "policy_batch": 384,
+    "utd": 0.5,
+    "buffer_steps": 1800,
+    "warmup_steps": 66,
+    "wm_only_iterations": 350,
+    "wm_lr": 0.00011,
+    "actor_lr": 0.00004,
+    "actor_bootstrap_weight": 0.65,
+    "gamma": 0.99,
+    "lambda": 0.95,
+    "optimizer": "Fused Adam",
+    "critic_epochs": 3,
+    "physics_hz": 500,
+    "policy_hz": 50,
+    "initial_envs": 64,
+    "max_step_reward": 1,
+    "action_noise": "SEE_PRE_REGISTERED_CANDIDATE_REGISTRY",
+    "optional_b14_budget": 0
+  },
+  "resource_budget": {
+    "train_total": 20000000,
+    "train_static_bucket": 2000000,
+    "train_smoke_c0": 500000,
+    "train_dynamic": 8000000,
+    "train_mixed": 10000000,
+    "eval_total": 2000000,
+    "eval_c0": 700000,
+    "eval_training_watch": 650000,
+    "eval_release": 650000,
+    "gpu_count": 1,
+    "gpu_seconds": 172800,
+    "wall_seconds": 259200,
+    "blocked_wait_seconds": 86400,
+    "persistent_bytes": 268435456000
+  },
+  "allowed_autonomous_changes": {
+    "retries_per_stage": 2,
+    "c0_calibration_trials": 3,
+    "learning_variants_per_stage": 2,
+    "lr_multiplier": [
+      0.75,
+      1.25
+    ],
+    "positive_reward_multiplier": [
+      0.75,
+      1.25
+    ],
+    "horizon": [
+      4,
+      6,
+      8
+    ],
+    "exploration_multiplier": [
+      0.5,
+      1.5
+    ],
+    "curriculum_shift_percentage_points": 15,
+    "source": "MULTI_AGENT_PROTOCOL.md"
+  },
+  "forbidden_changes": [
+    "direction",
+    "original_hmb",
+    "split",
+    "scoring_target_or_domain_rules",
+    "acceptance_metrics",
+    "safety_authority",
+    "resource_cap",
+    "real_permissions"
+  ],
+  "deployment_grades": {
+    "EXPORTABLE": [
+      "trained_actor",
+      "export_parity"
+    ],
+    "SIM_DEPLOYABLE": [
+      "exportable",
+      "isolated_inference",
+      "causal_prefix",
+      "fallback",
+      "streaming_closed_loop",
+      "no_rmb"
+    ],
+    "SIM_RECOMMENDED": [
+      "sim_deployable",
+      "v1_performance_gate"
+    ],
+    "REAL_DEPLOYABLE": [
+      "physical_robot_base",
+      "C2-RT",
+      "P01-T",
+      "hardware_servo",
+      "external_metrology",
+      "site_safety",
+      "shadow",
+      "hil",
+      "human_real_approval"
+    ]
+  },
+  "formal_scoring_requirements": [
+    "physical_robot_base",
+    "C2-RT",
+    "P01-T",
+    "hardware_servo",
+    "external_metrology",
+    "formal_scoring_human_approval"
+  ],
+  "final_test_requirements": [
+    "final_test_sealed",
+    "access_log",
+    "independent_lineage",
+    "final_test_human_approval"
+  ],
+  "approval_status": "PENDING_HUMAN_REVIEW",
+  "execution_authorized": false
+}

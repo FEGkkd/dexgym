@@ -1,0 +1,45 @@
+# S0-5 v2.0.0 仿真和训练参数登记
+
+各候选为 PRE_REGISTERED_CANDIDATE。批准本设计与后续实际执行为两件事。只有设计批准及独立整体授权之后，才可按下表采集实测并冻结适用值。独立最终数据封存，硬件资格独立。表内变化允许权限受 [Campaign 协议](../MULTI_AGENT_PROTOCOL.md) 和实际授权约束。
+
+## 仿真、动作和接口
+
+| 参数、初始值 | 允许范围与定标数据 | 冻结点及负责人 | 失败和批准 |
+|---|---|---|---|
+| 54 轴、50 Hz、500 Hz、正常重力，臂 ±8°/手 ±5° | V1 固定架构，逐轴合法脉冲及 Servo CPU/Warp；不放宽硬限制 | G-B，Physics & Task Agent，独立复核 | 顺序、单位、安全、时钟错误即停。超出候选需用户批准和重验 |
+| 臂 16 ms 目标滤波、手直通，起始 delay=0、无速度前馈 | B 候选通过后锁定名义 profile；C3 可用臂 τ 0.9–1.1 倍，单独标识并对齐。对真实硬件无资格 | G-B 固定名义，C3 扰动运行之前冻结；同上 | 求解可分辨性、边界或配对失败停该配置，超范围需批准 |
+| CPU/Warp 同命令候选最大 0.05°、0.05 rad/s、0.5 mm | 容差只可收紧至 0.01°、0.01 rad/s、0.1 mm。1/10/150 子步正常、近限、同初态同输入比较，含模型精度下限和 event boundary 对照 | B smoke 前锁候选，G-B 固化；Physics/Reviewer | 超界修模型/适配；放宽须用户批准，不从 Actor 结果反调 |
+| Env 64 起点评估；实选 16、32、64、128，1/8/16 smoke | 同一 GPU 的 free memory、Warp/WM/Actor 更新和端到端真实 transition/s，连续 5 min dry profile 后取预算内吞吐最大档，峰值≤可用显存 80% | B smoke，主代理与独立 Reviewer，C0 前锁定 | 降档并重算训练时间，不能占用其他任务或任意增加 GPU；范围外需批准 |
+| Obs 1,703×5 和共享 Builder，Critic 使用当前 Builder 加非部署仿真 profile（见下） | 备选 compact 仅去掉对现有指尖可精确重建的 225 跨手数值与 50 跨手位，成 1,428×5。评估不变。合成波形、Train 真实反馈/B0 耗时、CPU 批量 1、GPU 内存实测 | B 后、C0 前定 schema；Physics/Deployment/Reviewer | 默认不能达资源门才采用 compact，实测排查噪声、归一化、因果。重测训练部署。其他裁剪须用户批准 |
+| Runtime builder 归一化、观测/action 等价 | V1-B 同后端 Builder 浮点 obs max abs≤1e−6（V1-D 独立导出跨进程测试适用独立的 2e−6 容差），动作≤1e−5，B0 同后端完全一致；允许收紧。至少 10,000 帧含失效/边界与八个开发母源 | G-B 冻结算法；V1-D 真实导出复验 | 不一致就排查，换版本即重验；扩大容差须同授权批准 |
+
+仿真模型及 Critic 条件候选固定 P=217，按 1 个有效重力倍率、各 54 的 τ（秒；直通零）、KP（Nm/rad）、KD（Nm·s/rad）、最大驱动力矩（Nm）顺序。Profile manifest 保留显式 W 重力、方向和控制模式，V1 固定重力方向。Critic context 输入为当前有效历史 Builder 与该 profile context 拼接，体积超限可改从当前帧恢复，须同 schema alt 预先登记并重跑回报和末值。外加时变隐含扰动需先设计其观测及 state 表示，再以新 configuration 重新通过 WM Gate，V1 默认无外力未知输入。
+
+## 学习初值和变化边界
+
+| 候选参数 | 初始值和允许范围 | 定标、冻结、失败及审批 |
+|---|---|---|
+| WM 隐层、窗口和想象 | 1280×3；wm_window=8；horizon=8，可尝试 6 或 4，窗口候选 4/6/8 且≥horizon | C0 用隔离调试源定标，资格源独立通过；WM Agent + Reviewer 在 Actor 前锁有效 horizon。长步不合格先修覆盖或状态，缩短要重算资格，范围外需用户批准 |
+| 真实 replay、更新和批 | buffer steps=1800（1200–2400）；warmup=66（64–96，且≥window/horizon）；WM batch=768（384–1024）、3 batches（2–4）；policy batch=384（256–512）；UTD=0.5（0.25–0.75） | 以 B 端到端 profile 和 C0 源独立验证，在 C0 锁首个合格组合，修改后重跑 smoke/WM；超范围需批准。UTD 非 transition 数，日志保存调用和真实消费 |
+| WM-only | 初案 350 iterations，100–1500 的比较；G-C0 始终强制 | C0 以固定留出满足误差与动作梯度后锁训练交接；超过 0.5M 子预算或无合格模型即停 |
+| 学习率 | WM/Critic 1.1e−4、Actor 4e−5，各 ±25% | C0 调 WM，C1–3 使用 Train 并做同目标实际验证，变动前留台账、重验 WM 与直接回放。范围内按授权推进 |
+| 优化器与折扣 | fused Adam 系列，现 engine Actor 实际 AdamW（零 weight decay）、其余 Adam；γ=0.99、λ=0.95、β=0.65；Critic 3 epochs | 先用 FP32、AMP=false、compile=false，纯性能优化在误差/梯度与固定种子短轨迹等价后启用；其它算法参数改动需批准，禁启 PPO 作为前置 |
+| wm/contact 正则 | 初案 contact weight 0.2、depth 0.03、FP32；kinematic weight 0（备选 0.05） | C0 独立 C0 表、标注形状、头部梯度、接触稀疏性和覆盖；量化完整性不足就不用 depth/kinematic 项，记录选择并重跑 |
+| WM 资格阈值与样本 | C0 表、至少 1,024 个源锚点与 4,096 个合法动作对照、逐轴响应、启用 watchdog | 在首次拟合及 Actor 执行前冻结；调试三 Train 母源确定正常数值噪声，其余三个专用源判资格，阈值仅可收紧。无法通过时修改覆盖或缩短 horizon，放宽参数需用户批准 |
+| 54 轴探索 | 残差幅域的 0.10–0.35、持续 1–8 拍，train physical collect 后的独立监测 noise sigma=0.10 候选 | 训练噪声候选 ×0.5–1.5，来源 Train，缺轴补打；G-C0 确定覆盖，幅度须总在硬安全和尺度内。改分布复验，范围外需批准 |
+| 奖励和课程 | 权重见任务契约；正项/一般代价允许初值 ±25%，安全代价不调；各课程比例初值±10 个百分点且总和 100%，静态保留≥15%，轻量扰动≤20% | 每个变体前锁定。仅匹配 Train 实采及固定开发评分可验；重做 [0,1] 归一化、反早退负控、WM watchdog、策略物理回归；范围外需批准 |
+| FailureHead | 默认诊断、概率上界 0.25；资格见模型契约 | C0 以源独立的实际阳性/阴性证据决定是否开启，Agent 实施、Reviewer 复核；没有证据禁用，可选支线不替代安全 |
+
+初始 WM 超参来自已审计 [S0-4 配置](../../../source/dexgym/tasks/direct/wholebody_s04/train_aligned.py)，不直接复用 action_noise=0 或旧模型权重。C1 主 B54 种子候选 49，分阶段延续同一主策略种子，所有初始化、采样和扰动 RNG 单列，变体不能增加统计种子数。无预算或评估独立性时不增加 B14、PPO、历史 S0-4 或新联合 IK 对照。
+
+## 候选预算与资源
+
+| 阶段/账户 | 上限或划分 |
+|---|---|
+| C0 + C1 | 合计 2,000,000 物理训练 transition，B smoke、C0 探索、暖场、三次 WM 候选及失败合计上限 500,000，C1 取剩余 |
+| C2 | 8,000,000 |
+| C3 | 10,000,000 |
+| 独立物理评估 | 另设 2,000,000，C0 资格初配 0.7M、C1–3 watchdog 和评估合计初配 0.65M、D 独立评估初配 0.65M。各评估池随整体授权锁定，改变桶用途须另行批准；评估不挪作正式训练 |
+| 设备、时间、磁盘 | 一块 GPU，48 GPU-hours，72 elapsed hours（运行与等待均计），250 GiB 磁盘。共享资源以实际预检为准 |
+
+由非占用资源只读检查、少规模预检证据和完整预算估算定开跑档。64 环境且 UTD 0.5 时，20M transition 约需 156k learner iterations，另外有暖场、评估及模型检查。全量 1800×64×8515×4 字节的 obs 仅自身约 3.66 GiB，须另计动力学状态、场景、诊断、归一化复制、网络和优化器。测量真实 transition/s、WM/Actor/Critic update/iter、GPU 峰值、已用磁盘及剩余时间。48 GPU h 内仅训练跑满 20M 就需有效均速约 116 transition/s，实际还要为评估和 I/O 保留余量。达不到条件就缩小 scope 内的运行量或按实际阻塞告知用户，同时保留未达门。禁止依据 imagined throughput 报算。每阶段最多两种训练配置变体，最多两次验证重跑，WM C0 最多三种总候选。失败和恢复消耗原预算，独立物理 eval 与 imagined transitions、WM/Critic/Actor step 都分别记账。预算增加、范围外试验或最终验收数值修订须用户批准。

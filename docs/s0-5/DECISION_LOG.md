@@ -1,34 +1,14 @@
-# S0-5 决策记录
+# S0-5 决策记录 v2.0.0
 
-以下为 P00 的方案决策，待人工接受 P00 后成为后续阶段依据。候选数值仍由各责任阶段冻结。
+历史 D-001–D-024 和 DCR-001–003 保存在已审核的 v0.1.x 基准。DCR-004 与有限签核来自独立的 SIM0 Git 对象。既有人工事件沿用其签核范围。 [原决策](https://github.com/FEGkkd/dexgym/blob/b8d8b401bdda59ad00a37f0a3bf6878b462ed756/docs/s0-5/DECISION_LOG.md) · [DCR-004](https://github.com/FEGkkd/dexgym/blob/c5af9af94d7b9d3f437c14df128441d1183bec56/docs/s0-5/dcr/DCR-004_bimanual_simulation_research_branch.md)
 
-| ID | 决定与理由 | 备选及证据 | 影响 |
-|---|---|---|---|
-| D-001 | 以三层目标并行保留意图和执行。评估生成器状态独立于所有候选执行 | SDK FK 保留作 B0/B2，现有 S0-4 输入和权重的语义见审计 | 004/013，P01–P09 |
-| D-002 | 54 维关节名核验的 residual，使用同一个 policy，名义优先 B1+ | S0-4 14 维无法直接单指补偿，S0-2 关节增量提供参考候选。候选限幅 P03 审核 | 002/005/010，P03–P05 |
-| D-003 | 使用捕获和接收双时间戳，离线/在线输出分开，前缀不变性作为硬测试 | Wholebody S0 对齐文件含 brackets 与 causal index，索引仅为参考，P01 验证到达时钟 | 003/012/021，P01/P04/P07/P10 |
-| D-004 | 保留硬件对齐的 MuJoCo CPU/Warp 接口候选，50/500 Hz 为仿真候选 | 已见 20 ms native step，历史 S0-4 profile；Teleop arm 频率可配置，手反馈另一路 | 009/015，P03/P04/P10 |
-| D-005 | PPO 用物理 rollout 和有界动作语义，SuperMimic 后续按同 task 对照 | 现有 PPO 有 tanh 分布实现和超时语义待核，S0-4 有实际 rollout+imagination | 017–019/025，P04–P09 |
-| D-006 | 统计失败同时保存覆盖与保守复合分位数，按源 episode 配对 | 旧 S0-4 sweep 有分段精确 reset、硬停后恢复。新协议保留旧指标仅作局部诊断 | 022/024/026，P03/P07/P09 |
-| D-007 | 频率、约束及挑战目标按 P02/P03 定量，对不可达提交 DCR | 先冻结绝对口径，候选相对收益为动态和难段 20%，实际非退化边界须验证 | 030，P02/P03/P09 |
-| D-008 | P00 用 Ubuntu main 与发布/运行快照共同审计，文档通过独立 S0-5 路径维护 | main 无 S0-4，修改两处用户源码，S0-4 运行脚本另有哈希；禁止覆盖既有改动 | 029，P00/P01 |
-| D-009 | 难段由训练/验证固定，既有被用于选型或公开评测的 source 与其衍生不作 final Test | 历史 S0-4 逐检查点评两划分，推荐分仅用 val、hold、hard；未见源证明需 P01/P09 | 011/026，P01/P09 |
-| D-010 | 奖励多尺度全局用最差两指候选、尾部 Huber、实测监督，P04 验证饱和及早退 | S0-4 只有 15 mm 单尺度与最差一指。各尺度保留为候选并分项验证 | 016，P04/P05 |
-| D-011 | 独立 Ubuntu checkout 和干净 ROS/Python 入口作为 P01 执行基线 | 主仓库与 Teleop 用户修改均保留，复用依赖逐项哈希 | 029，P00/P01 |
-| D-012 | HMB 与真机 Telemetry 逻辑分离，原始 MANUS topology 保留可变节点数 | 实测 25 节点姿态与两种录包结构，21 点选取留给后续映射 | 001/004/011，P01/P02 |
-| D-013 | `aligned_offline` 和 `aligned_causal` 分产物与索引，时钟按可证性分级 | 旧 S0 的 pose 为双端插值，header causal index 无 controller receive | 003/012，P01/P04/P07 |
-| D-014 | 历史使用传播到母源；独立 Final Test 未证明时仅允许开发池，P09 保持门禁 | 反复使用的历史 test 和难段已不具独立性 | 011/026，P01/P09 |
-| D-015 | 证据一致性检查与技术/人工裁定分开，旧 P00 从固定 Git 对象复验 | 检查不以 PASS 字符串确认技术结论，合法后续状态转换有负控 | 029，P00及后续 |
-| D-016 | 评分、在线名义与 Oracle 显式分离；P03 冻结全链路测量及 P09 主要指标 | 避免使用离线轨迹提供在线名义，整体精度以实际映射意图和功能几何核证 | 005/009/024/030，P02/P03/P09 |
-| D-017 | P01-A 分开登记 MCAP 实例、逻辑 recording 视图、完全字节副本与已证实捕获母源 | DexGym 录制索引包含采集平台的路径别名，旧目录和 ZIP 中也有同字节数据。不同 SHA 或同名只用于排查线索，历史用途沿已知父边传播 | 001/011，P01-A |
-| D-018 | 捕获期 tracker 配置凭启动快照及配置 SHA 登记，分别登记 Human 与 Telemetry 两种资格 | 现有采集快照保存 `units.tracker.startedConfigurations`。校验读回文件可证明启动配置来源，标定几何与实际硬件行为在 P01-B/C 验证 | 001/012，P01-A/C |
-| D-019 | B 阶段独立复验历史 A1，保留旧结果；合并录包完整签名须校验 sidecar 分片顺序及 footer 计数 | A1 成功执行、技术门、人工批准分离。声明冲突与不同字节的谱系证据另记 | 001/011，P01-A/B |
-| D-020 | schema 按类型名、编码与内嵌定义 SHA 寻址。观测配对使用原写入者证据和物理索引 | 文件本地 schema ID 可重复。仅同时间不足以证明配对；缺 writer 快照的录制可做诊断 | 001/012，P01-B/C |
-| D-021 | DCR-001 明确 HMB 主线和 P01-T 支线。P01-T ACCEPTED 是 P03 正式启动的硬前置 | 新 HMB 有界技术门、历史错误、辅助兼容性和遥测资格分开保留。项目用户批准依赖调整，[DCR](dcr/DCR-001_p01_hmb_telemetry_dependencies.md) | 001/011/012/015/029/030，P01–P03 |
-| D-022 | 捕获配置原样重建 OpenVR 注册腕，评分使用单独录下的注册消息。在线核心使用有界 ZOH，分离诊断时钟和真实资格 | 已绑定逐录制配置、schema、原包索引；采集器观测可作代理，显式加延时的窗口用 SIMULATED。真实控制器到达未证，维持门禁。[P01-C](reports/P01_C_acceptance.md) | 001/003/012/029，P01-C |
-| D-023 | 历史仿真资格与真实控制时序分门；安全回退撤销缓存，恢复使用新鲜样本 | 对同一母源和窗口做配对回归，实际控制前维持 C2-RT、robot-base、P01-T，各自签核。[DCR-002](dcr/DCR-002_simulation_and_real_clock_qualification.md) | 001/003/009/012/015/018/029/030，P01–P03 |
-| D-024 | 按原母源冻结开发 split，C 最终同步器与生产 schema 分别锁哈希 | 逐源有界验证、Train 参数选取、显式仿真和独立安全掩码。正式构建需 D 签核及独立 E 授权。[D1](reports/P01_D_acceptance.md) | 001/011/012/029，P01-D/E |
+| 决策 | V2 候选 |
+|---|---|
+| D-025 | 现有 Teleop 名义链 + 54 DoF 残差。P03 新联合 IK 迁至可选对照。 |
+| D-026 | 复用 SuperMimic，资格化 54 轴 WM 后启用 Actor 更新，PPO 属于可选同条件研究。 |
+| D-027 | 仿真阶段自有 Servo 和安全门。物理资格独立于 V1 release。 |
+| D-028 | P02 原签核范围保持历史静态。M1 连续参考用途等待人工批准及 V1-A 技术核验。 |
+| D-029 | V1 工程单种子、最终科研多种子及独立 Test 各自留痕。按实际证据授予候选等级。 |
+| D-030 | 设计人工批准与独立 Campaign 整体授权分离。授权后按 DAG 和预算自主推进技术门，人工事件来源必须可核查。 |
 
-## 设计变更请求
-
-当前无已批准的核心目标变更。提交 DCR 时记录 Original design、Discovered problem、Supporting evidence、Proposed change、Alternatives、Expected benefit、Risks、Affected requirements、Affected phases、Affected tests、Compatibility impact、Approval status。保持旧版本有效至人工批准。
+V2 变更统一由 [DCR-005](dcr/DCR-005_policy_first_supermimic.md) 提交。候选状态 PENDING_HUMAN_REVIEW。

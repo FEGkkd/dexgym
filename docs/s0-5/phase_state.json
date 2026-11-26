@@ -470,4 +470,39 @@
       "startup authorization"
     ]
   }
+,
+  "policy_first_v2": {
+    "schema": "s05.phase-state.v2",
+    "design_version": "2.0.0",
+    "design_status": "DRAFT_READY_FOR_REVIEW",
+    "handoff_status": "DESIGN_READY_FOR_REVIEW",
+    "approval_status": "PENDING_HUMAN_REVIEW",
+    "design_approval": null,
+    "execution_authorized": false,
+    "execution_authorization": null,
+    "campaign_id": null,
+    "stage_states": {
+      "V1-A": "NOT_STARTED",
+      "V1-B": "NOT_STARTED",
+      "V1-C0": "NOT_STARTED",
+      "V1-C1": "NOT_STARTED",
+      "V1-C2": "NOT_STARTED",
+      "V1-C3": "NOT_STARTED",
+      "V1-D": "NOT_STARTED"
+    },
+    "historical_P02_limited_acceptance": {
+      "scope": "HISTORICAL_SIMULATION_STATIC_RESEARCH_ONLY",
+      "git_commit": "c5af9af94d7b9d3f437c14df128441d1183bec56",
+      "path": "reports/approvals/P02_LIMITED_ACCEPTANCE_SIM0.md"
+    },
+    "m1_continuous_use": "PENDING_HUMAN_REVIEW",
+    "hardware": {
+      "P01-T": "BLOCKED",
+      "C2-RT": "BLOCKED",
+      "robot-base": "BLOCKED",
+      "real_deployment": "BLOCKED"
+    },
+    "formal_physical_scoring": "PENDING_HUMAN_REVIEW",
+    "final_test": "BLOCKED"
+  }
 }

@@ -1,61 +1,50 @@
-# S0-5 Master Design v0.1.2
+# S0-5 Master Design v2.0.0
 
-P00 Review Fix 明确 P01 数据契约、在线信号边界与评估口径。版本沿革见 [决策记录](DECISION_LOG.md)。
+**Generalist Real-Time Residual Motion Controller for High-Precision Bimanual Dexterous Teleoperation**
 
-## M1 研究问题与范围
+`DRAFT_READY_FOR_REVIEW`。V2.0.0 是待审设计候选。当前授权仅覆盖设计修订、源码与历史证据审计、检查器及合成检查。本候选的人工批准和 V1 Campaign 启动是两个独立事件。原活动设计在候选获批前保有其原有范围及历史基准身份。[设计变更](dcr/DCR-005_policy_first_supermimic.md) · [项目状态](PROJECT_STATE.md)
 
-给定 MANUS 双手几何与双腕 Tracker 指令，以及实测机器人状态，学习一个共享、在线、因果的 54 DoF 残差闭环控制器。检验该控制器能否在同一目标、动力学、扰动和有效安全约束下，相比充分优化的解析名义控制器改善精度和恢复能力。主要结果是物理执行误差、静态、动态、双手协调、延迟、失败与跨 episode 泛化。训练回报仅作为诊断。若强传统基线已达标且学习无收益，报告该结果。
+## M1 研究问题
 
-输入限定为 Teleop。对象位姿、视觉、触觉、EgoPro、自主操作、接触动力学和 VLA 属于当前范围之外。可保留含物体的人类录制和采集上下文，仿真环境采用无对象机器人和场地碰撞几何。
+在同一双臂双手 54 DoF 机器人、实时可用人端信号、名义参考、意图、仿真 Servo、安全约束和评分时间轴下，SuperMimic 学到的闭环残差能否相较现有 Marvin IK + Wuji SDK 改善十指空间精度、臂手协调、动态跟踪、稳定保持及恢复？以执行后几何、功能表现、约束介入、失败和延迟回答。使用 **Existing Teleop + 54 DoF Residual RL**，基础命令链沿用现有名义算法。V1 优先交付能独立闭环仿真运行的 Actor，再独立完成生产遥操作集成。[现有 Teleop](https://github.com/FEGkkd/whole-body-teleop/tree/codex/whole-body-sim-phase1) · [评估协议](EVALUATION_PROTOCOL.md)
 
-## M2 信息与控制流
+输入限真人 MANUS 双手骨架和双腕 Tracker 及机器人本体反馈。仿真为无物体机器人与场地碰撞几何。对象状态、视觉、触觉、EgoPro、VLA、自主任务执行和对象接触动力学在范围之外。手、臂、场地自碰撞检测仍是执行约束。历史录制只有符合 HMB 冻结谱系和资格的信号进入 V1。[HMB Reader 契约](specs/HMB_reader_contract.md)
 
-| 顺序 | 模块及状态所有权 | 产物 |
-|---|---|---|
-| 1 | 一致时钟与因果同步器按捕获和接收双时间戳缓存每路流 | 对齐的双腕、双手、有效位、年龄、来源索引 |
-| 2 | 意图映射模块使用冻结标定、骨长规则和功能几何 | 原始、映射的双手目标 |
-| 3 | 策略独立可行性服务从指令和固定参考上下文计算 | 可行几何、投影损失、状态、原始与优化名义关节参考 |
-| 4 | 有期限的联合 IK 与解析反馈 | 54 维名义命令及因果参考速度 |
-| 5 | 共享 observation builder 和统一 Actor | 54 维归一化残差，四个头顺序见契约 |
-| 6 | 安全投影、Servo、物理执行 | 请求、下发、滤波后目标三条独立信号 |
-| 7 | 机器人状态采集与 FK，单独记录物理与系统时钟 | 几何反馈、约束及事件、下拍输入、执行指标 |
+## M2 结构与信号所有权
 
-评估目标生成器以 `mapped_intent`、固定初态和共同指令流确定 `feasible_scoring_target`。冻结后的目标与有效性标签独立于每个被评估控制器的任何实际执行或回退。`q_nominal_online` 仅依赖当前可用人端输入、既往控制状态、实测反馈及固定模型/配置。部署时不得读取离线未来参考、`q_oracle_offline` 关节轨迹或固定训练 Bank。离线 Oracle 仍可用于可行性诊断和训练辅助。`q_requested`、`q_issued`、`q_applied`、`q_measured` 各自记录时间和来源，见 [信号契约](CONTRACTS.md#c3-名义动作和安全)。
+| 向下游依次传递 | 所有者与控制契约 |
+| --- | --- |
+| 可用人端输入 | HMB Reader 提供历史模拟因果数据，仿真部署用等型的实时可用样本、时间、时龄、权限与世代状态。独立记录源时标及到达时标。 |
+| 关节名义参考 | Marvin IK 为臂，Wuji SDK 为手。V1 训练输入为 `CACHED_CAUSAL_NOMINAL_REFERENCE`。V1-D 独立仿真 Runtime 由因果适配实时生成 `q_nominal_online`。两种路径的启动状态、时钟、采样和分布差异须实测。 |
+| 独立人意图 | 冻结注册、手部地标、腕与功能几何从人端数据生成。独立生成器与评分过程不得读取被评控制器的输出或机器人实测姿态。可选独立合法见证另存其几何与状态。 |
+| 残差 Actor | 当前帧及过去四帧的因果观测和机器人反馈输入共享 MLP 512/512/256，近零初始化，输出 54 维有界归一化动作。V1-B 冻结特征顺序和模型接口。 |
+| 仿真命令与反馈 | `q_requested = q_nominal + scale ⊙ a`，`q_issued = SafetyProjection(q_requested)`；Servo 演化 `q_applied`，MuJoCo 提供 `q_measured, qd_measured`。硬投影、路径护栏、执行器和回退有独立裁决权，Actor 和 World Model 只能提出动作或作可微预测。 |
+| 衡量与发布 | 独立评估进程只依据 MuJoCo 执行结果选 checkpoint，验证 B0/B54 等条件、连续回放、失败和性能门。部署包保存 Actor、接口及可验证运行依赖。 |
 
-## M3 几何与责任分离
+启动姿态锁存、固定绝对姿态等原 Teleop 策略保留为基线与后续集成研究。V1-A 以固定 M1 软件注册对齐训练名义 IK 和独立 mapped intent。V1-D 使用已审仿真启动策略和隔离仿真入口开展无 Bank 在线闭环。生产 START、真实多频率链路及发布命令所有权在后续集成审查中验证。[技术契约](CONTRACTS.md) · [仿真部署规格](specs/V1-D_evaluation_deployment.md)
 
-机器人公共世界系 W、腕系 U_h、原始采集系 H、关节与地标顺序见 [C1](CONTRACTS.md#c1-几何和数据)。几何使用米与弧度。世界定位综合两个腕位姿及局部手型。指尖直接跟踪，给拇指与另外四指的相对向量、左右手指尖相对向量和双腕相对 SE(3) 独立项。绝对与相对目标的权重在 P02 根据多种手型和对捏证据确定。
+## M3 参考、功能几何与可改善域
 
-对任意对应点，记录向量 e_projection = feasible − mapped、e_execution = measured − feasible、e_e2e = measured − mapped，三者满足 e_e2e = e_projection + e_execution。该关系适用于同点、同拍的向量。原始人体至映射的保真度用尺度归一化、对捏与左右配对单独评估。整体遥操作精度必须以端到端映射意图、功能对捏及双手几何证据支持。可行目标拟合用于诊断执行误差。静态运动学可达与给定 Servo 条件下的动态可执行性分开验证。
+HMB 是冻结的真人数据及 `SIMULATED` 时钟产品。RMB 由 V1-A 新建，将 `q_nominal, qd_nominal`、原 SDK 输出、名义 FK 与状态存为一层，将独立人意图存为另一层，并可增加独立可行几何。世界系目标包含腕与十指，局部手型、同手捏合、跨手指对及双腕相对 SE(3) 分项。保留 M0 原意图参照、映射差、投影差和物理执行差。在同一点同时刻另有合法可行几何时，执行相对 mapped intent 的误差向量等于相对可行几何的误差向量加投影向量。各项百分位独立计算。
 
-## M4 名义控制与安全约束
+P02 既有有限交接覆盖历史仿真静态研究。V2.0 提请将冻结的尺度 1 M1 授予 V1 连续仿真参考用途，依赖 Train-only 身份、连续性和阈值切换技术检查。M0 为不可变审计列，M2、Minimax 分别用于压缩和位置可达诊断，平滑捏合保留未冻结状态。保留严格必要条件排除、UNKNOWN、独立合法残差改善见证、困难连续运动和全计划域。共同可改善规则和样本身份须在正式 Actor 学习之前冻结，训练后的输出和结果无权改变其分母。[V1-A 规格](specs/V1-A_offline_rmb.md) · [RMB 契约](specs/V2_rmb_contract.md) · [P02 最终交接](reports/P02_final_handoff.md) · [P02 历史有限签核](https://github.com/FEGkkd/dexgym/blob/c5af9af94d7b9d3f437c14df128441d1183bec56/docs/s0-5/reports/approvals/P02_LIMITED_ACCEPTANCE_SIM0.md)
 
-P03 从审计确认的 FK/解析 Jacobian 构造在线小迭代约束 IK，候选为 DLS 初值加 warm-start QP。目标由全局指尖、腕内形状、对捏、跨手几何、腕位置/旋转、姿态先验及连续性组成。B1 为联合 IK + Servo。B1+ 额外使用因果几何反馈、带限幅的速度/Servo 前馈及可用的真实反馈。离线 Oracle 使用更高迭代预算、多初值与完整约束，单独给出收敛和失败状态。B0 保留原始 IK + SDK + Servo。相同安全层会记录约束介入和回退，使联合控制收益与更换限幅的影响可区分。
+## M4 环境与算法
 
-位置、速度、执行器命令、Marvin J6/J7 联动、手部独立驱动/耦合、自碰撞、臂间和手间距离为显式约束。近接触使用连续步或经误差上界校核的细分检查。可行时优先零残差等价，发生目标无效、超时或不可行时进入统一回退状态机，不能依赖奖励避免碰撞。所有速度、力矩、手部耦合及碰撞裕量由 P02/P03 的模型和测量确定，P10 独立审核真机参数。
+初始候选为正常重力、50 Hz 控制、500 Hz 物理和位置 Servo，2 ms 子步每拍 10 次。优先移植已审 MuJoCo Warp、CPU 几何、Torch FK 与命令投影，按实际 SHA、54 轴命名、路径约束、动作响应与 CPU/GPU Servo 验证决定资格。残差初始尺度左右臂 ±8°、双手 ±5°。四组动作依次为左臂 7、右臂 7、左手 20、右手 20。执行等价性用 B0 核对。几何 Reward 使用独立 mapped intent，多尺度世界指尖、局部手型、对捏、双手、腕和速度，并按同一 Reward 单位设定 Critic value bound。[环境规格](specs/V1-B_residual_environment.md)
 
-## M5 学习接口与时序
+主算法复用现有 SuperMimic。以 MuJoCo 执行 transition 填充 Replay，学习 54 轴动力学及必要的失败预测。通过独立模型资格后，从合法 Replay 状态做短时 imagination，可微几何回报训练 Actor，Critic 匹配 λ-return。不断采样 MuJoCo 纠正分布。模型状态须包含已证必要的 Servo 记忆，任务适配须绑定请求、投影、下发、滤波后与有效区间量。模型资格覆盖 1/4/8 步误差、静止、动作梯度、各轴实际激励、约束边界与源级留出，Actor 更新服从资格以及运行期模型利用检查。[World Model 规格](specs/V1-C0_world_model.md)
 
-50 Hz 控制与 500 Hz 物理频率为候选契约。P01 区分各独立捕获、接收和记录域，分发 [离线与因果数据](specs/P01_teleop_data.md)。P03 按实际输入速率、Servo 带宽、硬件约束和计时证据考察候选控制频率。测量采集、同步、意图映射、在线名义求解、Actor、投影、发令、Servo 与真实响应的环节时间及全链路 P50/P95/P99、deadline miss、回退和各频率精度。频率调整需有 DCR、数据和人工签核。每拍仅消费有界到达且捕获不超出查询时刻的样本。域扰动仍遵守真实时序。
+采样器可访问合格时序、根和分段索引。Actor 白名单排除未来时刻、离线插值、录制和轨迹索引、Oracle q 及特权标签。训练环境能在想象之后的步骤推进外生参考，单次 Actor 决策仍只消费当前及历史合法信息。实际闭环评分及发布部署继续使用该信息边界。[RMB 契约](specs/V2_rmb_contract.md) · [环境规格](specs/V1-B_residual_environment.md)
 
-Actor 采用共享归一化 MLP 候选 512/512/256，四个近零初始化的输出头。最近五帧因果历史作为起点，紧凑特征与 Jacobian 摘要由 P04 实测后冻结。控制量通过 joint name 双射到模型坐标。奖励用执行后状态与当拍发令绑定的目标比较。独立评估还按物理时间对比人端意图，保留采集与执行延迟。契约见 [C2–C5](CONTRACTS.md#c2-时钟同步和缺测)。
+## M5 阶段与资源
 
-## M6 训练与阶段执行
+在人工设计批准和独立有界 Campaign 授权后，V1-A 建参考，V1-B 建任务与通过接口/物理门，V1-C0 用有界真实仿真采样资格化 World Model，V1-C1/C2/C3 依次做静态、原速动态和混合，V1-D 独立评估、导出与仿真部署。V1 候选主训练实物理上限为 2000 万 transitions，包含探索、WM-only warmup 及失败重试。显存、时钟时间、GPU-hours、评估和重试均使用有限台账，以授权预算和运行预检为准。新联合 IK/QP、PPO、新人体录制、最终 START、真实计量和辨识不构成该 V1 仿真主线依赖。历史相关证据和可选对照均可追溯。[阶段路线](ROADMAP.md) · [自主研发规范](MULTI_AGENT_PROTOCOL.md)
 
-本节的阶段前置条件叠加 DCR-002。P01-D 至 P02 仅可依次批准有资格的历史 HMB 仿真用途。P03 正式启动需 P02、P01-T、C2-RT 和物理 robot-base 注册分别 ACCEPTED。已有控制、精度、基线、鲁棒性、安全与阶段验收要求保持有效。[依赖细则](dcr/DCR-002_simulation_and_real_clock_qualification.md)
+## M6 验收与研究外推
 
-P00–P03 依次建立审计、原始数据、几何可行性及传统基线。P01 的 HMB 主线独立验收后开放 P02 人体意图研究。P03 正式启动同时依赖 P02 ACCEPTED 和 P01-T 遥测资格人工 ACCEPTED。正式 RL 仍需 P03 模型、Servo、强基线和冻结协议的既有前置证据。P04 在独立 `wholebody_s05` 环境落实闭环与训练 adapter，数学测试先行。P05 先通过静态收敛门再进入 P06。P06 学原速动态控制并保留静态能力。P07 增加在线变化和输入丢失。P08 以实测确定扰动范围并逐项证实作用。P09 比较冻结候选、消融和算法。P10 验证部署与真机。[路线图](ROADMAP.md) · [DCR-001](dcr/DCR-001_p01_hmb_telemetry_dependencies.md)
+V1 比较相同缓存参考下的 B0 零残差和 B54 全身残差。B14、S0-4、PPO 或新联合 IK 可在匹配条件下另作消融或后续对照。V1 工程结果按单种子、历史开发集范围报告，功能和推荐性能分别判定。独立 Final Test 在有独立新数据、审计与批准前保持阻塞。后续正式科研对照仍须预注册、多种子、独立数据、完整物理评分和原有挑战标准。真机另需 C2-RT、P01-T、物理 robot-base、Servo、外部计量、实物安全，以及各级 Shadow/HIL/现场人工批准。[评估协议](EVALUATION_PROTOCOL.md) · [部署规格](specs/V1-D_evaluation_deployment.md) · [共享硬件计量](specs/HARDWARE_SHARED_MEASUREMENT_PLAN.md)
 
-PPO 起步，按真实物理 transition 计预算。对于归一化残差的有界动作，概率模型匹配下发给环境的策略动作，将安全投影后的命令记录为执行信号。处理真实终止、时限截断、最终观测 bootstrap 和 reset 顺序。保存归一化器、网络/优化器、RNG、采样器状态与已完成 rollout 边界；若不保存环境状态，清楚标记续训与逐拍复现的区别。后续 SuperMimic 共用数据、动力学、R/O/A 契约和回放验收。其模型另验证一步、多步、任务空间、静态平衡、动作 Jacobian 和模型利用风险。
+## M7 设计、执行与证据身份
 
-## M7 评估与成功标准
-
-冻结 [评估协议](EVALUATION_PROTOCOL.md) 的版本、episode 谱系、失败处理和随机种子。P03 强基线完成后、正式 RL 前，批准主效应门槛与其他指标的允许退化边界。20% 的动态和难段 P95 改善为候选相对门槛。绝对挑战目标按协议逐项报告，P02/P03 量化物理可行性。变更必须提交 DCR，待批准后生效。强基线与学习均遵循唯一的目标定义和计分时间轴。
-
-## M8 真机边界与物理限制
-
-软件约束、硬件安全、测量标定分别审核。P10 离线等价 → Shadow → HIL → 独立授权的逐级真机测试。真机每级均要求负责人签核、看门狗、硬件急停可用、回退测试和中止条件。编码器 FK、外测指尖、端到端时间和通信因果分别记录。静态不可达、关节饱和、追踪丢失、执行时延和手/臂 Servo 带宽均可能限制挑战目标，按 P02/P03 实验证据判定。
-
-## M9 证据、变更与授权
-
-证据标记为 `CODE` 源码确认、`OBSERVED` 本阶段实际执行或可读性见证、`HISTORICAL` 以前实验产物、`HYPOTHESIS` 未验证因果解释、`DESIGN` 本阶段方案。验收状态按 [项目状态](PROJECT_STATE.md) 枚举，人工审核前最高为 READY_FOR_REVIEW。Run ID 和失败披露要求见 [C6](CONTRACTS.md#c6-版本及运行证据)。任何核心变更使用 [决策记录](DECISION_LOG.md) 的 DCR 字段。每个阶段正式开工需已有依赖证据、冻结的当前阶段 Spec 及授权。
+Design Freeze 候选锁定版本、基线 Git 对象、文档 SHA、需求映射、DAG、量化门、待审参数、预算和自主更改边界。后续生效要分别记录项目用户真实设计批准和 V1 Campaign 执行授权。Main Agent 按实际技术证据、独立审查和预算推进，通过的技术记录使用 `TECHNICAL_PASS`，最终交付为 `READY_FOR_REVIEW`。保留每次失败、原始报告及不可变历史证据，任何阶段、目标域或指标变化须按契约重新获得资格。[追踪矩阵](TRACEABILITY_MATRIX.md) · [自主研发规范](MULTI_AGENT_PROTOCOL.md) · [设计冻结候选](design_freeze_candidate.json)

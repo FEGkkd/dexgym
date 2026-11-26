@@ -1,0 +1,44 @@
+{
+  "reviewed_baseline": "b8d8b401bdda59ad00a37f0a3bf6878b462ed756",
+  "ubuntu_s05_head": "b8d8b401bdda59ad00a37f0a3bf6878b462ed756",
+  "ubuntu_s05_clean": true,
+  "sim0": "c5af9af94d7b9d3f437c14df128441d1183bec56",
+  "sim0_approval": "docs/s0-5/reports/approvals/P02_LIMITED_ACCEPTANCE_SIM0.md",
+  "sim0_dcr": "docs/s0-5/dcr/DCR-004_bimanual_simulation_research_branch.md",
+  "sim0_untracked_preserved": true,
+  "teleop_repo": "FEGkkd/whole-body-teleop",
+  "teleop_head": "6d0b0b5b2601618f1b0052d93ef2403eea9b064a",
+  "teleop_ubuntu_runtime_branch": "4sensor",
+  "teleop_runtime_dirty": true,
+  "original_hmb_archive_relative": "review-1/hmb_manifest.json",
+  "p02_final_run": "P02-FINAL-20261126-ecd12ec",
+  "required_evidence": {
+    "evidence/P01_E_E1/hmb_manifest.json": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074",
+    "evidence/P01_F/p02_handoff_manifest.json": "cc1f21ead157e576113a184dba48a5d2596f4835ffdf53e554823cb67eb3fb97",
+    "evidence/P02/final_handoff/execution_receipt.json": "f7c874a48d6be5128f2f895c12038c9fb1057f25be57dab91ce2280478fa1458",
+    "evidence/P02/final_handoff/limited_scope_candidate.json": "9f78b4c3087289859d22eefd71a1b567317b3951488159bff174b2657c10ffa7",
+    "evidence/P02/final_handoff/agent_work_manifest.json": "b45344cd15c08a583eaba84b49bd40ef917d1eb844a0720beb1d11d8e08b2c75"
+  },
+  "source_paths": [
+    "source/dexgym/algorithms/supermimic/dex_reference/engine.py",
+    "source/dexgym/algorithms/supermimic/dex_reference/config.py",
+    "source/dexgym/algorithms/supermimic/dex_reference/buffer.py",
+    "source/dexgym/algorithms/supermimic/dex_reference/networks.py",
+    "source/dexgym/tasks/direct/wholebody_s0_1/supermimic.py",
+    "source/dexgym/tasks/direct/wholebody_s04/train_aligned.py",
+    "source/dexgym/tasks/direct/wholebody_s04/aligned_physics.py",
+    "source/dexgym/tasks/direct/wholebody_s04/aligned_task.py",
+    "source/dexgym/tasks/direct/marvin54_s0/warp_physics.py",
+    "source/dexgym/tasks/direct/wholebody_s05/hmb_reader.py",
+    "source/dexgym/data/wuji_retarget.py"
+  ],
+  "gpu_snapshot": {
+    "name": "NVIDIA GeForce RTX 5090",
+    "total_mib": 32607,
+    "used_mib": 454,
+    "utilization_pct": 0,
+    "filesystem_available_gib_approx": 640
+  },
+  "scope": "READ_ONLY_SOURCE_AND_EVIDENCE_IDENTITY",
+  "sim0_approval_sha256": "b2ac5935ba67adbe5fedb89bb7f52052b1e0320207dcaa5cbba7056d3ef9b8f5"
+}

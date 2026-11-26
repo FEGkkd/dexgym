@@ -1,0 +1,108 @@
+{
+  "schema": "s05.v2.design-verification.v1",
+  "scope": "READ_ONLY_DESIGN_AND_SYNTHETIC_CONTROLS",
+  "reviewed_baseline": "b8d8b401bdda59ad00a37f0a3bf6878b462ed756",
+  "ubuntu_and_git_readback": {
+    "ubuntu_s05_worktree": "/home/ubuntu/dexgym_worktrees/s0-5",
+    "ubuntu_s05_clean": true,
+    "github_dexgym_s05_before_release": "b8d8b401bdda59ad00a37f0a3bf6878b462ed756",
+    "github_teleop_branch": "codex/whole-body-sim-phase1",
+    "github_teleop_head": "6d0b0b5b2601618f1b0052d93ef2403eea9b064a",
+    "sim0_origin_import": "c5af9af94d7b9d3f437c14df128441d1183bec56",
+    "archive_manifest_e1": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074"
+  },
+  "checks": [
+    {
+      "command": "python -B docs/s0-5/evidence/P00_V2/check_design.py",
+      "exit": 0,
+      "output": [
+        "PASS historical P00–P02: 274 preserved paths, scoped SIM0 object, 11 audited source SHAs",
+        "PASS 36 active files, 291 links, 35 requirements, 7 V1 stages",
+        "PASS evidence/hash integrity and design-only state; external URLs: 2",
+        "  https://github.com/FEGkkd/whole-body-teleop/tree/6d0b0b5b2601618f1b0052d93ef2403eea9b064a",
+        "  https://github.com/FEGkkd/whole-body-teleop/tree/codex/whole-body-sim-phase1"
+      ]
+    },
+    {
+      "command": "python -B docs/s0-5/evidence/P00_V2/test_check_design.py",
+      "exit": 0,
+      "synthetic_cases": 21,
+      "output": [
+        "test_agent_cannot_mint_approval (__main__.DesignControls.test_agent_cannot_mint_approval) ... ok",
+        "test_b_preparation_but_no_formal_gate_before_a (__main__.DesignControls.test_b_preparation_but_no_formal_gate_before_a) ... ok",
+        "test_c0_requires_a_and_b (__main__.DesignControls.test_c0_requires_a_and_b) ... ok",
+        "test_changed_scoring_threshold_hash_is_rejected (__main__.DesignControls.test_changed_scoring_threshold_hash_is_rejected) ... ok",
+        "test_changed_upstream_invalidates_transitive_gate (__main__.DesignControls.test_changed_upstream_invalidates_transitive_gate) ... ok",
+        "test_d_cannot_bypass_c3 (__main__.DesignControls.test_d_cannot_bypass_c3) ... ok",
+        "test_design_dag_cannot_drop_c3 (__main__.DesignControls.test_design_dag_cannot_drop_c3) ... ok",
+        "test_design_only_fixture_has_no_capability (__main__.DesignControls.test_design_only_fixture_has_no_capability) ... ok",
+        "test_final_test_and_formal_scoring_are_separate_gates (__main__.DesignControls.test_final_test_and_formal_scoring_are_separate_gates) ... ok",
+        "test_historical_phase_events_are_immutable (__main__.DesignControls.test_historical_phase_events_are_immutable) ... ok",
+        "test_m1_static_approval_does_not_authorize_continuous (__main__.DesignControls.test_m1_static_approval_does_not_authorize_continuous) ... ok",
+        "test_qualified_actor_stage (__main__.DesignControls.test_qualified_actor_stage) ... ok",
+        "test_real_deploy_needs_independent_hardware_evidence (__main__.DesignControls.test_real_deploy_needs_independent_hardware_evidence) ... ok",
+        "test_resource_cap_includes_reservations (__main__.DesignControls.test_resource_cap_includes_reservations) ... ok",
+        "test_resource_totals_cannot_hide_subbuckets (__main__.DesignControls.test_resource_totals_cannot_hide_subbuckets) ... ok",
+        "test_retry_exhaustion (__main__.DesignControls.test_retry_exhaustion) ... ok",
+        "test_same_author_review_rejected (__main__.DesignControls.test_same_author_review_rejected) ... ok",
+        "test_scoped_human_authorization_allows_a (__main__.DesignControls.test_scoped_human_authorization_allows_a) ... ok",
+        "test_stale_world_model_inputs_rejected (__main__.DesignControls.test_stale_world_model_inputs_rejected) ... ok",
+        "test_tampered_gate_metric_evidence (__main__.DesignControls.test_tampered_gate_metric_evidence) ... ok",
+        "test_tampered_historical_receipt_rejected (__main__.DesignControls.test_tampered_historical_receipt_rejected) ... ok",
+        "",
+        "----------------------------------------------------------------------",
+        "Ran 21 tests in 0.280s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "command": "python -B docs/s0-5/evidence/P00_V2/verify_legacy.py",
+      "exit": 0,
+      "output": [
+        "Historical Git object b8d8b401bdda59ad00a37f0a3bf6878b462ed756: docs/s0-5/evidence/P00/check_documents.py",
+        "PASS historic Git replay of 38 files at cc05f09847254ddae3b76581fb9e1feed4f31065",
+        "PASS structure: 71 Markdown files, 30 requirements, 11 phase specs, 486 local links",
+        "PASS E1 receipt, output and independent audit file hashes",
+        "PASS F1 receipt, preregistration, scoped handoff and exact evidence hashes",
+        "PASS E0 bounded review receipt and exact execution candidate hashes",
+        "PASS E0 acceptance and independent E1 authorization match the reviewed Git bytes",
+        "PASS DCR-001 subphase replay, human gates, active spec and independent P03 dependency",
+        "PASS integrity: 24 hashed evidence files and 6 referenced review rows",
+        "PASS phase event log; approval authenticity and technical acceptance require human review",
+        "Historical Git object 09c1c9e3c63797083a82493e2a40dd8bb4b1db6d: docs/s0-5/evidence/P00_review_fix/test_review_checks.py",
+        ".....",
+        "----------------------------------------------------------------------",
+        "Ran 5 tests in 0.010s",
+        "",
+        "OK"
+      ]
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0
+    }
+  ],
+  "observed_failures": [
+    {
+      "input": "Legacy active checker against V2 working tree",
+      "exit": 1,
+      "error": "Requirement row schema",
+      "disposition": "Replay full legacy checker at b8d8b40; active V2 has its own checker"
+    },
+    {
+      "input": "Legacy negative tests run against the newer b8d8b40 checker",
+      "exit": 1,
+      "error": "Missing or external file example-review-artifact before old P09 assertion",
+      "disposition": "Preserved. All five pass at their own 09c1c9e baseline, and V2 independently covers Final Test"
+    },
+    {
+      "input": "Provisional V2 package while merging files",
+      "exit": 1,
+      "error": "Incomplete V1-C1 section structure; report and work-manifest targets not yet present",
+      "disposition": "Completed structural sections and referenced deliverables, then reran"
+    }
+  ],
+  "runtime_experiments": "NOT_RUN",
+  "execution_authorized": false
+}
