@@ -117,7 +117,7 @@ def tail_compact(report):
                 decision='RETAIN_FROZEN_QC' if all(x['disposition']=='RETAIN_FROZEN_QC' for x in data) else 'REVIEW')
 
 
-def seal(run,e1,old_a,archive,raw_dir,unit):
+def seal(run,e1,old_a,archive,raw_dir,unit,out):
     assert file_sha(E/'hmb_manifest.json')==MANIFEST and file_sha(E/'review_receipt.json')==RECEIPT
     assert file_sha(E/'production_plan.json')==PLAN
     view=read(archive/'independent_integrity.json')
@@ -156,7 +156,7 @@ def seal(run,e1,old_a,archive,raw_dir,unit):
                             calibration=c['calibration']) for c in raw['cases'] if c['goal']['kind']=='root'],
         repeated_sdk=[c['repeated_sdk'] for c in raw['cases'] if 'repeated_sdk' in c],
         scenario_witness_counts=Counter(c['goal']['name'] for c in raw['cases'] if c['goal']['kind']=='scenario'))
-    out=run/'sealed'
+    assert out.parent==run and out.name.startswith('sealed')
     out.mkdir(mode=0o700)
     report_objects={
         'independent_integrity.json':compact_view,
