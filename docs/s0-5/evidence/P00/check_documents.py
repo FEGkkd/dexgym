@@ -235,6 +235,19 @@ def p01_dependency_states(document):
             require(approval.get('type')=='human' and bool(approval.get('by')) and bool(approval.get('ref')),
                     f'{owner} requires human ACCEPTED')
             checked_file(ROOT,approval['ref'])
+            if owner=='P01-F':
+                require(event['allowed_use']==['HMB_GEOMETRY_DEVELOPMENT','HMB_SIMULATED_CAUSAL','HMB_OFFLINE_DIAGNOSTIC'],
+                        'F1 approval scope differs')
+                reviewed=event['reviewed_commit']
+                for key,path in (('receipt','evidence/P01_F/review_receipt.json'),
+                                 ('handoff','evidence/P01_F/p02_handoff_manifest.json'),
+                                 ('e1_manifest','evidence/P01_E_E1/hmb_manifest.json')):
+                    git_bytes=git('show',f'{reviewed}:docs/s0-5/{path}')
+                    require(git_bytes.returncode==0 and digest(git_bytes.stdout)==event[key+'_sha256']==
+                            digest(checked_file(ROOT,path).read_bytes()),f'F1 approval {key} hash mismatch')
+                f1=load_json(checked_file(ROOT,'evidence/P01_F/review_receipt.json'))
+                require(f1['run_id']==event['run_id'] and f1['technical_gates']['F1']=='PASS',
+                        'F1 approval needs exact passing receipt')
             if owner=='P01-E':
                 require(event['run_id']==document['p01e_production_authorization']['run_id'],
                         'E1 approval run differs from authorized production')

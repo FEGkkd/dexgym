@@ -2,8 +2,8 @@
   "schema": "s05.phase-state.v1",
   "current": {
     "P00": "ACCEPTED",
-    "P01": "IN_PROGRESS",
-    "P02": "NOT_STARTED",
+    "P01": "ACCEPTED",
+    "P02": "IN_PROGRESS",
     "P03": "NOT_STARTED",
     "P04": "NOT_STARTED",
     "P05": "NOT_STARTED",
@@ -54,6 +54,34 @@
       "spec_sha256": "662ffd475dc40eb0769c0d2c474b5c526916d168c2413c67b98c4fecb624013a",
       "scope": "P01-A only",
       "timestamp_basis": "first Ubuntu observation after authorization"
+    },
+    {
+      "phase": "P01",
+      "from": "IN_PROGRESS",
+      "to": "READY_FOR_REVIEW",
+      "at": "2026-11-26T19:38:13+08:00",
+      "evidence_ref": "reports/P01_acceptance.md",
+      "scope": "HISTORICAL_HMB"
+    },
+    {
+      "phase": "P01",
+      "from": "READY_FOR_REVIEW",
+      "to": "ACCEPTED",
+      "at": "2026-11-26T20:05:03+08:00",
+      "evidence_ref": "reports/approvals/P01_ACCEPTED_P02.md",
+      "scope": "HISTORICAL_HMB",
+      "approval": {"type": "human", "by": "project_user", "ref": "reports/approvals/P01_ACCEPTED_P02.md"}
+    },
+    {
+      "phase": "P02",
+      "from": "NOT_STARTED",
+      "to": "IN_PROGRESS",
+      "at": "2026-11-26T20:05:03+08:00",
+      "evidence_ref": "reports/approvals/P01_ACCEPTED_P02.md",
+      "authorization_ref": "reports/approvals/P01_ACCEPTED_P02.md",
+      "spec_sha256": "9b03d7cdb80dfd43b43b5fb459630d30bdd25d8f50e2ef4c12435d3ddd0e1cf6",
+      "scope": "STATIC_INTENT_AND_FEASIBILITY",
+      "run_id": "P02-20261126-54c2e06"
     }
   ],
   "review_fix_ref": "reports/P00_review_fix.md",
@@ -90,7 +118,7 @@
     "P01-C": "ACCEPTED",
     "P01-D": "ACCEPTED",
     "P01-E": "ACCEPTED",
-    "P01-F": "READY_FOR_REVIEW",
+    "P01-F": "ACCEPTED",
     "P01-T": "BLOCKED"
   },
   "p01_subphase_events": [
@@ -340,6 +368,20 @@
       "technical_gates": {
         "F1": "PASS"
       }
+    },
+    {
+      "phase": "P01-F",
+      "from": "READY_FOR_REVIEW",
+      "to": "ACCEPTED",
+      "at": "2026-11-26T20:05:03+08:00",
+      "scope": "INDEPENDENT_HMB_QUALIFICATION",
+      "run_id": "P01-F-20261126-b22f8be",
+      "reviewed_commit": "54c2e06972189418542b14f93b84a081d9bcac1e",
+      "receipt_sha256": "1957bc5828cc76935f8231f13824b44e5084e6445cfb66f4d5e3b9f76870b039",
+      "handoff_sha256": "cc1f21ead157e576113a184dba48a5d2596f4835ffdf53e554823cb67eb3fb97",
+      "e1_manifest_sha256": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074",
+      "allowed_use": ["HMB_GEOMETRY_DEVELOPMENT", "HMB_SIMULATED_CAUSAL", "HMB_OFFLINE_DIAGNOSTIC"],
+      "approval": {"type": "human", "by": "project_user", "ref": "reports/approvals/P01_ACCEPTED_P02.md"}
     }
   ],
   "p01e_preflight": {

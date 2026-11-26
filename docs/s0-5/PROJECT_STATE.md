@@ -5,7 +5,7 @@
 | 阶段 | 当前状态 | 授权范围 |
 |---|---|---|
 | P00 | ACCEPTED | 用户签核 `09c1c9e3c63797083a82493e2a40dd8bb4b1db6d` |
-| P01 | IN_PROGRESS | F1 技术验证已完成，等待 P01-F 和主线人工签核 |
+| P01 | ACCEPTED | 人工签核历史 HMB 数据主线和三项历史用途 |
 | P01-A | ACCEPTED | 人工签核仅覆盖 A1 元数据门 |
 | P01-B（历史） | BLOCKED | v0.2.0 原 B1 FAIL / B2 BLOCKED |
 | P01-B-HMB | ACCEPTED | 用户签核 `8b0f399` 的有界解码门 |
@@ -13,12 +13,13 @@
 | P01-C（历史 HMB 仿真资格） | ACCEPTED | 项目用户签核 `eb00f25`、最终凭据与 SHA |
 | P01-D | ACCEPTED | 用户签核 `34e44b6`，绑定原 D1 配置和运行凭据 |
 | P01-E | ACCEPTED | 用户签核绑定正式 Run、manifest、计划及凭据 SHA |
-| P01-F | READY_FOR_REVIEW | F1 PASS，独立 HMB 资格及 P02 移交待人工审核 |
+| P01-F | ACCEPTED | 签核绑定 F1 receipt、P02 handoff 和 E1 manifest SHA |
 | C2-RT | BLOCKED | 设备物理捕获、控制器接收和跨时钟误差界未证 |
 | 物理 robot-base 注册 | BLOCKED | 缺独立外部测量 |
 | P01-T | BLOCKED | 动态资格为 0，P03 正式启动的强制前置 |
 | Final Test | BLOCKED | 缺乏独立封存证据 |
-| P02–P10 | NOT_STARTED | 待各自授权 |
+| P02 | IN_PROGRESS | 离线人体意图、约束静态可行性、历史诊断 |
+| P03–P10 | NOT_STARTED | 依各自独立前置 |
 
 原 Master Design、Contracts、Evaluation Protocol v0.1.1 和 P01 v0.2.0 留作历史版本。项目用户批准 DCR-001 的依赖范围，活动规格为 P01 v0.2.1 和三份 v0.1.2 设计。QC 数值阈值、时钟参数和全量预算将在 P01-C/D 另行实测和冻结。[DCR-001](dcr/DCR-001_p01_hmb_telemetry_dependencies.md) · [原批准记录](reports/approvals/P00_ACCEPTED_P01_A.md)
 
@@ -38,4 +39,4 @@ E0 的原技术审核事件和证据继续保留。项目用户独立批准配�
 
 正式 E1 历史仿真 HMB 已由用户签核。P01-F 独立审计 Run 为 `P01-F-20261126-b22f8be`。[E1 验收报告](reports/P01_E_acceptance.md) · [人工签核](reports/approvals/P01_E_ACCEPTED_P01_F.md) · [P01-F 规格](specs/P01_F_independent_hmb_acceptance.md)
 
-F1 重算全部拍及有效段，重新校验 1,540 个正式分区文件并从 32 个母源的原始数据复验 4,790 对消息。因果历史五拍姿态窗口 110,796 个，独立速度资格 110,622 个。三类用途限历史仿真研发，真实时序与物理校准仍待独立证据。下一步需项目用户签核 P01-F、P01 数据主线及明确批准 P02。[P01-F 验收](reports/P01_F_acceptance.md) · [P01 汇总](reports/P01_acceptance.md)
+F1 重算全部拍及有效段，重新校验 1,540 个正式分区文件并从 32 个母源的原始数据复验 4,790 对消息。用户签核 P01-F、P01 数据主线与三类历史用途，独立授权 P02；当前 Run 为 `P02-20261126-54c2e06`。[P01-F 验收](reports/P01_F_acceptance.md) · [P01 历史技术汇总](reports/P01_acceptance.md) · [人工签核和 P02 授权](reports/approvals/P01_ACCEPTED_P02.md)
