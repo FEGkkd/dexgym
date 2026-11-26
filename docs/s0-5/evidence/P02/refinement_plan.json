@@ -1,0 +1,45 @@
+{
+  "schema": "s05.p02.refinement.v1",
+  "run_id": "P02-REFINE-20261126-8753921",
+  "reviewed_commit": "87539210e60f1134820b9f06fdb084cbc3ec1bf1",
+  "reference_run_id": "P02-20261126-54c2e06",
+  "reference_review_receipt_sha256": "1f55ed102ad10d5dce1eac0e7c10ed68e2604ccff0f645b74e0432646ede6492b",
+  "development_authorization": "User approved DCR-003 research only; P02 stays READY_FOR_REVIEW, formal scoring scope pending.",
+  "data_rule": "All signed E1 Train and Validation partitions, all HMB joint-valid geometry ticks. Count invalid and unknown separately. Fit Train once, hash freeze the fitted candidates before reading Validation geometry.",
+  "cohort_rule": "Use all 38 frozen original planned identities (32 roots, 6 F1 tails). Replay original full and fixed-hand outcomes as historical evidence. Use the three original recorded initializations on M0 and seeds by the same algorithm on candidate targets. Do not replace ineligible or failed rows.",
+  "M1": {
+    "loss": "Train-only equal-root-weight radial excess squared plus 0.018 times home-wrist distance squared and weak transform regularization. Yaw and translation shared, scale 1. Preserve original fixed wrist mounting unless separate dated calibration exists.",
+    "gravity_axis": "z",
+    "yaw_seed_offsets_deg": [-45, 0, 45],
+    "yaw_offset_bound_deg": 75,
+    "translation_offset_bound_m": 0.40,
+    "optimizer_max_iterations": 65,
+    "sample_stride_per_partition_ticks": 12
+  },
+  "M2": {
+    "trigger": "Run only if M1 Train bound >3 mm fraction remains above 0.02 on all valid Train ticks.",
+    "loss": "Same as M1 with additional scale penalty and common wrist centroid pivot. Scale acts only on inter-wrist spacings and common wrist translation, not on local bone lengths.",
+    "scale_limits": [0.75, 1.0],
+    "scale_penalty_m2": 0.018
+  },
+  "functional": {
+    "threshold_m": 0.020,
+    "continuous_blend_distance_m": [0.016, 0.024],
+    "comparison": "Original hard-switch vs continuous smoothstep. Compare every within-segment consecutive tick, label velocities as proxy. Include up to one earliest valid entry and exit per split and side for constrained legal FK checks."
+  },
+  "solve": {
+    "multitask_iteration_budgets": [90, 300, 1000],
+    "max_seconds_per_start": 8.0,
+    "matched_candidates_iterations": 300,
+    "minimax_iterations": 300,
+    "max_workers_per_experiment": 1,
+    "do_not_claim_global_optimum": true,
+    "static_clearance_m": 0.0005
+  },
+  "score_policy": {
+    "thresholds_mm": [3, 5, 10, 15],
+    "unknown_in_hit_denominator": true,
+    "formal_use_authorized": false,
+    "preserve_M0_target_for_all_scoring": true
+  }
+}
