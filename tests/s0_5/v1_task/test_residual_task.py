@@ -11,7 +11,7 @@ from dexgym.tasks.direct.wholebody_s05.v1.task.geometry import ResidualKinematic
 from dexgym.tasks.direct.wholebody_s05.v1.task.observation import (CausalHistory, ObservationBuilder,
                                                                   geometry_mask, velocity_mask)
 from dexgym.tasks.direct.wholebody_s05.v1.task.physics import ServoProfile
-from dexgym.tasks.direct.wholebody_s05.v1.task.safety import NativeSweep
+from dexgym.tasks.direct.wholebody_s05.v1.task.safety import NativeSweep, SafetyProjection
 from dexgym.tasks.direct.wholebody_s05.v1.task.smoke import make_task, target_frame
 
 XML = Path(__file__).resolve().parents[3] / (
@@ -81,6 +81,17 @@ class ContractTests(unittest.TestCase):
         # Failure to resolve a large swept interval cannot become a proof.
         distant = np.zeros_like(home)
         self.assertFalse(NativeSweep(self.robot, max_depth=0).permits(home, distant))
+
+    def test_batched_minimum_gap_preserves_signed_exact_queries(self):
+        guard = SafetyProjection(self.robot, device="cpu", max_step=[.027] * 14 + [.10] * 40)
+        home = torch.tensor(self.robot.home, dtype=torch.float32)
+        contact = home.clone()
+        contact[self.robot.names.index("l_index_finger_mcp_abd")] += .275
+        poses = torch.stack((home, contact, contact, home))
+        observed = guard.minimum_gaps(poses, torch.tensor([True, True, True, False]))
+        expected = [guard.sweep.pose_gap(q.numpy()) for q in (home, contact, contact)]
+        torch.testing.assert_close(observed, torch.tensor([*expected, 0.], dtype=poses.dtype))
+        self.assertLess(observed[1].item(), 0.)
 
     def test_native_advances_and_b0_masks_every_axis(self):
         task, q, reset = make_task(self.robot, 1, ServoProfile(), "B0", "cpu")

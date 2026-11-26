@@ -5,6 +5,8 @@ import numpy as np
 
 from . import JOINTS
 
+GAP_REPORT_CAP_M = .005
+
 
 class NativeSweep:
     """Prove clearance on straight canonical-q intervals with MuJoCo geometry.
@@ -70,7 +72,7 @@ class NativeSweep:
                 unresolved.append(i)
         return np.asarray(unresolved, dtype=int)
 
-    def minimum_gap(self, data, cap=.005):
+    def minimum_gap(self, data, cap=GAP_REPORT_CAP_M):
         a, b, m = self.a, self.b, self.model
         broad = np.linalg.norm(data.geom_xpos[a] - data.geom_xpos[b], axis=-1) - self.radii
         minimum = cap

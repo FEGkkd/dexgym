@@ -118,6 +118,20 @@
       "physical_intervals_across_both_backends": 18,
       "scope": "SYNTHETIC_BOUNDARY_DIAGNOSTIC"
     },
+    "initial_scale64": {
+      "path": "runs/V1-B-scale64-01/result.json",
+      "sha256": "badd84867f331d5a2b9e87518eea81da27fd24530994398a4c74df446489d260",
+      "exit": 0,
+      "backend": "WarpServo",
+      "parallel_warp_worlds": 64,
+      "actual_physical_transitions": 512,
+      "all_valid": true,
+      "actual_transitions_per_second": 195.92188856820982,
+      "peak_torch_allocated_bytes": 20183552,
+      "peak_torch_reserved_bytes": 29360128,
+      "memory_scope": "Torch allocator; direct Warp and device allocation not included",
+      "scale_and_learner_qualification": false
+    },
     "synthetic_world_model_smoke": {
       "scope": "PHYSICAL_SYNTHETIC_PREACTOR_SMOKE",
       "cpu": {

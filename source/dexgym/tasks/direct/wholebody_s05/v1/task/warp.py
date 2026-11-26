@@ -152,11 +152,13 @@ class WarpServo(WarpPhysics):
                 for value in (post, step_servo, ctrl, torque, depth, overflow, marks):
                     value.record_stream(caller)
             actual = post[:, :JOINTS]
+            finite = torch.isfinite(post).all(-1) & torch.isfinite(torque).all(-1)
             valid = guard.positions_valid(actual) & guard.velocities_valid(post[:, JOINTS:])
             check = active & valid & (depth == 0.) & ~overflow
             cleared = guard.permitted_paths(state[:, :JOINTS], actual, check)
-            subgap = guard.minimum_gaps(actual, check)
-            finite = torch.isfinite(post).all(-1) & torch.isfinite(torque).all(-1)
+            # The measured signed clearance remains useful at actual contacts
+            # and stops, independently of whether the motion remains permitted.
+            subgap = guard.minimum_gaps(actual, active & torch.isfinite(actual).all(-1))
             safe_force = (torque.abs() <= self.effort + 1e-4).all(-1)
             event = ((~cleared | ~safe_force).int() * Stop.PHYSICAL_CONSTRAINT
                      | (~finite).int() * Stop.BAD_FEEDBACK | overflow.int() * Stop.OVERFLOW)

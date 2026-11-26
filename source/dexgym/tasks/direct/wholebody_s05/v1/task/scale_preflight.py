@@ -18,7 +18,7 @@ from .smoke import make_task, target_frame
 
 MODEL_MANIFEST_SHA256 = "92c44cabe65b278ab8261c2659c2cfa8c670fad07fd7d3a640e8629bc5c06a0d"
 MODEL_MANIFEST = Path("docs/s0-5/evidence/P02/refinement/model_assets_sha256.json")
-MAX_ENVIRONMENTS = 64
+MAX_ENVIRONMENTS = 4096
 MAX_TRANSITIONS = 25_000
 AMPLITUDE = 0.015
 

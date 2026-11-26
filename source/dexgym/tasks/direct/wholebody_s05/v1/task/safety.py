@@ -8,7 +8,7 @@ import torch
 
 from ...p02.model import COUPLING_LIMIT, COUPLING_WEIGHTS
 from . import DT, JOINTS
-from .native_sweep import NativeSweep
+from .native_sweep import GAP_REPORT_CAP_M, NativeSweep
 
 
 class Stop(IntFlag):
@@ -64,10 +64,20 @@ class SafetyProjection:
         return torch.isfinite(value).all(-1) & (value.abs() <= self.max_step / DT + tolerance).all(-1)
 
     def minimum_gaps(self, pose, candidate):
-        rows = pose.detach().cpu().numpy()
-        inspect = candidate.detach().cpu().tolist()
-        result = [self.sweep.pose_gap(q) if present else 0. for q, present in zip(rows, inspect, strict=True)]
-        return torch.tensor(result, device=pose.device, dtype=pose.dtype)
+        gaps = pose.new_zeros(len(pose))
+        if self.influence is not None and self.cache_anchor is not None and self.cache_anchor.shape == pose.shape:
+            # A proved lower bound above the report cap has the same result as
+            # a full capped narrow-phase query.
+            clear = candidate & (self._cached_clearance(pose, pose) >= GAP_REPORT_CAP_M).all(-1)
+            gaps[clear] = GAP_REPORT_CAP_M
+            candidate = candidate & ~clear
+        queried = candidate.nonzero().flatten()
+        if queried.numel() > 0:
+            rows = pose[queried].detach().cpu().numpy()
+            unique, inverse = np.unique(rows, axis=0, return_inverse=True)
+            exact = np.asarray([self.sweep.pose_gap(row) for row in unique])
+            gaps[queried] = torch.as_tensor(exact[inverse], device=pose.device, dtype=pose.dtype)
+        return gaps
 
     def project(self, request, previous):
         low = torch.maximum(self.bounds[:, 0], previous - self.max_step)

@@ -19,6 +19,7 @@ class ScalePreflightTests(unittest.TestCase):
 
     def test_workload_is_checked_before_rollout(self):
         validate_workload(64, 8, 512)
-        for arguments in ((64, 8, 511), (64, 391, 25_000), (65, 1, 25_000), (1, 1, 25_001), (1, 0, 25_000)):
+        validate_workload(4096, 6, 25_000)
+        for arguments in ((64, 8, 511), (4096, 7, 25_000), (4097, 1, 25_000), (1, 1, 25_001), (1, 0, 25_000)):
             with self.subTest(arguments=arguments), self.assertRaises(ValueError):
                 validate_workload(*arguments)
