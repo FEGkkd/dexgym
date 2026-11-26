@@ -104,6 +104,52 @@ def register(root):
         return state
 
 
+def record_physics_smoke(state, facts):
+    """Reserve conservative B-only physical work without advancing a scientific stage."""
+    if state["execution_authorized"] is not True or state["dcr_review"] != "TECHNICAL_PASS":
+        raise ValueError("physics smoke requires the reviewed campaign")
+    cap = 25000
+    accounts = ("train_precursor", "train_static_bucket", "train_primary_total", "train_total")
+    book = state.setdefault("b_physical_smoke_budget", {
+        "execution_config_sha256": state["execution_config_sha256"],
+        "previous_physical_transitions": state["physical_evidence"]["synthetic_smoke_actual_transitions"],
+        "external_runs": {},
+    })
+    if book["execution_config_sha256"] != state["execution_config_sha256"]:
+        raise ValueError("physics smoke budget bound to different execution configuration")
+    runs = book.setdefault("external_runs", {})
+    run_id = facts.get("run_id")
+    if not isinstance(run_id, str) or not run_id.startswith("V1-B-"):
+        raise ValueError("an explicit V1-B smoke Run ID is required")
+    if facts["action"] == "complete":
+        run = runs[run_id]
+        code, actual = facts["exit"], facts["actual_physical_transitions"]
+        if run["outcome"] is not None or type(code) is not int or (
+            actual is not None and (type(actual) is not int or not 0 <= actual <= run["reserved"])
+        ):
+            raise ValueError("invalid smoke outcome")
+        run["outcome"] = facts
+        return
+    if facts["action"] != "reserve" or run_id in runs:
+        raise ValueError("invalid smoke reservation")
+    units = facts["reserved"]
+    if type(units) is not int or units < 1:
+        raise ValueError("a positive physical upper bound is required")
+    supervised = [run for run in state.get("c0_supervised_runs", {}).values() if run.get("mode") == "b_smoke"]
+    if any(run["status"] in {"STARTING", "RUNNING"} for run in supervised):
+        raise ValueError("finish the reserved learner smoke before adding a physical smoke")
+    charged = sum(run["outcome"]["charged_physical_transitions"] for run in supervised)
+    if book["previous_physical_transitions"] + charged + units > cap or any(
+        state["remaining_budget"][key] < units for key in accounts
+    ):
+        raise ValueError("insufficient remaining physics smoke budget")
+    runs[run_id] = {"reserved": units, "reservation": facts, "outcome": None}
+    book["previous_physical_transitions"] += units
+    for key in accounts:
+        state["resource_usage"][key] += units
+        state["remaining_budget"][key] -= units
+
+
 def record(root, kind, data):
     with lock(root):
         history = event_history(root / "events.jsonl")
@@ -137,6 +183,8 @@ def record(root, kind, data):
             state["agent_work_packages"].update(facts)
         elif kind == "DASHBOARD":
             state["dashboard"] = facts
+        elif kind == "B_SMOKE_ACCOUNTING":
+            record_physics_smoke(state, facts)
         elif kind == "INFRASTRUCTURE_BLOCKED":
             if not facts.get("mount_is_only_persistent_device") or not facts.get("blocking_evidence"):
                 raise ValueError("blocking record requires device and observed kernel evidence")
