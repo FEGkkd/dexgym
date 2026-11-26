@@ -19,9 +19,17 @@
 
 `V1-A-train-radial-07` 退出 0。独立复核读取报告原始文件，SHA-256 为 `0658b1e8938b6402da5e001091321350a3a3655afd1718c253764759f084f13c`，逐分区复算 24 个 Train 根、228 分区、86,338 计划拍与 85,382 联合有效拍。按照冻结输入掩码进入探针的 85,243 拍均获得双侧 native workspace 响应。左腕排除 6,169 拍，右腕排除 61,348 拍，双侧同时超界 3,550 拍，并集为 63,967 拍。将 139 个未进入探针的联合有效拍全部按可能合法计，Train 双侧精确直接 IK 覆盖率仍至多为 **21,415 / 85,382 = 25.0814%**。24 个母源中无一达到 85% 的必要上界，最高为 81.3985%。[上界审计源码](../../../source/dexgym/tasks/direct/wholebody_s05/v1/rmb/audit_nominal_workspace.py)
 
-受审桥接在 native base 系计算未投影请求的腕心半径 `||p_TCP − R_TCP·t_tool − p_shoulder||`，只在超过同配置两段有限连杆之和 `0.6020794064 m` 再加 `1 µm` 时作严格排除。该 epsilon 向保留样本的方向扩大上界。夹带实际控制器的 0.5 mm reserve 或 5 mm 平滑过渡会缩小可控半径，因此审计未用它们 For exclusion. 每侧 15 个原生 FK 正控的 MuJoCo 位置差小于 0.215 µm，姿态差小于 0.93 µrad。两个独立 Windows 统计正负控通过（0.77 s，退出 0）。该约束是给定腕姿经 SDK 适配后的姿态可达必要条件。P02 指尖必要界、实际 Servo 动态表现、硬件资格及指尖评分需分别验证。[Native CCS 几何](https://github.com/FEGkkd/whole-body-teleop/blob/6d0b0b5b2601618f1b0052d93ef2403eea9b064a/src/whole_body_teleop/src/marvin_kine_sdk.cpp#L425) · [P02 指尖必要界](../reports/P02_review_refinement.md)
+受审桥接在 native base 系计算未投影请求的腕心半径 `||p_TCP − R_TCP·t_tool − p_shoulder||`，只在超过同配置两段有限连杆之和 `0.6020794064 m` 再加 `1 µm` 时作严格排除。该余量向保留样本的方向扩大上界。实际控制器的 0.5 mm reserve 与 5 mm 平滑过渡另记为命令塑形，排除式只使用完整连杆长度。每侧 15 个原生 FK 正控的 MuJoCo 位置差小于 0.215 µm，姿态差小于 0.93 µrad。两个独立 Windows 统计正负控通过（0.77 s，退出 0）。该约束是给定腕姿经 SDK 适配后的姿态可达必要条件。P02 指尖必要界、实际 Servo 动态表现、硬件资格及指尖评分需分别验证。[Native CCS 几何](https://github.com/FEGkkd/whole-body-teleop/blob/6d0b0b5b2601618f1b0052d93ef2403eea9b064a/src/whole_body_teleop/src/marvin_kine_sdk.cpp#L425) · [P02 指尖必要界](../reports/P02_review_refinement.md)
 
-精确腕姿超出本上界时，换 seed、增加因果子拍、START 锚定和 workspace 投影均无法让该原目标精确可达。平滑捏合也不会移动原 M1 腕目标。后续因果 waypoint 或 START 锚定方案可以独立证明命令可执行，并长期保留原 target、实现目标、投影差、硬安全和实际反馈。将这类命令计入原确切目标规格下的正式名义覆盖涉及资格语义变更，需要有限 DCR 和项目用户授权。该 DCR 如获批准，应明确保留冻结的 M1 独立评分目标、计划分母、85% 数值门、全套安全门、直接 IK 失败审计和残差能力域重验。在此之前 G-A 及其训练依赖继续阻塞。[冻结覆盖标准](../specs/V1-A_offline_rmb.md) · [冻结目标契约](../specs/V2_rmb_contract.md)
+原 M1 腕目标超出该几何界时，换 seed、增加因果子拍、START 锚定和 workspace 投影均无法让该原目标精确可达。平滑捏合也不会移动原 M1 腕目标。后续因果 waypoint 或 START 锚定方案可以独立证明命令可执行，并保留原目标、实际求解目标、投影差、硬安全和实际反馈。将这类命令计入正式名义覆盖涉及资格语义变更，需要有限 DCR 和项目用户授权。该 DCR 如获批准，应明确保留冻结的 M1 独立评分目标、计划分母、85% 数值门、全套安全门、直接 IK 失败审计和残差能力域重验。在此之前 G-A 及其训练依赖继续阻塞。[冻结覆盖标准](../specs/V1-A_offline_rmb.md) · [冻结目标契约](../specs/V2_rmb_contract.md)
+
+独立复算 `phase1-step-06.json`，SHA-256 为 `0aa53c6da7b0db386d0b9614c223b7bf5e4bcd09fea1beabd25b45dfd956acd4`。每侧 192 个样本中，原目标 SDK 解为左 46、右 5，workspace 投影后为左 46、右 82。从 home 开始按 4 ms 速率裁剪的首个 waypoint 每侧均有 192 个 SDK 解，首个 waypoint 距原请求左 0.299–0.992 m、右 0.318–0.574 m。探针未执行实时 START/NSP、轴投影、正式重试判定及命令接纳。结果证明近 home 的单步可解，不能建立该路径全程的合法性或精度。[单步诊断源码](../../../source/dexgym/tasks/direct/wholebody_s05/v1/rmb/probe_nominal.py)
+
+### M1 连续性诊断的范围
+
+`mapping_continuity.py` 固定只读签名 Train HMB，逐拍复用原硬 M1 与三个预登记平滑区间。额外步量使用无捏合修正的 `before` 几何扣除共同原步量。活跃捏合向量和距离沿用 P02 的映射掌系缩放人端目标。P02 将活跃指对误差合并，并按侧及进出报告阈值事件。新版诊断改用逐拍适用指对最大值；局部手型、跨手和相对腕以同拍无修正 M1 为诊断参照，统一取硬阈值活跃拍。现行 V1-A §12 给出功能 P95 容差和固定适用场景，尚未明确授权以无修正 M1 和这一个捏合掩码计算全部功能门。应单列硬阈值未激活但平滑仍有权重的拍，以及各固定功能场景、侧别和指对分母。相对腕零差来自三个手型候选共用腕姿，属于实现不变量。[连续性诊断源码](../../../source/dexgym/tasks/direct/wholebody_s05/v1/rmb/mapping_continuity.py) · [P02 实现](../evidence/P02/refinement/workspace.py) · [冻结非退化方案](../specs/V1-A_offline_rmb.md#12-m1-连续性候选与冻结)
+
+本地独立复跑四项合成测试，含三段权重端点、配对掩码、时钟及映射失败边界，0.73 s 完成，退出 0。诊断不读取 Validation，结果不能选择和封存映射，也不能授予 G-A 资格。[合成测试](../../../tests/s0_5/v1_rmb/test_mapping_continuity.py)
 
 ## 固定版本的 Teleop 恢复路径
 

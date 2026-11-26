@@ -1,0 +1,1551 @@
+{
+  "test": "S0-5 signed model CPU/Warp free-response parity",
+  "model": {
+    "assets": {
+      "dual_arm_marvin.xml": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+      "meshes/Base_L.STL": "c69fe56485ec9fbbe59b6de581abc0001d2ebbd8a9e6d31951ea1de6ba45571e",
+      "meshes/Base_R.STL": "c69fe56485ec9fbbe59b6de581abc0001d2ebbd8a9e6d31951ea1de6ba45571e",
+      "meshes/Link1_L.STL": "86854ac8c4f17dac5116b6e9a4d036bca1ccf5d4b9ed04cb8285a7d006cfde28",
+      "meshes/Link1_R.STL": "86854ac8c4f17dac5116b6e9a4d036bca1ccf5d4b9ed04cb8285a7d006cfde28",
+      "meshes/Link2_L.STL": "4776a6a2086ddc61b1643aff93386e545baccef2751db29d863fe027a76f325e",
+      "meshes/Link2_R.STL": "53eb9fc69c939d2ebd4f32c1df341c1c42bc3d9d0911db0c9fcee70aa2701b34",
+      "meshes/Link3_L.STL": "d58f1039bd3eb2ccc1a1959b89d2de7ae714344ad8cb8b78ef97b92dcd317d26",
+      "meshes/Link3_R.STL": "122456d8fc3e81694f352fc1f29d0bc19066f7f3d7572857a1be1e7c030dec9c",
+      "meshes/Link4_L.STL": "77f18566339f38acac1785fae517b05ff1e5247b95404ce26536d215bbed9cd7",
+      "meshes/Link4_R.STL": "77f18566339f38acac1785fae517b05ff1e5247b95404ce26536d215bbed9cd7",
+      "meshes/Link5_L.STL": "573f15ee62b0a9b2d62aceeb756800fd86969a685535e91416b73d51f1c57613",
+      "meshes/Link5_R.STL": "2de51a340695c89b2fd58b1171dfacc4d85aa4e6cd50879e021a2d0bde8599a8",
+      "meshes/Link6_L.STL": "b6b7570d8ebf1d2acb01baf8941b892f5a5f72aaa05503ab8340da8a2a7b2c13",
+      "meshes/Link6_R.STL": "49722d14b9ac34a84a41c95f49bd0b2a8859d4a05f66b247822bf36b0a703cd5",
+      "meshes/Link7_L.STL": "7c81b774b7ad8d0258140c31292270b894cf6c95bf0b669c01110ea3348827a4",
+      "meshes/Link7_R.STL": "727310e0a39d0d513357e139cdb52db6a787b53549b7c49a4847095928c595f2",
+      "meshes/l_index_finger_distal.STL": "47630a76817e938ec60141a1f100cf022394d9d2db7d96bb3ca6c258356e6574",
+      "meshes/l_index_finger_middle.STL": "5af2f99b93fb63669ce398a0bb8bded708e167dfbe95c4e1e9e484fc560f2560",
+      "meshes/l_index_finger_proximal.STL": "89e49d06793eedd081e59fadded28badd027a6f99b7bfe6554ebc2e7ed01e142",
+      "meshes/l_index_finger_proximal_abd.STL": "78f4806eec50b94779e2e987de7e6bab5ad7ea3d6e8a964a883993f7728a37ea",
+      "meshes/l_index_finger_tip_sensor_frame.STL": "4961c77d85083321feae6fdd4134084c7ac40b438cb416f74b29a77b20f14a71",
+      "meshes/l_middle_finger_distal.STL": "47630a76817e938ec60141a1f100cf022394d9d2db7d96bb3ca6c258356e6574",
+      "meshes/l_middle_finger_middle.STL": "b3bb4726751b29238baa84d5dfd4120c0567a3589674b4bf873ddb47bc520a4b",
+      "meshes/l_middle_finger_proximal.STL": "8eea0513ad131808b5d214199aa92aca987eb63285abcb819864f71697072f88",
+      "meshes/l_middle_finger_proximal_abd.STL": "78f372e549967c39eb564b34ed6d04cd54217d16d9ca05b1563ee8cb6ef6e240",
+      "meshes/l_middle_finger_tip_sensor_frame.STL": "4961c77d85083321feae6fdd4134084c7ac40b438cb416f74b29a77b20f14a71",
+      "meshes/l_mount.STL": "db56d3547765b5a679698bbe2c0444ced492449e6ed9f5720fe78da33e94465a",
+      "meshes/l_pinky_distal.STL": "19f4f22a89dcd60f7655ac9cd7c43d4f0ec696065ca9bcf36573de0106ab9675",
+      "meshes/l_pinky_middle.STL": "63061786518fd016e4a1430866811423ca1bf1bd7f1c25c0b1afdbbd127a1882",
+      "meshes/l_pinky_proximal.STL": "41939a3da70824bc50821eb2f20734a2f32228ddd85c646f6676a1bc66ad1813",
+      "meshes/l_pinky_proximal_abd.STL": "25fc27d8ec8dfd75b3bbc43d154de3cd16c16d3f232684099a11e604232a5224",
+      "meshes/l_pinky_tip_sensor_frame.STL": "b85eff25ea1c9df6cf8f10e2eaecea7bda2836435fe99df37d1f96823e4a3da7",
+      "meshes/l_ring_finger_distal.STL": "b149433ff04d032efb86b9ab600ba55a45717b7629aa392a70ec346841e52d7d",
+      "meshes/l_ring_finger_middle.STL": "65969a58aba7af89f847e2c431de67066a4d7728e53ac71ef74c97c04ebd228d",
+      "meshes/l_ring_finger_proximal.STL": "b8962bc4ac95acb90b75ce883274a19c8884ee74b924d09fd961d0ce8847cae9",
+      "meshes/l_ring_finger_proximal_abd.STL": "9b7aab081a9d1cc29f24891417d6ab03ee36f4a716a632528ec777963553fff9",
+      "meshes/l_ring_finger_tip_sensor_frame.STL": "cf69841d299dc170d3303aec327929a859f7bc2a91514165f13a2eb5fe43ca85",
+      "meshes/l_thumb_distal.STL": "0d89c323bf1608b2ee42b003286e4707cdfe267b7ff65db437b336ade758749c",
+      "meshes/l_thumb_middle.STL": "3a84286a4de13ad95771fcc43a277ece2a0c5bcf2476ea04f2292f8a022c70d0",
+      "meshes/l_thumb_proximal.STL": "5144d8ab958dcacbd70b12d413624ab5c74faab5fb3406502c1aa45f931802d0",
+      "meshes/l_thumb_proximal_abd.STL": "539f4df7100751ecf3463138023fb78535fc1114e73dccba2c1f3262e7ce13e7",
+      "meshes/l_thumb_tip_sensor_frame.STL": "e0b34bb387e3217b3f2dedf37c0980fb92693e0de617be613fb3e9dcb692a1db",
+      "meshes/l_wrist.STL": "cc3944120241f19effa9a95a7edb9b2cfd00f2796305d78c05b563962d6f5361",
+      "meshes/r_index_finger_distal.STL": "7b11dd372a4a155e2bf1305c7d3cf0bacfbfd526f6659c467ccf35efd7553b7d",
+      "meshes/r_index_finger_middle.STL": "9ba4bd6449d5c60255c1bbe1cdf3ec1bd7f9f0413f45f9ee20ca1e97165b5a93",
+      "meshes/r_index_finger_proximal.STL": "d07ffb4a0f107d53837b068ee3aafd30b58a2775271beabc26911ac8d4288ef3",
+      "meshes/r_index_finger_proximal_abd.STL": "373722f52678f818a311d7c5a4ec6ac711038cfbf36536c082325f9315853cb5",
+      "meshes/r_index_finger_tip_sensor_frame.STL": "d5a13c52478576aa461d9739957bcf4612b359be58e449bb199a9ad01cb75cb6",
+      "meshes/r_middle_finger_distal.STL": "7b11dd372a4a155e2bf1305c7d3cf0bacfbfd526f6659c467ccf35efd7553b7d",
+      "meshes/r_middle_finger_middle.STL": "5f88e7c641888fdc7fbae7c3b613b691b8ae4fc35af473b2daf40bead9198178",
+      "meshes/r_middle_finger_proximal.STL": "039bee058e2e24fa083c77c7512d30782aecced1654897c6b9fd7b3b68866f6c",
+      "meshes/r_middle_finger_proximal_abd.STL": "91e3f149f9cabc198b903881661db428fa17860af7f79b5f0a4e8ff555616d6e",
+      "meshes/r_middle_finger_tip_sensor_frame.STL": "d5a13c52478576aa461d9739957bcf4612b359be58e449bb199a9ad01cb75cb6",
+      "meshes/r_mount.STL": "302c1a168417f2c84abc30a148ff6ce364ce6621340f15190c8f53cfe50d6268",
+      "meshes/r_pinky_distal.STL": "6832e7482d550cec79298ac1c1a304fcfc64ce0e3c925948d04e62a6242b9dae",
+      "meshes/r_pinky_middle.STL": "609cc6cef5df1bd4a92ec8a889c670643a45f8fc559d124622b96ebc77f76122",
+      "meshes/r_pinky_proximal.STL": "c88defaf8c670dc4a12a489e653ee4732a79a32780046dbe3fe6d98d1a686680",
+      "meshes/r_pinky_proximal_abd.STL": "0d9493bc1a62162c89a1be7673d8d91ebc9f20383847d66e46ac35a3645f9701",
+      "meshes/r_pinky_tip_sensor_frame.STL": "22f19f242d73f10231f420ce91ef5ba4dd6d53d2b9c7a15e68b5da0ba1f7a359",
+      "meshes/r_ring_finger_distal.STL": "7b11dd372a4a155e2bf1305c7d3cf0bacfbfd526f6659c467ccf35efd7553b7d",
+      "meshes/r_ring_finger_middle.STL": "6fbcf92b159a2d9e3b097f459ac5df73577cda5ca2b62020284de287f49323e4",
+      "meshes/r_ring_finger_proximal.STL": "da1870bfe85621550c6081c944b91e4dafc7721a73f46be6a77f0c15dd0b214a",
+      "meshes/r_ring_finger_proximal_abd.STL": "df3787ff168f4c0fa21c77296fe34418240e8c8d357c1ede99c96cf2f89d32f0",
+      "meshes/r_ring_finger_tip_sensor_frame.STL": "d5a13c52478576aa461d9739957bcf4612b359be58e449bb199a9ad01cb75cb6",
+      "meshes/r_thumb_distal.STL": "273878b0f78e35ffd5e3ad416cb4c79368c6fc43a886ec047760c5f21a55b04d",
+      "meshes/r_thumb_middle.STL": "a04ebd10f24534121672721011c95d26a0c8f734ee65481c49b962fd0b573ea7",
+      "meshes/r_thumb_proximal.STL": "e3e9e7c1266c6d3e38287b074e38162bf508626de14d54e995e40e1d56d7247e",
+      "meshes/r_thumb_proximal_abd.STL": "2aaafd9ba420bf2b40d2e262f8328ba4937e647021a0ea188aa3620bde0d135a",
+      "meshes/r_thumb_tip_sensor_frame.STL": "4bb06fa7ee605b72a21f62debe43fe711e57da3fcc45c89ab2644ee476b0a4af",
+      "meshes/r_wrist.STL": "ece3f36af8ed61079d0061dd9d9b11e5eae76ce9640287d0975c1522f8731fc6"
+    },
+    "joints": [
+      "Joint1_L",
+      "Joint2_L",
+      "Joint3_L",
+      "Joint4_L",
+      "Joint5_L",
+      "Joint6_L",
+      "Joint7_L",
+      "Joint1_R",
+      "Joint2_R",
+      "Joint3_R",
+      "Joint4_R",
+      "Joint5_R",
+      "Joint6_R",
+      "Joint7_R",
+      "l_thumb_cmc_flex",
+      "l_thumb_cmc_abd",
+      "l_thumb_mcp",
+      "l_thumb_ip",
+      "l_index_finger_mcp_flex",
+      "l_index_finger_mcp_abd",
+      "l_index_finger_pip",
+      "l_index_finger_dip",
+      "l_middle_finger_mcp_flex",
+      "l_middle_finger_mcp_abd",
+      "l_middle_finger_pip",
+      "l_middle_finger_dip",
+      "l_ring_finger_mcp_flex",
+      "l_ring_finger_mcp_abd",
+      "l_ring_finger_pip",
+      "l_ring_finger_dip",
+      "l_pinky_mcp_flex",
+      "l_pinky_mcp_abd",
+      "l_pinky_pip",
+      "l_pinky_dip",
+      "r_thumb_cmc_flex",
+      "r_thumb_cmc_abd",
+      "r_thumb_mcp",
+      "r_thumb_ip",
+      "r_index_finger_mcp_flex",
+      "r_index_finger_mcp_abd",
+      "r_index_finger_pip",
+      "r_index_finger_dip",
+      "r_middle_finger_mcp_flex",
+      "r_middle_finger_mcp_abd",
+      "r_middle_finger_pip",
+      "r_middle_finger_dip",
+      "r_ring_finger_mcp_flex",
+      "r_ring_finger_mcp_abd",
+      "r_ring_finger_pip",
+      "r_ring_finger_dip",
+      "r_pinky_mcp_flex",
+      "r_pinky_mcp_abd",
+      "r_pinky_pip",
+      "r_pinky_dip"
+    ],
+    "filters_s": [
+      0.016,
+      0.016,
+      0.016,
+      0.016,
+      0.016,
+      0.016,
+      0.016,
+      0.016,
+      0.016,
+      0.016,
+      0.016,
+      0.016,
+      0.016,
+      0.016,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "gravity_multiplier": 1.0,
+    "opt_gravity": [
+      0.0,
+      0.0,
+      -9.81
+    ],
+    "qpos_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53
+    ],
+    "qvel_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53
+    ],
+    "drive": {
+      "Joint1_L": {
+        "actuator_id": 0,
+        "kp": 400.0,
+        "kd": 45.0,
+        "effort": 108.0
+      },
+      "Joint2_L": {
+        "actuator_id": 1,
+        "kp": 400.0,
+        "kd": 45.0,
+        "effort": 108.0
+      },
+      "Joint3_L": {
+        "actuator_id": 2,
+        "kp": 440.0,
+        "kd": 40.0,
+        "effort": 66.0
+      },
+      "Joint4_L": {
+        "actuator_id": 3,
+        "kp": 340.0,
+        "kd": 34.0,
+        "effort": 66.0
+      },
+      "Joint5_L": {
+        "actuator_id": 4,
+        "kp": 200.0,
+        "kd": 23.0,
+        "effort": 18.0
+      },
+      "Joint6_L": {
+        "actuator_id": 5,
+        "kp": 120.0,
+        "kd": 16.0,
+        "effort": 18.0
+      },
+      "Joint7_L": {
+        "actuator_id": 6,
+        "kp": 85.0,
+        "kd": 12.0,
+        "effort": 18.0
+      },
+      "Joint1_R": {
+        "actuator_id": 7,
+        "kp": 400.0,
+        "kd": 45.0,
+        "effort": 108.0
+      },
+      "Joint2_R": {
+        "actuator_id": 8,
+        "kp": 400.0,
+        "kd": 45.0,
+        "effort": 108.0
+      },
+      "Joint3_R": {
+        "actuator_id": 9,
+        "kp": 440.0,
+        "kd": 40.0,
+        "effort": 66.0
+      },
+      "Joint4_R": {
+        "actuator_id": 10,
+        "kp": 340.0,
+        "kd": 34.0,
+        "effort": 66.0
+      },
+      "Joint5_R": {
+        "actuator_id": 11,
+        "kp": 200.0,
+        "kd": 23.0,
+        "effort": 18.0
+      },
+      "Joint6_R": {
+        "actuator_id": 12,
+        "kp": 120.0,
+        "kd": 16.0,
+        "effort": 18.0
+      },
+      "Joint7_R": {
+        "actuator_id": 13,
+        "kp": 85.0,
+        "kd": 12.0,
+        "effort": 18.0
+      },
+      "l_thumb_cmc_flex": {
+        "actuator_id": 14,
+        "kp": 1.35499,
+        "kd": 0.04769,
+        "effort": 1.02
+      },
+      "l_thumb_cmc_abd": {
+        "actuator_id": 15,
+        "kp": 2.19882,
+        "kd": 0.062838,
+        "effort": 0.83
+      },
+      "l_thumb_mcp": {
+        "actuator_id": 16,
+        "kp": 0.886467,
+        "kd": 0.027982,
+        "effort": 0.35
+      },
+      "l_thumb_ip": {
+        "actuator_id": 17,
+        "kp": 0.654026,
+        "kd": 0.020457,
+        "effort": 0.21
+      },
+      "l_index_finger_mcp_flex": {
+        "actuator_id": 18,
+        "kp": 1.34521,
+        "kd": 0.047402,
+        "effort": 1.05
+      },
+      "l_index_finger_mcp_abd": {
+        "actuator_id": 19,
+        "kp": 0.88946,
+        "kd": 0.027239,
+        "effort": 0.38
+      },
+      "l_index_finger_pip": {
+        "actuator_id": 20,
+        "kp": 0.779361,
+        "kd": 0.024489,
+        "effort": 0.31
+      },
+      "l_index_finger_dip": {
+        "actuator_id": 21,
+        "kp": 0.656424,
+        "kd": 0.020508,
+        "effort": 0.3
+      },
+      "l_middle_finger_mcp_flex": {
+        "actuator_id": 22,
+        "kp": 1.29931,
+        "kd": 0.045699,
+        "effort": 1.06
+      },
+      "l_middle_finger_mcp_abd": {
+        "actuator_id": 23,
+        "kp": 0.942641,
+        "kd": 0.027846,
+        "effort": 0.39
+      },
+      "l_middle_finger_pip": {
+        "actuator_id": 24,
+        "kp": 0.73725,
+        "kd": 0.023408,
+        "effort": 0.32
+      },
+      "l_middle_finger_dip": {
+        "actuator_id": 25,
+        "kp": 0.710314,
+        "kd": 0.022366,
+        "effort": 0.29
+      },
+      "l_ring_finger_mcp_flex": {
+        "actuator_id": 26,
+        "kp": 1.27689,
+        "kd": 0.046209,
+        "effort": 1.02
+      },
+      "l_ring_finger_mcp_abd": {
+        "actuator_id": 27,
+        "kp": 1.01333,
+        "kd": 0.028704,
+        "effort": 0.41
+      },
+      "l_ring_finger_pip": {
+        "actuator_id": 28,
+        "kp": 0.859159,
+        "kd": 0.027436,
+        "effort": 0.28
+      },
+      "l_ring_finger_dip": {
+        "actuator_id": 29,
+        "kp": 0.648064,
+        "kd": 0.020448,
+        "effort": 0.3
+      },
+      "l_pinky_mcp_flex": {
+        "actuator_id": 30,
+        "kp": 1.10292,
+        "kd": 0.043816,
+        "effort": 0.87
+      },
+      "l_pinky_mcp_abd": {
+        "actuator_id": 31,
+        "kp": 0.910201,
+        "kd": 0.026593,
+        "effort": 0.36
+      },
+      "l_pinky_pip": {
+        "actuator_id": 32,
+        "kp": 0.861968,
+        "kd": 0.027476,
+        "effort": 0.28
+      },
+      "l_pinky_dip": {
+        "actuator_id": 33,
+        "kp": 0.656704,
+        "kd": 0.020611,
+        "effort": 0.3
+      },
+      "r_thumb_cmc_flex": {
+        "actuator_id": 34,
+        "kp": 1.35499,
+        "kd": 0.04769,
+        "effort": 1.02
+      },
+      "r_thumb_cmc_abd": {
+        "actuator_id": 35,
+        "kp": 2.19882,
+        "kd": 0.062838,
+        "effort": 0.83
+      },
+      "r_thumb_mcp": {
+        "actuator_id": 36,
+        "kp": 0.886467,
+        "kd": 0.027982,
+        "effort": 0.35
+      },
+      "r_thumb_ip": {
+        "actuator_id": 37,
+        "kp": 0.654026,
+        "kd": 0.020457,
+        "effort": 0.21
+      },
+      "r_index_finger_mcp_flex": {
+        "actuator_id": 38,
+        "kp": 1.34521,
+        "kd": 0.047402,
+        "effort": 1.05
+      },
+      "r_index_finger_mcp_abd": {
+        "actuator_id": 39,
+        "kp": 0.88946,
+        "kd": 0.027239,
+        "effort": 0.38
+      },
+      "r_index_finger_pip": {
+        "actuator_id": 40,
+        "kp": 0.779361,
+        "kd": 0.024489,
+        "effort": 0.31
+      },
+      "r_index_finger_dip": {
+        "actuator_id": 41,
+        "kp": 0.656424,
+        "kd": 0.020508,
+        "effort": 0.3
+      },
+      "r_middle_finger_mcp_flex": {
+        "actuator_id": 42,
+        "kp": 1.29931,
+        "kd": 0.045699,
+        "effort": 1.06
+      },
+      "r_middle_finger_mcp_abd": {
+        "actuator_id": 43,
+        "kp": 0.942641,
+        "kd": 0.027846,
+        "effort": 0.39
+      },
+      "r_middle_finger_pip": {
+        "actuator_id": 44,
+        "kp": 0.73725,
+        "kd": 0.023408,
+        "effort": 0.32
+      },
+      "r_middle_finger_dip": {
+        "actuator_id": 45,
+        "kp": 0.710314,
+        "kd": 0.022366,
+        "effort": 0.29
+      },
+      "r_ring_finger_mcp_flex": {
+        "actuator_id": 46,
+        "kp": 1.27689,
+        "kd": 0.046209,
+        "effort": 1.02
+      },
+      "r_ring_finger_mcp_abd": {
+        "actuator_id": 47,
+        "kp": 1.01333,
+        "kd": 0.028704,
+        "effort": 0.41
+      },
+      "r_ring_finger_pip": {
+        "actuator_id": 48,
+        "kp": 0.859159,
+        "kd": 0.027436,
+        "effort": 0.28
+      },
+      "r_ring_finger_dip": {
+        "actuator_id": 49,
+        "kp": 0.648064,
+        "kd": 0.020448,
+        "effort": 0.3
+      },
+      "r_pinky_mcp_flex": {
+        "actuator_id": 50,
+        "kp": 1.10292,
+        "kd": 0.043816,
+        "effort": 0.87
+      },
+      "r_pinky_mcp_abd": {
+        "actuator_id": 51,
+        "kp": 0.910201,
+        "kd": 0.026593,
+        "effort": 0.36
+      },
+      "r_pinky_pip": {
+        "actuator_id": 52,
+        "kp": 0.861968,
+        "kd": 0.027476,
+        "effort": 0.28
+      },
+      "r_pinky_dip": {
+        "actuator_id": 53,
+        "kp": 0.656704,
+        "kd": 0.020611,
+        "effort": 0.3
+      }
+    },
+    "physics_dt": 0.002,
+    "control_substeps": 10,
+    "mujoco": "3.12.0",
+    "sha256": "2e8bc47984c818e16355313ea40b360989cbf1af8edc37255e539ee11ecf13e5"
+  },
+  "scope": "FREE_RESPONSE_ONLY",
+  "limits": {
+    "q_rad": 0.000872664626,
+    "qd_rad_s": 0.05,
+    "tip_m": 0.0005,
+    "servo_rad": 0.000872664626,
+    "applied_rad": 0.000872664626,
+    "ctrl_rad": 0.000872664626
+  },
+  "warp_parallel_worlds": 1,
+  "conditions": [
+    {
+      "fixture": "home_hold",
+      "planned_substeps": 1,
+      "completed_per_world": 1,
+      "warp_executed_kernel_world_substeps_upper": 1,
+      "real_guarded_intervals": 2,
+      "native_events": [
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 1.1859810911118984e-09,
+        "qd_rad_s": 5.923211574554443e-07,
+        "tip_m": 0.0,
+        "servo_rad": 0.0,
+        "applied_rad": 0.0,
+        "ctrl_rad": 3.725290298461914e-09,
+        "torque_Nm": 2.9534101486206055e-05,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 0.0
+      },
+      "seconds": 115.01128412600156,
+      "pass": true
+    },
+    {
+      "fixture": "home_hold",
+      "planned_substeps": 10,
+      "completed_per_world": 10,
+      "warp_executed_kernel_world_substeps_upper": 10,
+      "real_guarded_intervals": 2,
+      "native_events": [
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 4.76837158203125e-07,
+        "qd_rad_s": 7.609523891005665e-07,
+        "tip_m": 1.9768624781590916e-07,
+        "servo_rad": 0.0,
+        "applied_rad": 0.0,
+        "ctrl_rad": 1.1920928955078125e-07,
+        "torque_Nm": 8.177012205123901e-05,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 0.0
+      },
+      "seconds": 0.0889937669999199,
+      "pass": true
+    },
+    {
+      "fixture": "home_hold",
+      "planned_substeps": 150,
+      "completed_per_world": 150,
+      "warp_executed_kernel_world_substeps_upper": 150,
+      "real_guarded_intervals": 30,
+      "native_events": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 1.7881393432617188e-06,
+        "qd_rad_s": 5.241254257271066e-06,
+        "tip_m": 7.215917321445886e-07,
+        "servo_rad": 0.0,
+        "applied_rad": 0.0,
+        "ctrl_rad": 1.1920928955078125e-07,
+        "torque_Nm": 0.00051116943359375,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 5.820766091346741e-11
+      },
+      "seconds": 1.297059865002666,
+      "pass": true
+    },
+    {
+      "fixture": "arm_only",
+      "planned_substeps": 1,
+      "completed_per_world": 1,
+      "warp_executed_kernel_world_substeps_upper": 1,
+      "real_guarded_intervals": 2,
+      "native_events": [
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 1.178705133497715e-09,
+        "qd_rad_s": 5.885958671569824e-07,
+        "tip_m": 0.0,
+        "servo_rad": 0.0,
+        "applied_rad": 0.0,
+        "ctrl_rad": 1.1920928955078125e-07,
+        "torque_Nm": 3.62396240234375e-05,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 0.0
+      },
+      "seconds": 0.012432621999323601,
+      "pass": true
+    },
+    {
+      "fixture": "arm_only",
+      "planned_substeps": 10,
+      "completed_per_world": 10,
+      "warp_executed_kernel_world_substeps_upper": 10,
+      "real_guarded_intervals": 2,
+      "native_events": [
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 3.5762786865234375e-07,
+        "qd_rad_s": 2.0563602447509766e-06,
+        "tip_m": 2.327635826304686e-07,
+        "servo_rad": 1.1920928955078125e-07,
+        "applied_rad": 1.1920928955078125e-07,
+        "ctrl_rad": 1.1920928955078125e-07,
+        "torque_Nm": 8.633732795715332e-05,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 0.0
+      },
+      "seconds": 0.0871414490029565,
+      "pass": true
+    },
+    {
+      "fixture": "arm_only",
+      "planned_substeps": 150,
+      "completed_per_world": 150,
+      "warp_executed_kernel_world_substeps_upper": 150,
+      "real_guarded_intervals": 30,
+      "native_events": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 1.3113021850585938e-06,
+        "qd_rad_s": 5.2819432312389836e-06,
+        "tip_m": 7.822754923836328e-07,
+        "servo_rad": 4.76837158203125e-07,
+        "applied_rad": 4.76837158203125e-07,
+        "ctrl_rad": 5.960464477539062e-07,
+        "torque_Nm": 0.00021839141845703125,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 1.7462298274040222e-10
+      },
+      "seconds": 1.2964072579998174,
+      "pass": true
+    },
+    {
+      "fixture": "hand_only",
+      "planned_substeps": 1,
+      "completed_per_world": 1,
+      "warp_executed_kernel_world_substeps_upper": 1,
+      "real_guarded_intervals": 2,
+      "native_events": [
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 1.1859810911118984e-09,
+        "qd_rad_s": 5.885958671569824e-07,
+        "tip_m": 0.0,
+        "servo_rad": 0.0,
+        "applied_rad": 0.0,
+        "ctrl_rad": 3.725290298461914e-09,
+        "torque_Nm": 2.9534101486206055e-05,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 0.0
+      },
+      "seconds": 0.012625826999283163,
+      "pass": true
+    },
+    {
+      "fixture": "hand_only",
+      "planned_substeps": 10,
+      "completed_per_world": 10,
+      "warp_executed_kernel_world_substeps_upper": 10,
+      "real_guarded_intervals": 2,
+      "native_events": [
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 4.76837158203125e-07,
+        "qd_rad_s": 1.5757977962493896e-06,
+        "tip_m": 2.980232238769531e-07,
+        "servo_rad": 0.0,
+        "applied_rad": 0.0,
+        "ctrl_rad": 1.1920928955078125e-07,
+        "torque_Nm": 9.40829049795866e-05,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 0.0
+      },
+      "seconds": 0.08768102500107489,
+      "pass": true
+    },
+    {
+      "fixture": "hand_only",
+      "planned_substeps": 150,
+      "completed_per_world": 150,
+      "warp_executed_kernel_world_substeps_upper": 150,
+      "real_guarded_intervals": 30,
+      "native_events": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 1.9073486328125e-06,
+        "qd_rad_s": 5.232046987657668e-06,
+        "tip_m": 1.1234329804210574e-06,
+        "servo_rad": 0.0,
+        "applied_rad": 0.0,
+        "ctrl_rad": 1.1920928955078125e-07,
+        "torque_Nm": 0.0004673004150390625,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 1.1641532182693481e-10
+      },
+      "seconds": 1.2955091110015928,
+      "pass": true
+    },
+    {
+      "fixture": "joint_arm_and_hand",
+      "planned_substeps": 1,
+      "completed_per_world": 1,
+      "warp_executed_kernel_world_substeps_upper": 1,
+      "real_guarded_intervals": 2,
+      "native_events": [
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 1.1641532182693481e-09,
+        "qd_rad_s": 5.811452865600586e-07,
+        "tip_m": 0.0,
+        "servo_rad": 0.0,
+        "applied_rad": 0.0,
+        "ctrl_rad": 1.1920928955078125e-07,
+        "torque_Nm": 3.62396240234375e-05,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 0.0
+      },
+      "seconds": 0.012421715000527911,
+      "pass": true
+    },
+    {
+      "fixture": "joint_arm_and_hand",
+      "planned_substeps": 10,
+      "completed_per_world": 10,
+      "warp_executed_kernel_world_substeps_upper": 10,
+      "real_guarded_intervals": 2,
+      "native_events": [
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 4.76837158203125e-07,
+        "qd_rad_s": 1.564621925354004e-06,
+        "tip_m": 3.7814908182554063e-07,
+        "servo_rad": 1.1920928955078125e-07,
+        "applied_rad": 1.1920928955078125e-07,
+        "ctrl_rad": 1.1920928955078125e-07,
+        "torque_Nm": 9.20367892831564e-05,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 0.0
+      },
+      "seconds": 0.08736739300002228,
+      "pass": true
+    },
+    {
+      "fixture": "joint_arm_and_hand",
+      "planned_substeps": 150,
+      "completed_per_world": 150,
+      "warp_executed_kernel_world_substeps_upper": 150,
+      "real_guarded_intervals": 30,
+      "native_events": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 1.3113021850585938e-06,
+        "qd_rad_s": 5.719085038435878e-06,
+        "tip_m": 7.656355478502519e-07,
+        "servo_rad": 4.76837158203125e-07,
+        "applied_rad": 4.76837158203125e-07,
+        "ctrl_rad": 5.960464477539062e-07,
+        "torque_Nm": 0.0003068592632189393,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 1.7462298274040222e-10
+      },
+      "seconds": 1.2937039960015682,
+      "pass": true
+    },
+    {
+      "fixture": "moving_initial_state",
+      "planned_substeps": 1,
+      "completed_per_world": 1,
+      "warp_executed_kernel_world_substeps_upper": 1,
+      "real_guarded_intervals": 2,
+      "native_events": [
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 1.2951204553246498e-09,
+        "qd_rad_s": 6.48200511932373e-07,
+        "tip_m": 0.0,
+        "servo_rad": 0.0,
+        "applied_rad": 0.0,
+        "ctrl_rad": 1.1920928955078125e-07,
+        "torque_Nm": 4.38690185546875e-05,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 0.0
+      },
+      "seconds": 0.012709498001640895,
+      "pass": true
+    },
+    {
+      "fixture": "moving_initial_state",
+      "planned_substeps": 10,
+      "completed_per_world": 10,
+      "warp_executed_kernel_world_substeps_upper": 10,
+      "real_guarded_intervals": 2,
+      "native_events": [
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 4.76837158203125e-07,
+        "qd_rad_s": 1.8030405044555664e-06,
+        "tip_m": 2.980232238769531e-07,
+        "servo_rad": 1.1920928955078125e-07,
+        "applied_rad": 1.1920928955078125e-07,
+        "ctrl_rad": 1.1920928955078125e-07,
+        "torque_Nm": 0.00010527099948376417,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 0.0
+      },
+      "seconds": 0.08823874999870895,
+      "pass": true
+    },
+    {
+      "fixture": "moving_initial_state",
+      "planned_substeps": 150,
+      "completed_per_world": 150,
+      "warp_executed_kernel_world_substeps_upper": 150,
+      "real_guarded_intervals": 30,
+      "native_events": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "warp_events": [
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ],
+        [
+          0
+        ]
+      ],
+      "events_equal": true,
+      "event_and_contact_free": true,
+      "maxima": {
+        "q_rad": 2.7418136596679688e-06,
+        "qd_rad_s": 6.304691851255484e-06,
+        "tip_m": 8.450417112726427e-07,
+        "servo_rad": 4.76837158203125e-07,
+        "applied_rad": 4.76837158203125e-07,
+        "ctrl_rad": 5.960464477539062e-07,
+        "torque_Nm": 0.0007343292236328125,
+        "contact_depth_m": 0.0,
+        "minimum_gap_m": 1.1641532182693481e-10
+      },
+      "seconds": 1.3020497289980995,
+      "pass": true
+    }
+  ],
+  "pass": true
+}

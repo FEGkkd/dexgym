@@ -1,0 +1,153 @@
+{
+  "schema": "s05.campaign.resume-evidence.v1",
+  "campaign_id": "S05-V1-20261127-490770e",
+  "evidence_root": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e",
+  "data_and_nominal": {
+    "sdk_identity": {
+      "deployed_vendor_and_install_configs_sha256": "ce20b1a80974c3ed58cdac4973152625096c8ad93a779e5fd4108c26ce19bd52",
+      "vendor_lib_sha256": "f2aec6ebc1f41302fe0126284076211c044d6c7e1c2276dc919767254e0c597f"
+    },
+    "roundtrip": {
+      "path": "runs/V1-A-ik-probe-03/probe.json",
+      "sha256": "5c44c581e63ce1ba5d79a31a40f51e5a5eb1292e431d2fd8aab57d44627de221",
+      "exit": 0,
+      "known_reachable_success_per_side": [8, 8],
+      "mapped_direct_success_per_side": [8, 0],
+      "right_mapped_shoulder_adjusted_radius_m": [0.735681, 0.775478],
+      "sdk_outer_radius_m": 0.6020794063538597
+    },
+    "all_train_root_sample": {
+      "path": "runs/V1-A-train-roots-05/bank/domain_counts.json",
+      "sha256": "8dd6b6d82bee03402333f83443328dadb3a88714e84f73272de1fbfe6e75f71b",
+      "exit": 0,
+      "roots": 24,
+      "planned": 2880,
+      "hmb_joint_valid": 2774,
+      "mapped": 2768,
+      "raw_marvin_arm_ik_success_left_right": [676, 79],
+      "legal_bilateral_nominal": 0,
+      "legal_five_tick_history": 0,
+      "independent_tip_10mm_strict_exclusions": 406
+    },
+    "phase1_geometry": {
+      "path": "runs/V1-A-phase1-step-06/probe.json",
+      "sha256": "0aa53c6da7b0db386d0b9614c223b7bf5e4bcd09fea1beabd25b45dfd956acd4",
+      "exit": 0,
+      "sampled_per_side": 192,
+      "original_target_success_left_right": [46, 5],
+      "radial_projection_success_left_right": [46, 82],
+      "clipped_single_step_success_left_right": [192, 192],
+      "uses_full_online_teleop_or_supplies_eligibility": false
+    },
+    "full_train_exact_wrist_bound": {
+      "path": "runs/V1-A-train-radial-07/result.json",
+      "committed_exact_mirror": "evidence/train-radial-07.json",
+      "sha256": "0658b1e8938b6402da5e001091321350a3a3655afd1718c253764759f084f13c",
+      "exit": 0,
+      "roots": 24,
+      "partitions": 228,
+      "planned": 86338,
+      "hmb_joint_valid": 85382,
+      "strictly_excluded_left_right": [6169, 61348],
+      "strictly_excluded_on_both": 3550,
+      "strictly_excluded_union": 63967,
+      "unmeasured_hmb_joint_valid_credited_to_ceiling": 139,
+      "max_possible_exact_ik_eligible_ticks": 21415,
+      "max_possible_exact_ik_eligible_fraction": 0.2508139888969572,
+      "frozen_minimum_fraction": 0.85,
+      "scope": "Necessary wrist-pose reach bound; neither fingertip error nor a direct-IK success rate"
+    },
+    "full_train_m1_continuity": {
+      "path": "runs/V1-A-m1-continuity-train-08/result.json",
+      "committed_exact_mirror": "evidence/m1-continuity-08.json",
+      "sha256": "8dae52c59408cbac3cec505353aee8e084431ad13cdeda74026a6965ef363c50",
+      "exit": 0,
+      "roots": 24,
+      "threshold_crossing_ticks": 1002,
+      "frozen_limit_p95_mm": 5,
+      "frozen_limit_max_mm": 15,
+      "variant_p95_and_max_mm": {
+        "M1_HARD_20": [22.34889656528698, 29.6348371678986],
+        "M1_SMOOTH_18_22": [19.07089937237912, 25.339538434797593],
+        "M1_SMOOTH_17_23": [18.449188662174834, 23.048339166709304],
+        "M1_SMOOTH_16_24": [17.333458335302733, 23.048339166709304]
+      },
+      "mapping_selected": false
+    }
+  },
+  "host_runtime": {
+    "prior_fault": "nvme0n1 repeatedly reported read-medium errors",
+    "fault_mapping": [
+      {"evidence": "preflight/torch-sigbus-09/strace.log", "library": "site-packages/nvidia/cusparselt/lib/libcusparseLt.so.0", "file_offset_hex": "0x2e9f0c0"},
+      {"evidence": "preflight/warp-model-sigbus-17/fault-mapping.txt", "library": "site-packages/numpy/_core/_multiarray_umath.cpython-312-x86_64-linux-gnu.so"}
+    ],
+    "isolated_runtime": "/dev/shm/s05-resume-490770e",
+    "existing_checkout_replaced": false,
+    "clean_torch_cuda_probe": {"evidence": "preflight/cusparselt-repair-10/torch-isolated.log", "exit": 0, "tensor_result": 10416.0},
+    "clean_full_task_import_and_cuda_probe": {"evidence": "preflight/full-task-import-16/output.log", "exit": 0, "joints": 54},
+    "clean_actual_warp_initialization": {"evidence": "preflight/warp-model-isolated-19/stdout.log", "exit": 0, "worlds": 1}
+  },
+  "scoped_physics": {
+    "native_smoke": {
+      "path": "runs/V1-B-native-smoke-04/result.json",
+      "committed_exact_mirror": "evidence/native-04.json",
+      "sha256": "f3c90ac9a5fbadc25ab8ea3a5b9e14909afc229977b533b8b76d29843f6e3f3d",
+      "exit": 0,
+      "actual_physical_transitions": 136,
+      "parallel_worlds": 1,
+      "tests_passed": ["54-axis signed response", "B0 zero residual", "invalid-action fallback", "pre-reset trace"]
+    },
+    "cpu_warp_free_response": {
+      "path": "runs/V1-B-warp-parity-03/result.json",
+      "committed_exact_mirror": "evidence/warp-parity-03.json",
+      "sha256": "8052e901a5e58956fece00a8c1511d2e7d10a9e8490d66e3011d134e1c202fb1",
+      "exit": 0,
+      "parallel_warp_worlds": 1,
+      "passed_fixtures": 15,
+      "physical_intervals_across_both_backends": 170,
+      "maximum_q_difference_rad": 0.0000027418136596679688,
+      "maximum_qd_difference_rad_s": 0.000006304691851255484,
+      "maximum_fingertip_difference_m": 0.0000011234329804210574
+    },
+    "synthetic_world_model_smoke": {
+      "scope": "PHYSICAL_SYNTHETIC_PREACTOR_SMOKE",
+      "cpu": {
+        "path": "runs/V1-B-wm-contract-cpu-01/learner/fit_report.json",
+        "sha256": "027b9b4e06b6ff9ee59b714513679c5eb2a38dd595a3038c81d63402c416df58",
+        "exit": 0,
+        "worlds": 8,
+        "physical_transitions": 176,
+        "learner_iterations": 2,
+        "wm_updates": 2,
+        "diagnostic_checkpoint_sha256": "a7a772030b8d65bf21886ae586b118bc6681edd1799fb00a3d24268a7009fdde"
+      },
+      "warp": {
+        "path": "runs/V1-B-wm-contract-warp-01/learner/fit_report.json",
+        "sha256": "af7bf15b1f176d0ce13194ed46e0455abd8fa136126184448f5ff18d101bad3e",
+        "exit": 0,
+        "worlds": 8,
+        "physical_transitions": 176,
+        "learner_iterations": 2,
+        "wm_updates": 2,
+        "diagnostic_checkpoint_sha256": "4ec3ff938532caff6f1a666d8f9942eff462f7e6bce3e680049cdd99fdf4f525"
+      },
+      "formal_wm_qualification": "NOT_RUN",
+      "actor_updates": 0,
+      "critic_updates": 0,
+      "imagined_transitions": 0
+    }
+  },
+  "teleop_input_inventory": {
+    "path": "runs/V1-D1-mcap-identity-preflight-01/result.json",
+    "committed_exact_mirror": "evidence/mcap-inventory-01.json",
+    "sha256": "6899d42a4d1efbde53dd57299e39315871ee3857688dcb21c3b28cc0d3b9256a",
+    "exit": 0,
+    "messages_in_recorded_file_order": {"s0_sim_20261119_172809": 103707, "s0_sim_20261117_181022": 182620},
+    "start_mode_and_initial_state": "UNKNOWN_PAYLOAD_NOT_DECODED",
+    "closed_loop_replay": "NOT_RUN"
+  },
+  "formal_world_model_updates": 0,
+  "actor_updates": 0,
+  "critic_updates": 0,
+  "passed_scientific_gates": []
+}

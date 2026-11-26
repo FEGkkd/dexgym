@@ -1,0 +1,1039 @@
+{
+  "scope": "READ_ONLY_MCAP_IDENTITY_SCHEMA_AND_TIME_INVENTORY",
+  "inventory": "CHECKED",
+  "replay_qualification": "NOT_EVALUATED",
+  "recorded_robot_commands_publishable": false,
+  "historical_robot_feedback_publishable": false,
+  "bags": [
+    {
+      "name": "s0_sim_20261119_172809_0.mcap",
+      "path": "/home/ubuntu/teleop_ws/data/s0_sim_20261119_172809/s0_sim_20261119_172809_0.mcap",
+      "sha256": "ffd5353918e38e6527b534aa3263baa20d7cb3f8a868d91f33b8644cbd437817",
+      "bytes": 132641216,
+      "mcap_profile": "ros2",
+      "recorder_library": "libmcap 1.3.1",
+      "purpose": "TELEOP_DEPLOYMENT_REGRESSION",
+      "channels": [
+        {
+          "topic": "/rosout",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "rcl_interfaces/msg/Log",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "d926abc0b09873a7ef201ac73af0899aa8ba043eff57f03d25bebe3158bc674a",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: transient_local\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 10\n    nsec: 0\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_e28ce254ca8abc06abf92773b74602cdbf116ed34fbaf294fb9f81da9f318eac"
+          },
+          "count": 36,
+          "log_first_ns": 1795080489353722197,
+          "log_last_ns": 1795080558614500247,
+          "publish_first_ns": 1795080489348793736,
+          "publish_last_ns": 1795080558614477551,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/manus_glove_left",
+          "role": "HUMAN_INPUT_CANDIDATE",
+          "message_encoding": "cdr",
+          "schema_name": "manus_ros2_msgs/msg/ManusGlove",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_f4357ec29c694114041b15ababa1a6ffd3f2f0bff8b7e8772b3bbe9ac3c0f270"
+          },
+          "count": 8299,
+          "log_first_ns": 1795080489459582789,
+          "log_last_ns": 1795080558609746071,
+          "publish_first_ns": 1795080489459535894,
+          "publish_last_ns": 1795080558609690284,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/manus_glove_right",
+          "role": "HUMAN_INPUT_CANDIDATE",
+          "message_encoding": "cdr",
+          "schema_name": "manus_ros2_msgs/msg/ManusGlove",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_f4357ec29c694114041b15ababa1a6ffd3f2f0bff8b7e8772b3bbe9ac3c0f270"
+          },
+          "count": 8298,
+          "log_first_ns": 1795080489460201470,
+          "log_last_ns": 1795080558610324748,
+          "publish_first_ns": 1795080489460171470,
+          "publish_last_ns": 1795080558610290773,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/vive/tracker/left_wrist",
+          "role": "HUMAN_INPUT_CANDIDATE",
+          "message_encoding": "cdr",
+          "schema_name": "tianji_interfaces/msg/TrackerPose",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_b5b3ce644b7f93feb088f6c0b447cdb32c1f6d342ba310c3e44dad60626bde4d"
+          },
+          "count": 8298,
+          "log_first_ns": 1795080489463154407,
+          "log_last_ns": 1795080558613523062,
+          "publish_first_ns": 1795080489463126504,
+          "publish_last_ns": 1795080558613490265,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/vive/tracker/right_wrist",
+          "role": "HUMAN_INPUT_CANDIDATE",
+          "message_encoding": "cdr",
+          "schema_name": "tianji_interfaces/msg/TrackerPose",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_b5b3ce644b7f93feb088f6c0b447cdb32c1f6d342ba310c3e44dad60626bde4d"
+          },
+          "count": 8296,
+          "log_first_ns": 1795080489463275021,
+          "log_last_ns": 1795080558613288154,
+          "publish_first_ns": 1795080489463238722,
+          "publish_last_ns": 1795080558613240940,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/dex/collection/status",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "dex_collection_interfaces/msg/CollectionStatus",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "b8ded4b4b2291f9db6db32388e48e1d7f692fbaa1bf4bca1c7c47d32f64fab5b",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: transient_local\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_ce543f80bf868a5ccd4933e5279f7649b3afc53908f2c67630c48ae1a3d2838c"
+          },
+          "count": 347,
+          "log_first_ns": 1795080489466496867,
+          "log_last_ns": 1795080558600014553,
+          "publish_first_ns": 1795080489399977506,
+          "publish_last_ns": 1795080558599969920,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/dex/collection/topics",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "dex_collection_interfaces/msg/TopicCatalogue",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "65839bbedefd0fdd3bdc82ac4a43bf9e0e39b03ab6acdca552de1d821b48f4af",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: transient_local\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_7bb1cafd4b777891622fbbdd779485d998cacb19e960b01f6cffc90f87eadfbe"
+          },
+          "count": 133,
+          "log_first_ns": 1795080489467309640,
+          "log_last_ns": 1795080558599086433,
+          "publish_first_ns": 1795080488599014906,
+          "publish_last_ns": 1795080558599033954,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/left_arm/ee_pose",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "geometry_msgs/msg/PoseStamped",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_10f3786d7d40fd2b54367835614bff85d4ad3b5dab62bf8bca0cc232d73b4cd8"
+          },
+          "count": 3457,
+          "log_first_ns": 1795080489467766266,
+          "log_last_ns": 1795080558608782031,
+          "publish_first_ns": 1795080489467705776,
+          "publish_last_ns": 1795080558608729522,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/left_arm/joint_states",
+          "role": "HISTORICAL_FEEDBACK_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "sensor_msgs/msg/JointState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_a13ee3a330e346c9d87b5aa18d24e11690752bd33a0350f11c5882bc9179260e"
+          },
+          "count": 6928,
+          "log_first_ns": 1795080489468964647,
+          "log_last_ns": 1795080558611029591,
+          "publish_first_ns": 1795080489468939504,
+          "publish_last_ns": 1795080558611007616,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/tianji/robot_state",
+          "role": "HISTORICAL_FEEDBACK_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "tianji_interfaces/msg/RobotState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "fa3b3c3a8d5af4e6d581c34d2202cdf2f994c4a6e46bf935162b39b89f87af24",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: transient_local\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_5fda1c43b05efa9ce95b5909cfa094704d372432afd8e5b5d07ff179025d593f"
+          },
+          "count": 6928,
+          "log_first_ns": 1795080489468957979,
+          "log_last_ns": 1795080558611014494,
+          "publish_first_ns": 1795080489468900037,
+          "publish_last_ns": 1795080558610968877,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/left_hand/state",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "5aa32a75a2b15633613c7ce24c307d6e46e383e9f6d6dbe482a9fc23db46c082",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_4ee155e51d60b606ec832641a0364ec16c0c08240347a5ec088af6ef5fcd8156"
+          },
+          "count": 6928,
+          "log_first_ns": 1795080489468993258,
+          "log_last_ns": 1795080558611039574,
+          "publish_first_ns": 1795080489468963382,
+          "publish_last_ns": 1795080558611017096,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/left_hand/sim/joint_states",
+          "role": "HISTORICAL_FEEDBACK_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "5aa32a75a2b15633613c7ce24c307d6e46e383e9f6d6dbe482a9fc23db46c082",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_4ee155e51d60b606ec832641a0364ec16c0c08240347a5ec088af6ef5fcd8156"
+          },
+          "count": 6927,
+          "log_first_ns": 1795080489478973634,
+          "log_last_ns": 1795080558611046411,
+          "publish_first_ns": 1795080489478953865,
+          "publish_last_ns": 1795080558611026301,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/whole_body_teleop/control_phase",
+          "role": "EVENT_CANDIDATE_REQUIRES_DECODE",
+          "message_encoding": "cdr",
+          "schema_name": "dex_collection_interfaces/msg/ControlPhase",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "1743f07ba0c7108db23f149d48bb54d1655075f49b7bc5590a61031a0173ade0",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: transient_local\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_117d804a8244eecebe39f07047f76ff0b22f88951cf6fe98d2f5c426710b55ff"
+          },
+          "count": 698,
+          "log_first_ns": 1795080489480256327,
+          "log_last_ns": 1795080558549583455,
+          "publish_first_ns": 1795080489448057531,
+          "publish_last_ns": 1795080558549571760,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/right_arm/ee_pose",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "geometry_msgs/msg/PoseStamped",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_10f3786d7d40fd2b54367835614bff85d4ad3b5dab62bf8bca0cc232d73b4cd8"
+          },
+          "count": 3456,
+          "log_first_ns": 1795080489487759194,
+          "log_last_ns": 1795080558608976403,
+          "publish_first_ns": 1795080489487733928,
+          "publish_last_ns": 1795080558608939498,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/whole_body_teleop/workflow_state",
+          "role": "EVENT_CANDIDATE_REQUIRES_DECODE",
+          "message_encoding": "cdr",
+          "schema_name": "tianji_interfaces/msg/TeleopState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "350ac86e1130b573586e1c902234241af1737bdb182b66622bf2e33222f89297",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_cde50b0204ce8d9c3981b07bf4c5c9eed9080e2c1ec8f426e733b27a0d7b3506"
+          },
+          "count": 697,
+          "log_first_ns": 1795080489548765960,
+          "log_last_ns": 1795080558549560821,
+          "publish_first_ns": 1795080489548734361,
+          "publish_last_ns": 1795080558549547907,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/whole_body_teleop/policy_status",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "std_msgs/msg/String",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "2022b3f1c32b578ff8d54a9948a51a10778761e0ad4ba60e50ae51292ca16884",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_df668c740482bbd48fb39d76a70dfd4bd59db1288021743503259e948f6b1a18"
+          },
+          "count": 697,
+          "log_first_ns": 1795080489550144674,
+          "log_last_ns": 1795080558550598195,
+          "publish_first_ns": 1795080489550109795,
+          "publish_last_ns": 1795080558550566665,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/left_hand/diagnostics",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandDiagnostics",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "a8152e37b00da452adc4c124606d1cbaf73e562eb4930bb28f5958b7ccec0722",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_82b0d8d4eeace0bdc1c95b224d9da851b8f8c1fbc0dc615c2923bcfeedd496d4"
+          },
+          "count": 336,
+          "log_first_ns": 1795080489569101934,
+          "log_last_ns": 1795080558551129547,
+          "publish_first_ns": 1795080489569005051,
+          "publish_last_ns": 1795080558551103453,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/right_hand/diagnostics",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandDiagnostics",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "a8152e37b00da452adc4c124606d1cbaf73e562eb4930bb28f5958b7ccec0722",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_82b0d8d4eeace0bdc1c95b224d9da851b8f8c1fbc0dc615c2923bcfeedd496d4"
+          },
+          "count": 336,
+          "log_first_ns": 1795080489569116737,
+          "log_last_ns": 1795080558551205162,
+          "publish_first_ns": 1795080489569058598,
+          "publish_last_ns": 1795080558551173714,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/right_arm/joint_states",
+          "role": "HISTORICAL_FEEDBACK_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "sensor_msgs/msg/JointState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_a13ee3a330e346c9d87b5aa18d24e11690752bd33a0350f11c5882bc9179260e"
+          },
+          "count": 6917,
+          "log_first_ns": 1795080489579008888,
+          "log_last_ns": 1795080558611053434,
+          "publish_first_ns": 1795080489578992080,
+          "publish_last_ns": 1795080558611030884,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/right_hand/sim/joint_states",
+          "role": "HISTORICAL_FEEDBACK_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "5aa32a75a2b15633613c7ce24c307d6e46e383e9f6d6dbe482a9fc23db46c082",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_4ee155e51d60b606ec832641a0364ec16c0c08240347a5ec088af6ef5fcd8156"
+          },
+          "count": 6917,
+          "log_first_ns": 1795080489579040404,
+          "log_last_ns": 1795080558611069420,
+          "publish_first_ns": 1795080489579024157,
+          "publish_last_ns": 1795080558611044252,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/right_hand/state",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "5aa32a75a2b15633613c7ce24c307d6e46e383e9f6d6dbe482a9fc23db46c082",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_4ee155e51d60b606ec832641a0364ec16c0c08240347a5ec088af6ef5fcd8156"
+          },
+          "count": 6917,
+          "log_first_ns": 1795080489579030160,
+          "log_last_ns": 1795080558611060812,
+          "publish_first_ns": 1795080489579007470,
+          "publish_last_ns": 1795080558611038432,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/left_hand/command",
+          "role": "ROBOT_COMMAND_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandCommand",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_fd03067d4b8dc3a025d933ee0c075f0c0ff354a131ce6869eacfef4c83882786"
+          },
+          "count": 2383,
+          "log_first_ns": 1795080492768769355,
+          "log_last_ns": 1795080555794106050,
+          "publish_first_ns": 1795080492768747456,
+          "publish_last_ns": 1795080555794085650,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/right_hand/command",
+          "role": "ROBOT_COMMAND_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandCommand",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_fd03067d4b8dc3a025d933ee0c075f0c0ff354a131ce6869eacfef4c83882786"
+          },
+          "count": 2383,
+          "log_first_ns": 1795080492768790201,
+          "log_last_ns": 1795080555794125881,
+          "publish_first_ns": 1795080492768777065,
+          "publish_last_ns": 1795080555794114321,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/tianji/joint_command",
+          "role": "ROBOT_COMMAND_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "tianji_interfaces/msg/JointCommand",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "78e31755714b821e61477256df9e8a5f0cc9d52559462a1150551ee19d34de06",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_b8686bb003e85f9465bf9bf65f390112ec422571e577ad8986a7cf09f9020a5e"
+          },
+          "count": 2365,
+          "log_first_ns": 1795080508493425874,
+          "log_last_ns": 1795080555794058810,
+          "publish_first_ns": 1795080508493375592,
+          "publish_last_ns": 1795080555794015593,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/whole_body_teleop/policy_metrics",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "std_msgs/msg/String",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "2022b3f1c32b578ff8d54a9948a51a10778761e0ad4ba60e50ae51292ca16884",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_df668c740482bbd48fb39d76a70dfd4bd59db1288021743503259e948f6b1a18"
+          },
+          "count": 2365,
+          "log_first_ns": 1795080508494278153,
+          "log_last_ns": 1795080555794760853,
+          "publish_first_ns": 1795080508494224785,
+          "publish_last_ns": 1795080555794731253,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/whole_body_teleop/policy_wrist_targets",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "geometry_msgs/msg/PoseArray",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "6784127c82ed90bae2965484d8d5a533c6a7381baa0ed3e1de7e9403ad7de256",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_af0cc36d190e104d546d168d6b39df04fa4b4ccecf59cb4c9ed328d3d5004aa0"
+          },
+          "count": 2365,
+          "log_first_ns": 1795080508494463426,
+          "log_last_ns": 1795080555794969509,
+          "publish_first_ns": 1795080508494439151,
+          "publish_last_ns": 1795080555794950193,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        }
+      ],
+      "file_order_message_count": 103707,
+      "identity_or_schema_findings": [],
+      "event_topics": [
+        "/whole_body_teleop/control_phase",
+        "/whole_body_teleop/workflow_state"
+      ],
+      "start_event_status": "UNKNOWN_PAYLOAD_NOT_DECODED",
+      "mode_and_initial_state_status": "UNKNOWN_PAYLOAD_NOT_DECODED",
+      "replay_whitelist_approved": false,
+      "replay_qualification": "NOT_EVALUATED"
+    },
+    {
+      "name": "s0_sim_20261117_181022_0.mcap",
+      "path": "/home/ubuntu/teleop_ws/data/s0_sim_20261117_181022/s0_sim_20261117_181022_0.mcap",
+      "sha256": "cbac62bb6d58ce2fa159d547408cf3534a29c32ca8b0bba1cddc8c4bc99ba1f5",
+      "bytes": 229433886,
+      "mcap_profile": "ros2",
+      "recorder_library": "libmcap 1.3.1",
+      "purpose": "TELEOP_DEPLOYMENT_REGRESSION",
+      "channels": [
+        {
+          "topic": "/rosout",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "rcl_interfaces/msg/Log",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "d926abc0b09873a7ef201ac73af0899aa8ba043eff57f03d25bebe3158bc674a",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: transient_local\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 10\n    nsec: 0\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_e28ce254ca8abc06abf92773b74602cdbf116ed34fbaf294fb9f81da9f318eac"
+          },
+          "count": 37,
+          "log_first_ns": 1794910222419413879,
+          "log_last_ns": 1794910342119948945,
+          "publish_first_ns": 1794910222413357376,
+          "publish_last_ns": 1794910342119929250,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/manus_glove_left",
+          "role": "HUMAN_INPUT_CANDIDATE",
+          "message_encoding": "cdr",
+          "schema_name": "manus_ros2_msgs/msg/ManusGlove",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_f4357ec29c694114041b15ababa1a6ffd3f2f0bff8b7e8772b3bbe9ac3c0f270"
+          },
+          "count": 14351,
+          "log_first_ns": 1794910222529517796,
+          "log_last_ns": 1794910342112678803,
+          "publish_first_ns": 1794910222529471774,
+          "publish_last_ns": 1794910342112649069,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/manus_glove_right",
+          "role": "HUMAN_INPUT_CANDIDATE",
+          "message_encoding": "cdr",
+          "schema_name": "manus_ros2_msgs/msg/ManusGlove",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "5635ec6a4cabdea549c9db39d48405a7baa9530447d965f8d85d9a1ea6036b97",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_f4357ec29c694114041b15ababa1a6ffd3f2f0bff8b7e8772b3bbe9ac3c0f270"
+          },
+          "count": 14351,
+          "log_first_ns": 1794910222529851518,
+          "log_last_ns": 1794910342113174436,
+          "publish_first_ns": 1794910222529816779,
+          "publish_last_ns": 1794910342113149133,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/vive/tracker/left_wrist",
+          "role": "HUMAN_INPUT_CANDIDATE",
+          "message_encoding": "cdr",
+          "schema_name": "tianji_interfaces/msg/TrackerPose",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_b5b3ce644b7f93feb088f6c0b447cdb32c1f6d342ba310c3e44dad60626bde4d"
+          },
+          "count": 14321,
+          "log_first_ns": 1794910222530705150,
+          "log_last_ns": 1794910342113942895,
+          "publish_first_ns": 1794910222530677145,
+          "publish_last_ns": 1794910342113914500,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/vive/tracker/right_wrist",
+          "role": "HUMAN_INPUT_CANDIDATE",
+          "message_encoding": "cdr",
+          "schema_name": "tianji_interfaces/msg/TrackerPose",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "05bace1fb626861602e6d3650893707b91359faa75f7f0c3df50f2fcecf0930e",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_b5b3ce644b7f93feb088f6c0b447cdb32c1f6d342ba310c3e44dad60626bde4d"
+          },
+          "count": 14243,
+          "log_first_ns": 1794910222530863930,
+          "log_last_ns": 1794910342114178215,
+          "publish_first_ns": 1794910222530848402,
+          "publish_last_ns": 1794910342114157932,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/whole_body_teleop/control_phase",
+          "role": "EVENT_CANDIDATE_REQUIRES_DECODE",
+          "message_encoding": "cdr",
+          "schema_name": "dex_collection_interfaces/msg/ControlPhase",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "1743f07ba0c7108db23f149d48bb54d1655075f49b7bc5590a61031a0173ade0",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: transient_local\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_117d804a8244eecebe39f07047f76ff0b22f88951cf6fe98d2f5c426710b55ff"
+          },
+          "count": 1206,
+          "log_first_ns": 1794910222538225828,
+          "log_last_ns": 1794910342062125872,
+          "publish_first_ns": 1794910222461598080,
+          "publish_last_ns": 1794910342062111524,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/dex/collection/topics",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "dex_collection_interfaces/msg/TopicCatalogue",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "65839bbedefd0fdd3bdc82ac4a43bf9e0e39b03ab6acdca552de1d821b48f4af",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: transient_local\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_7bb1cafd4b777891622fbbdd779485d998cacb19e960b01f6cffc90f87eadfbe"
+          },
+          "count": 230,
+          "log_first_ns": 1794910222539900156,
+          "log_last_ns": 1794910341908576347,
+          "publish_first_ns": 1794910222145662782,
+          "publish_last_ns": 1794910341908526112,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/left_arm/ee_pose",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "geometry_msgs/msg/PoseStamped",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_10f3786d7d40fd2b54367835614bff85d4ad3b5dab62bf8bca0cc232d73b4cd8"
+          },
+          "count": 5971,
+          "log_first_ns": 1794910222541683818,
+          "log_last_ns": 1794910342101735137,
+          "publish_first_ns": 1794910222541641053,
+          "publish_last_ns": 1794910342101689909,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/right_arm/ee_pose",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "geometry_msgs/msg/PoseStamped",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "91730cd71e186290634ccd257a2c6380117abee20b90b0ef436aee1702cdae2e",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_10f3786d7d40fd2b54367835614bff85d4ad3b5dab62bf8bca0cc232d73b4cd8"
+          },
+          "count": 5971,
+          "log_first_ns": 1794910222541789542,
+          "log_last_ns": 1794910342101926036,
+          "publish_first_ns": 1794910222541772505,
+          "publish_last_ns": 1794910342101900384,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/dex/collection/status",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "dex_collection_interfaces/msg/CollectionStatus",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "b8ded4b4b2291f9db6db32388e48e1d7f692fbaa1bf4bca1c7c47d32f64fab5b",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: transient_local\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_ce543f80bf868a5ccd4933e5279f7649b3afc53908f2c67630c48ae1a3d2838c"
+          },
+          "count": 599,
+          "log_first_ns": 1794910222541908902,
+          "log_last_ns": 1794910341993569855,
+          "publish_first_ns": 1794910222393537908,
+          "publish_last_ns": 1794910341993537350,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/whole_body_teleop/workflow_state",
+          "role": "EVENT_CANDIDATE_REQUIRES_DECODE",
+          "message_encoding": "cdr",
+          "schema_name": "tianji_interfaces/msg/TeleopState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "350ac86e1130b573586e1c902234241af1737bdb182b66622bf2e33222f89297",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_cde50b0204ce8d9c3981b07bf4c5c9eed9080e2c1ec8f426e733b27a0d7b3506"
+          },
+          "count": 1205,
+          "log_first_ns": 1794910222563021869,
+          "log_last_ns": 1794910342062105288,
+          "publish_first_ns": 1794910222562988635,
+          "publish_last_ns": 1794910342062075024,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/whole_body_teleop/policy_status",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "std_msgs/msg/String",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "2022b3f1c32b578ff8d54a9948a51a10778761e0ad4ba60e50ae51292ca16884",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_df668c740482bbd48fb39d76a70dfd4bd59db1288021743503259e948f6b1a18"
+          },
+          "count": 1205,
+          "log_first_ns": 1794910222565856664,
+          "log_last_ns": 1794910342063555223,
+          "publish_first_ns": 1794910222565784304,
+          "publish_last_ns": 1794910342063528855,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/left_arm/joint_states",
+          "role": "HISTORICAL_FEEDBACK_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "sensor_msgs/msg/JointState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_a13ee3a330e346c9d87b5aa18d24e11690752bd33a0350f11c5882bc9179260e"
+          },
+          "count": 11845,
+          "log_first_ns": 1794910223860846207,
+          "log_last_ns": 1794910342110780511,
+          "publish_first_ns": 1794910223860829437,
+          "publish_last_ns": 1794910342110769682,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/left_hand/sim/joint_states",
+          "role": "HISTORICAL_FEEDBACK_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "5aa32a75a2b15633613c7ce24c307d6e46e383e9f6d6dbe482a9fc23db46c082",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_4ee155e51d60b606ec832641a0364ec16c0c08240347a5ec088af6ef5fcd8156"
+          },
+          "count": 11845,
+          "log_first_ns": 1794910223860880778,
+          "log_last_ns": 1794910342110791784,
+          "publish_first_ns": 1794910223860861658,
+          "publish_last_ns": 1794910342110785324,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/left_hand/state",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "5aa32a75a2b15633613c7ce24c307d6e46e383e9f6d6dbe482a9fc23db46c082",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_4ee155e51d60b606ec832641a0364ec16c0c08240347a5ec088af6ef5fcd8156"
+          },
+          "count": 11845,
+          "log_first_ns": 1794910223860863117,
+          "log_last_ns": 1794910342110786561,
+          "publish_first_ns": 1794910223860844951,
+          "publish_last_ns": 1794910342110776716,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/right_hand/state",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "5aa32a75a2b15633613c7ce24c307d6e46e383e9f6d6dbe482a9fc23db46c082",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_4ee155e51d60b606ec832641a0364ec16c0c08240347a5ec088af6ef5fcd8156"
+          },
+          "count": 11845,
+          "log_first_ns": 1794910223860903033,
+          "log_last_ns": 1794910342110803381,
+          "publish_first_ns": 1794910223860886888,
+          "publish_last_ns": 1794910342110795526,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/right_hand/sim/joint_states",
+          "role": "HISTORICAL_FEEDBACK_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "5aa32a75a2b15633613c7ce24c307d6e46e383e9f6d6dbe482a9fc23db46c082",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_4ee155e51d60b606ec832641a0364ec16c0c08240347a5ec088af6ef5fcd8156"
+          },
+          "count": 11845,
+          "log_first_ns": 1794910223860925047,
+          "log_last_ns": 1794910342110807323,
+          "publish_first_ns": 1794910223860899552,
+          "publish_last_ns": 1794910342110798940,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/tianji/robot_state",
+          "role": "HISTORICAL_FEEDBACK_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "tianji_interfaces/msg/RobotState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "fa3b3c3a8d5af4e6d581c34d2202cdf2f994c4a6e46bf935162b39b89f87af24",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: transient_local\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_5fda1c43b05efa9ce95b5909cfa094704d372432afd8e5b5d07ff179025d593f"
+          },
+          "count": 11844,
+          "log_first_ns": 1794910223870860413,
+          "log_last_ns": 1794910342110772077,
+          "publish_first_ns": 1794910223870808541,
+          "publish_last_ns": 1794910342110749809,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/right_arm/joint_states",
+          "role": "HISTORICAL_FEEDBACK_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "sensor_msgs/msg/JointState",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "3cd38d65f3a55c3ed1e06497aa4a27baa80bec77d515b54062bc420bbdc95cf7",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_a13ee3a330e346c9d87b5aa18d24e11690752bd33a0350f11c5882bc9179260e"
+          },
+          "count": 11844,
+          "log_first_ns": 1794910223870906592,
+          "log_last_ns": 1794910342110798757,
+          "publish_first_ns": 1794910223870890741,
+          "publish_last_ns": 1794910342110790126,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/left_hand/diagnostics",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandDiagnostics",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "a8152e37b00da452adc4c124606d1cbaf73e562eb4930bb28f5958b7ccec0722",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_82b0d8d4eeace0bdc1c95b224d9da851b8f8c1fbc0dc615c2923bcfeedd496d4"
+          },
+          "count": 576,
+          "log_first_ns": 1794910223930982886,
+          "log_last_ns": 1794910342040958380,
+          "publish_first_ns": 1794910223930914668,
+          "publish_last_ns": 1794910342040935896,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/right_hand/diagnostics",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandDiagnostics",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "a8152e37b00da452adc4c124606d1cbaf73e562eb4930bb28f5958b7ccec0722",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_82b0d8d4eeace0bdc1c95b224d9da851b8f8c1fbc0dc615c2923bcfeedd496d4"
+          },
+          "count": 576,
+          "log_first_ns": 1794910223931069532,
+          "log_last_ns": 1794910342041017483,
+          "publish_first_ns": 1794910223931017289,
+          "publish_last_ns": 1794910342041000363,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/left_hand/command",
+          "role": "ROBOT_COMMAND_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandCommand",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_fd03067d4b8dc3a025d933ee0c075f0c0ff354a131ce6869eacfef4c83882786"
+          },
+          "count": 5096,
+          "log_first_ns": 1794910225082562154,
+          "log_last_ns": 1794910342102025847,
+          "publish_first_ns": 1794910225082535386,
+          "publish_last_ns": 1794910342102003142,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/right_hand/command",
+          "role": "ROBOT_COMMAND_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "manus_wuji_interfaces/msg/HandCommand",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "146749fe7e1c1fae278f6509474b9f367ac68cccf848fbb1305298f8a71b8f14",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_fd03067d4b8dc3a025d933ee0c075f0c0ff354a131ce6869eacfef4c83882786"
+          },
+          "count": 5096,
+          "log_first_ns": 1794910225082602485,
+          "log_last_ns": 1794910342102080931,
+          "publish_first_ns": 1794910225082584835,
+          "publish_last_ns": 1794910342102055566,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/tianji/joint_command",
+          "role": "ROBOT_COMMAND_AUDIT_ONLY",
+          "message_encoding": "cdr",
+          "schema_name": "tianji_interfaces/msg/JointCommand",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "78e31755714b821e61477256df9e8a5f0cc9d52559462a1150551ee19d34de06",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: reliable\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_b8686bb003e85f9465bf9bf65f390112ec422571e577ad8986a7cf09f9020a5e"
+          },
+          "count": 4891,
+          "log_first_ns": 1794910235028715698,
+          "log_last_ns": 1794910332970042091,
+          "publish_first_ns": 1794910235028664730,
+          "publish_last_ns": 1794910332969975748,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/whole_body_teleop/policy_metrics",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "std_msgs/msg/String",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "2022b3f1c32b578ff8d54a9948a51a10778761e0ad4ba60e50ae51292ca16884",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_df668c740482bbd48fb39d76a70dfd4bd59db1288021743503259e948f6b1a18"
+          },
+          "count": 4891,
+          "log_first_ns": 1794910235029678014,
+          "log_last_ns": 1794910332970613390,
+          "publish_first_ns": 1794910235029640045,
+          "publish_last_ns": 1794910332970590783,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        },
+        {
+          "topic": "/whole_body_teleop/policy_wrist_targets",
+          "role": "DIAGNOSTIC_OR_UNKNOWN",
+          "message_encoding": "cdr",
+          "schema_name": "geometry_msgs/msg/PoseArray",
+          "schema_encoding": "ros2msg",
+          "schema_sha256": "6784127c82ed90bae2965484d8d5a533c6a7381baa0ed3e1de7e9403ad7de256",
+          "metadata": {
+            "offered_qos_profiles": "- history: unknown\n  depth: 0\n  reliability: best_effort\n  durability: volatile\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: automatic\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false",
+            "topic_type_hash": "RIHS01_af0cc36d190e104d546d168d6b39df04fa4b4ccecf59cb4c9ed328d3d5004aa0"
+          },
+          "count": 4891,
+          "log_first_ns": 1794910235029927121,
+          "log_last_ns": 1794910332970792059,
+          "publish_first_ns": 1794910235029906206,
+          "publish_last_ns": 1794910332970776293,
+          "log_backsteps": 0,
+          "same_log_time": 0
+        }
+      ],
+      "file_order_message_count": 182620,
+      "identity_or_schema_findings": [],
+      "event_topics": [
+        "/whole_body_teleop/control_phase",
+        "/whole_body_teleop/workflow_state"
+      ],
+      "start_event_status": "UNKNOWN_PAYLOAD_NOT_DECODED",
+      "mode_and_initial_state_status": "UNKNOWN_PAYLOAD_NOT_DECODED",
+      "replay_whitelist_approved": false,
+      "replay_qualification": "NOT_EVALUATED"
+    }
+  ]
+}
