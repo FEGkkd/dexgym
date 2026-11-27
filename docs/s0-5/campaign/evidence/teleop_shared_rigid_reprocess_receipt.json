@@ -1,0 +1,282 @@
+{
+  "archive": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/TELEOP-SHARED-RIGID-REPROCESS-01",
+  "artifact_sha256": {
+    "candidate-session-bound/manifest.json": "0b3af0676138cd54658b8d870eed5a9349ec35a422b254059ec6ced3ae61fd6b",
+    "executables.sha256": "0f190dc7f4b7ba123f41275048f1d14f61a280eddb69111e4a26afe95ff9a001",
+    "geometry_summary.json": "57bd1e5ed8a46a0679a0c12cf96361c397decd74f0241a015b92124ecda8c76f",
+    "independent_trace_audit.json": "7bd05428142fa6854624c3f99e20dabbd5ebfd8ee0bbc2f4d6c35950686ba284",
+    "roots/cohort_run.json": "89601f45751ed4a09794a13dde4580a42703960e278c3fc3b09202a2d322d81b",
+    "tools/export_shared_rigid_candidate.py": "0c976ef2f7c7ae0dd69b5dd9f85feaf99424d24bcdb753521eae52785ebe493f",
+    "tools/seal_shared_rigid_candidate.py": "e7d02d5cdbef01df1483fd1ff4709c696a05b5cbf143fe00f0b56e0019557a27",
+    "tools/summarize_shared_rigid_geometry.py": "2101dcd1999766f6c6365cd20ab3466d1566410d33219de07ba78d4a0e486623",
+    "tools/trace_audit.py": "80011692a018739bd54dbcb7ea5e6cdfa6ef4e2a209176ee8ecbd30d3b276520"
+  },
+  "b_runtime_sha256": {
+    "cohort.json": "7d6c4702229aefd0d564f76dfae5a2a7b62a0340b9c4cae43fea512cc2d531c2",
+    "dual_arm_marvin.xml": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "record_hand_home": "98d4c4a985fa2cc1874e5a085d675842f1ba38d3d867c1344367116bac816a2a",
+    "shared_rigid_transforms.txt": "33cbc93c4a2db925986f596b4b1730c7eaca026a9facfdf26aa4aaa8032c8f94",
+    "whole_body_mujoco_driver_node": "03a3119b94359ff6d429cfb18c5e16d2eb612866f8d21a25f679a18186cf6d7f",
+    "whole_body_teleop_node": "d6b6cf85c761abd73c5a92b668210cc51aefb455a7dd1c2fc5f71a5105f8b109"
+  },
+  "candidate_by_split": {
+    "Train": {
+      "hmb_joint_valid": {
+        "all_54_issued": 77617,
+        "all_54_measured": 77614,
+        "arm_status": {
+          "left": {
+            "ACTIVE_REPORTED": 33148,
+            "HOLD_REPORTED": 13906,
+            "INACTIVE_OR_OUTSIDE_REPLAY": 7762,
+            "LIMITED_REPORTED": 15245,
+            "UNKNOWN": 15321
+          },
+          "right": {
+            "ACTIVE_REPORTED": 39898,
+            "HOLD_REPORTED": 1238,
+            "INACTIVE_OR_OUTSIDE_REPLAY": 7762,
+            "LIMITED_REPORTED": 16019,
+            "UNKNOWN": 20465
+          }
+        },
+        "both_arms_reported_active_or_limited": 47759,
+        "rows": 85382
+      },
+      "planned": {
+        "all_54_issued": 78319,
+        "all_54_measured": 78315,
+        "arm_status": {
+          "left": {
+            "ACTIVE_REPORTED": 33416,
+            "HOLD_REPORTED": 14000,
+            "INACTIVE_OR_OUTSIDE_REPLAY": 8016,
+            "LIMITED_REPORTED": 15409,
+            "REJECTED_REPORTED": 14,
+            "UNKNOWN": 15483
+          },
+          "right": {
+            "ACTIVE_REPORTED": 40231,
+            "HOLD_REPORTED": 1238,
+            "INACTIVE_OR_OUTSIDE_REPLAY": 8016,
+            "LIMITED_REPORTED": 16197,
+            "REJECTED_REPORTED": 3,
+            "UNKNOWN": 20653
+          }
+        },
+        "both_arms_reported_active_or_limited": 48191,
+        "rows": 86338
+      }
+    },
+    "Validation": {
+      "hmb_joint_valid": {
+        "all_54_issued": 22365,
+        "all_54_measured": 22362,
+        "arm_status": {
+          "left": {
+            "ACTIVE_REPORTED": 8402,
+            "HOLD_REPORTED": 3290,
+            "INACTIVE_OR_OUTSIDE_REPLAY": 6783,
+            "LIMITED_REPORTED": 3550,
+            "UNKNOWN": 7125
+          },
+          "right": {
+            "ACTIVE_REPORTED": 8539,
+            "HOLD_REPORTED": 2381,
+            "INACTIVE_OR_OUTSIDE_REPLAY": 6783,
+            "LIMITED_REPORTED": 3728,
+            "UNKNOWN": 7719
+          }
+        },
+        "both_arms_reported_active_or_limited": 11693,
+        "rows": 29150
+      },
+      "planned": {
+        "all_54_issued": 22621,
+        "all_54_measured": 22618,
+        "arm_status": {
+          "left": {
+            "ACTIVE_REPORTED": 8520,
+            "HOLD_REPORTED": 3319,
+            "INACTIVE_OR_OUTSIDE_REPLAY": 7652,
+            "LIMITED_REPORTED": 3578,
+            "REJECTED_REPORTED": 7,
+            "UNKNOWN": 7199
+          },
+          "right": {
+            "ACTIVE_REPORTED": 8659,
+            "HOLD_REPORTED": 2391,
+            "INACTIVE_OR_OUTSIDE_REPLAY": 7652,
+            "LIMITED_REPORTED": 3771,
+            "REJECTED_REPORTED": 7,
+            "UNKNOWN": 7795
+          }
+        },
+        "both_arms_reported_active_or_limited": 11837,
+        "rows": 30275
+      }
+    }
+  },
+  "candidate_total": {
+    "hmb_joint_valid": {
+      "all_54_issued": 99982,
+      "all_54_measured": 99976,
+      "arm_status": {
+        "left": {
+          "ACTIVE_REPORTED": 41550,
+          "HOLD_REPORTED": 17196,
+          "INACTIVE_OR_OUTSIDE_REPLAY": 14545,
+          "LIMITED_REPORTED": 18795,
+          "UNKNOWN": 22446
+        },
+        "right": {
+          "ACTIVE_REPORTED": 48437,
+          "HOLD_REPORTED": 3619,
+          "INACTIVE_OR_OUTSIDE_REPLAY": 14545,
+          "LIMITED_REPORTED": 19747,
+          "UNKNOWN": 28184
+        }
+      },
+      "both_arms_reported_active_or_limited": 59452,
+      "rows": 114532
+    },
+    "planned": {
+      "all_54_issued": 100940,
+      "all_54_measured": 100933,
+      "arm_status": {
+        "left": {
+          "ACTIVE_REPORTED": 41936,
+          "HOLD_REPORTED": 17319,
+          "INACTIVE_OR_OUTSIDE_REPLAY": 15668,
+          "LIMITED_REPORTED": 18987,
+          "REJECTED_REPORTED": 21,
+          "UNKNOWN": 22682
+        },
+        "right": {
+          "ACTIVE_REPORTED": 48890,
+          "HOLD_REPORTED": 3629,
+          "INACTIVE_OR_OUTSIDE_REPLAY": 15668,
+          "LIMITED_REPORTED": 19968,
+          "REJECTED_REPORTED": 10,
+          "UNKNOWN": 28448
+        }
+      },
+      "both_arms_reported_active_or_limited": 60028,
+      "rows": 116613
+    }
+  },
+  "cohort_sha256": "7d6c4702229aefd0d564f76dfae5a2a7b62a0340b9c4cae43fea512cc2d531c2",
+  "controls": {
+    "geometry_exit": 0,
+    "pair_export_exit": 0,
+    "replay_exit": 0,
+    "session_export_and_seal_exit": 0
+  },
+  "data_scope": "DIAGNOSTIC_CANDIDATE",
+  "historical_A_vs_shared_B": {
+    "counts": {
+      "closest_tip_pair_changed": 40524,
+      "coherent_feedback_A_only_hmb_valid": 51,
+      "coherent_feedback_A_only_planned": 54,
+      "coherent_feedback_B_only_hmb_valid": 8914,
+      "coherent_feedback_B_only_planned": 8982,
+      "coherent_feedback_common_hmb_valid": 91062,
+      "coherent_feedback_common_planned": 91951,
+      "coherent_feedback_neither_hmb_valid": 14505,
+      "coherent_feedback_neither_planned": 15626,
+      "common_frozen_m1_wrist_rows": 90893,
+      "common_geometry_rows": 91062,
+      "hmb_joint_valid": 114532,
+      "planned": 116613
+    },
+    "feedback_reasons": {
+      "A_hmb_valid": {
+        "COHERENT_MEASURED": 91113,
+        "NOT_ACTIVE_AT_PLANNED_CUTOFF": 23408,
+        "NOT_RUN_OUTSIDE_REPLAYED_INPUT_TIMELINE": 3,
+        "NO_COMPLETE_MEASURED_STATE_BEFORE_CUTOFF": 5,
+        "STALE_MEASURED_STATE": 3
+      },
+      "A_planned": {
+        "COHERENT_MEASURED": 92005,
+        "NOT_ACTIVE_AT_PLANNED_CUTOFF": 24528,
+        "NOT_RUN_OUTSIDE_REPLAYED_INPUT_TIMELINE": 70,
+        "NO_COMPLETE_MEASURED_STATE_BEFORE_CUTOFF": 7,
+        "STALE_MEASURED_STATE": 3
+      },
+      "B_hmb_valid": {
+        "COHERENT_MEASURED": 99976,
+        "NOT_ACTIVE_AT_PLANNED_CUTOFF": 14542,
+        "NOT_RUN_OUTSIDE_REPLAYED_INPUT_TIMELINE": 3,
+        "NO_COMPLETE_MEASURED_STATE_BEFORE_CUTOFF": 9,
+        "STALE_MEASURED_STATE": 2
+      },
+      "B_planned": {
+        "COHERENT_MEASURED": 100933,
+        "NOT_ACTIVE_AT_PLANNED_CUTOFF": 15598,
+        "NOT_RUN_OUTSIDE_REPLAYED_INPUT_TIMELINE": 70,
+        "NO_COMPLETE_MEASURED_STATE_BEFORE_CUTOFF": 10,
+        "STALE_MEASURED_STATE": 2
+      },
+      "frozen_m1_missing_on_common_feedback": {
+        "AB": 169
+      }
+    },
+    "unchanged_frozen_m1_wrist_errors": {
+      "frozen_m1_max_wrist_position_error_mm": {
+        "A": {
+          "n": 90893,
+          "p50": 360.89688911192434,
+          "p95": 715.5790191691382,
+          "p99": 1012.3565177662737
+        },
+        "B": {
+          "n": 90893,
+          "p50": 379.8380021854602,
+          "p95": 701.9179975468129,
+          "p99": 988.0413302681039
+        },
+        "B_minus_A_on_paired_ticks": {
+          "n": 90893,
+          "p50": 4.735813253853621,
+          "p95": 56.85988066181758,
+          "p99": 113.57035572516449
+        }
+      },
+      "frozen_m1_max_wrist_rotation_error_deg": {
+        "A": {
+          "n": 90893,
+          "p50": 63.52388465567545,
+          "p95": 103.64888226093584,
+          "p99": 126.92105023776855
+        },
+        "B": {
+          "n": 90893,
+          "p50": 55.49878356647504,
+          "p95": 89.43825245824189,
+          "p99": 104.42755065137194
+        },
+        "B_minus_A_on_paired_ticks": {
+          "n": 90893,
+          "p50": -5.766681602651701,
+          "p95": 20.273523637774694,
+          "p99": 27.00667250363072
+        }
+      }
+    }
+  },
+  "lifecycle": {
+    "coherent_feedback_outside_native_active_epoch": 0,
+    "eligible_connected_hand_messages": 466241,
+    "extra_hand_fields_invalid": 0,
+    "extra_hand_fields_missing": 0,
+    "four_original_human_inputs": 32,
+    "one_common_active_task_session": 32,
+    "recorded_roots": 32,
+    "stop_ack": 32
+  },
+  "run": "TELEOP-SHARED-RIGID-REPROCESS-01",
+  "schema": "s05.teleop.shared_rigid_reprocess_receipt.v1",
+  "teleop_commit": "30cf13bdc496c43b3016462cfa0a206334d1ff7f",
+  "training_admission": false
+}
