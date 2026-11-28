@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/NATIVE-EVENT-INTENT-ROOT05-01/dexgym-event/scripts/s0_5_campaign_teleop/native_hand_driver_probe.py", line 124, in controls
+    assert fault.all() and np.array_equal(q[14:], measured[14:])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

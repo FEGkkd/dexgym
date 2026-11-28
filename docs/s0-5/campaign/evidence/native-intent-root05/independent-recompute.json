@@ -1,0 +1,141 @@
+{
+  "scope": "DIAGNOSTIC_ONLY",
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "denominators": {
+    "full_root": {
+      "planned_ticks": 4844,
+      "joint_valid_ticks": 4831,
+      "five_frame_ticks": 4741,
+      "nominal_pair_eligible_ticks": 4831
+    },
+    "start_window": {
+      "planned_ticks": 4804,
+      "joint_valid_ticks": 4794,
+      "five_frame_ticks": 4708,
+      "nominal_pair_eligible_ticks": 4794
+    }
+  },
+  "partitions": {
+    "recording:8d51b482abc64ad7af84b3fe/00000": 400,
+    "recording:8d51b482abc64ad7af84b3fe/00001": 400,
+    "recording:8d51b482abc64ad7af84b3fe/00002": 400,
+    "recording:8d51b482abc64ad7af84b3fe/00003": 400,
+    "recording:8d51b482abc64ad7af84b3fe/00004": 400,
+    "recording:8d51b482abc64ad7af84b3fe/00005": 400,
+    "recording:8d51b482abc64ad7af84b3fe/00006": 400,
+    "recording:8d51b482abc64ad7af84b3fe/00007": 400,
+    "recording:8d51b482abc64ad7af84b3fe/00008": 400,
+    "recording:8d51b482abc64ad7af84b3fe/00009": 400,
+    "recording:8d51b482abc64ad7af84b3fe/00010": 400,
+    "recording:8d51b482abc64ad7af84b3fe/00011": 400,
+    "recording:8d51b482abc64ad7af84b3fe/00012": 44
+  },
+  "writer_events": 23242,
+  "exact_L2_L3_L4_events": 23242,
+  "grids": {
+    "rows_500hz": 48435,
+    "rows_50hz": 4844,
+    "supported_50hz": {
+      "left": 4842,
+      "right": 4842
+    },
+    "max_grid_lag_ns": 96,
+    "max_receive_to_sample_age_ns": {
+      "left": 8192267,
+      "right": 8178612
+    },
+    "publications_by_capture_end": 23242
+  },
+  "physics": {
+    "window_rows": {
+      "0": 105,
+      "None": 4189,
+      "1": 85,
+      "2": 85,
+      "3": 85,
+      "4": 85,
+      "5": 85,
+      "6": 85
+    },
+    "modes": {
+      "A": {
+        "native_accepted": 2712,
+        "native_rejected": 0,
+        "substeps": 5652,
+        "maximum_hand_speed_rad_s": 3.575565451821521,
+        "velocity_excesses": 0,
+        "events": 0,
+        "penetration_steps": 0,
+        "named_contact_steps": 0,
+        "rmb_feedback_at_exact_signed_tick": 561,
+        "rmb_feedback_at_leading_cutoff": 560
+      },
+      "B": {
+        "substeps": 5851,
+        "maximum_hand_speed_rad_s": 3.6683976485598366,
+        "velocity_excesses": 0,
+        "events": 0,
+        "penetration_steps": 0,
+        "named_contact_steps": 0,
+        "rmb_feedback_at_exact_signed_tick": 580,
+        "rmb_feedback_at_leading_cutoff": 579
+      },
+      "C": {
+        "native_accepted": 2712,
+        "native_rejected": 0,
+        "substeps": 5652,
+        "maximum_hand_speed_rad_s": 3.575565451821521,
+        "velocity_excesses": 0,
+        "events": 0,
+        "penetration_steps": 0,
+        "named_contact_steps": 0,
+        "rmb_feedback_at_exact_signed_tick": 561,
+        "rmb_feedback_at_leading_cutoff": 560
+      },
+      "D": {
+        "native_accepted": 2708,
+        "native_rejected": 0,
+        "substeps": 5644,
+        "maximum_hand_speed_rad_s": 3.575565451821521,
+        "velocity_excesses": 0,
+        "events": 0,
+        "penetration_steps": 0,
+        "named_contact_steps": 0,
+        "rmb_feedback_at_exact_signed_tick": 560,
+        "rmb_feedback_at_leading_cutoff": 560
+      }
+    },
+    "A_C_paired_fields": {
+      "compared_substeps": 6150
+    },
+    "C_D_shadow": {
+      "PERMIT/PERMIT": 5440,
+      "same_live_C_D_snapshot": 5617,
+      "SWEEP_UNPROVEN/SWEEP_UNPROVEN": 41,
+      "PERMIT/SWEEP_UNPROVEN": 3,
+      "diverged_live_C_D_snapshot": 28,
+      "COLLISION/SWEEP_UNPROVEN": 22,
+      "COLLISION/COLLISION": 148
+    },
+    "leading_offset_min_max_ns": [
+      904,
+      1000
+    ]
+  },
+  "sha256": {
+    "audit": "5c2911706e52c6b3b1ad66a7bc74ed2772ffcb784a8f5c0a1ff377bdc2cd55b8",
+    "ticks": "e99addfcec5841ff893f399ef8942822b1da01c0024cb4463827fd1593490fc0",
+    "windows": "0931007455bf9aaf178f6260726e037e74cc69a404b9345439c186263c9b822c",
+    "raw_partitions": "80c02192e9c11e4c62b1eeb7b0852e89a0bf3bcd00a15dc5c7ceb69a280e07cf",
+    "partition_receipt": "cab126fba6d8e619a83f0433f2ad6dc3cc11786bb7c0926afd879f4760a75cd9",
+    "replay_receipt": "e2e660632571ab008c23f24198922389c152c333587e0df3e580cb7fb0f8eb25",
+    "samples": "54a79cf8d52601fc8c03045db60d584c2d3b0dbfe3fd84eab255e5fb207b903e",
+    "zoh": "1343b71c84ff34dbae8e5d02f6c15d5d0ab215591e024e9d80ee854e9ac3fa56",
+    "physics": "d683866e9c9864d61c3e1f151da073285cf55713ec72b884a070b70e7e577d68",
+    "physics_receipt": "1b03a69d43d16f60f8592e0a8f2c4824b88a392a45f9db36982786f9e50d426c",
+    "events": "c32a2987d55ab6137ac44e28cf3e1661012c5e88c1c6cd7a1fba178494585ffa",
+    "archived_a": "e279269347fa071c93550c003000f87c40f27249a0259c737678e50710763ec2",
+    "recovered_c": "e279269347fa071c93550c003000f87c40f27249a0259c737678e50710763ec2",
+    "verifier": "5e05b3a67587fe7b8b6f59c271694f234a9819f50f9a1f6d8a02337c469848d4"
+  }
+}

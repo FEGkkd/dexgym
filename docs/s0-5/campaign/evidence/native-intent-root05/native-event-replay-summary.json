@@ -1,0 +1,510 @@
+{
+  "schema": "s05.teleop.native_event_replay.v1",
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "scope": "DIAGNOSTIC_ONLY",
+  "formal_coverage_credit": false,
+  "historical_teleop_callback_clock": "UNOBSERVED",
+  "historical_callback_gate": "UNOBSERVED",
+  "replay_callback_clock": "RECONSTRUCTED_COLLECTOR_ORDER",
+  "replay_callback_gate": "DIAGNOSTIC_OPEN",
+  "collector_origin_mono_ns": 621698743607975,
+  "capture_stop_exclusive_ns": 96868267152,
+  "callback_offset_ns": 0,
+  "callback_order": "COLLECTOR_MONOTONIC_SIDE_PHYSICAL_INDEX",
+  "published": {
+    "left": 11621,
+    "right": 11621
+  },
+  "callback_calls": {
+    "left": 11621,
+    "right": 11621
+  },
+  "callback_stages": {
+    "left/PUBLISHED": 11621,
+    "right/PUBLISHED": 11621
+  },
+  "joint_names": {
+    "left": [
+      "l_THJ0",
+      "l_THJ1",
+      "l_THJ2",
+      "l_THJ3",
+      "l_FFJ0",
+      "l_FFJ1",
+      "l_FFJ2",
+      "l_FFJ3",
+      "l_MFJ0",
+      "l_MFJ1",
+      "l_MFJ2",
+      "l_MFJ3",
+      "l_RFJ0",
+      "l_RFJ1",
+      "l_RFJ2",
+      "l_RFJ3",
+      "l_LFJ0",
+      "l_LFJ1",
+      "l_LFJ2",
+      "l_LFJ3"
+    ],
+    "right": [
+      "r_THJ0",
+      "r_THJ1",
+      "r_THJ2",
+      "r_THJ3",
+      "r_FFJ0",
+      "r_FFJ1",
+      "r_FFJ2",
+      "r_FFJ3",
+      "r_MFJ0",
+      "r_MFJ1",
+      "r_MFJ2",
+      "r_MFJ3",
+      "r_RFJ0",
+      "r_RFJ1",
+      "r_RFJ2",
+      "r_RFJ3",
+      "r_LFJ0",
+      "r_LFJ1",
+      "r_LFJ2",
+      "r_LFJ3"
+    ]
+  },
+  "session_creations_per_side": 1,
+  "explicit_session_resets": 0,
+  "partition_resets": 0,
+  "zoh_scope": "NATIVE_L4_PRE_DRIVER",
+  "zoh_step_ns": 2000000,
+  "signed_sample_nominal_step_ns": 20000000,
+  "zoh_rule": "LATEST_PUBLISHED_PER_SIDE_WITH_RECEIVE_NS_LE_ZOH_CUTOFF_NS",
+  "sample_rule": "LATEST_500HZ_ROW_WITH_ZOH_CUTOFF_NS_LE_SIGNED_HMB_TICK_NS",
+  "grids": {
+    "rows_500hz": 48435,
+    "rows_50hz": 4844,
+    "supported_50hz": {
+      "left": 4842,
+      "right": 4842
+    },
+    "max_grid_lag_ns": 96,
+    "max_receive_to_sample_age_ns": {
+      "left": 8192267,
+      "right": 8178612
+    },
+    "partitions": [
+      {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+        "first_root_tick": 0,
+        "ticks": 400,
+        "first_sample": {
+          "tick_ns": 0,
+          "zoh_cutoff_ns": 0,
+          "held_receive_ns": [
+            null,
+            null
+          ],
+          "held_source_index": [
+            null,
+            null
+          ],
+          "native_calls": {}
+        }
+      },
+      {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00001",
+        "first_root_tick": 400,
+        "ticks": 400,
+        "first_sample": {
+          "tick_ns": 8000000070,
+          "zoh_cutoff_ns": 8000000000,
+          "held_receive_ns": [
+            7995195537,
+            7995205033
+          ],
+          "held_source_index": [
+            "asset:9b8da9d8bd97543fd07fac4d:1912",
+            "asset:780754eb69a2e19d197d5878:1912"
+          ],
+          "native_calls": {
+            "left": 957,
+            "right": 957
+          }
+        }
+      },
+      {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00002",
+        "first_root_tick": 800,
+        "ticks": 400,
+        "first_sample": {
+          "tick_ns": 16000000086,
+          "zoh_cutoff_ns": 16000000000,
+          "held_receive_ns": [
+            15995191291,
+            15995200020
+          ],
+          "held_source_index": [
+            "asset:9b8da9d8bd97543fd07fac4d:3832",
+            "asset:780754eb69a2e19d197d5878:3832"
+          ],
+          "native_calls": {
+            "left": 1917,
+            "right": 1917
+          }
+        }
+      },
+      {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00003",
+        "first_root_tick": 1200,
+        "ticks": 400,
+        "first_sample": {
+          "tick_ns": 24000000078,
+          "zoh_cutoff_ns": 24000000000,
+          "held_receive_ns": [
+            23995183204,
+            23995189531
+          ],
+          "held_source_index": [
+            "asset:9b8da9d8bd97543fd07fac4d:5752",
+            "asset:780754eb69a2e19d197d5878:5752"
+          ],
+          "native_calls": {
+            "left": 2877,
+            "right": 2877
+          }
+        }
+      },
+      {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+        "first_root_tick": 1600,
+        "ticks": 400,
+        "first_sample": {
+          "tick_ns": 32000000070,
+          "zoh_cutoff_ns": 32000000000,
+          "held_receive_ns": [
+            31995186746,
+            31995197084
+          ],
+          "held_source_index": [
+            "asset:9b8da9d8bd97543fd07fac4d:7672",
+            "asset:780754eb69a2e19d197d5878:7672"
+          ],
+          "native_calls": {
+            "left": 3837,
+            "right": 3837
+          }
+        }
+      },
+      {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00005",
+        "first_root_tick": 2000,
+        "ticks": 400,
+        "first_sample": {
+          "tick_ns": 40000000073,
+          "zoh_cutoff_ns": 40000000000,
+          "held_receive_ns": [
+            39995203944,
+            39995215414
+          ],
+          "held_source_index": [
+            "asset:9b8da9d8bd97543fd07fac4d:9592",
+            "asset:780754eb69a2e19d197d5878:9592"
+          ],
+          "native_calls": {
+            "left": 4797,
+            "right": 4797
+          }
+        }
+      },
+      {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00006",
+        "first_root_tick": 2400,
+        "ticks": 400,
+        "first_sample": {
+          "tick_ns": 48000000096,
+          "zoh_cutoff_ns": 48000000000,
+          "held_receive_ns": [
+            47995245693,
+            47995251767
+          ],
+          "held_source_index": [
+            "asset:9b8da9d8bd97543fd07fac4d:11512",
+            "asset:780754eb69a2e19d197d5878:11512"
+          ],
+          "native_calls": {
+            "left": 5757,
+            "right": 5757
+          }
+        }
+      },
+      {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00007",
+        "first_root_tick": 2800,
+        "ticks": 400,
+        "first_sample": {
+          "tick_ns": 56000000082,
+          "zoh_cutoff_ns": 56000000000,
+          "held_receive_ns": [
+            55995161854,
+            55995167206
+          ],
+          "held_source_index": [
+            "asset:9b8da9d8bd97543fd07fac4d:13432",
+            "asset:780754eb69a2e19d197d5878:13432"
+          ],
+          "native_calls": {
+            "left": 6717,
+            "right": 6717
+          }
+        }
+      },
+      {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00008",
+        "first_root_tick": 3200,
+        "ticks": 400,
+        "first_sample": {
+          "tick_ns": 64000000077,
+          "zoh_cutoff_ns": 64000000000,
+          "held_receive_ns": [
+            63995212551,
+            63995232853
+          ],
+          "held_source_index": [
+            "asset:9b8da9d8bd97543fd07fac4d:15352",
+            "asset:780754eb69a2e19d197d5878:15352"
+          ],
+          "native_calls": {
+            "left": 7677,
+            "right": 7677
+          }
+        }
+      },
+      {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+        "first_root_tick": 3600,
+        "ticks": 400,
+        "first_sample": {
+          "tick_ns": 72000000065,
+          "zoh_cutoff_ns": 72000000000,
+          "held_receive_ns": [
+            71995255033,
+            71995260088
+          ],
+          "held_source_index": [
+            "asset:9b8da9d8bd97543fd07fac4d:17272",
+            "asset:780754eb69a2e19d197d5878:17272"
+          ],
+          "native_calls": {
+            "left": 8637,
+            "right": 8637
+          }
+        }
+      },
+      {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00010",
+        "first_root_tick": 4000,
+        "ticks": 400,
+        "first_sample": {
+          "tick_ns": 80000000070,
+          "zoh_cutoff_ns": 80000000000,
+          "held_receive_ns": [
+            79995147179,
+            79995149310
+          ],
+          "held_source_index": [
+            "asset:9b8da9d8bd97543fd07fac4d:19192",
+            "asset:780754eb69a2e19d197d5878:19192"
+          ],
+          "native_calls": {
+            "left": 9597,
+            "right": 9597
+          }
+        }
+      },
+      {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00011",
+        "first_root_tick": 4400,
+        "ticks": 400,
+        "first_sample": {
+          "tick_ns": 88000000072,
+          "zoh_cutoff_ns": 88000000000,
+          "held_receive_ns": [
+            87995165565,
+            87995182944
+          ],
+          "held_source_index": [
+            "asset:9b8da9d8bd97543fd07fac4d:21112",
+            "asset:780754eb69a2e19d197d5878:21112"
+          ],
+          "native_calls": {
+            "left": 10557,
+            "right": 10557
+          }
+        }
+      },
+      {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00012",
+        "first_root_tick": 4800,
+        "ticks": 44,
+        "first_sample": {
+          "tick_ns": 96000000075,
+          "zoh_cutoff_ns": 96000000000,
+          "held_receive_ns": [
+            95995257796,
+            95995269665
+          ],
+          "held_source_index": [
+            "asset:9b8da9d8bd97543fd07fac4d:23032",
+            "asset:780754eb69a2e19d197d5878:23032"
+          ],
+          "native_calls": {
+            "left": 11517,
+            "right": 11517
+          }
+        }
+      }
+    ]
+  },
+  "provenance": {
+    "teleop_revision": "6d0b0b5b2601618f1b0052d93ef2403eea9b064a",
+    "source_sha256": {
+      "src/whole_body_teleop/src/retarget_node.cpp": "6699176c4a278445c5ef10631ef8b9f9d538aa816353d78ea2b99eba9ee8c117",
+      "src/whole_body_teleop/include/manus_wuji_teleop/command_smoother.hpp": "717221eda5edfa1e00778adfabf474b0c8b3ff9e5b1726b4398c89f43d0be0d1",
+      "third_party/wuji_c_api/release-lock.json": "9eb7040687a8409af5bb9cd7c6452d73672bb96edc7aa106d3ba7167bf32c6fc",
+      "src/wuji_sdk_cpp/src/retarget_session.cpp": "2dba16308d135d6a57774d27d819410206ae48313907dba2145366716240e297",
+      "src/wuji_sdk_cpp/src/sdk_manager.cpp": "950937ab6532bbc748975fbdb720020b1d703f39b49e9935d43143471a69d7ff",
+      "src/wuji_sdk_cpp/src/error.cpp": "382caa5f005ed9856286f7ec3b2be77ab9af257eec620c89158d1a00a40f5070",
+      "src/whole_body_teleop/config/real.yaml": "570a9d684bc333dbc141716c031bb76e3234a072d2edcbe752dbb74c5ac21588",
+      "src/whole_body_teleop/config/sim.yaml": "171e16780c1e9a2a4c003c3ad986a53d4ad9924c2a2ea274ee2b1846b2561b70",
+      "src/wuji_sdk_cpp/include/wuji_sdk_cpp/error.hpp": "fe4149991fc2d1de66f56d2ae08e3c1dcf8ce302e72277361094196b574c016d",
+      "src/wuji_sdk_cpp/include/wuji_sdk_cpp/hand2_client.hpp": "13d3f0fad0831eed58f3e57419225d21c43a99abe12f65f4f37c4b2fc405f590",
+      "src/wuji_sdk_cpp/include/wuji_sdk_cpp/retarget_session.hpp": "32d834a6d751d9a58148af2471e0a3516411d6e701a1a6855b49fb253c095ebf",
+      "src/wuji_sdk_cpp/include/wuji_sdk_cpp/sdk_manager.hpp": "f07ecf8a666520f4ee199c11c558e11cc2f9333fbfb6371c14c29e362c004c58",
+      "src/wuji_sdk_cpp/include/wuji_sdk_cpp/sdk_version.hpp": "fbf878ba1000d4e7e820379e870efa0c1feef7eb63624215c4d48e6bdb39fb55"
+    },
+    "wrapper_cpp_sha256": "13563ba0060aac629e8188155b0cff7e1f1afa81d14c419bec0a9ad9e3987d5d",
+    "python_sha256": "c368046baa1732c92b50eb766b57a20caf544629bddd17a70d29eef408b3e2e8",
+    "instrumented_callback_sha256": "49c0dcb9f78988ae1ac79dd56318e7bc660080b4e4e5b0c8f9989f4d0cfa743b",
+    "bridge_sha256": "f7201351ce4cd24656f21c0f78ee2bbfb26a9fd29203140ba5b6a80fff74ed93",
+    "wuji_library": "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/third_party/wuji_c_api/lib/libwuji_sdk_c.so",
+    "wuji_release": {
+      "version": "2026.10.26",
+      "tag": "v2026.10.26",
+      "release_url": "https://github.com/wuji-technology/wuji-sdk/releases/tag/v2026.10.26",
+      "asset": "wuji-sdk-c-2026.10.26-x86_64-linux-gnu.tar.gz",
+      "asset_url": "https://github.com/wuji-technology/wuji-sdk/releases/download/v2026.10.26/wuji-sdk-c-2026.10.26-x86_64-linux-gnu.tar.gz",
+      "archive_sha256": "ecd2fd28fb8c09c177ded2bb2961e9293709bdc9de71957a5a647e83cff35722",
+      "archive_size": 11175357,
+      "header_sha256": "d07aef2a5dbfb203d041852d5e21621de57d19844db2a2f4603f2fd019575693",
+      "library_sha256": "1bdc160c6c27a9b1bfa727dfb7c33c8b01fbb5acbefc8cfdfa17b2fd84c75282",
+      "library_version": "2026.10.26"
+    },
+    "build_command": [
+      "g++",
+      "-std=c++20",
+      "-O2",
+      "-fPIC",
+      "-shared",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-I",
+      "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/TELEOP-PARITY-ROOT05-01/wuji/build",
+      "-I",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/whole_body_teleop/include",
+      "-I",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/wuji_sdk_cpp/include",
+      "-I",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/third_party/wuji_c_api/include",
+      "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/TELEOP-PARITY-ROOT05-01/dexgym/scripts/s0_5_campaign_teleop/parity_wuji_probe.cpp",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/wuji_sdk_cpp/src/retarget_session.cpp",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/wuji_sdk_cpp/src/sdk_manager.cpp",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/wuji_sdk_cpp/src/error.cpp",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/third_party/wuji_c_api/lib/libwuji_sdk_c.so",
+      "-Wl,-rpath,/home/ubuntu/dexgym_worktrees/teleop-sim0-study/third_party/wuji_c_api/lib",
+      "-Wl,-z,defs",
+      "-o",
+      "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/TELEOP-PARITY-ROOT05-01/wuji/build/libparity_wuji_probe.so"
+    ],
+    "bridge_path": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/TELEOP-PARITY-ROOT05-01/wuji/build/libparity_wuji_probe.so",
+    "bridge_reused": true,
+    "loaded_wuji": {
+      "path": "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/third_party/wuji_c_api/lib/libwuji_sdk_c.so",
+      "sha256": "1bdc160c6c27a9b1bfa727dfb7c33c8b01fbb5acbefc8cfdfa17b2fd84c75282"
+    }
+  },
+  "profile_by_side": {
+    "left": {
+      "manus_rotation_z_deg": 15.0,
+      "max_input_age_ms": 100,
+      "output_lp_alpha": 0.3,
+      "glove_id": 0,
+      "input_topic": "/manus_glove_left",
+      "command_topic": "/left_hand/command"
+    },
+    "right": {
+      "manus_rotation_z_deg": -15.0,
+      "max_input_age_ms": 100,
+      "output_lp_alpha": 0.3,
+      "glove_id": 0,
+      "input_topic": "/manus_glove_right",
+      "command_topic": "/right_hand/command"
+    }
+  },
+  "signed_identities": {
+    "config": "6aeaa203e39bea392bc20d5fceee26ea5f85752d219824f98f96b2c852846317",
+    "handoff": "cc1f21ead157e576113a184dba48a5d2596f4835ffdf53e554823cb67eb3fb97",
+    "hmb_index": "fecb0c31ee78c6d3ecc0923fe2101aba2f1b06bd7e878786839fe22d40f7cc1d",
+    "hmb_manifest": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074",
+    "plan": "0f94b842e2558ec04da257aff94d469ae9b965968fff1a4593382fc2eea09404",
+    "reconstruction": "477cc0b64e967a7dfb9d3d2ceb2eaf27da42f1306d372cf8e42a06e1120f63d3",
+    "whitelist": "1228c92b5ffff81df9058878ab5f555dd933781934f2ca9cc6ff567bfa2dd93b"
+  },
+  "source_sha256": {
+    "events": "c32a2987d55ab6137ac44e28cf3e1661012c5e88c1c6cd7a1fba178494585ffa",
+    "ticks": "e99addfcec5841ff893f399ef8942822b1da01c0024cb4463827fd1593490fc0",
+    "event_audit": "5c2911706e52c6b3b1ad66a7bc74ed2772ffcb784a8f5c0a1ff377bdc2cd55b8",
+    "archived_a": "e279269347fa071c93550c003000f87c40f27249a0259c737678e50710763ec2",
+    "archived_a_summary": "7622a45fef7564295a4131e6dd74b0931ef01fef54f59e8748e7bdcec7cfaec0"
+  },
+  "script_sha256": "9bd1f90a8f39031a315e0d3f7e519132af3b8e2e96011abb31119fa1c8adcccb",
+  "output_sha256": {
+    "wuji-c-updates.jsonl": "e279269347fa071c93550c003000f87c40f27249a0259c737678e50710763ec2",
+    "native-zoh-500hz.jsonl.gz": "1343b71c84ff34dbae8e5d02f6c15d5d0ab215591e024e9d80ee854e9ac3fa56",
+    "native-samples-50hz.jsonl.gz": "54a79cf8d52601fc8c03045db60d584c2d3b0dbfe3fd84eab255e5fb207b903e"
+  },
+  "exact_against_archived_a": {
+    "left": {
+      "L2": {
+        "present": 11621,
+        "exact": 11621,
+        "missing": 0
+      },
+      "L3": {
+        "present": 11621,
+        "exact": 11621,
+        "missing": 0
+      },
+      "L4": {
+        "present": 11621,
+        "exact": 11621,
+        "missing": 0
+      }
+    },
+    "right": {
+      "L2": {
+        "present": 11621,
+        "exact": 11621,
+        "missing": 0
+      },
+      "L3": {
+        "present": 11621,
+        "exact": 11621,
+        "missing": 0
+      },
+      "L4": {
+        "present": 11621,
+        "exact": 11621,
+        "missing": 0
+      }
+    }
+  },
+  "callback_output_byte_identical_to_a": true
+}

@@ -1,0 +1,1016 @@
+{
+  "all_fault_steps": [],
+  "driver_controls": {
+    "duplicate_rejected": true,
+    "future_rejected": true,
+    "independent_hands": true,
+    "smoothstep_and_clip": true,
+    "stale_rejected": true,
+    "timeout_latches_measured_once_per_side": true,
+    "valid_hold": true
+  },
+  "driver_source": {
+    "adapter_sha256": "dd9c39b75309837323190894f1cf2cb983885ed76796b70cca860c0c1fc7bcc3",
+    "binary_sha256": "a17ed7ad5017944b413891b3468ad0aee95a453426f4a32dd862aaafd3508614",
+    "compiler_command": [
+      "g++",
+      "-std=c++20",
+      "-O2",
+      "-fPIC",
+      "-shared",
+      "-Wall",
+      "-Wextra",
+      "-I",
+      "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/NATIVE-EVENT-INTENT-ROOT05-01/physics/driver-build",
+      "-I",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/whole_body_mujoco_driver/include",
+      "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/NATIVE-EVENT-INTENT-ROOT05-01/dexgym-windows/scripts/s0_5_campaign_teleop/native_hand_driver_probe.cpp",
+      "-o",
+      "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/NATIVE-EVENT-INTENT-ROOT05-01/physics/driver-build/libnative_hand_driver_probe.so"
+    ],
+    "config": {
+      "hand_command_timeout_sec": 0.1,
+      "hand_handoff_hold_sec": 0.5,
+      "hand_handoff_ramp_sec": 1.0
+    },
+    "extracted_sha256": {
+      "native_hand_accept.inc": "b939853d38ff8050490fe000fa68610be380b7f5d9f5d7b4e79065a44b46efc6",
+      "native_hand_hold.inc": "1b3f8c72ae1ecc15c08143112ec84a5579c0524982e13c15c14c2afb630b4db2",
+      "native_hand_watchdog.inc": "b360ac1d63b0c6582928b6dae081e9b4c683ac4eda33fa1f589b105c2f5b6d1f"
+    },
+    "native_revision": "6d0b0b5b2601618f1b0052d93ef2403eea9b064a",
+    "source_sha256": {
+      "src/whole_body_mujoco_driver/config/sim.yaml": "9a9703b9eae0567b22aa392eb06a04bb1408c9780807e86b44b30a24c916fe08",
+      "src/whole_body_mujoco_driver/include/whole_body_mujoco_driver/model_joints.hpp": "3da888256356481f876df4f2d93ceb53c5a877bbb32b1ef948ffe7ce88b4a801",
+      "src/whole_body_mujoco_driver/src/mujoco_backend.cpp": "18726e07f19d04281759e278b32512edb1c4f6a0535231a4c2e4f3e955ca126b"
+    },
+    "wrapper_sha256": "af693103b3c30151d26f5769f0e195efccf831a460e6036a3e0da55de4552a4c"
+  },
+  "experiment_status": {
+    "A": {
+      "COMPLETE": 564,
+      "NOT_EXECUTED": 4238,
+      "PARTIAL": 2
+    },
+    "B": {
+      "COMPLETE": 583,
+      "NOT_EXECUTED": 4218,
+      "PARTIAL": 3
+    },
+    "C": {
+      "COMPLETE": 564,
+      "NOT_EXECUTED": 4238,
+      "PARTIAL": 2
+    },
+    "D": {
+      "COMPLETE": 564,
+      "NOT_EXECUTED": 4238,
+      "PARTIAL": 2
+    }
+  },
+  "formal_coverage_credit": false,
+  "full": {
+    "hmb_five_frame_candidate_ticks": 4741,
+    "hmb_joint_valid_ticks": 4831,
+    "partitions": 13,
+    "plan_ticks": 4844
+  },
+  "paired_A_C": {
+    "q_applied:equal": 5652,
+    "q_driver_command:equal": 5654,
+    "q_issued:equal": 5652,
+    "q_measured:equal": 5652,
+    "qd_measured:equal": 5652,
+    "sources:equal": 5654
+  },
+  "physical_clock": "Signed START-anchored lockstep grid plus the previous reconstruction's 1 us cutoff margin",
+  "physics": {
+    "A": {
+      "candidate:COLLISION:CLEARANCE_VIOLATION": 8,
+      "candidate:COLLISION:PENETRATION": 162,
+      "candidate:PERMIT:PERMIT": 5443,
+      "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 19,
+      "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_QUERIES": 22,
+      "driver_accepted": 2712,
+      "held_steps": 209,
+      "max_hand_speed_rad_s": 3.575565451821521,
+      "moved_steps": 897,
+      "penetrating_steps": 0,
+      "physics_events": 0,
+      "physics_steps": 5652,
+      "rejoining_steps": 5,
+      "sampled_minimum_gap_m": 0.0008024632697924972,
+      "signed_contacts": 0,
+      "wrist_position_drift_mm": {
+        "max": [
+          0.0647880475576072,
+          0.1005071159887479
+        ],
+        "n": 566,
+        "p50": [
+          0.013475005094536006,
+          0.018332439856117714
+        ],
+        "p95": [
+          0.043659723145772426,
+          0.052375408264345724
+        ],
+        "p99": [
+          0.061072078246442556,
+          0.07768950489152866
+        ]
+      }
+    },
+    "B": {
+      "candidate:COLLISION:CLEARANCE_VIOLATION": 50,
+      "candidate:COLLISION:PENETRATION": 230,
+      "candidate:PERMIT:PERMIT": 5513,
+      "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 33,
+      "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_QUERIES": 26,
+      "driver_accepted": 1151,
+      "held_steps": 338,
+      "max_hand_speed_rad_s": 3.6683976485598366,
+      "moved_steps": 377,
+      "penetrating_steps": 0,
+      "physics_events": 0,
+      "physics_steps": 5851,
+      "rejoining_steps": 2,
+      "sampled_minimum_gap_m": 0.0007811118848621845,
+      "signed_contacts": 0,
+      "wrist_position_drift_mm": {
+        "max": [
+          0.06988491468782154,
+          0.10513092103484127
+        ],
+        "n": 586,
+        "p50": [
+          0.014136131771341062,
+          0.020855664358086286
+        ],
+        "p95": [
+          0.04566135838756056,
+          0.05864237907896592
+        ],
+        "p99": [
+          0.06591294207382115,
+          0.0886175174283214
+        ]
+      }
+    },
+    "C": {
+      "c_d_snapshot:COLLISION:COLLISION": 148,
+      "c_d_snapshot:COLLISION:SWEEP_UNPROVEN": 22,
+      "c_d_snapshot:PERMIT:PERMIT": 5440,
+      "c_d_snapshot:PERMIT:SWEEP_UNPROVEN": 3,
+      "c_d_snapshot:SWEEP_UNPROVEN:SWEEP_UNPROVEN": 41,
+      "candidate:COLLISION:CLEARANCE_VIOLATION": 8,
+      "candidate:COLLISION:PENETRATION": 162,
+      "candidate:PERMIT:PERMIT": 5443,
+      "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 19,
+      "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_QUERIES": 22,
+      "driver_accepted": 2712,
+      "held_steps": 209,
+      "max_hand_speed_rad_s": 3.575565451821521,
+      "moved_steps": 897,
+      "penetrating_steps": 0,
+      "physics_events": 0,
+      "physics_steps": 5652,
+      "rejoining_steps": 5,
+      "sampled_minimum_gap_m": 0.0008024632697924972,
+      "signed_contacts": 0,
+      "wrist_position_drift_mm": {
+        "max": [
+          0.0647880475576072,
+          0.1005071159887479
+        ],
+        "n": 566,
+        "p50": [
+          0.013475005094536006,
+          0.018332439856117714
+        ],
+        "p95": [
+          0.043659723145772426,
+          0.052375408264345724
+        ],
+        "p99": [
+          0.061072078246442556,
+          0.07768950489152866
+        ]
+      }
+    },
+    "D": {
+      "c_d_snapshot:COLLISION:COLLISION": 139,
+      "c_d_snapshot:COLLISION:SWEEP_UNPROVEN": 22,
+      "c_d_snapshot:PERMIT:PERMIT": 5440,
+      "c_d_snapshot:PERMIT:SWEEP_UNPROVEN": 3,
+      "c_d_snapshot:SWEEP_UNPROVEN:SWEEP_UNPROVEN": 41,
+      "candidate:COLLISION:CLEARANCE_VIOLATION": 8,
+      "candidate:COLLISION:PENETRATION": 153,
+      "candidate:PERMIT:PERMIT": 5443,
+      "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 18,
+      "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_QUERIES": 23,
+      "driver_accepted": 2708,
+      "held_steps": 204,
+      "max_hand_speed_rad_s": 3.575565451821521,
+      "moved_steps": 897,
+      "penetrating_steps": 0,
+      "physics_events": 0,
+      "physics_steps": 5644,
+      "rejoining_steps": 6,
+      "sampled_minimum_gap_m": 0.0008024632697924972,
+      "signed_contacts": 0,
+      "wrist_position_drift_mm": {
+        "max": [
+          0.0647880475576072,
+          0.1005071159887479
+        ],
+        "n": 566,
+        "p50": [
+          0.013475005094536006,
+          0.018332439856117714
+        ],
+        "p95": [
+          0.043659723145772426,
+          0.052375408264345724
+        ],
+        "p99": [
+          0.061072078246442556,
+          0.07768950489152866
+        ]
+      }
+    }
+  },
+  "physics_hz": 500,
+  "rmb_hz": 50,
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "scope": "DIAGNOSTIC_ONLY",
+  "sha256": {
+    "baseline": "d6d83d40b44d29447e1d4a1e357bc0424b123dbabfcc113eef8218d330c605df",
+    "ledger": "d683866e9c9864d61c3e1f151da073285cf55713ec72b884a070b70e7e577d68",
+    "model": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+    "model_receipt": "1d67a6dad1831574af10a1fdf6349638097af6457e9d8527c9bd77e150e876fe",
+    "native_a": "e279269347fa071c93550c003000f87c40f27249a0259c737678e50710763ec2",
+    "native_c": "e279269347fa071c93550c003000f87c40f27249a0259c737678e50710763ec2",
+    "sdk_summary": "7622a45fef7564295a4131e6dd74b0931ef01fef54f59e8748e7bdcec7cfaec0",
+    "sdk_ticks": "f51b74ceeb4052c8a985ad5ea6b43b1017dad27d42f1b8694d2ad3b1d479ff24",
+    "source": "eb5e00592ded43be151a66bcf7724af9eea43d130a9130ce46d62ab09b607aa4",
+    "windows": "0931007455bf9aaf178f6260726e037e74cc69a404b9345439c186263c9b822c"
+  },
+  "signed_joints": [
+    "Joint1_L",
+    "Joint2_L",
+    "Joint3_L",
+    "Joint4_L",
+    "Joint5_L",
+    "Joint6_L",
+    "Joint7_L",
+    "Joint1_R",
+    "Joint2_R",
+    "Joint3_R",
+    "Joint4_R",
+    "Joint5_R",
+    "Joint6_R",
+    "Joint7_R",
+    "l_thumb_cmc_flex",
+    "l_thumb_cmc_abd",
+    "l_thumb_mcp",
+    "l_thumb_ip",
+    "l_index_finger_mcp_flex",
+    "l_index_finger_mcp_abd",
+    "l_index_finger_pip",
+    "l_index_finger_dip",
+    "l_middle_finger_mcp_flex",
+    "l_middle_finger_mcp_abd",
+    "l_middle_finger_pip",
+    "l_middle_finger_dip",
+    "l_ring_finger_mcp_flex",
+    "l_ring_finger_mcp_abd",
+    "l_ring_finger_pip",
+    "l_ring_finger_dip",
+    "l_pinky_mcp_flex",
+    "l_pinky_mcp_abd",
+    "l_pinky_pip",
+    "l_pinky_dip",
+    "r_thumb_cmc_flex",
+    "r_thumb_cmc_abd",
+    "r_thumb_mcp",
+    "r_thumb_ip",
+    "r_index_finger_mcp_flex",
+    "r_index_finger_mcp_abd",
+    "r_index_finger_pip",
+    "r_index_finger_dip",
+    "r_middle_finger_mcp_flex",
+    "r_middle_finger_mcp_abd",
+    "r_middle_finger_pip",
+    "r_middle_finger_dip",
+    "r_ring_finger_mcp_flex",
+    "r_ring_finger_mcp_abd",
+    "r_ring_finger_pip",
+    "r_ring_finger_dip",
+    "r_pinky_mcp_flex",
+    "r_pinky_mcp_abd",
+    "r_pinky_pip",
+    "r_pinky_dip"
+  ],
+  "source_clock": "RECORDED_EVENT_REPLAY",
+  "strict_RMB_sample": "Latest previous observed 500 Hz endpoint no later than exact signed HMB tick",
+  "window": {
+    "hmb_cutoff_start_ns": 800000000,
+    "hmb_cutoff_stop_exclusive_ns": 96868267152,
+    "hmb_five_frame_candidate_ticks": 4708,
+    "hmb_joint_valid_ticks": 4794,
+    "partitions": [
+      {
+        "first_tick": 40,
+        "hmb_five_frame_candidate_ticks": 360,
+        "hmb_joint_valid_ticks": 360,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+        "plan_ticks": 360
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 381,
+        "hmb_joint_valid_ticks": 397,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00001",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00002",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00003",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00005",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00006",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 391,
+        "hmb_joint_valid_ticks": 399,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00007",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 368,
+        "hmb_joint_valid_ticks": 394,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00008",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00010",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00011",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 40,
+        "hmb_joint_valid_ticks": 44,
+        "last_tick": 43,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00012",
+        "plan_ticks": 44
+      }
+    ],
+    "plan_ticks": 4804,
+    "source_cutoff_start_ns": 621699543607975,
+    "source_cutoff_stop_exclusive_ns": 621795611875127
+  },
+  "window_results": [
+    {
+      "counts": {
+        "candidate:PERMIT:PERMIT": 1050,
+        "driver_accepted": 504,
+        "held_steps": 0,
+        "moved_steps": 194,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 1050,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "A",
+      "stop": null,
+      "window": 0
+    },
+    {
+      "counts": {
+        "candidate:PERMIT:PERMIT": 1050,
+        "driver_accepted": 206,
+        "held_steps": 0,
+        "moved_steps": 80,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 1050,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "B",
+      "stop": null,
+      "window": 0
+    },
+    {
+      "counts": {
+        "c_d_snapshot:PERMIT:PERMIT": 1050,
+        "candidate:PERMIT:PERMIT": 1050,
+        "driver_accepted": 504,
+        "held_steps": 0,
+        "moved_steps": 194,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 1050,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "C",
+      "stop": null,
+      "window": 0
+    },
+    {
+      "counts": {
+        "c_d_snapshot:PERMIT:PERMIT": 1050,
+        "candidate:PERMIT:PERMIT": 1050,
+        "driver_accepted": 504,
+        "held_steps": 0,
+        "moved_steps": 194,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 1050,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "D",
+      "stop": null,
+      "window": 0
+    },
+    {
+      "counts": {
+        "candidate:PERMIT:PERMIT": 751,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 10,
+        "driver_accepted": 364,
+        "held_steps": 9,
+        "moved_steps": 122,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 760,
+        "rejoining_steps": 1,
+        "signed_contacts": 0
+      },
+      "mode": "A",
+      "stop": "HOLD_INFEASIBLE:SWEEP_UNPROVEN",
+      "window": 1
+    },
+    {
+      "counts": {
+        "candidate:PERMIT:PERMIT": 810,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 10,
+        "driver_accepted": 164,
+        "held_steps": 9,
+        "moved_steps": 56,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 819,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "B",
+      "stop": "HOLD_INFEASIBLE:SWEEP_UNPROVEN",
+      "window": 1
+    },
+    {
+      "counts": {
+        "c_d_snapshot:PERMIT:PERMIT": 750,
+        "c_d_snapshot:PERMIT:SWEEP_UNPROVEN": 1,
+        "c_d_snapshot:SWEEP_UNPROVEN:SWEEP_UNPROVEN": 10,
+        "candidate:PERMIT:PERMIT": 751,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 10,
+        "driver_accepted": 364,
+        "held_steps": 9,
+        "moved_steps": 122,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 760,
+        "rejoining_steps": 1,
+        "signed_contacts": 0
+      },
+      "mode": "C",
+      "stop": "HOLD_INFEASIBLE:SWEEP_UNPROVEN",
+      "window": 1
+    },
+    {
+      "counts": {
+        "c_d_snapshot:PERMIT:PERMIT": 750,
+        "c_d_snapshot:PERMIT:SWEEP_UNPROVEN": 1,
+        "c_d_snapshot:SWEEP_UNPROVEN:SWEEP_UNPROVEN": 10,
+        "candidate:PERMIT:PERMIT": 751,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 10,
+        "driver_accepted": 364,
+        "held_steps": 10,
+        "moved_steps": 122,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 760,
+        "rejoining_steps": 1,
+        "signed_contacts": 0
+      },
+      "mode": "D",
+      "stop": "HOLD_INFEASIBLE:SWEEP_UNPROVEN",
+      "window": 1
+    },
+    {
+      "counts": {
+        "candidate:COLLISION:CLEARANCE_VIOLATION": 4,
+        "candidate:COLLISION:PENETRATION": 145,
+        "candidate:PERMIT:PERMIT": 695,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 5,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_QUERIES": 1,
+        "driver_accepted": 408,
+        "held_steps": 155,
+        "moved_steps": 108,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 850,
+        "rejoining_steps": 1,
+        "signed_contacts": 0
+      },
+      "mode": "A",
+      "stop": null,
+      "window": 2
+    },
+    {
+      "counts": {
+        "candidate:COLLISION:CLEARANCE_VIOLATION": 10,
+        "candidate:COLLISION:PENETRATION": 130,
+        "candidate:PERMIT:PERMIT": 710,
+        "driver_accepted": 167,
+        "held_steps": 140,
+        "moved_steps": 46,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 850,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "B",
+      "stop": null,
+      "window": 2
+    },
+    {
+      "counts": {
+        "c_d_snapshot:COLLISION:COLLISION": 139,
+        "c_d_snapshot:COLLISION:SWEEP_UNPROVEN": 10,
+        "c_d_snapshot:PERMIT:PERMIT": 695,
+        "c_d_snapshot:SWEEP_UNPROVEN:SWEEP_UNPROVEN": 6,
+        "candidate:COLLISION:CLEARANCE_VIOLATION": 4,
+        "candidate:COLLISION:PENETRATION": 145,
+        "candidate:PERMIT:PERMIT": 695,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 5,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_QUERIES": 1,
+        "driver_accepted": 408,
+        "held_steps": 155,
+        "moved_steps": 108,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 850,
+        "rejoining_steps": 1,
+        "signed_contacts": 0
+      },
+      "mode": "C",
+      "stop": null,
+      "window": 2
+    },
+    {
+      "counts": {
+        "c_d_snapshot:COLLISION:COLLISION": 139,
+        "c_d_snapshot:COLLISION:SWEEP_UNPROVEN": 10,
+        "c_d_snapshot:PERMIT:PERMIT": 695,
+        "c_d_snapshot:SWEEP_UNPROVEN:SWEEP_UNPROVEN": 6,
+        "candidate:COLLISION:CLEARANCE_VIOLATION": 4,
+        "candidate:COLLISION:PENETRATION": 145,
+        "candidate:PERMIT:PERMIT": 695,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 5,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_QUERIES": 1,
+        "driver_accepted": 408,
+        "held_steps": 155,
+        "moved_steps": 108,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 850,
+        "rejoining_steps": 1,
+        "signed_contacts": 0
+      },
+      "mode": "D",
+      "stop": null,
+      "window": 2
+    },
+    {
+      "counts": {
+        "candidate:PERMIT:PERMIT": 592,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_QUERIES": 21,
+        "driver_accepted": 294,
+        "held_steps": 21,
+        "moved_steps": 84,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 613,
+        "rejoining_steps": 3,
+        "signed_contacts": 0
+      },
+      "mode": "A",
+      "stop": "SIXTEEN_CONSECUTIVE_UNPROVED_2MS_TARGETS",
+      "window": 3
+    },
+    {
+      "counts": {
+        "candidate:PERMIT:PERMIT": 593,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_QUERIES": 23,
+        "driver_accepted": 120,
+        "held_steps": 23,
+        "moved_steps": 35,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 616,
+        "rejoining_steps": 2,
+        "signed_contacts": 0
+      },
+      "mode": "B",
+      "stop": "SIXTEEN_CONSECUTIVE_UNPROVED_2MS_TARGETS",
+      "window": 3
+    },
+    {
+      "counts": {
+        "c_d_snapshot:PERMIT:PERMIT": 592,
+        "c_d_snapshot:SWEEP_UNPROVEN:SWEEP_UNPROVEN": 21,
+        "candidate:PERMIT:PERMIT": 592,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_QUERIES": 21,
+        "driver_accepted": 294,
+        "held_steps": 21,
+        "moved_steps": 84,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 613,
+        "rejoining_steps": 3,
+        "signed_contacts": 0
+      },
+      "mode": "C",
+      "stop": "SIXTEEN_CONSECUTIVE_UNPROVED_2MS_TARGETS",
+      "window": 3
+    },
+    {
+      "counts": {
+        "c_d_snapshot:PERMIT:PERMIT": 592,
+        "c_d_snapshot:SWEEP_UNPROVEN:SWEEP_UNPROVEN": 21,
+        "candidate:PERMIT:PERMIT": 592,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_QUERIES": 21,
+        "driver_accepted": 294,
+        "held_steps": 21,
+        "moved_steps": 84,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 613,
+        "rejoining_steps": 3,
+        "signed_contacts": 0
+      },
+      "mode": "D",
+      "stop": "SIXTEEN_CONSECUTIVE_UNPROVED_2MS_TARGETS",
+      "window": 3
+    },
+    {
+      "counts": {
+        "candidate:PERMIT:PERMIT": 850,
+        "driver_accepted": 408,
+        "held_steps": 0,
+        "moved_steps": 145,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 850,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "A",
+      "stop": null,
+      "window": 4
+    },
+    {
+      "counts": {
+        "candidate:PERMIT:PERMIT": 850,
+        "driver_accepted": 167,
+        "held_steps": 0,
+        "moved_steps": 60,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 850,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "B",
+      "stop": null,
+      "window": 4
+    },
+    {
+      "counts": {
+        "c_d_snapshot:PERMIT:PERMIT": 850,
+        "candidate:PERMIT:PERMIT": 850,
+        "driver_accepted": 408,
+        "held_steps": 0,
+        "moved_steps": 145,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 850,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "C",
+      "stop": null,
+      "window": 4
+    },
+    {
+      "counts": {
+        "c_d_snapshot:PERMIT:PERMIT": 850,
+        "candidate:PERMIT:PERMIT": 850,
+        "driver_accepted": 408,
+        "held_steps": 0,
+        "moved_steps": 145,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 850,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "D",
+      "stop": null,
+      "window": 4
+    },
+    {
+      "counts": {
+        "candidate:COLLISION:CLEARANCE_VIOLATION": 4,
+        "candidate:COLLISION:PENETRATION": 17,
+        "candidate:PERMIT:PERMIT": 655,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 4,
+        "driver_accepted": 326,
+        "held_steps": 24,
+        "moved_steps": 99,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 679,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "A",
+      "stop": "HOLD_INFEASIBLE:SWEEP_UNPROVEN",
+      "window": 5
+    },
+    {
+      "counts": {
+        "candidate:COLLISION:CLEARANCE_VIOLATION": 40,
+        "candidate:COLLISION:PENETRATION": 100,
+        "candidate:PERMIT:PERMIT": 650,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 23,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_QUERIES": 3,
+        "driver_accepted": 161,
+        "held_steps": 166,
+        "moved_steps": 40,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 816,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "B",
+      "stop": "SIXTEEN_CONSECUTIVE_UNPROVED_2MS_TARGETS",
+      "window": 5
+    },
+    {
+      "counts": {
+        "c_d_snapshot:COLLISION:COLLISION": 9,
+        "c_d_snapshot:COLLISION:SWEEP_UNPROVEN": 12,
+        "c_d_snapshot:PERMIT:PERMIT": 653,
+        "c_d_snapshot:PERMIT:SWEEP_UNPROVEN": 2,
+        "c_d_snapshot:SWEEP_UNPROVEN:SWEEP_UNPROVEN": 4,
+        "candidate:COLLISION:CLEARANCE_VIOLATION": 4,
+        "candidate:COLLISION:PENETRATION": 17,
+        "candidate:PERMIT:PERMIT": 655,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 4,
+        "driver_accepted": 326,
+        "held_steps": 24,
+        "moved_steps": 99,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 679,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "C",
+      "stop": "HOLD_INFEASIBLE:SWEEP_UNPROVEN",
+      "window": 5
+    },
+    {
+      "counts": {
+        "c_d_snapshot:COLLISION:SWEEP_UNPROVEN": 12,
+        "c_d_snapshot:PERMIT:PERMIT": 653,
+        "c_d_snapshot:PERMIT:SWEEP_UNPROVEN": 2,
+        "c_d_snapshot:SWEEP_UNPROVEN:SWEEP_UNPROVEN": 4,
+        "candidate:COLLISION:CLEARANCE_VIOLATION": 4,
+        "candidate:COLLISION:PENETRATION": 8,
+        "candidate:PERMIT:PERMIT": 655,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_DEPTH": 3,
+        "candidate:SWEEP_UNPROVEN:MAX_SUBDIVISION_QUERIES": 1,
+        "driver_accepted": 322,
+        "held_steps": 18,
+        "moved_steps": 99,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 671,
+        "rejoining_steps": 1,
+        "signed_contacts": 0
+      },
+      "mode": "D",
+      "stop": "SIXTEEN_CONSECUTIVE_UNPROVED_2MS_TARGETS",
+      "window": 5
+    },
+    {
+      "counts": {
+        "candidate:PERMIT:PERMIT": 850,
+        "driver_accepted": 408,
+        "held_steps": 0,
+        "moved_steps": 145,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 850,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "A",
+      "stop": null,
+      "window": 6
+    },
+    {
+      "counts": {
+        "candidate:PERMIT:PERMIT": 850,
+        "driver_accepted": 166,
+        "held_steps": 0,
+        "moved_steps": 60,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 850,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "B",
+      "stop": null,
+      "window": 6
+    },
+    {
+      "counts": {
+        "c_d_snapshot:PERMIT:PERMIT": 850,
+        "candidate:PERMIT:PERMIT": 850,
+        "driver_accepted": 408,
+        "held_steps": 0,
+        "moved_steps": 145,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 850,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "C",
+      "stop": null,
+      "window": 6
+    },
+    {
+      "counts": {
+        "c_d_snapshot:PERMIT:PERMIT": 850,
+        "candidate:PERMIT:PERMIT": 850,
+        "driver_accepted": 408,
+        "held_steps": 0,
+        "moved_steps": 145,
+        "penetrating_steps": 0,
+        "physics_events": 0,
+        "physics_steps": 850,
+        "rejoining_steps": 0,
+        "signed_contacts": 0
+      },
+      "mode": "D",
+      "stop": null,
+      "window": 6
+    }
+  ],
+  "windows": [
+    {
+      "names": [
+        "initial_handoff_control"
+      ],
+      "start_row": 0,
+      "start_tick_ns": 800000000,
+      "stop_exclusive_tick_ns": 2900000000,
+      "stop_row_exclusive": 105
+    },
+    {
+      "names": [
+        "thumb_index_pinch"
+      ],
+      "start_row": 147,
+      "start_tick_ns": 3740000000,
+      "stop_exclusive_tick_ns": 5440000000,
+      "stop_row_exclusive": 232
+    },
+    {
+      "names": [
+        "asymmetric_hands"
+      ],
+      "start_row": 351,
+      "start_tick_ns": 7820000000,
+      "stop_exclusive_tick_ns": 9520000070,
+      "stop_row_exclusive": 436
+    },
+    {
+      "names": [
+        "fist"
+      ],
+      "start_row": 908,
+      "start_tick_ns": 18960000086,
+      "stop_exclusive_tick_ns": 20660000086,
+      "stop_row_exclusive": 993
+    },
+    {
+      "names": [
+        "spread"
+      ],
+      "start_row": 1196,
+      "start_tick_ns": 24720000078,
+      "stop_exclusive_tick_ns": 26420000078,
+      "stop_row_exclusive": 1281
+    },
+    {
+      "names": [
+        "one_finger_flexion"
+      ],
+      "start_row": 2706,
+      "start_tick_ns": 54920000096,
+      "stop_exclusive_tick_ns": 56620000082,
+      "stop_row_exclusive": 2791
+    },
+    {
+      "names": [
+        "natural_open"
+      ],
+      "start_row": 3237,
+      "start_tick_ns": 65540000077,
+      "stop_exclusive_tick_ns": 67240000077,
+      "stop_row_exclusive": 3322
+    }
+  ]
+}

@@ -1,0 +1,226 @@
+{
+  "schema": "s05.teleop.native_raw_event_partitions.v1",
+  "scope": "DIAGNOSTIC_ONLY",
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "formal_coverage_credit": false,
+  "historical_teleop_callback_clock": "UNOBSERVED",
+  "assignment_clock": "RECORDER_MONOTONIC_OFFSET",
+  "collector_origin_mono_ns": 621698743607975,
+  "storage_interval": "FIRST_SIGNED_CUTOFF_INCLUSIVE_TO_NEXT_PARTITION_FIRST_SIGNED_CUTOFF_EXCLUSIVE",
+  "final_storage_stop_exclusive_ns": 96868267152,
+  "no_resampling": true,
+  "native_callback_calls": 0,
+  "partition_tags_scope": "STORAGE_ONLY",
+  "partition_session_resets": 0,
+  "mcaps": {
+    "left": {
+      "asset_id": "asset:9b8da9d8bd97543fd07fac4d",
+      "bytes": 38110452,
+      "canonical_uri": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/data/raw/episodes/18e74d55f7a665ed-b811820d75b53465/streams/manus_left/manus_left_0.mcap",
+      "sha256": "21a6eba6f97b31510a3c793857f2f3d4fce5c8744e3f8de0af2a8d07ab344cb1",
+      "verified_path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/data/raw/episodes/18e74d55f7a665ed-b811820d75b53465/streams/manus_left/manus_left_0.mcap"
+    },
+    "right": {
+      "asset_id": "asset:780754eb69a2e19d197d5878",
+      "bytes": 38110462,
+      "canonical_uri": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/data/raw/episodes/18e74d55f7a665ed-b811820d75b53465/streams/manus_right/manus_right_0.mcap",
+      "sha256": "8109f2151b5697bcb4008e6623f6c325e9e610f7071dbf64da4b23e93afca23e",
+      "verified_path": "/home/ubuntu/MANUS_STEAMVR_ws/dex_data_platform-cpp-collection/data/raw/episodes/18e74d55f7a665ed-b811820d75b53465/streams/manus_right/manus_right_0.mcap"
+    }
+  },
+  "writer_events": {
+    "left": 11621,
+    "right": 11621
+  },
+  "validity_counts": {
+    "left": {
+      "in_recorded_interval": 11621,
+      "geometry_issue_free": 11621,
+      "finite_payload_fields": 11621
+    },
+    "right": {
+      "in_recorded_interval": 11621,
+      "geometry_issue_free": 11621,
+      "finite_payload_fields": 11621
+    }
+  },
+  "partitions": [
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "first_root_tick": 0,
+      "ticks": 400,
+      "first_signed_cutoff_ns": 0,
+      "last_signed_cutoff_ns": 7980000000,
+      "storage_stop_exclusive_ns": 8000000070,
+      "writer_events": {
+        "left": 957,
+        "right": 957
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00001",
+      "first_root_tick": 400,
+      "ticks": 400,
+      "first_signed_cutoff_ns": 8000000070,
+      "last_signed_cutoff_ns": 15980000070,
+      "storage_stop_exclusive_ns": 16000000086,
+      "writer_events": {
+        "left": 960,
+        "right": 960
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00002",
+      "first_root_tick": 800,
+      "ticks": 400,
+      "first_signed_cutoff_ns": 16000000086,
+      "last_signed_cutoff_ns": 23980000086,
+      "storage_stop_exclusive_ns": 24000000078,
+      "writer_events": {
+        "left": 960,
+        "right": 960
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00003",
+      "first_root_tick": 1200,
+      "ticks": 400,
+      "first_signed_cutoff_ns": 24000000078,
+      "last_signed_cutoff_ns": 31980000078,
+      "storage_stop_exclusive_ns": 32000000070,
+      "writer_events": {
+        "left": 960,
+        "right": 960
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "first_root_tick": 1600,
+      "ticks": 400,
+      "first_signed_cutoff_ns": 32000000070,
+      "last_signed_cutoff_ns": 39980000070,
+      "storage_stop_exclusive_ns": 40000000073,
+      "writer_events": {
+        "left": 960,
+        "right": 960
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00005",
+      "first_root_tick": 2000,
+      "ticks": 400,
+      "first_signed_cutoff_ns": 40000000073,
+      "last_signed_cutoff_ns": 47980000073,
+      "storage_stop_exclusive_ns": 48000000096,
+      "writer_events": {
+        "left": 960,
+        "right": 960
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00006",
+      "first_root_tick": 2400,
+      "ticks": 400,
+      "first_signed_cutoff_ns": 48000000096,
+      "last_signed_cutoff_ns": 55980000096,
+      "storage_stop_exclusive_ns": 56000000082,
+      "writer_events": {
+        "left": 960,
+        "right": 960
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00007",
+      "first_root_tick": 2800,
+      "ticks": 400,
+      "first_signed_cutoff_ns": 56000000082,
+      "last_signed_cutoff_ns": 63980000082,
+      "storage_stop_exclusive_ns": 64000000077,
+      "writer_events": {
+        "left": 960,
+        "right": 960
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00008",
+      "first_root_tick": 3200,
+      "ticks": 400,
+      "first_signed_cutoff_ns": 64000000077,
+      "last_signed_cutoff_ns": 71980000077,
+      "storage_stop_exclusive_ns": 72000000065,
+      "writer_events": {
+        "left": 960,
+        "right": 960
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "first_root_tick": 3600,
+      "ticks": 400,
+      "first_signed_cutoff_ns": 72000000065,
+      "last_signed_cutoff_ns": 79980000065,
+      "storage_stop_exclusive_ns": 80000000070,
+      "writer_events": {
+        "left": 960,
+        "right": 960
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00010",
+      "first_root_tick": 4000,
+      "ticks": 400,
+      "first_signed_cutoff_ns": 80000000070,
+      "last_signed_cutoff_ns": 87980000070,
+      "storage_stop_exclusive_ns": 88000000072,
+      "writer_events": {
+        "left": 960,
+        "right": 960
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00011",
+      "first_root_tick": 4400,
+      "ticks": 400,
+      "first_signed_cutoff_ns": 88000000072,
+      "last_signed_cutoff_ns": 95980000072,
+      "storage_stop_exclusive_ns": 96000000075,
+      "writer_events": {
+        "left": 960,
+        "right": 960
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00012",
+      "first_root_tick": 4800,
+      "ticks": 44,
+      "first_signed_cutoff_ns": 96000000075,
+      "last_signed_cutoff_ns": 96860000075,
+      "storage_stop_exclusive_ns": 96868267152,
+      "writer_events": {
+        "left": 104,
+        "right": 104
+      }
+    }
+  ],
+  "outside": {
+    "OUTSIDE_BEFORE_FIRST_SIGNED_CUTOFF": {
+      "left": 0,
+      "right": 0
+    },
+    "OUTSIDE_AT_OR_AFTER_CAPTURE_END": {
+      "left": 0,
+      "right": 0
+    }
+  },
+  "source_sha256": {
+    "events": "c32a2987d55ab6137ac44e28cf3e1661012c5e88c1c6cd7a1fba178494585ffa",
+    "ticks": "e99addfcec5841ff893f399ef8942822b1da01c0024cb4463827fd1593490fc0",
+    "event_audit": "5c2911706e52c6b3b1ad66a7bc74ed2772ffcb784a8f5c0a1ff377bdc2cd55b8"
+  },
+  "recovered_writer_events_sha256": "c32a2987d55ab6137ac44e28cf3e1661012c5e88c1c6cd7a1fba178494585ffa",
+  "roundtrip_exact": true,
+  "output_sha256": {
+    "native-writer-events-by-partition.jsonl.gz": "80c02192e9c11e4c62b1eeb7b0852e89a0bf3bcd00a15dc5c7ceb69a280e07cf"
+  },
+  "script_sha256": "fd649ca96bdb9c20f80ea43ae3eb6dbdbb6de22e7ba7f15f806ac22972115514"
+}
