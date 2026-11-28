@@ -73,7 +73,7 @@ def checked_inputs(attempt, plan_path, cohort_path, model_path):
 
 def trace_data(path, model_sha, anchor):
     groups = defaultdict(dict)
-    times, models, latched, outcomes = [], [], [], []
+    times, models, latched, outcomes, preposition_clocks = [], [], [], [], []
     stages, statuses, measurements, history_input = {}, [], [], []
     previous = -1
     phase_active = False
@@ -97,6 +97,8 @@ def trace_data(path, model_sha, anchor):
                 outcomes.append(row)
             elif kind == "start_measurement":
                 measurements.append((mono, row.get("ready")))
+            elif kind == "preposition_clock":
+                preposition_clocks.append(mono)
             elif kind == "pilot_lifecycle":
                 statuses.append((mono, row["status"]))
             elif kind == "input" and stage == HISTORICAL:
@@ -120,7 +122,8 @@ def trace_data(path, model_sha, anchor):
             elif group[topic][2] is None:
                 seen, q, _ = group[topic]
                 group[topic] = (seen, q, mono)
-    if models != [model_sha] or len(latched) > 1 or len(times) > 1 or len(outcomes) > 1:
+    if (models != [model_sha] or len(latched) > 1 or len(times) > 1 or len(outcomes) > 1
+            or len(preposition_clocks) > 1):
         raise ValueError("Trace model or singleton START/timebase proof differs")
     if history_input and (not times or not latched or not outcomes or outcomes[0]["status"] != "START_REACHED"
                           or min(history_input) < anchor["source_cutoff_ns"]
@@ -148,7 +151,8 @@ def trace_data(path, model_sha, anchor):
         current.sort(key=lambda item: item[:2])
     return {"frames": frames, "locked": locked, "timebase": times[0] if times else None,
             "history_end": max(history_input, default=None), "measurements": measurements, "lifecycle": statuses,
-            "outcome": outcomes[0] if outcomes else {}, "last_observer_ns": previous}
+            "outcome": outcomes[0] if outcomes else {}, "last_observer_ns": previous,
+            "preposition_clock_ns": preposition_clocks[0] if preposition_clocks else None}
 
 
 def feedback_at(frames, receipts, cutoff, ros_cutoff, names):
@@ -217,8 +221,8 @@ def human_rows(cohort, docs, products, root, anchor, end_hmb):
     return samples
 
 
-def render_rows(trace, human, anchor, names, fps, max_seconds):
-    historical = trace["history_end"] is not None
+def render_rows(trace, human, anchor, names, fps, max_seconds, preposition_from_seconds=None):
+    historical = trace["history_end"] is not None and preposition_from_seconds is None
     stage = HISTORICAL if historical else PREPOSITION
     frames = trace["frames"][stage]
     if not historical and not frames:
@@ -234,7 +238,13 @@ def render_rows(trace, human, anchor, names, fps, max_seconds):
     outcome = trace["outcome"]
     if not outcome and any(status == "FAULT_STOP" for _, status in trace["lifecycle"]):
         outcome = {"status": "PROTECTIVE_STOP_NO_HOME_TO_START_HANDOFF"}
-    if historical:
+    if preposition_from_seconds is not None:
+        zero = trace["preposition_clock_ns"]
+        if zero is None or stage != PREPOSITION:
+            raise ValueError("Time-aligned preposition clip requires the common start clock and preposition feedback")
+        origin = zero + round(preposition_from_seconds * 1e9)
+        stop = min(zero + round((preposition_from_seconds + max_seconds) * 1e9), arrivals[-1])
+    elif historical:
         zero = origin = base["origin_mono_ns"]
         last = min(trace["history_end"], anchor["historical_window"]["source_cutoff_stop_exclusive_ns"] - 1)
         stop = min(origin + round(max_seconds * 1e9), origin + last - base["origin_schedule_ns"])
@@ -306,8 +316,9 @@ def dot(draw, centre, radius, color, stroke=2):
 
 
 class DrawVideo:
-    def __init__(self, root, anchor, locked):
+    def __init__(self, root, anchor, locked, center_offset_mm=None):
         self.root = root
+        self.center_offset_mm = center_offset_mm
         h = np.asarray(anchor["registered_wrist_start_h"], dtype=float)
         self.source_center = VIRTUAL_R @ h[:, :3, 3].mean(axis=0)
         self.world_center = (locked @ h)[:, :3, 3].mean(axis=0) if locked is not None else None
@@ -377,6 +388,10 @@ class DrawVideo:
         draw = ImageDraw.Draw(canvas)
         root = self.root.split(":")[-1]
         self.text(draw, (18, 17), "DCR-009   Native MuJoCo guarded diagnostic", "title")
+        offset = self.center_offset_mm
+        if offset is not None:
+            label = "Original center" if not offset else f"{'Left' if offset > 0 else 'Right'} {abs(offset)} mm"
+            self.text(draw, (800, 23), label, "small_title", color=INK, anchor="ma")
         if frame["source_is_frozen_anchor"]:
             stage = "PREPOSITION  |  Frozen human anchor  |  NO HISTORICAL REPLAY"
             if frame["stage"] != PREPOSITION:
@@ -472,11 +487,14 @@ def main():
     parser.add_argument("--docs", type=Path, default=Path(__file__).resolve().parents[2] / "docs/s0-5")
     parser.add_argument("--hmb-products", type=Path)
     parser.add_argument("--max-seconds", type=float, default=8)
+    parser.add_argument("--preposition-from-seconds", type=float)
     parser.add_argument("--fps", type=int, default=25)
     parser.add_argument("--ffmpeg", default="ffmpeg")
     args = parser.parse_args()
     if not 0 < args.max_seconds <= 10 or not 1 <= args.fps <= 50:
         parser.error("Render no more than 10 seconds at 1–50 fps")
+    if args.preposition_from_seconds is not None and not 0 <= args.preposition_from_seconds < 10:
+        parser.error("Preposition start must be in the recorded 10-second bounded window")
     result, input_receipt, path, anchor_path, anchor, model_sha = checked_inputs(
         args.attempt, args.plan, args.cohort, args.model)
     cohort = json.loads(args.cohort.read_bytes())
@@ -484,13 +502,18 @@ def main():
     if len(matches) != 1 or input_receipt["root"] != matches[0]:
         raise ValueError("Input receipt and original signed HMB root metadata differ")
     trace = trace_data(path, model_sha, anchor)
+    center = result.get("center_offset_mm")
+    if center != input_receipt.get("center_offset_mm"):
+        raise ValueError("Video center offset does not match the native input receipt")
     hmb_end = anchor["hmb_cutoff_ns"]
-    if trace["history_end"] is not None:
+    historical = trace["history_end"] is not None and args.preposition_from_seconds is None
+    if historical:
         hmb_end += round(args.max_seconds * 1e9)
     human = human_rows(cohort, args.docs, args.hmb_products, matches[0], anchor, hmb_end)
     robot = RobotModel(args.model)
-    painter = DrawVideo(result["root"], anchor, trace["locked"])
-    rows = render_rows(trace, human, anchor, signed_feedback_names(robot), args.fps, args.max_seconds)
+    painter = DrawVideo(result["root"], anchor, trace["locked"], center)
+    rows = render_rows(trace, human, anchor, signed_feedback_names(robot), args.fps, args.max_seconds,
+                       args.preposition_from_seconds)
     args.out.mkdir(exist_ok=False, parents=True)
     report = write_video(rows, args.out, painter, robot, args.fps, args.ffmpeg)
     report.update({"schema": "s05.teleop.dcr009_guarded_diagnostic_video.v1", "scope": "DIAGNOSTIC_ONLY",
@@ -500,7 +523,8 @@ def main():
                    "plan_sha256": digest(args.plan), "cohort_sha256": digest(args.cohort),
                    "anchor_sha256": digest(anchor_path), "actual_model_sha256": model_sha,
                    "anatomical_mount_status": "UNKNOWN", "locked_map_from_actual_native_start": trace["locked"] is not None,
-                   "original_input_mode": "SIGNED_HMB_REPLAY" if trace["history_end"] is not None else "FROZEN_SIGNED_START_NO_HISTORICAL_REPLAY",
+                   "original_input_mode": "SIGNED_HMB_REPLAY" if historical else "FROZEN_SIGNED_START_PREPOSITION",
+                   "center_offset_mm": center, "preposition_from_seconds": args.preposition_from_seconds,
                    "feedback": "Same-header four native MuJoCo groups; FK only; monotonic receipt cutoff and 40 ms freshness",
                    "timing": "Historical samples chosen at preceding signed HMB cutoff with recorded ROS epoch. Preposition uses actual observer monotonic receipt time.",
                    "fps": args.fps, "frame_size": FRAME_SIZE})
