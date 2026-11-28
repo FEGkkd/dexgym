@@ -27,7 +27,7 @@ def evidence_summary(path):
     counts = {"historical_packets": 0, "historical_seals": 0, "preposition_packets": 0}
     reached = "NOT_OBSERVED"
     stop = False
-    position_held = False
+    protective_stop = None
     with path.open(encoding="utf-8") as stream:
         for line in stream:
             if not line.endswith("\n"):
@@ -41,11 +41,19 @@ def evidence_summary(path):
                 stop = row["late_observed_command_count"] == 0
             if row["kind"] == "pilot_lifecycle" and row.get("status") == "FAULT_STOP":
                 failure = row.get("failure", {})
-                position_held = (
-                    row["stage"] == "preposition_start" and failure.get("source") == "/tianji/robot_state"
+                if row["stage"] != "preposition_start":
+                    continue
+                if (
+                    failure.get("source") == "/tianji/robot_state"
                     and failure.get("code") == "DRIVER_NOT_COMMANDABLE"
                     and failure.get("reason") == "position held; home required before next enable"
-                )
+                ):
+                    protective_stop = "NATIVE_PROTECTIVE_HOLD_NO_HISTORY"
+                elif (
+                    failure.get("source") == "/tianji/safety" and failure.get("code") == "JOINT_LIMIT"
+                    and failure.get("reason") == "both arms held: joint command violates uniform joint limit margin"
+                ):
+                    protective_stop = "NATIVE_JOINT_LIMIT_REJECTION_NO_HISTORY"
             if row["kind"] == "input" and row["stage"] == "preposition_start":
                 counts["preposition_packets"] += 1
             if row["stage"] == "historical_human_inputs":
@@ -61,9 +69,9 @@ def evidence_summary(path):
         phase = "HISTORICAL_REPLAY_COMPLETE"
     elif stop and reached == "START_NOT_REACHED" and not counts["historical_packets"]:
         phase = "START_NOT_REACHED_NO_HISTORY"
-    elif (stop and position_held and reached == "NOT_OBSERVED" and counts["preposition_packets"]
+    elif (stop and protective_stop and reached == "NOT_OBSERVED" and counts["preposition_packets"]
           and not counts["historical_packets"]):
-        phase = "NATIVE_PROTECTIVE_HOLD_NO_HISTORY"
+        phase = protective_stop
     else:
         phase = "INCOMPLETE_TRACE"
     return {"observed_phase": phase, "start_status": reached, **counts, "formal_coverage_credit": False}
@@ -163,7 +171,9 @@ def attempt(args, index, selection, cancelled):
                     result.update(phase="INVALID_TRACE", trace_error=str(error))
             if result["phase"] == "COMPLETED":
                 result["phase"] = result.get("observed_phase", "INCOMPLETE_TRACE")
-            elif result.get("observed_phase") == "NATIVE_PROTECTIVE_HOLD_NO_HISTORY":
+            elif result.get("observed_phase") in {
+                "NATIVE_PROTECTIVE_HOLD_NO_HISTORY", "NATIVE_JOINT_LIMIT_REJECTION_NO_HISTORY"
+            }:
                 result["phase"] = result["observed_phase"]
             result["finished_unix_ns"] = time.time_ns()
             save(result_file, result)
@@ -172,26 +182,34 @@ def attempt(args, index, selection, cancelled):
 
 def closed(row):
     return (
-        row["phase"] in {"HISTORICAL_REPLAY_COMPLETE", "START_NOT_REACHED_NO_HISTORY", "NATIVE_PROTECTIVE_HOLD_NO_HISTORY"}
+        row["phase"] in {"HISTORICAL_REPLAY_COMPLETE", "START_NOT_REACHED_NO_HISTORY",
+                         "NATIVE_PROTECTIVE_HOLD_NO_HISTORY", "NATIVE_JOINT_LIMIT_REJECTION_NO_HISTORY"}
         and row["owned_groups_stopped"] and row.get("same_domain_empty_after") is True
     )
 
 
-def completed_prefix(previous_run, plan_sha, roster):
-    receipt = json.loads((previous_run / "run_receipt.json").read_bytes())
-    if receipt["scope"] != SCOPE or receipt["plan_sha256"] != plan_sha:
-        raise ValueError("Earlier work does not belong to these locked six roots")
-    previous = receipt["attempts"]
-    if not 0 < len(previous) < len(roster):
-        raise ValueError("No incomplete original roster to continue")
-    for index, row in enumerate(previous, start=1):
-        trace = previous_run / f"attempt-{index:02d}" / "evidence" / "trace.jsonl"
-        if row["attempt"] != index or row["root"] != roster[index - 1]["root"] or row["trace_sha256"] != digest(trace):
-            raise ValueError("Earlier protected attempt does not match the original trace or root")
-        actual = evidence_summary(trace)
-        if not closed(dict(row, phase=actual["observed_phase"])):
-            raise ValueError("Previous session was not a verified independent closed diagnostic")
-    return len(previous)
+def completed_prefix(previous_runs, plan_sha, roster):
+    index = 0
+    previous_receipt_sha = None
+    for previous_run in previous_runs:
+        receipt_path = previous_run / "run_receipt.json"
+        receipt = json.loads(receipt_path.read_bytes())
+        if (receipt["scope"] != SCOPE or receipt["plan_sha256"] != plan_sha
+                or receipt.get("prior_closed_attempt_count", 0) != index
+                or receipt.get("prior_run_receipt_sha256") != previous_receipt_sha):
+            raise ValueError("Earlier work does not belong to the same locked run chain")
+        for row in receipt["attempts"]:
+            index += 1
+            if index >= len(roster):
+                raise ValueError("No incomplete original roster to continue")
+            trace = previous_run / f"attempt-{index:02d}" / "evidence" / "trace.jsonl"
+            if row["attempt"] != index or row["root"] != roster[index - 1]["root"] or row["trace_sha256"] != digest(trace):
+                raise ValueError("Earlier protected attempt does not match the original trace or root")
+            actual = evidence_summary(trace)
+            if not closed(dict(row, phase=actual["observed_phase"])):
+                raise ValueError("Previous session was not a verified independent closed diagnostic")
+        previous_receipt_sha = digest(receipt_path)
+    return index
 
 
 def main():
@@ -201,7 +219,7 @@ def main():
         parser.add_argument(f"--{key}", type=lambda path: Path(path).resolve(), required=True)
     for key in ("plan-sha256", "controller-sha256", "simulator-sha256"):
         parser.add_argument(f"--{key}", required=True)
-    parser.add_argument("--resume-from", type=lambda path: Path(path).resolve())
+    parser.add_argument("--resume-from", action="append", default=[], type=lambda path: Path(path).resolve())
     parser.add_argument("--domain", type=int, choices=DOMAINS, required=True)
     args = parser.parse_args()
     if os.name != "posix" or not args.output.parent.is_dir():
@@ -226,7 +244,7 @@ def main():
               "preregistered_roots": [row["root"] for row in roster], "attempts": [], "status": "IN_PROGRESS"}
     if prior:
         ledger["prior_closed_attempt_count"] = prior
-        ledger["prior_run_receipt_sha256"] = digest(args.resume_from / "run_receipt.json")
+        ledger["prior_run_receipt_sha256"] = digest(args.resume_from[-1] / "run_receipt.json")
     receipt = args.output / "run_receipt.json"
     save(receipt, ledger)
     for index, root in enumerate(roster[prior:], start=prior + 1):

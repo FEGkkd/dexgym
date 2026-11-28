@@ -405,8 +405,11 @@ class DrawVideo:
             poses = np.repeat(np.eye(4)[None], 2, axis=0)
             poses[:, :3, :3] = actual.rotations
             poses[:, :3, 3] = actual.wrists
-            arms = np.asarray([np.vstack(([robot.joints[k].xanchor.copy() for k in range(s*7, (s+1)*7)],
-                                         actual.wrists[s])) for s in range(2)])
+            arms = np.asarray([
+                np.vstack(([robot.data.joint(name).xanchor.copy() for name in robot.names[s*7:(s+1)*7]],
+                           actual.wrists[s]))
+                for s in range(2)
+            ])
             show_origin = self.world_center
             if show_origin is None:
                 show_origin = robot.geometry(robot.home).wrists.mean(axis=0)
