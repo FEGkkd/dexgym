@@ -1,0 +1,349 @@
+{
+  "anchor_hmb_cutoff_ns": 80000000,
+  "anchor_partition": "recording:8800a1148baaa5ee2d0d517b/00000",
+  "assets": {
+    "anchor.json": "85a1710390135873a6eba5cf2358183f3ee9ff3a6408815c06a62206ed811aa8",
+    "comparison-verified/comparison.json": "e7584bab189da5083e8b244659927a72c3683b31fb5f7e102d22dc6a1eba9d9f",
+    "comparison-verified/first_common_palms.png": "d8fd6bf4b1f3ea8e548d01fec62c02c37413786dc42e4af0d44b815a3431d5bd",
+    "comparison-verified/preposition_trajectory.png": "07c87e70cec1bd34f1d43922b08e36143079dd6988d5ac578e4026f665301be3",
+    "comparison-verified/same_cutoff_7p94_palms.png": "e8b0fb21fa670a9a982ccd6c784d3d07673d6852796665e91c1b97aa9b3e40b4",
+    "immediate/evidence/trace.jsonl": "396759f6598d2a2e10e1e6d8e05804a15ea5d418cc3bfb0dec1b1accfa24188e",
+    "paired/immediate/pair_summary.json": "233a034c1994900d3bbb277d11137c4886101686eb2099eb20c7f78f8d6642dc",
+    "paired/preposition/pair_summary.json": "a3f403722584d5ef2e125cf00829662136ea3503f483a7f57ba49b31faf4525c",
+    "preposition/evidence/trace.jsonl": "e8ceceeb7eb1c10eb9074e979d7d328449c770ee83755177baf25d7d1713bbd2",
+    "tools/compare_start_handoff.py": "b1b9f982694f9099bc835fbc0c7c1a3e66f90a7e355722b98a7183fb2f0d9e24",
+    "tools/replay_start_handoff.py": "c4bcc4d2e20990491c59ac0b580d301907d788b6090a7da18b30de559a8e40e8"
+  },
+  "counts": {
+    "hmb_valid": 3831,
+    "immediate_coherent": 3835,
+    "planned": 3840,
+    "preposition_coherent": 3835
+  },
+  "effective_params_equal": true,
+  "full_replay_frozen_M1": {
+    "online_m1_wrist_pos_max_m": {
+      "n": 3830,
+      "p50": [
+        306.9044162164279,
+        306.9033740757016
+      ],
+      "p95": [
+        416.7647128172642,
+        416.54619634831937
+      ]
+    },
+    "online_m1_wrist_rot_max_rad": {
+      "n": 3830,
+      "p50": [
+        72.83104191967062,
+        73.16262707980974
+      ],
+      "p95": [
+        113.76760011451458,
+        114.10658968526933
+      ]
+    }
+  },
+  "input_count": {
+    "immediate": 36820,
+    "preposition": 36820
+  },
+  "input_sha256": {
+    "immediate": "27d482cad1a7e1f92bca44525fba4de8c0ce4e49a847c2a02a0975312d202643",
+    "preposition": "27d482cad1a7e1f92bca44525fba4de8c0ce4e49a847c2a02a0975312d202643"
+  },
+  "run": "TELEOP-SHARED-RIGID-START-HANDOFF-03-01",
+  "scope": "ISOLATED_MUJOCO_START_HANDOFF_DIAGNOSTIC",
+  "snapshots": {
+    "first_common_in_signed_anchor_partition": {
+      "common_active_measured": true,
+      "hmb_cutoff_ns": 100000000,
+      "immediate": {
+        "diagnostics": {
+          "left": {
+            "arm_command_accepted": "true",
+            "ik_target_accepted": "true",
+            "mapping_policy": "shared_rigid_diagnostic_v1",
+            "primary_reason": "",
+            "rate_limited": "true",
+            "recovery_action": "accept",
+            "servo_boundary_active": "false",
+            "servo_reason": "",
+            "solve_mode": "full_step"
+          },
+          "right": {
+            "arm_command_accepted": "true",
+            "ik_target_accepted": "true",
+            "mapping_policy": "shared_rigid_diagnostic_v1",
+            "primary_reason": "",
+            "rate_limited": "true",
+            "recovery_action": "accept",
+            "servo_boundary_active": "false",
+            "servo_reason": "",
+            "solve_mode": "full_step"
+          }
+        },
+        "header_age_ns": 566669,
+        "palm_metrics": {
+          "acute_palm_plane_deg": 3.8810805569960047,
+          "closest_cross_hand_tip_mm": 308.5344840599018,
+          "directed_palm_normals_deg": 3.8810805569960047,
+          "palm_origin_gap_mm": 521.403060730526,
+          "right_minus_left_palm_foreaft_mm": -4.400936690921675,
+          "right_minus_left_palm_height_mm": 2.1379135780634773
+        },
+        "receive_age_ns": 602200,
+        "status": "COHERENT_MEASURED"
+      },
+      "preposition": {
+        "diagnostics": {
+          "left": {
+            "arm_command_accepted": "true",
+            "ik_target_accepted": "true",
+            "mapping_policy": "shared_rigid_diagnostic_v1",
+            "primary_reason": "",
+            "rate_limited": "false",
+            "recovery_action": "accept",
+            "servo_boundary_active": "false",
+            "servo_reason": "",
+            "solve_mode": "full_step"
+          },
+          "right": {
+            "arm_command_accepted": "true",
+            "ik_target_accepted": "true",
+            "mapping_policy": "shared_rigid_diagnostic_v1",
+            "primary_reason": "",
+            "rate_limited": "true",
+            "recovery_action": "accept",
+            "servo_boundary_active": "false",
+            "servo_reason": "",
+            "solve_mode": "full_step"
+          }
+        },
+        "header_age_ns": 1325935,
+        "palm_metrics": {
+          "acute_palm_plane_deg": 64.03983451885419,
+          "closest_cross_hand_tip_mm": 318.0215627474593,
+          "directed_palm_normals_deg": 64.03983451885419,
+          "palm_origin_gap_mm": 484.218397960135,
+          "right_minus_left_palm_foreaft_mm": -93.01389287456362,
+          "right_minus_left_palm_height_mm": -8.24724095308449
+        },
+        "receive_age_ns": 639961,
+        "status": "COHERENT_MEASURED"
+      },
+      "seconds_after_anchor": 0.02,
+      "source_cutoff_ns": 621618452513455
+    },
+    "prior_03_7p94_snapshot": {
+      "common_active_measured": true,
+      "hmb_cutoff_ns": 56720000069,
+      "immediate": {
+        "diagnostics": {
+          "left": {
+            "arm_command_accepted": "true",
+            "ik_target_accepted": "true",
+            "mapping_policy": "shared_rigid_diagnostic_v1",
+            "primary_reason": "",
+            "rate_limited": "true",
+            "recovery_action": "accept",
+            "servo_boundary_active": "false",
+            "servo_reason": "",
+            "solve_mode": "full_step"
+          },
+          "right": {
+            "arm_command_accepted": "true",
+            "ik_target_accepted": "true",
+            "mapping_policy": "shared_rigid_diagnostic_v1",
+            "primary_reason": "",
+            "rate_limited": "true",
+            "recovery_action": "accept",
+            "servo_boundary_active": "false",
+            "servo_reason": "",
+            "solve_mode": "full_step"
+          }
+        },
+        "header_age_ns": 404327,
+        "palm_metrics": {
+          "acute_palm_plane_deg": 10.137988977580715,
+          "closest_cross_hand_tip_mm": 24.276363386657692,
+          "directed_palm_normals_deg": 10.137988977580715,
+          "palm_origin_gap_mm": 169.93299249010363,
+          "right_minus_left_palm_foreaft_mm": 5.292078484969098,
+          "right_minus_left_palm_height_mm": -5.059935473477939
+        },
+        "receive_age_ns": 416538,
+        "status": "COHERENT_MEASURED"
+      },
+      "preposition": {
+        "diagnostics": {
+          "left": {
+            "arm_command_accepted": "true",
+            "ik_target_accepted": "true",
+            "mapping_policy": "shared_rigid_diagnostic_v1",
+            "primary_reason": "",
+            "rate_limited": "true",
+            "recovery_action": "accept",
+            "servo_boundary_active": "false",
+            "servo_reason": "",
+            "solve_mode": "full_step"
+          },
+          "right": {
+            "arm_command_accepted": "true",
+            "ik_target_accepted": "true",
+            "mapping_policy": "shared_rigid_diagnostic_v1",
+            "primary_reason": "",
+            "rate_limited": "true",
+            "recovery_action": "accept",
+            "servo_boundary_active": "false",
+            "servo_reason": "",
+            "solve_mode": "full_step"
+          }
+        },
+        "header_age_ns": 1255102,
+        "palm_metrics": {
+          "acute_palm_plane_deg": 5.6782042571208216,
+          "closest_cross_hand_tip_mm": 16.959830209826862,
+          "directed_palm_normals_deg": 5.6782042571208216,
+          "palm_origin_gap_mm": 168.4760320740905,
+          "right_minus_left_palm_foreaft_mm": 5.07228264037396,
+          "right_minus_left_palm_height_mm": -1.9225794214703384
+        },
+        "receive_age_ns": 547230,
+        "status": "COHERENT_MEASURED"
+      },
+      "prior_clip_seconds": 7.941974178,
+      "seconds_after_anchor": 56.640000069,
+      "source_cutoff_ns": 621675072513524
+    }
+  },
+  "start": {
+    "immediate": {
+      "continue_after_miss": false,
+      "elapsed_s": null,
+      "enable_calls": 1,
+      "first_ready_elapsed_s": null,
+      "home_geometry": {
+        "palm_normal_angle_to_world_down_deg": [
+          4.185779631030506,
+          4.1952040856841055
+        ],
+        "palm_normals_world": [
+          [
+            -0.025447154648525303,
+            -0.06841111095395064,
+            -0.9973326236609031
+          ],
+          [
+            0.02546306843550926,
+            -0.06858020698051623,
+            -0.9973206040969763
+          ]
+        ]
+      },
+      "last_ready_dwell_observed_s": 0.0,
+      "measurement": {
+        "active_task": false,
+        "arms_accepted": true,
+        "control_reasons": {
+          "left": {
+            "primary_reason": "",
+            "rate_limited": "true",
+            "recovery_action": "accept",
+            "solve_mode": "full_step"
+          },
+          "right": {
+            "primary_reason": "",
+            "rate_limited": "true",
+            "recovery_action": "accept",
+            "solve_mode": "full_step"
+          }
+        },
+        "hand_error_to_issued_rad": [
+          null,
+          null
+        ],
+        "max_q_change_from_home_rad": 0.005691813905168606,
+        "measured_speed_rad_s": 0.0,
+        "wrist_error_m_deg": [
+          [
+            0.05728293270579375,
+            60.10807774063866
+          ],
+          [
+            0.06015597717455361,
+            38.45351305833519
+          ]
+        ]
+      },
+      "preanchor_input_messages": 28,
+      "start_calls": 1,
+      "start_calls_accepted": 1,
+      "status": "IMMEDIATE_CONTROL"
+    },
+    "preposition": {
+      "continue_after_miss": false,
+      "elapsed_s": 3.184922568994807,
+      "enable_calls": 1,
+      "first_ready_elapsed_s": 2.9789920039766002,
+      "home_geometry": {
+        "palm_normal_angle_to_world_down_deg": [
+          4.184954221182657,
+          4.194470258786701
+        ],
+        "palm_normals_world": [
+          [
+            -0.025434206109222417,
+            -0.06840059745008698,
+            -0.9973336750697155
+          ],
+          [
+            0.025451123421543775,
+            -0.06857101615628619,
+            -0.9973215409585193
+          ]
+        ]
+      },
+      "last_ready_dwell_observed_s": 0.20559039601357654,
+      "measurement": {
+        "active_task": true,
+        "arms_accepted": true,
+        "control_reasons": {
+          "left": {
+            "primary_reason": "",
+            "rate_limited": "false",
+            "recovery_action": "accept",
+            "solve_mode": "full_step"
+          },
+          "right": {
+            "primary_reason": "",
+            "rate_limited": "false",
+            "recovery_action": "accept",
+            "solve_mode": "full_step"
+          }
+        },
+        "hand_error_to_issued_rad": [
+          9.644381904502786e-05,
+          5.805996955093873e-05
+        ],
+        "max_q_change_from_home_rad": 1.27110631075922,
+        "measured_speed_rad_s": 0.007274438511018364,
+        "wrist_error_m_deg": [
+          [
+            2.253877119284483e-05,
+            0.009978509738287313
+          ],
+          [
+            4.863401148706215e-07,
+            8.407149006866341e-05
+          ]
+        ]
+      },
+      "preanchor_input_messages": 28,
+      "start_calls": 1,
+      "start_calls_accepted": 1,
+      "status": "START_REACHED"
+    }
+  }
+}

@@ -245,7 +245,9 @@ class Replay:
                     or "diagnostic_msgs/msg/DiagnosticArray" in type_names
                     or ("end_effector" in topic and "geometry_msgs/msg/PoseStamped" in type_names)):
                 def receive(message, name=topic):
-                    self.write("output", topic=name, value=message_to_ordereddict(message))
+                    value = message_to_ordereddict(message)
+                    self.write("output", topic=name, value=value)
+                    self.observe_output(name, value)
                 self.subscriptions.append(self.node.create_subscription(
                     get_message(type_names[0]), topic, receive, qos_profile_sensor_data
                 ))
@@ -269,6 +271,21 @@ class Replay:
                    original_schedule_ns=event.schedule_ns, record_index=event.record_index,
                    original_stamp_ns=original,
                    published_stamp_ns=msg.header.stamp.sec * NS + msg.header.stamp.nanosec)
+        return msg.header.stamp.sec * NS + msg.header.stamp.nanosec
+
+    def observe_output(self, topic, value):
+        pass
+
+    def start_inputs(self, events):
+        warmup = {}
+        for event in events:
+            warmup.setdefault(event.topic, event)
+            if warmup.keys() == HUMAN.keys():
+                break
+        return warmup
+
+    def before_history(self, warmup):
+        pass
 
     def run(self, events):
         self.verify_and_subscribe()
@@ -286,11 +303,7 @@ class Replay:
             self.write("model", path=str(model.resolve()), sha256=hashlib.file_digest(stream, "sha256").hexdigest())
         self.service("connect")
         self.service("home")
-        warmup = {}
-        for event in events:
-            warmup.setdefault(event.topic, event)
-            if warmup.keys() == HUMAN.keys():
-                break
+        warmup = self.start_inputs(events)
         self.stage = "synthetic_start_warmup"
         for _ in range(25):
             for event in warmup.values():
@@ -302,6 +315,7 @@ class Replay:
             for event in warmup.values():
                 self.send(event)
             self.service("enable")
+            self.before_history(warmup)
             self.replay(events, warmup)
         finally:
             self.stage = "tail"
