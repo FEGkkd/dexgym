@@ -1,0 +1,427 @@
+{
+  "scope": "DIAGNOSTIC_ONLY_NO_MJ_STEP",
+  "source_proof_inputs_sha256": "d1d9228d0a6b1fb8dd13daaa5fa41d0783b271f12277787d5707dc134e28afe4",
+  "source_ledger_sha256": "53d9359928f753b826af0a5a7065d5d5e27b924fed8ac1670748ecdb2d99ede6",
+  "source_model_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+  "script_sha256": "f1441302c7cd2ba50678928135985f774defe83508296748c81946bd63d2d0b8",
+  "samples": {
+    "first_rejection": {
+      "source": {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+        "tick": 253,
+        "subcycle": 0,
+        "time_ns": 5060000000
+      },
+      "four_input_points_gap_m": [
+        0.00272619322237144,
+        0.0027261932223714216,
+        0.002907446041629056,
+        0.0024613171959885207
+      ],
+      "right_pair_sampled_vertex_min_m": 0.0007073610787622464,
+      "A_full_54D": {
+        "verdict": "SWEEP_UNPROVEN",
+        "proof_ms": 7.835108,
+        "cache_hit": false,
+        "cache_kind": null,
+        "root_queries": 1,
+        "queries": 241,
+        "max_depth": 18,
+        "termination": "MAX_SUBDIVISION_DEPTH",
+        "min_sample_gap_m": 0.0009237140342091256,
+        "sampled_clearance_violation": null,
+        "witness_pair_index": null,
+        "unresolved_pair_indices": [
+          2425
+        ]
+      },
+      "B_servo_reference_segments_only": {
+        "issued_to_proposed_segment": [
+          true,
+          0.455483
+        ],
+        "filter_reference_segments": [
+          [
+            true,
+            true
+          ],
+          0.779307
+        ],
+        "authority": "setpoint / hypothetical segment only, not dynamics or admission"
+      },
+      "C_archived_held_steps": "all actual executed substep proofs passed; no inference on rejected proposal",
+      "D_same_box_deeper_pair_adaptive": {
+        "verdict": "PERMIT",
+        "proof_ms": 8.810313,
+        "cache_hit": false,
+        "cache_kind": null,
+        "root_queries": 1,
+        "queries": 274,
+        "max_depth": 21,
+        "termination": "PERMIT",
+        "min_sample_gap_m": 0.0009117803498004194,
+        "sampled_clearance_violation": null,
+        "witness_pair_index": null,
+        "unresolved_pair_indices": []
+      },
+      "E_groupwise_full_body_candidates": [
+        {
+          "group": "left_arm",
+          "verdict": "PERMIT",
+          "proof_ms": 1.402621,
+          "cache_hit": false,
+          "cache_kind": null,
+          "root_queries": 1,
+          "queries": 18,
+          "max_depth": 5,
+          "termination": "PERMIT",
+          "min_sample_gap_m": 0.0008949320740943068,
+          "sampled_clearance_violation": null,
+          "witness_pair_index": null,
+          "unresolved_pair_indices": []
+        },
+        {
+          "group": "right_arm",
+          "verdict": "PERMIT",
+          "proof_ms": 1.268816,
+          "cache_hit": false,
+          "cache_kind": null,
+          "root_queries": 1,
+          "queries": 18,
+          "max_depth": 5,
+          "termination": "PERMIT",
+          "min_sample_gap_m": 0.0008949320740943068,
+          "sampled_clearance_violation": null,
+          "witness_pair_index": null,
+          "unresolved_pair_indices": []
+        },
+        {
+          "group": "left_hand",
+          "verdict": "PERMIT",
+          "proof_ms": 1.1946,
+          "cache_hit": false,
+          "cache_kind": null,
+          "root_queries": 1,
+          "queries": 18,
+          "max_depth": 5,
+          "termination": "PERMIT",
+          "min_sample_gap_m": 0.0008949320740943068,
+          "sampled_clearance_violation": null,
+          "witness_pair_index": null,
+          "unresolved_pair_indices": []
+        },
+        {
+          "group": "right_hand",
+          "verdict": "SWEEP_UNPROVEN",
+          "proof_ms": 7.651501,
+          "cache_hit": false,
+          "cache_kind": null,
+          "root_queries": 1,
+          "queries": 241,
+          "max_depth": 18,
+          "termination": "MAX_SUBDIVISION_DEPTH",
+          "min_sample_gap_m": 0.0009237140342091256,
+          "sampled_clearance_violation": null,
+          "witness_pair_index": null,
+          "unresolved_pair_indices": [
+            2425
+          ]
+        }
+      ],
+      "E_combined_final_reproof": {
+        "verdict": "PERMIT",
+        "proof_ms": 1.240461,
+        "cache_hit": false,
+        "cache_kind": null,
+        "root_queries": 1,
+        "queries": 18,
+        "max_depth": 5,
+        "termination": "PERMIT",
+        "min_sample_gap_m": 0.0008949320740943068,
+        "sampled_clearance_violation": null,
+        "witness_pair_index": null,
+        "unresolved_pair_indices": []
+      }
+    },
+    "worst_candidate_endpoint": {
+      "source": {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00007",
+        "tick": 11,
+        "subcycle": 0,
+        "time_ns": 56220000082
+      },
+      "four_input_points_gap_m": [
+        0.00272619322237144,
+        0.0027261932223714403,
+        0.0024582590076447485,
+        -0.0010659012966250322
+      ],
+      "right_pair_sampled_vertex_min_m": -0.0025593093788677025,
+      "A_full_54D": {
+        "verdict": "SWEEP_UNPROVEN",
+        "proof_ms": 3.604002,
+        "cache_hit": false,
+        "cache_kind": null,
+        "root_queries": 1,
+        "queries": 100,
+        "max_depth": 18,
+        "termination": "MAX_SUBDIVISION_DEPTH",
+        "min_sample_gap_m": 0.0010591177737970423,
+        "sampled_clearance_violation": null,
+        "witness_pair_index": null,
+        "unresolved_pair_indices": [
+          2425
+        ]
+      },
+      "B_servo_reference_segments_only": {
+        "issued_to_proposed_segment": [
+          false,
+          0.693488
+        ],
+        "filter_reference_segments": [
+          [
+            false,
+            false
+          ],
+          0.995096
+        ],
+        "authority": "setpoint / hypothetical segment only, not dynamics or admission"
+      },
+      "C_archived_held_steps": "all actual executed substep proofs passed; no inference on rejected proposal",
+      "D_same_box_deeper_pair_adaptive": {
+        "verdict": "SWEEP_UNPROVEN",
+        "proof_ms": 22.521657,
+        "cache_hit": false,
+        "cache_kind": null,
+        "root_queries": 1,
+        "queries": 382,
+        "max_depth": 24,
+        "termination": "MAX_SUBDIVISION_DEPTH",
+        "min_sample_gap_m": 0.0010591177737970423,
+        "sampled_clearance_violation": null,
+        "witness_pair_index": null,
+        "unresolved_pair_indices": [
+          2425
+        ]
+      },
+      "E_groupwise_full_body_candidates": [
+        {
+          "group": "left_arm",
+          "verdict": "PERMIT",
+          "proof_ms": 0.804901,
+          "cache_hit": false,
+          "cache_kind": null,
+          "root_queries": 1,
+          "queries": 14,
+          "max_depth": 7,
+          "termination": "PERMIT",
+          "min_sample_gap_m": 0.0012170216239195727,
+          "sampled_clearance_violation": null,
+          "witness_pair_index": null,
+          "unresolved_pair_indices": []
+        },
+        {
+          "group": "right_arm",
+          "verdict": "PERMIT",
+          "proof_ms": 0.817279,
+          "cache_hit": false,
+          "cache_kind": null,
+          "root_queries": 1,
+          "queries": 14,
+          "max_depth": 7,
+          "termination": "PERMIT",
+          "min_sample_gap_m": 0.001217021623919623,
+          "sampled_clearance_violation": null,
+          "witness_pair_index": null,
+          "unresolved_pair_indices": []
+        },
+        {
+          "group": "left_hand",
+          "verdict": "PERMIT",
+          "proof_ms": 0.9504,
+          "cache_hit": false,
+          "cache_kind": null,
+          "root_queries": 1,
+          "queries": 20,
+          "max_depth": 7,
+          "termination": "PERMIT",
+          "min_sample_gap_m": 0.0011679070695908638,
+          "sampled_clearance_violation": null,
+          "witness_pair_index": null,
+          "unresolved_pair_indices": []
+        },
+        {
+          "group": "right_hand",
+          "verdict": "SWEEP_UNPROVEN",
+          "proof_ms": 3.749386,
+          "cache_hit": false,
+          "cache_kind": null,
+          "root_queries": 1,
+          "queries": 100,
+          "max_depth": 18,
+          "termination": "MAX_SUBDIVISION_DEPTH",
+          "min_sample_gap_m": 0.0010591177737970423,
+          "sampled_clearance_violation": null,
+          "witness_pair_index": null,
+          "unresolved_pair_indices": [
+            2425
+          ]
+        }
+      ],
+      "E_combined_final_reproof": {
+        "verdict": "PERMIT",
+        "proof_ms": 1.329273,
+        "cache_hit": false,
+        "cache_kind": null,
+        "root_queries": 1,
+        "queries": 20,
+        "max_depth": 7,
+        "termination": "PERMIT",
+        "min_sample_gap_m": 0.0011679070695908638,
+        "sampled_clearance_violation": null,
+        "witness_pair_index": null,
+        "unresolved_pair_indices": []
+      }
+    },
+    "widest_candidate_endpoint": {
+      "source": {
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00005",
+        "tick": 210,
+        "subcycle": 0,
+        "time_ns": 44200000073
+      },
+      "four_input_points_gap_m": [
+        0.00272619322237144,
+        0.0027261932223714403,
+        0.0024582590076447433,
+        0.007706138014106871
+      ],
+      "right_pair_sampled_vertex_min_m": 0.00012836933736415384,
+      "A_full_54D": {
+        "verdict": "SWEEP_UNPROVEN",
+        "proof_ms": 10.370215,
+        "cache_hit": false,
+        "cache_kind": null,
+        "root_queries": 1,
+        "queries": 339,
+        "max_depth": 18,
+        "termination": "MAX_SUBDIVISION_DEPTH",
+        "min_sample_gap_m": 0.0010199641190634387,
+        "sampled_clearance_violation": null,
+        "witness_pair_index": null,
+        "unresolved_pair_indices": [
+          2425
+        ]
+      },
+      "B_servo_reference_segments_only": {
+        "issued_to_proposed_segment": [
+          true,
+          0.567372
+        ],
+        "filter_reference_segments": [
+          [
+            true,
+            true
+          ],
+          0.842483
+        ],
+        "authority": "setpoint / hypothetical segment only, not dynamics or admission"
+      },
+      "C_archived_held_steps": "all actual executed substep proofs passed; no inference on rejected proposal",
+      "D_same_box_deeper_pair_adaptive": {
+        "verdict": "SWEEP_UNPROVEN",
+        "proof_ms": 37.387018,
+        "cache_hit": false,
+        "cache_kind": null,
+        "root_queries": 1,
+        "queries": 831,
+        "max_depth": 24,
+        "termination": "MAX_SUBDIVISION_DEPTH",
+        "min_sample_gap_m": 0.0010199641190634387,
+        "sampled_clearance_violation": null,
+        "witness_pair_index": null,
+        "unresolved_pair_indices": [
+          2425
+        ]
+      },
+      "E_groupwise_full_body_candidates": [
+        {
+          "group": "left_arm",
+          "verdict": "PERMIT",
+          "proof_ms": 0.973339,
+          "cache_hit": false,
+          "cache_kind": null,
+          "root_queries": 1,
+          "queries": 14,
+          "max_depth": 7,
+          "termination": "PERMIT",
+          "min_sample_gap_m": 0.0012170216239195623,
+          "sampled_clearance_violation": null,
+          "witness_pair_index": null,
+          "unresolved_pair_indices": []
+        },
+        {
+          "group": "right_arm",
+          "verdict": "PERMIT",
+          "proof_ms": 1.003199,
+          "cache_hit": false,
+          "cache_kind": null,
+          "root_queries": 1,
+          "queries": 14,
+          "max_depth": 7,
+          "termination": "PERMIT",
+          "min_sample_gap_m": 0.001217021623919434,
+          "sampled_clearance_violation": null,
+          "witness_pair_index": null,
+          "unresolved_pair_indices": []
+        },
+        {
+          "group": "left_hand",
+          "verdict": "PERMIT",
+          "proof_ms": 1.049813,
+          "cache_hit": false,
+          "cache_kind": null,
+          "root_queries": 1,
+          "queries": 22,
+          "max_depth": 7,
+          "termination": "PERMIT",
+          "min_sample_gap_m": 0.001178623584365395,
+          "sampled_clearance_violation": null,
+          "witness_pair_index": null,
+          "unresolved_pair_indices": []
+        },
+        {
+          "group": "right_hand",
+          "verdict": "SWEEP_UNPROVEN",
+          "proof_ms": 10.217847,
+          "cache_hit": false,
+          "cache_kind": null,
+          "root_queries": 1,
+          "queries": 339,
+          "max_depth": 18,
+          "termination": "MAX_SUBDIVISION_DEPTH",
+          "min_sample_gap_m": 0.0010199641190634387,
+          "sampled_clearance_violation": null,
+          "witness_pair_index": null,
+          "unresolved_pair_indices": [
+            2425
+          ]
+        }
+      ],
+      "E_combined_final_reproof": {
+        "verdict": "PERMIT",
+        "proof_ms": 1.151739,
+        "cache_hit": false,
+        "cache_kind": null,
+        "root_queries": 1,
+        "queries": 22,
+        "max_depth": 7,
+        "termination": "PERMIT",
+        "min_sample_gap_m": 0.001178623584365395,
+        "sampled_clearance_violation": null,
+        "witness_pair_index": null,
+        "unresolved_pair_indices": []
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "scope": "DIAGNOSTIC_ONLY_NO_MJ_STEP",
+  "proof_inputs_sha256": "d1d9228d0a6b1fb8dd13daaa5fa41d0783b271f12277787d5707dc134e28afe4",
+  "envelope_samples": {
+    "first_rejection": {
+      "left_arm": {
+        "nominal_max_delta_rad": 0.002640843391418457,
+        "changed_axes": 7,
+        "selected_in_E": true
+      },
+      "right_arm": {
+        "nominal_max_delta_rad": 0.002099156379699707,
+        "changed_axes": 7,
+        "selected_in_E": true
+      },
+      "left_hand": {
+        "nominal_max_delta_rad": 0.002804875373840332,
+        "changed_axes": 20,
+        "selected_in_E": true
+      },
+      "right_hand": {
+        "nominal_max_delta_rad": 0.011126697063446045,
+        "changed_axes": 20,
+        "selected_in_E": false
+      }
+    },
+    "worst_candidate_endpoint": {
+      "left_arm": {
+        "nominal_max_delta_rad": 0.0036191046237945557,
+        "changed_axes": 7,
+        "selected_in_E": true
+      },
+      "right_arm": {
+        "nominal_max_delta_rad": 0.003619074821472168,
+        "changed_axes": 7,
+        "selected_in_E": true
+      },
+      "left_hand": {
+        "nominal_max_delta_rad": 0.02000001072883606,
+        "changed_axes": 20,
+        "selected_in_E": true
+      },
+      "right_hand": {
+        "nominal_max_delta_rad": 0.02000001072883606,
+        "changed_axes": 20,
+        "selected_in_E": false
+      }
+    },
+    "widest_candidate_endpoint": {
+      "left_arm": {
+        "nominal_max_delta_rad": 0.0034110546112060547,
+        "changed_axes": 7,
+        "selected_in_E": true
+      },
+      "right_arm": {
+        "nominal_max_delta_rad": 0.0021985620260238647,
+        "changed_axes": 7,
+        "selected_in_E": true
+      },
+      "left_hand": {
+        "nominal_max_delta_rad": 0.02000001072883606,
+        "changed_axes": 20,
+        "selected_in_E": true
+      },
+      "right_hand": {
+        "nominal_max_delta_rad": 0.02000001072883606,
+        "changed_axes": 20,
+        "selected_in_E": false
+      }
+    }
+  }
+}

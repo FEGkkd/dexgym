@@ -1,0 +1,72 @@
+{
+  "archived_rejections": [
+    {
+      "count": 22905,
+      "leaf_pairs": [
+        2425
+      ],
+      "reason": "SWEEP_UNPROVEN",
+      "termination": "MAX_SUBDIVISION_DEPTH"
+    }
+  ],
+  "audit_sha256": "7252c5ba6c2e6fb98d88f6c6bed84412c9646db9f39b95de9271a7e478c8eeab",
+  "elapsed_seconds": 272.7954846950015,
+  "events_sha256": "c9aff0777e3f91a454f152042b848c9f25f676d2a5d1b4e3231c5b5a3049cf2d",
+  "formal_coverage_credit": false,
+  "fresh_proof_tally": [
+    {
+      "archived": "PERMIT",
+      "count": 1115,
+      "decision": "PERMIT",
+      "same_leaf": true,
+      "termination": "PERMIT"
+    },
+    {
+      "archived": "SWEEP_UNPROVEN",
+      "count": 22905,
+      "decision": "SWEEP_UNPROVEN",
+      "same_leaf": true,
+      "termination": "MAX_SUBDIVISION_DEPTH"
+    }
+  ],
+  "historical_commands_equal_f32": 24020,
+  "location_row_order": [
+    "partition_index",
+    "tick_index",
+    "subcycle",
+    "tick_ns"
+  ],
+  "mode": "ISSUED_ONLY_RECONSTRUCTION_NO_NOMINAL_RECOMPUTATION",
+  "model_receipt_sha256": "1d67a6dad1831574af10a1fdf6349638097af6457e9d8527c9bd77e150e876fe",
+  "original_decisions": {
+    "PERMIT": 1115,
+    "SWEEP_UNPROVEN": 22905
+  },
+  "original_receipt_sha256": "d6d83d40b44d29447e1d4a1e357bc0424b123dbabfcc113eef8218d330c605df",
+  "partitions": [
+    "recording:8d51b482abc64ad7af84b3fe/00000",
+    "recording:8d51b482abc64ad7af84b3fe/00001",
+    "recording:8d51b482abc64ad7af84b3fe/00002",
+    "recording:8d51b482abc64ad7af84b3fe/00003",
+    "recording:8d51b482abc64ad7af84b3fe/00004",
+    "recording:8d51b482abc64ad7af84b3fe/00005",
+    "recording:8d51b482abc64ad7af84b3fe/00006",
+    "recording:8d51b482abc64ad7af84b3fe/00007",
+    "recording:8d51b482abc64ad7af84b3fe/00008",
+    "recording:8d51b482abc64ad7af84b3fe/00009",
+    "recording:8d51b482abc64ad7af84b3fe/00010",
+    "recording:8d51b482abc64ad7af84b3fe/00011",
+    "recording:8d51b482abc64ad7af84b3fe/00012"
+  ],
+  "proof_inputs_sha256": "d1d9228d0a6b1fb8dd13daaa5fa41d0783b271f12277787d5707dc134e28afe4",
+  "reconstructed_start_commands_equal_f64": 945,
+  "scope": "DIAGNOSTIC_ONLY",
+  "state_row_order": [
+    "issued",
+    "servo",
+    "measured",
+    "proposal"
+  ],
+  "verified_feedback_after_hmb_rows": 4804,
+  "verified_servo_ctrl_torque_substeps": 48040
+}

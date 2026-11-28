@@ -1,0 +1,219 @@
+{
+  "scope": "DIAGNOSTIC_ONLY_ARCHIVED_NO_DYNAMICS",
+  "runtime_commit": "c2b5720e663d54d30ae937ecf710baac20112271",
+  "receipt_sha256": "d6d83d40b44d29447e1d4a1e357bc0424b123dbabfcc113eef8218d330c605df",
+  "trace_sha256": "c9aff0777e3f91a454f152042b848c9f25f676d2a5d1b4e3231c5b5a3049cf2d",
+  "script_sha256": "09646afd3528115df5532901d74ce7efe0640d3d54874901012c5815be252a72",
+  "request_ledger_sha256": "53d9359928f753b826af0a5a7065d5d5e27b924fed8ac1670748ecdb2d99ede6",
+  "model_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+  "mujoco": "3.13.0",
+  "asset_count": 71,
+  "verified_arrays": 156,
+  "original_ticks": 4804,
+  "candidate_requests": 24020,
+  "admitted_candidate": {
+    "PERMIT": 1115
+  },
+  "failed_original_telemetry_counts": [
+    {
+      "status": "SWEEP_UNPROVEN",
+      "termination": "MAX_SUBDIVISION_DEPTH",
+      "last_unresolved_pairs": [
+        2425
+      ],
+      "count": 22905
+    }
+  ],
+  "right_pair_geometry": {
+    "index": 2425,
+    "geom_ids": [
+      138,
+      151
+    ],
+    "geom_names": [
+      "r_finger1_tip_sensor_col",
+      "r_finger2_tip_sensor_col"
+    ],
+    "same_mesh_as_visual": [
+      true,
+      true
+    ],
+    "same_body_as_visual": [
+      true,
+      true
+    ],
+    "same_local_transform_as_visual": [
+      true,
+      true
+    ],
+    "contype_conaffinity": [
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "collision_shape": "MuJoCo mesh narrowphase convex collision representation; shared mesh asset with visual renderer",
+    "relative_joint_names": [
+      "r_thumb_cmc_flex",
+      "r_thumb_cmc_abd",
+      "r_thumb_mcp",
+      "r_thumb_ip",
+      "r_index_finger_mcp_flex",
+      "r_index_finger_mcp_abd",
+      "r_index_finger_pip",
+      "r_index_finger_dip"
+    ]
+  },
+  "independent_point_gap_statistics_mm": {
+    "issued": {
+      "min": 2.7261932223714282,
+      "p50": 2.7261932223714282,
+      "p95": 2.7261932223714282,
+      "p99": 2.7261932223714282,
+      "max": 2.7261932223714282
+    },
+    "filtered": {
+      "min": 2.7261932223714282,
+      "p50": 2.7261932223714282,
+      "p95": 2.7261932223714282,
+      "p99": 2.7261932223714282,
+      "max": 2.7261932223714282
+    },
+    "candidate": {
+      "min": -1.0659012966250596,
+      "p50": 3.77976803030622,
+      "p95": 7.445321651572725,
+      "p99": 7.673419286309732,
+      "max": 7.706138014106751
+    },
+    "last_archived_measurement": {
+      "min": 2.3637227570987944,
+      "p50": 2.458259967770641,
+      "p95": 2.458259967770641,
+      "p99": 2.458260377309264,
+      "max": 2.9074433517682143
+    },
+    "runtime_min_probe": {
+      "min": 0.8891770495631204,
+      "p50": 1.0199641190634063,
+      "p95": 1.1000570737005668,
+      "p99": 1.2170216239195657,
+      "max": 1.217605881014324
+    }
+  },
+  "query_statistics": {
+    "min": 93.0,
+    "p50": 262.0,
+    "p95": 387.7999999999993,
+    "p99": 476.9599999999991,
+    "max": 688.0
+  },
+  "depth_statistics": {
+    "min": 18.0,
+    "p50": 18.0,
+    "p95": 18.0,
+    "p99": 18.0,
+    "max": 18.0
+  },
+  "point_threshold_failures": [
+    {
+      "point": "candidate",
+      "reason": "CLEARANCE_VIOLATION",
+      "count": 85
+    },
+    {
+      "point": "candidate",
+      "reason": "PENETRATION",
+      "count": 870
+    }
+  ],
+  "original_physics": {
+    "intervals": 24020,
+    "substeps": 48040,
+    "minimum_sampled_gap_mm": 1.170595409348607,
+    "maximum_penetration_mm": 0.0,
+    "any_contact_across_13_channels_per_hmb_tick": false,
+    "any_event": false
+  },
+  "cases": {
+    "candidate_min": {
+      "values": [
+        -0.0010659012966250595
+      ],
+      "row": {
+        "line": 2772,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00007",
+        "tick": 11,
+        "subcycle": 0,
+        "time_ns": 56220000082,
+        "control_cutoff_ns": 56220001000,
+        "status": "SWEEP_UNPROVEN",
+        "termination": "MAX_SUBDIVISION_DEPTH",
+        "held": true,
+        "hold_proof": "PERMIT",
+        "last_unresolved_pairs": [
+          2425
+        ],
+        "queries": 100,
+        "depth": 18,
+        "sampled_clearance_violation": null,
+        "witness_pair_index": null,
+        "runtime_min_probe_gap_m": 0.0010591177737970423,
+        "independent_right_pair_gaps_m": [
+          0.002726193222371428,
+          0.002726193222371428,
+          -0.0010659012966250595,
+          0.002458259967770641
+        ],
+        "precontrol_measured_exact": false,
+        "q_measured_samples": "latest_20ms_export_or_exact_start_JSON",
+        "source_event_row_sha256": "7fc9e90ec7206cc739b5ee0fe7b7512303082202e0cf6c9b43be98e2a64d6bc9"
+      }
+    },
+    "first": {
+      "values": [
+        0.002461317195988429
+      ],
+      "row": {
+        "line": 214,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+        "tick": 253,
+        "subcycle": 0,
+        "time_ns": 5060000000,
+        "control_cutoff_ns": 5060001000,
+        "status": "SWEEP_UNPROVEN",
+        "termination": "MAX_SUBDIVISION_DEPTH",
+        "held": true,
+        "hold_proof": "PERMIT",
+        "last_unresolved_pairs": [
+          2425
+        ],
+        "queries": 241,
+        "depth": 18,
+        "sampled_clearance_violation": null,
+        "witness_pair_index": null,
+        "runtime_min_probe_gap_m": 0.0009237140342091256,
+        "independent_right_pair_gaps_m": [
+          0.002726193222371428,
+          0.002726193222371428,
+          0.002461317195988429,
+          0.0029074433517682144
+        ],
+        "precontrol_measured_exact": false,
+        "q_measured_samples": "latest_20ms_export_or_exact_start_JSON",
+        "source_event_row_sha256": "1b64cd10b5724caca49597b4e7d993436e3c77089592827e9ea399ad4ed64c5c"
+      }
+    }
+  },
+  "wall_seconds": 0.650093336997088,
+  "limitations": [
+    "Last unresolved-pair list identifies the original stopping leaf, not all unresolved boxes.",
+    "Independent mesh computations are point geometry of all archived rejected proposals and available stored references.",
+    "Exact per-request measured f64, exact internal filtered f64, and proof tree were not archived. Full historical proof replay needs verified deterministic physical state reconstruction.",
+    "No admission, no interpretation of SWEEP_UNPROVEN as penetration, and no active coverage credit."
+  ]
+}

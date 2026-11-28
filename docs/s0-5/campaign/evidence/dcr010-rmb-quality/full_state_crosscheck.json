@@ -1,0 +1,31 @@
+{
+  "scope": "DIAGNOSTIC_ONLY_NO_MJ_STEP",
+  "source_ledger_sha256": "53d9359928f753b826af0a5a7065d5d5e27b924fed8ac1670748ecdb2d99ede6",
+  "script_sha256": "e03ec795923f889751ef8513a7509ffd4bf3cb5723b7c75c5a080af340156791",
+  "runtime_assets_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+  "pair_ids": [
+    138,
+    151
+  ],
+  "threshold_classifications": {
+    "MEETS_CLEARANCE": 21950,
+    "CLEARANCE_VIOLATION": 85,
+    "PENETRATION": 870,
+    "PENETRATION_STATIC_CONTACT_CONFIRMED": 870
+  },
+  "difference_in_classification_vs_common_frame": 0,
+  "max_abs_gap_delta_m_vs_common_frame": 6.010816844259637e-16,
+  "worst": {
+    "line": 2772,
+    "partition": "recording:8d51b482abc64ad7af84b3fe/00007",
+    "tick": 11,
+    "subcycle": 0,
+    "time_ns": 56220000082,
+    "gap_m": -0.0010659012966250322,
+    "static_pair_contacts_m": [
+      -0.0010635222138960895,
+      -0.0010659013859340729,
+      -0.001059826263019074
+    ]
+  }
+}
