@@ -132,6 +132,8 @@ class NativePair:
                                            ct.c_int32, ct.c_double, ct.c_int64, ct.c_int64, ct.c_int64,
                                            ct.c_int, ct.POINTER(Output)]
         lib.s05_wuji_probe_step.restype = ct.c_int
+        lib.s05_wuji_probe_joint_name.argtypes = [ct.c_int, ct.c_size_t, ct.POINTER(ct.c_char), ct.c_size_t]
+        lib.s05_wuji_probe_joint_name.restype = None
         self.handles = []
         try:
             for side, p in enumerate(configs):
@@ -156,11 +158,26 @@ class NativePair:
             if self.library.s05_wuji_probe_reset(handle, recreate, ct.byref(output)):
                 raise RuntimeError(output.error.decode())
 
+    def joint_names(self):
+        names = []
+        buffer = ct.create_string_buffer(32)
+        for side in range(2):
+            order = []
+            for axis in range(20):
+                self.library.s05_wuji_probe_joint_name(side, axis, buffer, len(buffer))
+                order.append(buffer.value.decode())
+            names.append(order)
+        return names
+
     def step(self, row, receive_ns, *, reconstructed=True, gate_open=True):
-        nodes = (RawNode * len(row["raw_nodes"]))(*(
-            RawNode(n["node_id"], n["chain_type"].encode(), n["joint_type"].encode(), (ct.c_double * 3)(*n["xyz"]))
-            for n in row["raw_nodes"]
-        ))
+        nodes = []
+        for node in row["raw_nodes"]:
+            # The extractor records a null position when a raw position field
+            # is nonfinite. Let the native selected-position check reject it.
+            xyz = node["xyz"] if node["xyz"] is not None else [np.nan] * 3
+            nodes.append(RawNode(node["node_id"], node["chain_type"].encode(), node["joint_type"].encode(),
+                                 (ct.c_double * 3)(*xyz)))
+        nodes = (RawNode * len(nodes))(*nodes)
         now_ns = 1_000_000_000 + receive_ns
         if reconstructed:
             header_ns, before_ns, after_ns = now_ns, now_ns, now_ns
@@ -256,6 +273,11 @@ def masked_source(tick):
     return [token if valid else None for token, valid in zip(tick["source_index"], tick["pose_valid"], strict=True)]
 
 
+def writer_tokens(tick, tokens):
+    return [tuple(value) if token is not None else None
+            for token, value in zip(tokens, tick["writer_identity"], strict=True)]
+
+
 def selected_native(native, ticks, by_id, *, partition_resets):
     result = []
     previous_partition = None
@@ -272,10 +294,11 @@ def selected_native(native, ticks, by_id, *, partition_resets):
         if in_replay(tick):
             previous_partition = partition
         tokens = masked_source(tick)
+        identities = writer_tokens(tick, tokens)
         for side, token in enumerate(tokens):
-            if token is not None and token != previous_tokens[side]:
+            if token is not None and identities[side] != previous_tokens[side]:
                 previous_outputs[side] = native.step(by_id[token], clock_of(tick) - earliest)
-                previous_tokens[side] = token
+                previous_tokens[side] = identities[side]
         result.append([previous_outputs[i] if token is not None else None for i, token in enumerate(tokens)])
     return result
 
@@ -320,7 +343,7 @@ def selected_python(hand, ticks, *, control=None):
             order = [np.asarray(x) if x is not None else None for x in tick["order"]]
             if control is not None:
                 tap.control = [row["sdk_keypoints"] if row is not None else None for row in control[index]]
-            nominal.refresh(None, common, order, tokens, tick_ns=clock_of(tick))
+            nominal.refresh(None, common, order, writer_tokens(tick, tokens), tick_ns=clock_of(tick))
         result.append([
             {"valid": bool(nominal.hand_valid[i] and accessible),
              "raw_rad": nominal.raw_hand[i].tolist() if nominal.hand_valid[i] and accessible else None,
@@ -349,7 +372,7 @@ def summarize(values):
 
 def rates(native, events, reference, factors):
     result = {}
-    origin = events[0]["receive_ns"]
+    origin = min(0, events[0]["receive_ns"])
     for factor in factors:
         native.reset(recreate=True)
         errors = {kind: [[], []] for kind in ("raw_rad", "filtered_rad")}
@@ -366,8 +389,9 @@ def pair_output(path, by_id, a, ticks, b, b_partition, c, control):
     latest = [None, None]
     event_index = 0
     errors = {key: [[], []] for key in (
-        "pre_rotation_m", "sdk_input_m", "same_sdk_input_raw_rad", "selected_native_vs_offline_raw_rad",
-        "selected_native_vs_offline_filtered_rad", "full_vs_selected_root_raw_rad",
+        "semantic_order_mismatched_nodes", "pre_rotation_m", "sdk_input_m", "same_sdk_input_raw_rad",
+        "selected_native_vs_offline_raw_rad",
+        "same_sdk_input_filtered_rad", "selected_native_vs_offline_filtered_rad", "full_vs_selected_root_raw_rad",
         "full_vs_selected_root_filtered_rad", "selected_root_vs_partition_raw_rad",
         "selected_root_vs_partition_filtered_rad", "same_token_full_vs_selected_root_raw_rad",
         "same_token_full_vs_selected_root_filtered_rad",
@@ -382,7 +406,7 @@ def pair_output(path, by_id, a, ticks, b, b_partition, c, control):
                 event_index += 1
             row = {key: tick[key] for key in ("partition", "partition_tick", "tick_ns", "source_index", "pose_valid",
                          "joint_valid", "safety_permission", "nominal_pair_eligible", "history_eligible",
-                         "in_start_window", "arrival_ns") if key in tick}
+                         "in_start_window", "arrival_ns", "writer_identity") if key in tick}
             row["control_cutoff_ns"] = cutoff
             row["a_source_index"] = [value["source_index"] if value is not None else None for value in latest]
             row["a_receive_ns"] = [value["receive_ns"] if value is not None else None for value in latest]
@@ -400,6 +424,7 @@ def pair_output(path, by_id, a, ticks, b, b_partition, c, control):
                 for name, left, right in (
                     ("sdk_input_m", row["b_sdk_keypoints"], row["c_sdk_keypoints"]),
                     ("same_sdk_input_raw_rad", row["b_raw_rad"], row["c_exact_raw_rad"]),
+                    ("same_sdk_input_filtered_rad", row["b_filtered_rad"], row["c_exact_filtered_rad"]),
                     ("selected_native_vs_offline_raw_rad", row["b_raw_rad"], row["c_raw_rad"]),
                     ("selected_native_vs_offline_filtered_rad", row["b_filtered_rad"], row["c_filtered_rad"]),
                     ("full_vs_selected_root_raw_rad", row["a_raw_rad"], row["b_raw_rad"]),
@@ -409,7 +434,11 @@ def pair_output(path, by_id, a, ticks, b, b_partition, c, control):
                 ):
                     errors[name][side].append(row_error(left[side], right[side]))
                 if selected[side] is not None and selected[side]["node_ids"] is not None:
-                    nodes = {node["node_id"]: node["xyz"] for node in by_id[token]["raw_nodes"]}
+                    source_nodes = by_id[token]["raw_nodes"]
+                    nodes = {node["node_id"]: node["xyz"] for node in source_nodes}
+                    signed_ids = [source_nodes[i]["node_id"] for i in tick["order"][side]]
+                    errors["semantic_order_mismatched_nodes"][side].append(
+                        sum(x != y for x, y in zip(selected[side]["node_ids"], signed_ids, strict=True)))
                     exact_xyz = [nodes[node_id] for node_id in selected[side]["node_ids"]]
                     signed_xyz = np.asarray(tick["common"][side])[tick["order"][side]]
                     errors["pre_rotation_m"][side].append(row_error(exact_xyz, signed_xyz))
@@ -449,6 +478,7 @@ def main():
     with ExitStack() as stack:
         native = NativePair(library, configs)
         stack.callback(native.close)
+        joint_names = native.joint_names()
         a = scheduled_a(native, events, out / "wuji-a-updates.jsonl", actual_clocks=args.actual_callback_clocks)
         native.reset(recreate=True)
         b = selected_native(native, ticks, by_id, partition_resets=False)
@@ -474,11 +504,14 @@ def main():
         "raw_event_callback_status": Counter((row["side"] + "/" + row["stage"]) for row in a),
         "signed_tick_count": len(ticks), "signed_pair_eligible_ticks": sum(t["nominal_pair_eligible"] for t in ticks),
         "inputs_in_scope": {"raw_events": len(events), "signed_ticks": len(ticks)},
-        "order": "Hand2 joint names, left then right in paired rows",
+        "joint_names": dict(zip(SIDES, joint_names, strict=True)),
+        "paired_row_side_order": SIDES,
         "summary_axis": "maximum absolute coordinate or joint error per paired hand/tick",
         "repeat_cold_start_rate_multiplier_errors": rate_summary,
         "comparisons": pair_output(out / "wuji-bc-ticks.jsonl", by_id, a, ticks, b, b_partition, c, control),
     }
+    summary["output_sha256"] = {name: digest(out / name)
+                                for name in ("wuji-a-updates.jsonl", "wuji-bc-ticks.jsonl")}
     with (out / "wuji-summary.json").open("x", encoding="utf-8") as stream:
         json.dump(summary, stream, indent=2, allow_nan=False)
         stream.write("\n")

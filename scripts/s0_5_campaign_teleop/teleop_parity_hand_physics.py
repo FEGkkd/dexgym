@@ -17,6 +17,7 @@ from audit_root_five_geometry_layers import stats
 from dexgym.tasks.direct.wholebody_s05.p02.model import COUPLING_LIMIT
 from dexgym.tasks.direct.wholebody_s05.v1.rmb.offline_nominal import OfflineTeleopNominal
 from dexgym.tasks.direct.wholebody_s05.v1.rmb.schema import file_sha, write_json
+from dexgym.tasks.direct.wholebody_s05.v1.task.physics import ServoProfile, signature
 from group_admission import verified_groups
 from offline_rmb_lockstep import Lockstep, PROOF
 from swept_live_guard import Reason, verified_robot
@@ -69,6 +70,7 @@ class NativeHandUpdates:
         self.pending = next(self.rows, None)
         self.q = [None, None]
         self.source = [None, None]
+        self.received = [None, None]
         self.last_clock = None
 
     def at(self, cutoff):
@@ -81,9 +83,11 @@ class NativeHandUpdates:
                 side = ("left", "right").index(row["side"])
                 self.q[side] = row["filtered_rad"]
                 self.source[side] = row["source_index"]
+                self.received[side] = row["receive_ns"]
             self.pending = next(self.rows, None)
         return {"a_filtered_rad": self.q.copy(), "a_valid": [x is not None for x in self.q],
-                "a_source_index": self.source.copy()}
+                "a_source_index": self.source.copy(), "a_receive_ns": self.received.copy(),
+                "physical_selection_ns": cutoff}
 
 
 class HandRollout:
@@ -145,6 +149,9 @@ class HandRollout:
                    "fixed_arm_joint_target": self.robot.home[:14].tolist(), "native_hand_status": statuses,
                    "handoff_mask": usable.tolist(), "python_step_limited": limited.tolist(),
                    "command_source_index": row["a_source_index"] if self.mode == "A" else row["source_index"],
+                   "physical_selection_ns": row["physical_selection_ns"],
+                   "source_receive_ns": row.get("a_receive_ns") if self.mode == "A" else None,
+                   "sdk_selected_control_cutoff_ns": row["control_cutoff_ns"],
                    "snapshot": state.tolist(), "nominal": target.tolist(),
                    "common_proof": common.name, "common_proof_detail": common_detail,
                    "guard_v2": shadow.name if self.shadow else None, "guard_v2_detail": shadow_detail,
@@ -190,6 +197,13 @@ def main(args):
     signed = json.loads(args.model_receipt.read_bytes())["model_identity"]["signed"]
     robot = verified_robot(args.model, signed["xml_sha256"], signed)
     axes = verified_groups(robot)
+    if signature(robot, ServoProfile()) != baseline["robot_model_servo"]:
+        raise ValueError("Fixed-arm control differs from the signed model or Servo")
+    sdk_summary = json.loads(args.sdk_summary.read_bytes())
+    if (sdk_summary["output_sha256"] != {p.name: file_sha(p) for p in (args.sdk_ticks, args.sdk_updates)}
+            or any(list(sdk_summary["joint_names"][side]) != [robot.actuators[i].name for i in axes[index + 2]]
+                   for index, side in enumerate(("left", "right")))):
+        raise ValueError("SDK output artifacts or named actuator order differ from the physical boundary")
     home = robot.geometry(robot.home)
     streams = {mode: HandRollout(robot, mode) for mode in MODES}
     a_updates = NativeHandUpdates(args.sdk_updates)
@@ -215,9 +229,14 @@ def main(args):
                 target_valid = bool(a["target_local_landmark_xyz_mask"][i].all())
                 evidence = {}
                 actual = {}
-                native_rows = [{**row, **a_updates.at(int(tick) + 4_000_000 * sub)} for sub in range(5)]
+                native_rows = []
+                sampled_rows = []
+                for sub in range(5):
+                    cut = row["control_cutoff_ns"] + 4_000_000 * sub
+                    native_rows.append({**row, **a_updates.at(cut)})
+                    sampled_rows.append({**row, "physical_selection_ns": cut})
                 for mode, rollout in streams.items():
-                    schedule = native_rows if mode == "A" else [row] * 5
+                    schedule = native_rows if mode == "A" else sampled_rows
                     traces = [rollout.advance(values, sub) for sub, values in enumerate(schedule)]
                     evidence[mode] = traces
                     samples = [sample for trial in traces for sample in trial.get("physical", [])]
@@ -248,10 +267,13 @@ def main(args):
         "full": baseline["full"], "window": baseline["window"], "robot_signature": baseline["robot_model_servo"]["sha256"],
         "groups_by_named_actuator": [[robot.names[j] for j in group] for group in axes],
         "fixed_arm_reference": "Signed Home joint targets; measured wrist drift reported independently",
+        "input_latching": "A/B hold their last published value. C/D use signed pair eligibility. Historical driver watchdog unobserved.",
+        "a_clock": "Reconstructed MANUS callback outputs at recorder receive time, consumed on the shared 4 ms issue grid.",
         "same_snapshot_counterfactual": "C.guard_v2 sees the exact C nominal vector/pre-issue state; D has separate physical feedback",
         "common_continuous_proof_max_depth": 24, "extra_v2_proof_max_depth": PROOF["max_depth"],
         "sha256": {"baseline_receipt": file_sha(reference_path), "sdk_ticks": file_sha(args.sdk_ticks),
                     "sdk_updates": file_sha(args.sdk_updates),
+                    "sdk_summary": file_sha(args.sdk_summary),
                     "model": file_sha(args.model), "model_receipt": file_sha(args.model_receipt),
                     "ledger": file_sha(ledger), "script": file_sha(Path(__file__))},
         "experiments": {mode: {"row_status": dict(mode_masks[mode]), "physics": dict(run.physics_stats),
@@ -264,6 +286,6 @@ def main(args):
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__)
-    for name in ("baseline", "model", "model-receipt", "sdk-ticks", "sdk-updates", "out"):
+    for name in ("baseline", "model", "model-receipt", "sdk-ticks", "sdk-updates", "sdk-summary", "out"):
         p.add_argument("--" + name, type=Path, required=True)
     main(p.parse_args())

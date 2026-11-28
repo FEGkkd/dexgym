@@ -189,6 +189,12 @@ private:
 }
 
 extern "C" {
+void s05_wuji_probe_joint_name(int side, size_t axis, char *target, size_t capacity) {
+  const auto handedness = side == 0 ? wuji_sdk_cpp::Handedness::Left : wuji_sdk_cpp::Handedness::Right;
+  const auto names = wuji_sdk_cpp::hand2_joint_names(handedness);
+  std::snprintf(target, capacity, "%s", names.at(axis).c_str());
+}
+
 void *s05_wuji_probe_create(int side, double rotation, int max_age, double alpha, uint32_t glove_id,
                            ProbeOutput *output) {
   try {
