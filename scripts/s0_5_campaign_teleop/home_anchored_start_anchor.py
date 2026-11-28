@@ -13,10 +13,8 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 
 from dexgym.tasks.direct.wholebody_s05.data.synchronize import CORE_STREAMS
-from dexgym.tasks.direct.wholebody_s05.hmb_reader import HMBReader, SIMULATED
 from dexgym.tasks.direct.wholebody_s05.p02.intent import semantic_order
 from hmb_cohort import EXPECTED_SPLITS, IDENTITIES, TICK_NS
-from prepare_start_handoff import bind_inputs, read_identity
 
 
 RUN_ID = "HOME-ANCHORED-PILOT-DCR009-01"
@@ -159,7 +157,7 @@ def hand_tips(data, sources, topologies, tick):
     return np.asarray(wrists)
 
 
-def anchor_rows(data, meta, sources, part, mounts, stop):
+def anchor_rows(data, meta, sources, part, mounts, stop, *, require_segment=True):
     used = data["tick_ns"] <= stop
     topologies = {(entry["stream"], entry["version"]): semantic_order(entry) for entry in meta["topologies"]}
     for tick in np.flatnonzero(used):
@@ -170,7 +168,7 @@ def anchor_rows(data, meta, sources, part, mounts, stop):
         source = ()
         samples = source_ns = wrists = tips = None
         if data["joint_valid"][tick] and data["safety_permission"][tick] and data["pose_valid"][tick, :4].all():
-            status = clock_status(data, tick) if segment >= 0 else "NO_SIGNED_CONTINUOUS_SEGMENT"
+            status = clock_status(data, tick) if segment >= 0 or not require_segment else "NO_SIGNED_CONTINUOUS_SEGMENT"
             if status == "VALID":
                 source = source_rows(data, sources, tick)
                 samples = tuple(role_identity(item) for item in source)
@@ -338,9 +336,10 @@ def motion_events(times, segments, poses, sources, valid, active):
     return sorted(retained, key=lambda row: (row["cutoff_ns"], row["side"]))
 
 
-def scan_root(reader, root, mounts, world_rotation, normals, origin, capture_end, explicit_status):
+def scan_root(reader, root, mounts, world_rotation, normals, origin, capture_end, explicit_status, *, diagnostic=False):
     parts, near = [], []
     start = previous = None
+    first_valid = None
     for part in root["hmb_partitions"]:
         raw, meta, sources, _ = reader.read(part["key"])
         identity = meta["identity"]
@@ -354,6 +353,9 @@ def scan_root(reader, root, mounts, world_rotation, normals, origin, capture_end
         previous = int(times[-1])
         if times[0] <= start + SEARCH_NS:
             near.extend(anchor_rows(raw, meta, sources, part["key"], mounts, start + SEARCH_NS))
+        if diagnostic and first_valid is None:
+            first_valid = next((row for row in anchor_rows(raw, meta, sources, part["key"], mounts, int(times[-1]),
+                                                         require_segment=False) if row.status == "VALID"), None)
         valid = raw["joint_valid"] & raw["safety_permission"] & raw["pose_valid"][:, :4].all(axis=1)
         positions = np.full((len(times), 2, 3), np.nan)
         if np.any(valid):
@@ -364,15 +366,24 @@ def scan_root(reader, root, mounts, world_rotation, normals, origin, capture_end
                       "positions": positions, "sources": raw["capture_bounds_ns"][:, 2:4, 0].copy()})
     anchor, primary = choose_anchor(near, PRIMARY, explicit_status)
     _, sensitivity = choose_anchor(near, SENSITIVITY, explicit_status)
+    anchor_status = primary["status"]
+    if diagnostic and anchor is None and explicit_status == "UNOBSERVED_IN_SIGNED_NATIVE_INPUTS" and first_valid is not None:
+        anchor = first_valid
+        anchor_status = "FIRST_CAUSAL_JOINT_VALID_DIAGNOSTIC"
     gaps = np.concatenate([np.linalg.norm(p["positions"][p["valid"], 1] - p["positions"][p["valid"], 0], axis=-1) for p in parts])
+    gap_key = "median_registered_wrist_gap_m" if diagnostic else "median_anatomical_gap_m"
     stats = {"root": root["root"], "split": root["split"], "task": root["task"], "source_manifest_sha256": root["manifest_sha256"],
              "explicit_event_status": explicit_status, "stable_primary": primary, "stable_sensitivity": sensitivity,
              "original_planned_start_ns": start, "original_planned_last_ns": previous,
              "full_root_denominators": {"partitions": len(parts), "plan_ticks": root["planned_ticks"],
                  "hmb_joint_valid_ticks": int(sum(p["joint"].sum() for p in parts)),
                  "hmb_five_frame_candidate_ticks": int(sum(p["five"].sum() for p in parts))},
-             "pose_support_ticks": len(gaps), "median_anatomical_gap_m": float(np.median(gaps)) if len(gaps) else None,
+             "pose_support_ticks": len(gaps), gap_key: float(np.median(gaps)) if len(gaps) else None,
              "ineligibility_reason": None if anchor else primary["reason"]}
+    if diagnostic:
+        stats.update(selected_anchor_status=anchor_status,
+                     stable_window_qualified_on_registered_wrist_proxy=anchor_status in {"RECONSTRUCTED_START", "EXPLICIT_START"},
+                     stable_anatomical_anchor_qualified=False)
     if anchor is None:
         return stats, None
     end = min(previous + TICK_NS, anchor.time + REPLAY_NS, capture_end - origin)
@@ -393,8 +404,9 @@ def scan_root(reader, root, mounts, world_rotation, normals, origin, capture_end
     win = {"source_cutoff_start_ns": origin + anchor.time, "source_cutoff_stop_exclusive_ns": origin + end,
            "hmb_cutoff_start_ns": anchor.time, "hmb_cutoff_stop_exclusive_ns": end, "partitions": segments,
            **{k: sum(part[k] for part in segments) for k in ("plan_ticks", "hmb_joint_valid_ticks", "hmb_five_frame_candidate_ticks")}}
-    stats.update(palm=palm_class(anchor.wrists, world_rotation, normals), motion_events=events,
-                 contains_start_stop_or_reversal=bool(events), historical_window=win)
+    stats.update(motion_events=events, contains_start_stop_or_reversal=bool(events), historical_window=win)
+    if not diagnostic:
+        stats["palm"] = palm_class(anchor.wrists, world_rotation, normals)
     return stats, anchor
 
 
@@ -463,6 +475,8 @@ def calibrated_geometry(calibration_path, frames_path, model_path=None):
 
 
 def train_reader(cohort_path, docs, hmb_products):
+    from dexgym.tasks.direct.wholebody_s05.hmb_reader import HMBReader, SIMULATED
+
     raw = cohort_path.read_bytes()
     cohort = json.loads(raw)
     if (cohort.get("schema") != "s05.teleop.hmb_source_cohort.v1" or cohort.get("native_assets_sha256_checked") is not True
@@ -483,6 +497,7 @@ def train_reader(cohort_path, docs, hmb_products):
 
 def verify_native(inputs, data, anchor, assets, cohort_path, cohort_sha, root):
     from nominal_live_replay import signed_events
+    from prepare_start_handoff import bind_inputs
 
     native, receipt = signed_events(cohort_path, root["root"], None)
     if receipt["root"] != root or receipt["cohort_receipt_sha256"] != cohort_sha:
@@ -520,6 +535,8 @@ def frozen_anchor(stats, anchor, assets, cohort_sha, frames_sha, cal_sha):
 
 
 def build(args):
+    from prepare_start_handoff import read_identity
+
     transforms, normals, calibration, normal_provenance, frames_sha = calibrated_geometry(args.calibration, args.frames, args.model)
     cohort_rows, reader, cohort_sha = train_reader(args.cohort, args.docs, args.hmb_products)
     cal_sha = file_sha(args.calibration)

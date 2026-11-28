@@ -1,0 +1,19 @@
+# DCR-009 diagnostic-only swept command guard
+
+Use one externally guarded native controller and one sidecar for each isolated MuJoCo attempt. The sidecar binds the exact installed Teleop and signed P02 MJCF and validates all relative include and mesh paths and SHA-256 values against the committed Stage II model-frame receipt. The controller owns the only arm and hand publishers and holds its publication mutex across snapshot, guard request, native publication and committed-state update. Arm and hand groups share that same transaction. The native controller verifies coherent current-generation feedback, the same header across all four feedback groups, numerical finiteness, monotonic cutoff, freshness and the currently active publication deadline.
+
+The child process binds a fresh socket in the attempt's owner-only directory. A request is 1316 bytes, packed little-endian as `<8sQI162d` with magic `S05SWP01`, positive monotonic sequence, group ID, last issued 54 radians, measured 54 radians and proposed 54 radians. Group IDs 0, 1, and 2 select the arms, left hand, and right hand. The signed and runtime names are `Joint1_L…Joint7_L` / `left_j1…left_j7`, `Joint1_R…Joint7_R` / `right_j1…right_j7`, then each side's `THJ0…3`, `FFJ0…3`, `MFJ0…3`, `RFJ0…3`, `LFJ0…3` actuator names. Readiness includes the full underlying joint and actuator manifest. The response is 24 bytes `<8sQII`, same magic and sequence, permit bit, and reason. Reason IDs are defined in `Reason`. Only a matching timely permit admits publication. Transport failures, time expiry, stale feedback, partial names, invalid axes and mismatched sequence deny publication.
+
+For each request the first issued state equals the acquired measured baseline. Subsequent issued snapshots must match the last timely admitted transaction's predecessor or candidate. This covers a controller that never published after a lost reply and retains the previous committed state. The controller commits a proposal only after its actual publish call succeeds. An independent attempt gets a new sidecar and socket. The server rejects edits outside the declared group.
+
+The guard checks both models throughout the coordinatewise envelope of measured, committed and proposed states. This permits any asynchronous ordering that remains inside the box. Joint and actuator ranges are intersected, and the extreme of each linear J6/J7 constraint is checked at the relevant box corner. Both models must prove collision distance greater than the existing 0.5 mm margin plus a 2 µm numerical reserve. MuJoCo narrow-phase distance evaluations and the existing parent-frame displacement bounds establish a conservative lower bound. If needed, split only an unresolved box along a nonzero displacement axis and repeat on unproven pairs. Resource limits are 7 split levels, 63 subdivision queries per model, and a default 25 ms server request deadline. Failure to prove clearance denies. Cached distances are recomputed from exact CPU MuJoCo states and may only be reused after subtracting the complete box displacement bound.
+
+One JSONL row records proof reason, PID, monotonic times and all finite input states per request. Native publish and feedback receipts separately determine whether a group was actually issued or applied. The proof scope is the submitted command envelope. Software setup must establish a lawful simulator Home before publication and stop on feedback outside the assumed envelope. This certificate does not establish Servo overshoot behavior, internal homing motion, physical safety or formal data/model qualification.
+
+```bash
+PYTHONPATH=source python scripts/s0_5_campaign_teleop/swept_live_guard.py \
+  --live-model "$LIVE_XML" --signed-model "$SIGNED_XML" \
+  --model-receipt docs/s0-5/campaign/evidence/dcr009-stage-two/model_frame_receipt.json \
+  --socket "$PRIVATE_ATTEMPT_SOCKET" --ready "$RUN_DIR/sweep-ready.json" \
+  --trace "$RUN_DIR/sweep-trace.jsonl"
+```
