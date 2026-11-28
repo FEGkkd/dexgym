@@ -22,6 +22,9 @@ from run_start_handoff_cohort import (
 
 
 SCRIPTS = Path(__file__).resolve().parent
+YAW_BASELINE_CONTROLLER_SHA256 = "9f95f3f6fb38f2db225f9f69fa57a24492daada252570f813ca7ac243655b9ba"
+YAW_BASELINE_DRIVER_SHA256 = "b226d4cbf4bbe7897a93c212c2e494430cbfe62da2aa97661c51e1fdd27fce59"
+YAW_BASELINE_GUARD_SHA256 = "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909"
 
 
 def evidence_summary(path):
@@ -98,6 +101,8 @@ def attempt(args, index, selection, cancelled):
     profile = selection.get("start_only_profile")
     if profile is not None:
         result["start_only_profile"] = profile
+    if args.align_start_yaw_to_home:
+        result["align_start_yaw_to_home"] = True
     save(result_file, result)
     children = []
     deadline = time.monotonic() + 180
@@ -173,6 +178,8 @@ def attempt(args, index, selection, cancelled):
                     arguments["start-only-profile"] = profile
                 for key, value in arguments.items():
                     program.extend((f"--{key}", str(value)))
+                if args.align_start_yaw_to_home:
+                    program.append("--align-start-yaw-to-home")
                 replay = subprocess.Popen(program, env=env, stdout=replay_log, stderr=subprocess.STDOUT, start_new_session=True)
                 children.append(replay)
                 result.update(replay_pid=replay.pid, replay_command=program, phase="RUNNING")
@@ -252,6 +259,7 @@ def main():
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--compare-root-five-centers", action="store_true")
     mode.add_argument("--root-five-start-only", choices=("original", "segmented"))
+    parser.add_argument("--align-start-yaw-to-home", action="store_true")
     parser.add_argument("--domain", type=int, choices=DOMAINS, required=True)
     args = parser.parse_args()
     if os.name != "posix" or not args.output.parent.is_dir():
@@ -261,6 +269,13 @@ def main():
                   (args.model, LIVE_SHA), (args.signed_model, SIGNED_SHA))
     if any(digest(path) != expected for path, expected in identities):
         raise ValueError("Requested diagnostic inputs differ from pinned assets")
+    if args.align_start_yaw_to_home and (
+        args.root_five_start_only != "segmented" or args.resume_from
+        or args.controller_sha256 != YAW_BASELINE_CONTROLLER_SHA256
+        or args.simulator_sha256 != YAW_BASELINE_DRIVER_SHA256
+        or digest(SCRIPTS / "swept_live_guard.py") != YAW_BASELINE_GUARD_SHA256
+    ):
+        raise ValueError("Yaw diagnostic must reuse the previous segmented controller, driver and sweep guard")
     plan = json.loads(args.plan.read_bytes())
     roster = check_scope(plan)
     roots = verified_roots(args.cohort, SCRIPTS.parents[1] / "docs/s0-5")
@@ -287,6 +302,8 @@ def main():
     if args.root_five_start_only:
         ledger["experiment"] = "ROOT_FIVE_ORIGINAL_CENTER_START_ONLY"
         ledger["profile"] = args.root_five_start_only
+    if args.align_start_yaw_to_home:
+        ledger["align_start_yaw_to_home"] = True
     if prior:
         ledger["prior_closed_attempt_count"] = prior
         ledger["prior_run_receipt_sha256"] = digest(args.resume_from[-1] / "run_receipt.json")

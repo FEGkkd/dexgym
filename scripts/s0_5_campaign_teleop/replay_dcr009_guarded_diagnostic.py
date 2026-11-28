@@ -54,6 +54,25 @@ def registered_targets(frames, measured_home, raw_registered, center_offset_mm=0
     return locked, registered_world, native
 
 
+def align_pair_yaw(locked, measured_home, registered_world):
+    """Rotate the whole intent about its midpoint, matching the signed left-to-right heading."""
+    home_line = np.diff(measured_home[:, :2, 3], axis=0)[0]
+    intent_line = np.diff(registered_world[:, :2, 3], axis=0)[0]
+    if min(np.linalg.norm(home_line), np.linalg.norm(intent_line)) < 1e-3:
+        raise ValueError("Cannot align START yaw for a degenerate horizontal left-to-right line")
+    cross = intent_line[0] * home_line[1] - intent_line[1] * home_line[0]
+    yaw = np.arctan2(cross, intent_line @ home_line)
+    pivot = registered_world[:, :3, 3].mean(axis=0)
+    turn = np.eye(4)
+    turn[:3, :3] = Rotation.from_rotvec([0., 0., yaw]).as_matrix()
+    turn[:3, 3] = pivot - turn[:3, :3] @ pivot
+    aligned = turn @ registered_world
+    frames = locked.copy()
+    frames[0] = turn @ locked[0]
+    return frames, aligned, {"yaw_deg": float(np.degrees(yaw)), "pivot_world_m": pivot.tolist(),
+                             "world_correction": turn.tolist()}
+
+
 def load(args):
     validate_environment(os.environ, args.session_map)
     if (args.launch_pid <= 1 or Path(os.environ.get("S05_DCR009_GUARD_SOCKET", ".")).resolve() != args.guard_socket
@@ -81,6 +100,8 @@ def load(args):
                 raise ValueError("Opt-in segmented controller profile was not armed for preposition")
         elif state_file:
             raise ValueError("The original START audit must use the original unsegmented controller")
+    if args.align_start_yaw_to_home and args.start_only_profile != "segmented":
+        raise ValueError("Common yaw alignment is confined to the segmented root-five START-only run")
     if plan["cohort_sha256"] != COHORT_SHA or plan["shared_frames_sha256"] != digest(args.frames):
         raise ValueError("Plan does not bind the original cohort and exact runtime frames")
     selection = next(row for row in rows if row["root"] == args.root)
@@ -265,6 +286,13 @@ def diagnostic_class():
                 raise ValueError("Original ROS wrist poses disagree with verified HMB registered poses")
             offset = self.args.center_offset_mm or 0
             locked, registered, self.goal = registered_targets(self.frames, self.home_snapshot, np.asarray(actual), offset)
+            yaw_evidence = {}
+            if self.args.align_start_yaw_to_home:
+                original_registered, original_native = registered, self.goal
+                locked, registered, yaw = align_pair_yaw(locked, self.home_snapshot, registered)
+                self.goal = np.linalg.inv(locked[1:3]) @ registered @ locked[3:5] @ locked[5:7]
+                yaw_evidence = {"yaw_alignment": yaw, "unaligned_registered_wrist": original_registered.tolist(),
+                                "unaligned_native_goal": original_native.tolist()}
             self.registered_goal = registered
             if self.args.center_offset_mm is not None:
                 _, _, self.original_goal = registered_targets(self.frames, self.home_snapshot, np.asarray(actual))
@@ -275,7 +303,7 @@ def diagnostic_class():
                        session_map_sha256=self.session_map_sha, shared_transform=self.shared.tolist(),
                        start_world_registered_wrist=registered.tolist(), runtime_native_goal=self.goal.tolist(),
                        center_offset_mm=self.args.center_offset_mm, center_offset_world_m=[offset / 1000, 0., 0.],
-                       scope=SCOPE, anatomical_mount_status="UNKNOWN", formal_coverage_credit=False)
+                       scope=SCOPE, anatomical_mount_status="UNKNOWN", formal_coverage_credit=False, **yaw_evidence)
             return selected
 
     return DiagnosticReplay, rclpy
@@ -301,6 +329,7 @@ def main():
     parser.add_argument("--launch-pid", type=int, required=True)
     parser.add_argument("--center-offset-mm", type=int, choices=CENTER_OFFSET_SEQUENCE_MM)
     parser.add_argument("--start-only-profile", choices=("original", "segmented"))
+    parser.add_argument("--align-start-yaw-to-home", action="store_true")
     args = parser.parse_args()
     root, anchor, frames, raw, home = load(args)
     from dexgym.tasks.direct.wholebody_s05.p02.model import RobotModel
@@ -319,6 +348,8 @@ def main():
                    shared_frames_sha256=digest(args.frames), historical_window=anchor["historical_window"])
     receipt["center_offset_mm"] = args.center_offset_mm
     receipt["start_only_profile"] = args.start_only_profile
+    if args.align_start_yaw_to_home:
+        receipt["align_start_yaw_to_home"] = True
     (args.output / "input.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     Runner, rclpy = diagnostic_class()
     rclpy.init()

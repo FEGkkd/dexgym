@@ -10,7 +10,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 
 from prepare_home_anchored_pilot_overlay import prepare
-from replay_dcr009_guarded_diagnostic import CENTER_OFFSET_SEQUENCE_MM, VIRTUAL_R, registered_targets
+from replay_dcr009_guarded_diagnostic import CENTER_OFFSET_SEQUENCE_MM, VIRTUAL_R, align_pair_yaw, registered_targets
 from replay_home_anchored_pilot import (
     AUTHORITY_SCHEMA, DESIGN, RUN_ID, FeedbackDwell, digest, expected_arm_publish,
     load_prerequisites, lock_home_frames, map_file, proper, read_frames, validate_environment,
@@ -18,6 +18,31 @@ from replay_home_anchored_pilot import (
 
 
 class PilotRuntimeTest(unittest.TestCase):
+    def test_common_yaw_preserves_relative_pose_height_and_nonworld_frames(self):
+        frames = np.repeat(np.eye(4)[None], 7, axis=0)
+        frames[0, :3, :3] = VIRTUAL_R
+        frames[3, :3, 3] = [.03, .02, -.01]
+        home = np.repeat(np.eye(4)[None], 2, axis=0)
+        home[:, :3, 3] = [[.3, -.5, .81], [-.3, -.5, .79]]
+        target = home.copy()
+        target[:, :3, 3] = [[.04, -.2, .833], [-.04, -.8, .767]]
+        target[0, :3, :3] = Rotation.from_euler("x", 27, degrees=True).as_matrix()
+        target[1, :3, :3] = Rotation.from_euler("y", 46, degrees=True).as_matrix()
+        result, aligned, record = align_pair_yaw(frames, home, target)
+        np.testing.assert_array_equal(result[1:], frames[1:])
+        np.testing.assert_allclose(aligned[:, :3, 3].mean(axis=0), target[:, :3, 3].mean(axis=0), atol=1e-14)
+        np.testing.assert_allclose(aligned[:, 2, 3], target[:, 2, 3], atol=1e-14)
+        np.testing.assert_allclose(np.linalg.inv(aligned[0]) @ aligned[1], np.linalg.inv(target[0]) @ target[1], atol=1e-14)
+        np.testing.assert_allclose(aligned[1, 1, 3], aligned[0, 1, 3], atol=1e-14)
+        self.assertLess(aligned[1, 0, 3], aligned[0, 0, 3])
+        self.assertAlmostEqual(record["yaw_deg"], -82.4053566314)
+        flipped = target[::-1].copy()
+        _, corrected, _ = align_pair_yaw(frames, home, flipped)
+        self.assertLess(corrected[1, 0, 3], corrected[0, 0, 3])
+        target[1, :2, 3] = target[0, :2, 3]
+        with self.assertRaisesRegex(ValueError, "degenerate"):
+            align_pair_yaw(frames, home, target)
+
     def test_strict_start_only_stops_without_claiming_historical_replay(self):
         from run_dcr009_guarded_diagnostic import evidence_summary
 
