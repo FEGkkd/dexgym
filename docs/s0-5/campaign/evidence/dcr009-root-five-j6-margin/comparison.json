@@ -1,0 +1,844 @@
+{
+  "schema": "s05.teleop.dcr009_root_five_segmented_start.v1",
+  "scope": "DIAGNOSTIC_ONLY",
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "center_offset_mm": 0,
+  "formal_coverage_credit": false,
+  "stage_credit": false,
+  "physical_qualification": false,
+  "residual_enabled": false,
+  "original_goal_equality": {
+    "same_original_input_records": true,
+    "source_cutoff_ns": 621699543607975,
+    "within_tolerance": true,
+    "runtime_native_goal": {
+      "exact_numeric_match": true,
+      "within_bound_target_tolerance": true,
+      "per_wrist": {
+        "left": {
+          "position_mm": 0.0,
+          "so3_deg": 0.0
+        },
+        "right": {
+          "position_mm": 0.0,
+          "so3_deg": 0.0
+        }
+      }
+    },
+    "start_world_registered_wrist": {
+      "exact_numeric_match": true,
+      "within_bound_target_tolerance": true,
+      "per_wrist": {
+        "left": {
+          "position_mm": 0.0,
+          "so3_deg": 0.0
+        },
+        "right": {
+          "position_mm": 0.0,
+          "so3_deg": 0.0
+        }
+      }
+    },
+    "position_tolerance_mm": 0.1,
+    "so3_tolerance_deg": 0.057295779513082325
+  },
+  "same_two_model_guard_configuration": true,
+  "publication_home_and_cleanup_evidence_complete": true,
+  "equal_time_support": {
+    "bin_ms": 20.0,
+    "common_terminal_cutoff_ms": 2940.0,
+    "common_bin_end_ms": [
+      200.0,
+      220.0,
+      260.0,
+      300.0,
+      320.0,
+      340.0,
+      360.0,
+      380.0,
+      400.0,
+      420.0,
+      440.0,
+      500.0,
+      520.0,
+      540.0,
+      600.0,
+      620.0,
+      640.0,
+      660.0,
+      720.0,
+      740.0,
+      760.0,
+      780.0,
+      800.0,
+      820.0,
+      840.0,
+      860.0,
+      880.0,
+      900.0,
+      920.0,
+      960.0,
+      980.0,
+      1000.0,
+      1020.0,
+      1040.0,
+      1060.0,
+      1080.0,
+      1100.0,
+      1140.0,
+      1160.0,
+      1200.0,
+      1220.0,
+      1240.0,
+      1260.0,
+      1280.0,
+      1300.0,
+      1320.0,
+      1360.0,
+      1380.0,
+      1400.0,
+      1440.0,
+      1460.0,
+      1480.0,
+      1500.0,
+      1520.0,
+      1540.0,
+      1560.0,
+      1620.0,
+      1640.0,
+      1660.0,
+      1680.0,
+      1700.0,
+      1720.0,
+      1740.0,
+      1760.0,
+      1780.0,
+      1840.0,
+      1860.0,
+      1880.0,
+      1900.0,
+      1920.0,
+      1940.0,
+      1960.0,
+      1980.0,
+      2000.0,
+      2040.0,
+      2060.0,
+      2100.0,
+      2120.0,
+      2140.0,
+      2160.0,
+      2180.0,
+      2200.0,
+      2220.0,
+      2260.0,
+      2280.0,
+      2300.0,
+      2320.0,
+      2360.0,
+      2400.0,
+      2440.0,
+      2460.0,
+      2480.0,
+      2500.0,
+      2520.0,
+      2540.0,
+      2560.0,
+      2580.0,
+      2600.0,
+      2640.0,
+      2660.0,
+      2680.0,
+      2700.0,
+      2720.0,
+      2740.0,
+      2760.0,
+      2780.0,
+      2800.0,
+      2820.0,
+      2880.0,
+      2900.0,
+      2920.0,
+      2940.0
+    ],
+    "eligible_bins": 112,
+    "rule": "Last distinct observed sample within each shared right-closed bin before either terminal event; no cross-bin fill"
+  },
+  "comparison_status": "DIAGNOSTIC_PAIRED",
+  "paired_p95_deltas": {
+    "engineering_tcp": {
+      "segmented_minus_original_worst_wrist_p95_mm": 0.593359270189012,
+      "segmented_minus_original_worst_wrist_p95_deg": 0.16698033724701133
+    },
+    "registered_wrist_marker": {
+      "segmented_minus_original_worst_wrist_p95_mm": 0.5295306839556133,
+      "segmented_minus_original_worst_wrist_p95_deg": 0.10834633657222525
+    },
+    "unshifted_engineering_tcp": {
+      "segmented_minus_original_worst_wrist_p95_mm": 0.593359270189012,
+      "segmented_minus_original_worst_wrist_p95_deg": 0.16698033724701133
+    }
+  },
+  "original": {
+    "attempt": 1,
+    "center_offset_mm": 0,
+    "phase": "NATIVE_PROTECTIVE_HOLD_NO_HISTORY",
+    "process_exit": 1,
+    "start_status": "NOT_OBSERVED",
+    "preposition_origin": "preposition_clock",
+    "preposition_duration_s": 2.950400374,
+    "stop_ack_with_no_late_observed_command": true,
+    "domain_empty_after": true,
+    "owned_groups_stopped": true,
+    "internal_home_proofs": [
+      [
+        "PERMIT",
+        "PERMIT"
+      ]
+    ],
+    "recorded_history_inputs": 0,
+    "preposition_input_packets": 532,
+    "fault_stops": [
+      {
+        "elapsed_s": 2.950400374,
+        "stage": "preposition_start",
+        "source": "/tianji/robot_state",
+        "code": "DRIVER_NOT_COMMANDABLE",
+        "reason": "position held; home required before next enable",
+        "header_ns": 1795847619604694794
+      }
+    ],
+    "other_abort_reports": [
+      {
+        "stage": "tail",
+        "error": "Pilot watchdog observed native hard fault: DRIVER_NOT_COMMANDABLE"
+      }
+    ],
+    "unsafe_safety_topic_messages_by_code": {
+      "COMMAND_STEP": 1
+    },
+    "native_joint_limit_watchdog_events": 0,
+    "all_supported_measurements_descriptive_only": {
+      "engineering_tcp": {
+        "samples": 124,
+        "left_position_mm": {
+          "mean": 315.3356281341348,
+          "p95": 381.8894788985997,
+          "min": 243.46485982260705
+        },
+        "right_position_mm": {
+          "mean": 278.5838640456891,
+          "p95": 335.7307501625475,
+          "min": 219.5744601573711
+        },
+        "left_so3_deg": {
+          "mean": 55.75378369568371,
+          "p95": 74.7861933674968,
+          "min": 35.25213588167554
+        },
+        "right_so3_deg": {
+          "mean": 58.727640903452034,
+          "p95": 77.77640990103795,
+          "min": 37.874117429614984
+        },
+        "worst_wrist_position_p95_mm": 381.8894788985997,
+        "worst_wrist_so3_p95_deg": 77.77640990103795,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "registered_wrist_marker": {
+        "samples": 124,
+        "left_position_mm": {
+          "mean": 270.5640066405688,
+          "p95": 336.23431147502123,
+          "min": 200.04767680969897
+        },
+        "right_position_mm": {
+          "mean": 322.3493991319773,
+          "p95": 380.45680516924364,
+          "min": 261.40446942042826
+        },
+        "left_so3_deg": {
+          "mean": 152.8741803461528,
+          "p95": 165.512464147016,
+          "min": 139.54743267403924
+        },
+        "right_so3_deg": {
+          "mean": 87.67400321510316,
+          "p95": 96.67237223892673,
+          "min": 79.49299128173647
+        },
+        "worst_wrist_position_p95_mm": 380.45680516924364,
+        "worst_wrist_so3_p95_deg": 165.512464147016,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "unshifted_engineering_tcp": {
+        "samples": 124,
+        "left_position_mm": {
+          "mean": 315.3356281341348,
+          "p95": 381.8894788985997,
+          "min": 243.46485982260705
+        },
+        "right_position_mm": {
+          "mean": 278.5838640456891,
+          "p95": 335.7307501625475,
+          "min": 219.5744601573711
+        },
+        "left_so3_deg": {
+          "mean": 55.75378369568371,
+          "p95": 74.7861933674968,
+          "min": 35.25213588167554
+        },
+        "right_so3_deg": {
+          "mean": 58.727640903452034,
+          "p95": 77.77640990103795,
+          "min": 37.874117429614984
+        },
+        "worst_wrist_position_p95_mm": 381.8894788985997,
+        "worst_wrist_so3_p95_deg": 77.77640990103795,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      }
+    },
+    "common_support_metrics": {
+      "engineering_tcp": {
+        "samples": 112,
+        "left_position_mm": {
+          "mean": 314.5715070064824,
+          "p95": 381.44907329826594,
+          "min": 243.46485982260705
+        },
+        "right_position_mm": {
+          "mean": 277.9366246425916,
+          "p95": 335.3357473476766,
+          "min": 219.5744601573711
+        },
+        "left_so3_deg": {
+          "mean": 55.53599897468979,
+          "p95": 74.66012342417937,
+          "min": 35.25213588167554
+        },
+        "right_so3_deg": {
+          "mean": 58.50873444905333,
+          "p95": 77.6502980812767,
+          "min": 37.874117429614984
+        },
+        "worst_wrist_position_p95_mm": 381.44907329826594,
+        "worst_wrist_so3_p95_deg": 77.6502980812767,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "registered_wrist_marker": {
+        "samples": 112,
+        "left_position_mm": {
+          "mean": 269.8111973053194,
+          "p95": 335.79795303068767,
+          "min": 200.04767680969897
+        },
+        "right_position_mm": {
+          "mean": 321.6888178924044,
+          "p95": 380.0587952373974,
+          "min": 261.40446942042826
+        },
+        "left_so3_deg": {
+          "mean": 152.73046307159802,
+          "p95": 165.4278821664617,
+          "min": 139.54743267403924
+        },
+        "right_so3_deg": {
+          "mean": 87.76618190929295,
+          "p95": 96.60134215164437,
+          "min": 79.49299128173647
+        },
+        "worst_wrist_position_p95_mm": 380.0587952373974,
+        "worst_wrist_so3_p95_deg": 165.4278821664617,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "unshifted_engineering_tcp": {
+        "samples": 112,
+        "left_position_mm": {
+          "mean": 314.5715070064824,
+          "p95": 381.44907329826594,
+          "min": 243.46485982260705
+        },
+        "right_position_mm": {
+          "mean": 277.9366246425916,
+          "p95": 335.3357473476766,
+          "min": 219.5744601573711
+        },
+        "left_so3_deg": {
+          "mean": 55.53599897468979,
+          "p95": 74.66012342417937,
+          "min": 35.25213588167554
+        },
+        "right_so3_deg": {
+          "mean": 58.50873444905333,
+          "p95": 77.6502980812767,
+          "min": 37.874117429614984
+        },
+        "worst_wrist_position_p95_mm": 381.44907329826594,
+        "worst_wrist_so3_p95_deg": 77.6502980812767,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      }
+    },
+    "groups": {
+      "arm": {
+        "guard_service_reasons": {
+          "PERMIT": 731,
+          "SWEEP_UNPROVEN": 1
+        },
+        "native_rejection_codes": {
+          "7": 1
+        },
+        "native_publications_with_permit": 731,
+        "observed_ros_messages": 727,
+        "native_publications_not_observed": 4,
+        "valid_guard_requests": 732,
+        "guard_permits": 731,
+        "permit_rate_over_valid_guard_requests": 0.9986338797814208
+      },
+      "left": {
+        "guard_service_reasons": {
+          "PERMIT": 6,
+          "SWEEP_UNPROVEN": 127
+        },
+        "native_rejection_codes": {
+          "7": 127
+        },
+        "native_publications_with_permit": 6,
+        "observed_ros_messages": 6,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 133,
+        "guard_permits": 6,
+        "permit_rate_over_valid_guard_requests": 0.045112781954887216
+      },
+      "right": {
+        "guard_service_reasons": {
+          "PERMIT": 4,
+          "SWEEP_UNPROVEN": 129
+        },
+        "native_rejection_codes": {
+          "7": 129
+        },
+        "native_publications_with_permit": 4,
+        "observed_ros_messages": 4,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 133,
+        "guard_permits": 4,
+        "permit_rate_over_valid_guard_requests": 0.03007518796992481
+      }
+    },
+    "unattributed_guard_reasons": {},
+    "publication_mismatches": {},
+    "input_identity": {
+      "result_sha256": "7926bf9a9621403038523f49dcdcfad27e3fba9224e68eb50e7657f6fd9edf60",
+      "native_trace_sha256": "c1de42da7d0a48a48261bf509decb86358bac7bcc8ed0496e17e9b8d7c3f91ba",
+      "guard_trace_sha256": "3ede1245c46eeaf336b0c879086584d7efcc404e01efacd400b40cc58e859186",
+      "sim_log_sha256": "d3ae25e9f13726b16cfe2ae5c7742edfdf5485eb5f02267cf359fe9f964b76be",
+      "input_receipt_sha256": "398da04a718072f789ea5e1270747da7ae6281d14bceb64b6798a8027af6b90b"
+    },
+    "profile": "segmented",
+    "measured_start_reached": false,
+    "endpoint": {
+      "elapsed_s": 2.92805594,
+      "observed_mono_ns": 158146334255874,
+      "terminal_gap_ms": 22.344434,
+      "feedback_header_ns": 1795847619581749707,
+      "matches_start_handoff_receipt": false,
+      "ready_sample": false,
+      "measured_speed_rad_s": 0.2947126862814018,
+      "hand_error_to_issued_rad": {
+        "left": null,
+        "right": null
+      },
+      "hand_error_to_unsegmented_wuji_rad": {
+        "left": null,
+        "right": null
+      },
+      "hand_segment_guard_proofs": {
+        "left": null,
+        "right": null
+      },
+      "engineering_tcp": {
+        "left": {
+          "position_mm": 243.46485982260705,
+          "so3_deg": 35.25213588167554
+        },
+        "right": {
+          "position_mm": 219.5744601573711,
+          "so3_deg": 37.874117429614984
+        }
+      },
+      "registered_wrist_marker": {
+        "left": {
+          "position_mm": 200.04767680969897,
+          "so3_deg": 139.54743267403924
+        },
+        "right": {
+          "position_mm": 261.40446942042826,
+          "so3_deg": 97.87861704592734
+        }
+      },
+      "unshifted_engineering_tcp": {
+        "left": {
+          "position_mm": 243.46485982260705,
+          "so3_deg": 35.25213588167554
+        },
+        "right": {
+          "position_mm": 219.5744601573711,
+          "so3_deg": 37.874117429614984
+        }
+      },
+      "hand_endpoint_proof_joins_observed_command": {
+        "left": null,
+        "right": null
+      }
+    },
+    "last_preterminal_hand_error_to_unsegmented_wuji_rad": {
+      "left": null,
+      "right": null
+    },
+    "start_only_scope_completion": false,
+    "live_model_sha256": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "identical_two_model_guard_contract_source_sha256": "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909"
+  },
+  "segmented": {
+    "attempt": 1,
+    "center_offset_mm": 0,
+    "phase": "NATIVE_PROTECTIVE_HOLD_NO_HISTORY",
+    "process_exit": 1,
+    "start_status": "NOT_OBSERVED",
+    "preposition_origin": "preposition_clock",
+    "preposition_duration_s": 3.125925547,
+    "stop_ack_with_no_late_observed_command": true,
+    "domain_empty_after": true,
+    "owned_groups_stopped": true,
+    "internal_home_proofs": [
+      [
+        "PERMIT",
+        "PERMIT"
+      ]
+    ],
+    "recorded_history_inputs": 0,
+    "preposition_input_packets": 568,
+    "fault_stops": [
+      {
+        "elapsed_s": 3.125925547,
+        "stage": "preposition_start",
+        "source": "/tianji/robot_state",
+        "code": "DRIVER_NOT_COMMANDABLE",
+        "reason": "position held; home required before next enable",
+        "header_ns": 1795857432292608755
+      }
+    ],
+    "other_abort_reports": [
+      {
+        "stage": "tail",
+        "error": "Pilot watchdog observed native hard fault: DRIVER_NOT_COMMANDABLE"
+      }
+    ],
+    "unsafe_safety_topic_messages_by_code": {
+      "COMMAND_STEP": 1
+    },
+    "native_joint_limit_watchdog_events": 0,
+    "all_supported_measurements_descriptive_only": {
+      "engineering_tcp": {
+        "samples": 140,
+        "left_position_mm": {
+          "mean": 316.09577361674417,
+          "p95": 390.8392649399195,
+          "min": 234.40399542418913
+        },
+        "right_position_mm": {
+          "mean": 279.4899315570281,
+          "p95": 343.8169112969056,
+          "min": 213.02059646894955
+        },
+        "left_so3_deg": {
+          "mean": 55.97389831659091,
+          "p95": 77.32585340656847,
+          "min": 32.66171399903968
+        },
+        "right_so3_deg": {
+          "mean": 58.94481914509227,
+          "p95": 80.33961734496293,
+          "min": 35.34061906827027
+        },
+        "worst_wrist_position_p95_mm": 390.8392649399195,
+        "worst_wrist_so3_p95_deg": 80.33961734496293,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "registered_wrist_marker": {
+        "samples": 140,
+        "left_position_mm": {
+          "mean": 271.342134171783,
+          "p95": 345.09855325313623,
+          "min": 191.25105314302502
+        },
+        "right_position_mm": {
+          "mean": 323.20224141629404,
+          "p95": 388.5997058012615,
+          "min": 254.4320273710085
+        },
+        "left_so3_deg": {
+          "mean": 153.04470169134052,
+          "p95": 167.2223885469416,
+          "min": 137.9294724646295
+        },
+        "right_so3_deg": {
+          "mean": 87.7358154209928,
+          "p95": 97.98366130767367,
+          "min": 78.91155160540622
+        },
+        "worst_wrist_position_p95_mm": 388.5997058012615,
+        "worst_wrist_so3_p95_deg": 167.2223885469416,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "unshifted_engineering_tcp": {
+        "samples": 140,
+        "left_position_mm": {
+          "mean": 316.09577361674417,
+          "p95": 390.8392649399195,
+          "min": 234.40399542418913
+        },
+        "right_position_mm": {
+          "mean": 279.4899315570281,
+          "p95": 343.8169112969056,
+          "min": 213.02059646894955
+        },
+        "left_so3_deg": {
+          "mean": 55.97389831659091,
+          "p95": 77.32585340656847,
+          "min": 32.66171399903968
+        },
+        "right_so3_deg": {
+          "mean": 58.94481914509227,
+          "p95": 80.33961734496293,
+          "min": 35.34061906827027
+        },
+        "worst_wrist_position_p95_mm": 390.8392649399195,
+        "worst_wrist_so3_p95_deg": 80.33961734496293,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      }
+    },
+    "common_support_metrics": {
+      "engineering_tcp": {
+        "samples": 112,
+        "left_position_mm": {
+          "mean": 315.4730960822386,
+          "p95": 382.04243256845496,
+          "min": 243.33707665719476
+        },
+        "right_position_mm": {
+          "mean": 278.7032879550653,
+          "p95": 335.8611627093442,
+          "min": 219.92985022507526
+        },
+        "left_so3_deg": {
+          "mean": 55.789388495816326,
+          "p95": 74.82220092188189,
+          "min": 35.15944280254176
+        },
+        "right_so3_deg": {
+          "mean": 58.766699693768054,
+          "p95": 77.81727841852371,
+          "min": 38.01268799006115
+        },
+        "worst_wrist_position_p95_mm": 382.04243256845496,
+        "worst_wrist_so3_p95_deg": 77.81727841852371,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "registered_wrist_marker": {
+        "samples": 112,
+        "left_position_mm": {
+          "mean": 270.6983420072933,
+          "p95": 336.383641945598,
+          "min": 199.90349421278523
+        },
+        "right_position_mm": {
+          "mean": 322.47049212408336,
+          "p95": 380.58832592135303,
+          "min": 261.785106300827
+        },
+        "left_so3_deg": {
+          "mean": 152.8980525422124,
+          "p95": 165.53622850303393,
+          "min": 139.51666831057938
+        },
+        "right_so3_deg": {
+          "mean": 87.6585818644993,
+          "p95": 96.54141198634926,
+          "min": 79.50175496658748
+        },
+        "worst_wrist_position_p95_mm": 380.58832592135303,
+        "worst_wrist_so3_p95_deg": 165.53622850303393,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "unshifted_engineering_tcp": {
+        "samples": 112,
+        "left_position_mm": {
+          "mean": 315.4730960822386,
+          "p95": 382.04243256845496,
+          "min": 243.33707665719476
+        },
+        "right_position_mm": {
+          "mean": 278.7032879550653,
+          "p95": 335.8611627093442,
+          "min": 219.92985022507526
+        },
+        "left_so3_deg": {
+          "mean": 55.789388495816326,
+          "p95": 74.82220092188189,
+          "min": 35.15944280254176
+        },
+        "right_so3_deg": {
+          "mean": 58.766699693768054,
+          "p95": 77.81727841852371,
+          "min": 38.01268799006115
+        },
+        "worst_wrist_position_p95_mm": 382.04243256845496,
+        "worst_wrist_so3_p95_deg": 77.81727841852371,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      }
+    },
+    "groups": {
+      "arm": {
+        "guard_service_reasons": {
+          "PERMIT": 774,
+          "SWEEP_UNPROVEN": 1
+        },
+        "native_rejection_codes": {
+          "7": 1
+        },
+        "native_publications_with_permit": 774,
+        "observed_ros_messages": 774,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 775,
+        "guard_permits": 774,
+        "permit_rate_over_valid_guard_requests": 0.9987096774193548
+      },
+      "left": {
+        "guard_service_reasons": {
+          "PERMIT": 6,
+          "SWEEP_UNPROVEN": 136
+        },
+        "native_rejection_codes": {
+          "7": 136
+        },
+        "native_publications_with_permit": 6,
+        "observed_ros_messages": 6,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 142,
+        "guard_permits": 6,
+        "permit_rate_over_valid_guard_requests": 0.04225352112676056
+      },
+      "right": {
+        "guard_service_reasons": {
+          "PERMIT": 4,
+          "SWEEP_UNPROVEN": 138
+        },
+        "native_rejection_codes": {
+          "7": 138
+        },
+        "native_publications_with_permit": 4,
+        "observed_ros_messages": 4,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 142,
+        "guard_permits": 4,
+        "permit_rate_over_valid_guard_requests": 0.028169014084507043
+      }
+    },
+    "unattributed_guard_reasons": {},
+    "publication_mismatches": {},
+    "input_identity": {
+      "result_sha256": "ead3338db8654dddd186ce023c30de759e378dfdaa579148d6b246dc77d778cc",
+      "native_trace_sha256": "7d69ba02015163d4077bf5988b3122019b4e63096bc732e4482afb17728ba2e7",
+      "guard_trace_sha256": "80b5c471f788623b0c3b804d6163d96eae55496959e6e1a58256513da4ea637b",
+      "sim_log_sha256": "d0b8b5627d69d96b47da485571d32a24ddecc2516c6e41d261def977fcafd76a",
+      "input_receipt_sha256": "398da04a718072f789ea5e1270747da7ae6281d14bceb64b6798a8027af6b90b"
+    },
+    "profile": "segmented",
+    "measured_start_reached": false,
+    "endpoint": {
+      "elapsed_s": 3.104923827,
+      "observed_mono_ns": 167958568521464,
+      "terminal_gap_ms": 21.00172,
+      "feedback_header_ns": 1795857432272623370,
+      "matches_start_handoff_receipt": false,
+      "ready_sample": false,
+      "measured_speed_rad_s": 0.31539774861740094,
+      "hand_error_to_issued_rad": {
+        "left": null,
+        "right": null
+      },
+      "hand_error_to_unsegmented_wuji_rad": {
+        "left": null,
+        "right": null
+      },
+      "hand_segment_guard_proofs": {
+        "left": null,
+        "right": null
+      },
+      "engineering_tcp": {
+        "left": {
+          "position_mm": 234.40399542418913,
+          "so3_deg": 32.66171399903968
+        },
+        "right": {
+          "position_mm": 213.02059646894955,
+          "so3_deg": 35.34061906827027
+        }
+      },
+      "registered_wrist_marker": {
+        "left": {
+          "position_mm": 191.25105314302502,
+          "so3_deg": 137.9294724646295
+        },
+        "right": {
+          "position_mm": 254.4320273710085,
+          "so3_deg": 99.34239055504862
+        }
+      },
+      "unshifted_engineering_tcp": {
+        "left": {
+          "position_mm": 234.40399542418913,
+          "so3_deg": 32.66171399903968
+        },
+        "right": {
+          "position_mm": 213.02059646894955,
+          "so3_deg": 35.34061906827027
+        }
+      },
+      "hand_endpoint_proof_joins_observed_command": {
+        "left": null,
+        "right": null
+      }
+    },
+    "last_preterminal_hand_error_to_unsegmented_wuji_rad": {
+      "left": {
+        "error_rad": 1.0345273807281479,
+        "guard_proof": 42,
+        "elapsed_s": 0.133237465,
+        "terminal_gap_ms": 2992.688082
+      },
+      "right": {
+        "error_rad": 0.9210498879383338,
+        "guard_proof": 43,
+        "elapsed_s": 0.133237465,
+        "terminal_gap_ms": 2992.688082
+      }
+    },
+    "start_only_scope_completion": false,
+    "live_model_sha256": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "identical_two_model_guard_contract_source_sha256": "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909"
+  }
+}
