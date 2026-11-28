@@ -1,0 +1,61 @@
+test_bounded_hand_rejoin_never_counts_as_exact_active (__main__.AdmissionTests.test_bounded_hand_rejoin_never_counts_as_exact_active) ... ok
+test_builder_full_active_requires_every_group_and_all_physical_positions (__main__.AdmissionTests.test_builder_full_active_requires_every_group_and_all_physical_positions) ... ok
+test_final_and_hold_veto_prevent_any_physical_step (__main__.AdmissionTests.test_final_and_hold_veto_prevent_any_physical_step) ... ok
+test_final_veto_requires_independent_hold_proof_and_discards_branches (__main__.AdmissionTests.test_final_veto_requires_independent_hold_proof_and_discards_branches) ... ok
+test_incomplete_physics_does_not_grant_a_rejoin_step (__main__.AdmissionTests.test_incomplete_physics_does_not_grant_a_rejoin_step) ... ok
+test_individual_proofs_do_not_authorize_an_unsafe_union (__main__.AdmissionTests.test_individual_proofs_do_not_authorize_an_unsafe_union) ... ok
+test_named_groups_must_preserve_nominal_order_and_transmissions (__main__.AdmissionTests.test_named_groups_must_preserve_nominal_order_and_transmissions) ... ok
+test_native_hard_fault_and_invalid_feedback_stop_before_proof (__main__.AdmissionTests.test_native_hard_fault_and_invalid_feedback_stop_before_proof) ... ok
+test_one_hand_rejection_keeps_other_movements_and_has_one_commit (__main__.AdmissionTests.test_one_hand_rejection_keeps_other_movements_and_has_one_commit) ... ok
+test_physical_calls_share_one_command_and_stop_at_first_event (__main__.AdmissionTests.test_physical_calls_share_one_command_and_stop_at_first_event) ... ok
+test_raw_missing_payload_survives_without_entering_finite_rmb_fields (__main__.AdmissionTests.test_raw_missing_payload_survives_without_entering_finite_rmb_fields) ... ok
+test_rejoin_only_unlocks_after_the_complete_exact_streak (__main__.AdmissionTests.test_rejoin_only_unlocks_after_the_complete_exact_streak) ... ok
+test_sampled_gap_codes_are_distinct_from_continuous_unproven (__main__.AdmissionTests.test_sampled_gap_codes_are_distinct_from_continuous_unproven) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.023s
+
+OK
+usage: build_offline_rmb_diagnostic.py [-h] --plan PLAN --cohort COHORT
+                                       --model MODEL --model-receipt
+                                       MODEL_RECEIPT --frames FRAMES --bridge
+                                       BRIDGE --config CONFIG --phase1 PHASE1
+                                       --wuji WUJI --out OUT [--root ROOT]
+                                       [--root-five-receipt ROOT_FIVE_RECEIPT]
+                                       [--independent-gate-receipt INDEPENDENT_GATE_RECEIPT]
+                                       [--group-admission]
+
+Build one signed Train source as a diagnostic, non-admissible offline RMB.
+
+options:
+  -h, --help            show this help message and exit
+  --plan PLAN
+  --cohort COHORT
+  --model MODEL
+  --model-receipt MODEL_RECEIPT
+  --frames FRAMES
+  --bridge BRIDGE
+  --config CONFIG
+  --phase1 PHASE1
+  --wuji WUJI
+  --out OUT
+  --root ROOT
+  --root-five-receipt ROOT_FIVE_RECEIPT
+  --independent-gate-receipt INDEPENDENT_GATE_RECEIPT
+  --group-admission
+DISK_LOSSLESS_PASS recording:8d51b482abc64ad7af84b3fe/00000 13
+PARTITION_PASS recording:8d51b482abc64ad7af84b3fe/00000 400 21855878
+PARTITION_PASS recording:8d51b482abc64ad7af84b3fe/00001 400 22623819
+PARTITION_PASS recording:8d51b482abc64ad7af84b3fe/00002 400 22631134
+PARTITION_PASS recording:8d51b482abc64ad7af84b3fe/00003 400 22631012
+PARTITION_PASS recording:8d51b482abc64ad7af84b3fe/00004 400 22628987
+PARTITION_PASS recording:8d51b482abc64ad7af84b3fe/00005 400 22647033
+PARTITION_PASS recording:8d51b482abc64ad7af84b3fe/00006 400 22652471
+PARTITION_PASS recording:8d51b482abc64ad7af84b3fe/00007 400 22652693
+PARTITION_PASS recording:8d51b482abc64ad7af84b3fe/00008 400 22652873
+PARTITION_PASS recording:8d51b482abc64ad7af84b3fe/00009 400 22652586
+PARTITION_PASS recording:8d51b482abc64ad7af84b3fe/00010 400 22652408
+PARTITION_PASS recording:8d51b482abc64ad7af84b3fe/00011 400 22651353
+DISK_LOSSLESS_PASS recording:8d51b482abc64ad7af84b3fe/00012 13
+PARTITION_PASS recording:8d51b482abc64ad7af84b3fe/00012 44 2983941
+ALL_SIGNED_PARTITIONS_PASS 13 4844 7d6c4702229aefd0d564f76dfae5a2a7b62a0340b9c4cae43fea512cc2d531c2

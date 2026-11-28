@@ -1,0 +1,53 @@
+{
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "source_receipt_sha256": "c4b9f9acfb7ce300c6c6f7b956bfc85254c38eb881c8bcbaad60a8b64febabc4",
+  "source_diagnostic_events_sha256": "c60603d13cd0ad40a2eb04f0bc6752d55530a87a5646769eea1fa3658d5bb0b5",
+  "compressed_step_status_sha256": "5e63043bc3c6c9c9ddccd5c871ad0bd82c2b11e79bac870a02d651fa89711af2",
+  "source_rows": 4804,
+  "statuses": {
+    "ACTIVE": 144,
+    "PARTIAL_GROUP": 34,
+    "REJOINING": 37,
+    "HOLD_INFEASIBLE:SWEEP_UNPROVEN": 4589
+  },
+  "final_combination_proofs": {
+    "PERMIT": 1076,
+    "SWEEP_UNPROVEN": 4
+  },
+  "hold_proofs": {
+    "PERMIT": 28,
+    "SWEEP_UNPROVEN": 1
+  },
+  "unchanged_hold_escalations_by_result": {
+    "PERMIT": 3,
+    "SWEEP_UNPROVEN": 1
+  },
+  "unchanged_hold_proof_max_depth": 24,
+  "group_outcomes": {
+    "LEFT_ARM": {
+      "LEFT_ARM_ACTIVE": 735,
+      "GROUP_HOLD": 130,
+      "REJOINING": 214,
+      "UNCOMMITTED_FAULT": 1
+    },
+    "LEFT_HAND": {
+      "LEFT_HAND_ACTIVE": 855,
+      "GROUP_HOLD": 28,
+      "REJOINING": 196,
+      "UNCOMMITTED_FAULT": 1
+    },
+    "RIGHT_ARM": {
+      "RIGHT_ARM_ACTIVE": 889,
+      "GROUP_HOLD": 54,
+      "REJOINING": 136,
+      "UNCOMMITTED_FAULT": 1
+    },
+    "RIGHT_HAND": {
+      "RIGHT_HAND_ACTIVE": 839,
+      "GROUP_HOLD": 30,
+      "REJOINING": 210,
+      "UNCOMMITTED_FAULT": 1
+    }
+  },
+  "physical_fault": "HOLD_INFEASIBLE:SWEEP_UNPROVEN"
+}

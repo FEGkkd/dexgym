@@ -1,0 +1,4584 @@
+{
+  "schema": "s05.dcr010.root5.grouped_terminal_archive_audit.v1",
+  "no_simulation_step_executed": true,
+  "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+  "partition_tick": 255,
+  "recorded_time_ns": 5100000000,
+  "historical_event_index": 215,
+  "rejected_subcycle_zero_based": 1,
+  "terminal_archive_events": [
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "tick": 252,
+      "time_ns": 5040000000,
+      "control_cutoff_ns": 5040001000,
+      "status": "ACTIVE",
+      "safety": [
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 287143
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.725679636001587,
+                    -1.5676329135894775,
+                    -1.5755398273468018,
+                    -1.6212141513824463,
+                    1.3946521282196045,
+                    -0.4484371244907379,
+                    0.9399053454399109
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 12,
+                    "max_depth": 2,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0009055106920600799,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 1603924
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0022922754287719727,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5330857038497925,
+                    -1.6546190977096558,
+                    1.2320891618728638,
+                    -1.5496418476104736,
+                    -1.690706491470337,
+                    -0.09894988685846329,
+                    -0.6765083074569702
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 12,
+                    "max_depth": 2,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0009055106920600799,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 1329536
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0010766983032226562,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.571426272392273,
+                    -0.7841948866844177,
+                    0.7883917093276978,
+                    -0.007265749853104353,
+                    1.1930737495422363,
+                    -0.21179281175136566,
+                    0.2186577022075653,
+                    0.734653651714325,
+                    0.8066996932029724,
+                    -0.18785594403743744,
+                    0.0014426270499825478,
+                    0.25094494223594666,
+                    0.5116322040557861,
+                    -0.08257392793893814,
+                    0.034178879112005234,
+                    0.2819439470767975,
+                    0.2537434697151184,
+                    0.013422030955553055,
+                    0.013348747044801712,
+                    0.6351240277290344
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 12,
+                    "max_depth": 2,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0009055106920600799,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 1269498
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0032894425094127655,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8423449397087097,
+                    -0.8282038569450378,
+                    0.4481498599052429,
+                    -0.0036335689947009087,
+                    1.4000684022903442,
+                    -0.08268113434314728,
+                    0.17854173481464386,
+                    0.4857207238674164,
+                    0.7832379937171936,
+                    -0.03927883133292198,
+                    0.014035863801836967,
+                    0.31572476029396057,
+                    0.4881580173969269,
+                    -0.044176988303661346,
+                    0.07941565662622452,
+                    0.307075172662735,
+                    0.16698184609413147,
+                    -0.04991786926984787,
+                    0.6272369027137756,
+                    0.3042597472667694
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 60,
+                    "max_depth": 11,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0009366057860606483,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 2727252
+                  }
+                }
+              ],
+              "delta_max_rad": 0.01216965913772583,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            }
+          ],
+          "hold_metrics": null
+        },
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 290785
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7255687713623047,
+                    -1.5677332878112793,
+                    -1.5753883123397827,
+                    -1.6210088729858398,
+                    1.3933957815170288,
+                    -0.4491221010684967,
+                    0.9401862025260925
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 44,
+                    "max_depth": 10,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0009256635543607504,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 2552207
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0012563467025756836,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5330857038497925,
+                    -1.6546190977096558,
+                    1.2320891618728638,
+                    -1.5496418476104736,
+                    -1.690706491470337,
+                    -0.09894988685846329,
+                    -0.6765083074569702
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 350813
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.571426272392273,
+                    -0.7841948866844177,
+                    0.7883917093276978,
+                    -0.007265749853104353,
+                    1.1930737495422363,
+                    -0.21179281175136566,
+                    0.2186577022075653,
+                    0.734653651714325,
+                    0.8066996932029724,
+                    -0.18785594403743744,
+                    0.0014426270499825478,
+                    0.25094494223594666,
+                    0.5116322040557861,
+                    -0.08257392793893814,
+                    0.034178879112005234,
+                    0.2819439470767975,
+                    0.2537434697151184,
+                    0.013422030955553055,
+                    0.013348747044801712,
+                    0.6351240277290344
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 320409
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8423449397087097,
+                    -0.8282038569450378,
+                    0.4481498599052429,
+                    -0.0036335689947009087,
+                    1.4000684022903442,
+                    -0.08268113434314728,
+                    0.17854173481464386,
+                    0.4857207238674164,
+                    0.7832379937171936,
+                    -0.03927883133292198,
+                    0.014035863801836967,
+                    0.31572476029396057,
+                    0.4881580173969269,
+                    -0.044176988303661346,
+                    0.07941565662622452,
+                    0.307075172662735,
+                    0.16698184609413147,
+                    -0.04991786926984787,
+                    0.6272369027137756,
+                    0.3042597472667694
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 299763
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            }
+          ],
+          "hold_metrics": null
+        },
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 260376
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7255687713623047,
+                    -1.5677332878112793,
+                    -1.5753883123397827,
+                    -1.6210088729858398,
+                    1.3933957815170288,
+                    -0.4491221010684967,
+                    0.9401862025260925
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 36,
+                    "max_depth": 9,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0009171710288310333,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 2133709
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5330857038497925,
+                    -1.6546190977096558,
+                    1.2320891618728638,
+                    -1.5496418476104736,
+                    -1.690706491470337,
+                    -0.09894988685846329,
+                    -0.6765083074569702
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 286572
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.571426272392273,
+                    -0.7841948866844177,
+                    0.7883917093276978,
+                    -0.007265749853104353,
+                    1.1930737495422363,
+                    -0.21179281175136566,
+                    0.2186577022075653,
+                    0.734653651714325,
+                    0.8066996932029724,
+                    -0.18785594403743744,
+                    0.0014426270499825478,
+                    0.25094494223594666,
+                    0.5116322040557861,
+                    -0.08257392793893814,
+                    0.034178879112005234,
+                    0.2819439470767975,
+                    0.2537434697151184,
+                    0.013422030955553055,
+                    0.013348747044801712,
+                    0.6351240277290344
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 276258
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8423449397087097,
+                    -0.8282038569450378,
+                    0.4481498599052429,
+                    -0.0036335689947009087,
+                    1.4000684022903442,
+                    -0.08268113434314728,
+                    0.17854173481464386,
+                    0.4857207238674164,
+                    0.7832379937171936,
+                    -0.03927883133292198,
+                    0.014035863801836967,
+                    0.31572476029396057,
+                    0.4881580173969269,
+                    -0.044176988303661346,
+                    0.07941565662622452,
+                    0.307075172662735,
+                    0.16698184609413147,
+                    -0.04991786926984787,
+                    0.6272369027137756,
+                    0.3042597472667694
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 265160
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            }
+          ],
+          "hold_metrics": null
+        },
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 431275
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7255687713623047,
+                    -1.5677332878112793,
+                    -1.5753883123397827,
+                    -1.6210088729858398,
+                    1.3933957815170288,
+                    -0.4491221010684967,
+                    0.9401862025260925
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 26,
+                    "max_depth": 7,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0009091970578774587,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 1776501
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5330857038497925,
+                    -1.6546190977096558,
+                    1.2320891618728638,
+                    -1.5496418476104736,
+                    -1.690706491470337,
+                    -0.09894988685846329,
+                    -0.6765083074569702
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 293437
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.571426272392273,
+                    -0.7841948866844177,
+                    0.7883917093276978,
+                    -0.007265749853104353,
+                    1.1930737495422363,
+                    -0.21179281175136566,
+                    0.2186577022075653,
+                    0.734653651714325,
+                    0.8066996932029724,
+                    -0.18785594403743744,
+                    0.0014426270499825478,
+                    0.25094494223594666,
+                    0.5116322040557861,
+                    -0.08257392793893814,
+                    0.034178879112005234,
+                    0.2819439470767975,
+                    0.2537434697151184,
+                    0.013422030955553055,
+                    0.013348747044801712,
+                    0.6351240277290344
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 270763
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8423449397087097,
+                    -0.8282038569450378,
+                    0.4481498599052429,
+                    -0.0036335689947009087,
+                    1.4000684022903442,
+                    -0.08268113434314728,
+                    0.17854173481464386,
+                    0.4857207238674164,
+                    0.7832379937171936,
+                    -0.03927883133292198,
+                    0.014035863801836967,
+                    0.31572476029396057,
+                    0.4881580173969269,
+                    -0.044176988303661346,
+                    0.07941565662622452,
+                    0.307075172662735,
+                    0.16698184609413147,
+                    -0.04991786926984787,
+                    0.6272369027137756,
+                    0.3042597472667694
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 267806
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            }
+          ],
+          "hold_metrics": null
+        },
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 574816
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7255687713623047,
+                    -1.5677332878112793,
+                    -1.5753883123397827,
+                    -1.6210088729858398,
+                    1.3933957815170288,
+                    -0.4491221010684967,
+                    0.9401862025260925
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 20,
+                    "max_depth": 6,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0009017747943834456,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 3386731
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5330857038497925,
+                    -1.6546190977096558,
+                    1.2320891618728638,
+                    -1.5496418476104736,
+                    -1.690706491470337,
+                    -0.09894988685846329,
+                    -0.6765083074569702
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 603852
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.571426272392273,
+                    -0.7841948866844177,
+                    0.7883917093276978,
+                    -0.007265749853104353,
+                    1.1930737495422363,
+                    -0.21179281175136566,
+                    0.2186577022075653,
+                    0.734653651714325,
+                    0.8066996932029724,
+                    -0.18785594403743744,
+                    0.0014426270499825478,
+                    0.25094494223594666,
+                    0.5116322040557861,
+                    -0.08257392793893814,
+                    0.034178879112005234,
+                    0.2819439470767975,
+                    0.2537434697151184,
+                    0.013422030955553055,
+                    0.013348747044801712,
+                    0.6351240277290344
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 572463
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8423449397087097,
+                    -0.8282038569450378,
+                    0.4481498599052429,
+                    -0.0036335689947009087,
+                    1.4000684022903442,
+                    -0.08268113434314728,
+                    0.17854173481464386,
+                    0.4857207238674164,
+                    0.7832379937171936,
+                    -0.03927883133292198,
+                    0.014035863801836967,
+                    0.31572476029396057,
+                    0.4881580173969269,
+                    -0.044176988303661346,
+                    0.07941565662622452,
+                    0.307075172662735,
+                    0.16698184609413147,
+                    -0.04991786926984787,
+                    0.6272369027137756,
+                    0.3042597472667694
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 575964
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            }
+          ],
+          "hold_metrics": null
+        }
+      ]
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "tick": 253,
+      "time_ns": 5060000000,
+      "control_cutoff_ns": 5060001000,
+      "status": "PARTIAL_GROUP",
+      "safety": [
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 329085
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7263927459716797,
+                    -1.5680781602859497,
+                    -1.5748785734176636,
+                    -1.6210886240005493,
+                    1.3907549381256104,
+                    -0.45102471113204956,
+                    0.9408979415893555
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 18,
+                    "max_depth": 5,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008949345900665989,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 3713116
+                  }
+                }
+              ],
+              "delta_max_rad": 0.002640843391418457,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5337315797805786,
+                    -1.6550318002700806,
+                    1.2314082384109497,
+                    -1.5499029159545898,
+                    -1.6886073350906372,
+                    -0.0994122326374054,
+                    -0.6765395402908325
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 18,
+                    "max_depth": 5,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008949345900665989,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 3346358
+                  }
+                }
+              ],
+              "delta_max_rad": 0.002099156379699707,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.5740370154380798,
+                    -0.783173143863678,
+                    0.7861524224281311,
+                    -0.007247802335768938,
+                    1.1943250894546509,
+                    -0.2106286734342575,
+                    0.21817292273044586,
+                    0.7353752851486206,
+                    0.803931474685669,
+                    -0.18751443922519684,
+                    0.001200335449539125,
+                    0.248465433716774,
+                    0.5088273286819458,
+                    -0.08163686096668243,
+                    0.03162698075175285,
+                    0.2808718681335449,
+                    0.25206154584884644,
+                    0.01378768589347601,
+                    0.010705680586397648,
+                    0.6356377005577087
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 18,
+                    "max_depth": 5,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008949345900665989,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 1874273
+                  }
+                }
+              ],
+              "delta_max_rad": 0.002804875373840332,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "BOUNDED_REJOIN",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8475629091262817,
+                    -0.827182412147522,
+                    0.43973007798194885,
+                    -0.0037346926983445883,
+                    1.4044153690338135,
+                    -0.08277249336242676,
+                    0.17439144849777222,
+                    0.48896634578704834,
+                    0.7774680256843567,
+                    -0.03984569013118744,
+                    0.01142923068255186,
+                    0.3125987946987152,
+                    0.48369288444519043,
+                    -0.04466439038515091,
+                    0.07156280428171158,
+                    0.3066125810146332,
+                    0.1649031937122345,
+                    -0.04971933737397194,
+                    0.6161102056503296,
+                    0.3064863383769989
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 241,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0009237165501793595,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 8194496
+                  }
+                },
+                {
+                  "candidate": [
+                    0.8449538946151733,
+                    -0.8276931047439575,
+                    0.4439399838447571,
+                    -0.0036841309629380703,
+                    1.4022419452667236,
+                    -0.08272681385278702,
+                    0.17646658420562744,
+                    0.48734354972839355,
+                    0.7803530097007751,
+                    -0.03956226259469986,
+                    0.012732546776533127,
+                    0.3141617774963379,
+                    0.48592543601989746,
+                    -0.04442068934440613,
+                    0.07548923045396805,
+                    0.3068438768386841,
+                    0.16594251990318298,
+                    -0.049818605184555054,
+                    0.621673583984375,
+                    0.30537304282188416
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 54,
+                    "max_depth": 11,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.000909325573110922,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 3382630
+                  }
+                }
+              ],
+              "delta_max_rad": 0.005563318729400635,
+              "nominal_status": "ACTIVE",
+              "committed": "BOUNDED_REJOIN",
+              "status": 3,
+              "label": "REJOINING",
+              "rejoin_streak": 0
+            }
+          ],
+          "hold_metrics": null
+        },
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 344244
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7263927459716797,
+                    -1.5680781602859497,
+                    -1.5748785734176636,
+                    -1.6210886240005493,
+                    1.3907549381256104,
+                    -0.45102471113204956,
+                    0.9408979415893555
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 40,
+                    "max_depth": 9,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0009009781116613498,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 2088564
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5337315797805786,
+                    -1.6550318002700806,
+                    1.2314082384109497,
+                    -1.5499029159545898,
+                    -1.6886073350906372,
+                    -0.0994122326374054,
+                    -0.6765395402908325
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 287765
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.5740370154380798,
+                    -0.783173143863678,
+                    0.7861524224281311,
+                    -0.007247802335768938,
+                    1.1943250894546509,
+                    -0.2106286734342575,
+                    0.21817292273044586,
+                    0.7353752851486206,
+                    0.803931474685669,
+                    -0.18751443922519684,
+                    0.001200335449539125,
+                    0.248465433716774,
+                    0.5088273286819458,
+                    -0.08163686096668243,
+                    0.03162698075175285,
+                    0.2808718681335449,
+                    0.25206154584884644,
+                    0.01378768589347601,
+                    0.010705680586397648,
+                    0.6356377005577087
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 275435
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "BOUNDED_REJOIN",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8475629091262817,
+                    -0.827182412147522,
+                    0.43973007798194885,
+                    -0.0037346926983445883,
+                    1.4044153690338135,
+                    -0.08277249336242676,
+                    0.17439144849777222,
+                    0.48896634578704834,
+                    0.7774680256843567,
+                    -0.03984569013118744,
+                    0.01142923068255186,
+                    0.3125987946987152,
+                    0.48369288444519043,
+                    -0.04466439038515091,
+                    0.07156280428171158,
+                    0.3066125810146332,
+                    0.1649031937122345,
+                    -0.04971933737397194,
+                    0.6161102056503296,
+                    0.3064863383769989
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 162,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0009153690917023645,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 5413470
+                  }
+                },
+                {
+                  "candidate": [
+                    0.8462584018707275,
+                    -0.8274377584457397,
+                    0.44183504581451416,
+                    -0.0037094117142260075,
+                    1.4033286571502686,
+                    -0.08274964988231659,
+                    0.17542901635169983,
+                    0.48815494775772095,
+                    0.7789105176925659,
+                    -0.03970397636294365,
+                    0.012080889195203781,
+                    0.31338030099868774,
+                    0.48480916023254395,
+                    -0.04454253986477852,
+                    0.07352601736783981,
+                    0.3067282438278198,
+                    0.16542285680770874,
+                    -0.04976896941661835,
+                    0.6188918948173523,
+                    0.30592969059944153
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 84,
+                    "max_depth": 13,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0009081736024290751,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 3358432
+                  }
+                }
+              ],
+              "delta_max_rad": 0.002781689167022705,
+              "nominal_status": "ACTIVE",
+              "committed": "BOUNDED_REJOIN",
+              "status": 3,
+              "label": "REJOINING",
+              "rejoin_streak": 0
+            }
+          ],
+          "hold_metrics": null
+        },
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 293593
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7263927459716797,
+                    -1.5680781602859497,
+                    -1.5748785734176636,
+                    -1.6210886240005493,
+                    1.3907549381256104,
+                    -0.45102471113204956,
+                    0.9408979415893555
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 60,
+                    "max_depth": 12,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0009013172025380751,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 2709625
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5337315797805786,
+                    -1.6550318002700806,
+                    1.2314082384109497,
+                    -1.5499029159545898,
+                    -1.6886073350906372,
+                    -0.0994122326374054,
+                    -0.6765395402908325
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 290299
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.5740370154380798,
+                    -0.783173143863678,
+                    0.7861524224281311,
+                    -0.007247802335768938,
+                    1.1943250894546509,
+                    -0.2106286734342575,
+                    0.21817292273044586,
+                    0.7353752851486206,
+                    0.803931474685669,
+                    -0.18751443922519684,
+                    0.001200335449539125,
+                    0.248465433716774,
+                    0.5088273286819458,
+                    -0.08163686096668243,
+                    0.03162698075175285,
+                    0.2808718681335449,
+                    0.25206154584884644,
+                    0.01378768589347601,
+                    0.010705680586397648,
+                    0.6356377005577087
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 269186
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8475629091262817,
+                    -0.827182412147522,
+                    0.43973007798194885,
+                    -0.0037346926983445883,
+                    1.4044153690338135,
+                    -0.08277249336242676,
+                    0.17439144849777222,
+                    0.48896634578704834,
+                    0.7774680256843567,
+                    -0.03984569013118744,
+                    0.01142923068255186,
+                    0.3125987946987152,
+                    0.48369288444519043,
+                    -0.04466439038515091,
+                    0.07156280428171158,
+                    0.3066125810146332,
+                    0.1649031937122345,
+                    -0.04971933737397194,
+                    0.6161102056503296,
+                    0.3064863383769989
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 136,
+                    "max_depth": 17,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0009085126931997107,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 5162398
+                  }
+                }
+              ],
+              "delta_max_rad": 0.002781689167022705,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 3,
+              "label": "REJOINING",
+              "rejoin_streak": 1
+            }
+          ],
+          "hold_metrics": null
+        },
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 262091
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7263927459716797,
+                    -1.5680781602859497,
+                    -1.5748785734176636,
+                    -1.6210886240005493,
+                    1.3907549381256104,
+                    -0.45102471113204956,
+                    0.9408979415893555
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 90,
+                    "max_depth": 14,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0009021027007891245,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 4704905
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5337315797805786,
+                    -1.6550318002700806,
+                    1.2314082384109497,
+                    -1.5499029159545898,
+                    -1.6886073350906372,
+                    -0.0994122326374054,
+                    -0.6765395402908325
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 298199
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.5740370154380798,
+                    -0.783173143863678,
+                    0.7861524224281311,
+                    -0.007247802335768938,
+                    1.1943250894546509,
+                    -0.2106286734342575,
+                    0.21817292273044586,
+                    0.7353752851486206,
+                    0.803931474685669,
+                    -0.18751443922519684,
+                    0.001200335449539125,
+                    0.248465433716774,
+                    0.5088273286819458,
+                    -0.08163686096668243,
+                    0.03162698075175285,
+                    0.2808718681335449,
+                    0.25206154584884644,
+                    0.01378768589347601,
+                    0.010705680586397648,
+                    0.6356377005577087
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 275200
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8475629091262817,
+                    -0.827182412147522,
+                    0.43973007798194885,
+                    -0.0037346926983445883,
+                    1.4044153690338135,
+                    -0.08277249336242676,
+                    0.17439144849777222,
+                    0.48896634578704834,
+                    0.7774680256843567,
+                    -0.03984569013118744,
+                    0.01142923068255186,
+                    0.3125987946987152,
+                    0.48369288444519043,
+                    -0.04466439038515091,
+                    0.07156280428171158,
+                    0.3066125810146332,
+                    0.1649031937122345,
+                    -0.04971933737397194,
+                    0.6161102056503296,
+                    0.3064863383769989
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 266883
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 3,
+              "label": "REJOINING",
+              "rejoin_streak": 2
+            }
+          ],
+          "hold_metrics": null
+        },
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 254004
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7263927459716797,
+                    -1.5680781602859497,
+                    -1.5748785734176636,
+                    -1.6210886240005493,
+                    1.3907549381256104,
+                    -0.45102471113204956,
+                    0.9408979415893555
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 64,
+                    "max_depth": 12,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008971229897628402,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 2705751
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5337315797805786,
+                    -1.6550318002700806,
+                    1.2314082384109497,
+                    -1.5499029159545898,
+                    -1.6886073350906372,
+                    -0.0994122326374054,
+                    -0.6765395402908325
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 282441
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.5740370154380798,
+                    -0.783173143863678,
+                    0.7861524224281311,
+                    -0.007247802335768938,
+                    1.1943250894546509,
+                    -0.2106286734342575,
+                    0.21817292273044586,
+                    0.7353752851486206,
+                    0.803931474685669,
+                    -0.18751443922519684,
+                    0.001200335449539125,
+                    0.248465433716774,
+                    0.5088273286819458,
+                    -0.08163686096668243,
+                    0.03162698075175285,
+                    0.2808718681335449,
+                    0.25206154584884644,
+                    0.01378768589347601,
+                    0.010705680586397648,
+                    0.6356377005577087
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 268357
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8475629091262817,
+                    -0.827182412147522,
+                    0.43973007798194885,
+                    -0.0037346926983445883,
+                    1.4044153690338135,
+                    -0.08277249336242676,
+                    0.17439144849777222,
+                    0.48896634578704834,
+                    0.7774680256843567,
+                    -0.03984569013118744,
+                    0.01142923068255186,
+                    0.3125987946987152,
+                    0.48369288444519043,
+                    -0.04466439038515091,
+                    0.07156280428171158,
+                    0.3066125810146332,
+                    0.1649031937122345,
+                    -0.04971933737397194,
+                    0.6161102056503296,
+                    0.3064863383769989
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 264261
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 3,
+              "label": "REJOINING",
+              "rejoin_streak": 3
+            }
+          ],
+          "hold_metrics": null
+        }
+      ]
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "tick": 254,
+      "time_ns": 5080000000,
+      "control_cutoff_ns": 5080001000,
+      "status": "PARTIAL_GROUP",
+      "safety": [
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 280046
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7280511856079102,
+                    -1.5684635639190674,
+                    -1.5743120908737183,
+                    -1.6232476234436035,
+                    1.3871358633041382,
+                    -0.45212751626968384,
+                    0.9383894205093384
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 46,
+                    "max_depth": 11,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008925448424777512,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 2368495
+                  }
+                }
+              ],
+              "delta_max_rad": 0.003619074821472168,
+              "nominal_status": "LIMITED_ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.535391926765442,
+                    -1.6552571058273315,
+                    1.2304738759994507,
+                    -1.5524623394012451,
+                    -1.6852179765701294,
+                    -0.10035787522792816,
+                    -0.6745121479034424
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 46,
+                    "max_depth": 11,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008925448424777512,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 2405355
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0033893585205078125,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.576470136642456,
+                    -0.782191812992096,
+                    0.7840250134468079,
+                    -0.007193207275122404,
+                    1.1953582763671875,
+                    -0.20958355069160461,
+                    0.2175600528717041,
+                    0.7359268069267273,
+                    0.8015985488891602,
+                    -0.18716169893741608,
+                    0.0010129146976396441,
+                    0.24613532423973083,
+                    0.5063078999519348,
+                    -0.08081301301717758,
+                    0.029614776372909546,
+                    0.2798493206501007,
+                    0.2505649924278259,
+                    0.014122269116342068,
+                    0.008556567132472992,
+                    0.6358846426010132
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 46,
+                    "max_depth": 11,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008925448424777512,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 2253354
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0025194287300109863,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "BOUNDED_REJOIN",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8521056175231934,
+                    -0.8261319398880005,
+                    0.4320761263370514,
+                    -0.003826860338449478,
+                    1.4080464839935303,
+                    -0.08280393481254578,
+                    0.17063096165657043,
+                    0.49174535274505615,
+                    0.7724278569221497,
+                    -0.04033045470714569,
+                    0.009253631345927715,
+                    0.30964457988739014,
+                    0.4798413813114166,
+                    -0.04504460468888283,
+                    0.06458548456430435,
+                    0.3061935305595398,
+                    0.16328676044940948,
+                    -0.04951488971710205,
+                    0.6061943769454956,
+                    0.3086482882499695
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 249,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0009149267117591505,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 8133848
+                  }
+                },
+                {
+                  "candidate": [
+                    0.8498342633247375,
+                    -0.8266571760177612,
+                    0.4359031021595001,
+                    -0.003780776634812355,
+                    1.4062309265136719,
+                    -0.08278821408748627,
+                    0.17251120507717133,
+                    0.49035584926605225,
+                    0.7749479413032532,
+                    -0.040088072419166565,
+                    0.010341431014239788,
+                    0.31112170219421387,
+                    0.48176711797714233,
+                    -0.04485449939966202,
+                    0.06807414442300797,
+                    0.3064030408859253,
+                    0.1640949845314026,
+                    -0.049617111682891846,
+                    0.6111522912979126,
+                    0.307567298412323
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 219,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0009037356757299498,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 7277304
+                  }
+                },
+                {
+                  "candidate": [
+                    0.848698616027832,
+                    -0.8269197940826416,
+                    0.4378165900707245,
+                    -0.00375773455016315,
+                    1.4053231477737427,
+                    -0.08278035372495651,
+                    0.17345133423805237,
+                    0.4896610975265503,
+                    0.7762079834938049,
+                    -0.039966881275177,
+                    0.010885330848395824,
+                    0.31186023354530334,
+                    0.4827300012111664,
+                    -0.044759444892406464,
+                    0.06981847435235977,
+                    0.30650782585144043,
+                    0.16449908912181854,
+                    -0.04966822639107704,
+                    0.6136312484741211,
+                    0.30702683329582214
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 102,
+                    "max_depth": 15,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008981402595406092,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 3837884
+                  }
+                }
+              ],
+              "delta_max_rad": 0.002478957176208496,
+              "nominal_status": "ACTIVE",
+              "committed": "BOUNDED_REJOIN",
+              "status": 3,
+              "label": "REJOINING",
+              "rejoin_streak": 0
+            }
+          ],
+          "hold_metrics": null
+        },
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 285362
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7282713651657104,
+                    -1.5685203075408936,
+                    -1.5742284059524536,
+                    -1.623537302017212,
+                    1.3864572048187256,
+                    -0.45235681533813477,
+                    0.9379445910453796
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 72,
+                    "max_depth": 13,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008928475400873728,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 3018384
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0006786584854125977,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5354784727096558,
+                    -1.6553115844726562,
+                    1.2303831577301025,
+                    -1.5525600910186768,
+                    -1.683485984802246,
+                    -0.10100473463535309,
+                    -0.6740801930427551
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 72,
+                    "max_depth": 13,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008928475400873728,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 2992695
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0017319917678833008,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.576470136642456,
+                    -0.782191812992096,
+                    0.7840250134468079,
+                    -0.007193207275122404,
+                    1.1953582763671875,
+                    -0.20958355069160461,
+                    0.2175600528717041,
+                    0.7359268069267273,
+                    0.8015985488891602,
+                    -0.18716169893741608,
+                    0.0010129146976396441,
+                    0.24613532423973083,
+                    0.5063078999519348,
+                    -0.08081301301717758,
+                    0.029614776372909546,
+                    0.2798493206501007,
+                    0.2505649924278259,
+                    0.014122269116342068,
+                    0.008556567132472992,
+                    0.6358846426010132
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 499373
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "BOUNDED_REJOIN",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8521056175231934,
+                    -0.8261319398880005,
+                    0.4320761263370514,
+                    -0.003826860338449478,
+                    1.4080464839935303,
+                    -0.08280393481254578,
+                    0.17063096165657043,
+                    0.49174535274505615,
+                    0.7724278569221497,
+                    -0.04033045470714569,
+                    0.009253631345927715,
+                    0.30964457988739014,
+                    0.4798413813114166,
+                    -0.04504460468888283,
+                    0.06458548456430435,
+                    0.3061935305595398,
+                    0.16328676044940948,
+                    -0.04951488971710205,
+                    0.6061943769454956,
+                    0.3086482882499695
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 317,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0009096339948118453,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 10343121
+                  }
+                },
+                {
+                  "candidate": [
+                    0.8504021167755127,
+                    -0.826525866985321,
+                    0.43494635820388794,
+                    -0.003792297560721636,
+                    1.4066848754882812,
+                    -0.08279214799404144,
+                    0.1720411479473114,
+                    0.4907032251358032,
+                    0.7743179202079773,
+                    -0.040148667991161346,
+                    0.01006948109716177,
+                    0.31075239181518555,
+                    0.4812856912612915,
+                    -0.044902026653289795,
+                    0.06720197945833206,
+                    0.3063506782054901,
+                    0.163892924785614,
+                    -0.0495915561914444,
+                    0.6099128127098083,
+                    0.3078375458717346
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 233,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.000901240768441329,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 7911287
+                  }
+                },
+                {
+                  "candidate": [
+                    0.8495503664016724,
+                    -0.8267228603363037,
+                    0.436381459236145,
+                    -0.003775015939027071,
+                    1.4060039520263672,
+                    -0.08278624713420868,
+                    0.17274624109268188,
+                    0.49018216133117676,
+                    0.7752629518508911,
+                    -0.040057774633169174,
+                    0.010477405972778797,
+                    0.31130632758140564,
+                    0.48200786113739014,
+                    -0.04483073577284813,
+                    0.06851022690534592,
+                    0.30642926692962646,
+                    0.16419601440429688,
+                    -0.04962989315390587,
+                    0.6117720603942871,
+                    0.3074322044849396
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 136,
+                    "max_depth": 18,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008947490417589216,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 4886111
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0018591880798339844,
+              "nominal_status": "ACTIVE",
+              "committed": "BOUNDED_REJOIN",
+              "status": 3,
+              "label": "REJOINING",
+              "rejoin_streak": 0
+            }
+          ],
+          "hold_metrics": null
+        },
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 293311
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7282713651657104,
+                    -1.5685203075408936,
+                    -1.5742284059524536,
+                    -1.623537302017212,
+                    1.3864572048187256,
+                    -0.45235681533813477,
+                    0.9379445910453796
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 90,
+                    "max_depth": 14,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008923818737882662,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 3484308
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5354784727096558,
+                    -1.6553115844726562,
+                    1.2303831577301025,
+                    -1.5525600910186768,
+                    -1.683485984802246,
+                    -0.10100473463535309,
+                    -0.6740801930427551
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 285892
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.576470136642456,
+                    -0.782191812992096,
+                    0.7840250134468079,
+                    -0.007193207275122404,
+                    1.1953582763671875,
+                    -0.20958355069160461,
+                    0.2175600528717041,
+                    0.7359268069267273,
+                    0.8015985488891602,
+                    -0.18716169893741608,
+                    0.0010129146976396441,
+                    0.24613532423973083,
+                    0.5063078999519348,
+                    -0.08081301301717758,
+                    0.029614776372909546,
+                    0.2798493206501007,
+                    0.2505649924278259,
+                    0.014122269116342068,
+                    0.008556567132472992,
+                    0.6358846426010132
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 264186
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": null,
+              "trials": [
+                {
+                  "candidate": [
+                    0.8521056175231934,
+                    -0.8261319398880005,
+                    0.4320761263370514,
+                    -0.003826860338449478,
+                    1.4080464839935303,
+                    -0.08280393481254578,
+                    0.17063096165657043,
+                    0.49174535274505615,
+                    0.7724278569221497,
+                    -0.04033045470714569,
+                    0.009253631345927715,
+                    0.30964457988739014,
+                    0.4798413813114166,
+                    -0.04504460468888283,
+                    0.06458548456430435,
+                    0.3061935305595398,
+                    0.16328676044940948,
+                    -0.04951488971710205,
+                    0.6061943769454956,
+                    0.3086482882499695
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 243,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0009049718189904378,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 8548730
+                  }
+                },
+                {
+                  "candidate": [
+                    0.8508279919624329,
+                    -0.8264274001121521,
+                    0.434228777885437,
+                    -0.0038009381387382746,
+                    1.4070252180099487,
+                    -0.08279509097337723,
+                    0.17168860137462616,
+                    0.49096375703811646,
+                    0.7738454341888428,
+                    -0.04019411653280258,
+                    0.009865518659353256,
+                    0.3104754686355591,
+                    0.4809246063232422,
+                    -0.04493767023086548,
+                    0.06654785573482513,
+                    0.30631139874458313,
+                    0.16374137997627258,
+                    -0.04957239329814911,
+                    0.6089832186698914,
+                    0.3080402612686157
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 225,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.000897686424035046,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 7563620
+                  }
+                },
+                {
+                  "candidate": [
+                    0.850189208984375,
+                    -0.8265751600265503,
+                    0.435305118560791,
+                    -0.0037879771552979946,
+                    1.4065146446228027,
+                    -0.08279067277908325,
+                    0.17221742868423462,
+                    0.4905729591846466,
+                    0.7745541930198669,
+                    -0.04012594372034073,
+                    0.01017146185040474,
+                    0.31089088320732117,
+                    0.48146623373031616,
+                    -0.04488420486450195,
+                    0.06752903759479523,
+                    0.3063703179359436,
+                    0.16396869719028473,
+                    -0.04960114136338234,
+                    0.6103776693344116,
+                    0.30773621797561646
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 138,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0008777989317316937,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 5060005
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": null,
+              "status": 2,
+              "label": "GROUP_HOLD",
+              "rejoin_streak": 0
+            }
+          ],
+          "hold_metrics": null
+        },
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 291496
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7282713651657104,
+                    -1.5685203075408936,
+                    -1.5742284059524536,
+                    -1.623537302017212,
+                    1.3864572048187256,
+                    -0.45235681533813477,
+                    0.9379445910453796
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 66,
+                    "max_depth": 12,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.000888930470646971,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 2819027
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5354784727096558,
+                    -1.6553115844726562,
+                    1.2303831577301025,
+                    -1.5525600910186768,
+                    -1.683485984802246,
+                    -0.10100473463535309,
+                    -0.6740801930427551
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 282201
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.576470136642456,
+                    -0.782191812992096,
+                    0.7840250134468079,
+                    -0.007193207275122404,
+                    1.1953582763671875,
+                    -0.20958355069160461,
+                    0.2175600528717041,
+                    0.7359268069267273,
+                    0.8015985488891602,
+                    -0.18716169893741608,
+                    0.0010129146976396441,
+                    0.24613532423973083,
+                    0.5063078999519348,
+                    -0.08081301301717758,
+                    0.029614776372909546,
+                    0.2798493206501007,
+                    0.2505649924278259,
+                    0.014122269116342068,
+                    0.008556567132472992,
+                    0.6358846426010132
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 264321
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "BOUNDED_REJOIN",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8521056175231934,
+                    -0.8261319398880005,
+                    0.4320761263370514,
+                    -0.003826860338449478,
+                    1.4080464839935303,
+                    -0.08280393481254578,
+                    0.17063096165657043,
+                    0.49174535274505615,
+                    0.7724278569221497,
+                    -0.04033045470714569,
+                    0.009253631345927715,
+                    0.30964457988739014,
+                    0.4798413813114166,
+                    -0.04504460468888283,
+                    0.06458548456430435,
+                    0.3061935305595398,
+                    0.16328676044940948,
+                    -0.04951488971710205,
+                    0.6061943769454956,
+                    0.3086482882499695
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 348,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0009015204174232102,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 10966570
+                  }
+                },
+                {
+                  "candidate": [
+                    0.8508279919624329,
+                    -0.8264274001121521,
+                    0.434228777885437,
+                    -0.0038009381387382746,
+                    1.4070252180099487,
+                    -0.08279509097337723,
+                    0.17168860137462616,
+                    0.49096375703811646,
+                    0.7738454341888428,
+                    -0.04019411653280258,
+                    0.009865518659353256,
+                    0.3104754686355591,
+                    0.4809246063232422,
+                    -0.04493767023086548,
+                    0.06654785573482513,
+                    0.30631139874458313,
+                    0.16374137997627258,
+                    -0.04957239329814911,
+                    0.6089832186698914,
+                    0.3080402612686157
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 168,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0008419551585474028,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 5712481
+                  }
+                },
+                {
+                  "candidate": [
+                    0.850189208984375,
+                    -0.8265751600265503,
+                    0.435305118560791,
+                    -0.0037879771552979946,
+                    1.4065146446228027,
+                    -0.08279067277908325,
+                    0.17221742868423462,
+                    0.4905729591846466,
+                    0.7745541930198669,
+                    -0.04012594372034073,
+                    0.01017146185040474,
+                    0.31089088320732117,
+                    0.48146623373031616,
+                    -0.04488420486450195,
+                    0.06752903759479523,
+                    0.3063703179359436,
+                    0.16396869719028473,
+                    -0.04960114136338234,
+                    0.6103776693344116,
+                    0.30773621797561646
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 108,
+                    "max_depth": 16,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008920780093313776,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 4026094
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0013943910598754883,
+              "nominal_status": "ACTIVE",
+              "committed": "BOUNDED_REJOIN",
+              "status": 3,
+              "label": "REJOINING",
+              "rejoin_streak": 0
+            }
+          ],
+          "hold_metrics": null
+        },
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 300537
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7282713651657104,
+                    -1.5685203075408936,
+                    -1.5742284059524536,
+                    -1.623537302017212,
+                    1.3864572048187256,
+                    -0.45235681533813477,
+                    0.9379445910453796
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 84,
+                    "max_depth": 14,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008884620333030172,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 3321969
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5354784727096558,
+                    -1.6553115844726562,
+                    1.2303831577301025,
+                    -1.5525600910186768,
+                    -1.683485984802246,
+                    -0.10100473463535309,
+                    -0.6740801930427551
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 286146
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.576470136642456,
+                    -0.782191812992096,
+                    0.7840250134468079,
+                    -0.007193207275122404,
+                    1.1953582763671875,
+                    -0.20958355069160461,
+                    0.2175600528717041,
+                    0.7359268069267273,
+                    0.8015985488891602,
+                    -0.18716169893741608,
+                    0.0010129146976396441,
+                    0.24613532423973083,
+                    0.5063078999519348,
+                    -0.08081301301717758,
+                    0.029614776372909546,
+                    0.2798493206501007,
+                    0.2505649924278259,
+                    0.014122269116342068,
+                    0.008556567132472992,
+                    0.6358846426010132
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": true,
+                    "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+                    "root_queries": 0,
+                    "queries": 0,
+                    "max_depth": 0,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": null,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 272099
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": "BOUNDED_REJOIN",
+              "trials": [
+                {
+                  "candidate": [
+                    0.8521056175231934,
+                    -0.8261319398880005,
+                    0.4320761263370514,
+                    -0.003826860338449478,
+                    1.4080464839935303,
+                    -0.08280393481254578,
+                    0.17063096165657043,
+                    0.49174535274505615,
+                    0.7724278569221497,
+                    -0.04033045470714569,
+                    0.009253631345927715,
+                    0.30964457988739014,
+                    0.4798413813114166,
+                    -0.04504460468888283,
+                    0.06458548456430435,
+                    0.3061935305595398,
+                    0.16328676044940948,
+                    -0.04951488971710205,
+                    0.6061943769454956,
+                    0.3086482882499695
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 275,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.000881850319520482,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 8884860
+                  }
+                },
+                {
+                  "candidate": [
+                    0.8511474132537842,
+                    -0.8263535499572754,
+                    0.43369060754776,
+                    -0.0038074187468737364,
+                    1.4072805643081665,
+                    -0.08279730379581451,
+                    0.17142419517040253,
+                    0.4911591410636902,
+                    0.7734910249710083,
+                    -0.04022819921374321,
+                    0.009712547063827515,
+                    0.31026774644851685,
+                    0.4806538224220276,
+                    -0.04496440291404724,
+                    0.06605726480484009,
+                    0.3062819242477417,
+                    0.1636277288198471,
+                    -0.049558013677597046,
+                    0.6082860231399536,
+                    0.30819225311279297
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 169,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0008172670173078065,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 5882975
+                  }
+                },
+                {
+                  "candidate": [
+                    0.8506683111190796,
+                    -0.8264643549919128,
+                    0.4344978630542755,
+                    -0.0037976978346705437,
+                    1.4068975448608398,
+                    -0.08279398828744888,
+                    0.17182081937789917,
+                    0.4908660650253296,
+                    0.7740225791931152,
+                    -0.04017706960439682,
+                    0.009942004457116127,
+                    0.3105792999267578,
+                    0.4810600280761719,
+                    -0.0449243038892746,
+                    0.06679315119981766,
+                    0.30632612109184265,
+                    0.16379821300506592,
+                    -0.04957957938313484,
+                    0.6093318462371826,
+                    0.3079642355442047
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 126,
+                    "max_depth": 17,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.0008490628056682984,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 4669392
+                  }
+                }
+              ],
+              "delta_max_rad": 0.001045823097229004,
+              "nominal_status": "ACTIVE",
+              "committed": "BOUNDED_REJOIN",
+              "status": 3,
+              "label": "REJOINING",
+              "rejoin_streak": 0
+            }
+          ],
+          "hold_metrics": null
+        }
+      ]
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "tick": 255,
+      "time_ns": 5100000000,
+      "control_cutoff_ns": 5100001000,
+      "status": "HOLD_INFEASIBLE:SWEEP_UNPROVEN",
+      "safety": [
+        {
+          "proof": "PERMIT",
+          "hold": false,
+          "hold_proof": null,
+          "fault": null,
+          "metrics": {
+            "cache_hit": true,
+            "cache_kind": "CERTIFIED_BOX_CONTAINMENT",
+            "root_queries": 0,
+            "queries": 0,
+            "max_depth": 0,
+            "termination": "PERMIT",
+            "min_sample_gap_m": null,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [],
+            "elapsed_ns": 307103
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    1.7296708822250366,
+                    -1.5687576532363892,
+                    -1.573879599571228,
+                    -1.6262603998184204,
+                    1.3837890625,
+                    -0.4526415467262268,
+                    0.9343254566192627
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 108,
+                    "max_depth": 16,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.000874437126169157,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 4424440
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0036191344261169434,
+              "nominal_status": "LIMITED_ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5367757081985474,
+                    -1.6554468870162964,
+                    1.2296894788742065,
+                    -1.5544319152832031,
+                    -1.6802986860275269,
+                    -0.1020403727889061,
+                    -0.6719699501991272
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 108,
+                    "max_depth": 16,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.000874437126169157,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 4299036
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0031872987747192383,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "RIGHT_ARM_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": "EXACT",
+              "trials": [
+                {
+                  "candidate": [
+                    0.5786967277526855,
+                    -0.7812885046005249,
+                    0.7819653749465942,
+                    -0.00712816696614027,
+                    1.1962162256240845,
+                    -0.20862726867198944,
+                    0.21688854694366455,
+                    0.7363767027854919,
+                    0.7996149063110352,
+                    -0.18682065606117249,
+                    0.0008533516083844006,
+                    0.24396994709968567,
+                    0.5041694641113281,
+                    -0.08009763807058334,
+                    0.028103064745664597,
+                    0.2789098918437958,
+                    0.24922440946102142,
+                    0.01442372240126133,
+                    0.006822129711508751,
+                    0.6359289288520813
+                  ],
+                  "proof": "PERMIT",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 108,
+                    "max_depth": 16,
+                    "termination": "PERMIT",
+                    "min_sample_gap_m": 0.000874437126169157,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [],
+                    "elapsed_ns": 4293594
+                  }
+                }
+              ],
+              "delta_max_rad": 0.002226591110229492,
+              "nominal_status": "ACTIVE",
+              "committed": "EXACT",
+              "status": 1,
+              "label": "LEFT_HAND_ACTIVE",
+              "rejoin_streak": 10
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": null,
+              "trials": [
+                {
+                  "candidate": [
+                    0.8561329245567322,
+                    -0.8250670433044434,
+                    0.4251750707626343,
+                    -0.003911995328962803,
+                    1.4110472202301025,
+                    -0.08287841081619263,
+                    0.16723360121250153,
+                    0.49412474036216736,
+                    0.7680628895759583,
+                    -0.0407157726585865,
+                    0.007481997366994619,
+                    0.30688485503196716,
+                    0.4767364263534546,
+                    -0.04535013809800148,
+                    0.05853373184800148,
+                    0.30588141083717346,
+                    0.16196195781230927,
+                    -0.04933378845453262,
+                    0.59737229347229,
+                    0.3107214868068695
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 324,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0009131543402733287,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 10993770
+                  }
+                },
+                {
+                  "candidate": [
+                    0.8534005880355835,
+                    -0.8257657289505005,
+                    0.4298364520072937,
+                    -0.0038548465818166733,
+                    1.4089723825454712,
+                    -0.08283619582653046,
+                    0.16952720284461975,
+                    0.49249541759490967,
+                    0.7710427045822144,
+                    -0.04044642299413681,
+                    0.008712001144886017,
+                    0.3087320923805237,
+                    0.47889822721481323,
+                    -0.04513721913099289,
+                    0.06266344338655472,
+                    0.30610376596450806,
+                    0.1628800928592682,
+                    -0.04945668578147888,
+                    0.6033520698547363,
+                    0.3093428611755371
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 223,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0009004414255386036,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 8029513
+                  }
+                },
+                {
+                  "candidate": [
+                    0.8520344495773315,
+                    -0.8261150121688843,
+                    0.4321671724319458,
+                    -0.0038262722082436085,
+                    1.4079349040985107,
+                    -0.08281509578227997,
+                    0.17067401111125946,
+                    0.49168074131011963,
+                    0.7725326418876648,
+                    -0.040311746299266815,
+                    0.009327002801001072,
+                    0.30965569615364075,
+                    0.47997912764549255,
+                    -0.04503076151013374,
+                    0.06472829729318619,
+                    0.30621492862701416,
+                    0.16333915293216705,
+                    -0.04951813071966171,
+                    0.6063419580459595,
+                    0.3086535334587097
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 263,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0008465769280035747,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 8995694
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE",
+              "committed": null,
+              "status": 2,
+              "label": "GROUP_HOLD",
+              "rejoin_streak": 0
+            }
+          ],
+          "hold_metrics": null
+        },
+        {
+          "proof": "SWEEP_UNPROVEN",
+          "hold": true,
+          "hold_proof": "SWEEP_UNPROVEN",
+          "fault": "HOLD_INFEASIBLE:SWEEP_UNPROVEN",
+          "metrics": {
+            "cache_hit": false,
+            "cache_kind": null,
+            "root_queries": 1,
+            "queries": 126,
+            "max_depth": 18,
+            "termination": "MAX_SUBDIVISION_DEPTH",
+            "min_sample_gap_m": 0.0008296024439679556,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [
+              2425
+            ],
+            "elapsed_ns": 4653212
+          },
+          "groups": [
+            {
+              "group": "LEFT_ARM",
+              "choice": null,
+              "trials": [
+                {
+                  "candidate": [
+                    1.7300608158111572,
+                    -1.5688238143920898,
+                    -1.5737823247909546,
+                    -1.6270190477371216,
+                    1.3830457925796509,
+                    -0.45272085070610046,
+                    0.9333171844482422
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 126,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0008296024439679556,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 4650606
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE"
+            },
+            {
+              "group": "RIGHT_ARM",
+              "choice": null,
+              "trials": [
+                {
+                  "candidate": [
+                    -1.5367757081985474,
+                    -1.6554468870162964,
+                    1.2296894788742065,
+                    -1.5544319152832031,
+                    -1.6802986860275269,
+                    -0.1020403727889061,
+                    -0.6719699501991272
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 126,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0008296024439679556,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 4641468
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE"
+            },
+            {
+              "group": "LEFT_HAND",
+              "choice": null,
+              "trials": [
+                {
+                  "candidate": [
+                    0.5786967277526855,
+                    -0.7812885046005249,
+                    0.7819653749465942,
+                    -0.00712816696614027,
+                    1.1962162256240845,
+                    -0.20862726867198944,
+                    0.21688854694366455,
+                    0.7363767027854919,
+                    0.7996149063110352,
+                    -0.18682065606117249,
+                    0.0008533516083844006,
+                    0.24396994709968567,
+                    0.5041694641113281,
+                    -0.08009763807058334,
+                    0.028103064745664597,
+                    0.2789098918437958,
+                    0.24922440946102142,
+                    0.01442372240126133,
+                    0.006822129711508751,
+                    0.6359289288520813
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 126,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0008296024439679556,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 4806161
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE"
+            },
+            {
+              "group": "RIGHT_HAND",
+              "choice": null,
+              "trials": [
+                {
+                  "candidate": [
+                    0.8561329245567322,
+                    -0.8250670433044434,
+                    0.4251750707626343,
+                    -0.003911995328962803,
+                    1.4110472202301025,
+                    -0.08287841081619263,
+                    0.16723360121250153,
+                    0.49412474036216736,
+                    0.7680628895759583,
+                    -0.0407157726585865,
+                    0.007481997366994619,
+                    0.30688485503196716,
+                    0.4767364263534546,
+                    -0.04535013809800148,
+                    0.05853373184800148,
+                    0.30588141083717346,
+                    0.16196195781230927,
+                    -0.04933378845453262,
+                    0.59737229347229,
+                    0.3107214868068695
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 183,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0009108660067675125,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 6315154
+                  }
+                },
+                {
+                  "candidate": [
+                    0.8534005880355835,
+                    -0.8257657289505005,
+                    0.4298364520072937,
+                    -0.0038548465818166733,
+                    1.4089723825454712,
+                    -0.08283619582653046,
+                    0.16952720284461975,
+                    0.49249541759490967,
+                    0.7710427045822144,
+                    -0.04044642299413681,
+                    0.008712001144886017,
+                    0.3087320923805237,
+                    0.47889822721481323,
+                    -0.04513721913099289,
+                    0.06266344338655472,
+                    0.30610376596450806,
+                    0.1628800928592682,
+                    -0.04945668578147888,
+                    0.6033520698547363,
+                    0.3093428611755371
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 253,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.0008971324049930483,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 8531308
+                  }
+                },
+                {
+                  "candidate": [
+                    0.8520344495773315,
+                    -0.8261150121688843,
+                    0.4321671724319458,
+                    -0.0038262722082436085,
+                    1.4079349040985107,
+                    -0.08281509578227997,
+                    0.17067401111125946,
+                    0.49168074131011963,
+                    0.7725326418876648,
+                    -0.040311746299266815,
+                    0.009327002801001072,
+                    0.30965569615364075,
+                    0.47997912764549255,
+                    -0.04503076151013374,
+                    0.06472829729318619,
+                    0.30621492862701416,
+                    0.16333915293216705,
+                    -0.04951813071966171,
+                    0.6063419580459595,
+                    0.3086535334587097
+                  ],
+                  "proof": "SWEEP_UNPROVEN",
+                  "metrics": {
+                    "cache_hit": false,
+                    "cache_kind": null,
+                    "root_queries": 1,
+                    "queries": 273,
+                    "max_depth": 18,
+                    "termination": "MAX_SUBDIVISION_DEPTH",
+                    "min_sample_gap_m": 0.000852414622183678,
+                    "sampled_clearance_violation": null,
+                    "witness_pair_index": null,
+                    "unresolved_pair_indices": [
+                      2425
+                    ],
+                    "elapsed_ns": 9192959
+                  }
+                }
+              ],
+              "delta_max_rad": 0.0,
+              "nominal_status": "ACTIVE"
+            }
+          ],
+          "hold_metrics": {
+            "cache_hit": false,
+            "cache_kind": null,
+            "root_queries": 1,
+            "queries": 126,
+            "max_depth": 18,
+            "termination": "MAX_SUBDIVISION_DEPTH",
+            "min_sample_gap_m": 0.0008296024439679556,
+            "sampled_clearance_violation": null,
+            "witness_pair_index": null,
+            "unresolved_pair_indices": [
+              2425
+            ],
+            "elapsed_ns": 4759269
+          }
+        }
+      ]
+    }
+  ],
+  "last_completed_substeps_on_terminal_tick": 2,
+  "last_applied_command": {
+    "physical_q": {
+      "Joint1_L": 1.7251708255863052,
+      "Joint2_L": -1.5683758097806582,
+      "Joint3_L": -1.5746569775509458,
+      "Joint4_L": -1.6252993786637724,
+      "Joint5_L": 1.379738258060789,
+      "Joint6_L": -0.43366403357722316,
+      "Joint7_L": 0.8959641380543226,
+      "Joint1_R": -1.5249926218746594,
+      "Joint2_R": -1.6590167746214612,
+      "Joint3_R": 1.236080997640904,
+      "Joint4_R": -1.540792833928031,
+      "Joint5_R": -1.6817082763209974,
+      "Joint6_R": -0.09018839808176693,
+      "Joint7_R": -0.7127457193521456,
+      "l_thumb_cmc_flex": 0.5767607091699086,
+      "l_thumb_cmc_abd": -0.7957266140252267,
+      "l_thumb_mcp": 0.7809594801334626,
+      "l_thumb_ip": -0.00805908611633685,
+      "l_index_finger_mcp_flex": 1.2170949752003504,
+      "l_index_finger_mcp_abd": -0.20844373111149733,
+      "l_index_finger_pip": 0.22538115076047607,
+      "l_index_finger_dip": 0.7359447671672288,
+      "l_middle_finger_mcp_flex": 0.8284048753348039,
+      "l_middle_finger_mcp_abd": -0.18332438988632704,
+      "l_middle_finger_pip": 0.010156459919776642,
+      "l_middle_finger_dip": 0.24917326077289584,
+      "l_ring_finger_mcp_flex": 0.5313367421754777,
+      "l_ring_finger_mcp_abd": -0.07456388720347773,
+      "l_ring_finger_pip": 0.03865328200197914,
+      "l_ring_finger_dip": 0.28178878678758135,
+      "l_pinky_mcp_flex": 0.27062971026323257,
+      "l_pinky_mcp_abd": 0.023387979607500053,
+      "l_pinky_pip": 0.015863036308513438,
+      "l_pinky_dip": 0.6365910115637606,
+      "r_thumb_cmc_flex": 0.8407101464901013,
+      "r_thumb_cmc_abd": -0.8401297730967126,
+      "r_thumb_mcp": 0.4324854135869513,
+      "r_thumb_ip": -0.0051869105878326665,
+      "r_index_finger_mcp_flex": 1.4225153299983828,
+      "r_index_finger_mcp_abd": -0.08819088453945055,
+      "r_index_finger_pip": 0.18097002144454818,
+      "r_index_finger_dip": 0.4889478868612249,
+      "r_middle_finger_mcp_flex": 0.8043741213063451,
+      "r_middle_finger_mcp_abd": -0.04212250516660756,
+      "r_middle_finger_pip": 0.021056764513011663,
+      "r_middle_finger_dip": 0.3140892389509043,
+      "r_ring_finger_mcp_flex": 0.5099004199303622,
+      "r_ring_finger_mcp_abd": -0.043846314329250596,
+      "r_ring_finger_pip": 0.08096352634518912,
+      "r_ring_finger_dip": 0.30781720891931463,
+      "r_pinky_mcp_flex": 0.1873503182577796,
+      "r_pinky_mcp_abd": -0.04686994139375995,
+      "r_pinky_pip": 0.6252293348117157,
+      "r_pinky_dip": 0.30727680893813997
+    },
+    "physical_qd": {
+      "Joint1_L": 0.017096756922253535,
+      "Joint2_L": 0.0023155453346641462,
+      "Joint3_L": -0.002180629404318072,
+      "Joint4_L": 0.018959438290378095,
+      "Joint5_L": 0.06075982750045082,
+      "Joint6_L": -0.12878869236293128,
+      "Joint7_L": 0.2869582752470325,
+      "Joint1_R": -0.08597519823065795,
+      "Joint2_R": 0.03405635976610648,
+      "Joint3_R": -0.05690402128369194,
+      "Joint4_R": -0.10884972849186379,
+      "Joint5_R": -0.02724942225440835,
+      "Joint6_R": -0.07278764999130646,
+      "Joint7_R": 0.2618252069907308,
+      "l_thumb_cmc_flex": 0.11972584075113914,
+      "l_thumb_cmc_abd": 0.04601739864294459,
+      "l_thumb_mcp": -0.11433071740622329,
+      "l_thumb_ip": 0.0015081204001036253,
+      "l_index_finger_mcp_flex": 0.06484154382146586,
+      "l_index_finger_mcp_abd": 0.05019868671408453,
+      "l_index_finger_pip": -0.025910682170206846,
+      "l_index_finger_dip": 0.031890241117663976,
+      "l_middle_finger_mcp_flex": -0.12375629897241734,
+      "l_middle_finger_mcp_abd": 0.014819313641307019,
+      "l_middle_finger_pip": -0.008112716325433247,
+      "l_middle_finger_dip": -0.11999942382444724,
+      "l_ring_finger_mcp_flex": -0.13226286065930853,
+      "l_ring_finger_mcp_abd": 0.042477314401475404,
+      "l_ring_finger_pip": -0.11315925416776111,
+      "l_ring_finger_dip": -0.05194089648005691,
+      "l_pinky_mcp_flex": -0.0805358435993765,
+      "l_pinky_mcp_abd": 0.019882821877885162,
+      "l_pinky_pip": -0.1214903397622638,
+      "l_pinky_dip": 0.018811720991902824,
+      "r_thumb_cmc_flex": 0.19564963752380138,
+      "r_thumb_cmc_abd": 0.02485231735182187,
+      "r_thumb_mcp": -0.2895873050274033,
+      "r_thumb_ip": -0.003947743645185303,
+      "r_index_finger_mcp_flex": 0.1668069452161015,
+      "r_index_finger_mcp_abd": 0.002648652547707762,
+      "r_index_finger_pip": -0.1394713930038193,
+      "r_index_finger_dip": 0.10937802935439657,
+      "r_middle_finger_mcp_flex": -0.19382977645721322,
+      "r_middle_finger_mcp_abd": -0.01389376119605867,
+      "r_middle_finger_pip": -0.08269578145656514,
+      "r_middle_finger_dip": -0.10673973693644004,
+      "r_ring_finger_mcp_flex": -0.14813092999829594,
+      "r_ring_finger_mcp_abd": -0.008209862020475432,
+      "r_ring_finger_pip": -0.2628757345598814,
+      "r_ring_finger_dip": -0.01504502855197981,
+      "r_pinky_mcp_flex": -0.06018321712130667,
+      "r_pinky_mcp_abd": 0.013962791104898844,
+      "r_pinky_pip": -0.3713446041397248,
+      "r_pinky_dip": 0.07863739684141255
+    },
+    "q_applied": {
+      "Joint1_L": 1.7280744314193726,
+      "Joint2_L": -1.5684345960617065,
+      "Joint3_L": -1.574354887008667,
+      "Joint4_L": -1.623583436012268,
+      "Joint5_L": 1.3871142864227295,
+      "Joint6_L": -0.4519309997558594,
+      "Joint7_L": 0.9377274513244629,
+      "Joint1_R": -1.5353082418441772,
+      "Joint2_R": -1.655235767364502,
+      "Joint3_R": 1.23052978515625,
+      "Joint4_R": -1.552375078201294,
+      "Joint5_R": -1.684181571006775,
+      "Joint6_R": -0.10081370174884796,
+      "Joint7_R": -0.6741632223129272,
+      "l_thumb_cmc_flex": 0.5786967277526855,
+      "l_thumb_cmc_abd": -0.7812885046005249,
+      "l_thumb_mcp": 0.7819653749465942,
+      "l_thumb_ip": -0.00712816696614027,
+      "l_index_finger_mcp_flex": 1.1962162256240845,
+      "l_index_finger_mcp_abd": -0.20862726867198944,
+      "l_index_finger_pip": 0.21688854694366455,
+      "l_index_finger_dip": 0.7363767027854919,
+      "l_middle_finger_mcp_flex": 0.7996149063110352,
+      "l_middle_finger_mcp_abd": -0.18682065606117249,
+      "l_middle_finger_pip": 0.0008533516083844006,
+      "l_middle_finger_dip": 0.24396994709968567,
+      "l_ring_finger_mcp_flex": 0.5041694641113281,
+      "l_ring_finger_mcp_abd": -0.08009763807058334,
+      "l_ring_finger_pip": 0.028103064745664597,
+      "l_ring_finger_dip": 0.2789098918437958,
+      "l_pinky_mcp_flex": 0.24922440946102142,
+      "l_pinky_mcp_abd": 0.01442372240126133,
+      "l_pinky_pip": 0.006822129711508751,
+      "l_pinky_dip": 0.6359289288520813,
+      "r_thumb_cmc_flex": 0.8506683111190796,
+      "r_thumb_cmc_abd": -0.8264643549919128,
+      "r_thumb_mcp": 0.4344978630542755,
+      "r_thumb_ip": -0.0037976978346705437,
+      "r_index_finger_mcp_flex": 1.4068975448608398,
+      "r_index_finger_mcp_abd": -0.08279398828744888,
+      "r_index_finger_pip": 0.17182081937789917,
+      "r_index_finger_dip": 0.4908660650253296,
+      "r_middle_finger_mcp_flex": 0.7740225791931152,
+      "r_middle_finger_mcp_abd": -0.04017706960439682,
+      "r_middle_finger_pip": 0.009942004457116127,
+      "r_middle_finger_dip": 0.3105792999267578,
+      "r_ring_finger_mcp_flex": 0.4810600280761719,
+      "r_ring_finger_mcp_abd": -0.0449243038892746,
+      "r_ring_finger_pip": 0.06679315119981766,
+      "r_ring_finger_dip": 0.30632612109184265,
+      "r_pinky_mcp_flex": 0.16379821300506592,
+      "r_pinky_mcp_abd": -0.04957957938313484,
+      "r_pinky_pip": 0.6093318462371826,
+      "r_pinky_dip": 0.3079642355442047
+    },
+    "actuator_ctrl": {
+      "Joint1_L": 1.7029353380203247,
+      "Joint2_L": -1.568421721458435,
+      "Joint3_L": -1.5744123458862305,
+      "Joint4_L": -1.659403920173645,
+      "Joint5_L": 1.3861180543899536,
+      "Joint6_L": -0.4536452293395996,
+      "Joint7_L": 0.9490684270858765,
+      "Joint1_R": -1.500927448272705,
+      "Joint2_R": -1.6719547510147095,
+      "Joint3_R": 1.228449821472168,
+      "Joint4_R": -1.5889860391616821,
+      "Joint5_R": -1.6838133335113525,
+      "Joint6_R": -0.10039488971233368,
+      "Joint7_R": -0.6872827410697937,
+      "l_thumb_cmc_flex": 0.5786967277526855,
+      "l_thumb_cmc_abd": -0.7812885046005249,
+      "l_thumb_mcp": 0.7819653749465942,
+      "l_thumb_ip": -0.00712816696614027,
+      "l_index_finger_mcp_flex": 1.1962162256240845,
+      "l_index_finger_mcp_abd": -0.20862726867198944,
+      "l_index_finger_pip": 0.21688854694366455,
+      "l_index_finger_dip": 0.7363767027854919,
+      "l_middle_finger_mcp_flex": 0.7996149063110352,
+      "l_middle_finger_mcp_abd": -0.18682065606117249,
+      "l_middle_finger_pip": 0.0008533516083844006,
+      "l_middle_finger_dip": 0.24396994709968567,
+      "l_ring_finger_mcp_flex": 0.5041694641113281,
+      "l_ring_finger_mcp_abd": -0.08009763807058334,
+      "l_ring_finger_pip": 0.028103064745664597,
+      "l_ring_finger_dip": 0.2789098918437958,
+      "l_pinky_mcp_flex": 0.24922440946102142,
+      "l_pinky_mcp_abd": 0.01442372240126133,
+      "l_pinky_pip": 0.006822129711508751,
+      "l_pinky_dip": 0.6359289288520813,
+      "r_thumb_cmc_flex": 0.8506683111190796,
+      "r_thumb_cmc_abd": -0.8264643549919128,
+      "r_thumb_mcp": 0.4344978630542755,
+      "r_thumb_ip": -0.0037976978346705437,
+      "r_index_finger_mcp_flex": 1.4068975448608398,
+      "r_index_finger_mcp_abd": -0.08279398828744888,
+      "r_index_finger_pip": 0.17182081937789917,
+      "r_index_finger_dip": 0.4908660650253296,
+      "r_middle_finger_mcp_flex": 0.7740225791931152,
+      "r_middle_finger_mcp_abd": -0.04017706960439682,
+      "r_middle_finger_pip": 0.009942004457116127,
+      "r_middle_finger_dip": 0.3105792999267578,
+      "r_ring_finger_mcp_flex": 0.4810600280761719,
+      "r_ring_finger_mcp_abd": -0.0449243038892746,
+      "r_ring_finger_pip": 0.06679315119981766,
+      "r_ring_finger_dip": 0.30632612109184265,
+      "r_pinky_mcp_flex": 0.16379821300506592,
+      "r_pinky_mcp_abd": -0.04957957938313484,
+      "r_pinky_pip": 0.6093318462371826,
+      "r_pinky_dip": 0.3079642355442047
+    },
+    "actuator_torque": {
+      "Joint1_L": -9.593118667602539,
+      "Joint2_L": -0.14409852027893066,
+      "Joint3_L": 0.20903319120407104,
+      "Joint4_L": -12.313019752502441,
+      "Joint5_L": -0.199271559715271,
+      "Joint6_L": -0.3500373363494873,
+      "Joint7_L": 1.0347368717193604,
+      "Joint1_R": 13.424532890319824,
+      "Joint2_R": -6.713222980499268,
+      "Joint3_R": -1.1178991794586182,
+      "Joint4_R": -12.750866889953613,
+      "Joint5_R": 0.25761857628822327,
+      "Joint6_R": -0.07710631936788559,
+      "Joint7_R": -0.9521061182022095,
+      "l_thumb_cmc_flex": -0.002677139127627015,
+      "l_thumb_cmc_abd": 0.029197970405220985,
+      "l_thumb_mcp": 0.0037303147837519646,
+      "l_thumb_ip": 0.0005848672590218484,
+      "l_index_finger_mcp_flex": -0.030996013432741165,
+      "l_index_finger_mcp_abd": -0.0014141951687633991,
+      "l_index_finger_pip": -0.006088321562856436,
+      "l_index_finger_dip": -0.00032514892518520355,
+      "l_middle_finger_mcp_flex": -0.03210790455341339,
+      "l_middle_finger_mcp_abd": -0.0036727366968989372,
+      "l_middle_finger_pip": -0.006673288065940142,
+      "l_middle_finger_dip": -0.0012784275459125638,
+      "l_ring_finger_mcp_flex": -0.028956614434719086,
+      "l_ring_finger_mcp_abd": -0.006723181344568729,
+      "l_ring_finger_pip": -0.006167145445942879,
+      "l_ring_finger_dip": -0.0009041093289852142,
+      "l_pinky_mcp_flex": -0.02028868906199932,
+      "l_pinky_mcp_abd": -0.008648831397294998,
+      "l_pinky_pip": -0.004710782319307327,
+      "l_pinky_dip": -0.0008240732131525874,
+      "r_thumb_cmc_flex": 0.004321004264056683,
+      "r_thumb_cmc_abd": 0.028515426442027092,
+      "r_thumb_mcp": 0.009769981727004051,
+      "r_thumb_ip": 0.000986755476333201,
+      "r_index_finger_mcp_flex": -0.028812266886234283,
+      "r_index_finger_mcp_abd": 0.0047486997209489346,
+      "r_index_finger_pip": -0.0037680487148463726,
+      "r_index_finger_dip": -0.000952006783336401,
+      "r_middle_finger_mcp_flex": -0.030693775042891502,
+      "r_middle_finger_mcp_abd": 0.0022404079791158438,
+      "r_middle_finger_pip": -0.006283144932240248,
+      "r_middle_finger_dip": -0.00015224574599415064,
+      "r_ring_finger_mcp_flex": -0.03005720116198063,
+      "r_ring_finger_mcp_abd": -0.000834390171803534,
+      "r_ring_finger_pip": -0.005065511912107468,
+      "r_ring_finger_dip": -0.00066488137235865,
+      "r_pinky_mcp_flex": -0.023345258086919785,
+      "r_pinky_mcp_abd": -0.0028021761681884527,
+      "r_pinky_pip": -0.003648274578154087,
+      "r_pinky_dip": -0.001136718550696969
+    },
+    "q_issued": {
+      "Joint1_L": 1.7296708822250366,
+      "Joint2_L": -1.5687576532363892,
+      "Joint3_L": -1.573879599571228,
+      "Joint4_L": -1.6262603998184204,
+      "Joint5_L": 1.3837890625,
+      "Joint6_L": -0.4526415467262268,
+      "Joint7_L": 0.9343254566192627,
+      "Joint1_R": -1.5367757081985474,
+      "Joint2_R": -1.6554468870162964,
+      "Joint3_R": 1.2296894788742065,
+      "Joint4_R": -1.5544319152832031,
+      "Joint5_R": -1.6802986860275269,
+      "Joint6_R": -0.1020403727889061,
+      "Joint7_R": -0.6719699501991272,
+      "l_thumb_cmc_flex": 0.5786967277526855,
+      "l_thumb_cmc_abd": -0.7812885046005249,
+      "l_thumb_mcp": 0.7819653749465942,
+      "l_thumb_ip": -0.00712816696614027,
+      "l_index_finger_mcp_flex": 1.1962162256240845,
+      "l_index_finger_mcp_abd": -0.20862726867198944,
+      "l_index_finger_pip": 0.21688854694366455,
+      "l_index_finger_dip": 0.7363767027854919,
+      "l_middle_finger_mcp_flex": 0.7996149063110352,
+      "l_middle_finger_mcp_abd": -0.18682065606117249,
+      "l_middle_finger_pip": 0.0008533516083844006,
+      "l_middle_finger_dip": 0.24396994709968567,
+      "l_ring_finger_mcp_flex": 0.5041694641113281,
+      "l_ring_finger_mcp_abd": -0.08009763807058334,
+      "l_ring_finger_pip": 0.028103064745664597,
+      "l_ring_finger_dip": 0.2789098918437958,
+      "l_pinky_mcp_flex": 0.24922440946102142,
+      "l_pinky_mcp_abd": 0.01442372240126133,
+      "l_pinky_pip": 0.006822129711508751,
+      "l_pinky_dip": 0.6359289288520813,
+      "r_thumb_cmc_flex": 0.8506683111190796,
+      "r_thumb_cmc_abd": -0.8264643549919128,
+      "r_thumb_mcp": 0.4344978630542755,
+      "r_thumb_ip": -0.0037976978346705437,
+      "r_index_finger_mcp_flex": 1.4068975448608398,
+      "r_index_finger_mcp_abd": -0.08279398828744888,
+      "r_index_finger_pip": 0.17182081937789917,
+      "r_index_finger_dip": 0.4908660650253296,
+      "r_middle_finger_mcp_flex": 0.7740225791931152,
+      "r_middle_finger_mcp_abd": -0.04017706960439682,
+      "r_middle_finger_pip": 0.009942004457116127,
+      "r_middle_finger_dip": 0.3105792999267578,
+      "r_ring_finger_mcp_flex": 0.4810600280761719,
+      "r_ring_finger_mcp_abd": -0.0449243038892746,
+      "r_ring_finger_pip": 0.06679315119981766,
+      "r_ring_finger_dip": 0.30632612109184265,
+      "r_pinky_mcp_flex": 0.16379821300506592,
+      "r_pinky_mcp_abd": -0.04957957938313484,
+      "r_pinky_pip": 0.6093318462371826,
+      "r_pinky_dip": 0.3079642355442047
+    },
+    "q_filtered_f64": {
+      "Joint1_L": 1.7280744123735592,
+      "Joint2_L": -1.568434549940154,
+      "Joint3_L": -1.5743548753395116,
+      "Joint4_L": -1.6235834487137288,
+      "Joint5_L": 1.38711425193206,
+      "Joint6_L": -0.4519310139867574,
+      "Joint7_L": 0.9377274486748961,
+      "Joint1_R": -1.5353082690378317,
+      "Joint2_R": -1.655235731986761,
+      "Joint3_R": 1.2305297737336462,
+      "Joint4_R": -1.5523750345620144,
+      "Joint5_R": -1.6841815963731763,
+      "Joint6_R": -0.10081370329701284,
+      "Joint7_R": -0.6741631958641813,
+      "l_thumb_cmc_flex": 0.5786967277526855,
+      "l_thumb_cmc_abd": -0.7812885046005249,
+      "l_thumb_mcp": 0.7819653749465942,
+      "l_thumb_ip": -0.00712816696614027,
+      "l_index_finger_mcp_flex": 1.1962162256240845,
+      "l_index_finger_mcp_abd": -0.20862726867198944,
+      "l_index_finger_pip": 0.21688854694366455,
+      "l_index_finger_dip": 0.7363767027854919,
+      "l_middle_finger_mcp_flex": 0.7996149063110352,
+      "l_middle_finger_mcp_abd": -0.18682065606117249,
+      "l_middle_finger_pip": 0.0008533516083844006,
+      "l_middle_finger_dip": 0.24396994709968567,
+      "l_ring_finger_mcp_flex": 0.5041694641113281,
+      "l_ring_finger_mcp_abd": -0.08009763807058334,
+      "l_ring_finger_pip": 0.028103064745664597,
+      "l_ring_finger_dip": 0.2789098918437958,
+      "l_pinky_mcp_flex": 0.24922440946102142,
+      "l_pinky_mcp_abd": 0.01442372240126133,
+      "l_pinky_pip": 0.006822129711508751,
+      "l_pinky_dip": 0.6359289288520813,
+      "r_thumb_cmc_flex": 0.8506683111190796,
+      "r_thumb_cmc_abd": -0.8264643549919128,
+      "r_thumb_mcp": 0.4344978630542755,
+      "r_thumb_ip": -0.0037976978346705437,
+      "r_index_finger_mcp_flex": 1.4068975448608398,
+      "r_index_finger_mcp_abd": -0.08279398828744888,
+      "r_index_finger_pip": 0.17182081937789917,
+      "r_index_finger_dip": 0.4908660650253296,
+      "r_middle_finger_mcp_flex": 0.7740225791931152,
+      "r_middle_finger_mcp_abd": -0.04017706960439682,
+      "r_middle_finger_pip": 0.009942004457116127,
+      "r_middle_finger_dip": 0.3105792999267578,
+      "r_ring_finger_mcp_flex": 0.4810600280761719,
+      "r_ring_finger_mcp_abd": -0.0449243038892746,
+      "r_ring_finger_pip": 0.06679315119981766,
+      "r_ring_finger_dip": 0.30632612109184265,
+      "r_pinky_mcp_flex": 0.16379821300506592,
+      "r_pinky_mcp_abd": -0.04957957938313484,
+      "r_pinky_pip": 0.6093318462371826,
+      "r_pinky_dip": 0.3079642355442047
+    },
+    "q_proposed": {
+      "Joint1_L": 1.7300608158111572,
+      "Joint2_L": -1.5688238143920898,
+      "Joint3_L": -1.5737823247909546,
+      "Joint4_L": -1.6270190477371216,
+      "Joint5_L": 1.3830457925796509,
+      "Joint6_L": -0.45272085070610046,
+      "Joint7_L": 0.9333171844482422,
+      "Joint1_R": -1.5367757081985474,
+      "Joint2_R": -1.6554468870162964,
+      "Joint3_R": 1.2296894788742065,
+      "Joint4_R": -1.5544319152832031,
+      "Joint5_R": -1.6802986860275269,
+      "Joint6_R": -0.1020403727889061,
+      "Joint7_R": -0.6719699501991272,
+      "l_thumb_cmc_flex": 0.5786967277526855,
+      "l_thumb_cmc_abd": -0.7812885046005249,
+      "l_thumb_mcp": 0.7819653749465942,
+      "l_thumb_ip": -0.00712816696614027,
+      "l_index_finger_mcp_flex": 1.1962162256240845,
+      "l_index_finger_mcp_abd": -0.20862726867198944,
+      "l_index_finger_pip": 0.21688854694366455,
+      "l_index_finger_dip": 0.7363767027854919,
+      "l_middle_finger_mcp_flex": 0.7996149063110352,
+      "l_middle_finger_mcp_abd": -0.18682065606117249,
+      "l_middle_finger_pip": 0.0008533516083844006,
+      "l_middle_finger_dip": 0.24396994709968567,
+      "l_ring_finger_mcp_flex": 0.5041694641113281,
+      "l_ring_finger_mcp_abd": -0.08009763807058334,
+      "l_ring_finger_pip": 0.028103064745664597,
+      "l_ring_finger_dip": 0.2789098918437958,
+      "l_pinky_mcp_flex": 0.24922440946102142,
+      "l_pinky_mcp_abd": 0.01442372240126133,
+      "l_pinky_pip": 0.006822129711508751,
+      "l_pinky_dip": 0.6359289288520813,
+      "r_thumb_cmc_flex": 0.8561329245567322,
+      "r_thumb_cmc_abd": -0.8250670433044434,
+      "r_thumb_mcp": 0.4251750707626343,
+      "r_thumb_ip": -0.003911995328962803,
+      "r_index_finger_mcp_flex": 1.4110472202301025,
+      "r_index_finger_mcp_abd": -0.08287841081619263,
+      "r_index_finger_pip": 0.16723360121250153,
+      "r_index_finger_dip": 0.49412474036216736,
+      "r_middle_finger_mcp_flex": 0.7680628895759583,
+      "r_middle_finger_mcp_abd": -0.0407157726585865,
+      "r_middle_finger_pip": 0.007481997366994619,
+      "r_middle_finger_dip": 0.30688485503196716,
+      "r_ring_finger_mcp_flex": 0.4767364263534546,
+      "r_ring_finger_mcp_abd": -0.04535013809800148,
+      "r_ring_finger_pip": 0.05853373184800148,
+      "r_ring_finger_dip": 0.30588141083717346,
+      "r_pinky_mcp_flex": 0.16196195781230927,
+      "r_pinky_mcp_abd": -0.04933378845453262,
+      "r_pinky_pip": 0.59737229347229,
+      "r_pinky_dip": 0.3107214868068695
+    }
+  },
+  "terminal_motion_witness": {
+    "last_velocity_peaks": [
+      {
+        "axis": "Joint7_L",
+        "value": 0.2869582752470325,
+        "limit": 1.3499999999999999,
+        "absolute_ratio": 0.21256168536817224
+      },
+      {
+        "axis": "Joint7_R",
+        "value": 0.2618252069907308,
+        "limit": 1.3499999999999999,
+        "absolute_ratio": 0.19394459777091172
+      },
+      {
+        "axis": "l_ring_finger_mcp_flex",
+        "value": -0.13226286065930853,
+        "limit": 5.0,
+        "absolute_ratio": 0.026452572131861706
+      },
+      {
+        "axis": "r_pinky_pip",
+        "value": -0.3713446041397248,
+        "limit": 5.0,
+        "absolute_ratio": 0.07426892082794496
+      }
+    ],
+    "last_torque_peaks": [
+      {
+        "axis": "Joint4_L",
+        "value": -12.313019752502441,
+        "limit": 66.0,
+        "absolute_ratio": 0.18656090534094608
+      },
+      {
+        "axis": "Joint4_R",
+        "value": -12.750866889953613,
+        "limit": 66.0,
+        "absolute_ratio": 0.19319495287808505
+      },
+      {
+        "axis": "l_thumb_cmc_abd",
+        "value": 0.029197970405220985,
+        "limit": 0.83,
+        "absolute_ratio": 0.03517827759665179
+      },
+      {
+        "axis": "r_thumb_cmc_abd",
+        "value": 0.028515426442027092,
+        "limit": 0.83,
+        "absolute_ratio": 0.0343559354723218
+      }
+    ],
+    "prefix_velocity_peaks": [
+      {
+        "axis": "Joint7_L",
+        "value": 0.548531504564818,
+        "limit": 1.3499999999999999,
+        "absolute_ratio": 0.40631963301097634
+      },
+      {
+        "axis": "Joint5_R",
+        "value": 0.6532457094883706,
+        "limit": 1.3499999999999999,
+        "absolute_ratio": 0.4838857107321264
+      },
+      {
+        "axis": "l_pinky_pip",
+        "value": 2.5548593333800795,
+        "limit": 5.0,
+        "absolute_ratio": 0.5109718666760159
+      },
+      {
+        "axis": "r_index_finger_dip",
+        "value": 1.2092877621953089,
+        "limit": 5.0,
+        "absolute_ratio": 0.24185755243906176
+      }
+    ],
+    "last_gap_m": 0.0012342053232714534,
+    "last_depth_m": 0.0,
+    "physical_event_codes": {
+      "0": 2152
+    },
+    "prefix_minimum_gap_m": 0.001170595409348607,
+    "prefix_maximum_penetration_m": 0.0
+  },
+  "partition_array_sha256": {
+    "physical_q": "05a3c39b43da07557e45bc81bd8b046e540c0de6053184624655d328124237aa",
+    "physical_qd": "d64239f23b4fa30ff64e332f03c39b308d607eb7741e4b25e10a2458bea07758",
+    "proof_inputs": "1c26cde4e53b3c2fb897e1c923aada93037e7af6736024e88a4835244d17abd3",
+    "q_issued": "a013835474d05dfe193555fe166bc002c07814910cc2d8fc9217a6cfdbb53e0e",
+    "q_issued_mask": "69ff446f64e13d331e59eb8391085e69c7dd14fdf5393ced02dc590d2ad9f3a0",
+    "q_applied": "3440b6dbdc28a13f3a7e112a5ec350527459905ceff18c071ead87cb2e2b8008",
+    "actuator_ctrl": "d3f9c34b1e7ec53982717a5b69d63773e063ad8184a2caefa599044631b7072e",
+    "actuator_torque": "8aef37a6092a12ef6690860475074b787e8766146baee9e142223242551d4942",
+    "substep_clearance_m": "950c6b3ff12934c57e732f95bbf2ea802e641524bc8a9b0fb68fa19438de8cd4",
+    "substep_event": "fbf326479cac472df4556167c580cc047be0580bdbbbb7dfb4dd2eb5722a0381",
+    "substep_penetration_m": "19274a2426f7200e5f288a0aa76cdcb2f391ce33221c2e7e52862ad033417dc5",
+    "substep_contact": "8fb3cdf02b13e36af38f76ab75dfdd2f52477fcd1cf2a84810a623f5b5808493",
+    "physical_state_mask": "44f6c937a4e4486f8c0a26a0415be9b03abcb40e80c54fbaf8c903ce93edcf71"
+  }
+}
