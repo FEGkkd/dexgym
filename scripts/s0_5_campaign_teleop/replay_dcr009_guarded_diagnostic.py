@@ -92,6 +92,17 @@ def diagnostic_class():
     from nominal_live_replay import HUMAN, deserialize_message
 
     class DiagnosticReplay(base):
+        def measure(self):
+            value = super().measure()
+            if value is not None:
+                diagnostics = [fields for _, fields in self.pilot_diagnostics.values()]
+                sequences = {fields.get("pilot_guard_sequence") for fields in diagnostics}
+                guarded = (all(fields.get("pilot_guarded_publish") == "true" for fields in diagnostics)
+                           and len(sequences) == 1 and next(iter(sequences), None) not in {None, "", "0"})
+                value["arms_accepted"] = value["arms_accepted"] and guarded
+                value["arm_guard_proof"] = next(iter(sequences)) if guarded else None
+            return value
+
         def service(self, operation, timeout=40):
             if operation == "home":
                 from swept_live_guard import Reason

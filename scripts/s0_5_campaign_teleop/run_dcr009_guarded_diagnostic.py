@@ -26,17 +26,36 @@ SCRIPTS = Path(__file__).resolve().parent
 def evidence_summary(path):
     counts = {"historical_packets": 0, "historical_seals": 0, "preposition_packets": 0}
     reached = "NOT_OBSERVED"
+    stop = False
     with path.open(encoding="utf-8") as stream:
         for line in stream:
+            if not line.endswith("\n"):
+                raise ValueError("Incomplete diagnostic trace; retained")
             row = json.loads(line)
             if row["kind"] == "start_handoff":
+                if reached != "NOT_OBSERVED":
+                    raise ValueError("Repeated START outcome")
                 reached = row["status"]
+            if row["kind"] == "pilot_stop":
+                stop = row["late_observed_command_count"] == 0
             if row["kind"] == "input" and row["stage"] == "preposition_start":
                 counts["preposition_packets"] += 1
             if row["stage"] == "historical_human_inputs":
+                if reached != "START_REACHED":
+                    raise ValueError("Historical input before a measured START reached")
                 counts["historical_packets"] += row["kind"] == "input"
-                counts["historical_seals"] += row["kind"] == "historical_input_seal"
-    return {"start_status": reached, **counts, "formal_coverage_credit": False}
+                if row["kind"] == "historical_input_seal":
+                    if (row["messages"] != counts["historical_packets"]
+                            or row["expected_cdr_sha256"] != row["published_cdr_sha256"]):
+                        raise ValueError("Historical stream does not match its source seal")
+                    counts["historical_seals"] += 1
+    if stop and reached == "START_REACHED" and counts["historical_packets"] and counts["historical_seals"] == 1:
+        phase = "HISTORICAL_REPLAY_COMPLETE"
+    elif stop and reached == "START_NOT_REACHED" and not counts["historical_packets"]:
+        phase = "START_NOT_REACHED_NO_HISTORY"
+    else:
+        phase = "INCOMPLETE_TRACE"
+    return {"observed_phase": phase, "start_status": reached, **counts, "formal_coverage_credit": False}
 
 
 def attempt(args, index, selection, cancelled):
@@ -76,9 +95,20 @@ def attempt(args, index, selection, cancelled):
             result.update(guard_command=guard_command, guard_pid=guard.pid)
             save(result_file, result)
             ready_deadline = time.monotonic() + 30
-            while not (endpoint.is_socket() and ready.is_file()):
+            configuration = None
+            while configuration is None:
+                if endpoint.is_socket() and ready.is_file():
+                    try:
+                        configuration = json.loads(ready.read_bytes())
+                    except json.JSONDecodeError:
+                        pass
                 if guard.poll() is not None or time.monotonic() >= ready_deadline or cancelled.wait(.1):
                     raise RuntimeError("Whole-body sweep guard did not verify assets and become ready")
+            if (configuration["pid"] != guard.pid or configuration["socket"] != str(endpoint)
+                    or configuration["scope"] != "DIAGNOSTIC_ONLY_MUJOCO_COMMAND_ENVELOPE"
+                    or configuration["live_model_sha256"] != LIVE_SHA or configuration["signed_model_sha256"] != SIGNED_SHA
+                    or configuration["guard_script_sha256"] != digest(SCRIPTS / "swept_live_guard.py")):
+                raise RuntimeError("Sweep guard readiness names an unexpected process, socket, or model")
             result["guard_ready_sha256"] = digest(ready)
             launch = ["ros2", "launch", "whole_body_bringup", "sim.launch.py"]
             with (path / "sim.log").open("w", encoding="utf-8") as sim_log, (path / "replay.log").open("w", encoding="utf-8") as replay_log:
@@ -115,8 +145,13 @@ def attempt(args, index, selection, cancelled):
                 result["cleanup_error"] = str(error)
             trace = path / "evidence" / "trace.jsonl"
             if trace.is_file():
-                result.update(evidence_summary(trace))
                 result["trace_sha256"] = digest(trace)
+                try:
+                    result.update(evidence_summary(trace))
+                except (OSError, ValueError, KeyError) as error:
+                    result.update(phase="INVALID_TRACE", trace_error=str(error))
+            if result["phase"] == "COMPLETED":
+                result["phase"] = result.get("observed_phase", "INCOMPLETE_TRACE")
             result["finished_unix_ns"] = time.time_ns()
             save(result_file, result)
     return result
@@ -157,12 +192,17 @@ def main():
         ledger["attempts"].append(verdict)
         save(receipt, ledger)
         print(index, root["root"], verdict["phase"], verdict.get("start_status"), flush=True)
-        if (verdict["phase"] != "COMPLETED" or verdict.get("same_domain_empty_after") is not True
+        if (verdict["phase"] not in {"HISTORICAL_REPLAY_COMPLETE", "START_NOT_REACHED_NO_HISTORY"}
+                or verdict.get("same_domain_empty_after") is not True
                 or not verdict["owned_groups_stopped"] or cancelled.is_set()):
             break
-    ledger["status"] = "ALL_SIX_ATTEMPTED" if len(ledger["attempts"]) == 6 else "STOPPED_BEFORE_SIX"
+    complete = len(ledger["attempts"]) == 6 and all(
+        row["phase"] in {"HISTORICAL_REPLAY_COMPLETE", "START_NOT_REACHED_NO_HISTORY"}
+        and row["owned_groups_stopped"] and row.get("same_domain_empty_after") is True for row in ledger["attempts"]
+    )
+    ledger["status"] = "ALL_SIX_DIAGNOSTICS_CLOSED" if complete else "STOPPED_WITH_INCOMPLETE_DIAGNOSTICS"
     save(receipt, ledger)
-    return 0 if ledger["status"] == "ALL_SIX_ATTEMPTED" else 1
+    return 0 if complete else 1
 
 
 if __name__ == "__main__":
