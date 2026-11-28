@@ -1,0 +1,586 @@
+{
+  "scope": "DIAGNOSTIC_ONLY",
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "center_offset_mm": 0,
+  "formal_coverage_credit": false,
+  "same_two_model_sweep_guard": true,
+  "yaw_alignment": {
+    "yaw_deg": -85.68618239846906,
+    "pivot_world_m": [
+      -5.271410380092156e-06,
+      -0.455499974704131,
+      0.9447239576595508
+    ],
+    "world_correction": [
+      [
+        0.0752192084444463,
+        0.9971670224596234,
+        0.0,
+        0.4542046786070882
+      ],
+      [
+        -0.9971670224596234,
+        0.0752192084444463,
+        -0.0,
+        -0.42124288363701384
+      ],
+      [
+        -0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "geometry": {
+    "remaining_heading_mismatch_deg": 4.283651031206405e-15,
+    "midpoint_change_mm": 2.7755575615628914e-14,
+    "gap_before_mm": 564.8085896770293,
+    "gap_after_mm": 564.8085896770293,
+    "relative_se3_max_element_delta": 1.1102230246251565e-16
+  },
+  "home_to_engineering_tcp_rotation_deg": {
+    "side_order": [
+      "left",
+      "right"
+    ],
+    "unaligned_actual_run": [
+      79.23902245768006,
+      82.18508750093466
+    ],
+    "unaligned_using_aligned_run_home": [
+      79.23902245768006,
+      82.18508750093466
+    ],
+    "aligned_actual_run": [
+      22.756928138182122,
+      28.173451301652257
+    ],
+    "yaw_only_reduction_with_same_home": [
+      56.482094319497946,
+      54.0116361992824
+    ]
+  },
+  "original_target_agreement_across_measured_home": {
+    "exact_numeric_match": false,
+    "within_bound_target_tolerance": true,
+    "per_wrist": {
+      "left": {
+        "position_mm": 0.0,
+        "so3_deg": 1.3496353862466647e-15
+      },
+      "right": {
+        "position_mm": 0.0,
+        "so3_deg": 8.88992059238452e-16
+      }
+    }
+  },
+  "common_time_support": {
+    "cutoff_s": 1.9000000000000001,
+    "bins": 71
+  },
+  "unaligned": {
+    "attempt": 1,
+    "center_offset_mm": 0,
+    "phase": "NATIVE_PROTECTIVE_HOLD_NO_HISTORY",
+    "process_exit": 1,
+    "start_status": "NOT_OBSERVED",
+    "preposition_origin": "preposition_clock",
+    "preposition_duration_s": 3.125925547,
+    "stop_ack_with_no_late_observed_command": true,
+    "domain_empty_after": true,
+    "owned_groups_stopped": true,
+    "internal_home_proofs": [
+      [
+        "PERMIT",
+        "PERMIT"
+      ]
+    ],
+    "recorded_history_inputs": 0,
+    "preposition_input_packets": 568,
+    "fault_stops": [
+      {
+        "elapsed_s": 3.125925547,
+        "stage": "preposition_start",
+        "source": "/tianji/robot_state",
+        "code": "DRIVER_NOT_COMMANDABLE",
+        "reason": "position held; home required before next enable",
+        "header_ns": 1795857432292608755
+      }
+    ],
+    "other_abort_reports": [
+      {
+        "stage": "tail",
+        "error": "Pilot watchdog observed native hard fault: DRIVER_NOT_COMMANDABLE"
+      }
+    ],
+    "unsafe_safety_topic_messages_by_code": {
+      "COMMAND_STEP": 1
+    },
+    "native_joint_limit_watchdog_events": 0,
+    "all_supported_measurements_descriptive_only": {
+      "engineering_tcp": {
+        "samples": 140,
+        "left_position_mm": {
+          "mean": 316.09577361674417,
+          "p95": 390.8392649399195,
+          "min": 234.40399542418913
+        },
+        "right_position_mm": {
+          "mean": 279.4899315570281,
+          "p95": 343.8169112969056,
+          "min": 213.02059646894955
+        },
+        "left_so3_deg": {
+          "mean": 55.97389831659091,
+          "p95": 77.32585340656847,
+          "min": 32.66171399903968
+        },
+        "right_so3_deg": {
+          "mean": 58.94481914509227,
+          "p95": 80.33961734496293,
+          "min": 35.34061906827027
+        },
+        "worst_wrist_position_p95_mm": 390.8392649399195,
+        "worst_wrist_so3_p95_deg": 80.33961734496293,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "registered_wrist_marker": {
+        "samples": 140,
+        "left_position_mm": {
+          "mean": 271.342134171783,
+          "p95": 345.09855325313623,
+          "min": 191.25105314302502
+        },
+        "right_position_mm": {
+          "mean": 323.20224141629404,
+          "p95": 388.5997058012615,
+          "min": 254.4320273710085
+        },
+        "left_so3_deg": {
+          "mean": 153.04470169134052,
+          "p95": 167.2223885469416,
+          "min": 137.9294724646295
+        },
+        "right_so3_deg": {
+          "mean": 87.7358154209928,
+          "p95": 97.98366130767367,
+          "min": 78.91155160540622
+        },
+        "worst_wrist_position_p95_mm": 388.5997058012615,
+        "worst_wrist_so3_p95_deg": 167.2223885469416,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "unshifted_engineering_tcp": {
+        "samples": 140,
+        "left_position_mm": {
+          "mean": 316.09577361674417,
+          "p95": 390.8392649399195,
+          "min": 234.40399542418913
+        },
+        "right_position_mm": {
+          "mean": 279.4899315570281,
+          "p95": 343.8169112969056,
+          "min": 213.02059646894955
+        },
+        "left_so3_deg": {
+          "mean": 55.97389831659091,
+          "p95": 77.32585340656847,
+          "min": 32.66171399903968
+        },
+        "right_so3_deg": {
+          "mean": 58.94481914509227,
+          "p95": 80.33961734496293,
+          "min": 35.34061906827027
+        },
+        "worst_wrist_position_p95_mm": 390.8392649399195,
+        "worst_wrist_so3_p95_deg": 80.33961734496293,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      }
+    },
+    "common_support_metrics": {},
+    "groups": {
+      "arm": {
+        "guard_service_reasons": {
+          "PERMIT": 774,
+          "SWEEP_UNPROVEN": 1
+        },
+        "native_rejection_codes": {
+          "7": 1
+        },
+        "native_publications_with_permit": 774,
+        "observed_ros_messages": 774,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 775,
+        "guard_permits": 774,
+        "permit_rate_over_valid_guard_requests": 0.9987096774193548
+      },
+      "left": {
+        "guard_service_reasons": {
+          "PERMIT": 6,
+          "SWEEP_UNPROVEN": 136
+        },
+        "native_rejection_codes": {
+          "7": 136
+        },
+        "native_publications_with_permit": 6,
+        "observed_ros_messages": 6,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 142,
+        "guard_permits": 6,
+        "permit_rate_over_valid_guard_requests": 0.04225352112676056
+      },
+      "right": {
+        "guard_service_reasons": {
+          "PERMIT": 4,
+          "SWEEP_UNPROVEN": 138
+        },
+        "native_rejection_codes": {
+          "7": 138
+        },
+        "native_publications_with_permit": 4,
+        "observed_ros_messages": 4,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 142,
+        "guard_permits": 4,
+        "permit_rate_over_valid_guard_requests": 0.028169014084507043
+      }
+    },
+    "unattributed_guard_reasons": {},
+    "publication_mismatches": {},
+    "input_identity": {
+      "result_sha256": "ead3338db8654dddd186ce023c30de759e378dfdaa579148d6b246dc77d778cc",
+      "native_trace_sha256": "7d69ba02015163d4077bf5988b3122019b4e63096bc732e4482afb17728ba2e7",
+      "guard_trace_sha256": "80b5c471f788623b0c3b804d6163d96eae55496959e6e1a58256513da4ea637b",
+      "sim_log_sha256": "d0b8b5627d69d96b47da485571d32a24ddecc2516c6e41d261def977fcafd76a",
+      "input_receipt_sha256": "398da04a718072f789ea5e1270747da7ae6281d14bceb64b6798a8027af6b90b"
+    },
+    "profile": "segmented",
+    "measured_start_reached": false,
+    "endpoint": {
+      "elapsed_s": 3.104923827,
+      "observed_mono_ns": 167958568521464,
+      "terminal_gap_ms": 21.00172,
+      "feedback_header_ns": 1795857432272623370,
+      "matches_start_handoff_receipt": false,
+      "ready_sample": false,
+      "measured_speed_rad_s": 0.31539774861740094,
+      "hand_error_to_issued_rad": {
+        "left": null,
+        "right": null
+      },
+      "hand_error_to_unsegmented_wuji_rad": {
+        "left": null,
+        "right": null
+      },
+      "hand_segment_guard_proofs": {
+        "left": null,
+        "right": null
+      },
+      "engineering_tcp": {
+        "left": {
+          "position_mm": 234.40399542418913,
+          "so3_deg": 32.66171399903968
+        },
+        "right": {
+          "position_mm": 213.02059646894955,
+          "so3_deg": 35.34061906827027
+        }
+      },
+      "registered_wrist_marker": {
+        "left": {
+          "position_mm": 191.25105314302502,
+          "so3_deg": 137.9294724646295
+        },
+        "right": {
+          "position_mm": 254.4320273710085,
+          "so3_deg": 99.34239055504862
+        }
+      },
+      "unshifted_engineering_tcp": {
+        "left": {
+          "position_mm": 234.40399542418913,
+          "so3_deg": 32.66171399903968
+        },
+        "right": {
+          "position_mm": 213.02059646894955,
+          "so3_deg": 35.34061906827027
+        }
+      },
+      "hand_endpoint_proof_joins_observed_command": {
+        "left": null,
+        "right": null
+      }
+    },
+    "last_preterminal_hand_error_to_unsegmented_wuji_rad": {
+      "left": {
+        "error_rad": 1.0345273807281479,
+        "guard_proof": 42,
+        "elapsed_s": 0.133237465,
+        "terminal_gap_ms": 2992.688082
+      },
+      "right": {
+        "error_rad": 0.9210498879383338,
+        "guard_proof": 43,
+        "elapsed_s": 0.133237465,
+        "terminal_gap_ms": 2992.688082
+      }
+    },
+    "start_only_scope_completion": false,
+    "live_model_sha256": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "identical_two_model_guard_contract_source_sha256": "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909"
+  },
+  "aligned": {
+    "attempt": 1,
+    "center_offset_mm": 0,
+    "phase": "NATIVE_PROTECTIVE_HOLD_NO_HISTORY",
+    "process_exit": 1,
+    "start_status": "NOT_OBSERVED",
+    "preposition_origin": "preposition_clock",
+    "preposition_duration_s": 1.906115287,
+    "stop_ack_with_no_late_observed_command": true,
+    "domain_empty_after": true,
+    "owned_groups_stopped": true,
+    "internal_home_proofs": [
+      [
+        "PERMIT",
+        "PERMIT"
+      ]
+    ],
+    "recorded_history_inputs": 0,
+    "preposition_input_packets": 348,
+    "fault_stops": [
+      {
+        "elapsed_s": 1.906115287,
+        "stage": "preposition_start",
+        "source": "/tianji/robot_state",
+        "code": "DRIVER_NOT_COMMANDABLE",
+        "reason": "position held; home required before next enable",
+        "header_ns": 1795858502440657969
+      }
+    ],
+    "other_abort_reports": [
+      {
+        "stage": "tail",
+        "error": "Pilot watchdog observed native hard fault: DRIVER_NOT_COMMANDABLE"
+      }
+    ],
+    "unsafe_safety_topic_messages_by_code": {
+      "COMMAND_STEP": 1
+    },
+    "native_joint_limit_watchdog_events": 0,
+    "all_supported_measurements_descriptive_only": {
+      "engineering_tcp": {
+        "samples": 79,
+        "left_position_mm": {
+          "mean": 6.429970606813662,
+          "p95": 29.105015602077554,
+          "min": 0.04221328479353793
+        },
+        "right_position_mm": {
+          "mean": 0.5890523270009119,
+          "p95": 3.494025593197525,
+          "min": 0.08398941849952939
+        },
+        "left_so3_deg": {
+          "mean": 8.469927320509411,
+          "p95": 19.724976328046118,
+          "min": 0.015039415050544777
+        },
+        "right_so3_deg": {
+          "mean": 13.339878347257041,
+          "p95": 25.15440492079502,
+          "min": 0.2822880974830829
+        },
+        "worst_wrist_position_p95_mm": 29.105015602077554,
+        "worst_wrist_so3_p95_deg": 25.15440492079502,
+        "bilateral_geometric_start_scale_hits": 15,
+        "bilateral_geometric_near_misses": 15
+      },
+      "registered_wrist_marker": {
+        "samples": 79,
+        "left_position_mm": {
+          "mean": 61.82044351924482,
+          "p95": 67.60646842902308,
+          "min": 37.85052975057834
+        },
+        "right_position_mm": {
+          "mean": 46.15562861386297,
+          "p95": 46.603258554865334,
+          "min": 38.74785679753255
+        },
+        "left_so3_deg": {
+          "mean": 114.02166835468681,
+          "p95": 119.04318107403313,
+          "min": 106.81942474297226
+        },
+        "right_so3_deg": {
+          "mean": 126.58056887111543,
+          "p95": 130.54569859353046,
+          "min": 122.49110958490247
+        },
+        "worst_wrist_position_p95_mm": 67.60646842902308,
+        "worst_wrist_so3_p95_deg": 130.54569859353046,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "unshifted_engineering_tcp": {
+        "samples": 79,
+        "left_position_mm": {
+          "mean": 383.2046567171007,
+          "p95": 392.4188295609507,
+          "min": 380.6028886358143
+        },
+        "right_position_mm": {
+          "mean": 353.1572464922354,
+          "p95": 353.39205335162904,
+          "min": 350.7837838078989
+        },
+        "left_so3_deg": {
+          "mean": 82.94227762023553,
+          "p95": 85.68204178501936,
+          "min": 79.51764255667136
+        },
+        "right_so3_deg": {
+          "mean": 83.35307323497307,
+          "p95": 85.36808719552837,
+          "min": 82.18567064536177
+        },
+        "worst_wrist_position_p95_mm": 392.4188295609507,
+        "worst_wrist_so3_p95_deg": 85.68204178501936,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      }
+    },
+    "common_support_metrics": {},
+    "groups": {
+      "arm": {
+        "guard_service_reasons": {
+          "PERMIT": 470,
+          "SWEEP_UNPROVEN": 1
+        },
+        "native_rejection_codes": {
+          "7": 1
+        },
+        "native_publications_with_permit": 470,
+        "observed_ros_messages": 470,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 471,
+        "guard_permits": 470,
+        "permit_rate_over_valid_guard_requests": 0.9978768577494692
+      },
+      "left": {
+        "guard_service_reasons": {
+          "PERMIT": 6,
+          "SWEEP_UNPROVEN": 80
+        },
+        "native_rejection_codes": {
+          "7": 80
+        },
+        "native_publications_with_permit": 6,
+        "observed_ros_messages": 6,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 86,
+        "guard_permits": 6,
+        "permit_rate_over_valid_guard_requests": 0.06976744186046512
+      },
+      "right": {
+        "guard_service_reasons": {
+          "PERMIT": 4,
+          "SWEEP_UNPROVEN": 82
+        },
+        "native_rejection_codes": {
+          "7": 82
+        },
+        "native_publications_with_permit": 4,
+        "observed_ros_messages": 4,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 86,
+        "guard_permits": 4,
+        "permit_rate_over_valid_guard_requests": 0.046511627906976744
+      }
+    },
+    "unattributed_guard_reasons": {},
+    "publication_mismatches": {},
+    "input_identity": {
+      "result_sha256": "46b1b94da1fadb2d25bb1c8cdf311745e3807ea78a556b99b9e25f4cc888a189",
+      "native_trace_sha256": "50f8a9af024821b8f80de2d7c099f63b7afffca87eae696cd4733950e3ecfd25",
+      "guard_trace_sha256": "785a0b684bc6aab1cacde7fe18f7141dcb5f90cd72d97308b7a237ca699fa29a",
+      "sim_log_sha256": "48393bc6db9e9364bf9f5439c1da16efc4b341e6f298160b65c24431871a5da0",
+      "input_receipt_sha256": "674483c1bb42f0bdeedcbbbbf9f55e7c7e57ae2e6c3e6ff1f03429ae4720bd81"
+    },
+    "profile": "segmented",
+    "measured_start_reached": false,
+    "endpoint": {
+      "elapsed_s": 1.884136092,
+      "observed_mono_ns": 169028715420170,
+      "terminal_gap_ms": 21.979195,
+      "feedback_header_ns": 1795858502420765265,
+      "matches_start_handoff_receipt": false,
+      "ready_sample": false,
+      "measured_speed_rad_s": 0.09809751810412771,
+      "hand_error_to_issued_rad": {
+        "left": null,
+        "right": null
+      },
+      "hand_error_to_unsegmented_wuji_rad": {
+        "left": null,
+        "right": null
+      },
+      "hand_segment_guard_proofs": {
+        "left": null,
+        "right": null
+      },
+      "engineering_tcp": {
+        "left": {
+          "position_mm": 0.04221328479353793,
+          "so3_deg": 0.015039415050544777
+        },
+        "right": {
+          "position_mm": 0.22607079898554835,
+          "so3_deg": 0.2822880974830829
+        }
+      },
+      "registered_wrist_marker": {
+        "left": {
+          "position_mm": 67.56230465954032,
+          "so3_deg": 119.04410402175888
+        },
+        "right": {
+          "position_mm": 46.607747426430215,
+          "so3_deg": 122.49110958490247
+        }
+      },
+      "unshifted_engineering_tcp": {
+        "left": {
+          "position_mm": 380.73365983515555,
+          "so3_deg": 85.68385166280417
+        },
+        "right": {
+          "position_mm": 353.40095492878123,
+          "so3_deg": 85.65632203024848
+        }
+      },
+      "hand_endpoint_proof_joins_observed_command": {
+        "left": null,
+        "right": null
+      }
+    },
+    "last_preterminal_hand_error_to_unsegmented_wuji_rad": {
+      "left": null,
+      "right": null
+    },
+    "start_only_scope_completion": false,
+    "live_model_sha256": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "identical_two_model_guard_contract_source_sha256": "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909"
+  }
+}
