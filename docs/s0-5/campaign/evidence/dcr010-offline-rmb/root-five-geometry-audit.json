@@ -1,0 +1,54 @@
+{
+  "scope": "DIAGNOSTIC_ONLY_SIGNED_HMB_GEOMETRY_AUDIT",
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "split": "Train",
+  "anatomical_mount_status": "UNKNOWN",
+  "formal_coverage_credit": false,
+  "physics_executed": false,
+  "source": {
+    "hmb_e1_manifest_sha256": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074",
+    "cohort_sha256": "7d6c4702229aefd0d564f76dfae5a2a7b62a0340b9c4cae43fea512cc2d531c2",
+    "pilot_plan_sha256": "3c0268291bdb8916a9a520d3fa73a1340fffd7f9e8a7b7364a1ef9950f9a0004",
+    "root_anchor_sha256": "2f633b87aa89be2df145779513bf1424f536510776cd79500a34870bbb7b0a06",
+    "diagnostic_frames_sha256": "a7225c31008b4088f86b2003ae326c9504ce969333acfd0fe0d2d2d68d425da4",
+    "prior_diagnostic_v2_trace_sha256": "e70c540aaebcef205e095c81809c4d6820d1d7fe232cc1996758802723811ec8",
+    "signed_model_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+    "frame_receipt_sha256": "1d67a6dad1831574af10a1fdf6349638097af6457e9d8527c9bd77e150e876fe"
+  },
+  "counts": {
+    "complete_source_plan": 4844,
+    "historical_plan": 4804,
+    "historical_joint_valid": 4794,
+    "raw_tracker_pair": 4804,
+    "raw_manus_pair": 4801,
+    "registered_wrist_pair": 4804,
+    "engineering_tip_target": 4801
+  },
+  "start": {
+    "signed_hmb_cutoff_ns": 800000000,
+    "exact_anchor_identity_reproduced": true,
+    "candidate_transform_vs_prior_recorded_abs_max": 1.1102230246251565e-16,
+    "virtual_shared_yaw_deg": -85.68618239846906,
+    "signed_keyframe_home_vs_observed_prior_live_home_midpoint_delta_m": 0.0002751350205170057,
+    "signed_keyframe_home_vs_prior_transform_element_abs_max": 0.0002751349819536397
+  },
+  "geometry_invariants": {
+    "interwrist_baseline_abs_error_max_m": 3.3306690738754696e-16,
+    "interwrist_relative_se3_element_abs_error_max": 6.938893903907228e-16,
+    "signed_model_morphology_bone_length_abs_error_max_m": 4.163336342344337e-17
+  },
+  "test_evidence": {
+    "synthetic_controls_passed": 3,
+    "implementation_sha256": "dacdfa84306f8e437145ce7135383d8f631ab24e1717d433ad46edb7a265e7be",
+    "synthetic_test_sha256": "07b8149a112ad03863ec7e0d0d2f5aefbcfe1efaba51aa727953fbb5152060c8",
+    "read_only_audit_script_sha256": "a32c09267eb4c5687c187f30be467635b88f89b875b563fa6d00d6928ef9b8b6",
+    "read_only_audit_stdout_sha256": "d20f8864a3113591d5941947237025842434a537f0188b19fc2cabc82488baa4",
+    "ubuntu_archive": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/DCR010-SIGNED-GEOMETRY-AUDIT-01"
+  },
+  "limitations": [
+    "The 4,801 engineering tip targets indicate geometric field availability only. They do not replace original HMB joint eligibility or scoring denominators.",
+    "The legacy registered-wrist-to-model-palm attachment is an engineering simulation hypothesis. Anatomical Tracker attachment and capture physical heading remain unqualified.",
+    "The signed model Home is a reproducible keyframe. For this exact transform reproduction the previously observed simulator Home was used as a comparison fixture.",
+    "The shared yaw invariants and target extraction were checked on root five only. This receipt provides neither six-root validation nor formal target selection."
+  ]
+}
