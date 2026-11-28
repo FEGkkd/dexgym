@@ -90,8 +90,41 @@ class NativeHandUpdates:
                 "physical_selection_ns": cutoff}
 
 
+class NativeHandoff:
+    """Reconstruct the pinned MuJoCo driver's enable ramp and command watchdog."""
+
+    def __init__(self, home, ctrlrange, cutoff):
+        self.home = home.reshape(2, 20).copy()
+        self.ctrlrange = ctrlrange.reshape(2, 20, 2)
+        self.command = self.home.copy()
+        self.enabled_ns = cutoff
+        self.received = [cutoff, cutoff]
+        self.source = [None, None]
+        self.fault = [False, False]
+
+    def target(self, filtered, valid, source, received, now, measured):
+        statuses = []
+        for i in range(2):
+            if valid[i] and source[i] != self.source[i] and not self.fault[i]:
+                # The capture contains no historical driver enable. Each
+                # window enables at its declared first physics cutoff.
+                self.source[i] = source[i]
+                self.received[i] = max(self.enabled_ns, received[i])
+                elapsed = (self.received[i] - self.enabled_ns) / 1e9
+                fraction = float(np.clip(elapsed - .5, 0., 1.))
+                blend = fraction * fraction * (3. - 2. * fraction)
+                command = np.clip(filtered[i], *self.ctrlrange[i].T)
+                self.command[i] = self.home[i] + blend * (command - self.home[i])
+            if now - self.received[i] > 100_000_000 and not self.fault[i]:
+                self.fault[i] = True
+                self.command[i] = measured.reshape(2, 20)[i]
+            statuses.append("DRIVER_WATCHDOG_HOLD" if self.fault[i] else
+                            "NATIVE_HANDOFF" if now - self.enabled_ns < 1_500_000_000 else "NATIVE_SMOOTHED")
+        return self.command.reshape(-1), statuses
+
+
 class HandRollout:
-    def __init__(self, robot, mode):
+    def __init__(self, robot, mode, *, native_handoff=False):
         self.mode = mode
         self.sim = Lockstep(robot, SimpleNamespace(reset=lambda _: np.zeros(2)))
         self.robot = robot
@@ -104,6 +137,9 @@ class HandRollout:
         self.timing = []
         self.stopped = None
         self.shadow = mode in ("C", "D")
+        self.with_handoff = native_handoff and not self.shadow
+        self.handoff = None
+        self.unproven_streak = 0
 
     def advance(self, row, subcycle):
         stage = "c" if self.mode == "D" else self.mode.lower()
@@ -122,6 +158,13 @@ class HandRollout:
             self.hand_controller.filtered_hand = filtered
             groups = self.hand_controller._propose_hands(previous, proposed, limited, np.ones(40, bool))
             statuses = [value.name for value in groups]
+        elif self.with_handoff:
+            now = row["physical_selection_ns"]
+            if self.handoff is None:
+                self.handoff = NativeHandoff(measured[14:], self.hand_ctrl_range, now)
+            source = row["a_source_index"] if self.mode == "A" else row["source_index"]
+            received = row["a_receive_ns"] if self.mode == "A" else [row["control_cutoff_ns"]] * 2
+            proposed[14:], statuses = self.handoff.target(filtered, usable, source, received, now, measured[14:])
         else:
             statuses = ["INPUT_HOLD"] * 2
             for side in range(2):
@@ -142,7 +185,7 @@ class HandRollout:
         if self.shadow:
             self.proof_stats[f"shadow:{common.name}:{shadow.name}:{shadow_detail.get('termination', '')}"] += 1
         allowed = common == Reason.PERMIT and (self.mode != "D" or shadow == Reason.PERMIT)
-        hold = not allowed or not usable.any()
+        hold = not allowed or (not usable.any() and not self.with_handoff)
         if hold:
             hold_proof, hold_detail = safety(self.robot, self.common, state, previous)
             if self.mode == "D" and hold_proof == Reason.PERMIT:
@@ -185,13 +228,19 @@ class HandRollout:
                      "gap_m": float(x.dist)} for x in data.contact]
             applied.append({"applied": interval.applied[0, 0].tolist(), "measured": q.tolist(),
                             "velocity": qd.tolist(), "minimum_gap_m": gap, "event": event,
-                            "contact_pairs": hits, "depth_m": float(interval.depth[0])})
+                            "contact_pairs": hits, "depth_m": float(interval.depth[0]),
+                            "torque": interval.torque[0, 0].tolist()})
             if event:
                 self.stopped = f"PHYSICS_EVENT:{event}"
                 break
         self.physics_stats["hold_intervals"] += int(hold)
         self.physics_stats["moved_intervals"] += int(not hold and not np.array_equal(previous, self.sim.issued))
         self.physics_stats["native_clipped_intervals"] += int("NATIVE_DRIVER_CLAMPED" in statuses)
+        unproved = (Reason.SWEEP_UNPROVEN, Reason.TIME_BUDGET)
+        exhausted = common in unproved or (self.mode == "D" and shadow in unproved)
+        self.unproven_streak = self.unproven_streak + 1 if exhausted else 0
+        if self.stopped is None and self.with_handoff and self.unproven_streak >= 8:
+            self.stopped = "EIGHT_CONSECUTIVE_UNPROVED_NATIVE_TARGETS"
         return {**receipt, "issued": self.sim.issued.tolist(), "physical": applied, "cause": self.stopped}
 
 
@@ -211,7 +260,18 @@ def main(args):
                    for index, side in enumerate(("left", "right")))):
         raise ValueError("SDK output artifacts or named actuator order differ from the physical boundary")
     home = robot.geometry(robot.home)
-    streams = {mode: HandRollout(robot, mode) for mode in MODES}
+    plan = json.loads(args.window_plan.read_bytes()) if args.window_plan else None
+    if plan and plan["input_sha256"] != sdk_summary["source_sha256"]["selection_jsonl"]:
+        raise ValueError("Forensic physical windows must come from the same signed inputs")
+    windows = (plan["physical_windows"] if plan else [{"start_tick_ns": baseline["window"]["hmb_cutoff_start_ns"],
+                  "stop_exclusive_tick_ns": baseline["window"]["hmb_cutoff_stop_exclusive_ns"]}])
+    if (plan and plan["root"] != ROOT or not windows or any(
+            w["start_tick_ns"] >= w["stop_exclusive_tick_ns"] for w in windows) or any(
+            a["stop_exclusive_tick_ns"] > b["start_tick_ns"] for a, b in zip(windows, windows[1:]))):
+        raise ValueError("Invalid or overlapping fixed-wrist windows")
+    streams = {}
+    completed = {mode: [] for mode in MODES}
+    active_window = None
     a_updates = NativeHandUpdates(args.sdk_updates)
     geometry = {mode: defaultdict(list) for mode in MODES}
     ledger = args.out / "fixed-arm-parity.jsonl.gz"
@@ -235,15 +295,25 @@ def main(args):
                 target_valid = bool(a["target_local_landmark_xyz_mask"][i].all())
                 evidence = {}
                 actual = {}
+                selection = next((k for k, win in enumerate(windows)
+                                  if win["start_tick_ns"] <= tick < win["stop_exclusive_tick_ns"]), None)
                 native_rows = []
                 sampled_rows = []
                 for sub in range(5):
                     cut = row["control_cutoff_ns"] + 4_000_000 * sub
                     native_rows.append({**row, **a_updates.at(cut)})
                     sampled_rows.append({**row, "physical_selection_ns": cut})
-                for mode, rollout in streams.items():
+                if selection is not None and active_window != selection:
+                    if active_window is not None:
+                        for mode, run in streams.items():
+                            completed[mode].append(run)
+                    streams = {mode: HandRollout(robot, mode, native_handoff=args.native_handoff) for mode in MODES}
+                    active_window = selection
+                for mode in MODES:
                     schedule = native_rows if mode == "A" else sampled_rows
-                    traces = [rollout.advance(values, sub) for sub, values in enumerate(schedule)]
+                    traces = ([streams[mode].advance(values, sub) for sub, values in enumerate(schedule)]
+                              if selection is not None else [{"status": "NOT_EXECUTED",
+                                    "cause": "OUTSIDE_REGISTERED_PHYSICS_WINDOWS"} for _ in range(5)])
                     evidence[mode] = traces
                     samples = [sample for trial in traces for sample in trial.get("physical", [])]
                     status = ("COMPLETE" if len(samples) == 10 else "PARTIAL" if samples else "NOT_EXECUTED")
@@ -262,18 +332,33 @@ def main(args):
                     if first in actual and second in actual:
                         paired[first + second].append(1000 * np.linalg.norm(
                             actual[first].local[:, :, -1] - actual[second].local[:, :, -1], axis=-1))
-                payload = {"partition": part["partition"], "partition_tick": i, "tick_ns": int(tick),
+                payload = {"partition": part["partition"], "partition_tick": i, "tick_ns": int(tick), "window": selection,
                            "source_index": row["source_index"], "target_local_m": target.tolist() if target_valid else None,
                            "experiments": evidence}
                 out.write((json.dumps(payload, separators=(",", ":"), allow_nan=False) + "\n").encode())
     if next(rows, None) is not None or count != 4804:
         raise ValueError("Fixed-wrist diagnostic did not preserve the declared row counts")
+    for mode, run in streams.items():
+        completed[mode].append(run)
+    per_mode = {}
+    for mode, runs in completed.items():
+        proofs, physics = Counter(), Counter()
+        for run in runs:
+            proofs.update(run.proof_stats)
+            physics.update(run.physics_stats)
+        per_mode[mode] = {"row_status": dict(mode_masks[mode]), "physics": dict(physics), "proofs": dict(proofs),
+                          "min_observed_gap_m": min((gap for run in runs for gap in run.gaps), default=None),
+                          "stop": [run.stopped for run in runs],
+                          "common_proof_latency_ms": stats([sample for run in runs for sample in run.timing]),
+                          "geometry": {name: stats(samples) for name, samples in geometry[mode].items()}}
     write_json(args.out / "fixed-arm-parity-summary.json", {
         "scope": "DIAGNOSTIC_ONLY", "formal_coverage_credit": False, "root": ROOT,
         "full": baseline["full"], "window": baseline["window"], "robot_signature": baseline["robot_model_servo"]["sha256"],
         "groups_by_named_actuator": [[robot.names[j] for j in group] for group in axes],
         "fixed_arm_reference": "Signed Home joint targets; measured wrist drift reported independently",
-        "input_latching": "A/B hold their last published value. C/D use signed pair eligibility. Historical driver watchdog unobserved.",
+        "input_latching": ("A/B reconstruct pinned driver hold, ramp, clamp and watchdog from the diagnostic window start."
+                           if args.native_handoff else "A/B hold last published target. C/D use signed pair eligibility."),
+        "physics_windows": windows, "historical_driver_lifecycle_observed": False,
         "a_clock": "Reconstructed MANUS callback outputs at recorder receive time, consumed on the shared 4 ms issue grid.",
         "same_snapshot_counterfactual": "C.guard_v2 sees the exact C nominal vector/pre-issue state; D has separate physical feedback",
         "common_continuous_proof_max_depth": 24, "extra_v2_proof_max_depth": PROOF["max_depth"],
@@ -281,12 +366,9 @@ def main(args):
                     "sdk_updates": file_sha(args.sdk_updates),
                     "sdk_summary": file_sha(args.sdk_summary),
                     "model": file_sha(args.model), "model_receipt": file_sha(args.model_receipt),
+                    "window_plan": file_sha(args.window_plan) if args.window_plan else None,
                     "ledger": file_sha(ledger), "script": file_sha(Path(__file__))},
-        "experiments": {mode: {"row_status": dict(mode_masks[mode]), "physics": dict(run.physics_stats),
-            "proofs": dict(run.proof_stats), "min_observed_gap_m": min(run.gaps, default=None), "stop": run.stopped,
-            "common_proof_latency_ms": stats(run.timing),
-            "geometry": {name: stats(samples) for name, samples in geometry[mode].items()}}
-                        for mode, run in streams.items()},
+        "experiments": per_mode,
         "paired_actual_local_tip_mm": {variant: stats(samples) for variant, samples in paired.items()}})
 
 
@@ -294,4 +376,6 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__)
     for name in ("baseline", "model", "model-receipt", "sdk-ticks", "sdk-updates", "sdk-summary", "out"):
         p.add_argument("--" + name, type=Path, required=True)
+    p.add_argument("--window-plan", type=Path)
+    p.add_argument("--native-handoff", action="store_true")
     main(p.parse_args())
