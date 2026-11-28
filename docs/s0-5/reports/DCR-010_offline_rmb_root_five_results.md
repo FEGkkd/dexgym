@@ -31,7 +31,7 @@ DCR-010 提议将离线数据、MuJoCo 和 SuperMimic 设为当前主线，异�
 
 22,905 次未证明全部达到离线深度 18 上限，均落在签名模型的右拇指与右食指末端传感器碰撞几何对。首次出现于 HMB 5.060 s（START 后 4.260 s），请求样点最小间隙 0.92377 mm。三个导出点的间隙分别为上拍实测 2.9074 mm、保持指令 2.7262 mm、新提案 2.4613 mm。这些端点不足以为混合关节状态包围盒内的全部姿态提供证明。拒绝后该拍使用另行获得许可的保持指令。全历史实际样本最小几何间隙 1.1706 mm。 [逐请求证明及覆盖核对](../campaign/evidence/dcr010-offline-rmb/run02-verified-audit.json) · [碰撞对和端点复算](../campaign/evidence/dcr010-offline-rmb/run02-pair-diagnosis.json)
 
-共同工程手目标的每拍最差指尖误差在 4,801 个有目标和完整实测的拍中为 P50/P95/P99 148.70/234.07/318.83 mm。146 个主动拍为 54.74/57.56/76.60 mm。完整评分域的左右腕 TCP 位置 P95 为 76.86／83.67 mm，姿态 P95 为 59.25°／64.40°。评分用每拍末端实测对同拍开始的独立目标，完整结果包含已保留的失败区间。三栏视频中的人体输入与目标按原时间轴展示，实测栏显示保持时机器人确实停留的位置。 [评分和活动分母](../campaign/evidence/dcr010-offline-rmb/run02-verified-audit.json) · [视频回执](../campaign/evidence/dcr010-offline-rmb/run02-video.json)
+共同工程手目标的每拍最差指尖误差在 4,801 个有目标和完整实测的拍中为 P50/P95/P99 148.70/234.07/318.83 mm。146 个主动拍为 54.74/57.56/76.60 mm。完整评分域的左右腕 TCP 位置 P95 为 76.86／83.67 mm，姿态 P95 为 59.25°／64.40°。评分用每拍末端实测对同拍开始的独立目标，完整结果包含已保留的失败区间。三栏视频中的人体输入与目标按原时间轴展示，实测栏显示保持时机器人确实停留的位置。三栏分别标注原 Tracker、注册腕代理和机器人 TCP，双腕距离不变性在注册腕代理映射前后核验。 [完整三栏视频](../campaign/evidence/dcr010-offline-rmb/root-five-offline.mp4) · [评分和活动分母](../campaign/evidence/dcr010-offline-rmb/run02-verified-audit.json) · [视频回执](../campaign/evidence/dcr010-offline-rmb/run02-video.json)
 
 ## 下游判定
 
