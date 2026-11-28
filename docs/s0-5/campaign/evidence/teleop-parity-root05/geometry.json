@@ -1,0 +1,2611 @@
+{
+  "full": {
+    "hmb_five_frame_candidate_ticks": 4741,
+    "hmb_joint_valid_ticks": 4831,
+    "partitions": 13,
+    "plan_ticks": 4844
+  },
+  "max_position_reconstruction_error_m": 7.686634106995882e-09,
+  "model_identities": {
+    "live": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "signed": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d"
+  },
+  "paired_rows": 4801,
+  "raw_near_pinch_rows": [
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 39.28168585142278,
+        "model_bones_same_origins": 53.821145556989386,
+        "raw": 19.94316291809082,
+        "same_bones_model_origins": 68.70972181319436
+      },
+      "tick": 235,
+      "time_ns": 4700000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 39.08933874066748,
+        "model_bones_same_origins": 53.90009990393723,
+        "raw": 19.64424705505371,
+        "same_bones_model_origins": 68.49274146372294
+      },
+      "tick": 236,
+      "time_ns": 4720000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.90650692509972,
+        "model_bones_same_origins": 55.324054046186184,
+        "raw": 15.700345993041992,
+        "same_bones_model_origins": 64.12305099563808
+      },
+      "tick": 237,
+      "time_ns": 4740000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.463690980461124,
+        "model_bones_same_origins": 55.85857173655339,
+        "raw": 14.989394187927246,
+        "same_bones_model_origins": 62.866350361367076
+      },
+      "tick": 238,
+      "time_ns": 4760000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.33055296675949,
+        "model_bones_same_origins": 56.03578256232411,
+        "raw": 14.666955947875977,
+        "same_bones_model_origins": 62.482610860082566
+      },
+      "tick": 239,
+      "time_ns": 4780000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.165179377545236,
+        "model_bones_same_origins": 56.14985478373889,
+        "raw": 14.276565551757812,
+        "same_bones_model_origins": 62.02370993466645
+      },
+      "tick": 240,
+      "time_ns": 4800000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.90121232386051,
+        "model_bones_same_origins": 56.51926278309461,
+        "raw": 13.829026222229004,
+        "same_bones_model_origins": 61.11317508130502
+      },
+      "tick": 241,
+      "time_ns": 4820000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.623339091834374,
+        "model_bones_same_origins": 56.68357655849665,
+        "raw": 13.163324356079102,
+        "same_bones_model_origins": 60.33566496650681
+      },
+      "tick": 242,
+      "time_ns": 4840000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.54231033870411,
+        "model_bones_same_origins": 56.77346221584188,
+        "raw": 12.984298706054688,
+        "same_bones_model_origins": 59.97196921653172
+      },
+      "tick": 243,
+      "time_ns": 4860000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.55508007369575,
+        "model_bones_same_origins": 56.8274552877637,
+        "raw": 12.936995506286621,
+        "same_bones_model_origins": 59.850504392231784
+      },
+      "tick": 244,
+      "time_ns": 4880000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.81674755235566,
+        "model_bones_same_origins": 56.97730635307371,
+        "raw": 13.07684326171875,
+        "same_bones_model_origins": 59.791732202911
+      },
+      "tick": 245,
+      "time_ns": 4900000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.8535446428579,
+        "model_bones_same_origins": 57.021515059116474,
+        "raw": 13.0541410446167,
+        "same_bones_model_origins": 59.74466065930122
+      },
+      "tick": 246,
+      "time_ns": 4920000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.929677619711846,
+        "model_bones_same_origins": 57.02994261655628,
+        "raw": 13.012738227844238,
+        "same_bones_model_origins": 59.65493443652428
+      },
+      "tick": 247,
+      "time_ns": 4940000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.94282081912689,
+        "model_bones_same_origins": 57.045460411422134,
+        "raw": 13.007660865783691,
+        "same_bones_model_origins": 59.609149451795744
+      },
+      "tick": 248,
+      "time_ns": 4960000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.894151334742745,
+        "model_bones_same_origins": 57.09211272280151,
+        "raw": 12.853477478027344,
+        "same_bones_model_origins": 59.45578129165153
+      },
+      "tick": 249,
+      "time_ns": 4980000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.92623851311202,
+        "model_bones_same_origins": 57.07843169576377,
+        "raw": 12.960874557495117,
+        "same_bones_model_origins": 59.516545343101384
+      },
+      "tick": 250,
+      "time_ns": 5000000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.01895660865609,
+        "model_bones_same_origins": 57.12218437046303,
+        "raw": 13.102243423461914,
+        "same_bones_model_origins": 59.58319861863384
+      },
+      "tick": 251,
+      "time_ns": 5020000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.055502065279775,
+        "model_bones_same_origins": 57.1177669353899,
+        "raw": 13.153579711914062,
+        "same_bones_model_origins": 59.63710718859452
+      },
+      "tick": 252,
+      "time_ns": 5040000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.03711206963296,
+        "model_bones_same_origins": 57.081628250611175,
+        "raw": 13.134313583374023,
+        "same_bones_model_origins": 59.66732722637195
+      },
+      "tick": 253,
+      "time_ns": 5060000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.12098124469822,
+        "model_bones_same_origins": 56.98299826542139,
+        "raw": 13.219464302062988,
+        "same_bones_model_origins": 59.80387097066289
+      },
+      "tick": 254,
+      "time_ns": 5080000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.15118680265402,
+        "model_bones_same_origins": 56.984684732095964,
+        "raw": 13.2213773727417,
+        "same_bones_model_origins": 59.837160201212626
+      },
+      "tick": 255,
+      "time_ns": 5100000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.13510788193716,
+        "model_bones_same_origins": 56.97313486257586,
+        "raw": 13.182427406311035,
+        "same_bones_model_origins": 59.80847537898014
+      },
+      "tick": 256,
+      "time_ns": 5120000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.11278406674169,
+        "model_bones_same_origins": 56.95136992708885,
+        "raw": 13.061508178710938,
+        "same_bones_model_origins": 59.720219702350875
+      },
+      "tick": 257,
+      "time_ns": 5140000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.079906877456736,
+        "model_bones_same_origins": 56.86735940134447,
+        "raw": 13.01429271697998,
+        "same_bones_model_origins": 59.70855611164621
+      },
+      "tick": 258,
+      "time_ns": 5160000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.131349378474,
+        "model_bones_same_origins": 56.996513626904765,
+        "raw": 13.012133598327637,
+        "same_bones_model_origins": 59.650185765363474
+      },
+      "tick": 259,
+      "time_ns": 5180000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.13210454746001,
+        "model_bones_same_origins": 56.94450212554112,
+        "raw": 13.019121170043945,
+        "same_bones_model_origins": 59.67113551366455
+      },
+      "tick": 260,
+      "time_ns": 5200000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.141310799317026,
+        "model_bones_same_origins": 56.968151869536115,
+        "raw": 13.066732406616211,
+        "same_bones_model_origins": 59.632048063785405
+      },
+      "tick": 261,
+      "time_ns": 5220000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.10369280100215,
+        "model_bones_same_origins": 57.02618217638096,
+        "raw": 13.008423805236816,
+        "same_bones_model_origins": 59.562272273320175
+      },
+      "tick": 262,
+      "time_ns": 5240000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.09936948640184,
+        "model_bones_same_origins": 57.120083952959114,
+        "raw": 13.002938270568848,
+        "same_bones_model_origins": 59.5217700710063
+      },
+      "tick": 263,
+      "time_ns": 5260000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.04224091237119,
+        "model_bones_same_origins": 57.00947982017705,
+        "raw": 12.966212272644043,
+        "same_bones_model_origins": 59.51665204971983
+      },
+      "tick": 264,
+      "time_ns": 5280000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.013639781627084,
+        "model_bones_same_origins": 57.022306702071816,
+        "raw": 12.889472961425781,
+        "same_bones_model_origins": 59.47758396544954
+      },
+      "tick": 265,
+      "time_ns": 5300000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.970304840029534,
+        "model_bones_same_origins": 57.15046687309492,
+        "raw": 12.879472732543945,
+        "same_bones_model_origins": 59.399229544010794
+      },
+      "tick": 266,
+      "time_ns": 5320000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.975182779432934,
+        "model_bones_same_origins": 57.06632686031861,
+        "raw": 12.867867469787598,
+        "same_bones_model_origins": 59.43104108474152
+      },
+      "tick": 267,
+      "time_ns": 5340000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.90113684455427,
+        "model_bones_same_origins": 57.10044736027406,
+        "raw": 12.756275177001953,
+        "same_bones_model_origins": 59.314933863062016
+      },
+      "tick": 268,
+      "time_ns": 5360000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.856991918349706,
+        "model_bones_same_origins": 57.14376397193156,
+        "raw": 12.72462272644043,
+        "same_bones_model_origins": 59.23846845078078
+      },
+      "tick": 269,
+      "time_ns": 5380000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.74880433078168,
+        "model_bones_same_origins": 57.26263338826817,
+        "raw": 12.620704650878906,
+        "same_bones_model_origins": 59.09284205187157
+      },
+      "tick": 270,
+      "time_ns": 5400000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.78593968765645,
+        "model_bones_same_origins": 57.28069154676416,
+        "raw": 12.639402389526367,
+        "same_bones_model_origins": 59.102905841342064
+      },
+      "tick": 271,
+      "time_ns": 5420000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.75926178504405,
+        "model_bones_same_origins": 57.29178556041122,
+        "raw": 12.640027046203613,
+        "same_bones_model_origins": 59.0709457652478
+      },
+      "tick": 272,
+      "time_ns": 5440000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.731865193840115,
+        "model_bones_same_origins": 57.29496940424947,
+        "raw": 12.632349967956543,
+        "same_bones_model_origins": 59.0459062719141
+      },
+      "tick": 273,
+      "time_ns": 5460000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.71181001967257,
+        "model_bones_same_origins": 57.328561694261744,
+        "raw": 12.628381729125977,
+        "same_bones_model_origins": 59.02090758114419
+      },
+      "tick": 274,
+      "time_ns": 5480000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.70069058985638,
+        "model_bones_same_origins": 57.29262407449787,
+        "raw": 12.617243766784668,
+        "same_bones_model_origins": 59.03092615593993
+      },
+      "tick": 275,
+      "time_ns": 5500000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.685426666157475,
+        "model_bones_same_origins": 57.3335031238055,
+        "raw": 12.5706148147583,
+        "same_bones_model_origins": 58.97715459033839
+      },
+      "tick": 276,
+      "time_ns": 5520000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.67589311194123,
+        "model_bones_same_origins": 57.35236680348972,
+        "raw": 12.604804039001465,
+        "same_bones_model_origins": 58.986249503735785
+      },
+      "tick": 277,
+      "time_ns": 5540000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.65700235377625,
+        "model_bones_same_origins": 57.40521534719862,
+        "raw": 12.52330207824707,
+        "same_bones_model_origins": 58.90201810908661
+      },
+      "tick": 278,
+      "time_ns": 5560000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.62633779743242,
+        "model_bones_same_origins": 57.38086348902718,
+        "raw": 12.51095962524414,
+        "same_bones_model_origins": 58.90266471921111
+      },
+      "tick": 279,
+      "time_ns": 5580000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.55273997923589,
+        "model_bones_same_origins": 57.39348163736245,
+        "raw": 12.447147369384766,
+        "same_bones_model_origins": 58.850488193399954
+      },
+      "tick": 280,
+      "time_ns": 5600000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.503623464717045,
+        "model_bones_same_origins": 57.372138535299186,
+        "raw": 12.391942977905273,
+        "same_bones_model_origins": 58.83840972962887
+      },
+      "tick": 281,
+      "time_ns": 5620000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.46240706781053,
+        "model_bones_same_origins": 57.4031196806266,
+        "raw": 12.317804336547852,
+        "same_bones_model_origins": 58.77628144959424
+      },
+      "tick": 282,
+      "time_ns": 5640000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.43113360539122,
+        "model_bones_same_origins": 57.38499827493671,
+        "raw": 12.267078399658203,
+        "same_bones_model_origins": 58.766337596702314
+      },
+      "tick": 283,
+      "time_ns": 5660000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.39069038759839,
+        "model_bones_same_origins": 57.42423884741642,
+        "raw": 12.242592811584473,
+        "same_bones_model_origins": 58.71096922971274
+      },
+      "tick": 284,
+      "time_ns": 5680000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.398931268620345,
+        "model_bones_same_origins": 57.44547281531323,
+        "raw": 12.268509864807129,
+        "same_bones_model_origins": 58.71212495303925
+      },
+      "tick": 285,
+      "time_ns": 5700000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.39319436067313,
+        "model_bones_same_origins": 57.43658708344852,
+        "raw": 12.285249710083008,
+        "same_bones_model_origins": 58.73019200543548
+      },
+      "tick": 286,
+      "time_ns": 5720000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.40432536647279,
+        "model_bones_same_origins": 57.34679622262442,
+        "raw": 12.27221393585205,
+        "same_bones_model_origins": 58.769059402763
+      },
+      "tick": 287,
+      "time_ns": 5740000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.348316828979,
+        "model_bones_same_origins": 57.320586168192484,
+        "raw": 12.2780179977417,
+        "same_bones_model_origins": 58.763551571712384
+      },
+      "tick": 288,
+      "time_ns": 5760000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.34570052313095,
+        "model_bones_same_origins": 57.32061809648556,
+        "raw": 12.283978462219238,
+        "same_bones_model_origins": 58.759719137769565
+      },
+      "tick": 289,
+      "time_ns": 5780000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.30503750392955,
+        "model_bones_same_origins": 57.342981585928165,
+        "raw": 12.204148292541504,
+        "same_bones_model_origins": 58.69477211234045
+      },
+      "tick": 290,
+      "time_ns": 5800000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.33898745125846,
+        "model_bones_same_origins": 57.47646389561515,
+        "raw": 12.435297966003418,
+        "same_bones_model_origins": 58.78396421672455
+      },
+      "tick": 291,
+      "time_ns": 5820000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.10835147146209,
+        "model_bones_same_origins": 57.41900648272033,
+        "raw": 12.215630531311035,
+        "same_bones_model_origins": 58.646613028892034
+      },
+      "tick": 292,
+      "time_ns": 5840000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.13745535852859,
+        "model_bones_same_origins": 57.471342636843865,
+        "raw": 12.38054084777832,
+        "same_bones_model_origins": 58.77929623468174
+      },
+      "tick": 293,
+      "time_ns": 5860000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.12521031162975,
+        "model_bones_same_origins": 57.3491739932008,
+        "raw": 12.691935539245605,
+        "same_bones_model_origins": 59.06354732854855
+      },
+      "tick": 294,
+      "time_ns": 5880000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.26685874330707,
+        "model_bones_same_origins": 56.89488964660885,
+        "raw": 13.058128356933594,
+        "same_bones_model_origins": 60.03824805749863
+      },
+      "tick": 295,
+      "time_ns": 5900000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.419992298950355,
+        "model_bones_same_origins": 55.0148275667291,
+        "raw": 13.420763969421387,
+        "same_bones_model_origins": 62.70841861290594
+      },
+      "tick": 296,
+      "time_ns": 5920000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 35.419992298950355,
+        "model_bones_same_origins": 55.0148275667291,
+        "raw": 13.420763969421387,
+        "same_bones_model_origins": 62.70841861290594
+      },
+      "tick": 297,
+      "time_ns": 5940000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 36.68885674569837,
+        "model_bones_same_origins": 52.388284600018686,
+        "raw": 16.444786071777344,
+        "same_bones_model_origins": 67.41454175048604
+      },
+      "tick": 298,
+      "time_ns": 5960000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "right_thumb_to_index_mm": {
+        "both": 37.78134302029267,
+        "model_bones_same_origins": 50.56092558598158,
+        "raw": 18.9305477142334,
+        "same_bones_model_origins": 70.88162782186872
+      },
+      "tick": 299,
+      "time_ns": 5980000000
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00002",
+      "right_thumb_to_index_mm": {
+        "both": 22.13566335947685,
+        "model_bones_same_origins": 51.71451235895468,
+        "raw": 17.30680274963379,
+        "same_bones_model_origins": 61.8188125979623
+      },
+      "tick": 286,
+      "time_ns": 21720000086
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00002",
+      "right_thumb_to_index_mm": {
+        "both": 22.266937125195412,
+        "model_bones_same_origins": 48.31917514321638,
+        "raw": 15.37532901763916,
+        "same_bones_model_origins": 64.68159052029016
+      },
+      "tick": 287,
+      "time_ns": 21740000086
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 40.52711099279653,
+        "model_bones_same_origins": 53.983815388833825,
+        "raw": 19.231542587280273,
+        "same_bones_model_origins": 70.3061482205348
+      },
+      "tick": 79,
+      "time_ns": 33580000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 39.75405600336409,
+        "model_bones_same_origins": 55.049575980729976,
+        "raw": 17.70464515686035,
+        "same_bones_model_origins": 68.35756433797054
+      },
+      "tick": 80,
+      "time_ns": 33600000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 39.04177605802299,
+        "model_bones_same_origins": 56.309746555136215,
+        "raw": 16.404937744140625,
+        "same_bones_model_origins": 66.64450584021408
+      },
+      "tick": 81,
+      "time_ns": 33620000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.738489178605995,
+        "model_bones_same_origins": 56.8085691686797,
+        "raw": 15.885276794433594,
+        "same_bones_model_origins": 65.94477446468387
+      },
+      "tick": 82,
+      "time_ns": 33640000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.518314156711135,
+        "model_bones_same_origins": 57.14383429274593,
+        "raw": 15.533467292785645,
+        "same_bones_model_origins": 65.42144483428908
+      },
+      "tick": 83,
+      "time_ns": 33660000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.14871495644625,
+        "model_bones_same_origins": 57.39812815698478,
+        "raw": 14.905940055847168,
+        "same_bones_model_origins": 64.77990982070743
+      },
+      "tick": 84,
+      "time_ns": 33680000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.02891110056338,
+        "model_bones_same_origins": 57.50060947999915,
+        "raw": 14.682316780090332,
+        "same_bones_model_origins": 64.6048442694172
+      },
+      "tick": 85,
+      "time_ns": 33700000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.8413319549987,
+        "model_bones_same_origins": 57.601371497695965,
+        "raw": 14.327731132507324,
+        "same_bones_model_origins": 64.19237037285615
+      },
+      "tick": 86,
+      "time_ns": 33720000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.796564166934175,
+        "model_bones_same_origins": 57.587368009938174,
+        "raw": 14.23293685913086,
+        "same_bones_model_origins": 64.09554570939905
+      },
+      "tick": 87,
+      "time_ns": 33740000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.796564166934175,
+        "model_bones_same_origins": 57.587368009938174,
+        "raw": 14.23293685913086,
+        "same_bones_model_origins": 64.09554570939905
+      },
+      "tick": 88,
+      "time_ns": 33760000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.705175335220034,
+        "model_bones_same_origins": 57.87005565386856,
+        "raw": 13.97159194946289,
+        "same_bones_model_origins": 63.627116030407635
+      },
+      "tick": 89,
+      "time_ns": 33780000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.631289632486734,
+        "model_bones_same_origins": 57.97306538566117,
+        "raw": 13.788871765136719,
+        "same_bones_model_origins": 63.37772705841684
+      },
+      "tick": 90,
+      "time_ns": 33800000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.94132008240608,
+        "model_bones_same_origins": 58.18404441237435,
+        "raw": 13.923558235168457,
+        "same_bones_model_origins": 63.28874467552595
+      },
+      "tick": 91,
+      "time_ns": 33820000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.142906129102755,
+        "model_bones_same_origins": 58.284361988658304,
+        "raw": 14.024580955505371,
+        "same_bones_model_origins": 63.29593085875774
+      },
+      "tick": 92,
+      "time_ns": 33840000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.73524836610188,
+        "model_bones_same_origins": 58.830963087957734,
+        "raw": 14.415642738342285,
+        "same_bones_model_origins": 63.1417785186397
+      },
+      "tick": 93,
+      "time_ns": 33860000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.802247721604424,
+        "model_bones_same_origins": 59.02204705858036,
+        "raw": 14.329769134521484,
+        "same_bones_model_origins": 62.78376280749012
+      },
+      "tick": 94,
+      "time_ns": 33880000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.55166031325664,
+        "model_bones_same_origins": 59.19635889412784,
+        "raw": 13.871082305908203,
+        "same_bones_model_origins": 62.133659600183165
+      },
+      "tick": 95,
+      "time_ns": 33900000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.73336116904366,
+        "model_bones_same_origins": 59.334363231437834,
+        "raw": 14.194289207458496,
+        "same_bones_model_origins": 62.12507096839278
+      },
+      "tick": 96,
+      "time_ns": 33920000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.67664640372711,
+        "model_bones_same_origins": 60.134682579574985,
+        "raw": 14.330413818359375,
+        "same_bones_model_origins": 60.92142761088156
+      },
+      "tick": 97,
+      "time_ns": 33940000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.737889107318566,
+        "model_bones_same_origins": 60.247719861224134,
+        "raw": 14.717202186584473,
+        "same_bones_model_origins": 60.817864631598724
+      },
+      "tick": 98,
+      "time_ns": 33960000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.691703073610235,
+        "model_bones_same_origins": 60.417203777753095,
+        "raw": 14.864910125732422,
+        "same_bones_model_origins": 60.267734985297075
+      },
+      "tick": 99,
+      "time_ns": 33980000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.75327756195358,
+        "model_bones_same_origins": 60.33442372015202,
+        "raw": 14.962640762329102,
+        "same_bones_model_origins": 60.30305515204403
+      },
+      "tick": 100,
+      "time_ns": 34000000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.760804016807974,
+        "model_bones_same_origins": 60.398486720154345,
+        "raw": 14.84170150756836,
+        "same_bones_model_origins": 59.93967763504312
+      },
+      "tick": 101,
+      "time_ns": 34020000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.897548505725744,
+        "model_bones_same_origins": 60.45771275245826,
+        "raw": 14.951709747314453,
+        "same_bones_model_origins": 59.85076569581733
+      },
+      "tick": 102,
+      "time_ns": 34040000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 39.0755211048477,
+        "model_bones_same_origins": 60.267057530311526,
+        "raw": 15.187480926513672,
+        "same_bones_model_origins": 60.01993189633739
+      },
+      "tick": 103,
+      "time_ns": 34060000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 39.03148191014934,
+        "model_bones_same_origins": 60.31539226215704,
+        "raw": 15.09211540222168,
+        "same_bones_model_origins": 59.89218335679344
+      },
+      "tick": 104,
+      "time_ns": 34080000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.955921056093096,
+        "model_bones_same_origins": 60.24878053356365,
+        "raw": 14.946250915527344,
+        "same_bones_model_origins": 59.7269688413344
+      },
+      "tick": 105,
+      "time_ns": 34100000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.8207933666357,
+        "model_bones_same_origins": 60.247806190998766,
+        "raw": 14.900609970092773,
+        "same_bones_model_origins": 59.62689859019884
+      },
+      "tick": 106,
+      "time_ns": 34120000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.7587533570115,
+        "model_bones_same_origins": 60.3786078669014,
+        "raw": 14.910093307495117,
+        "same_bones_model_origins": 59.32525909245097
+      },
+      "tick": 107,
+      "time_ns": 34140000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.6814014143991,
+        "model_bones_same_origins": 60.44469535383965,
+        "raw": 14.914446830749512,
+        "same_bones_model_origins": 59.23452576168559
+      },
+      "tick": 108,
+      "time_ns": 34160000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.66706860684288,
+        "model_bones_same_origins": 60.399061614317475,
+        "raw": 14.907119750976562,
+        "same_bones_model_origins": 59.17058589811937
+      },
+      "tick": 109,
+      "time_ns": 34180000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.62126687558574,
+        "model_bones_same_origins": 60.41954538296206,
+        "raw": 14.906009674072266,
+        "same_bones_model_origins": 59.113739852672055
+      },
+      "tick": 110,
+      "time_ns": 34200000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.53464051480963,
+        "model_bones_same_origins": 60.49354094454913,
+        "raw": 14.861227989196777,
+        "same_bones_model_origins": 59.03266831382159
+      },
+      "tick": 111,
+      "time_ns": 34220000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.38158970312745,
+        "model_bones_same_origins": 60.33660579488887,
+        "raw": 14.764277458190918,
+        "same_bones_model_origins": 58.99970672311179
+      },
+      "tick": 112,
+      "time_ns": 34240000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.27867085758319,
+        "model_bones_same_origins": 60.3302374799247,
+        "raw": 14.715642929077148,
+        "same_bones_model_origins": 58.91712053721586
+      },
+      "tick": 113,
+      "time_ns": 34260000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.210639115851635,
+        "model_bones_same_origins": 60.356103297333235,
+        "raw": 14.728195190429688,
+        "same_bones_model_origins": 58.770039269543226
+      },
+      "tick": 114,
+      "time_ns": 34280000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.04634940800416,
+        "model_bones_same_origins": 60.411312774703845,
+        "raw": 14.662376403808594,
+        "same_bones_model_origins": 58.602399408918025
+      },
+      "tick": 115,
+      "time_ns": 34300000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.10605641084456,
+        "model_bones_same_origins": 60.42866864861677,
+        "raw": 14.726339340209961,
+        "same_bones_model_origins": 58.639916400916206
+      },
+      "tick": 116,
+      "time_ns": 34320000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 38.008058937321856,
+        "model_bones_same_origins": 60.45584039502413,
+        "raw": 14.629307746887207,
+        "same_bones_model_origins": 58.581657905288886
+      },
+      "tick": 117,
+      "time_ns": 34340000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.87073652637333,
+        "model_bones_same_origins": 60.43421682446126,
+        "raw": 14.579663276672363,
+        "same_bones_model_origins": 58.47608483398792
+      },
+      "tick": 118,
+      "time_ns": 34360000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.70142258346291,
+        "model_bones_same_origins": 60.46026684662474,
+        "raw": 14.399096488952637,
+        "same_bones_model_origins": 58.37001509757922
+      },
+      "tick": 119,
+      "time_ns": 34380000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.67858314999657,
+        "model_bones_same_origins": 60.40533011354058,
+        "raw": 14.357874870300293,
+        "same_bones_model_origins": 58.3856528298613
+      },
+      "tick": 120,
+      "time_ns": 34400000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.65602086732817,
+        "model_bones_same_origins": 60.405885084655004,
+        "raw": 14.366961479187012,
+        "same_bones_model_origins": 58.42367136126721
+      },
+      "tick": 121,
+      "time_ns": 34420000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.6650484569555,
+        "model_bones_same_origins": 60.40056951326967,
+        "raw": 14.378645896911621,
+        "same_bones_model_origins": 58.445629115531396
+      },
+      "tick": 122,
+      "time_ns": 34440000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.692554217969096,
+        "model_bones_same_origins": 60.448608385435946,
+        "raw": 14.433764457702637,
+        "same_bones_model_origins": 58.47388690866893
+      },
+      "tick": 123,
+      "time_ns": 34460000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.63926203554319,
+        "model_bones_same_origins": 60.41936350165026,
+        "raw": 14.513713836669922,
+        "same_bones_model_origins": 58.52185385247383
+      },
+      "tick": 124,
+      "time_ns": 34480000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.651358666584365,
+        "model_bones_same_origins": 60.388138039659935,
+        "raw": 14.476821899414062,
+        "same_bones_model_origins": 58.542865049825686
+      },
+      "tick": 125,
+      "time_ns": 34500000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.576950796340334,
+        "model_bones_same_origins": 60.448814568006455,
+        "raw": 14.42864990234375,
+        "same_bones_model_origins": 58.479874490105686
+      },
+      "tick": 126,
+      "time_ns": 34520000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.588622583075534,
+        "model_bones_same_origins": 60.416868847962846,
+        "raw": 14.444697380065918,
+        "same_bones_model_origins": 58.552087841713494
+      },
+      "tick": 127,
+      "time_ns": 34540000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.611515888565755,
+        "model_bones_same_origins": 60.36526363748401,
+        "raw": 14.499015808105469,
+        "same_bones_model_origins": 58.752120028563716
+      },
+      "tick": 128,
+      "time_ns": 34560000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.5331189996518,
+        "model_bones_same_origins": 60.526198620208014,
+        "raw": 14.485920906066895,
+        "same_bones_model_origins": 58.63954304073213
+      },
+      "tick": 129,
+      "time_ns": 34580000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.52336673264266,
+        "model_bones_same_origins": 60.62826696490275,
+        "raw": 14.575287818908691,
+        "same_bones_model_origins": 58.603880470974616
+      },
+      "tick": 130,
+      "time_ns": 34600000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.60322211763046,
+        "model_bones_same_origins": 60.810869769317115,
+        "raw": 14.846318244934082,
+        "same_bones_model_origins": 58.784389022186566
+      },
+      "tick": 131,
+      "time_ns": 34620000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 36.92652830086504,
+        "model_bones_same_origins": 60.69433873594425,
+        "raw": 14.458130836486816,
+        "same_bones_model_origins": 58.76265506042434
+      },
+      "tick": 132,
+      "time_ns": 34640000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 36.964978886043475,
+        "model_bones_same_origins": 60.789176429337125,
+        "raw": 14.655889511108398,
+        "same_bones_model_origins": 58.891469175479976
+      },
+      "tick": 133,
+      "time_ns": 34660000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 36.96779896974831,
+        "model_bones_same_origins": 60.832266864404225,
+        "raw": 14.664046287536621,
+        "same_bones_model_origins": 58.85410337897156
+      },
+      "tick": 134,
+      "time_ns": 34680000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 36.68689189303939,
+        "model_bones_same_origins": 61.06688015324859,
+        "raw": 14.322583198547363,
+        "same_bones_model_origins": 58.573053184937194
+      },
+      "tick": 135,
+      "time_ns": 34700000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 35.38082885665949,
+        "model_bones_same_origins": 60.29606844974746,
+        "raw": 12.82088565826416,
+        "same_bones_model_origins": 59.470988290773036
+      },
+      "tick": 136,
+      "time_ns": 34720000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 35.242143344620914,
+        "model_bones_same_origins": 59.897036644646754,
+        "raw": 12.875829696655273,
+        "same_bones_model_origins": 60.299591728397886
+      },
+      "tick": 137,
+      "time_ns": 34740000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 35.800482497674984,
+        "model_bones_same_origins": 57.31507989051358,
+        "raw": 14.376967430114746,
+        "same_bones_model_origins": 64.54839491264185
+      },
+      "tick": 138,
+      "time_ns": 34760000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 36.44308343314148,
+        "model_bones_same_origins": 56.20942758592839,
+        "raw": 15.956460952758789,
+        "same_bones_model_origins": 66.70971971140521
+      },
+      "tick": 139,
+      "time_ns": 34780000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 36.630912635459985,
+        "model_bones_same_origins": 55.98843385001136,
+        "raw": 16.426485061645508,
+        "same_bones_model_origins": 67.2493543249033
+      },
+      "tick": 140,
+      "time_ns": 34800000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "right_thumb_to_index_mm": {
+        "both": 37.860466420243334,
+        "model_bones_same_origins": 54.123094871223515,
+        "raw": 19.444461822509766,
+        "same_bones_model_origins": 70.97863404981193
+      },
+      "tick": 141,
+      "time_ns": 34820000070
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 30.3218359753474,
+        "model_bones_same_origins": 41.11816059624993,
+        "raw": 16.826284408569336,
+        "same_bones_model_origins": 71.0372005366246
+      },
+      "tick": 79,
+      "time_ns": 73580000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 29.578805758507663,
+        "model_bones_same_origins": 42.332618106631664,
+        "raw": 15.48292064666748,
+        "same_bones_model_origins": 69.103827660524
+      },
+      "tick": 80,
+      "time_ns": 73600000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.717236922623176,
+        "model_bones_same_origins": 43.77984765695581,
+        "raw": 14.89787769317627,
+        "same_bones_model_origins": 66.97930324820172
+      },
+      "tick": 81,
+      "time_ns": 73620000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.472960667607143,
+        "model_bones_same_origins": 44.3343050187116,
+        "raw": 14.822583198547363,
+        "same_bones_model_origins": 66.44792184880843
+      },
+      "tick": 82,
+      "time_ns": 73640000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.21132649990314,
+        "model_bones_same_origins": 45.601062962600324,
+        "raw": 14.999098777770996,
+        "same_bones_model_origins": 65.05519510237619
+      },
+      "tick": 83,
+      "time_ns": 73660000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.176223711785777,
+        "model_bones_same_origins": 45.553965161945705,
+        "raw": 15.03958797454834,
+        "same_bones_model_origins": 65.02063079087371
+      },
+      "tick": 84,
+      "time_ns": 73680000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.145881586591656,
+        "model_bones_same_origins": 45.53423612289998,
+        "raw": 15.065654754638672,
+        "same_bones_model_origins": 64.94478202663764
+      },
+      "tick": 85,
+      "time_ns": 73700000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.017350122281826,
+        "model_bones_same_origins": 46.0800780973596,
+        "raw": 16.101299285888672,
+        "same_bones_model_origins": 64.47648579521366
+      },
+      "tick": 86,
+      "time_ns": 73720000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.017350122281826,
+        "model_bones_same_origins": 46.0800780973596,
+        "raw": 16.101299285888672,
+        "same_bones_model_origins": 64.47648579521366
+      },
+      "tick": 87,
+      "time_ns": 73740000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.18380815572783,
+        "model_bones_same_origins": 46.22870441281366,
+        "raw": 16.23263931274414,
+        "same_bones_model_origins": 64.5012440141044
+      },
+      "tick": 88,
+      "time_ns": 73760000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.18537670877546,
+        "model_bones_same_origins": 46.44884838170666,
+        "raw": 16.433086395263672,
+        "same_bones_model_origins": 64.41355416670969
+      },
+      "tick": 89,
+      "time_ns": 73780000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.17963248662125,
+        "model_bones_same_origins": 46.49929010002154,
+        "raw": 16.537147521972656,
+        "same_bones_model_origins": 64.41156542233341
+      },
+      "tick": 90,
+      "time_ns": 73800000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.181758542312572,
+        "model_bones_same_origins": 46.529601925850656,
+        "raw": 16.564847946166992,
+        "same_bones_model_origins": 64.4298818984949
+      },
+      "tick": 91,
+      "time_ns": 73820000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.02986647581308,
+        "model_bones_same_origins": 46.59490534682371,
+        "raw": 16.53505516052246,
+        "same_bones_model_origins": 64.33078518207023
+      },
+      "tick": 92,
+      "time_ns": 73840000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.040775928859123,
+        "model_bones_same_origins": 46.66542019019016,
+        "raw": 16.718914031982422,
+        "same_bones_model_origins": 64.2434183757045
+      },
+      "tick": 93,
+      "time_ns": 73860000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.156353935928006,
+        "model_bones_same_origins": 46.847829467317766,
+        "raw": 17.08206558227539,
+        "same_bones_model_origins": 64.25361491877428
+      },
+      "tick": 94,
+      "time_ns": 73880000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.11966944166584,
+        "model_bones_same_origins": 46.93998394321129,
+        "raw": 17.094491958618164,
+        "same_bones_model_origins": 64.17345143512
+      },
+      "tick": 95,
+      "time_ns": 73900000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.11966944166584,
+        "model_bones_same_origins": 46.93998394321129,
+        "raw": 17.094491958618164,
+        "same_bones_model_origins": 64.17345143512
+      },
+      "tick": 96,
+      "time_ns": 73920000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.251521803313786,
+        "model_bones_same_origins": 47.14453349953991,
+        "raw": 17.10625457763672,
+        "same_bones_model_origins": 64.14496023478016
+      },
+      "tick": 97,
+      "time_ns": 73940000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.243065924572086,
+        "model_bones_same_origins": 47.16894928020083,
+        "raw": 17.181827545166016,
+        "same_bones_model_origins": 64.1441780594965
+      },
+      "tick": 98,
+      "time_ns": 73960000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.286804538889932,
+        "model_bones_same_origins": 47.810209877752634,
+        "raw": 17.39413070678711,
+        "same_bones_model_origins": 63.869074270537105
+      },
+      "tick": 99,
+      "time_ns": 73980000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.427558237808256,
+        "model_bones_same_origins": 47.80435626294345,
+        "raw": 17.613161087036133,
+        "same_bones_model_origins": 64.11577711194961
+      },
+      "tick": 100,
+      "time_ns": 74000000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.345634121688644,
+        "model_bones_same_origins": 48.016201325929515,
+        "raw": 17.700603485107422,
+        "same_bones_model_origins": 63.98152650840913
+      },
+      "tick": 101,
+      "time_ns": 74020000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.342600871030914,
+        "model_bones_same_origins": 48.24198455683785,
+        "raw": 17.7556095123291,
+        "same_bones_model_origins": 63.83111541242983
+      },
+      "tick": 102,
+      "time_ns": 74040000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.361432199623977,
+        "model_bones_same_origins": 48.40785091774366,
+        "raw": 17.812524795532227,
+        "same_bones_model_origins": 63.741691298924486
+      },
+      "tick": 103,
+      "time_ns": 74060000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.399291911126387,
+        "model_bones_same_origins": 48.483191756383974,
+        "raw": 17.851638793945312,
+        "same_bones_model_origins": 63.71756108997326
+      },
+      "tick": 104,
+      "time_ns": 74080000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.455721915330678,
+        "model_bones_same_origins": 48.54654271725008,
+        "raw": 17.980363845825195,
+        "same_bones_model_origins": 63.73706769543676
+      },
+      "tick": 105,
+      "time_ns": 74100000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.530114422581146,
+        "model_bones_same_origins": 48.78335043510486,
+        "raw": 17.927871704101562,
+        "same_bones_model_origins": 63.67151094781562
+      },
+      "tick": 106,
+      "time_ns": 74120000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.59586518448658,
+        "model_bones_same_origins": 48.90737667222784,
+        "raw": 18.38526725769043,
+        "same_bones_model_origins": 63.67919673932432
+      },
+      "tick": 107,
+      "time_ns": 74140000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.795004318374296,
+        "model_bones_same_origins": 49.05777507916751,
+        "raw": 18.480899810791016,
+        "same_bones_model_origins": 63.74959860252703
+      },
+      "tick": 108,
+      "time_ns": 74160000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.77479431803396,
+        "model_bones_same_origins": 49.465842793298606,
+        "raw": 18.56519889831543,
+        "same_bones_model_origins": 63.47902078527401
+      },
+      "tick": 109,
+      "time_ns": 74180000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.736055223041433,
+        "model_bones_same_origins": 49.44854044274159,
+        "raw": 18.559091567993164,
+        "same_bones_model_origins": 63.47268514126483
+      },
+      "tick": 110,
+      "time_ns": 74200000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.79965913625289,
+        "model_bones_same_origins": 49.54010228209879,
+        "raw": 18.675634384155273,
+        "same_bones_model_origins": 63.45646091308761
+      },
+      "tick": 111,
+      "time_ns": 74220000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.69679334315823,
+        "model_bones_same_origins": 49.63894146267324,
+        "raw": 18.688539505004883,
+        "same_bones_model_origins": 63.35020107288053
+      },
+      "tick": 112,
+      "time_ns": 74240000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.75210170918105,
+        "model_bones_same_origins": 49.90293279801308,
+        "raw": 18.714475631713867,
+        "same_bones_model_origins": 63.18471050018937
+      },
+      "tick": 113,
+      "time_ns": 74260000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.630209290545196,
+        "model_bones_same_origins": 49.97927480435454,
+        "raw": 18.78473472595215,
+        "same_bones_model_origins": 63.097494929109004
+      },
+      "tick": 114,
+      "time_ns": 74280000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.64781483650559,
+        "model_bones_same_origins": 50.205261522485536,
+        "raw": 18.859975814819336,
+        "same_bones_model_origins": 62.967142051234646
+      },
+      "tick": 115,
+      "time_ns": 74300000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.887573486232164,
+        "model_bones_same_origins": 50.48581703281024,
+        "raw": 19.004539489746094,
+        "same_bones_model_origins": 62.96579365993256
+      },
+      "tick": 116,
+      "time_ns": 74320000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.92824487433158,
+        "model_bones_same_origins": 50.68986687463155,
+        "raw": 19.09834861755371,
+        "same_bones_model_origins": 62.83955200371885
+      },
+      "tick": 117,
+      "time_ns": 74340000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 29.140704953435108,
+        "model_bones_same_origins": 51.01606218756348,
+        "raw": 19.275054931640625,
+        "same_bones_model_origins": 62.81542159173427
+      },
+      "tick": 118,
+      "time_ns": 74360000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 29.017781188012478,
+        "model_bones_same_origins": 51.03205828791491,
+        "raw": 19.349212646484375,
+        "same_bones_model_origins": 62.72533211430305
+      },
+      "tick": 119,
+      "time_ns": 74380000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 29.001886527691315,
+        "model_bones_same_origins": 51.077142105148255,
+        "raw": 19.397846221923828,
+        "same_bones_model_origins": 62.68501832723408
+      },
+      "tick": 120,
+      "time_ns": 74400000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.950037657744666,
+        "model_bones_same_origins": 51.437170370630774,
+        "raw": 19.34458351135254,
+        "same_bones_model_origins": 62.13812927901253
+      },
+      "tick": 121,
+      "time_ns": 74420000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.94202861905717,
+        "model_bones_same_origins": 51.53198071119152,
+        "raw": 19.31591033935547,
+        "same_bones_model_origins": 62.02233731976821
+      },
+      "tick": 122,
+      "time_ns": 74440000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 29.125956722653683,
+        "model_bones_same_origins": 51.700860536176975,
+        "raw": 19.341154098510742,
+        "same_bones_model_origins": 62.05338986056069
+      },
+      "tick": 123,
+      "time_ns": 74460000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 29.068893059106056,
+        "model_bones_same_origins": 51.634804358427765,
+        "raw": 19.403263092041016,
+        "same_bones_model_origins": 62.11397656453178
+      },
+      "tick": 124,
+      "time_ns": 74480000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 29.068548815447954,
+        "model_bones_same_origins": 51.76153590973164,
+        "raw": 19.34664535522461,
+        "same_bones_model_origins": 62.01680424569377
+      },
+      "tick": 125,
+      "time_ns": 74500000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.979373262220967,
+        "model_bones_same_origins": 51.70035112488624,
+        "raw": 19.43869400024414,
+        "same_bones_model_origins": 61.93060166208192
+      },
+      "tick": 126,
+      "time_ns": 74520000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 29.039918419554663,
+        "model_bones_same_origins": 51.811313982826846,
+        "raw": 19.43132209777832,
+        "same_bones_model_origins": 61.8507119817336
+      },
+      "tick": 127,
+      "time_ns": 74540000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.943392766327197,
+        "model_bones_same_origins": 51.808881377435966,
+        "raw": 19.408639907836914,
+        "same_bones_model_origins": 61.80559342562345
+      },
+      "tick": 128,
+      "time_ns": 74560000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.887790889074438,
+        "model_bones_same_origins": 51.80503084661973,
+        "raw": 19.41277313232422,
+        "same_bones_model_origins": 61.67231063934573
+      },
+      "tick": 129,
+      "time_ns": 74580000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.916498750072428,
+        "model_bones_same_origins": 51.897246603088014,
+        "raw": 19.40852165222168,
+        "same_bones_model_origins": 61.59146249742735
+      },
+      "tick": 130,
+      "time_ns": 74600000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.916498750072428,
+        "model_bones_same_origins": 51.897246603088014,
+        "raw": 19.40852165222168,
+        "same_bones_model_origins": 61.59146249742735
+      },
+      "tick": 131,
+      "time_ns": 74620000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.85749795651596,
+        "model_bones_same_origins": 51.95781044337595,
+        "raw": 19.399921417236328,
+        "same_bones_model_origins": 61.51523916084393
+      },
+      "tick": 132,
+      "time_ns": 74640000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.85749795651596,
+        "model_bones_same_origins": 51.95781044337595,
+        "raw": 19.399921417236328,
+        "same_bones_model_origins": 61.51523916084393
+      },
+      "tick": 133,
+      "time_ns": 74660000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.765287485996673,
+        "model_bones_same_origins": 51.97611546349718,
+        "raw": 19.42784881591797,
+        "same_bones_model_origins": 61.466888171122044
+      },
+      "tick": 134,
+      "time_ns": 74680000065
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "right_thumb_to_index_mm": {
+        "both": 28.613982472219906,
+        "model_bones_same_origins": 52.45362612153249,
+        "raw": 19.550153732299805,
+        "same_bones_model_origins": 61.090234711839074
+      },
+      "tick": 135,
+      "time_ns": 74700000065
+    }
+  ],
+  "right_thumb_index_at_most_20mm": {
+    "both": 0,
+    "model_bones_same_origins": 0,
+    "raw": 187,
+    "same_bones_model_origins": 0
+  },
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "same_threshold_mm": 20,
+  "scope": "DIAGNOSTIC_ONLY",
+  "sha256": {
+    "model_receipt": "1d67a6dad1831574af10a1fdf6349638097af6457e9d8527c9bd77e150e876fe",
+    "original_execution_receipt": "d6d83d40b44d29447e1d4a1e357bc0424b123dbabfcc113eef8218d330c605df",
+    "script": "37d58d4db8ef727ec3f55cffef8921d01be720890f4ea804c49d737b3dcb7583"
+  },
+  "signed_vs_native_geometry": {
+    "joint_axis": {
+      "different_axes": [],
+      "max_abs_difference": 0.0
+    },
+    "joint_range": {
+      "different_axes": [],
+      "max_abs_difference": 0.0
+    },
+    "joint_zero": {
+      "home_difference_deg_max": 0.0,
+      "same_qpos0": true
+    },
+    "local_tip_delta_mm": {
+      "max": [
+        [
+          6.3876306577708615,
+          5.812730960113462,
+          5.8481359102205515,
+          5.652817745771975,
+          5.531840631764692
+        ],
+        [
+          5.79617287883404,
+          5.790493143452995,
+          5.826700202798583,
+          5.632432637972757,
+          5.12937608133312
+        ]
+      ],
+      "n": 62,
+      "p50": [
+        [
+          4.437506137871946,
+          2.7402207535930003,
+          4.644623940227649,
+          4.976072188369643,
+          5.316906479164441
+        ],
+        [
+          3.7868979372813216,
+          2.302178354160786,
+          4.626466556745241,
+          4.93614676824911,
+          4.432893909978694
+        ]
+      ],
+      "p95": [
+        [
+          4.437507530988157,
+          4.896761792805327,
+          5.209249097847139,
+          4.976117595894174,
+          5.31690682779992
+        ],
+        [
+          4.462959899710937,
+          4.117249857383753,
+          4.639838820453432,
+          4.93614681016641,
+          4.432894000649847
+        ]
+      ],
+      "p99": [
+        [
+          5.206292769957986,
+          5.457429500068894,
+          5.607867206483738,
+          5.357926572147671,
+          5.400735834507418
+        ],
+        [
+          5.108516400557675,
+          4.887681141663264,
+          5.153245556706254,
+          5.207699260195777,
+          4.7045233722244895
+        ]
+      ]
+    },
+    "native_collision_pairs": 3454,
+    "same_actuator_aliases": true,
+    "same_numeric_q_samples_proposed": 62,
+    "signed_collision_pairs": 2542,
+    "world_tip_delta_mm": {
+      "max": [
+        [
+          6.381416127018539,
+          5.798237291678754,
+          5.833852364192049,
+          5.638280397195598,
+          5.659084882315365
+        ],
+        [
+          5.794187360926941,
+          5.777823655883313,
+          5.813535448909026,
+          5.618500940455766,
+          5.143354543164673
+        ]
+      ],
+      "n": 62,
+      "p50": [
+        [
+          4.4563458980744555,
+          2.7444225154128774,
+          4.63814765413215,
+          4.968156792344895,
+          5.430450457796952
+        ],
+        [
+          3.7224687626185986,
+          2.306146917812207,
+          4.621796996786699,
+          4.929162235643502,
+          4.441269954056093
+        ]
+      ],
+      "p95": [
+        [
+          4.456381202054668,
+          4.888924025438434,
+          5.199518710778741,
+          4.968201985318048,
+          5.430450775069736
+        ],
+        [
+          4.397931211591759,
+          4.112957325946982,
+          4.6344817929218625,
+          4.929162277639682,
+          4.441270045208692
+        ]
+      ],
+      "p99": [
+        [
+          5.27570402927624,
+          5.446064571627683,
+          5.595636585028573,
+          5.346592225769971,
+          5.5196232667385985
+        ],
+        [
+          5.073558241397478,
+          4.880013137360408,
+          5.144803171853677,
+          5.198005331356443,
+          4.715084370980386
+        ]
+      ]
+    },
+    "wrist_delta_mm": {
+      "max": [
+        0.0,
+        0.0
+      ],
+      "n": 62,
+      "p50": [
+        0.0,
+        0.0
+      ],
+      "p95": [
+        0.0,
+        0.0
+      ],
+      "p99": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "thumb_to_each_other_finger_mm_by_side": {
+    "both": {
+      "max": [
+        [
+          131.59408027195323,
+          161.82039471685675,
+          175.0249452365091,
+          184.89193063361046
+        ],
+        [
+          143.1542616386619,
+          150.94618288395415,
+          158.17230356446797,
+          174.14199890229705
+        ]
+      ],
+      "n": 4801,
+      "p50": [
+        [
+          72.55426353409666,
+          96.29648574269746,
+          104.14826958563916,
+          125.45439990542349
+        ],
+        [
+          78.39801253208675,
+          96.22296447540378,
+          103.79237592090074,
+          122.28368474464456
+        ]
+      ],
+      "p95": [
+        [
+          116.4374410739674,
+          135.39102633463236,
+          147.1416535180109,
+          158.72630058247032
+        ],
+        [
+          124.1042838460668,
+          142.9765098649661,
+          147.12718417549763,
+          164.86889039402368
+        ]
+      ],
+      "p99": [
+        [
+          129.91907393068328,
+          148.47202823312873,
+          160.06383186840296,
+          170.7707022680174
+        ],
+        [
+          140.8775488215124,
+          150.30804875892568,
+          157.6176075801869,
+          172.92119926286716
+        ]
+      ]
+    },
+    "model_bones_same_origins": {
+      "max": [
+        [
+          101.91758118193023,
+          134.9754154806052,
+          150.9083789148226,
+          164.60997399039942
+        ],
+        [
+          111.99254471120688,
+          120.33537874501069,
+          126.06405520967928,
+          144.71760471219122
+        ]
+      ],
+      "n": 4801,
+      "p50": [
+        [
+          73.27685951312174,
+          83.38653414255062,
+          97.51799503675944,
+          115.0432005580909
+        ],
+        [
+          71.66397913702828,
+          86.58553607251989,
+          94.90005224034904,
+          106.05991770945535
+        ]
+      ],
+      "p95": [
+        [
+          90.70805525038388,
+          104.68102483646123,
+          121.6991205177703,
+          139.6218122572312
+        ],
+        [
+          97.64556557243067,
+          109.07230513018048,
+          117.17778959082746,
+          137.25206471312907
+        ]
+      ],
+      "p99": [
+        [
+          100.48704434048962,
+          122.95580635978916,
+          137.70058046417623,
+          151.1677884897262
+        ],
+        [
+          109.95677967845003,
+          119.40210097984912,
+          125.29654387426677,
+          141.8996337956973
+        ]
+      ]
+    },
+    "raw": {
+      "max": [
+        [
+          142.2310791015625,
+          196.3063507080078,
+          212.30245971679688,
+          212.9788055419922
+        ],
+        [
+          153.07203674316406,
+          168.12106323242188,
+          164.3527374267578,
+          174.02516174316406
+        ]
+      ],
+      "n": 4801,
+      "p50": [
+        [
+          73.18917083740234,
+          109.59937286376953,
+          104.70323181152344,
+          140.7225799560547
+        ],
+        [
+          77.9523696899414,
+          105.62137603759766,
+          98.47335052490234,
+          109.71102905273438
+        ]
+      ],
+      "p95": [
+        [
+          125.58472442626953,
+          153.48489379882812,
+          167.0097198486328,
+          176.6272430419922
+        ],
+        [
+          131.43589782714844,
+          150.2918701171875,
+          151.69723510742188,
+          162.46261596679688
+        ]
+      ],
+      "p99": [
+        [
+          139.94073486328125,
+          179.67782592773438,
+          193.91143798828125,
+          195.06549072265625
+        ],
+        [
+          150.56570434570312,
+          166.582275390625,
+          163.2747039794922,
+          168.30531311035156
+        ]
+      ]
+    },
+    "same_bones_model_origins": {
+      "max": [
+        [
+          188.1962993086453,
+          243.78057225614464,
+          253.08678385210774,
+          244.65245745264355
+        ],
+        [
+          197.16181349312757,
+          217.72501062887488,
+          213.20349226898063,
+          213.68164915363963
+        ]
+      ],
+      "n": 4801,
+      "p50": [
+        [
+          111.6614269866451,
+          167.33315200372505,
+          142.48663567730978,
+          173.33391198451253
+        ],
+        [
+          119.47170545806755,
+          155.35354823242704,
+          139.89166463226283,
+          143.8736282736977
+        ]
+      ],
+      "p95": [
+        [
+          172.89300303176728,
+          205.90146509082263,
+          214.239469296955,
+          210.22818216944196
+        ],
+        [
+          176.1230822942925,
+          203.8554848515284,
+          199.69867999992385,
+          202.62269615116637
+        ]
+      ],
+      "p99": [
+        [
+          186.06251420907162,
+          229.09735309726446,
+          236.35529030347928,
+          227.6132259487397
+        ],
+        [
+          194.7298222255004,
+          216.59235038333756,
+          212.26610113590667,
+          208.72903463796615
+        ]
+      ]
+    }
+  },
+  "window": {
+    "hmb_cutoff_start_ns": 800000000,
+    "hmb_cutoff_stop_exclusive_ns": 96868267152,
+    "hmb_five_frame_candidate_ticks": 4708,
+    "hmb_joint_valid_ticks": 4794,
+    "partitions": [
+      {
+        "first_tick": 40,
+        "hmb_five_frame_candidate_ticks": 360,
+        "hmb_joint_valid_ticks": 360,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+        "plan_ticks": 360
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 381,
+        "hmb_joint_valid_ticks": 397,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00001",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00002",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00003",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00005",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00006",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 391,
+        "hmb_joint_valid_ticks": 399,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00007",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 368,
+        "hmb_joint_valid_ticks": 394,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00008",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00010",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00011",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 40,
+        "hmb_joint_valid_ticks": 44,
+        "last_tick": 43,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00012",
+        "plan_ticks": 44
+      }
+    ],
+    "plan_ticks": 4804,
+    "source_cutoff_start_ns": 621699543607975,
+    "source_cutoff_stop_exclusive_ns": 621795611875127
+  }
+}

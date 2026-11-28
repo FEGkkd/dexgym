@@ -1,0 +1,40 @@
+{
+  "scope": "DIAGNOSTIC_ONLY",
+  "paired_rows": 4794,
+  "same_source_start_token": [
+    "asset:9b8da9d8bd97543fd07fac4d:180",
+    "asset:780754eb69a2e19d197d5878:182"
+  ],
+  "same_start_max_abs_rad": [
+    0.0,
+    0.0
+  ],
+  "dense_calls_after_start": [
+    11531,
+    11530
+  ],
+  "per_side_max_absolute_raw_joint_error_rad": [
+    {
+      "n": 4794,
+      "exact": 1,
+      "max": 0.4660273790359497,
+      "p50": 0.040711551904678345,
+      "p95": 0.20541491061449035,
+      "p99": 0.31681344822049134
+    },
+    {
+      "n": 4794,
+      "exact": 1,
+      "max": 0.3778262734413147,
+      "p50": 0.04750194400548935,
+      "p95": 0.19905481040477738,
+      "p99": 0.285242491364479
+    }
+  ],
+  "sha256": {
+    "raw_events": "c32a2987d55ab6137ac44e28cf3e1661012c5e88c1c6cd7a1fba178494585ffa",
+    "sdk_ticks": "f51b74ceeb4052c8a985ad5ea6b43b1017dad27d42f1b8694d2ad3b1d479ff24",
+    "script": "7e5adf17362eb25b0a83fe8f43c77b736970f47937a48e6df7cacfda9fbccfc4",
+    "original_native_bridge": "f7201351ce4cd24656f21c0f78ee2bbfb26a9fd29203140ba5b6a80fff74ed93"
+  }
+}

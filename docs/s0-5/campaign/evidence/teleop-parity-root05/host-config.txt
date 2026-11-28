@@ -1,0 +1,23 @@
+NATIVE_HEAD 6d0b0b5b2601618f1b0052d93ef2403eea9b064a
+USER_WORKSPACE_HEAD 30cf13bdc496c43b3016462cfa0a206334d1ff7f
+SOURCE_HASHES
+570a9d684bc333dbc141716c031bb76e3234a072d2edcbe752dbb74c5ac21588  /home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/whole_body_teleop/config/real.yaml
+171e16780c1e9a2a4c003c3ad986a53d4ad9924c2a2ea274ee2b1846b2561b70  /home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/whole_body_teleop/config/sim.yaml
+9a9703b9eae0567b22aa392eb06a04bb1408c9780807e86b44b30a24c916fe08  /home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/whole_body_mujoco_driver/config/sim.yaml
+9b3d280e855d0e271d280420b78971a655b20a1af9dea0cf63237fff7e44845f  /home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/whole_body_bringup/config/sim.yaml
+570a9d684bc333dbc141716c031bb76e3234a072d2edcbe752dbb74c5ac21588  /home/ubuntu/teleop_ws/src/whole_body_teleop/config/real.yaml
+171e16780c1e9a2a4c003c3ad986a53d4ad9924c2a2ea274ee2b1846b2561b70  /home/ubuntu/teleop_ws/src/whole_body_teleop/config/sim.yaml
+9a9703b9eae0567b22aa392eb06a04bb1408c9780807e86b44b30a24c916fe08  /home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/config/sim.yaml
+9b3d280e855d0e271d280420b78971a655b20a1af9dea0cf63237fff7e44845f  /home/ubuntu/teleop_ws/src/whole_body_bringup/config/sim.yaml
+SIM_HANDOFF_VALUES
+/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/whole_body_mujoco_driver/config/sim.yaml:12:    hand_command_timeout_sec: 0.1
+/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/whole_body_mujoco_driver/config/sim.yaml:13:    hand_handoff_hold_sec: 0.5
+/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/whole_body_mujoco_driver/config/sim.yaml:14:    hand_handoff_ramp_sec: 1.0
+/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/config/sim.yaml:12:    hand_command_timeout_sec: 0.1
+/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/config/sim.yaml:13:    hand_handoff_hold_sec: 0.5
+/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/config/sim.yaml:14:    hand_handoff_ramp_sec: 1.0
+SIGNED_MODEL_AND_RUNTIME_SOURCE
+939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d  /home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/TELEOP-PARITY-ROOT05-01/dexgym/source/dexgym/assets/marvin_wuji/hand2_2/generated/dual_arm_marvin.xml
+1d67a6dad1831574af10a1fdf6349638097af6457e9d8527c9bd77e150e876fe  /home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/TELEOP-PARITY-ROOT05-01/dexgym/docs/s0-5/campaign/evidence/dcr009-stage-two/model_frame_receipt.json
+7f972ac0d6a8cb4f96da5c6c603beaf1d71dce694317aecd490a4d43ad49bdf6  /home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/TELEOP-PARITY-ROOT05-01/dexgym-window/scripts/s0_5_campaign_teleop/teleop_parity_hand_physics.py
+0931007455bf9aaf178f6260726e037e74cc69a404b9345439c186263c9b822c  /home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/TELEOP-PARITY-ROOT05-01/evidence/window-plan.json

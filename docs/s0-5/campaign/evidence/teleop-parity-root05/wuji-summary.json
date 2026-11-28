@@ -1,0 +1,511 @@
+{
+  "provenance": {
+    "teleop_revision": "6d0b0b5b2601618f1b0052d93ef2403eea9b064a",
+    "source_sha256": {
+      "src/whole_body_teleop/src/retarget_node.cpp": "6699176c4a278445c5ef10631ef8b9f9d538aa816353d78ea2b99eba9ee8c117",
+      "src/whole_body_teleop/include/manus_wuji_teleop/command_smoother.hpp": "717221eda5edfa1e00778adfabf474b0c8b3ff9e5b1726b4398c89f43d0be0d1",
+      "third_party/wuji_c_api/release-lock.json": "9eb7040687a8409af5bb9cd7c6452d73672bb96edc7aa106d3ba7167bf32c6fc",
+      "src/wuji_sdk_cpp/src/retarget_session.cpp": "2dba16308d135d6a57774d27d819410206ae48313907dba2145366716240e297",
+      "src/wuji_sdk_cpp/src/sdk_manager.cpp": "950937ab6532bbc748975fbdb720020b1d703f39b49e9935d43143471a69d7ff",
+      "src/wuji_sdk_cpp/src/error.cpp": "382caa5f005ed9856286f7ec3b2be77ab9af257eec620c89158d1a00a40f5070",
+      "src/whole_body_teleop/config/real.yaml": "570a9d684bc333dbc141716c031bb76e3234a072d2edcbe752dbb74c5ac21588",
+      "src/whole_body_teleop/config/sim.yaml": "171e16780c1e9a2a4c003c3ad986a53d4ad9924c2a2ea274ee2b1846b2561b70",
+      "src/wuji_sdk_cpp/include/wuji_sdk_cpp/error.hpp": "fe4149991fc2d1de66f56d2ae08e3c1dcf8ce302e72277361094196b574c016d",
+      "src/wuji_sdk_cpp/include/wuji_sdk_cpp/hand2_client.hpp": "13d3f0fad0831eed58f3e57419225d21c43a99abe12f65f4f37c4b2fc405f590",
+      "src/wuji_sdk_cpp/include/wuji_sdk_cpp/retarget_session.hpp": "32d834a6d751d9a58148af2471e0a3516411d6e701a1a6855b49fb253c095ebf",
+      "src/wuji_sdk_cpp/include/wuji_sdk_cpp/sdk_manager.hpp": "f07ecf8a666520f4ee199c11c558e11cc2f9333fbfb6371c14c29e362c004c58",
+      "src/wuji_sdk_cpp/include/wuji_sdk_cpp/sdk_version.hpp": "fbf878ba1000d4e7e820379e870efa0c1feef7eb63624215c4d48e6bdb39fb55"
+    },
+    "wrapper_cpp_sha256": "13563ba0060aac629e8188155b0cff7e1f1afa81d14c419bec0a9ad9e3987d5d",
+    "python_sha256": "c368046baa1732c92b50eb766b57a20caf544629bddd17a70d29eef408b3e2e8",
+    "instrumented_callback_sha256": "49c0dcb9f78988ae1ac79dd56318e7bc660080b4e4e5b0c8f9989f4d0cfa743b",
+    "bridge_sha256": "f7201351ce4cd24656f21c0f78ee2bbfb26a9fd29203140ba5b6a80fff74ed93",
+    "wuji_library": "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/third_party/wuji_c_api/lib/libwuji_sdk_c.so",
+    "wuji_release": {
+      "version": "2026.10.26",
+      "tag": "v2026.10.26",
+      "release_url": "https://github.com/wuji-technology/wuji-sdk/releases/tag/v2026.10.26",
+      "asset": "wuji-sdk-c-2026.10.26-x86_64-linux-gnu.tar.gz",
+      "asset_url": "https://github.com/wuji-technology/wuji-sdk/releases/download/v2026.10.26/wuji-sdk-c-2026.10.26-x86_64-linux-gnu.tar.gz",
+      "archive_sha256": "ecd2fd28fb8c09c177ded2bb2961e9293709bdc9de71957a5a647e83cff35722",
+      "archive_size": 11175357,
+      "header_sha256": "d07aef2a5dbfb203d041852d5e21621de57d19844db2a2f4603f2fd019575693",
+      "library_sha256": "1bdc160c6c27a9b1bfa727dfb7c33c8b01fbb5acbefc8cfdfa17b2fd84c75282",
+      "library_version": "2026.10.26"
+    },
+    "build_command": [
+      "g++",
+      "-std=c++20",
+      "-O2",
+      "-fPIC",
+      "-shared",
+      "-Wall",
+      "-Wextra",
+      "-Wpedantic",
+      "-I",
+      "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/TELEOP-PARITY-ROOT05-01/wuji/build",
+      "-I",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/whole_body_teleop/include",
+      "-I",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/wuji_sdk_cpp/include",
+      "-I",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/third_party/wuji_c_api/include",
+      "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/TELEOP-PARITY-ROOT05-01/dexgym/scripts/s0_5_campaign_teleop/parity_wuji_probe.cpp",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/wuji_sdk_cpp/src/retarget_session.cpp",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/wuji_sdk_cpp/src/sdk_manager.cpp",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/wuji_sdk_cpp/src/error.cpp",
+      "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/third_party/wuji_c_api/lib/libwuji_sdk_c.so",
+      "-Wl,-rpath,/home/ubuntu/dexgym_worktrees/teleop-sim0-study/third_party/wuji_c_api/lib",
+      "-Wl,-z,defs",
+      "-o",
+      "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/TELEOP-PARITY-ROOT05-01/wuji/build/libparity_wuji_probe.so"
+    ]
+  },
+  "profile_by_side": [
+    {
+      "manus_rotation_z_deg": 15.0,
+      "max_input_age_ms": 100,
+      "output_lp_alpha": 0.3,
+      "glove_id": 0,
+      "input_topic": "/manus_glove_left",
+      "command_topic": "/left_hand/command"
+    },
+    {
+      "manus_rotation_z_deg": -15.0,
+      "max_input_age_ms": 100,
+      "output_lp_alpha": 0.3,
+      "glove_id": 0,
+      "input_topic": "/manus_glove_right",
+      "command_topic": "/right_hand/command"
+    }
+  ],
+  "profile_sha256": {
+    "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/whole_body_teleop/config/real.yaml": "570a9d684bc333dbc141716c031bb76e3234a072d2edcbe752dbb74c5ac21588",
+    "/home/ubuntu/dexgym_worktrees/teleop-sim0-study/src/whole_body_teleop/config/sim.yaml": "171e16780c1e9a2a4c003c3ad986a53d4ad9924c2a2ea274ee2b1846b2561b70"
+  },
+  "source_sha256": {
+    "event_jsonl": "c32a2987d55ab6137ac44e28cf3e1661012c5e88c1c6cd7a1fba178494585ffa",
+    "selection_jsonl": "e99addfcec5841ff893f399ef8942822b1da01c0024cb4463827fd1593490fc0"
+  },
+  "raw_event_clock": "RECONSTRUCTED_COLLECTOR_ORDER",
+  "raw_event_gate": "DIAGNOSTIC_OPEN",
+  "selected_event_clock": "SIGNED_CONTROL_CUTOFF_WITH_IMMEDIATE_RESTAMP_AND_OPEN_GATE",
+  "selected_session_lifecycle": "ONE_RESET_AT_START_ANCHOR_PER_ROOT; B_PARTITION IS RESET SENSITIVITY",
+  "raw_event_callback_status": {
+    "left/PUBLISHED": 11621,
+    "right/PUBLISHED": 11621
+  },
+  "signed_tick_count": 4844,
+  "signed_pair_eligible_ticks": 4831,
+  "inputs_in_scope": {
+    "raw_events": 23242,
+    "signed_ticks": 4844
+  },
+  "joint_names": {
+    "left": [
+      "l_THJ0",
+      "l_THJ1",
+      "l_THJ2",
+      "l_THJ3",
+      "l_FFJ0",
+      "l_FFJ1",
+      "l_FFJ2",
+      "l_FFJ3",
+      "l_MFJ0",
+      "l_MFJ1",
+      "l_MFJ2",
+      "l_MFJ3",
+      "l_RFJ0",
+      "l_RFJ1",
+      "l_RFJ2",
+      "l_RFJ3",
+      "l_LFJ0",
+      "l_LFJ1",
+      "l_LFJ2",
+      "l_LFJ3"
+    ],
+    "right": [
+      "r_THJ0",
+      "r_THJ1",
+      "r_THJ2",
+      "r_THJ3",
+      "r_FFJ0",
+      "r_FFJ1",
+      "r_FFJ2",
+      "r_FFJ3",
+      "r_MFJ0",
+      "r_MFJ1",
+      "r_MFJ2",
+      "r_MFJ3",
+      "r_RFJ0",
+      "r_RFJ1",
+      "r_RFJ2",
+      "r_RFJ3",
+      "r_LFJ0",
+      "r_LFJ1",
+      "r_LFJ2",
+      "r_LFJ3"
+    ]
+  },
+  "paired_row_side_order": [
+    "left",
+    "right"
+  ],
+  "summary_axis": "maximum absolute coordinate or joint error per paired hand/tick",
+  "repeat_cold_start_rate_multiplier_errors": {
+    "0.5": {
+      "raw_rad": [
+        {
+          "n": 11621,
+          "exact": 11621,
+          "max": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        {
+          "n": 11621,
+          "exact": 11621,
+          "max": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        }
+      ],
+      "filtered_rad": [
+        {
+          "n": 11621,
+          "exact": 11621,
+          "max": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        {
+          "n": 11621,
+          "exact": 11621,
+          "max": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        }
+      ]
+    },
+    "1.0": {
+      "raw_rad": [
+        {
+          "n": 11621,
+          "exact": 11621,
+          "max": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        {
+          "n": 11621,
+          "exact": 11621,
+          "max": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        }
+      ],
+      "filtered_rad": [
+        {
+          "n": 11621,
+          "exact": 11621,
+          "max": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        {
+          "n": 11621,
+          "exact": 11621,
+          "max": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        }
+      ]
+    },
+    "2.0": {
+      "raw_rad": [
+        {
+          "n": 11621,
+          "exact": 11621,
+          "max": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        {
+          "n": 11621,
+          "exact": 11621,
+          "max": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        }
+      ],
+      "filtered_rad": [
+        {
+          "n": 11621,
+          "exact": 11621,
+          "max": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        {
+          "n": 11621,
+          "exact": 11621,
+          "max": 0.0,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        }
+      ]
+    }
+  },
+  "comparisons": {
+    "semantic_order_mismatched_nodes": [
+      {
+        "n": 4794,
+        "exact": 4794,
+        "max": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      {
+        "n": 4794,
+        "exact": 4794,
+        "max": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      }
+    ],
+    "pre_rotation_m": [
+      {
+        "n": 4794,
+        "exact": 4794,
+        "max": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      {
+        "n": 4794,
+        "exact": 4794,
+        "max": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      }
+    ],
+    "sdk_input_m": [
+      {
+        "n": 4794,
+        "exact": 0,
+        "max": 1.4901161193847656e-08,
+        "p50": 1.4901161193847656e-08,
+        "p95": 1.4901161193847656e-08,
+        "p99": 1.4901161193847656e-08
+      },
+      {
+        "n": 4794,
+        "exact": 0,
+        "max": 1.4901161193847656e-08,
+        "p50": 1.4901161193847656e-08,
+        "p95": 1.4901161193847656e-08,
+        "p99": 1.4901161193847656e-08
+      }
+    ],
+    "same_sdk_input_raw_rad": [
+      {
+        "n": 4794,
+        "exact": 4794,
+        "max": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      },
+      {
+        "n": 4794,
+        "exact": 4794,
+        "max": 0.0,
+        "p50": 0.0,
+        "p95": 0.0,
+        "p99": 0.0
+      }
+    ],
+    "selected_native_vs_offline_raw_rad": [
+      {
+        "n": 4794,
+        "exact": 0,
+        "max": 0.10352498292922974,
+        "p50": 0.006720390170812607,
+        "p95": 0.034798498637974254,
+        "p99": 0.053018336296081506
+      },
+      {
+        "n": 4794,
+        "exact": 0,
+        "max": 0.08679026365280151,
+        "p50": 0.0060079991817474365,
+        "p95": 0.034507875144481656,
+        "p99": 0.05266046863049262
+      }
+    ],
+    "same_sdk_input_filtered_rad": [
+      {
+        "n": 4794,
+        "exact": 1,
+        "max": 1.1898165874768551e-07,
+        "p50": 4.332935510387159e-08,
+        "p95": 5.939420799627726e-08,
+        "p99": 1.0399542873518167e-07
+      },
+      {
+        "n": 4794,
+        "exact": 1,
+        "max": 1.1851283510111443e-07,
+        "p50": 4.045404522479146e-08,
+        "p95": 5.848414500464471e-08,
+        "p99": 7.144449116758184e-08
+      }
+    ],
+    "selected_native_vs_offline_filtered_rad": [
+      {
+        "n": 4794,
+        "exact": 0,
+        "max": 0.0731552307920611,
+        "p50": 0.006387445795295377,
+        "p95": 0.032727687817685105,
+        "p99": 0.047686805250514414
+      },
+      {
+        "n": 4794,
+        "exact": 0,
+        "max": 0.07607813959451326,
+        "p50": 0.005647009397983002,
+        "p95": 0.03401701075842796,
+        "p99": 0.04818294558509233
+      }
+    ],
+    "full_vs_selected_root_raw_rad": [
+      {
+        "n": 4794,
+        "exact": 0,
+        "max": 0.505500853061676,
+        "p50": 0.04545255925040692,
+        "p95": 0.22900144159793845,
+        "p99": 0.34769709706306445
+      },
+      {
+        "n": 4794,
+        "exact": 0,
+        "max": 0.3820573687553406,
+        "p50": 0.053222715854644775,
+        "p95": 0.2290565639734268,
+        "p99": 0.3062980920076369
+      }
+    ],
+    "full_vs_selected_root_filtered_rad": [
+      {
+        "n": 4794,
+        "exact": 0,
+        "max": 0.6011041700839996,
+        "p50": 0.05387544631958008,
+        "p95": 0.30442891418933854,
+        "p99": 0.4528330062329768
+      },
+      {
+        "n": 4794,
+        "exact": 0,
+        "max": 0.49522948265075684,
+        "p50": 0.06328589655458927,
+        "p95": 0.30517273619771,
+        "p99": 0.41314960926771144
+      }
+    ],
+    "selected_root_vs_partition_raw_rad": [
+      {
+        "n": 4794,
+        "exact": 360,
+        "max": 0.5854080021381378,
+        "p50": 0.011079803109169006,
+        "p95": 0.5459716476500034,
+        "p99": 0.5651905085146426
+      },
+      {
+        "n": 4794,
+        "exact": 360,
+        "max": 0.3644858617335558,
+        "p50": 0.009530629962682724,
+        "p95": 0.07354426234960548,
+        "p99": 0.313484002277255
+      }
+    ],
+    "selected_root_vs_partition_filtered_rad": [
+      {
+        "n": 4794,
+        "exact": 360,
+        "max": 0.5816991776227951,
+        "p50": 0.011042766273021698,
+        "p95": 0.5459314066916701,
+        "p99": 0.5650588159263132
+      },
+      {
+        "n": 4794,
+        "exact": 360,
+        "max": 0.3608665522187948,
+        "p50": 0.009313583374023438,
+        "p95": 0.08030888140201566,
+        "p99": 0.314063347391784
+      }
+    ],
+    "same_token_full_vs_selected_root_raw_rad": [
+      {
+        "n": 781,
+        "exact": 0,
+        "max": 0.44010603427886963,
+        "p50": 0.04547250270843506,
+        "p95": 0.2107868194580078,
+        "p99": 0.3280632734298706
+      },
+      {
+        "n": 669,
+        "exact": 0,
+        "max": 0.34880609810352325,
+        "p50": 0.05324268341064453,
+        "p95": 0.22125347554683686,
+        "p99": 0.29089227914810184
+      }
+    ],
+    "same_token_full_vs_selected_root_filtered_rad": [
+      {
+        "n": 781,
+        "exact": 0,
+        "max": 0.5705656707286835,
+        "p50": 0.05359403043985367,
+        "p95": 0.29305651783943176,
+        "p99": 0.4391187012195591
+      },
+      {
+        "n": 669,
+        "exact": 0,
+        "max": 0.4575304388999939,
+        "p50": 0.062478065490722656,
+        "p95": 0.29988905787467957,
+        "p99": 0.41447160840034497
+      }
+    ]
+  },
+  "output_sha256": {
+    "wuji-a-updates.jsonl": "e279269347fa071c93550c003000f87c40f27249a0259c737678e50710763ec2",
+    "wuji-bc-ticks.jsonl": "f51b74ceeb4052c8a985ad5ea6b43b1017dad27d42f1b8694d2ad3b1d479ff24"
+  }
+}

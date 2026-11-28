@@ -1,0 +1,144 @@
+{
+  "frozen_planned_rows": 4804,
+  "input_sha256": "e99addfcec5841ff893f399ef8942822b1da01c0024cb4463827fd1593490fc0",
+  "physical_windows": [
+    {
+      "names": [
+        "initial_handoff_control"
+      ],
+      "start_row": 0,
+      "start_tick_ns": 800000000,
+      "stop_exclusive_tick_ns": 2900000000,
+      "stop_row_exclusive": 105
+    },
+    {
+      "names": [
+        "thumb_index_pinch"
+      ],
+      "start_row": 147,
+      "start_tick_ns": 3740000000,
+      "stop_exclusive_tick_ns": 5440000000,
+      "stop_row_exclusive": 232
+    },
+    {
+      "names": [
+        "asymmetric_hands"
+      ],
+      "start_row": 351,
+      "start_tick_ns": 7820000000,
+      "stop_exclusive_tick_ns": 9520000070,
+      "stop_row_exclusive": 436
+    },
+    {
+      "names": [
+        "fist"
+      ],
+      "start_row": 908,
+      "start_tick_ns": 18960000086,
+      "stop_exclusive_tick_ns": 20660000086,
+      "stop_row_exclusive": 993
+    },
+    {
+      "names": [
+        "spread"
+      ],
+      "start_row": 1196,
+      "start_tick_ns": 24720000078,
+      "stop_exclusive_tick_ns": 26420000078,
+      "stop_row_exclusive": 1281
+    },
+    {
+      "names": [
+        "one_finger_flexion"
+      ],
+      "start_row": 2706,
+      "start_tick_ns": 54920000096,
+      "stop_exclusive_tick_ns": 56620000082,
+      "stop_row_exclusive": 2791
+    },
+    {
+      "names": [
+        "natural_open"
+      ],
+      "start_row": 3237,
+      "start_tick_ns": 65540000077,
+      "stop_exclusive_tick_ns": 67240000077,
+      "stop_row_exclusive": 3322
+    }
+  ],
+  "proxy_evidence": [
+    {
+      "gesture": "natural_open",
+      "input_support_first_row": 3304,
+      "input_support_stop_row_exclusive": 3331,
+      "proxy_margin": 0.14556720925040834,
+      "side": "right",
+      "status": "PLANNED_PROXY_PROBE",
+      "within_proxy_first_row": 3313,
+      "within_proxy_stop_row_exclusive": 3322
+    },
+    {
+      "gesture": "fist",
+      "input_support_first_row": 926,
+      "input_support_stop_row_exclusive": 1052,
+      "proxy_margin": 0.7053735939237274,
+      "side": "right",
+      "status": "PLANNED_PROXY_PROBE",
+      "within_proxy_first_row": 984,
+      "within_proxy_stop_row_exclusive": 993
+    },
+    {
+      "gesture": "thumb_index_pinch",
+      "input_support_first_row": 195,
+      "input_support_stop_row_exclusive": 260,
+      "proxy_margin": 7.795852015723723,
+      "side": "right",
+      "status": "PLANNED_PROXY_PROBE",
+      "within_proxy_first_row": 223,
+      "within_proxy_stop_row_exclusive": 232
+    },
+    {
+      "gesture": "thumb_middle_pinch",
+      "status": "INSUFFICIENT_INPUT_EVIDENCE"
+    },
+    {
+      "gesture": "spread",
+      "input_support_first_row": 1238,
+      "input_support_stop_row_exclusive": 1316,
+      "proxy_margin": 0.20536654100728668,
+      "side": "left",
+      "status": "PLANNED_PROXY_PROBE",
+      "within_proxy_first_row": 1272,
+      "within_proxy_stop_row_exclusive": 1281
+    },
+    {
+      "gesture": "one_finger_flexion",
+      "input_support_first_row": 2782,
+      "input_support_stop_row_exclusive": 2792,
+      "proxy_margin": 0.20099428409544112,
+      "side": "right",
+      "status": "PLANNED_PROXY_PROBE",
+      "within_proxy_first_row": 2782,
+      "within_proxy_stop_row_exclusive": 2791
+    },
+    {
+      "gesture": "asymmetric_hands",
+      "input_support_first_row": 380,
+      "input_support_stop_row_exclusive": 483,
+      "proxy_margin": 0.44347154904053493,
+      "side": "both",
+      "status": "PLANNED_PROXY_PROBE",
+      "within_proxy_first_row": 427,
+      "within_proxy_stop_row_exclusive": 436
+    },
+    {
+      "gesture": "rapid_repeated_open_close",
+      "status": "INSUFFICIENT_INPUT_EVIDENCE"
+    }
+  ],
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "rows_in_physical_windows": 615,
+  "scope": "DIAGNOSTIC_ONLY",
+  "selection_input": "Signed HMB geometry only, independent of SDK or physics results",
+  "start_each_window": "Signed Home, use recorded preceding movement on unchanged time grid"
+}

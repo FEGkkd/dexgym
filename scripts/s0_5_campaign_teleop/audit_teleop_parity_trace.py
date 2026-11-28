@@ -47,6 +47,9 @@ def audit(args):
     latency = defaultdict(list)
     contacts = defaultdict(Counter)
     selected_witness = {}
+    fault_steps = []
+    joints = tuple(joint for group in signed["groups_by_named_actuator"] for joint in group)
+    velocity_cap = np.asarray([1.35] * 14 + [5.] * 40)
     args.out.mkdir()
     compact_path = args.out / "row-ledger.jsonl.gz"
     with gzip.open(source, "rt", encoding="utf-8") as src, compact_path.open("xb") as raw, (
@@ -72,6 +75,20 @@ def audit(args):
                         for pair in step["contact_pairs"]:
                             if pair["gap_m"] <= 0:
                                 contacts[mode][tuple(sorted((pair["geom1"], pair["geom2"])))] += 1
+                        if step["event"]:
+                            speed = np.asarray(step["velocity"])
+                            exceeded = np.flatnonzero(abs(speed.astype(np.float32)) > velocity_cap + 2e-5)
+                            fault_steps.append({"mode": mode, "root_plan_row": index, "tick_ns": row["tick_ns"],
+                                                "subcycle": sub, "event": step["event"],
+                                                "velocity_limit_violations": [
+                                                    {"axis": joints[j], "velocity_rad_s": float(speed[j]),
+                                                     "limit_rad_s": float(velocity_cap[j])} for j in exceeded],
+                                                "contact_pairs": step["contact_pairs"],
+                                                "minimum_gap_m": step["minimum_gap_m"],
+                                                "depth_m": step["depth_m"],
+                                                "torque_nm": step.get("torque"),
+                                                "candidate_common_proof": trial["common_proof"],
+                                                "candidate_current_v2_proof": trial["guard_v2"]})
                     if not detail["physical_steps"] or "snapshot" not in trial:
                         continue
                     if mode == "A":
@@ -101,6 +118,7 @@ def audit(args):
         "source_to_scheduled_issue_age_ms_by_mode_side": {k: stats(v) for k, v in latency.items()},
         "actual_contacts_by_pair": {mode: [{"geoms": list(pair), "nonpositive_contact_records": n} for pair, n in c.items()]
                                     for mode, c in contacts.items()},
+        "observed_fault_steps": fault_steps,
         "representative_exact_c_witnesses": selected_witness,
         "sha256": {"physics_summary": file_sha(receipt), "full_physics": file_sha(source),
                     "compact_rows": file_sha(compact_path), "sdk_ticks": file_sha(args.sdk), "event_audit": file_sha(args.events),
