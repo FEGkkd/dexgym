@@ -177,7 +177,8 @@ def blank(data, *, grouped=False):
             ("filtered_wuji", (5, 2, 20), "<f4"), ("nominal_hand_limited", (5, 40), bool),
         ):
             fields[key] = np.zeros((n, *shape), dtype=dtype)
-        for key in ("pose", "pose_valid", "node_mask", "source_index", "capture_bounds_ns", "arrival_bounds_ns",
+        fields["hmb_source_index_full"] = data["source_index"].copy()
+        for key in ("pose", "pose_valid", "node_mask", "capture_bounds_ns", "arrival_bounds_ns",
                     "age_ns", "clock_generation", "calibration_id", "topology_id", "safety_permission"):
             fields["hmb_" + key] = data[key].copy()
     return fields
@@ -375,6 +376,13 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
              and historical["diagnostic_five_frame_ticks"] >= .70 * window["hmb_five_frame_candidate_ticks"])
     return {"schema": "s05.rmb.offline_diagnostic.v2" if args.group_admission else "s05.rmb.offline_diagnostic.v1",
             "scope": SCOPE, "formal_coverage_credit": False, "group_admission": args.group_admission,
+            "proof_semantics": ("combined candidate before fallback; nominal_proposal remains pre-admission"
+                                if args.group_admission else "original whole-vector candidate before fallback"),
+            "historical_target_layers": {
+                "M0_TARGET": "docs/s0-5/specs/V2_rmb_contract.md#r3-m1-连续输出与-m0-审计",
+                "M1_TARGET": "docs/s0-5/specs/V2_rmb_contract.md#r3-m1-连续输出与-m0-审计",
+                "materialized_in_diagnostic": False,
+            },
             "group_joint_names": dict(zip(COMMAND_GROUPS, robot.groups, strict=True)),
             "group_status_codes": {code.name: int(code) for code in GroupStatus},
             "root": args.root, "full": dict(full), "window": window, "historical": dict(historical),

@@ -170,6 +170,8 @@ class GroupedLockstep(Lockstep):
         final_reason, final_metrics = admission.final
         hold_reason, hold_metrics = admission.hold or (None, None)
         groups = admission.outcomes
+        for entry, nominal_status in zip(groups, proposal.status, strict=True):
+            entry["nominal_status"] = OfflineNominalStatus(nominal_status).name
         if admission.issued is None:
             self.fault = f"HOLD_INFEASIBLE:{hold_reason.name}"
             return GroupedSubstep(proposal, final_reason.name, final_metrics, None, None, True, self.fault,
