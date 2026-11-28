@@ -95,6 +95,7 @@ class HandRollout:
         self.mode = mode
         self.sim = Lockstep(robot, SimpleNamespace(reset=lambda _: np.zeros(2)))
         self.robot = robot
+        self.hand_ctrl_range = np.asarray([a.ctrlrange for a in robot.actuators[14:]], dtype=np.float64)
         self.hand_controller = OfflineTeleopNominal(robot, None, None, np.repeat(np.eye(4)[None], 7, axis=0))
         self.common = SweptEnvelopeV2(robot, max_queries=PROOF["max_queries"], max_depth=24)
         self.proof_stats = Counter()
@@ -122,11 +123,14 @@ class HandRollout:
             groups = self.hand_controller._propose_hands(previous, proposed, limited, np.ones(40, bool))
             statuses = [value.name for value in groups]
         else:
+            statuses = ["INPUT_HOLD"] * 2
             for side in range(2):
                 if usable[side]:
                     group = slice(14 + 20 * side, 34 + 20 * side)
-                    proposed[group] = filtered[side]
-            statuses = ["NATIVE_SMOOTHED" if x else "INPUT_HOLD" for x in usable]
+                    low, high = self.hand_ctrl_range[side * 20:(side + 1) * 20].T
+                    proposed[group] = np.clip(filtered[side], low, high)
+                    statuses[side] = ("NATIVE_DRIVER_CLAMPED" if not np.array_equal(proposed[group], filtered[side])
+                                      else "NATIVE_SMOOTHED")
         target = proposed.astype(np.float32).astype(np.float64)
         state = np.stack((previous.copy(), self.sim.physics.filtered[0].copy(), measured))
         time0 = monotonic_ns()
@@ -186,6 +190,8 @@ class HandRollout:
                 self.stopped = f"PHYSICS_EVENT:{event}"
                 break
         self.physics_stats["hold_intervals"] += int(hold)
+        self.physics_stats["moved_intervals"] += int(not hold and not np.array_equal(previous, self.sim.issued))
+        self.physics_stats["native_clipped_intervals"] += int("NATIVE_DRIVER_CLAMPED" in statuses)
         return {**receipt, "issued": self.sim.issued.tolist(), "physical": applied, "cause": self.stopped}
 
 

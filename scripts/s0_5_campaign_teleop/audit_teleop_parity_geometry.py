@@ -41,6 +41,8 @@ def model_comparison(signed, native, samples):
     if tuple(signed.names) != tuple(native.names):
         raise ValueError("Models differ in named actuator order")
     template = {"same_actuator_aliases": [x.name for x in signed.actuators] == [x.name for x in native.actuators],
+                "same_hand_ctrlrange": bool(np.array_equal([x.ctrlrange for x in signed.actuators[14:]],
+                                                           [x.ctrlrange for x in native.actuators[14:]])),
                 "signed_collision_pairs": len(signed.collision_pairs), "native_collision_pairs": len(native.collision_pairs)}
     for key, field in (("joint_axis", "axis"), ("joint_range", "range")):
         a = np.stack([getattr(j, field) for j in signed.joints])
