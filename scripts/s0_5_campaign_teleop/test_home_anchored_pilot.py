@@ -10,6 +10,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 
 from prepare_home_anchored_pilot_overlay import prepare
+from replay_dcr009_guarded_diagnostic import CENTER_OFFSET_SEQUENCE_MM, VIRTUAL_R, registered_targets
 from replay_home_anchored_pilot import (
     AUTHORITY_SCHEMA, DESIGN, RUN_ID, FeedbackDwell, digest, expected_arm_publish,
     load_prerequisites, lock_home_frames, map_file, proper, read_frames, validate_environment,
@@ -17,6 +18,28 @@ from replay_home_anchored_pilot import (
 
 
 class PilotRuntimeTest(unittest.TestCase):
+    def test_center_offset_translates_both_registered_and_engineering_targets_in_world(self):
+        frames = np.repeat(np.eye(4)[None], 7, axis=0)
+        frames[0, :3, :3] = VIRTUAL_R
+        frames[1, :3, :3] = Rotation.from_euler("z", 32, degrees=True).as_matrix()
+        frames[2, :3, :3] = Rotation.from_euler("x", -18, degrees=True).as_matrix()
+        frames[3:7, :3, 3] = [[.04, -.05, .03], [.02, .08, -.06], [.06, .06, .01], [.09, .01, -.02]]
+        home = np.repeat(np.eye(4)[None], 2, axis=0)
+        home[:, :3, 3] = [[.2, -.3, .4], [-.2, -.1, .4]]
+        raw = home.copy()
+        raw[1, :3, :3] = Rotation.from_euler("y", 38, degrees=True).as_matrix()
+        initial, initial_registered, initial_native = registered_targets(frames, home, raw)
+        for offset in CENTER_OFFSET_SEQUENCE_MM:
+            with self.subTest(offset=offset):
+                locked, registered, native = registered_targets(frames, home, raw, offset)
+                delta = np.repeat([[offset / 1000, 0, 0]], 2, axis=0)
+                np.testing.assert_array_equal(locked[:, :3, :3], initial[:, :3, :3])
+                np.testing.assert_array_equal(locked[1:], initial[1:])
+                np.testing.assert_array_equal(registered[:, :3, :3], initial_registered[:, :3, :3])
+                np.testing.assert_allclose(registered[:, :3, 3] - initial_registered[:, :3, 3], delta, atol=1e-14)
+                np.testing.assert_allclose((frames[1:3] @ native)[:, :3, 3]
+                                           - (frames[1:3] @ initial_native)[:, :3, 3], delta, atol=1e-14)
+
     def test_shared_map_only_translates_the_fixed_rotation(self):
         frames = np.repeat(np.eye(4)[None], 7, axis=0)
         frames[0, :3, :3] = Rotation.from_euler("z", 49, degrees=True).as_matrix()

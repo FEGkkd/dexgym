@@ -12,7 +12,8 @@ from threading import Event
 import time
 
 from replay_dcr009_guarded_diagnostic import (
-    COHORT_SHA, LEGACY_BRIDGE_SHA, LIVE_SHA, RUN_ID, SCOPE, SIGNED_SHA, VIRTUAL_SHA, check_scope,
+    CENTER_OFFSET_SEQUENCE_MM, COHORT_SHA, LEGACY_BRIDGE_SHA, LIVE_SHA, ROOT_FIVE, ROOT_FIVE_PLAN_SHA,
+    RUN_ID, SCOPE, SIGNED_SHA, VIRTUAL_SHA, check_scope,
 )
 from run_home_anchored_pilot import resolved_executable
 from run_start_handoff_cohort import (
@@ -83,6 +84,8 @@ def attempt(args, index, selection, cancelled):
     result_file = path / "result.json"
     result = {"root": selection["root"], "scope": SCOPE, "attempt": index,
               "phase": "PREFLIGHT", "started_unix_ns": time.time_ns(), "formal_coverage_credit": False}
+    if "center_offset_mm" in selection:
+        result["center_offset_mm"] = selection["center_offset_mm"]
     save(result_file, result)
     children = []
     deadline = time.monotonic() + 180
@@ -146,6 +149,8 @@ def attempt(args, index, selection, cancelled):
                     "guard-socket": endpoint, "output": path / "evidence", "controller-executable": controller,
                     "simulator-executable": simulator, "launch-pid": sim.pid,
                 }
+                if "center_offset_mm" in selection:
+                    arguments["center-offset-mm"] = selection["center_offset_mm"]
                 for key, value in arguments.items():
                     program.extend((f"--{key}", str(value)))
                 replay = subprocess.Popen(program, env=env, stdout=replay_log, stderr=subprocess.STDOUT, start_new_session=True)
@@ -203,7 +208,10 @@ def completed_prefix(previous_runs, plan_sha, roster):
             if index >= len(roster):
                 raise ValueError("No incomplete original roster to continue")
             trace = previous_run / f"attempt-{index:02d}" / "evidence" / "trace.jsonl"
-            if row["attempt"] != index or row["root"] != roster[index - 1]["root"] or row["trace_sha256"] != digest(trace):
+            planned = roster[index - 1]
+            if (row["attempt"] != index or row["root"] != planned["root"]
+                    or row.get("center_offset_mm") != planned.get("center_offset_mm")
+                    or row["trace_sha256"] != digest(trace)):
                 raise ValueError("Earlier protected attempt does not match the original trace or root")
             actual = evidence_summary(trace)
             if not closed(dict(row, phase=actual["observed_phase"])):
@@ -220,6 +228,7 @@ def main():
     for key in ("plan-sha256", "controller-sha256", "simulator-sha256"):
         parser.add_argument(f"--{key}", required=True)
     parser.add_argument("--resume-from", action="append", default=[], type=lambda path: Path(path).resolve())
+    parser.add_argument("--compare-root-five-centers", action="store_true")
     parser.add_argument("--domain", type=int, choices=DOMAINS, required=True)
     args = parser.parse_args()
     if os.name != "posix" or not args.output.parent.is_dir():
@@ -235,6 +244,10 @@ def main():
     if (plan["cohort_sha256"] != COHORT_SHA or plan["shared_frames_sha256"] != digest(args.frames)
             or any(roots[row["root"]]["split"] != "Train" or not 0 < row["replay_planned_ticks"] <= 6000 for row in roster)):
         raise ValueError("Plan is outside the verified Train cohort or budget")
+    if args.compare_root_five_centers:
+        if args.plan_sha256 != ROOT_FIVE_PLAN_SHA or roster[4]["root"] != ROOT_FIVE:
+            raise ValueError("The five-offset diagnostic has one frozen root and plan")
+        roster = [dict(roster[4], center_offset_mm=value) for value in CENTER_OFFSET_SEQUENCE_MM]
     prior = completed_prefix(args.resume_from, args.plan_sha256, roster) if args.resume_from else 0
     args.output.mkdir(exist_ok=False)
     cancelled = Event()
@@ -242,6 +255,9 @@ def main():
         signal.signal(stop, lambda signum, frame: cancelled.set())
     ledger = {"run_id": RUN_ID, "scope": SCOPE, "formal_coverage_credit": False, "plan_sha256": args.plan_sha256,
               "preregistered_roots": [row["root"] for row in roster], "attempts": [], "status": "IN_PROGRESS"}
+    if args.compare_root_five_centers:
+        ledger["comparison"] = "ROOT_FIVE_COMMON_CENTER_OFFSETS"
+        ledger["preregistered_center_offsets_mm"] = list(CENTER_OFFSET_SEQUENCE_MM)
     if prior:
         ledger["prior_closed_attempt_count"] = prior
         ledger["prior_run_receipt_sha256"] = digest(args.resume_from[-1] / "run_receipt.json")
@@ -254,8 +270,11 @@ def main():
         print(index, root["root"], verdict["phase"], verdict.get("start_status"), flush=True)
         if not closed(verdict) or cancelled.is_set():
             break
-    complete = len(ledger["attempts"]) + prior == 6 and all(closed(row) for row in ledger["attempts"])
-    ledger["status"] = "ALL_SIX_DIAGNOSTICS_CLOSED" if complete else "STOPPED_WITH_INCOMPLETE_DIAGNOSTICS"
+    complete = len(ledger["attempts"]) + prior == len(roster) and all(closed(row) for row in ledger["attempts"])
+    if complete:
+        ledger["status"] = "ALL_FIVE_CENTER_OFFSETS_CLOSED" if args.compare_root_five_centers else "ALL_SIX_DIAGNOSTICS_CLOSED"
+    else:
+        ledger["status"] = "STOPPED_WITH_INCOMPLETE_DIAGNOSTICS"
     save(receipt, ledger)
     return 0 if complete else 1
 

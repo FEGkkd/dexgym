@@ -9,9 +9,10 @@ from pathlib import Path
 import time
 
 import numpy as np
+from scipy.spatial.transform import Rotation
 
 from replay_home_anchored_pilot import (
-    WRISTS, digest, map_file, object_at, pose_from_xyz_quat, proper, read_frames,
+    WRISTS, digest, map_file, object_at, palm_poses, pose_from_xyz_quat, proper, read_frames,
     replay_class, validate_environment,
 )
 
@@ -24,6 +25,10 @@ LEGACY_BRIDGE_SHA = "33cbc93c4a2db925986f596b4b1730c7eaca026a9facfdf26aa4aaa8032
 COHORT_SHA = "7d6c4702229aefd0d564f76dfae5a2a7b62a0340b9c4cae43fea512cc2d531c2"
 LIVE_SHA = "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d"
 SIGNED_SHA = "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d"
+ROOT_FIVE = "capture:b63bc72d2e8b2ee395e966f6"
+ROOT_FIVE_PLAN_SHA = "3c0268291bdb8916a9a520d3fa73a1340fffd7f9e8a7b7364a1ef9950f9a0004"
+# +X in W goes toward the named left base. -X is virtual operator right.
+CENTER_OFFSET_SEQUENCE_MM = (0, 10, 20, -10, -20)
 
 
 def check_scope(plan):
@@ -37,12 +42,13 @@ def check_scope(plan):
     return rows
 
 
-def registered_targets(frames, measured_home, raw_registered):
+def registered_targets(frames, measured_home, raw_registered, center_offset_mm=0):
     """Lock translation on registered wrist origins; engineering attachment never rewrites that target."""
     locked = proper(frames, 7).copy()
     home = proper(measured_home, 2)
     raw = proper(raw_registered, 2)
     locked[0, :3, 3] = home[:, :3, 3].mean(axis=0) - locked[0, :3, :3] @ raw[:, :3, 3].mean(axis=0)
+    locked[0, 0, 3] += center_offset_mm / 1000
     registered_world = locked[0] @ raw
     native = np.linalg.inv(locked[1:3]) @ registered_world @ locked[3:5] @ locked[5:7]
     return locked, registered_world, native
@@ -64,6 +70,8 @@ def load(args):
         raise ValueError("Only the common qualified virtual rotation may replace the old bridge")
     plan = object_at(args.plan, args.plan_sha256)
     rows = check_scope(plan)
+    if args.center_offset_mm is not None and (args.root != ROOT_FIVE or args.plan_sha256 != ROOT_FIVE_PLAN_SHA):
+        raise ValueError("Center offset comparison is authorized only for root five in the frozen diagnostic plan")
     if plan["cohort_sha256"] != COHORT_SHA or plan["shared_frames_sha256"] != digest(args.frames):
         raise ValueError("Plan does not bind the original cohort and exact runtime frames")
     selection = next(row for row in rows if row["root"] == args.root)
@@ -92,6 +100,11 @@ def diagnostic_class():
     from nominal_live_replay import HUMAN, deserialize_message
 
     class DiagnosticReplay(base):
+        def before_history(self, warmup):
+            self.stage = "preposition_start"
+            self.write("preposition_clock", center_offset_mm=self.args.center_offset_mm)
+            return super().before_history(warmup)
+
         def measure(self):
             value = super().measure()
             if value is not None:
@@ -101,6 +114,15 @@ def diagnostic_class():
                            and len(sequences) == 1 and next(iter(sequences), None) not in {None, "", "0"})
                 value["arms_accepted"] = value["arms_accepted"] and guarded
                 value["arm_guard_proof"] = next(iter(sequences)) if guarded else None
+                if self.args.center_offset_mm is not None:
+                    geometry = self.robot.geometry()
+                    native = (np.linalg.inv(self.frames[1:3]) @ palm_poses(geometry)
+                              @ self.model_palm_from_anatomical @ self.frames[5:7])
+                    value["wrist_original_error_m_deg"] = pair_errors(self.original_goal, native)
+                    scoring_wrist = np.repeat(np.eye(4)[None], 2, axis=0)
+                    scoring_wrist[:, :3, :3] = geometry.rotations
+                    scoring_wrist[:, :3, 3] = geometry.wrists
+                    value["registered_wrist_error_m_deg"] = pair_errors(self.registered_goal, scoring_wrist)
             return value
 
         def service(self, operation, timeout=40):
@@ -153,17 +175,30 @@ def diagnostic_class():
                     [pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w]))
             if not np.allclose(actual, self.anatomical_start, atol=1e-5, rtol=0):
                 raise ValueError("Original ROS wrist poses disagree with verified HMB registered poses")
-            locked, registered, self.goal = registered_targets(self.frames, self.home_snapshot, np.asarray(actual))
+            offset = self.args.center_offset_mm or 0
+            locked, registered, self.goal = registered_targets(self.frames, self.home_snapshot, np.asarray(actual), offset)
+            self.registered_goal = registered
+            if self.args.center_offset_mm is not None:
+                _, _, self.original_goal = registered_targets(self.frames, self.home_snapshot, np.asarray(actual))
             self.shared = locked[0]
             self.session_map_sha = map_file(self.args.session_map, self.session, locked)
             self.write("start_anchor", source_cutoff_ns=self.anchor["source_cutoff_ns"], inputs=witnessed,
                        selected_anchor_status=self.anchor["selected_anchor_status"], session=self.session,
                        session_map_sha256=self.session_map_sha, shared_transform=self.shared.tolist(),
                        start_world_registered_wrist=registered.tolist(), runtime_native_goal=self.goal.tolist(),
+                       center_offset_mm=self.args.center_offset_mm, center_offset_world_m=[offset / 1000, 0., 0.],
                        scope=SCOPE, anatomical_mount_status="UNKNOWN", formal_coverage_credit=False)
             return selected
 
     return DiagnosticReplay, rclpy
+
+
+def pair_errors(target, actual):
+    """Euclidean position then SO(3) geodesic angle, per named left/right side."""
+    positions = np.linalg.norm(target[:, :3, 3] - actual[:, :3, 3], axis=1)
+    relative = target[:, :3, :3].transpose(0, 2, 1) @ actual[:, :3, :3]
+    angle = np.degrees(Rotation.from_matrix(relative).magnitude())
+    return np.column_stack((positions, angle)).tolist()
 
 
 def main():
@@ -176,6 +211,7 @@ def main():
     parser.add_argument("--model-receipt", type=lambda path: Path(path).resolve(), required=True)
     parser.add_argument("--root", required=True)
     parser.add_argument("--launch-pid", type=int, required=True)
+    parser.add_argument("--center-offset-mm", type=int, choices=CENTER_OFFSET_SEQUENCE_MM)
     args = parser.parse_args()
     root, anchor, frames, raw, home = load(args)
     from dexgym.tasks.direct.wholebody_s05.p02.model import RobotModel
@@ -192,6 +228,7 @@ def main():
     receipt.update(scope=SCOPE, formal_coverage_credit=False, anatomical_mount_status="UNKNOWN",
                    cumulative_campaign_credit=False, residual_enabled=False, plan_sha256=args.plan_sha256,
                    shared_frames_sha256=digest(args.frames), historical_window=anchor["historical_window"])
+    receipt["center_offset_mm"] = args.center_offset_mm
     (args.output / "input.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     Runner, rclpy = diagnostic_class()
     rclpy.init()
