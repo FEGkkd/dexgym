@@ -1,0 +1,121 @@
+{
+  "schema": "s05.dcr009.guarded_diagnostic_summary.v1",
+  "run_id": "HOME-ANCHORED-DIAGNOSTIC-DCR009-01",
+  "scope": "DIAGNOSTIC_ONLY",
+  "code_under_test_commit": "1da1a99",
+  "status": "ALL_SIX_DIAGNOSTICS_CLOSED",
+  "formal_coverage_credit": false,
+  "human_anatomical_mount_status": "UNKNOWN",
+  "actual_advanced_to_start": 0,
+  "actual_historical_root_replays": 0,
+  "native_outcome_checks": [
+    {
+      "root": "capture:1bc59d07cb650ee219d5adbf",
+      "attempt": 1,
+      "original_ledger_phase": "ABORTED",
+      "raw_fault_code": "DRIVER_NOT_COMMANDABLE",
+      "exact_published_arm_payload_matches": 159
+    },
+    {
+      "root": "capture:2151546f1c0b35e04218a1bb",
+      "attempt": 2,
+      "original_ledger_phase": "NATIVE_PROTECTIVE_HOLD_NO_HISTORY",
+      "raw_fault_code": "DRIVER_NOT_COMMANDABLE",
+      "exact_published_arm_payload_matches": 156
+    },
+    {
+      "root": "capture:2edc372773190c61446b634c",
+      "attempt": 3,
+      "original_ledger_phase": "NATIVE_PROTECTIVE_HOLD_NO_HISTORY",
+      "raw_fault_code": "DRIVER_NOT_COMMANDABLE",
+      "exact_published_arm_payload_matches": 168
+    },
+    {
+      "root": "capture:3118754b1d9742a2718048e2",
+      "attempt": 4,
+      "original_ledger_phase": "NATIVE_PROTECTIVE_HOLD_NO_HISTORY",
+      "raw_fault_code": "DRIVER_NOT_COMMANDABLE",
+      "exact_published_arm_payload_matches": 136
+    },
+    {
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "attempt": 5,
+      "original_ledger_phase": "ABORTED",
+      "raw_fault_code": "JOINT_LIMIT",
+      "exact_published_arm_payload_matches": 262
+    },
+    {
+      "root": "capture:b70297470e5e9fc8d030706e",
+      "attempt": 6,
+      "original_ledger_phase": "NATIVE_PROTECTIVE_HOLD_NO_HISTORY",
+      "raw_fault_code": "DRIVER_NOT_COMMANDABLE",
+      "exact_published_arm_payload_matches": 209
+    }
+  ],
+  "command_envelope": {
+    "published_arms": 1090,
+    "published_left_hand": 0,
+    "published_right_hand": 0,
+    "unproven_arm_requests": 5,
+    "unproven_left_hand_requests": 259,
+    "unproven_right_hand_requests": 259,
+    "servo_substep_application_qualified": false
+  },
+  "diagnostic_selected_roots_original_denominators": {
+    "roots": 6,
+    "partitions": 53,
+    "planned_ticks": 19854,
+    "joint_valid_ticks": 19649,
+    "signed_history_windows": 19019,
+    "authorized_planned_replay_after_selected_anchor_ticks": 19656
+  },
+  "original_full_hmb": {
+    "hmb_five_frame_candidate_ticks": 110796,
+    "hmb_joint_valid_ticks": 114532,
+    "partitions": 308,
+    "plan_ticks": 116613,
+    "roots": 32,
+    "validation_denominators_from_prior_signed_evidence": {
+      "hmb_five_frame_candidate_ticks": 28237,
+      "hmb_joint_valid_ticks": 29150,
+      "partitions": 80,
+      "plan_ticks": 30275,
+      "roots": 8
+    }
+  },
+  "required_coverage_percent": {
+    "active": 85,
+    "history": 70
+  },
+  "candidate_center_shift_run": false,
+  "controller_binary_sha256": "27a9bf001a5459cce099a098152cf4f1be2b51af490efda67b3b9c36d3c7d7d0",
+  "simulator_binary_sha256": "b226d4cbf4bbe7897a93c212c2e494430cbfe62da2aa97661c51e1fdd27fce59",
+  "immutable_receipt_sha256": {
+    "pilot_plan.json": "3c0268291bdb8916a9a520d3fa73a1340fffd7f9e8a7b7364a1ef9950f9a0004",
+    "run-01.json": "9d3dcad9bb01dd5f05656e99727282abb0666824a8e899966a8d041b99690d38",
+    "run-02.json": "9aa1d83290665db17a205fddd5a3f271052ce319dc5d26c84429fadefe79aad6",
+    "run-03.json": "10f39a124901c82c08a8a11347f324b35865e331a32ff1a3030b2a626d9a464c",
+    "guard-audit-01.json": "ff8e08c4a1ed95ef3d8128b0171dd7e63c1b33ea5f9f7e8d4a9c85029274f3d0",
+    "guard-audit-02.json": "3b8197e2657ff518261a0365c5e3d4ad163918431d5892934e15dcdaba93591e",
+    "guard-audit-03.json": "adf55dab8b2b24b47cab3bf9df12a999073bcec8c63f6850d49317e07ea69f3a"
+  },
+  "media": {
+    "host_bundle_sha256": "f1f9cee54bdcb96e09b0b71a0889913aa9fe1e7eab288c019837c54dbf975be6",
+    "native_h264_frames": 143,
+    "native_compilation_seconds": 5.72,
+    "review_compilation_seconds": 26.48,
+    "review_speed": 0.25,
+    "review_sha256": "c1f26681810d0f7952a49c4c6e49e9bfe8ff14620aeee254a0cec5a4e83618f6",
+    "raw_video_sha256": [
+      "16acefd6b3d03794e87d4f2d1bed4f8c4c2817b8788ab7aca3970b4befe2f84c",
+      "6dfb3759c3d2b1fa000722f527faf7a4843e73beb8b82d83293379b34ffa57dd",
+      "6033bbd6e386a20c1e43fa7f10f36743c479672f862ea25a6c38fb77ad4d9110",
+      "3f8c9f79d6571fa96a211b549a219d00ff11f26d7520cfd9a6e4bd2aa6a5b236",
+      "8f4678eefff34a688cbdec4952b44288f3f37ec531fa7d19f05751c3ba57f8af",
+      "1541827ca64e51bf123829b93ea1e9f2ba114b482a7e0b05eb53f55302c63f98"
+    ]
+  },
+  "full_rmb_build": "NOT_RUN",
+  "formal_training": "NOT_RUN",
+  "real_robot": "NOT_RUN"
+}

@@ -1,0 +1,49 @@
+{
+  "scope": "DIAGNOSTIC_ONLY",
+  "formal_coverage_credit": false,
+  "input_receipt_sha256": "9d3dcad9bb01dd5f05656e99727282abb0666824a8e899966a8d041b99690d38",
+  "run_status": "STOPPED_WITH_INCOMPLETE_DIAGNOSTICS",
+  "results": [
+    {
+      "root": "capture:1bc59d07cb650ee219d5adbf",
+      "phase": "ABORTED",
+      "start_status": "NOT_OBSERVED",
+      "historical_packets": 0,
+      "formal_coverage_credit": false,
+      "status": "PREPUBLICATION_PROOFS_MATCH",
+      "sweep_request_reasons": {
+        "PERMIT": 159,
+        "SWEEP_UNPROVEN": 79
+      },
+      "controller_pub_proven": {
+        "arm": 159,
+        "left": 0,
+        "right": 0
+      },
+      "controller_denials": {
+        "left:7": 39,
+        "right:7": 39,
+        "arm:7": 1
+      },
+      "total_observed_ros_command_messages": {
+        "arm": 159,
+        "left": 0,
+        "right": 0
+      },
+      "unbound_publish_proofs": [],
+      "observed_without_publish_receipt": {
+        "arm": [],
+        "left": [],
+        "right": []
+      },
+      "internal_home_proof": [
+        "PERMIT",
+        "PERMIT"
+      ],
+      "sweep_trace_sha256": "e04baa639b54b65c79a0aaf6bba5810db5e63e801912b84b88afff647d888974",
+      "native_trace_sha256": "30ab71f419769849cc36abf1c67cf3c493d652c99f7d9058854b5c06bebec382",
+      "plant_substep_application_qualified": false,
+      "dynamic_overshoot_qualified": false
+    }
+  ]
+}

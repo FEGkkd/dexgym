@@ -1,0 +1,171 @@
+{
+  "scope": "DIAGNOSTIC_ONLY",
+  "formal_coverage_credit": false,
+  "input_receipt_sha256": "9aa1d83290665db17a205fddd5a3f271052ce319dc5d26c84429fadefe79aad6",
+  "run_status": "STOPPED_WITH_INCOMPLETE_DIAGNOSTICS",
+  "results": [
+    {
+      "root": "capture:2151546f1c0b35e04218a1bb",
+      "phase": "NATIVE_PROTECTIVE_HOLD_NO_HISTORY",
+      "start_status": "NOT_OBSERVED",
+      "historical_packets": 0,
+      "formal_coverage_credit": false,
+      "status": "PREPUBLICATION_PROOFS_MATCH",
+      "sweep_request_reasons": {
+        "PERMIT": 156,
+        "SWEEP_UNPROVEN": 79
+      },
+      "controller_pub_proven": {
+        "arm": 156,
+        "left": 0,
+        "right": 0
+      },
+      "controller_denials": {
+        "right:7": 39,
+        "left:7": 39,
+        "arm:7": 1
+      },
+      "total_observed_ros_command_messages": {
+        "arm": 156,
+        "left": 0,
+        "right": 0
+      },
+      "unbound_publish_proofs": [],
+      "observed_without_publish_receipt": {
+        "arm": [],
+        "left": [],
+        "right": []
+      },
+      "internal_home_proof": [
+        "PERMIT",
+        "PERMIT"
+      ],
+      "sweep_trace_sha256": "51af9b1c55743bd73401ae60c37f8c2374a6e7fa124c9c14930c143db739ada9",
+      "native_trace_sha256": "a55b33dfbdf3e3695f9354135df6e7e775395a87b09fb77a8f9efdeaed052f54",
+      "plant_substep_application_qualified": false,
+      "dynamic_overshoot_qualified": false
+    },
+    {
+      "root": "capture:2edc372773190c61446b634c",
+      "phase": "NATIVE_PROTECTIVE_HOLD_NO_HISTORY",
+      "start_status": "NOT_OBSERVED",
+      "historical_packets": 0,
+      "formal_coverage_credit": false,
+      "status": "PREPUBLICATION_PROOFS_MATCH",
+      "sweep_request_reasons": {
+        "PERMIT": 168,
+        "SWEEP_UNPROVEN": 81
+      },
+      "controller_pub_proven": {
+        "arm": 168,
+        "left": 0,
+        "right": 0
+      },
+      "controller_denials": {
+        "left:7": 40,
+        "right:7": 40,
+        "arm:7": 1
+      },
+      "total_observed_ros_command_messages": {
+        "arm": 168,
+        "left": 0,
+        "right": 0
+      },
+      "unbound_publish_proofs": [],
+      "observed_without_publish_receipt": {
+        "arm": [],
+        "left": [],
+        "right": []
+      },
+      "internal_home_proof": [
+        "PERMIT",
+        "PERMIT"
+      ],
+      "sweep_trace_sha256": "39faa8dfd1180a9faef535155b41c0c8a5f001a15a492eefaf97fb52ea29d94f",
+      "native_trace_sha256": "f8336777f6ad638ed2909d07c63ac933bd607c57ec89adc1a63c0c0b93ae7ece",
+      "plant_substep_application_qualified": false,
+      "dynamic_overshoot_qualified": false
+    },
+    {
+      "root": "capture:3118754b1d9742a2718048e2",
+      "phase": "NATIVE_PROTECTIVE_HOLD_NO_HISTORY",
+      "start_status": "NOT_OBSERVED",
+      "historical_packets": 0,
+      "formal_coverage_credit": false,
+      "status": "PREPUBLICATION_PROOFS_MATCH",
+      "sweep_request_reasons": {
+        "PERMIT": 136,
+        "SWEEP_UNPROVEN": 75
+      },
+      "controller_pub_proven": {
+        "arm": 136,
+        "left": 0,
+        "right": 0
+      },
+      "controller_denials": {
+        "right:7": 37,
+        "left:7": 37,
+        "arm:7": 1
+      },
+      "total_observed_ros_command_messages": {
+        "arm": 136,
+        "left": 0,
+        "right": 0
+      },
+      "unbound_publish_proofs": [],
+      "observed_without_publish_receipt": {
+        "arm": [],
+        "left": [],
+        "right": []
+      },
+      "internal_home_proof": [
+        "PERMIT",
+        "PERMIT"
+      ],
+      "sweep_trace_sha256": "ba9e544610d0ec7394d6346a1a0ee02781b3ee6087fca86cd99c7b0e7650c120",
+      "native_trace_sha256": "75204e1054d374c44be2f1ab5b376609e85b08dac8ee13dcd9216bcce36166ab",
+      "plant_substep_application_qualified": false,
+      "dynamic_overshoot_qualified": false
+    },
+    {
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "phase": "ABORTED",
+      "start_status": "NOT_OBSERVED",
+      "historical_packets": 0,
+      "formal_coverage_credit": false,
+      "status": "PREPUBLICATION_PROOFS_MATCH",
+      "sweep_request_reasons": {
+        "PERMIT": 262,
+        "SWEEP_UNPROVEN": 122
+      },
+      "controller_pub_proven": {
+        "arm": 262,
+        "left": 0,
+        "right": 0
+      },
+      "controller_denials": {
+        "left:7": 61,
+        "right:7": 61
+      },
+      "total_observed_ros_command_messages": {
+        "arm": 262,
+        "left": 0,
+        "right": 0
+      },
+      "unbound_publish_proofs": [],
+      "observed_without_publish_receipt": {
+        "arm": [],
+        "left": [],
+        "right": []
+      },
+      "internal_home_proof": [
+        "PERMIT",
+        "PERMIT"
+      ],
+      "sweep_trace_sha256": "c286913ebd00f6dd975fa039671f0ded332693743a0abc421add3f866413260b",
+      "native_trace_sha256": "9d3468c3f5b840dad838e617ceebde028f1f438fd6f0b834cf46bf1d40e7928b",
+      "plant_substep_application_qualified": false,
+      "dynamic_overshoot_qualified": false
+    }
+  ]
+}
