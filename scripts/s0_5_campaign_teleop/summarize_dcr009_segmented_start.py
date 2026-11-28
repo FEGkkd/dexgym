@@ -146,8 +146,8 @@ def inspect(path, profile):
     return attempt, bins, end, input_records, next((row for row in trace if row["kind"] == "start_anchor"), {}), scrutiny
 
 
-def compare(original_path, segmented_path):
-    original, original_bins, original_end, original_inputs, original_anchor, original_guard = inspect(original_path, "original")
+def compare(original_path, segmented_path, original_profile="original"):
+    original, original_bins, original_end, original_inputs, original_anchor, original_guard = inspect(original_path, original_profile)
     segmented, segmented_bins, segmented_end, segmented_inputs, segmented_anchor, segmented_guard = inspect(segmented_path, "segmented")
     cutoff = original_anchor.get("source_cutoff_ns")
     if (not original_inputs or original_inputs != segmented_inputs or cutoff != segmented_anchor.get("source_cutoff_ns")
@@ -191,8 +191,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for option in ("original", "segmented", "out"):
         parser.add_argument(f"--{option}", type=Path, required=True)
+    parser.add_argument("--original-profile", choices=("original", "segmented"), default="original")
     args = parser.parse_args()
-    result = compare(args.original, args.segmented)
+    result = compare(args.original, args.segmented, args.original_profile)
     with args.out.open("x", encoding="utf-8") as stream:
         json.dump(result, stream, indent=2, allow_nan=False)
         stream.write("\n")

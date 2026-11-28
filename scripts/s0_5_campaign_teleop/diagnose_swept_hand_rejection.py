@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Attribute first per-hand sweep rejections without changing the live guard."""
+"""Attribute first per-group sweep rejections without changing the live guard."""
 
 import argparse
 from collections import Counter
@@ -14,6 +14,7 @@ import swept_live_guard as guard
 
 
 HAND_GROUPS = {1: "left_hand", 2: "right_hand"}
+ARM_GROUP = {0: "arms"}
 
 
 def _check_sources(ready_path, model_receipt_path):
@@ -50,7 +51,7 @@ def _snapshot(row):
     return states
 
 
-def replay_prefix(path, original, budget_ms):
+def replay_prefix(path, original, budget_ms, groups=HAND_GROUPS):
     selected, mismatches, counts = {}, [], Counter()
     budget_ns = budget_ms * 1_000_000
     with path.open(encoding="utf-8") as stream:
@@ -59,7 +60,7 @@ def replay_prefix(path, original, budget_ms):
             sequence, group, name = row["sequence"], row["group"], row["reason"]
             counts[name] += 1
             states = _snapshot(row)
-            target = group in HAND_GROUPS and name == "SWEEP_UNPROVEN" and group not in selected
+            target = group in groups and name == "SWEEP_UNPROVEN" and group not in selected
             if states is not None:
                 if type(sequence) is not int or type(group) is not int or sequence <= 0 or group not in (0, 1, 2):
                     raise ValueError(f"Malformed finite row at line {lineno}")
@@ -75,11 +76,11 @@ def replay_prefix(path, original, budget_ms):
                 if target:
                     selected[group] = (row, states, caches, replay_reason.name, lineno)
             elif target:
-                raise ValueError(f"The selected hand rejection lacks a state at line {lineno}")
-            if selected.keys() == HAND_GROUPS.keys():
+                raise ValueError(f"The selected sweep rejection lacks a state at line {lineno}")
+            if selected.keys() == groups.keys():
                 break
-    if selected.keys() != HAND_GROUPS.keys():
-        raise ValueError(f"The baseline trace has no SWEEP_UNPROVEN row for each hand: {list(selected)}")
+    if selected.keys() != groups.keys():
+        raise ValueError(f"The trace has no SWEEP_UNPROVEN row for groups {groups.keys() - selected.keys()}")
     return selected, mismatches, dict(counts)
 
 
@@ -194,6 +195,7 @@ def main():
     for key in ("trace", "live-model", "signed-model", "model-receipt", "out"):
         parser.add_argument(f"--{key}", type=Path, required=True)
     parser.add_argument("--ready", type=Path, help="Original sweep-ready.json beside the trace by default")
+    parser.add_argument("--arms", action="store_true", help="Attribute the first whole-arm failure instead of both hands")
     args = parser.parse_args()
     ready_path = args.ready or args.trace.with_name("sweep-ready.json")
     ready, models = _check_sources(ready_path, args.model_receipt)
@@ -202,7 +204,8 @@ def main():
     code = guard.Guard((live, signed))
     if ready["joint_names"] != list(code.names) or ready["actuator_names"] != list(code.actuators):
         raise ValueError("The reconstructed named 54-axis order differs from the original")
-    selected, mismatches, counts = replay_prefix(args.trace, code, ready["budget_ms"])
+    groups = ARM_GROUP if args.arms else HAND_GROUPS
+    selected, mismatches, counts = replay_prefix(args.trace, code, ready["budget_ms"], groups)
     witnesses = []
     for group, (row, states, caches, same_budget, lineno) in sorted(selected.items()):
         analysis = {key: diagnose_model(robot, states, cache) for key, robot, cache in
@@ -211,7 +214,8 @@ def main():
         reproduced = (same_budget == row["reason"] and first_reject is not None
                       and analysis[first_reject]["result"] == row["reason"] and not mismatches)
         witnesses.append({
-            "hand": HAND_GROUPS[group], "sequence": row["sequence"], "trace_line": lineno,
+            "sequence": row["sequence"], "trace_line": lineno,
+            ("group" if args.arms else "hand"): groups[group],
             "recorded_reason": row["reason"], "same_budget_offline_replay_reason": same_budget,
             "recorded_proof_duration_ms": (row["proof_complete_ns"] - row["receipt_ns"]) / 1e6,
             "original_first_failing_model_reproduced": first_reject if reproduced else None,
