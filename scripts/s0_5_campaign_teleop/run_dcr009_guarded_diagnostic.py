@@ -26,6 +26,7 @@ YAW_BASELINE_CONTROLLER_SHA256 = "9f95f3f6fb38f2db225f9f69fa57a24492daada252570f
 YAW_BASELINE_DRIVER_SHA256 = "b226d4cbf4bbe7897a93c212c2e494430cbfe62da2aa97661c51e1fdd27fce59"
 YAW_BASELINE_GUARD_SHA256 = "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909"
 STAGED_START_CONTROLLER_SHA256 = "13ed4843a57fdf1b58ac7ac78202b0d2ef0f686b1b468e78a5aa73d38f9adcc9"
+HISTORY_CONTROLLER_SHA256 = "9a4a318b11984a1659284cb3c38e8f382ff3de8539f14f495f6ca335e8016376"
 
 
 def evidence_summary(path, audited_stop=False):
@@ -123,6 +124,8 @@ def attempt(args, index, selection, cancelled):
         result["wrist_first_fingers"] = True
     if args.replay_root_five_history:
         result["replay_root_five_history"] = True
+    if args.allow_one_unproven_arm:
+        result["simulation_guard_exception"] = "SIMULATION_ONLY_ALLOW_ONE_UNPROVEN_ARM_SWEEP"
     save(result_file, result)
     children = []
     deadline = time.monotonic() + 180
@@ -163,6 +166,10 @@ def attempt(args, index, selection, cancelled):
                 "--model-receipt", str(args.model_receipt), "--socket", str(endpoint), "--ready", str(ready),
                 "--trace", str(path / "sweep-trace.jsonl"), "--budget-ms", "25",
             ]
+            if args.allow_one_unproven_arm:
+                guard_command[2] = str(SCRIPTS / "simulate_one_unproven_sweep.py")
+                guard_command.extend(("--stage", str(stage_marker), "--exception-log", str(path / "guard-exception.jsonl"),
+                                      "--mode-receipt", str(path / "guard-mode.json"), "--root", selection["root"]))
             with (path / "guard.log").open("w", encoding="utf-8") as guard_log:
                 guard = subprocess.Popen(guard_command, env=env, stdout=guard_log, stderr=subprocess.STDOUT, start_new_session=True)
                 children.append(guard)
@@ -184,6 +191,15 @@ def attempt(args, index, selection, cancelled):
                     or configuration["guard_script_sha256"] != digest(SCRIPTS / "swept_live_guard.py")):
                 raise RuntimeError("Sweep guard readiness names an unexpected process, socket, or model")
             result["guard_ready_sha256"] = digest(ready)
+            if args.allow_one_unproven_arm:
+                guard_mode = path / "guard-mode.json"
+                exception_mode = json.loads(guard_mode.read_bytes())
+                if (exception_mode["mode"] != result["simulation_guard_exception"]
+                        or exception_mode["root"] != ROOT_FIVE or exception_mode["max_exceptions"] != 1
+                        or exception_mode["wrapper_sha256"] != digest(SCRIPTS / "simulate_one_unproven_sweep.py")
+                        or exception_mode["strict_guard_sha256"] != configuration["guard_script_sha256"]):
+                    raise ValueError("The isolated single-exception guard mode differs")
+                result["guard_mode_sha256"] = digest(guard_mode)
             launch = ["ros2", "launch", "whole_body_bringup", "sim.launch.py"]
             with (path / "sim.log").open("w", encoding="utf-8") as sim_log, (path / "replay.log").open("w", encoding="utf-8") as replay_log:
                 sim = subprocess.Popen(launch, env=env, stdout=sim_log, stderr=subprocess.STDOUT, start_new_session=True)
@@ -223,6 +239,11 @@ def attempt(args, index, selection, cancelled):
             result.update(phase="ABORTED", error=str(error))
         finally:
             result["owned_groups_stopped"] = all([stop_owned_group(p) for p in reversed(children)])
+            if args.allow_one_unproven_arm and (path / "guard-exception.jsonl").is_file():
+                exception_trace = path / "guard-exception.jsonl"
+                records = exception_trace.read_bytes().splitlines()
+                result["guard_exception_trace_sha256"] = digest(exception_trace)
+                result["guard_exception_count"] = len(records)
             try:
                 result["same_domain_empty_after"] = graph_empty(env, path / "cleanup-ros.log", attempts=3)
             except (OSError, subprocess.SubprocessError) as error:
@@ -310,6 +331,7 @@ def main():
     parser.add_argument("--align-start-yaw-to-home", action="store_true")
     parser.add_argument("--wrist-first-fingers", action="store_true")
     parser.add_argument("--replay-root-five-history", action="store_true")
+    parser.add_argument("--allow-one-unproven-arm", action="store_true")
     parser.add_argument("--domain", type=int, choices=DOMAINS, required=True)
     args = parser.parse_args()
     if os.name != "posix" or not args.output.parent.is_dir():
@@ -332,6 +354,10 @@ def main():
         not args.wrist_first_fingers or args.resume_from or args.controller_sha256 == STAGED_START_CONTROLLER_SHA256
     ):
         raise ValueError("A single wrist-first root-five history requires the dedicated STOP-audited native controller")
+    if args.allow_one_unproven_arm and (
+        not args.replay_root_five_history or args.domain != 213 or args.controller_sha256 != HISTORY_CONTROLLER_SHA256
+    ):
+        raise ValueError("The one-step exception requires the exact prior isolated root-five history controller")
     plan = json.loads(args.plan.read_bytes())
     roster = check_scope(plan)
     roots = verified_roots(args.cohort, SCRIPTS.parents[1] / "docs/s0-5")
@@ -365,6 +391,8 @@ def main():
     if args.replay_root_five_history:
         ledger["experiment"] = "ROOT_FIVE_WRIST_FIRST_GUARDED_HISTORY"
         ledger["replay_root_five_history"] = True
+    if args.allow_one_unproven_arm:
+        ledger["experiment"] = "ROOT_FIVE_ONE_SWEEP_UNPROVEN_PASS"
     if prior:
         ledger["prior_closed_attempt_count"] = prior
         ledger["prior_run_receipt_sha256"] = digest(args.resume_from[-1] / "run_receipt.json")
