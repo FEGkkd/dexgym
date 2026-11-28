@@ -1,0 +1,25 @@
+{
+  "source_run": "HOME-ANCHORED-DIAGNOSTIC-DCR009-ROOT05-CENTERS-01",
+  "comparison_sha256": "22a1a531cb5a2c317813618143cefc6189a151b243ecebd96047a105a843da84",
+  "delivery_archive_sha256": "eca3612bdaf05812686e8b66f46dc1293aa10cf86b47ee237f9906141e74ef2d",
+  "native_experiment_code": "1bb8eb7",
+  "actual_summary_and_media_code": "8fdf4f6",
+  "sweep_script_unchanged": true,
+  "starting_comparison_seconds": 0.22,
+  "display_speed": 0.25,
+  "display_end_hold_seconds": 1,
+  "video_seconds": 4.84,
+  "video_h264_width_height": [
+    2160,
+    480
+  ],
+  "comparison_media_sha256": {
+    "original-vs-left-20mm.mp4": "bf53e0fd163c9197595779e18e432fc628cbf632da42440a047ec5569aca9408",
+    "original-vs-left-20mm.png": "dd318f111c161cc4211af49e9f7039da77c874552908632aee8b07d8ca487cb9"
+  },
+  "source_clips": [
+    "1a413bc918aaeab6378bc68abf6144dae686f9a3f420d83c615d6dce2c06e2bd",
+    "d92e51ff626a93972d07a7bc990da5460d98f9d7745d34cc25260a7e649d06dd"
+  ],
+  "residual_enabled": false
+}

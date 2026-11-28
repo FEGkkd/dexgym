@@ -516,6 +516,12 @@ def main():
                        args.preposition_from_seconds)
     args.out.mkdir(exist_ok=False, parents=True)
     report = write_video(rows, args.out, painter, robot, args.fps, args.ffmpeg)
+    if historical:
+        input_mode = "SIGNED_HMB_REPLAY"
+    elif args.preposition_from_seconds is not None:
+        input_mode = "FROZEN_SIGNED_START_PREPOSITION"
+    else:
+        input_mode = "FROZEN_SIGNED_START_NO_HISTORICAL_REPLAY"
     report.update({"schema": "s05.teleop.dcr009_guarded_diagnostic_video.v1", "scope": "DIAGNOSTIC_ONLY",
                    "formal_coverage_credit": False, "root": result["root"], "split": "Train",
                    "native_result_sha256": digest(args.attempt / "result.json"), "source_trace_sha256": result["trace_sha256"],
@@ -523,7 +529,7 @@ def main():
                    "plan_sha256": digest(args.plan), "cohort_sha256": digest(args.cohort),
                    "anchor_sha256": digest(anchor_path), "actual_model_sha256": model_sha,
                    "anatomical_mount_status": "UNKNOWN", "locked_map_from_actual_native_start": trace["locked"] is not None,
-                   "original_input_mode": "SIGNED_HMB_REPLAY" if historical else "FROZEN_SIGNED_START_PREPOSITION",
+                   "original_input_mode": input_mode,
                    "center_offset_mm": center, "preposition_from_seconds": args.preposition_from_seconds,
                    "feedback": "Same-header four native MuJoCo groups; FK only; monotonic receipt cutoff and 40 ms freshness",
                    "timing": "Historical samples chosen at preceding signed HMB cutoff with recorded ROS epoch. Preposition uses actual observer monotonic receipt time.",
