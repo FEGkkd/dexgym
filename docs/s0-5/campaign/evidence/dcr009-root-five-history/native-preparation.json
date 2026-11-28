@@ -1,0 +1,12 @@
+{
+  "scope": "ROOT_FIVE_GUARDED_HISTORY_STOP_AUDIT",
+  "baseline": {
+    "src/teleop_controller_node.cpp": "ba43d3413c60b16e8b46cf6bb29f702e1035a221569d640b600a00349277f268",
+    "include/tianji_teleop_controller/teleop_controller_node.hpp": "3cb33fc6509f3d19386e6a594b55d089626792e3b1232d92424418a57a73aa9d",
+    "include/tianji_teleop_controller/dcr009_teleop_guard.hpp": "5995ef2830a216d3787bd86b3cc55b25726621e9da61ca5dd1b87c984654ce82"
+  },
+  "updated": {
+    "src/teleop_controller_node.cpp": "532ddb926d3c1e808d836beef546574e39447a0f97e1f791dae7ef3c1a1e83a9",
+    "include/tianji_teleop_controller/teleop_controller_node.hpp": "8b40049d89e89833520bb1a77200ff950655b90991ccedc0f760f7b1e7f6541d"
+  }
+}

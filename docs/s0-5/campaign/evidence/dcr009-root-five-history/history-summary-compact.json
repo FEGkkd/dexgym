@@ -1,0 +1,842 @@
+{
+  "scope": "DIAGNOSTIC_ONLY_ROOT_FIVE_HISTORY",
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "formal_coverage_credit": false,
+  "original_full_root_denominators": {
+    "hmb_five_frame_candidate_ticks": 4741,
+    "hmb_joint_valid_ticks": 4831,
+    "partitions": 13,
+    "plan_ticks": 4844
+  },
+  "frozen_window": {
+    "hmb_cutoff_start_ns": 800000000,
+    "hmb_cutoff_stop_exclusive_ns": 96868267152,
+    "hmb_five_frame_candidate_ticks": 4708,
+    "hmb_joint_valid_ticks": 4794,
+    "partitions": [
+      {
+        "first_tick": 40,
+        "hmb_five_frame_candidate_ticks": 360,
+        "hmb_joint_valid_ticks": 360,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+        "plan_ticks": 360
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 381,
+        "hmb_joint_valid_ticks": 397,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00001",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00002",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00003",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00005",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00006",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 391,
+        "hmb_joint_valid_ticks": 399,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00007",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 368,
+        "hmb_joint_valid_ticks": 394,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00008",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00010",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00011",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 40,
+        "hmb_joint_valid_ticks": 44,
+        "last_tick": 43,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00012",
+        "plan_ticks": 44
+      }
+    ],
+    "plan_ticks": 4804,
+    "source_cutoff_start_ns": 621699543607975,
+    "source_cutoff_stop_exclusive_ns": 621795611875127
+  },
+  "source_files_sha256": {
+    "native_trace": "335151150f57a3a43ae048e751c5674e11931c3ef65b8e035e78ae0980edf28c",
+    "input_receipt": "dc59579652ef97aba2a416bcf94097e9533b0f966faa4c0209491f458c7d67a3",
+    "cohort": "7d6c4702229aefd0d564f76dfae5a2a7b62a0340b9c4cae43fea512cc2d531c2",
+    "plan": "3c0268291bdb8916a9a520d3fa73a1340fffd7f9e8a7b7364a1ef9950f9a0004",
+    "live_model": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "swept_trace": "c7accfca453960fac3b30688af5da958345b75ff4f1bf5b01753bb88672addff"
+  },
+  "start_handoff": {
+    "kind": "start_handoff",
+    "stage": "preposition_start",
+    "mono_ns": 171436933497204,
+    "log_est_ns": null,
+    "status": "START_REACHED",
+    "measurement": {
+      "wrist_error_m_deg": [
+        [
+          0.0000022974593183356233,
+          0.0005569627860082453
+        ],
+        [
+          0.0000016082978610678339,
+          0.0003427837836841969
+        ]
+      ],
+      "hand_error_to_issued_rad": [
+        0.00002514645811375893,
+        8.721495747820995E-14
+      ],
+      "measured_speed_rad_s": 0.0012817823496418504,
+      "named_q_rad": {
+        "left_j1": 1.695155066489947,
+        "left_j2": -1.5432571744231793,
+        "left_j3": -1.609455406887688,
+        "left_j4": -1.6860897684963356,
+        "left_j5": 1.1855274478170217,
+        "left_j6": -0.20026283657321145,
+        "left_j7": 0.053749000950404094,
+        "l_THJ0": -0.3466818148119784,
+        "l_THJ1": -0.26431747112543263,
+        "l_THJ2": 1.049221607175587,
+        "l_THJ3": -0.0068358451063239385,
+        "l_FFJ0": 0.5476963972640683,
+        "l_FFJ1": -0.2836956722862856,
+        "l_FFJ2": 0.03446745950306899,
+        "l_FFJ3": 0.12336089404403666,
+        "l_MFJ0": 0.49633056855583024,
+        "l_MFJ1": -0.11910724184682273,
+        "l_MFJ2": -0.000056575003637018597,
+        "l_MFJ3": 0.003912189702576807,
+        "l_RFJ0": 0.3743931668669276,
+        "l_RFJ1": -0.0587187606102404,
+        "l_RFJ2": 0.1879911336233338,
+        "l_RFJ3": 0.1072671946617475,
+        "l_LFJ0": 0.1067382328247672,
+        "l_LFJ1": 0.00753196121429164,
+        "l_LFJ2": 0.5254650374346133,
+        "l_LFJ3": 0.17915962099064492,
+        "right_j1": -1.5739908741881992,
+        "right_j2": -1.6062011823873283,
+        "right_j3": 1.5320368218494693,
+        "right_j4": -1.490621622765003,
+        "right_j5": -1.2620487537289002,
+        "right_j6": 0.07798267596211923,
+        "right_j7": -0.4573368774285749,
+        "r_THJ0": 0.3721073269844261,
+        "r_THJ1": -0.5194194316863926,
+        "r_THJ2": 0.8870668411255043,
+        "r_THJ3": 0.037525933235886565,
+        "r_FFJ0": 0.925989747047425,
+        "r_FFJ1": -0.019099131226515683,
+        "r_FFJ2": 0.10096610337495929,
+        "r_FFJ3": 0.05669924244284636,
+        "r_MFJ0": 0.7607223987579271,
+        "r_MFJ1": 0.047848559916106655,
+        "r_MFJ2": 0.09090341627597621,
+        "r_MFJ3": 0.17296427488326968,
+        "r_RFJ0": 0.6078831553459039,
+        "r_RFJ1": 0.004774133209178988,
+        "r_RFJ2": 0.2819128334522214,
+        "r_RFJ3": 0.2283656746149057,
+        "r_LFJ0": 0.28237292170523876,
+        "r_LFJ1": -0.025380415841923607,
+        "r_LFJ2": 0.9116518497467002,
+        "r_LFJ3": 0.16498272120952528
+      },
+      "active_task": true,
+      "feedback_header_ns": 1795860910630070422,
+      "arms_accepted": true,
+      "arm_publish_status": [
+        "ACCEPTED",
+        "ACCEPTED"
+      ],
+      "shared_transform": [
+        [
+          -0.0752192084444463,
+          0.0,
+          0.9971670224596234,
+          0.6351897099240722
+        ],
+        [
+          0.9971670224596234,
+          0.0,
+          0.0752192084444463,
+          0.023365696584624895
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          1.8941930705055054
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "native_goal": [
+        [
+          [
+            -0.16372012573140218,
+            0.05769922193964607,
+            0.9848180137558676,
+            0.38945397936239257
+          ],
+          [
+            -0.34053140603976945,
+            0.9336210305671432,
+            -0.11131097332842999,
+            0.296804896161945
+          ],
+          [
+            -0.9258693654782357,
+            -0.3535853094661941,
+            -0.13320415533542565,
+            0.1820723137147064
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        [
+          [
+            0.06608540882620258,
+            -0.3570952054575296,
+            0.9317272846597972,
+            0.416762278092439
+          ],
+          [
+            0.32907081622070977,
+            0.8893273768420513,
+            0.3175046688020055,
+            -0.3003185213323409
+          ],
+          [
+            -0.941989976938242,
+            0.28562183221609627,
+            0.17628117400735266,
+            0.1668003769214602
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      ],
+      "session_map_sha256": "ec6686a3503521f20703a96c4013aab1e54c001c6f8ec6b44ad359f8f244a146",
+      "arm_guard_proof": "5900",
+      "hand_error_to_unsegmented_wuji_rad": [
+        0.00002514645811375893,
+        8.940696383241686E-8
+      ],
+      "hand_segment_guard_proofs": [
+        5894,
+        5895
+      ],
+      "finger_stage_readbacks": {
+        "left": {
+          "stage": 11,
+          "proof": 5894,
+          "command_sequence": 805,
+          "command_header_ns": 1795860910620856136,
+          "raw_wuji_target_rad": {
+            "l_THJ0": -0.34668150544166565,
+            "l_THJ1": -0.26431751251220703,
+            "l_THJ2": 1.0492216348648071,
+            "l_THJ3": -0.006835836451500654,
+            "l_FFJ0": 0.5476972460746765,
+            "l_FFJ1": -0.28369569778442383,
+            "l_FFJ2": 0.03446752950549126,
+            "l_FFJ3": 0.12336094677448273,
+            "l_MFJ0": 0.4963313639163971,
+            "l_MFJ1": -0.11910726130008698,
+            "l_MFJ2": -0.000056565604609204456,
+            "l_MFJ3": 0.003912229090929031,
+            "l_RFJ0": 0.374393492937088,
+            "l_RFJ1": -0.058718763291835785,
+            "l_RFJ2": 0.1879911571741104,
+            "l_RFJ3": 0.10726721584796906,
+            "l_LFJ0": 0.10671308636665344,
+            "l_LFJ1": 0.0075319609604775906,
+            "l_LFJ2": 0.5254648923873901,
+            "l_LFJ3": 0.17915910482406616
+          },
+          "issued_target_rad": {
+            "l_THJ0": -0.34668150544166565,
+            "l_THJ1": -0.26431751251220703,
+            "l_THJ2": 1.0492216348648071,
+            "l_THJ3": -0.006835836451500654,
+            "l_FFJ0": 0.5476972460746765,
+            "l_FFJ1": -0.28369569778442383,
+            "l_FFJ2": 0.03446752950549126,
+            "l_FFJ3": 0.12336094677448273,
+            "l_MFJ0": 0.4963313639163971,
+            "l_MFJ1": -0.11910726130008698,
+            "l_MFJ2": -0.000056565604609204456,
+            "l_MFJ3": 0.003912229090929031,
+            "l_RFJ0": 0.374393492937088,
+            "l_RFJ1": -0.058718763291835785,
+            "l_RFJ2": 0.1879911571741104,
+            "l_RFJ3": 0.10726721584796906,
+            "l_LFJ0": 0.10671308636665344,
+            "l_LFJ1": 0.0075319609604775906,
+            "l_LFJ2": 0.5254648923873901,
+            "l_LFJ3": 0.17915910482406616
+          },
+          "issued_error_rad": {
+            "l_THJ0": 0.0,
+            "l_THJ1": 0.0,
+            "l_THJ2": 0.0,
+            "l_THJ3": 0.0,
+            "l_FFJ0": 0.0,
+            "l_FFJ1": 0.0,
+            "l_FFJ2": 0.0,
+            "l_FFJ3": 0.0,
+            "l_MFJ0": 0.0,
+            "l_MFJ1": 0.0,
+            "l_MFJ2": 0.0,
+            "l_MFJ3": 0.0,
+            "l_RFJ0": 0.0,
+            "l_RFJ1": 0.0,
+            "l_RFJ2": 0.0,
+            "l_RFJ3": 0.0,
+            "l_LFJ0": 0.0,
+            "l_LFJ1": 0.0,
+            "l_LFJ2": 0.0,
+            "l_LFJ3": 0.0
+          },
+          "measured_error_rad": {
+            "l_THJ0": 3.093703127565739E-7,
+            "l_THJ1": 4.1386774396467985E-8,
+            "l_THJ2": 2.7689220027937722E-8,
+            "l_THJ3": 8.65482328426398E-9,
+            "l_FFJ0": 8.48810608244932E-7,
+            "l_FFJ1": 2.549813821195457E-8,
+            "l_FFJ2": 7.00024222685669E-8,
+            "l_FFJ3": 5.273044606513011E-8,
+            "l_MFJ0": 7.953605668520325E-7,
+            "l_MFJ1": 1.9453264249458257E-8,
+            "l_MFJ2": 9.399027814140364E-9,
+            "l_MFJ3": 3.938835222479925E-8,
+            "l_RFJ0": 3.2607016042796033E-7,
+            "l_RFJ1": 2.681595383247082E-9,
+            "l_RFJ2": 2.355077660665117E-8,
+            "l_RFJ3": 2.1186221554891915E-8,
+            "l_LFJ0": 0.00002514645811375893,
+            "l_LFJ1": 2.5381404963886744E-10,
+            "l_LFJ2": 1.4504722312125296E-7,
+            "l_LFJ3": 5.161665787567493E-7
+          }
+        },
+        "right": {
+          "stage": 11,
+          "proof": 5895,
+          "command_sequence": 805,
+          "command_header_ns": 1795860910621371813,
+          "raw_wuji_target_rad": {
+            "r_THJ0": 0.3721073269844055,
+            "r_THJ1": -0.5194194316864014,
+            "r_THJ2": 0.8870668411254883,
+            "r_THJ3": 0.03752593323588371,
+            "r_FFJ0": 0.9259897470474243,
+            "r_FFJ1": -0.019099131226539612,
+            "r_FFJ2": 0.10096610337495804,
+            "r_FFJ3": 0.0566992424428463,
+            "r_MFJ0": 0.7607223987579346,
+            "r_MFJ1": 0.04784855991601944,
+            "r_MFJ2": 0.09090341627597809,
+            "r_MFJ3": 0.17296427488327026,
+            "r_RFJ0": 0.6078832149505615,
+            "r_RFJ1": 0.004774162080138922,
+            "r_RFJ2": 0.28191274404525757,
+            "r_RFJ3": 0.2283656895160675,
+            "r_LFJ0": 0.28237292170524597,
+            "r_LFJ1": -0.025380415841937065,
+            "r_LFJ2": 0.9116518497467041,
+            "r_LFJ3": 0.16498272120952606
+          },
+          "issued_target_rad": {
+            "r_THJ0": 0.3721073269844055,
+            "r_THJ1": -0.5194194316864014,
+            "r_THJ2": 0.8870668411254883,
+            "r_THJ3": 0.03752593323588371,
+            "r_FFJ0": 0.9259897470474243,
+            "r_FFJ1": -0.019099131226539612,
+            "r_FFJ2": 0.10096610337495804,
+            "r_FFJ3": 0.0566992424428463,
+            "r_MFJ0": 0.7607223987579346,
+            "r_MFJ1": 0.04784855991601944,
+            "r_MFJ2": 0.09090341627597809,
+            "r_MFJ3": 0.17296427488327026,
+            "r_RFJ0": 0.6078831553459167,
+            "r_RFJ1": 0.004774133209139109,
+            "r_RFJ2": 0.28191283345222473,
+            "r_RFJ3": 0.2283656746149063,
+            "r_LFJ0": 0.28237292170524597,
+            "r_LFJ1": -0.025380415841937065,
+            "r_LFJ2": 0.9116518497467041,
+            "r_LFJ3": 0.16498272120952606
+          },
+          "issued_error_rad": {
+            "r_THJ0": 0.0,
+            "r_THJ1": 0.0,
+            "r_THJ2": 0.0,
+            "r_THJ3": 0.0,
+            "r_FFJ0": 0.0,
+            "r_FFJ1": 0.0,
+            "r_FFJ2": 0.0,
+            "r_FFJ3": 0.0,
+            "r_MFJ0": 0.0,
+            "r_MFJ1": 0.0,
+            "r_MFJ2": 0.0,
+            "r_MFJ3": 0.0,
+            "r_RFJ0": 5.960464477539063E-8,
+            "r_RFJ1": 2.8870999813079834E-8,
+            "r_RFJ2": 8.940696716308594E-8,
+            "r_RFJ3": 1.4901161193847656E-8,
+            "r_LFJ0": 0.0,
+            "r_LFJ1": 0.0,
+            "r_LFJ2": 0.0,
+            "r_LFJ3": 0.0
+          },
+          "measured_error_rad": {
+            "r_THJ0": 2.0594637106796654E-14,
+            "r_THJ1": 8.770761894538737E-15,
+            "r_THJ2": 1.5987211554602254E-14,
+            "r_THJ3": 2.851885394505871E-15,
+            "r_FFJ0": 6.661338147750939E-16,
+            "r_FFJ1": 2.3928775627624077E-14,
+            "r_FFJ2": 1.2490009027033011E-15,
+            "r_FFJ3": 6.245004513516506E-17,
+            "r_MFJ0": 7.438494264988549E-15,
+            "r_MFJ1": 8.721495747820995E-14,
+            "r_MFJ2": 1.8735013540549517E-15,
+            "r_MFJ3": 5.828670879282072E-16,
+            "r_RFJ0": 5.960465765397771E-8,
+            "r_RFJ1": 2.8870959933521845E-8,
+            "r_RFJ2": 8.940696383241686E-8,
+            "r_RFJ3": 1.490116180447032E-8,
+            "r_LFJ0": 7.216449660063518E-15,
+            "r_LFJ1": 1.345798472662807E-14,
+            "r_LFJ2": 3.885780586188048E-15,
+            "r_LFJ3": 7.771561172376096E-16
+          }
+        }
+      },
+      "wrist_original_error_m_deg": [
+        [
+          0.38076816803068503,
+          85.68608476787325
+        ],
+        [
+          0.35318840996895134,
+          85.68646693524609
+        ]
+      ],
+      "registered_wrist_error_m_deg": [
+        [
+          0.06755097083579048,
+          119.03905743026891
+        ],
+        [
+          0.04658179233492625,
+          122.47350948830714
+        ]
+      ]
+    },
+    "elapsed_s": 17.360722797,
+    "continue_after_miss": false,
+    "wrist_first_fingers": true,
+    "terminal_finger_stage": 11
+  },
+  "historical_window_intent": {
+    "kind": "historical_window_intent",
+    "stage": "preposition_start",
+    "mono_ns": 171436939821529,
+    "log_est_ns": null,
+    "packets_by_topic": {
+      "/manus_glove_left": 11528,
+      "/manus_glove_right": 11528,
+      "/vive/tracker/left_wrist": 11528,
+      "/vive/tracker/right_wrist": 11528
+    },
+    "expected_packets": 46112,
+    "source_cutoff_start_ns": 621699543607975,
+    "source_cutoff_stop_exclusive_ns": 621795611875127,
+    "planned_hmb_ticks": 4804,
+    "shared_transform": [
+      [
+        -0.0752192084444463,
+        0.0,
+        0.9971670224596234,
+        0.6351897099240722
+      ],
+      [
+        0.9971670224596234,
+        0.0,
+        0.0752192084444463,
+        0.023365696584624895
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        1.8941930705055054
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "session": "s05-dcr009-34de381e-d136-4ded-8e34-a28f4b06bd80"
+  },
+  "recorded_timebase": {
+    "kind": "timebase",
+    "stage": "historical_human_inputs",
+    "mono_ns": 171436973170327,
+    "log_est_ns": 1794488008952472215,
+    "epoch_delta_ns": 1372901728709465,
+    "origin_log_ns": 1794488008952280235,
+    "origin_mono_ns": 171436972978347,
+    "origin_schedule_ns": 621699543607975
+  },
+  "input_counts_all_stages": {
+    "synthetic_start_warmup": 104,
+    "preposition_start": 3116,
+    "historical_human_inputs": 1271
+  },
+  "matched_historical_packets": {
+    "expected_packets": 46112,
+    "observed_publication_records": 1271,
+    "matched_source_prefix_packets": 1271,
+    "expected_by_topic": {
+      "/manus_glove_left": 11528,
+      "/manus_glove_right": 11528,
+      "/vive/tracker/left_wrist": 11528,
+      "/vive/tracker/right_wrist": 11528
+    },
+    "observed_by_topic": {
+      "/manus_glove_left": 318,
+      "/manus_glove_right": 318,
+      "/vive/tracker/left_wrist": 317,
+      "/vive/tracker/right_wrist": 318
+    },
+    "unobserved_original_suffix_packets": 44841,
+    "packet_identity_status": "PARTIAL_PREFIX",
+    "first_mismatch": null,
+    "verified_per_packet_original_cdr_hashes_in_prefix": 1271,
+    "expected_ordered_cdr_digest": "dd6bd04430bf74a372f851d0ca32fc612d4bffcb9304366a678a2e2cd66f858c",
+    "complete_replayer_cdr_seal_matches": false,
+    "publication_observer_lag_ms": {
+      "n": 1271,
+      "max": 41.870505,
+      "p50": 1.076047,
+      "p95": 3.2959959999999997,
+      "p99": 21.78485179999999
+    },
+    "early_publication_observations": 0,
+    "last_matched": {
+      "kind": "input",
+      "stage": "historical_human_inputs",
+      "mono_ns": 171439619534832,
+      "log_est_ns": 1794488011598836720,
+      "topic": "/vive/tracker/right_wrist",
+      "original_log_ns": 1794488011597749893,
+      "original_schedule_ns": 621702189077638,
+      "record_index": 820,
+      "original_stamp_ns": 1794488011597522070,
+      "published_stamp_ns": 1795860913326231535,
+      "cdr_sha256": "696d1f47d267b072db61a1df28962cf3d3d5a152a8f7391ac50bf99b80656f25"
+    },
+    "first_unmatched_original": {
+      "topic": "/vive/tracker/left_wrist",
+      "record_index": 820,
+      "original_log_ns": 1794488011597864304,
+      "original_schedule_ns": 621702189192056,
+      "original_stamp_ns": 1794488011597522070,
+      "cdr_sha256": "3bc6147bb7805bc645846d52dfb0447436027efe5f77568ebd4e57e21a735b96"
+    }
+  },
+  "observed_historical_command_messages": {
+    "/tianji/joint_command": 509,
+    "/left_hand/command": 278,
+    "/right_hand/command": 225
+  },
+  "feedback_complete_named_history_frames": 265,
+  "hmb_tick_status_counts": {
+    "NO_FRESH_CAUSAL_54_AXIS_FEEDBACK": 3,
+    "OBSERVED_TCP": 130,
+    "ORIGINAL_INPUT_PREFIX_NOT_REACHED": 4671
+  },
+  "wrist_tcp_error": {
+    "left": {
+      "position_mm": {
+        "n": 130,
+        "max": 0.9654687513628516,
+        "p50": 0.2334672102975573,
+        "p95": 0.7601798357445557,
+        "p99": 0.8909931763591981
+      },
+      "orientation_deg": {
+        "n": 130,
+        "max": 0.8831388886518703,
+        "p50": 0.10117879493984033,
+        "p95": 0.47257419304963766,
+        "p99": 0.7509537603502461
+      }
+    },
+    "right": {
+      "position_mm": {
+        "n": 130,
+        "max": 1.3572065972797223,
+        "p50": 0.4132163155082248,
+        "p95": 0.9251617767382349,
+        "p99": 0.9927054047727218
+      },
+      "orientation_deg": {
+        "n": 130,
+        "max": 0.7480685944785748,
+        "p50": 0.1546594220008469,
+        "p95": 0.6004960620689866,
+        "p99": 0.7284877792858514
+      }
+    }
+  },
+  "last_scored_hmb_tick": {
+    "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+    "partition_tick": 172,
+    "hmb_cutoff_ns": 3440000000,
+    "original_schedule_ns": 621702183607975,
+    "original_hmb_joint_valid": true,
+    "original_five_frame_candidate": true,
+    "replay_cutoff_mono_ns": 171439612978347,
+    "replay_cutoff_ros_ns": 1795860913320989700,
+    "feedback_arrival_mono_ns": 171439611948229,
+    "feedback_header_ros_ns": 1795860913320054080,
+    "wrists": [
+      {
+        "side": "left",
+        "xyz_error_mm": [
+          -0.21417910728865897,
+          -0.2509921661018599,
+          0.4084410703457664
+        ],
+        "position_mm": 0.5250655819882558,
+        "orientation_deg": 0.4651441183673254,
+        "target_world_xyz_m": [
+          0.2712911533509178,
+          -0.38943948322226624,
+          0.9516378861366726
+        ],
+        "actual_world_xyz_m": [
+          0.27107697424362914,
+          -0.3896904753883681,
+          0.9520463272070183
+        ]
+      },
+      {
+        "side": "right",
+        "xyz_error_mm": [
+          0.49894444061077126,
+          0.10193429046667646,
+          0.4088223123251966
+        ],
+        "position_mm": 0.6530481126565337,
+        "orientation_deg": 0.25441968577657564,
+        "target_world_xyz_m": [
+          -0.25465393432446504,
+          -0.4172644939944709,
+          0.9528382575671389
+        ],
+        "actual_world_xyz_m": [
+          -0.25415498988385427,
+          -0.41716255970400423,
+          0.9532470798794641
+        ]
+      }
+    ],
+    "status": "OBSERVED_TCP"
+  },
+  "halt": {
+    "kind": "history_halt",
+    "stage": "historical_human_inputs",
+    "mono_ns": 171439619630101,
+    "log_est_ns": 1794488011598931989,
+    "error": "Pilot watchdog observed native hard fault: DRIVER_NOT_COMMANDABLE",
+    "failure": {
+      "source": "/tianji/robot_state",
+      "code": "DRIVER_NOT_COMMANDABLE",
+      "reason": "position held; home required before next enable",
+      "header_ns": 1795860913325540386
+    },
+    "last_source": {
+      "topic": "/vive/tracker/right_wrist",
+      "record_index": 820,
+      "source_schedule_ns": 621702189077638
+    }
+  },
+  "historical_safety_observations": [
+    {
+      "mono_ns": 171439616464142,
+      "header_ns": 1795860913325434845,
+      "topic": "/tianji/safety",
+      "code": "COMMAND_STEP",
+      "reason": "latched stop: DCR-009 54-axis arm publication did not receive a fresh swept proof"
+    },
+    {
+      "mono_ns": 171439619589197,
+      "header_ns": 1795860913325540386,
+      "topic": "/tianji/robot_state",
+      "code": "DRIVER_NOT_COMMANDABLE",
+      "reason": "position held; home required before next enable"
+    }
+  ],
+  "latest_arm_diagnostics": {
+    "left": {
+      "mono_ns": 171439595899155,
+      "ros_header_ns": 1795860913303132963,
+      "fields": {
+        "session": "s05-dcr009-34de381e-d136-4ded-8e34-a28f4b06bd80",
+        "mapping_policy": "home_anchored_pilot_v1",
+        "arm_command_accepted": "true",
+        "pilot_generation": "2",
+        "pilot_guard_sequence": "6980",
+        "pilot_guarded_publish": "true",
+        "pilot_arm_status": "ACCEPTED",
+        "sequence": "4869",
+        "tracker_source_stamp_sec": "1795860913.292876",
+        "primary_reason": "",
+        "solve_mode": "full_step",
+        "rate_limited": "false",
+        "target_input_raw_available": "true",
+        "target_input_raw_xyz_m": "0.38954158489326735,0.29814061243717854,0.18125825097040768",
+        "target_input_raw_quat_xyzw": "-0.091377773683437011,0.73986779708512473,-0.16244765024989893,0.64641821311079251"
+      }
+    },
+    "right": {
+      "mono_ns": 171439595899155,
+      "ros_header_ns": 1795860913303132963,
+      "fields": {
+        "session": "s05-dcr009-34de381e-d136-4ded-8e34-a28f4b06bd80",
+        "mapping_policy": "home_anchored_pilot_v1",
+        "arm_command_accepted": "true",
+        "pilot_generation": "2",
+        "pilot_guard_sequence": "6980",
+        "pilot_guarded_publish": "true",
+        "pilot_arm_status": "ACCEPTED",
+        "sequence": "4869",
+        "tracker_source_stamp_sec": "1795860913.292876",
+        "primary_reason": "",
+        "solve_mode": "full_step",
+        "rate_limited": "false",
+        "target_input_raw_available": "true",
+        "target_input_raw_xyz_m": "0.41720433154452691,-0.29698556199568266,0.16448280867772999",
+        "target_input_raw_quat_xyzw": "0.00097741017819908283,0.63813656130177565,0.20678616969906585,0.74163350370683623"
+      }
+    }
+  },
+  "sweep": {
+    "status": "OBSERVED",
+    "by_group_reason": {
+      "0:PERMIT": 517,
+      "1:PERMIT": 278,
+      "2:PERMIT": 225,
+      "2:SWEEP_UNPROVEN": 54,
+      "0:SWEEP_UNPROVEN": 1
+    },
+    "latest_denial_by_group": {
+      "2": {
+        "sequence": 6983,
+        "reason": "SWEEP_UNPROVEN",
+        "receipt_ns": 171439603099236,
+        "proof_complete_ns": 171439605132020
+      },
+      "0": {
+        "sequence": 6985,
+        "reason": "SWEEP_UNPROVEN",
+        "receipt_ns": 171439614320484,
+        "proof_complete_ns": 171439616275651
+      }
+    }
+  },
+  "target_basis": "Frozen yaw-aligned engineering map of signed HMB registered wrists through the historical palm mount and exact live-model palm-to-scoring-TCP link. Independent anatomical and physical accuracy are unqualified. No feedback interpolation or packet-time realignment.",
+  "full_packet_audit": {
+    "path": "original-and-observed-packets.jsonl",
+    "sha256": "79656cc15d7d37392c86db4ddf8fff0ee46a287fb7e34eb75b00176312a174d1"
+  }
+}

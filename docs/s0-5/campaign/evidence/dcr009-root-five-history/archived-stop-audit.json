@@ -1,0 +1,51 @@
+{
+  "scope": "DIAGNOSTIC_ONLY",
+  "formal_coverage_credit": false,
+  "status": "INCONCLUSIVE",
+  "causes": [
+    "missing_or_nonunique_native_barrier",
+    "missing_or_unordered_observer_boundary"
+  ],
+  "native_record_conflicts": [],
+  "native_barrier": null,
+  "accepted_stop_receipt_mono_ns": 169984866898820,
+  "observer_ack_mono_ns": 169984866898820,
+  "observer_boundary_mono_ns": null,
+  "native_post_barrier_publications": [],
+  "observer_post_boundary": [
+    {
+      "classification": "UNKNOWN",
+      "topic": "/tianji/joint_command",
+      "command_sequence": 4290,
+      "receipt_mono_ns": 169984875339507,
+      "after_ack_ms": 8.440687,
+      "native_publication": {
+        "group": "arm",
+        "session": "s05-dcr009-8bac89ed-de31-41e1-8010-d74b2157c126",
+        "generation": 2,
+        "sequence": 4290,
+        "proof": 5834,
+        "feedback_ns": 1795859458566352606,
+        "line": 60,
+        "ros_log_ns": 1795859458569946855,
+        "command_header_ns": null
+      },
+      "exact_command_proof_join": true,
+      "exact_native_command_header_join": false,
+      "exact_coherent_feedback_join": false,
+      "native_feedback_fresh": true,
+      "proof_complete_before_ack": true,
+      "proof_complete_mono_ns": 169984860718678
+    }
+  ],
+  "driver_application_qualified": false,
+  "source_sha256": {
+    "native_log": "5131bc801c8d3144e1a79a1ca14a81e225e52b96b1c6c07e438073b7b04d4169",
+    "observer_trace": "7af0fd359ee1687ef695246acd1ca0f4230e8dccfa4386a64a54fba1719b6bcb",
+    "sweep_trace": "ebf36e9576fd7e6b300002376e0189a717c2aedd689278f479ff25b38c662fea",
+    "archive_run_receipt": "6b8a12b54c0f2ea3ff7b88629818fcbbf3ba452e6575df0a62b6a90e8ba74842"
+  },
+  "recorded_phase": "ABORTED",
+  "archive_observation_only": true,
+  "archive_scope": "Retained extracts lack the new native barrier and an independently joined 54-axis observation"
+}
