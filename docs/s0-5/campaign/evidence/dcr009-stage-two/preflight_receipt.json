@@ -1,0 +1,84 @@
+{
+  "schema": "s05.dcr009.stage_two_preflight.v1",
+  "run_id": "HOME-ANCHORED-PILOT-DCR009-01",
+  "approved_design_commit": "6808935d7588834ad875789a2ca6bbb779d2caa9",
+  "actual_remote_teleop_head": "30cf13bdc496c43b3016462cfa0a206334d1ff7f",
+  "actual_remote_teleop_worktree_had_user_changes": true,
+  "human_design_approval": "APPROVED",
+  "human_pilot_authority": "AUTHORIZED_WITHIN_STAGE_TWO",
+  "recorded_pilot_technical_state": "BLOCKED_CALIBRATION_AND_SAFETY",
+  "recorded_pilot_launch_allowed": false,
+  "recorded_train_pilot_roots_run": 0,
+  "full_rmb_authorized": false,
+  "training_authorized": false,
+  "real_robot_authorized": false,
+  "recorded_control_replay": "NOT_RUN",
+  "full_rmb_build": "NOT_RUN",
+  "formal_training": "NOT_RUN",
+  "guard_qualification": "NOT_ESTABLISHED",
+  "driver_application_evidence": "NOT_OBSERVED",
+  "source_hmb": {
+    "manifest_sha256": "e63df2698feb812bc300593d9bf8d1ad3dcae1d2dc59aa4d3a3dfa96851d8074",
+    "source_cohort_sha256": "7d6c4702229aefd0d564f76dfae5a2a7b62a0340b9c4cae43fea512cc2d531c2",
+    "planned_ticks": 116613,
+    "joint_valid_ticks": 114532,
+    "original_history_candidates": 110796,
+    "active_gate_percent": 85,
+    "history_gate_percent": 70,
+    "active_numerator": null,
+    "history_numerator": null
+  },
+  "verified_archived_tracker_bundle_sha256": "36f5c135d01193413a0ad29e8c957a4f98972d27003cc1f6ec3f14d0863bcfb9",
+  "downloaded_preflight_bundle_sha256": "998dec83ff9468a605e8402edd284c62ff871bfb91dff5fbec0410b07917884f",
+  "validation": {
+    "ubuntu_controls": {
+      "exit_code": 0,
+      "tests_passed": 18,
+      "command": "python3 -B -m unittest discover -s scripts/s0_5_campaign_teleop -p 'test_home_anchored_*.py' -v",
+      "raw_log_sha256": "995e7a12b80f08372b081b279d733843dca5464d7b7e374f46a1c8ad18792823"
+    },
+    "archived_cal_disposition": {
+      "exit_code": 2,
+      "virtual_axes": "PASS",
+      "recorded_mcap": "BLOCKED"
+    },
+    "exact_two_model_fk": {
+      "exit_code": 0,
+      "probes": 158,
+      "matched_named_local_axes": 54
+    },
+    "native_fk": {
+      "exit_code": 0,
+      "holdout_probes_per_side": 14,
+      "shim_sha256": "5dcc1624fa5abd9dbb3dda0622fbf2cc02a7d188780cea81ef9e1b14508b0bbc",
+      "vendor_lib_sha256": "f2aec6ebc1f41302fe0126284076211c044d6c7e1c2276dc919767254e0c597f",
+      "marvin_config_sha256": "ce20b1a80974c3ed58cdac4973152625096c8ad93a779e5fd4108c26ce19bd52",
+      "source_build_log_sha256": "68582b506619e427f09dc0c14fad9b38a818aa2b846348560bc5f555b8776505"
+    },
+    "isolated_native_overlay": {
+      "source_patch_exit_code": 0,
+      "initial_build_exit_code": 1,
+      "initial_build_failure": "The active Conda Python lacked ROS ament's catkin_pkg.",
+      "system_python_rebuild_exit_code": 0,
+      "compiled_executable_sha256": "9b1bda094accbc680c8af76bf22de30ca1008acfe5e50ab03064651343623aef",
+      "teleop_core_cpp_sha256": "b3a6eca7d6ca54d3d2802d89ed3b521a654eb0f5be2051d4b62a7a2c1ac7f18c",
+      "teleop_controller_node_cpp_sha256": "07f387239ef509045b0d936594087ce95d0f70de467e8e6d6f1622472d33cd21",
+      "successful_build_log_sha256": "afdef241db955a720b911050e9b921c9b65c4991d476f8ad089b85aff5bdbde3",
+      "runtime_mujoco_launch": "NOT_RUN"
+    }
+  },
+  "mirrored_output_sha256": {
+    "model_frame_receipt.json": "1d67a6dad1831574af10a1fdf6349638097af6457e9d8527c9bd77e150e876fe",
+    "model_native_fk_receipt.json": "f97fa5fe4d907a46fa24b6484278d5d837cd7aaf92df910c9321eb228def0145",
+    "virtual_axis_receipt.json": "4798dfbdaf80178b265a0c325bce1b96b09221d35b4b11c86d35c650c5f3782a",
+    "calibration_receipt.json": "9af50a774a80029f91e74c983c15270eb76a1b334a0b2703bdd022bf4a5f08c5",
+    "calibration_preflight.png": "8ef5348a77bf988d98a1e1695be4f52145c39cbf7a9bf41e0271c0b73d080459"
+  },
+  "verified_tested_ubuntu_source_sha256": {
+    "home_anchored_start_anchor.py": "3e47338a02e8a76344e358ba69abb61182dd50762ce18459b6a39989cab02dff",
+    "replay_home_anchored_pilot.py": "d3d3616d706f898f1f7d0faa048f2f7f05df1bf1abad680145725c769b6c69fb",
+    "run_home_anchored_pilot.py": "85cc30c733f1501bd1d67fbb34d0a9d5f33801244e1c048fb0341d1397b60588",
+    "test_home_anchored_pilot.py": "46082d072d6f57bfbbfc0f7e6c0ea8a91ea314a674f2d70e82d3fbe673ced412"
+  },
+  "independent_review_sha256": "cbe0d5452dabdcc6a1cf894e4625bd4d48c27f195b7628948d9e6047efde17a3"
+}

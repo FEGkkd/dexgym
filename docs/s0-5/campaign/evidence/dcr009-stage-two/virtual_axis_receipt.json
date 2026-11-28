@@ -1,0 +1,99 @@
+{
+  "scope": "VIRTUAL_SCENE_COORDINATE_CONVENTION_ONLY",
+  "status": "PASS",
+  "source_convention": {
+    "up_H": [
+      0,
+      1,
+      0
+    ],
+    "up_W": [
+      0,
+      0,
+      1
+    ],
+    "horizontal_H": [
+      1,
+      0,
+      0
+    ],
+    "horizontal_W": [
+      -1,
+      0,
+      0
+    ],
+    "H_frame_literal": "openvr_world"
+  },
+  "virtual_world_from_tracker_rotation": [
+    [
+      -1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      1,
+      0
+    ]
+  ],
+  "holdouts": [
+    {
+      "fixture": "left_skew",
+      "input_fixture": "left_skew",
+      "position_error_m": 0.0,
+      "max_axis_vector_error": 0.0,
+      "pass": true
+    },
+    {
+      "fixture": "right_skew",
+      "input_fixture": "right_skew",
+      "position_error_m": 0.0,
+      "max_axis_vector_error": 0.0,
+      "pass": true
+    },
+    {
+      "fixture": "third_axis",
+      "input_fixture": "third_axis",
+      "position_error_m": 0.0,
+      "max_axis_vector_error": 0.0,
+      "pass": true
+    }
+  ],
+  "controls": {
+    "declared_basis_positive": true,
+    "reverse_horizontal_rejected": true,
+    "left_right_swap_rejected": true,
+    "reflection_rejected": true
+  },
+  "target_lineage": "Fixed virtual direction and point fixtures. No HMB, M1, IK, or motion fit.",
+  "capture_heading_qualified": false,
+  "physical_calibration_qualified": false,
+  "tracker_to_anatomical_palm_qualified": false,
+  "exact_model_support": {
+    "model_frame_receipt_sha256": "1d67a6dad1831574af10a1fdf6349638097af6457e9d8527c9bd77e150e876fe",
+    "live_model_sha256": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "virtual_up_W": [
+      -0.0,
+      -0.0,
+      1.0
+    ],
+    "virtual_rightward_W": [
+      -1.0,
+      0.0,
+      0.0
+    ],
+    "virtual_forward_W": [
+      -0.0,
+      -1.0,
+      -0.0
+    ],
+    "rightward_standard": "Named robot left-base origin toward the right-base origin",
+    "forward_standard": "Up cross rightward under the co-oriented virtual operator standard",
+    "pass": true
+  }
+}

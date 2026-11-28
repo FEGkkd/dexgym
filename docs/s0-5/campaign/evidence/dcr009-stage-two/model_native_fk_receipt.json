@@ -1,0 +1,2642 @@
+{
+  "scope": "EXACT_MODEL_FK_AND_OPTIONAL_NATIVE_TCP_ONLY",
+  "model_identity": {
+    "live": {
+      "xml_sha256": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+      "dependencies": {
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/left/Base_L.STL": "c69fe56485ec9fbbe59b6de581abc0001d2ebbd8a9e6d31951ea1de6ba45571e",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/left/Link1_L.STL": "86854ac8c4f17dac5116b6e9a4d036bca1ccf5d4b9ed04cb8285a7d006cfde28",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/left/Link2_L.STL": "4776a6a2086ddc61b1643aff93386e545baccef2751db29d863fe027a76f325e",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/left/Link3_L.STL": "d58f1039bd3eb2ccc1a1959b89d2de7ae714344ad8cb8b78ef97b92dcd317d26",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/left/Link4_L.STL": "77f18566339f38acac1785fae517b05ff1e5247b95404ce26536d215bbed9cd7",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/left/Link5_L.STL": "573f15ee62b0a9b2d62aceeb756800fd86969a685535e91416b73d51f1c57613",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/left/Link6_L.STL": "b6b7570d8ebf1d2acb01baf8941b892f5a5f72aaa05503ab8340da8a2a7b2c13",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/left/Link7_L.STL": "7c81b774b7ad8d0258140c31292270b894cf6c95bf0b669c01110ea3348827a4",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/right/Base_R.STL": "c69fe56485ec9fbbe59b6de581abc0001d2ebbd8a9e6d31951ea1de6ba45571e",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/right/Link1_R.STL": "86854ac8c4f17dac5116b6e9a4d036bca1ccf5d4b9ed04cb8285a7d006cfde28",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/right/Link2_R.STL": "53eb9fc69c939d2ebd4f32c1df341c1c42bc3d9d0911db0c9fcee70aa2701b34",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/right/Link3_R.STL": "122456d8fc3e81694f352fc1f29d0bc19066f7f3d7572857a1be1e7c030dec9c",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/right/Link4_R.STL": "77f18566339f38acac1785fae517b05ff1e5247b95404ce26536d215bbed9cd7",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/right/Link5_R.STL": "2de51a340695c89b2fd58b1171dfacc4d85aa4e6cd50879e021a2d0bde8599a8",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/right/Link6_R.STL": "49722d14b9ac34a84a41c95f49bd0b2a8859d4a05f66b247822bf36b0a703cd5",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/right/Link7_R.STL": "727310e0a39d0d513357e139cdb52db6a787b53549b7c49a4847095928c595f2",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_index_finger_distal.STL": "3e87920820252191b66a337bffe1bdddb4392fc30309758e0369bdcd9964c996",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_index_finger_middle.STL": "ad167cffae6957a062eb67576cf40584b668ad5a26ce9133269ea1028c8a4765",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_index_finger_proximal.STL": "4f8635951712c36749c362c18f33253e852179c6042211afebee7a57d8db9c57",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_index_finger_proximal_abd.STL": "879583b9403fbb8a408de722a77c37e42bc29b5ec4a3f28ce35d8bde758684ac",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_index_finger_tip_sensor_frame.STL": "7b66999e7d8a09b0d194af807b0780c2205cc9f1b00db49444369911bd85135b",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_middle_finger_distal.STL": "d52e9285937c71589da2a0cc04ef91a39019f09d4a9d6d413ffdf226e9bdc3c3",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_middle_finger_middle.STL": "3fa4868a8c2431c42bad76a6e8ce7a87b71b370c05af89dbff7a9441a5e8880d",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_middle_finger_proximal.STL": "60bd1719c350e60126f6eaea8a702902df748f426c4bd47eb48d9f8fa8c3803c",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_middle_finger_proximal_abd.STL": "921328fed4290d6abb0ff559e7b9f6818513210d3562a64811ca9b084af8b2b1",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_middle_finger_tip_sensor_frame.STL": "7b66999e7d8a09b0d194af807b0780c2205cc9f1b00db49444369911bd85135b",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_mount.STL": "175491889134d13e4b468c32e80cc93e14d6eed3f287c52ed7e0cb8273920aae",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_pinky_distal.STL": "630261a156db18cd88207aa5a90572d15480961c4b68fbfb6877b6349195232a",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_pinky_middle.STL": "c19b3b46d170a87e08beb309307fcbcc11b89fc52061f6d8ad63a6692c0c33d5",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_pinky_proximal.STL": "df5bbe36bbd592c8913ea3c6c31af5cda0011f801de184815672b2fbe4f429b1",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_pinky_proximal_abd.STL": "af1e1a26483fac1b030b3bec7fe6a96b1705c8b1f1410095ecb6fb09751ad641",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_pinky_tip_sensor_frame.STL": "be13adc0fdfbec3c1f70821a0ea946cc6ff9f0a1531c065a7965c9dfcf7b8514",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_ring_finger_distal.STL": "7f7abd5a0b0762012296aa57895c3abaace20965557c8ceda20bd184e70009f7",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_ring_finger_middle.STL": "386912dd2d79d6f274a957d4b227cd12208393b65f19da59155e190fc835d093",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_ring_finger_proximal.STL": "1025331cca112596feb9e5c6e39e110297bbf7c5b9a80c73aa8f552dc97c4877",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_ring_finger_proximal_abd.STL": "2a687303caa5ea25ef63640b8e3606be1493b9f26d1b95d89e687425abcb53a8",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_ring_finger_tip_sensor_frame.STL": "7b66999e7d8a09b0d194af807b0780c2205cc9f1b00db49444369911bd85135b",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_thumb_distal.STL": "c64baf6839b633a668cfc8b9386f44b26e1a52f9ae28e11a24aae54cd6fcd4c6",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_thumb_middle.STL": "33cafea989a21445ceb51fee5bc6777b23c6ded88183ad2103946108efdbc292",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_thumb_proximal.STL": "115227446584dd51e3ae77113063f97dc9e88cf4ce5db201eef2b81c17dd939c",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_thumb_proximal_abd.STL": "3528478e63b18ee73b4170d03b6cf2df5bbf00f31bca2c1b03eccdfde0f5caa4",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_thumb_tip_sensor_frame.STL": "1f0460fbb02d1d148ade528851099034e90652ea5440f39c26415cf281eb8232",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/left/l_wrist.STL": "b37d7bbcb3c8888e7179f27e8c87e436358adad9cf30d7cb86bc46ee696a7ee8",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_index_finger_distal.STL": "837f4ffdcd4a786731ded0652a57ec9015605148cba78881d2d4d71ced804976",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_index_finger_middle.STL": "2e1dd153fb0725aa3caed4dd49cb918da0378e875c4b9442bd147793a111f7d7",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_index_finger_proximal.STL": "46b1e8036544dcd4aeba9382d1b3fbe4adb531fb2fe56b6ab5138d0a81f6661c",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_index_finger_proximal_abd.STL": "f1ff36b8d54ce2bf93f42424da9392df6568dc1b286ff588157fe6030797f1f6",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_index_finger_tip_sensor_frame.STL": "4142c661bbe09bcbbee8c6188676915986bcdcc49f397720252864148665da37",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_middle_finger_distal.STL": "81ed25e0a780172603b334895e2f7487478e785db0b9c1642ddbb4964b7a388a",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_middle_finger_middle.STL": "8f7234c6ef133c11ecea89e3d1a94f4842dec9099c53faccd9312115d86fed4d",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_middle_finger_proximal.STL": "ea4db9cd3cccfd4048b620d334a1f00b034110d667aa689e3421e56c08725ff9",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_middle_finger_proximal_abd.STL": "483d9af13da2a605263cf27cbbc789f2dfcd571cb0a37b54c9322e5705c7ada9",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_middle_finger_tip_sensor_frame.STL": "4142c661bbe09bcbbee8c6188676915986bcdcc49f397720252864148665da37",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_mount.STL": "fd30d30dbfd254e317e957588dd5863c46405f719e255fe79104ece93a08e416",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_pinky_distal.STL": "d6aef893258d6de0200e1bc4cdfeb3a7f941072aa79aa4d955162b362b9af894",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_pinky_middle.STL": "12466b870cf8cc47aacdc02a535474d65bce3bf128840a8e471c4fede43d57ee",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_pinky_proximal.STL": "6a5696573c69e37467e3ba3b722d92ecd0078f0e18ae8e1e2c49ad118800ea8b",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_pinky_proximal_abd.STL": "321e9e615166eab4cd87ad4bc8609a7c19944fd7200f957d11bb020fa255bb72",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_pinky_tip_sensor_frame.STL": "b9c9df3fee37dd4f30072c15b65bd1019c4cea1b90dbba9b082eb05b6678d561",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_ring_finger_distal.STL": "32129d2a8cf862f410c64201fea9f8942108af3bdc3b6e8ddd5776c3e9da465a",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_ring_finger_middle.STL": "9069d35b6f34fe23b49a7b28f8ef2dfd36ee18bebcf72de039e550f38d6a36cb",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_ring_finger_proximal.STL": "7f22b426af3ce5ddae228e370d51d15c1c66e7888c4db292ab5b8127dadcef5f",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_ring_finger_proximal_abd.STL": "bfc1ac8e3324942ecfd2dae448b925db3bf668a03b3aaa36a050aef1d8734d40",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_ring_finger_tip_sensor_frame.STL": "4142c661bbe09bcbbee8c6188676915986bcdcc49f397720252864148665da37",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_thumb_distal.STL": "133cd575b899cf7c40651d8851065d43c87addb6be61face329c170edcc389dd",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_thumb_middle.STL": "a3e9851cd3aed770fb0ed2b05b2ceca86980af1bfef2fbc8e1925e9a6110f56f",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_thumb_proximal.STL": "e5f4c7dbffeddf626e5d6c7883e10a6c1de0e2d8213a9122dba5ee29a488345f",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_thumb_proximal_abd.STL": "d9e28b15b054ede554f23524c32f430fefa3622eb9fa10016c39fec10a2638e8",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_thumb_tip_sensor_frame.STL": "7a94ebdd1c50ec5b62e73abd51848fe15589d9eb07e2fa3b1eab6567e5f08c12",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/assets/wujihand2/right/r_wrist.STL": "748cf6a16bc5bfedf9c7e2ee489459f726740680db1449221133be570f9ee505",
+        "/home/ubuntu/teleop_ws/src/whole_body_mujoco_driver/model/dual_arm_marvin.xml": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d"
+      }
+    },
+    "signed": {
+      "xml_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+      "dependencies": {
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/dual_arm_marvin.xml": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Base_L.STL": "c69fe56485ec9fbbe59b6de581abc0001d2ebbd8a9e6d31951ea1de6ba45571e",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Base_R.STL": "c69fe56485ec9fbbe59b6de581abc0001d2ebbd8a9e6d31951ea1de6ba45571e",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link1_L.STL": "86854ac8c4f17dac5116b6e9a4d036bca1ccf5d4b9ed04cb8285a7d006cfde28",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link1_R.STL": "86854ac8c4f17dac5116b6e9a4d036bca1ccf5d4b9ed04cb8285a7d006cfde28",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link2_L.STL": "4776a6a2086ddc61b1643aff93386e545baccef2751db29d863fe027a76f325e",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link2_R.STL": "53eb9fc69c939d2ebd4f32c1df341c1c42bc3d9d0911db0c9fcee70aa2701b34",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link3_L.STL": "d58f1039bd3eb2ccc1a1959b89d2de7ae714344ad8cb8b78ef97b92dcd317d26",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link3_R.STL": "122456d8fc3e81694f352fc1f29d0bc19066f7f3d7572857a1be1e7c030dec9c",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link4_L.STL": "77f18566339f38acac1785fae517b05ff1e5247b95404ce26536d215bbed9cd7",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link4_R.STL": "77f18566339f38acac1785fae517b05ff1e5247b95404ce26536d215bbed9cd7",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link5_L.STL": "573f15ee62b0a9b2d62aceeb756800fd86969a685535e91416b73d51f1c57613",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link5_R.STL": "2de51a340695c89b2fd58b1171dfacc4d85aa4e6cd50879e021a2d0bde8599a8",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link6_L.STL": "b6b7570d8ebf1d2acb01baf8941b892f5a5f72aaa05503ab8340da8a2a7b2c13",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link6_R.STL": "49722d14b9ac34a84a41c95f49bd0b2a8859d4a05f66b247822bf36b0a703cd5",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link7_L.STL": "7c81b774b7ad8d0258140c31292270b894cf6c95bf0b669c01110ea3348827a4",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/Link7_R.STL": "727310e0a39d0d513357e139cdb52db6a787b53549b7c49a4847095928c595f2",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_index_finger_distal.STL": "47630a76817e938ec60141a1f100cf022394d9d2db7d96bb3ca6c258356e6574",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_index_finger_middle.STL": "5af2f99b93fb63669ce398a0bb8bded708e167dfbe95c4e1e9e484fc560f2560",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_index_finger_proximal.STL": "89e49d06793eedd081e59fadded28badd027a6f99b7bfe6554ebc2e7ed01e142",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_index_finger_proximal_abd.STL": "78f4806eec50b94779e2e987de7e6bab5ad7ea3d6e8a964a883993f7728a37ea",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_index_finger_tip_sensor_frame.STL": "4961c77d85083321feae6fdd4134084c7ac40b438cb416f74b29a77b20f14a71",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_middle_finger_distal.STL": "47630a76817e938ec60141a1f100cf022394d9d2db7d96bb3ca6c258356e6574",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_middle_finger_middle.STL": "b3bb4726751b29238baa84d5dfd4120c0567a3589674b4bf873ddb47bc520a4b",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_middle_finger_proximal.STL": "8eea0513ad131808b5d214199aa92aca987eb63285abcb819864f71697072f88",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_middle_finger_proximal_abd.STL": "78f372e549967c39eb564b34ed6d04cd54217d16d9ca05b1563ee8cb6ef6e240",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_middle_finger_tip_sensor_frame.STL": "4961c77d85083321feae6fdd4134084c7ac40b438cb416f74b29a77b20f14a71",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_mount.STL": "db56d3547765b5a679698bbe2c0444ced492449e6ed9f5720fe78da33e94465a",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_pinky_distal.STL": "19f4f22a89dcd60f7655ac9cd7c43d4f0ec696065ca9bcf36573de0106ab9675",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_pinky_middle.STL": "63061786518fd016e4a1430866811423ca1bf1bd7f1c25c0b1afdbbd127a1882",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_pinky_proximal.STL": "41939a3da70824bc50821eb2f20734a2f32228ddd85c646f6676a1bc66ad1813",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_pinky_proximal_abd.STL": "25fc27d8ec8dfd75b3bbc43d154de3cd16c16d3f232684099a11e604232a5224",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_pinky_tip_sensor_frame.STL": "b85eff25ea1c9df6cf8f10e2eaecea7bda2836435fe99df37d1f96823e4a3da7",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_ring_finger_distal.STL": "b149433ff04d032efb86b9ab600ba55a45717b7629aa392a70ec346841e52d7d",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_ring_finger_middle.STL": "65969a58aba7af89f847e2c431de67066a4d7728e53ac71ef74c97c04ebd228d",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_ring_finger_proximal.STL": "b8962bc4ac95acb90b75ce883274a19c8884ee74b924d09fd961d0ce8847cae9",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_ring_finger_proximal_abd.STL": "9b7aab081a9d1cc29f24891417d6ab03ee36f4a716a632528ec777963553fff9",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_ring_finger_tip_sensor_frame.STL": "cf69841d299dc170d3303aec327929a859f7bc2a91514165f13a2eb5fe43ca85",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_thumb_distal.STL": "0d89c323bf1608b2ee42b003286e4707cdfe267b7ff65db437b336ade758749c",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_thumb_middle.STL": "3a84286a4de13ad95771fcc43a277ece2a0c5bcf2476ea04f2292f8a022c70d0",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_thumb_proximal.STL": "5144d8ab958dcacbd70b12d413624ab5c74faab5fb3406502c1aa45f931802d0",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_thumb_proximal_abd.STL": "539f4df7100751ecf3463138023fb78535fc1114e73dccba2c1f3262e7ce13e7",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_thumb_tip_sensor_frame.STL": "e0b34bb387e3217b3f2dedf37c0980fb92693e0de617be613fb3e9dcb692a1db",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/l_wrist.STL": "cc3944120241f19effa9a95a7edb9b2cfd00f2796305d78c05b563962d6f5361",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_index_finger_distal.STL": "7b11dd372a4a155e2bf1305c7d3cf0bacfbfd526f6659c467ccf35efd7553b7d",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_index_finger_middle.STL": "9ba4bd6449d5c60255c1bbe1cdf3ec1bd7f9f0413f45f9ee20ca1e97165b5a93",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_index_finger_proximal.STL": "d07ffb4a0f107d53837b068ee3aafd30b58a2775271beabc26911ac8d4288ef3",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_index_finger_proximal_abd.STL": "373722f52678f818a311d7c5a4ec6ac711038cfbf36536c082325f9315853cb5",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_index_finger_tip_sensor_frame.STL": "d5a13c52478576aa461d9739957bcf4612b359be58e449bb199a9ad01cb75cb6",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_middle_finger_distal.STL": "7b11dd372a4a155e2bf1305c7d3cf0bacfbfd526f6659c467ccf35efd7553b7d",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_middle_finger_middle.STL": "5f88e7c641888fdc7fbae7c3b613b691b8ae4fc35af473b2daf40bead9198178",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_middle_finger_proximal.STL": "039bee058e2e24fa083c77c7512d30782aecced1654897c6b9fd7b3b68866f6c",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_middle_finger_proximal_abd.STL": "91e3f149f9cabc198b903881661db428fa17860af7f79b5f0a4e8ff555616d6e",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_middle_finger_tip_sensor_frame.STL": "d5a13c52478576aa461d9739957bcf4612b359be58e449bb199a9ad01cb75cb6",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_mount.STL": "302c1a168417f2c84abc30a148ff6ce364ce6621340f15190c8f53cfe50d6268",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_pinky_distal.STL": "6832e7482d550cec79298ac1c1a304fcfc64ce0e3c925948d04e62a6242b9dae",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_pinky_middle.STL": "609cc6cef5df1bd4a92ec8a889c670643a45f8fc559d124622b96ebc77f76122",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_pinky_proximal.STL": "c88defaf8c670dc4a12a489e653ee4732a79a32780046dbe3fe6d98d1a686680",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_pinky_proximal_abd.STL": "0d9493bc1a62162c89a1be7673d8d91ebc9f20383847d66e46ac35a3645f9701",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_pinky_tip_sensor_frame.STL": "22f19f242d73f10231f420ce91ef5ba4dd6d53d2b9c7a15e68b5da0ba1f7a359",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_ring_finger_distal.STL": "7b11dd372a4a155e2bf1305c7d3cf0bacfbfd526f6659c467ccf35efd7553b7d",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_ring_finger_middle.STL": "6fbcf92b159a2d9e3b097f459ac5df73577cda5ca2b62020284de287f49323e4",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_ring_finger_proximal.STL": "da1870bfe85621550c6081c944b91e4dafc7721a73f46be6a77f0c15dd0b214a",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_ring_finger_proximal_abd.STL": "df3787ff168f4c0fa21c77296fe34418240e8c8d357c1ede99c96cf2f89d32f0",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_ring_finger_tip_sensor_frame.STL": "d5a13c52478576aa461d9739957bcf4612b359be58e449bb199a9ad01cb75cb6",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_thumb_distal.STL": "273878b0f78e35ffd5e3ad416cb4c79368c6fc43a886ec047760c5f21a55b04d",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_thumb_middle.STL": "a04ebd10f24534121672721011c95d26a0c8f734ee65481c49b962fd0b573ea7",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_thumb_proximal.STL": "e3e9e7c1266c6d3e38287b074e38162bf508626de14d54e995e40e1d56d7247e",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_thumb_proximal_abd.STL": "2aaafd9ba420bf2b40d2e262f8328ba4937e647021a0ea188aa3620bde0d135a",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_thumb_tip_sensor_frame.STL": "4bb06fa7ee605b72a21f62debe43fe711e57da3fcc45c89ab2644ee476b0a4af",
+        "/home/ubuntu/dexgym_worktrees/s05-dcr009-pilot/source/dexgym/assets/marvin_wuji/hand2_2/generated/meshes/r_wrist.STL": "ece3f36af8ed61079d0061dd9d9b11e5eae76ce9640287d0975c1522f8731fc6"
+      }
+    }
+  },
+  "named_axes": [
+    {
+      "joint": "Joint1_L",
+      "live_parent_body": "Link1_L",
+      "signed_parent_body": "Link1_L",
+      "live_actuator": "Joint1_L_position",
+      "signed_actuator": "Joint1_L_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -3.1067,
+        3.1067
+      ],
+      "signed_bounds_rad": [
+        -3.1067,
+        3.1067
+      ]
+    },
+    {
+      "joint": "Joint2_L",
+      "live_parent_body": "Link2_L",
+      "signed_parent_body": "Link2_L",
+      "live_actuator": "Joint2_L_position",
+      "signed_actuator": "Joint2_L_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -2.0944,
+        2.0944
+      ],
+      "signed_bounds_rad": [
+        -2.0944,
+        2.0944
+      ]
+    },
+    {
+      "joint": "Joint3_L",
+      "live_parent_body": "Link3_L",
+      "signed_parent_body": "Link3_L",
+      "live_actuator": "Joint3_L_position",
+      "signed_actuator": "Joint3_L_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -3.1067,
+        3.1067
+      ],
+      "signed_bounds_rad": [
+        -3.1067,
+        3.1067
+      ]
+    },
+    {
+      "joint": "Joint4_L",
+      "live_parent_body": "Link4_L",
+      "signed_parent_body": "Link4_L",
+      "live_actuator": "Joint4_L_position",
+      "signed_actuator": "Joint4_L_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -2.5307,
+        1.0472
+      ],
+      "signed_bounds_rad": [
+        -2.5307,
+        1.0472
+      ]
+    },
+    {
+      "joint": "Joint5_L",
+      "live_parent_body": "Link5_L",
+      "signed_parent_body": "Link5_L",
+      "live_actuator": "Joint5_L_position",
+      "signed_actuator": "Joint5_L_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -3.1067,
+        3.1067
+      ],
+      "signed_bounds_rad": [
+        -3.1067,
+        3.1067
+      ]
+    },
+    {
+      "joint": "Joint6_L",
+      "live_parent_body": "Link6_L",
+      "signed_parent_body": "Link6_L",
+      "live_actuator": "Joint6_L_position",
+      "signed_actuator": "Joint6_L_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.0472,
+        1.0472
+      ],
+      "signed_bounds_rad": [
+        -1.0472,
+        1.0472
+      ]
+    },
+    {
+      "joint": "Joint7_L",
+      "live_parent_body": "Link7_L",
+      "signed_parent_body": "Link7_L",
+      "live_actuator": "Joint7_L_position",
+      "signed_actuator": "Joint7_L_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.5708,
+        1.5708
+      ],
+      "signed_bounds_rad": [
+        -1.5708,
+        1.5708
+      ]
+    },
+    {
+      "joint": "Joint1_R",
+      "live_parent_body": "Link1_R",
+      "signed_parent_body": "Link1_R",
+      "live_actuator": "Joint1_R_position",
+      "signed_actuator": "Joint1_R_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -3.1067,
+        3.1067
+      ],
+      "signed_bounds_rad": [
+        -3.1067,
+        3.1067
+      ]
+    },
+    {
+      "joint": "Joint2_R",
+      "live_parent_body": "Link2_R",
+      "signed_parent_body": "Link2_R",
+      "live_actuator": "Joint2_R_position",
+      "signed_actuator": "Joint2_R_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -2.0944,
+        2.0944
+      ],
+      "signed_bounds_rad": [
+        -2.0944,
+        2.0944
+      ]
+    },
+    {
+      "joint": "Joint3_R",
+      "live_parent_body": "Link3_R",
+      "signed_parent_body": "Link3_R",
+      "live_actuator": "Joint3_R_position",
+      "signed_actuator": "Joint3_R_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -3.1067,
+        3.1067
+      ],
+      "signed_bounds_rad": [
+        -3.1067,
+        3.1067
+      ]
+    },
+    {
+      "joint": "Joint4_R",
+      "live_parent_body": "Link4_R",
+      "signed_parent_body": "Link4_R",
+      "live_actuator": "Joint4_R_position",
+      "signed_actuator": "Joint4_R_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -2.5307,
+        1.0472
+      ],
+      "signed_bounds_rad": [
+        -2.5307,
+        1.0472
+      ]
+    },
+    {
+      "joint": "Joint5_R",
+      "live_parent_body": "Link5_R",
+      "signed_parent_body": "Link5_R",
+      "live_actuator": "Joint5_R_position",
+      "signed_actuator": "Joint5_R_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -3.1067,
+        3.1067
+      ],
+      "signed_bounds_rad": [
+        -3.1067,
+        3.1067
+      ]
+    },
+    {
+      "joint": "Joint6_R",
+      "live_parent_body": "Link6_R",
+      "signed_parent_body": "Link6_R",
+      "live_actuator": "Joint6_R_position",
+      "signed_actuator": "Joint6_R_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.0472,
+        1.0472
+      ],
+      "signed_bounds_rad": [
+        -1.0472,
+        1.0472
+      ]
+    },
+    {
+      "joint": "Joint7_R",
+      "live_parent_body": "Link7_R",
+      "signed_parent_body": "Link7_R",
+      "live_actuator": "Joint7_R_position",
+      "signed_actuator": "Joint7_R_position",
+      "live_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "signed_axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.5708,
+        1.5708
+      ],
+      "signed_bounds_rad": [
+        -1.5708,
+        1.5708
+      ]
+    },
+    {
+      "joint": "l_thumb_cmc_flex",
+      "live_parent_body": "l_thumb_proximal",
+      "signed_parent_body": "l_thumb_proximal",
+      "live_actuator": "l_THJ0",
+      "signed_actuator": "l_THJ0",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.187,
+        1.291
+      ],
+      "signed_bounds_rad": [
+        -1.187,
+        1.291
+      ]
+    },
+    {
+      "joint": "l_thumb_cmc_abd",
+      "live_parent_body": "l_thumb_proximal_abd",
+      "signed_parent_body": "l_thumb_proximal_abd",
+      "live_actuator": "l_THJ1",
+      "signed_actuator": "l_THJ1",
+      "live_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "signed_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.484,
+        0.698
+      ],
+      "signed_bounds_rad": [
+        -1.484,
+        0.698
+      ]
+    },
+    {
+      "joint": "l_thumb_mcp",
+      "live_parent_body": "l_thumb_middle",
+      "signed_parent_body": "l_thumb_middle",
+      "live_actuator": "l_THJ2",
+      "signed_actuator": "l_THJ2",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "l_thumb_ip",
+      "live_parent_body": "l_thumb_distal",
+      "signed_parent_body": "l_thumb_distal",
+      "live_actuator": "l_THJ3",
+      "signed_actuator": "l_THJ3",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "l_index_finger_mcp_flex",
+      "live_parent_body": "l_index_finger_proximal",
+      "signed_parent_body": "l_index_finger_proximal",
+      "live_actuator": "l_FFJ0",
+      "signed_actuator": "l_FFJ0",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "l_index_finger_mcp_abd",
+      "live_parent_body": "l_index_finger_proximal_abd",
+      "signed_parent_body": "l_index_finger_proximal_abd",
+      "live_actuator": "l_FFJ1",
+      "signed_actuator": "l_FFJ1",
+      "live_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "signed_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -0.698,
+        0.698
+      ],
+      "signed_bounds_rad": [
+        -0.698,
+        0.698
+      ]
+    },
+    {
+      "joint": "l_index_finger_pip",
+      "live_parent_body": "l_index_finger_middle",
+      "signed_parent_body": "l_index_finger_middle",
+      "live_actuator": "l_FFJ2",
+      "signed_actuator": "l_FFJ2",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        2.094
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        2.094
+      ]
+    },
+    {
+      "joint": "l_index_finger_dip",
+      "live_parent_body": "l_index_finger_distal",
+      "signed_parent_body": "l_index_finger_distal",
+      "live_actuator": "l_FFJ3",
+      "signed_actuator": "l_FFJ3",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "l_middle_finger_mcp_flex",
+      "live_parent_body": "l_middle_finger_proximal",
+      "signed_parent_body": "l_middle_finger_proximal",
+      "live_actuator": "l_MFJ0",
+      "signed_actuator": "l_MFJ0",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "l_middle_finger_mcp_abd",
+      "live_parent_body": "l_middle_finger_proximal_abd",
+      "signed_parent_body": "l_middle_finger_proximal_abd",
+      "live_actuator": "l_MFJ1",
+      "signed_actuator": "l_MFJ1",
+      "live_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "signed_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -0.698,
+        0.698
+      ],
+      "signed_bounds_rad": [
+        -0.698,
+        0.698
+      ]
+    },
+    {
+      "joint": "l_middle_finger_pip",
+      "live_parent_body": "l_middle_finger_middle",
+      "signed_parent_body": "l_middle_finger_middle",
+      "live_actuator": "l_MFJ2",
+      "signed_actuator": "l_MFJ2",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        2.094
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        2.094
+      ]
+    },
+    {
+      "joint": "l_middle_finger_dip",
+      "live_parent_body": "l_middle_finger_distal",
+      "signed_parent_body": "l_middle_finger_distal",
+      "live_actuator": "l_MFJ3",
+      "signed_actuator": "l_MFJ3",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "l_ring_finger_mcp_flex",
+      "live_parent_body": "l_ring_finger_proximal",
+      "signed_parent_body": "l_ring_finger_proximal",
+      "live_actuator": "l_RFJ0",
+      "signed_actuator": "l_RFJ0",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "l_ring_finger_mcp_abd",
+      "live_parent_body": "l_ring_finger_proximal_abd",
+      "signed_parent_body": "l_ring_finger_proximal_abd",
+      "live_actuator": "l_RFJ1",
+      "signed_actuator": "l_RFJ1",
+      "live_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "signed_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -0.698,
+        0.698
+      ],
+      "signed_bounds_rad": [
+        -0.698,
+        0.698
+      ]
+    },
+    {
+      "joint": "l_ring_finger_pip",
+      "live_parent_body": "l_ring_finger_middle",
+      "signed_parent_body": "l_ring_finger_middle",
+      "live_actuator": "l_RFJ2",
+      "signed_actuator": "l_RFJ2",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        2.094
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        2.094
+      ]
+    },
+    {
+      "joint": "l_ring_finger_dip",
+      "live_parent_body": "l_ring_finger_distal",
+      "signed_parent_body": "l_ring_finger_distal",
+      "live_actuator": "l_RFJ3",
+      "signed_actuator": "l_RFJ3",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "l_pinky_mcp_flex",
+      "live_parent_body": "l_pinky_proximal",
+      "signed_parent_body": "l_pinky_proximal",
+      "live_actuator": "l_LFJ0",
+      "signed_actuator": "l_LFJ0",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "l_pinky_mcp_abd",
+      "live_parent_body": "l_pinky_proximal_abd",
+      "signed_parent_body": "l_pinky_proximal_abd",
+      "live_actuator": "l_LFJ1",
+      "signed_actuator": "l_LFJ1",
+      "live_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "signed_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -0.698,
+        0.698
+      ],
+      "signed_bounds_rad": [
+        -0.698,
+        0.698
+      ]
+    },
+    {
+      "joint": "l_pinky_pip",
+      "live_parent_body": "l_pinky_middle",
+      "signed_parent_body": "l_pinky_middle",
+      "live_actuator": "l_LFJ2",
+      "signed_actuator": "l_LFJ2",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        2.094
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        2.094
+      ]
+    },
+    {
+      "joint": "l_pinky_dip",
+      "live_parent_body": "l_pinky_distal",
+      "signed_parent_body": "l_pinky_distal",
+      "live_actuator": "l_LFJ3",
+      "signed_actuator": "l_LFJ3",
+      "live_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "r_thumb_cmc_flex",
+      "live_parent_body": "r_thumb_proximal",
+      "signed_parent_body": "r_thumb_proximal",
+      "live_actuator": "r_THJ0",
+      "signed_actuator": "r_THJ0",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.187,
+        1.291
+      ],
+      "signed_bounds_rad": [
+        -1.187,
+        1.291
+      ]
+    },
+    {
+      "joint": "r_thumb_cmc_abd",
+      "live_parent_body": "r_thumb_proximal_abd",
+      "signed_parent_body": "r_thumb_proximal_abd",
+      "live_actuator": "r_THJ1",
+      "signed_actuator": "r_THJ1",
+      "live_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "signed_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.484,
+        0.698
+      ],
+      "signed_bounds_rad": [
+        -1.484,
+        0.698
+      ]
+    },
+    {
+      "joint": "r_thumb_mcp",
+      "live_parent_body": "r_thumb_middle",
+      "signed_parent_body": "r_thumb_middle",
+      "live_actuator": "r_THJ2",
+      "signed_actuator": "r_THJ2",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "r_thumb_ip",
+      "live_parent_body": "r_thumb_distal",
+      "signed_parent_body": "r_thumb_distal",
+      "live_actuator": "r_THJ3",
+      "signed_actuator": "r_THJ3",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "r_index_finger_mcp_flex",
+      "live_parent_body": "r_index_finger_proximal",
+      "signed_parent_body": "r_index_finger_proximal",
+      "live_actuator": "r_FFJ0",
+      "signed_actuator": "r_FFJ0",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "r_index_finger_mcp_abd",
+      "live_parent_body": "r_index_finger_proximal_abd",
+      "signed_parent_body": "r_index_finger_proximal_abd",
+      "live_actuator": "r_FFJ1",
+      "signed_actuator": "r_FFJ1",
+      "live_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "signed_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -0.698,
+        0.698
+      ],
+      "signed_bounds_rad": [
+        -0.698,
+        0.698
+      ]
+    },
+    {
+      "joint": "r_index_finger_pip",
+      "live_parent_body": "r_index_finger_middle",
+      "signed_parent_body": "r_index_finger_middle",
+      "live_actuator": "r_FFJ2",
+      "signed_actuator": "r_FFJ2",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        2.094
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        2.094
+      ]
+    },
+    {
+      "joint": "r_index_finger_dip",
+      "live_parent_body": "r_index_finger_distal",
+      "signed_parent_body": "r_index_finger_distal",
+      "live_actuator": "r_FFJ3",
+      "signed_actuator": "r_FFJ3",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "r_middle_finger_mcp_flex",
+      "live_parent_body": "r_middle_finger_proximal",
+      "signed_parent_body": "r_middle_finger_proximal",
+      "live_actuator": "r_MFJ0",
+      "signed_actuator": "r_MFJ0",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "r_middle_finger_mcp_abd",
+      "live_parent_body": "r_middle_finger_proximal_abd",
+      "signed_parent_body": "r_middle_finger_proximal_abd",
+      "live_actuator": "r_MFJ1",
+      "signed_actuator": "r_MFJ1",
+      "live_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "signed_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -0.698,
+        0.698
+      ],
+      "signed_bounds_rad": [
+        -0.698,
+        0.698
+      ]
+    },
+    {
+      "joint": "r_middle_finger_pip",
+      "live_parent_body": "r_middle_finger_middle",
+      "signed_parent_body": "r_middle_finger_middle",
+      "live_actuator": "r_MFJ2",
+      "signed_actuator": "r_MFJ2",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        2.094
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        2.094
+      ]
+    },
+    {
+      "joint": "r_middle_finger_dip",
+      "live_parent_body": "r_middle_finger_distal",
+      "signed_parent_body": "r_middle_finger_distal",
+      "live_actuator": "r_MFJ3",
+      "signed_actuator": "r_MFJ3",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "r_ring_finger_mcp_flex",
+      "live_parent_body": "r_ring_finger_proximal",
+      "signed_parent_body": "r_ring_finger_proximal",
+      "live_actuator": "r_RFJ0",
+      "signed_actuator": "r_RFJ0",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "r_ring_finger_mcp_abd",
+      "live_parent_body": "r_ring_finger_proximal_abd",
+      "signed_parent_body": "r_ring_finger_proximal_abd",
+      "live_actuator": "r_RFJ1",
+      "signed_actuator": "r_RFJ1",
+      "live_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "signed_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -0.698,
+        0.698
+      ],
+      "signed_bounds_rad": [
+        -0.698,
+        0.698
+      ]
+    },
+    {
+      "joint": "r_ring_finger_pip",
+      "live_parent_body": "r_ring_finger_middle",
+      "signed_parent_body": "r_ring_finger_middle",
+      "live_actuator": "r_RFJ2",
+      "signed_actuator": "r_RFJ2",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        2.094
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        2.094
+      ]
+    },
+    {
+      "joint": "r_ring_finger_dip",
+      "live_parent_body": "r_ring_finger_distal",
+      "signed_parent_body": "r_ring_finger_distal",
+      "live_actuator": "r_RFJ3",
+      "signed_actuator": "r_RFJ3",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "r_pinky_mcp_flex",
+      "live_parent_body": "r_pinky_proximal",
+      "signed_parent_body": "r_pinky_proximal",
+      "live_actuator": "r_LFJ0",
+      "signed_actuator": "r_LFJ0",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    },
+    {
+      "joint": "r_pinky_mcp_abd",
+      "live_parent_body": "r_pinky_proximal_abd",
+      "signed_parent_body": "r_pinky_proximal_abd",
+      "live_actuator": "r_LFJ1",
+      "signed_actuator": "r_LFJ1",
+      "live_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "signed_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -0.698,
+        0.698
+      ],
+      "signed_bounds_rad": [
+        -0.698,
+        0.698
+      ]
+    },
+    {
+      "joint": "r_pinky_pip",
+      "live_parent_body": "r_pinky_middle",
+      "signed_parent_body": "r_pinky_middle",
+      "live_actuator": "r_LFJ2",
+      "signed_actuator": "r_LFJ2",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        2.094
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        2.094
+      ]
+    },
+    {
+      "joint": "r_pinky_dip",
+      "live_parent_body": "r_pinky_distal",
+      "signed_parent_body": "r_pinky_distal",
+      "live_actuator": "r_LFJ3",
+      "signed_actuator": "r_LFJ3",
+      "live_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "signed_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "live_zero_rad": 0.0,
+      "signed_zero_rad": 0.0,
+      "same_local_coordinates": true,
+      "live_bounds_rad": [
+        -1.047,
+        1.57
+      ],
+      "signed_bounds_rad": [
+        -1.047,
+        1.57
+      ]
+    }
+  ],
+  "named_axes_locally_identical": true,
+  "home_max_joint_difference_rad": 0.0,
+  "gravity_live_m_s2": [
+    0.0,
+    0.0,
+    -9.81
+  ],
+  "gravity_signed_m_s2": [
+    0.0,
+    0.0,
+    -9.81
+  ],
+  "probe_count": 158,
+  "probe_names": [
+    "home",
+    "signed_home",
+    "Joint1_L:-1",
+    "Joint1_L:+1",
+    "Joint2_L:-1",
+    "Joint2_L:+1",
+    "Joint3_L:-1",
+    "Joint3_L:+1",
+    "Joint4_L:-1",
+    "Joint4_L:+1",
+    "Joint5_L:-1",
+    "Joint5_L:+1",
+    "Joint6_L:-1",
+    "Joint6_L:+1",
+    "Joint7_L:-1",
+    "Joint7_L:+1",
+    "Joint1_R:-1",
+    "Joint1_R:+1",
+    "Joint2_R:-1",
+    "Joint2_R:+1",
+    "Joint3_R:-1",
+    "Joint3_R:+1",
+    "Joint4_R:-1",
+    "Joint4_R:+1",
+    "Joint5_R:-1",
+    "Joint5_R:+1",
+    "Joint6_R:-1",
+    "Joint6_R:+1",
+    "Joint7_R:-1",
+    "Joint7_R:+1",
+    "l_thumb_cmc_flex:-1",
+    "l_thumb_cmc_flex:+1",
+    "l_thumb_cmc_abd:-1",
+    "l_thumb_cmc_abd:+1",
+    "l_thumb_mcp:-1",
+    "l_thumb_mcp:+1",
+    "l_thumb_ip:-1",
+    "l_thumb_ip:+1",
+    "l_index_finger_mcp_flex:-1",
+    "l_index_finger_mcp_flex:+1",
+    "l_index_finger_mcp_abd:-1",
+    "l_index_finger_mcp_abd:+1",
+    "l_index_finger_pip:-1",
+    "l_index_finger_pip:+1",
+    "l_index_finger_dip:-1",
+    "l_index_finger_dip:+1",
+    "l_middle_finger_mcp_flex:-1",
+    "l_middle_finger_mcp_flex:+1",
+    "l_middle_finger_mcp_abd:-1",
+    "l_middle_finger_mcp_abd:+1",
+    "l_middle_finger_pip:-1",
+    "l_middle_finger_pip:+1",
+    "l_middle_finger_dip:-1",
+    "l_middle_finger_dip:+1",
+    "l_ring_finger_mcp_flex:-1",
+    "l_ring_finger_mcp_flex:+1",
+    "l_ring_finger_mcp_abd:-1",
+    "l_ring_finger_mcp_abd:+1",
+    "l_ring_finger_pip:-1",
+    "l_ring_finger_pip:+1",
+    "l_ring_finger_dip:-1",
+    "l_ring_finger_dip:+1",
+    "l_pinky_mcp_flex:-1",
+    "l_pinky_mcp_flex:+1",
+    "l_pinky_mcp_abd:-1",
+    "l_pinky_mcp_abd:+1",
+    "l_pinky_pip:-1",
+    "l_pinky_pip:+1",
+    "l_pinky_dip:-1",
+    "l_pinky_dip:+1",
+    "r_thumb_cmc_flex:-1",
+    "r_thumb_cmc_flex:+1",
+    "r_thumb_cmc_abd:-1",
+    "r_thumb_cmc_abd:+1",
+    "r_thumb_mcp:-1",
+    "r_thumb_mcp:+1",
+    "r_thumb_ip:-1",
+    "r_thumb_ip:+1",
+    "r_index_finger_mcp_flex:-1",
+    "r_index_finger_mcp_flex:+1",
+    "r_index_finger_mcp_abd:-1",
+    "r_index_finger_mcp_abd:+1",
+    "r_index_finger_pip:-1",
+    "r_index_finger_pip:+1",
+    "r_index_finger_dip:-1",
+    "r_index_finger_dip:+1",
+    "r_middle_finger_mcp_flex:-1",
+    "r_middle_finger_mcp_flex:+1",
+    "r_middle_finger_mcp_abd:-1",
+    "r_middle_finger_mcp_abd:+1",
+    "r_middle_finger_pip:-1",
+    "r_middle_finger_pip:+1",
+    "r_middle_finger_dip:-1",
+    "r_middle_finger_dip:+1",
+    "r_ring_finger_mcp_flex:-1",
+    "r_ring_finger_mcp_flex:+1",
+    "r_ring_finger_mcp_abd:-1",
+    "r_ring_finger_mcp_abd:+1",
+    "r_ring_finger_pip:-1",
+    "r_ring_finger_pip:+1",
+    "r_ring_finger_dip:-1",
+    "r_ring_finger_dip:+1",
+    "r_pinky_mcp_flex:-1",
+    "r_pinky_mcp_flex:+1",
+    "r_pinky_mcp_abd:-1",
+    "r_pinky_mcp_abd:+1",
+    "r_pinky_pip:-1",
+    "r_pinky_pip:+1",
+    "r_pinky_dip:-1",
+    "r_pinky_dip:+1",
+    "mixed_near_home:0",
+    "mixed_near_home:1",
+    "mixed_near_home:2",
+    "mixed_near_home:3",
+    "mixed_near_home:4",
+    "mixed_near_home:5",
+    "mixed_near_home:6",
+    "mixed_near_home:7",
+    "mixed_near_home:8",
+    "mixed_near_home:9",
+    "mixed_near_home:10",
+    "mixed_near_home:11",
+    "mixed_near_home:12",
+    "mixed_near_home:13",
+    "mixed_near_home:14",
+    "mixed_near_home:15",
+    "mixed_near_home:16",
+    "mixed_near_home:17",
+    "mixed_near_home:18",
+    "mixed_near_home:19",
+    "mixed_near_home:20",
+    "mixed_near_home:21",
+    "mixed_near_home:22",
+    "mixed_near_home:23",
+    "mixed_common_range:0",
+    "mixed_common_range:1",
+    "mixed_common_range:2",
+    "mixed_common_range:3",
+    "mixed_common_range:4",
+    "mixed_common_range:5",
+    "mixed_common_range:6",
+    "mixed_common_range:7",
+    "mixed_common_range:8",
+    "mixed_common_range:9",
+    "mixed_common_range:10",
+    "mixed_common_range:11",
+    "mixed_common_range:12",
+    "mixed_common_range:13",
+    "mixed_common_range:14",
+    "mixed_common_range:15",
+    "mixed_common_range:16",
+    "mixed_common_range:17",
+    "mixed_common_range:18",
+    "mixed_common_range:19",
+    "mixed_common_range:20",
+    "mixed_common_range:21",
+    "mixed_common_range:22",
+    "mixed_common_range:23"
+  ],
+  "pose_fields_units": [
+    "m",
+    "rad"
+  ],
+  "finger_fields_units": "m",
+  "finger_order": [
+    "thumb",
+    "index_finger",
+    "middle_finger",
+    "ring_finger",
+    "pinky"
+  ],
+  "landmark_order": [
+    "root",
+    "third_axis",
+    "fourth_axis",
+    "tip"
+  ],
+  "virtual_anatomical_frame": {
+    "origin": "Named live Wuji wrist body origin",
+    "x": "Distal direction from body origin to mean of four non-thumb named MCP anchors",
+    "y": "Index-from-pinky MCP direction after orthogonalization to x",
+    "z": "Cross product of x and y",
+    "normal": "Positive z on the left; negative z on the right",
+    "scope": "Robot-model coordinate convention only. Human marker attachment is unmeasured."
+  },
+  "sides": {
+    "l": {
+      "metrics": {
+        "base": {
+          "p95": [
+            0.0,
+            0.0
+          ],
+          "max": [
+            0.0,
+            0.0
+          ]
+        },
+        "wrist_scoring_tcp": {
+          "p95": [
+            0.0,
+            0.0
+          ],
+          "max": [
+            0.0,
+            0.0
+          ]
+        },
+        "model_palm": {
+          "p95": [
+            0.00030011447436365896,
+            1.633835999967933e-05
+          ],
+          "max": [
+            0.0003001144743637144,
+            1.633835999978983e-05
+          ]
+        },
+        "live_palm_scoring_closure": {
+          "p95": [
+            1.1102230246251565e-16,
+            4.443059973708329e-17
+          ],
+          "max": [
+            1.3597399555105182e-16,
+            1.2509569582735758e-16
+          ]
+        },
+        "native_tcp_held_out": {
+          "p95": [
+            2.143206459204785e-07,
+            9.29197200935861e-07
+          ],
+          "max": [
+            2.1432064593500456e-07,
+            9.29197201073222e-07
+          ]
+        },
+        "world_landmark_euclidean": {
+          "p95": [
+            [
+              0.0007750022451076619,
+              0.002661300725287141,
+              0.003888530891986074,
+              0.006449721505769326
+            ],
+            [
+              0.0023946504362385174,
+              0.004074364487242,
+              0.005030188030467378,
+              0.005798335424398238
+            ],
+            [
+              0.0024066189991272828,
+              0.004099868947788372,
+              0.005059453993480505,
+              0.005833852364192049
+            ],
+            [
+              0.00222406550092759,
+              0.003908960953908325,
+              0.004866284472461457,
+              0.005638280397195759
+            ],
+            [
+              0.0021722099323725277,
+              0.0037885134587426956,
+              0.004718787491750461,
+              0.005659796823780684
+            ]
+          ],
+          "max": [
+            [
+              0.00077500224510778,
+              0.0027998197404724865,
+              0.004264530333195282,
+              0.006702919335638968
+            ],
+            [
+              0.0023946504362386376,
+              0.004084572889818086,
+              0.005044585537793056,
+              0.005805414606518614
+            ],
+            [
+              0.0024066189991274103,
+              0.004102375709951933,
+              0.005062494835344193,
+              0.005837300159346743
+            ],
+            [
+              0.0022240655009276656,
+              0.0039157577899458385,
+              0.00487579470133244,
+              0.005654307935554836
+            ],
+            [
+              0.002172209932372577,
+              0.0038222396745055654,
+              0.004755200001042841,
+              0.005718296891160505
+            ]
+          ]
+        },
+        "palm_local_landmark_euclidean": {
+          "p95": [
+            [
+              0.0008316252377724262,
+              0.0027024627622129656,
+              0.003916336791360101,
+              0.006459336037779904
+            ],
+            [
+              0.0024131366314612697,
+              0.0040850862171860946,
+              0.005038762978954645,
+              0.005812786379644554
+            ],
+            [
+              0.002424501059393507,
+              0.004110090785179893,
+              0.005067566478271543,
+              0.005848135910220552
+            ],
+            [
+              0.0022431300229813307,
+              0.003919494838375254,
+              0.004874562531789905,
+              0.005652817745772102
+            ],
+            [
+              0.0021915447044605738,
+              0.003724335547677147,
+              0.00462977892045691,
+              0.00553252742724523
+            ]
+          ],
+          "max": [
+            [
+              0.0008316252377725036,
+              0.002851251617200578,
+              0.0043410398814027265,
+              0.006788490494682463
+            ],
+            [
+              0.0024131366314613305,
+              0.004095375165396488,
+              0.0050532914415353635,
+              0.005819276379300235
+            ],
+            [
+              0.002424501059393645,
+              0.004112624813872762,
+              0.005070655217004502,
+              0.00585133067562217
+            ],
+            [
+              0.0022431300229813884,
+              0.003926242394897655,
+              0.0048840118734665245,
+              0.005669631281947425
+            ],
+            [
+              0.0021915447044606783,
+              0.0037594265693682042,
+              0.0046678336117383645,
+              0.005592710161334134
+            ]
+          ]
+        },
+        "virtual_anatomical_flexion_invariance": {
+          "p95": [
+            0.0,
+            1.5379491414384822e-15
+          ],
+          "max": [
+            0.0,
+            2.846832915843028e-15
+          ]
+        }
+      },
+      "same_base_palm_scoring_tcp_on_probes": false,
+      "native_tcp_home_bridge_passed_14_axis_perturbations": true,
+      "native_tcp_held_out_names": [
+        "Joint1_L:-1",
+        "Joint1_L:+1",
+        "Joint2_L:-1",
+        "Joint2_L:+1",
+        "Joint3_L:-1",
+        "Joint3_L:+1",
+        "Joint4_L:-1",
+        "Joint4_L:+1",
+        "Joint5_L:-1",
+        "Joint5_L:+1",
+        "Joint6_L:-1",
+        "Joint6_L:+1",
+        "Joint7_L:-1",
+        "Joint7_L:+1"
+      ],
+      "same_finger_geometry_on_probes": false
+    },
+    "r": {
+      "metrics": {
+        "base": {
+          "p95": [
+            0.0,
+            0.0
+          ],
+          "max": [
+            0.0,
+            0.0
+          ]
+        },
+        "wrist_scoring_tcp": {
+          "p95": [
+            0.0,
+            0.0
+          ],
+          "max": [
+            0.0,
+            0.0
+          ]
+        },
+        "model_palm": {
+          "p95": [
+            0.0002501661810362784,
+            6.06400000154744e-08
+          ],
+          "max": [
+            0.0002501661810363371,
+            6.064000013239466e-08
+          ]
+        },
+        "live_palm_scoring_closure": {
+          "p95": [
+            1.2412670766236366e-16,
+            2.946043618291034e-16
+          ],
+          "max": [
+            2.306856124162272e-16,
+            3.777716358848211e-16
+          ]
+        },
+        "native_tcp_held_out": {
+          "p95": [
+            1.9730560987614538e-07,
+            6.057259563336977e-07
+          ],
+          "max": [
+            1.9730560996499151e-07,
+            6.057262972075747e-07
+          ]
+        },
+        "world_landmark_euclidean": {
+          "p95": [
+            [
+              0.0007737584861581961,
+              0.002142490536883177,
+              0.0033083969915601776,
+              0.00579418736092696
+            ],
+            [
+              0.002386172450834532,
+              0.004059410112211351,
+              0.005011609336325513,
+              0.005777823655883313
+            ],
+            [
+              0.002398231452588943,
+              0.004084883893514189,
+              0.00504081189316587,
+              0.005813535448909026
+            ],
+            [
+              0.0022164794887042957,
+              0.003895243465817959,
+              0.004848322941429324,
+              0.005619372799176022
+            ],
+            [
+              0.0021651383890045907,
+              0.003581234995240959,
+              0.004459955001496613,
+              0.005157487601228592
+            ]
+          ],
+          "max": [
+            [
+              0.0007737584861584151,
+              0.002146021300994993,
+              0.003324729336306931,
+              0.005802231749716828
+            ],
+            [
+              0.0023861724508347586,
+              0.00406508082524549,
+              0.005018001809696297,
+              0.005782274334166529
+            ],
+            [
+              0.002398231452589107,
+              0.004087597890582281,
+              0.005043894328946677,
+              0.005816990984936266
+            ],
+            [
+              0.002216479488704376,
+              0.0039015483247170964,
+              0.004857829844617279,
+              0.0056326433031528315
+            ],
+            [
+              0.0021651383890046384,
+              0.00359696302529064,
+              0.0044845905957249885,
+              0.005178019268318291
+            ]
+          ]
+        },
+        "palm_local_landmark_euclidean": {
+          "p95": [
+            [
+              0.0008268541698380083,
+              0.002155817517903227,
+              0.0033235058088133275,
+              0.005796172878834075
+            ],
+            [
+              0.002403433536029707,
+              0.004069337984807102,
+              0.005019516196204639,
+              0.005790493143452995
+            ],
+            [
+              0.002415907917970589,
+              0.004095147928478075,
+              0.00504904176959213,
+              0.005826700202798583
+            ],
+            [
+              0.002236205914969401,
+              0.003906479093318928,
+              0.004857311743310768,
+              0.005633399550931947
+            ],
+            [
+              0.0021858728235178643,
+              0.0035951170052189187,
+              0.0044712455550304534,
+              0.005143532014056671
+            ]
+          ],
+          "max": [
+            [
+              0.0008268541698380874,
+              0.0021594771197704,
+              0.0033395631752326997,
+              0.005804051108467872
+            ],
+            [
+              0.002403433536029772,
+              0.004074929211463091,
+              0.0050258692141019684,
+              0.005794872210228437
+            ],
+            [
+              0.0024159079179706605,
+              0.004097834206131661,
+              0.0050521186829252775,
+              0.005829882356878916
+            ],
+            [
+              0.002236205914969439,
+              0.003912845415392291,
+              0.004866919492584531,
+              0.0056465082362405425
+            ],
+            [
+              0.0021858728235179016,
+              0.003610788543452183,
+              0.004495848557879105,
+              0.005164071217090307
+            ]
+          ]
+        },
+        "virtual_anatomical_flexion_invariance": {
+          "p95": [
+            0.0,
+            2.2392026019048736e-15
+          ],
+          "max": [
+            0.0,
+            3.3311320863704934e-15
+          ]
+        }
+      },
+      "same_base_palm_scoring_tcp_on_probes": false,
+      "native_tcp_home_bridge_passed_14_axis_perturbations": true,
+      "native_tcp_held_out_names": [
+        "Joint1_R:-1",
+        "Joint1_R:+1",
+        "Joint2_R:-1",
+        "Joint2_R:+1",
+        "Joint3_R:-1",
+        "Joint3_R:+1",
+        "Joint4_R:-1",
+        "Joint4_R:+1",
+        "Joint5_R:-1",
+        "Joint5_R:+1",
+        "Joint6_R:-1",
+        "Joint6_R:+1",
+        "Joint7_R:-1",
+        "Joint7_R:+1"
+      ],
+      "same_finger_geometry_on_probes": false
+    }
+  },
+  "simulator_bridges": {
+    "l": {
+      "world_from_base": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.09
+        ],
+        [
+          -1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          1.25
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "model_palm_from_scoring_tcp": [
+        [
+          1.0,
+          -1.6940658950228074e-21,
+          6.117862981827422e-22,
+          -0.0030000000000000035
+        ],
+        [
+          0.0,
+          -1.0,
+          -5.551115123724995e-17,
+          0.0003001099999999867
+        ],
+        [
+          0.0,
+          -5.551115120841595e-17,
+          -1.0,
+          0.028499999999999946
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "model_palm_from_native_tcp_home_candidate": [
+        [
+          0.9999999996964075,
+          1.1020097548689337e-05,
+          -2.203949030775547e-05,
+          -0.0030055537577478647
+        ],
+        [
+          1.1020502337381383e-05,
+          -0.9999999997706087,
+          1.836648073829929e-05,
+          0.0003027249446870615
+        ],
+        [
+          -2.203928790229048e-05,
+          -1.836672361902748e-05,
+          -0.999999999588465,
+          0.02849993401585699
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "model_palm_from_virtual_anatomical": [
+        [
+          -0.12537721654104608,
+          0.9917761500302825,
+          0.025702564143102263,
+          0.0
+        ],
+        [
+          0.0671713374217064,
+          0.03433343439708198,
+          -0.9971505536835853,
+          0.0
+        ],
+        [
+          -0.9898325944327147,
+          -0.12329348528455147,
+          -0.07092356085948576,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "virtual_anatomical_from_scoring_tcp": [
+        [
+          -0.12537721654104608,
+          -0.06717133742170635,
+          0.9898325944327145,
+          -0.027813938501635545
+        ],
+        [
+          0.9917761500302825,
+          -0.034333434397081974,
+          0.12329348528455146,
+          -0.006478888973703654
+        ],
+        [
+          0.025702564143102263,
+          0.9971505536835851,
+          0.07092356085948581,
+          -0.0023976840295906144
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "virtual_anatomical_from_native_tcp_home_candidate": [
+        [
+          -0.12535466103557766,
+          -0.0671545390937635,
+          0.9898365909763875,
+          -0.02781300122436045
+        ],
+        [
+          0.9917792454014994,
+          -0.03432024042191815,
+          0.12327225757732736,
+          -0.006484299142734204
+        ],
+        [
+          0.025693138140068406,
+          0.997152139333052,
+          0.07090468021244747,
+          -0.0024004295891175546
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "model_only_palm_facing_axis_in_virtual_anatomical": [
+        0,
+        0,
+        1
+      ]
+    },
+    "r": {
+      "world_from_base": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          -0.09
+        ],
+        [
+          -1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          1.25
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "model_palm_from_scoring_tcp": [
+        [
+          0.9999999998655362,
+          -1.6398999998897468e-05,
+          -7.476151916053589e-23,
+          -0.003000004101970451
+        ],
+        [
+          -1.639899999889746e-05,
+          -0.9999999998655361,
+          -1.71392034677902e-16,
+          -0.0002501108029663861
+        ],
+        [
+          1.5649869448063097e-21,
+          1.7139203467344108e-16,
+          -0.9999999999999998,
+          0.028499999999999952
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "model_palm_from_native_tcp_home_candidate": [
+        [
+          0.9999999999585689,
+          -5.3782536704630565e-06,
+          7.343888963712644e-06,
+          -0.00299584656697384
+        ],
+        [
+          -5.378280654198198e-06,
+          -0.9999999999787846,
+          3.6742966224012073e-06,
+          -0.0002488914610899162
+        ],
+        [
+          7.3438692022575615e-06,
+          -3.674336119744924e-06,
+          -0.9999999999662816,
+          0.028500065988599534
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "model_palm_from_virtual_anatomical": [
+        [
+          -0.12525814038056976,
+          0.9917909754058649,
+          -0.025711074887769948,
+          0.0
+        ],
+        [
+          -0.06716978189414498,
+          -0.034333219658759954,
+          -0.997150665861562,
+          0.0
+        ],
+        [
+          -0.9898477755032309,
+          -0.12317423079259057,
+          0.07091889875032714,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "virtual_anatomical_from_scoring_tcp": [
+        [
+          -0.12525703884647382,
+          0.06717183599335687,
+          0.9898477755032307,
+          -0.027818086778810508
+        ],
+        [
+          0.9917915383029741,
+          0.03431695527393878,
+          0.12317423079259057,
+          -0.006477255462966421
+        ],
+        [
+          -0.02569472261054438,
+          0.9971510873633984,
+          -0.07091889875032698,
+          0.002347720098230802
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "virtual_anatomical_from_native_tcp_home_candidate": [
+        [
+          -0.12526504843003508,
+          0.06717409259620778,
+          0.9898466087862773,
+          -0.027818754765509154
+        ],
+        [
+          0.991790255443025,
+          0.03432833813810298,
+          0.12318138824080292,
+          -0.006473182049304328
+        ],
+        [
+          -0.0257051911114528,
+          0.9971505435412188,
+          -0.0709227513945386,
+          0.0023464020158119325
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "model_only_palm_facing_axis_in_virtual_anatomical": [
+        0,
+        0,
+        -1
+      ]
+    }
+  },
+  "scope_exclusions": [
+    "physical_calibration",
+    "tracker_attachment",
+    "manus_attachment",
+    "dynamics",
+    "safety",
+    "untested_pose_equivalence"
+  ],
+  "native_identity": {
+    "bridge_sha256": "5dcc1624fa5abd9dbb3dda0622fbf2cc02a7d188780cea81ef9e1b14508b0bbc",
+    "config_sha256": "ce20b1a80974c3ed58cdac4973152625096c8ad93a779e5fd4108c26ce19bd52"
+  }
+}

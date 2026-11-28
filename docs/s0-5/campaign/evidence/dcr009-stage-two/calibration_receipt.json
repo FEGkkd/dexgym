@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "scope": "MUJOCO_ONLY",
+  "status": "BLOCKED",
+  "live_model_sha256": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+  "signed_model_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+  "qualification": {
+    "virtual_scene_axis_convention": "PASS",
+    "physical_shared_registration": "UNQUALIFIED",
+    "recorded_capture_heading": "UNQUALIFIED",
+    "recorded_tracker_to_anatomical_attachment": "UNQUALIFIED",
+    "recorded_mcap_pilot": "BLOCKED"
+  },
+  "blocking_conditions": [
+    "No independently qualified link from the as-recorded registered Tracker wrist frames to the matching anatomical palms across the selected recordings.",
+    "Virtual co-oriented scene axes validate a separate coordinate standard. The archived physical directed-heading references do not validate transfer of that standard to the recorded room."
+  ],
+  "evidence": {
+    "model_frame_receipt": {
+      "path": "model_frame_receipt.json",
+      "sha256": "1d67a6dad1831574af10a1fdf6349638097af6457e9d8527c9bd77e150e876fe"
+    },
+    "virtual_axis_receipt": {
+      "path": "virtual_axis_receipt.json",
+      "sha256": "4798dfbdaf80178b265a0c325bce1b96b09221d35b4b11c86d35c650c5f3782a"
+    },
+    "tracker_archive": {
+      "archive_member_sha256": {
+        ".validation/s0-policy/t-heading-20261119.DfY0t7G4/results.json": "6ef610e12b36165adbea995e2b118b341fe5569b2f7a54d3b4bd06941cf0cb50",
+        ".validation/s0-policy/palm-wrist-joint-20261119.xoQMOMg3/joint_calibration_report.json": "6f6ee03c890d3bbdfcb7fb747b0f9845962a4e7d2ac6c983382e9b77050ee337",
+        ".validation/s0-policy/palm-wrist-joint-20261119.xoQMOMg3/joint_calibration_review.json": "44b8333614b97521a32514de93c28aaea11e0f668ec00e4071ace4f9c27dab1b",
+        ".validation/s0-policy/palm-wrist-joint-20261119.xoQMOMg3/policy_s02_sim.joint_calibration_candidate.yaml": "7e98b5af6beeef917ef5c08ee36338ac0bd5d26cd133282ee73d02940195fd80",
+        ".validation/s0-policy/palm-calibration-20261117-173506/live_calibration_verified.json": "ff8d60a83dd37b4e726e6dcfc9e774c721729a7ead49bde6cdf746b2055b78e9",
+        "data/s0_heading_reference_20261119_165342/calibration_windows.json": "2ac38e1618e69d0a6440ebee2c3fb694c488c9a398f7455ab03db6e0da634d10",
+        "data/s0_heading_reference_20261119_165505/calibration_windows.json": "3630a09fbdbf17038f02cd78aa18e92b2a94a953366848c6f9fbc697d7599489",
+        "data/s0_heading_reference_20261119_165606/calibration_windows.json": "cadd0c75a1b225447c76eb0dfad1027400dd25b2ea8bc10d724531eb88d0a84c",
+        "src/vive_tracker_ros/config/tracker.yaml": "c626978236190d61d6b95fd6d03d92fd1cd8d9ef9528a3c6386a3ad3e431dcda",
+        "src/vive_tracker_ros/config/tracker_calibration.yaml": "9637f10c1bf8419c72ed8001190621e4a9bfb395a28a67c6f3c608984c503c84"
+      },
+      "status": "ARCHIVE_NOT_QUALIFIED_FOR_CAPTURE_CAL",
+      "heading": {
+        "common_yaw_deg": 17.058897971036735,
+        "old_rotation": [
+          [
+            0.08171734929190519,
+            0.0,
+            0.9966555447217992
+          ],
+          [
+            0.9966555447217988,
+            0.0,
+            -0.08171734929190516
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ]
+        ],
+        "historical_candidate_rotation": [
+          [
+            -0.21425139659863868,
+            0.0,
+            0.9767785516971256
+          ],
+          [
+            0.9767785516971252,
+            0.0,
+            0.2142513965986388
+          ],
+          [
+            0.0,
+            0.9999999999999999,
+            0.0
+          ]
+        ],
+        "references": [
+          {
+            "bag": "s0_heading_reference_20261119_165606",
+            "role": "reference",
+            "direction": "toward_robot",
+            "topic": "/vive/tracker/left_wrist",
+            "fit_yaw_deg": 17.700730252915122,
+            "directed_holdout_angle_deg": 2.946420964757804,
+            "vertical_excursion_mm": 19.74853938064225
+          },
+          {
+            "bag": "s0_heading_reference_20261119_165505",
+            "role": "reference",
+            "direction": "toward_robot",
+            "topic": "/vive/tracker/left_wrist",
+            "fit_yaw_deg": 12.4497206052779,
+            "directed_holdout_angle_deg": -4.930093506698029,
+            "vertical_excursion_mm": 21.516905170651523
+          },
+          {
+            "bag": "s0_heading_reference_20261119_165342",
+            "role": "reference",
+            "direction": "toward_robot",
+            "topic": "/vive/tracker/left_wrist",
+            "fit_yaw_deg": 17.058897971036735,
+            "directed_holdout_angle_deg": 1.9836725419402246,
+            "vertical_excursion_mm": 13.516151688860557
+          }
+        ],
+        "scope": "Historical manually directed capture. External common-frame, fixture and recording generation correspondence are unavailable."
+      },
+      "tracker_attachment": {
+        "candidate_status": "candidate_failed_independent_holdouts",
+        "holdouts": {
+          "current": {
+            "s0_palm_precision_20261118_124732_holdout": {
+              "contact_p95_mm": 36.83793910645211,
+              "contact_inferred_relative_angle_deg_p95": 3.5933896265700627,
+              "contact_inferred_relative_wrist_gap_mm_p95": 21.443310952091785
+            },
+            "s0_palm_precision_20261118_124945_holdout": {
+              "contact_p95_mm": 62.60691271632378,
+              "contact_inferred_relative_angle_deg_p95": 1.8534434096780974,
+              "contact_inferred_relative_wrist_gap_mm_p95": 9.680968745359909
+            }
+          },
+          "old_five_only": {
+            "s0_palm_precision_20261118_124732_holdout": {
+              "contact_p95_mm": 16.971998199307347,
+              "contact_inferred_relative_angle_deg_p95": 6.149894504506866,
+              "contact_inferred_relative_wrist_gap_mm_p95": 17.596446288910048
+            },
+            "s0_palm_precision_20261118_124945_holdout": {
+              "contact_p95_mm": 23.522051240251553,
+              "contact_inferred_relative_angle_deg_p95": 8.356789892250474,
+              "contact_inferred_relative_wrist_gap_mm_p95": 19.112366408001343
+            }
+          },
+          "pivots_fixed": {
+            "s0_palm_precision_20261118_124732_holdout": {
+              "contact_p95_mm": 37.919776605612405,
+              "contact_inferred_relative_angle_deg_p95": 14.456592344583669,
+              "contact_inferred_relative_wrist_gap_mm_p95": 55.373590470308955
+            },
+            "s0_palm_precision_20261118_124945_holdout": {
+              "contact_p95_mm": 39.058136545506855,
+              "contact_inferred_relative_angle_deg_p95": 12.544572753503761,
+              "contact_inferred_relative_wrist_gap_mm_p95": 44.971975007328595
+            }
+          },
+          "joint": {
+            "s0_palm_precision_20261118_124732_holdout": {
+              "contact_p95_mm": 30.053583361714864,
+              "contact_inferred_relative_angle_deg_p95": 9.712056980815868,
+              "contact_inferred_relative_wrist_gap_mm_p95": 41.74293628196715
+            },
+            "s0_palm_precision_20261118_124945_holdout": {
+              "contact_p95_mm": 33.23353442770084,
+              "contact_inferred_relative_angle_deg_p95": 8.849282231771923,
+              "contact_inferred_relative_wrist_gap_mm_p95": 34.99929860290691
+            }
+          }
+        },
+        "scope": "Historical labeled contacts, wearer tracker pivots and relative pose proxies; absolute side-specific anatomical mount and cohort recording-epoch equivalence remain unestablished.",
+        "expected_replay_topics": [
+          "/vive/tracker/left_wrist",
+          "/vive/tracker/right_wrist"
+        ],
+        "replay_topic_semantics": "Post-software-registration wrist child poses. Keep the raw marker as a separate upstream frame and do not reapply the raw-to-child fixed edge."
+      }
+    }
+  }
+}
