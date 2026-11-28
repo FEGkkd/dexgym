@@ -12,7 +12,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 
 from replay_home_anchored_pilot import (
-    WRISTS, digest, map_file, object_at, palm_poses, pose_from_xyz_quat, proper, read_frames,
+    FRESH_NS, WRISTS, digest, map_file, object_at, palm_poses, pose_from_xyz_quat, proper, read_frames,
     replay_class, validate_environment,
 )
 
@@ -72,6 +72,15 @@ def load(args):
     rows = check_scope(plan)
     if args.center_offset_mm is not None and (args.root != ROOT_FIVE or args.plan_sha256 != ROOT_FIVE_PLAN_SHA):
         raise ValueError("Center offset comparison is authorized only for root five in the frozen diagnostic plan")
+    if args.start_only_profile is not None:
+        if args.root != ROOT_FIVE or args.center_offset_mm != 0 or args.plan_sha256 != ROOT_FIVE_PLAN_SHA:
+            raise ValueError("The isolated START diagnosis requires root five at the original center")
+        state_file = os.environ.get("S05_DCR009_SEGMENTED_START_STATE")
+        if args.start_only_profile == "segmented":
+            if not state_file or Path(state_file).read_bytes() != b"PREPOSITION\n":
+                raise ValueError("Opt-in segmented controller profile was not armed for preposition")
+        elif state_file:
+            raise ValueError("The original START audit must use the original unsegmented controller")
     if plan["cohort_sha256"] != COHORT_SHA or plan["shared_frames_sha256"] != digest(args.frames):
         raise ValueError("Plan does not bind the original cohort and exact runtime frames")
     selection = next(row for row in rows if row["root"] == args.root)
@@ -98,8 +107,83 @@ def load(args):
 def diagnostic_class():
     base, rclpy = replay_class()
     from nominal_live_replay import HUMAN, deserialize_message
+    from summarize_nominal_replay import joint_values, stamp
 
     class DiagnosticReplay(base):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.segmented_diag = {}
+            self.segmented_commands = {}
+
+        def observe_output(self, topic, value):
+            super().observe_output(topic, value)
+            if self.args.start_only_profile != "segmented":
+                return
+            header = stamp(value.get("header", {}).get("stamp"))
+            if header is None:
+                return
+            now = self.node.get_clock().now().nanoseconds
+            if not 0 <= now - header <= FRESH_NS:
+                return
+            self.segmented_commands = {key: item for key, item in self.segmented_commands.items() if now - key[1] <= FRESH_NS}
+            for side in ("left", "right"):
+                if topic == f"/{side}_hand/command" and value.get("side") == side:
+                    sequence = value.get("sequence")
+                    if type(sequence) is int and sequence > 0:
+                        key = side, header, sequence
+                        hand = joint_values(value, 20)
+                        self.segmented_commands[key] = hand if key not in self.segmented_commands else None
+            if topic != "/tianji/teleop_diagnostics":
+                return
+            for item in value.get("status", []):
+                for side in ("left", "right"):
+                    if (item.get("name") == f"tianji/{side}_hand/dcr009_segmented_target"
+                            and item.get("hardware_id") == "dcr009_isolated_mujoco"):
+                        fields = {field["key"]: field["value"] for field in item["values"]}
+                        if fields.get("session") == self.session:
+                            self.segmented_diag[side] = header, fields
+
+        def segmented_hand_errors(self, q):
+            now = self.node.get_clock().now().nanoseconds
+            generation = {fields.get("pilot_generation") for _, fields in self.pilot_diagnostics.values()}
+            errors, proof_ids = [], []
+            for index, side in enumerate(("left", "right")):
+                observed = self.segmented_diag.get(side)
+                proof, error = None, None
+                if observed is not None and 0 <= now - observed[0] <= FRESH_NS:
+                    _, fields = observed
+                    try:
+                        header = int(fields["command_header_ns"])
+                        sequence = int(fields["command_sequence"])
+                        guard = int(fields["guard_sequence"])
+                        raw = np.asarray([float(value) for value in fields["raw_wuji_target_rad"].split(",")])
+                        issued = np.asarray([float(value) for value in fields["issued_target_rad"].split(",")])
+                        names = self.plant_names[14 + 20 * index:34 + 20 * index]
+                        actual = self.segmented_commands.get((side, header, sequence))
+                        if (actual is not None and set(actual) == set(names) and 0 <= now - header <= FRESH_NS
+                                and guard > 0 and generation == {fields["generation"]}
+                                and raw.shape == issued.shape == (20,) and np.isfinite(raw).all()
+                                and np.array_equal(issued, [actual[name] for name in names])):
+                            error = float(np.max(np.abs(raw - [q[name] for name in names])))
+                            proof = guard
+                    except (KeyError, ValueError):
+                        pass
+                errors.append(error)
+                proof_ids.append(proof)
+            return errors, proof_ids
+
+        def additional_start_checks(self, measurement):
+            if self.args.start_only_profile != "segmented":
+                return True
+            return all(error is not None and error <= .10 for error in measurement["hand_error_to_unsegmented_wuji_rad"])
+
+        def replay(self, events, warmup):
+            if self.args.start_only_profile is not None:
+                self.write("start_only_completed", profile=self.args.start_only_profile,
+                           original_history_started=False)
+                return
+            return super().replay(events, warmup)
+
         def before_history(self, warmup):
             self.stage = "preposition_start"
             self.write("preposition_clock", center_offset_mm=self.args.center_offset_mm)
@@ -114,6 +198,10 @@ def diagnostic_class():
                            and len(sequences) == 1 and next(iter(sequences), None) not in {None, "", "0"})
                 value["arms_accepted"] = value["arms_accepted"] and guarded
                 value["arm_guard_proof"] = next(iter(sequences)) if guarded else None
+                if self.args.start_only_profile == "segmented":
+                    errors, proofs = self.segmented_hand_errors(value["named_q_rad"])
+                    value["hand_error_to_unsegmented_wuji_rad"] = errors
+                    value["hand_segment_guard_proofs"] = proofs
                 if self.args.center_offset_mm is not None:
                     geometry = self.robot.geometry()
                     native = (np.linalg.inv(self.frames[1:3]) @ palm_poses(geometry)
@@ -212,6 +300,7 @@ def main():
     parser.add_argument("--root", required=True)
     parser.add_argument("--launch-pid", type=int, required=True)
     parser.add_argument("--center-offset-mm", type=int, choices=CENTER_OFFSET_SEQUENCE_MM)
+    parser.add_argument("--start-only-profile", choices=("original", "segmented"))
     args = parser.parse_args()
     root, anchor, frames, raw, home = load(args)
     from dexgym.tasks.direct.wholebody_s05.p02.model import RobotModel
@@ -229,6 +318,7 @@ def main():
                    cumulative_campaign_credit=False, residual_enabled=False, plan_sha256=args.plan_sha256,
                    shared_frames_sha256=digest(args.frames), historical_window=anchor["historical_window"])
     receipt["center_offset_mm"] = args.center_offset_mm
+    receipt["start_only_profile"] = args.start_only_profile
     (args.output / "input.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     Runner, rclpy = diagnostic_class()
     rclpy.init()

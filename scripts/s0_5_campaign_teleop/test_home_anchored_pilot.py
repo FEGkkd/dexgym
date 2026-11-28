@@ -18,6 +18,26 @@ from replay_home_anchored_pilot import (
 
 
 class PilotRuntimeTest(unittest.TestCase):
+    def test_strict_start_only_stops_without_claiming_historical_replay(self):
+        from run_dcr009_guarded_diagnostic import evidence_summary
+
+        samples = [
+            {"kind": "start_handoff", "stage": "preposition_start", "status": "START_REACHED"},
+            {"kind": "start_only_completed", "stage": "preposition_start",
+             "profile": "segmented", "original_history_started": False},
+            {"kind": "pilot_stop", "stage": "tail", "late_observed_command_count": 0},
+        ]
+        with TemporaryDirectory() as directory:
+            trace = Path(directory) / "trace.jsonl"
+            trace.write_text("".join(json.dumps(row) + "\n" for row in samples), encoding="utf-8")
+            result = evidence_summary(trace)
+            self.assertEqual(result["observed_phase"], "START_REACHED_NO_HISTORY_BY_SCOPE")
+            self.assertEqual(result["historical_packets"], 0)
+            samples[0]["status"] = "START_NOT_REACHED"
+            trace.write_text("".join(json.dumps(row) + "\n" for row in samples), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "START-only completion"):
+                evidence_summary(trace)
+
     def test_center_offset_translates_both_registered_and_engineering_targets_in_world(self):
         frames = np.repeat(np.eye(4)[None], 7, axis=0)
         frames[0, :3, :3] = VIRTUAL_R

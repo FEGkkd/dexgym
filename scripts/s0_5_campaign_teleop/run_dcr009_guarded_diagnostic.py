@@ -29,6 +29,7 @@ def evidence_summary(path):
     reached = "NOT_OBSERVED"
     stop = False
     protective_stop = None
+    start_only_done = False
     with path.open(encoding="utf-8") as stream:
         for line in stream:
             if not line.endswith("\n"):
@@ -40,6 +41,12 @@ def evidence_summary(path):
                 reached = row["status"]
             if row["kind"] == "pilot_stop":
                 stop = row["late_observed_command_count"] == 0
+            if row["kind"] == "start_only_completed":
+                if (start_only_done or reached != "START_REACHED"
+                        or row.get("original_history_started") is not False
+                        or row.get("profile") not in {"original", "segmented"}):
+                    raise ValueError("Invalid bounded START-only completion")
+                start_only_done = True
             if row["kind"] == "pilot_lifecycle" and row.get("status") == "FAULT_STOP":
                 failure = row.get("failure", {})
                 if row["stage"] != "preposition_start":
@@ -68,6 +75,8 @@ def evidence_summary(path):
                     counts["historical_seals"] += 1
     if stop and reached == "START_REACHED" and counts["historical_packets"] and counts["historical_seals"] == 1:
         phase = "HISTORICAL_REPLAY_COMPLETE"
+    elif stop and reached == "START_REACHED" and start_only_done and not counts["historical_packets"]:
+        phase = "START_REACHED_NO_HISTORY_BY_SCOPE"
     elif stop and reached == "START_NOT_REACHED" and not counts["historical_packets"]:
         phase = "START_NOT_REACHED_NO_HISTORY"
     elif (stop and protective_stop and reached == "NOT_OBSERVED" and counts["preposition_packets"]
@@ -86,6 +95,9 @@ def attempt(args, index, selection, cancelled):
               "phase": "PREFLIGHT", "started_unix_ns": time.time_ns(), "formal_coverage_credit": False}
     if "center_offset_mm" in selection:
         result["center_offset_mm"] = selection["center_offset_mm"]
+    profile = selection.get("start_only_profile")
+    if profile is not None:
+        result["start_only_profile"] = profile
     save(result_file, result)
     children = []
     deadline = time.monotonic() + 180
@@ -98,6 +110,12 @@ def attempt(args, index, selection, cancelled):
         env["S05_HOME_ANCHORED_SESSION_MAP"] = str(session_map)
         env["S05_DCR009_GUARD_SOCKET"] = str(endpoint)
         env["S05_DCR009_GUARD_TIMEOUT_MS"] = "35"
+        env.pop("S05_DCR009_SEGMENTED_START_STATE", None)
+        if profile == "segmented":
+            stage_marker = Path(private_socket_dir) / "stage"
+            stage_marker.write_bytes(b"PREPOSITION\n")
+            stage_marker.chmod(0o600)
+            env["S05_DCR009_SEGMENTED_START_STATE"] = str(stage_marker)
         try:
             if not graph_empty(env, path / "preflight-ros.log") or cancelled.is_set():
                 raise RuntimeError("Could not prove an unused local-only ROS domain")
@@ -151,6 +169,8 @@ def attempt(args, index, selection, cancelled):
                 }
                 if "center_offset_mm" in selection:
                     arguments["center-offset-mm"] = selection["center_offset_mm"]
+                if profile is not None:
+                    arguments["start-only-profile"] = profile
                 for key, value in arguments.items():
                     program.extend((f"--{key}", str(value)))
                 replay = subprocess.Popen(program, env=env, stdout=replay_log, stderr=subprocess.STDOUT, start_new_session=True)
@@ -187,7 +207,7 @@ def attempt(args, index, selection, cancelled):
 
 def closed(row):
     return (
-        row["phase"] in {"HISTORICAL_REPLAY_COMPLETE", "START_NOT_REACHED_NO_HISTORY",
+        row["phase"] in {"HISTORICAL_REPLAY_COMPLETE", "START_REACHED_NO_HISTORY_BY_SCOPE", "START_NOT_REACHED_NO_HISTORY",
                          "NATIVE_PROTECTIVE_HOLD_NO_HISTORY", "NATIVE_JOINT_LIMIT_REJECTION_NO_HISTORY"}
         and row["owned_groups_stopped"] and row.get("same_domain_empty_after") is True
     )
@@ -211,6 +231,7 @@ def completed_prefix(previous_runs, plan_sha, roster):
             planned = roster[index - 1]
             if (row["attempt"] != index or row["root"] != planned["root"]
                     or row.get("center_offset_mm") != planned.get("center_offset_mm")
+                    or row.get("start_only_profile") != planned.get("start_only_profile")
                     or row["trace_sha256"] != digest(trace)):
                 raise ValueError("Earlier protected attempt does not match the original trace or root")
             actual = evidence_summary(trace)
@@ -228,7 +249,9 @@ def main():
     for key in ("plan-sha256", "controller-sha256", "simulator-sha256"):
         parser.add_argument(f"--{key}", required=True)
     parser.add_argument("--resume-from", action="append", default=[], type=lambda path: Path(path).resolve())
-    parser.add_argument("--compare-root-five-centers", action="store_true")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--compare-root-five-centers", action="store_true")
+    mode.add_argument("--root-five-start-only", choices=("original", "segmented"))
     parser.add_argument("--domain", type=int, choices=DOMAINS, required=True)
     args = parser.parse_args()
     if os.name != "posix" or not args.output.parent.is_dir():
@@ -244,10 +267,13 @@ def main():
     if (plan["cohort_sha256"] != COHORT_SHA or plan["shared_frames_sha256"] != digest(args.frames)
             or any(roots[row["root"]]["split"] != "Train" or not 0 < row["replay_planned_ticks"] <= 6000 for row in roster)):
         raise ValueError("Plan is outside the verified Train cohort or budget")
-    if args.compare_root_five_centers:
+    if args.compare_root_five_centers or args.root_five_start_only:
         if args.plan_sha256 != ROOT_FIVE_PLAN_SHA or roster[4]["root"] != ROOT_FIVE:
-            raise ValueError("The five-offset diagnostic has one frozen root and plan")
-        roster = [dict(roster[4], center_offset_mm=value) for value in CENTER_OFFSET_SEQUENCE_MM]
+            raise ValueError("This diagnostic requires root five in the frozen plan")
+        if args.root_five_start_only:
+            roster = [dict(roster[4], center_offset_mm=0, start_only_profile=args.root_five_start_only)]
+        else:
+            roster = [dict(roster[4], center_offset_mm=value) for value in CENTER_OFFSET_SEQUENCE_MM]
     prior = completed_prefix(args.resume_from, args.plan_sha256, roster) if args.resume_from else 0
     args.output.mkdir(exist_ok=False)
     cancelled = Event()
@@ -258,6 +284,9 @@ def main():
     if args.compare_root_five_centers:
         ledger["comparison"] = "ROOT_FIVE_COMMON_CENTER_OFFSETS"
         ledger["preregistered_center_offsets_mm"] = list(CENTER_OFFSET_SEQUENCE_MM)
+    if args.root_five_start_only:
+        ledger["experiment"] = "ROOT_FIVE_ORIGINAL_CENTER_START_ONLY"
+        ledger["profile"] = args.root_five_start_only
     if prior:
         ledger["prior_closed_attempt_count"] = prior
         ledger["prior_run_receipt_sha256"] = digest(args.resume_from[-1] / "run_receipt.json")
@@ -272,7 +301,10 @@ def main():
             break
     complete = len(ledger["attempts"]) + prior == len(roster) and all(closed(row) for row in ledger["attempts"])
     if complete:
-        ledger["status"] = "ALL_FIVE_CENTER_OFFSETS_CLOSED" if args.compare_root_five_centers else "ALL_SIX_DIAGNOSTICS_CLOSED"
+        if args.root_five_start_only:
+            ledger["status"] = "ONE_ROOT_START_ONLY_CLOSED"
+        else:
+            ledger["status"] = "ALL_FIVE_CENTER_OFFSETS_CLOSED" if args.compare_root_five_centers else "ALL_SIX_DIAGNOSTICS_CLOSED"
     else:
         ledger["status"] = "STOPPED_WITH_INCOMPLETE_DIAGNOSTICS"
     save(receipt, ledger)

@@ -518,6 +518,9 @@ def replay_class():
                     "shared_transform": self.shared.tolist(), "native_goal": self.goal.tolist(),
                     "session_map_sha256": self.session_map_sha}
 
+        def additional_start_checks(self, measurement):
+            return True
+
         def before_history(self, warmup):
             self.stage = "preposition_start"
             begin = time.monotonic()
@@ -532,7 +535,8 @@ def replay_class():
                 ready = (current is not None and elapsed >= 1.5 and current["arms_accepted"]
                          and current["measured_speed_rad_s"] is not None and current["measured_speed_rad_s"] <= .16
                          and all(d <= .010 and a <= 5. for d, a in current["wrist_error_m_deg"])
-                         and all(x is not None and x <= .10 for x in current["hand_error_to_issued_rad"]))
+                         and all(x is not None and x <= .10 for x in current["hand_error_to_issued_rad"])
+                         and self.additional_start_checks(current))
                 if current is not None:
                     last = current
                     self.write("start_measurement", elapsed_s=elapsed, ready=ready, value=current)
