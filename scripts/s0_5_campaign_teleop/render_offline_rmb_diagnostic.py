@@ -25,6 +25,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for key in ("run", "anchor", "model", "out"):
         parser.add_argument("--" + key, type=Path, required=True)
+    parser.add_argument("--fps", type=float, choices=(12.5, 25., 50.), default=12.5)
     args = parser.parse_args()
     receipt_path = args.run / "receipt.json"
     receipt = json.loads(receipt_path.read_bytes())
@@ -40,7 +41,7 @@ def main():
     anchor = json.loads(args.anchor.read_bytes())
     start = json.loads(start_path.read_bytes())
     with events_path.open(encoding="utf-8") as f:
-        events = {(row["partition"], row["tick"]): row["status"] for row in map(json.loads, f)}
+        events = {(row["partition"], row["tick"]): row for row in map(json.loads, f)}
     robot = RobotModel(args.model)
     home = robot.geometry(robot.home)
     home_tcp = np.repeat(np.eye(4)[None], 2, axis=0)
@@ -51,7 +52,8 @@ def main():
     raw_view[:3, :3] = VIRTUAL_R
     args.out.mkdir(exist_ok=False)
     video = args.out / "root-five-offline.mp4"
-    fps = 12.5
+    fps = args.fps
+    stride = int(50 / fps)
     command = ["ffmpeg", "-nostdin", "-v", "error", "-n", "-f", "rawvideo", "-pix_fmt", "rgb24",
                "-s", f"{FRAME_SIZE[0]}x{FRAME_SIZE[1]}", "-r", str(fps), "-i", "-", "-an",
                "-c:v", "libx264", "-crf", "22", "-threads", "2", "-pix_fmt", "yuv420p",
@@ -68,16 +70,19 @@ def main():
                     raise ValueError(f"Diagnostic model/data mismatch for {part['partition']}/{field}")
                 arrays[field] = np.load(path, allow_pickle=False)
             for i, tick in enumerate(arrays["tick_ns"]):
-                status = events.get((part["partition"], i))
-                if status is None:
+                event = events.get((part["partition"], i))
+                if event is None:
                     continue
+                status = event["status"]
                 ticks += 1
-                if (ticks - 1) % 4 != 0 and ticks != receipt["window"]["plan_ticks"]:
+                if (ticks - 1) % stride != 0 and ticks != receipt["window"]["plan_ticks"]:
                     continue
                 image = Image.new("RGB", FRAME_SIZE, "#f3f7fb")
                 draw = ImageDraw.Draw(image)
                 elapsed = (int(tick) - receipt["window"]["hmb_cutoff_start_ns"]) / 1e9
-                view.text(draw, (18, 17), "DCR-010   Offline RMB / Simulation diagnostic", "title")
+                title = "DCR-010   Four-group offline RMB diagnostic" if receipt.get("group_admission") else (
+                    "DCR-010   Offline RMB / Simulation diagnostic")
+                view.text(draw, (18, 17), title, "title")
                 view.text(draw, (18, 53), f"Original timeline   {elapsed:06.3f} s   |   {status}", "body",
                           "#963419" if status != "ACTIVE" else "#205d4a")
                 for x, title, caption in (
@@ -115,6 +120,16 @@ def main():
                 else:
                     view.wrist_panel(draw, 970, None, None)
                     view.text(draw, (987, 492), "No historical physics executed for this row.", "small", "#963419")
+                if receipt.get("group_admission"):
+                    statuses = []
+                    for g, name in enumerate(("Left arm", "Right arm", "Left hand", "Right hand")):
+                        labels = [e["groups"][g].get("label", "NO_COMMIT") for e in event["safety"]
+                                  if len(e.get("groups", ())) == 4]
+                        inactive = [label for label in labels if not label.endswith("_ACTIVE")]
+                        state = inactive[-1] if inactive else ("ACTIVE" if len(labels) == 5 else "NO_FULL_INTERVAL")
+                        statuses.append(f"{name}  {state}")
+                    view.text(draw, (987, 519), "   |   ".join(statuses[:2]), "small", MUTED)
+                    view.text(draw, (987, 545), "   |   ".join(statuses[2:]), "small", MUTED)
                 view.text(draw, (18, 616), "Recorded input time is retained. Missing and rejected commands stay in the denominator.",
                           "footer", MUTED)
                 if not frames:
@@ -126,6 +141,7 @@ def main():
             raise RuntimeError("Incomplete render or history")
     write_json(args.out / "video.json", {"scope": "DIAGNOSTIC_ONLY", "rendered_frames": frames,
               "rendered_frames_with_measured_feedback": measured, "duration_seconds": frames / fps,
+              "sample_fps": fps, "source_frames_interpolated": False,
               "original_history_ticks": ticks, "video_sha256": file_sha(video),
               "poster_sha256": file_sha(args.out / "poster.png"), "run_receipt_sha256": file_sha(receipt_path)})
 
