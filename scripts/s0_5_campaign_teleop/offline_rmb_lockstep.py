@@ -32,6 +32,7 @@ class Substep:
     interval: object
     used_hold: bool
     fault: str | None
+    hold_proof: str | None = None
 
 
 class Lockstep:
@@ -71,15 +72,20 @@ class Lockstep:
             raise RuntimeError("No additional physical steps after an uncontained fault")
         measured, _ = self.state()
         proposal = self.nominal.propose(target, measured, self.issued, self.branch, hand_axes=hand_axes)
+        if proposal.hard_fault:
+            self.fault = "NATIVE_PAIR_HARD_FAULT"
+            return Substep(proposal, "NATIVE_PAIR_HARD_FAULT", {}, None, None, True, self.fault)
         # CpuServo receives float32. Certify the exact vector it will receive.
         candidate = proposal.q_requested.astype(np.float32).astype(np.float64)
         proof, evidence = self._proof(candidate, measured)
-        hold = target is None or proposal.hard_fault or proof != Reason.PERMIT
+        hold = target is None or proof != Reason.PERMIT
+        hold_status = None
         if hold:
             hold_proof, _ = self._proof(self.issued, measured)
+            hold_status = hold_proof.name
             if hold_proof != Reason.PERMIT:
                 self.fault = f"HOLD_INFEASIBLE:{hold_proof.name}"
-                return Substep(proposal, proof.name, evidence, None, None, True, self.fault)
+                return Substep(proposal, proof.name, evidence, None, None, True, self.fault, hold_status)
         else:
             self.issued = candidate
             self.branch = proposal.q_branch.copy()
@@ -87,9 +93,9 @@ class Lockstep:
                                          torch.ones(1, dtype=torch.bool), self.safety, count=2)
         if interval.event[0] or interval.substeps[0] != 2:
             self.fault = f"PHYSICS:{int(interval.event[0])}"
-        return Substep(proposal, proof.name, evidence, self.issued.copy(), interval, hold, self.fault)
+        return Substep(proposal, proof.name, evidence, self.issued.copy(), interval, hold, self.fault, hold_status)
 
-    def preposition(self, target, scoring_tcp, common, order, source):
+    def preposition(self, target, scoring_tcp, common, order, source, *, observe):
         """Advance frozen wrists, then digits, recording where dwell succeeds or fails."""
         self.nominal.refresh(target, common, order, source, tick_ns=0)
         enabled = np.zeros(40, dtype=bool)
@@ -103,6 +109,7 @@ class Lockstep:
             for tick in range(maximum):
                 for _ in range(ARM_SUBSTEPS):
                     report = self.advance(target, hand_axes=enabled)
+                    observe(stage, tick, report, self.state())
                     if report.fault:
                         break
                 q, qd = self.state()

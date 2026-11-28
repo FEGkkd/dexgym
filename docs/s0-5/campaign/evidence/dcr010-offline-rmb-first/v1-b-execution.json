@@ -1,0 +1,101 @@
+{
+  "schema": "s05.offline_policy_first.v1_b_synthetic_receipt.v1",
+  "scope": "DIAGNOSTIC_ONLY",
+  "formal_coverage_credit": false,
+  "qualifies_g_b": false,
+  "qualifies_g_c0": false,
+  "requested_base": "548f04195d9f3815cc522d0f7f76c95b3bee8c46",
+  "server_base": "14936b54b895f6c2a54e0aad58e9017bfbb1bfda",
+  "server_base_relationship": "No changes between server base and requested base in S0-5 V1 or shared SuperMimic source. The two edited source modules were mounted as an isolated package search overlay.",
+  "server_scope_directory": "/dev/shm/s05-offline-rl.KJTjGbWE",
+  "interpreter": "/home/ubuntu/miniconda3/envs/manus_wuji_real/bin/python",
+  "runtime_versions": {
+    "mujoco": "3.13.0",
+    "torch": "2.10.0+cu128",
+    "gymnasium": "1.2.3",
+    "warp": "1.17.0"
+  },
+  "source_sha256": {
+    "source/dexgym/tasks/direct/wholebody_s05/v1/task/reference.py": "a1d3f4462d90ade1227bff20a0c3a9677f600ec9fd768d98905a209eecf1137b",
+    "source/dexgym/tasks/direct/wholebody_s05/v1/learning/synthetic_preflight.py": "cdb218c14d12323ec1cb7600648cf9ce72204ec06705c6e6766ba81921e9f04a"
+  },
+  "commands": {
+    "launch_note": "Use the checkout root as working directory, PYTHONPATH=$PWD/source, OMP_NUM_THREADS=1, MKL_NUM_THREADS=1, and the interpreter above. Use a fresh $OUT path under an isolated directory. The first command reproduces the staged-overlay invocation after checking out matching source bytes.",
+    "synthetic": [
+      "-B",
+      "-m",
+      "dexgym.tasks.direct.wholebody_s05.v1.learning.synthetic_preflight",
+      "--model",
+      "source/dexgym/assets/marvin_wuji/hand2_2/generated/dual_arm_marvin.xml",
+      "--out",
+      "$OUT/synthetic.json",
+      "--device",
+      "cpu"
+    ],
+    "native": [
+      "-B",
+      "-m",
+      "dexgym.tasks.direct.wholebody_s05.v1.task.smoke",
+      "--model",
+      "source/dexgym/assets/marvin_wuji/hand2_2/generated/dual_arm_marvin.xml",
+      "--out",
+      "$OUT/native-smoke.json",
+      "--envs",
+      "1",
+      "--steps",
+      "24",
+      "--device",
+      "cpu"
+    ],
+    "regressions": [
+      "-B",
+      "-m",
+      "pytest",
+      "-q",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp",
+      "$OUT/pytest-tmp",
+      "tests/s0_5/v1_learning",
+      "tests/s0_5/v1_task",
+      "tests/s0_5/v1_rmb/test_rmb.py"
+    ]
+  },
+  "evidence": [
+    {
+      "path": "v1-b-synthetic-cpu.json",
+      "sha256": "53966787968a8d539945855a17b632dd39769bb9671551aafd5fb29c7205a76e",
+      "exit": 0,
+      "physical_transitions": 40,
+      "optimizer_updates": 0
+    },
+    {
+      "path": "v1-b-native-cpu.json",
+      "sha256": "acb9d8f5c1adfda99429ce33e62c49a8b2c13c2d3eeafa1ab75135c79b293342",
+      "exit": 0,
+      "physical_transitions": 136,
+      "optimizer_updates": 0
+    },
+    {
+      "path": "v1-b-regressions.txt",
+      "sha256": "fd441f2502087c1da897811a48673eaf852f15628893fc78dbf7ac91393231bb",
+      "exit": 0,
+      "passed": 37,
+      "subtests_passed": 5
+    }
+  ],
+  "gpu": {
+    "status": "NOT_RUN",
+    "name": "NVIDIA GeForce RTX 5090",
+    "memory_used_mib": 10944,
+    "memory_total_mib": 32607,
+    "utilization_percent_at_probe": 96,
+    "reason": "Shared GPU was active at observation. The intact CPU environment also did not contain mujoco_warp. No other GPU process was touched."
+  },
+  "limits": [
+    "No HMB, actual human episode, or offline diagnostic bank was imported.",
+    "The admitted RMB gate positively refuses this synthetic bank.",
+    "Collection updates in-memory feature statistics only. No optimizer or checkpoint is used.",
+    "A qualified RMB, reviewed simulation target and asset identity, CPU/Warp parity and scale qualification, reserved resources, and independent C0 validation remain prerequisites for formal policy training."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "action_width": 54,
+  "actor_observation_shape": [
+    2,
+    8515
+  ],
+  "causal_history_frames": 5,
+  "device": "cpu",
+  "dynamics_state_width": 108,
+  "formal_training_qualified": false,
+  "isolated_fit_and_holdout": true,
+  "model_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+  "optimizer_updates": 0,
+  "physical_full_steps": 40,
+  "physical_transitions": 40,
+  "physics_backend": "CpuServo",
+  "physics_substeps_per_tick": 10,
+  "production_bank_admission_denied": true,
+  "scope": "DIAGNOSTIC_ONLY_SYNTHETIC_RMB_PHYSICAL_INFERENCE",
+  "synthetic_manifest_sha256": "dfa9339024dd35f778d4a4acc99ecbf17904b15debaddd6c7032a937af3c7803",
+  "torch_version": "2.10.0+cu128",
+  "training_artifact_written": false,
+  "world_model_contact_width": 13,
+  "world_model_replay_inference_horizon": 8
+}

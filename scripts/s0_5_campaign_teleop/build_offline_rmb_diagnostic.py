@@ -5,6 +5,7 @@ import argparse
 from collections import Counter
 import json
 from pathlib import Path
+import sys
 from time import monotonic, process_time
 
 import numpy as np
@@ -21,7 +22,7 @@ from dexgym.tasks.direct.wholebody_s05.v1.rmb.schema import (
 )
 from dexgym.tasks.direct.wholebody_s05.v1.rmb.teleop_candidate import ARM_SUBSTEPS
 from dexgym.tasks.direct.wholebody_s05.v1.rmb.teleop_native import TeleopNative
-from dexgym.tasks.direct.wholebody_s05.v1.task.physics import signature
+from dexgym.tasks.direct.wholebody_s05.v1.task.physics import ServoProfile, signature
 from home_anchored_start_anchor import hmb_five_rows, role_identity, train_reader
 from offline_rmb_lockstep import ACTIVE, PROOF, Lockstep
 from replay_dcr009_guarded_diagnostic import ROOT_FIVE, ROOT_FIVE_PLAN_SHA, SIGNED_SHA, check_scope
@@ -31,6 +32,12 @@ from swept_live_guard import EXACT_MODEL_RECEIPT_SHA, verified_robot
 
 SCOPE = "DIAGNOSTIC_ONLY"
 DOCS = Path(__file__).resolve().parents[2] / "docs/s0-5"
+
+
+def implementation():
+    modules = ("offline_rmb_lockstep", "swept_live_guard_v2",
+               SimulationIntent.__module__, OfflineTeleopNominal.__module__)
+    return {name: file_sha(Path(sys.modules[name].__file__)) for name in modules} | {"builder": file_sha(Path(__file__))}
 
 
 def hand_input(data, meta, sources, i):
@@ -44,6 +51,11 @@ def valid_input(data, i):
                 and data["pose_valid"][i, :4].all() and (data["source_index"][i, :4, 0] >= 0).all()
                 and (data["capture_bounds_ns"][i, :4, 1] <= data["tick_ns"][i]).all()
                 and (data["arrival_bounds_ns"][i, :4, 1] <= data["cutoff_ns"][i]).all())
+
+
+def generation(data, meta, i):
+    fields = ("clock_generation", "calibration_id", "topology_id")
+    return tuple(tuple(meta["dictionary"][key][code] for code in data[key][i, :4]) for key in fields)
 
 
 def active(history):
@@ -73,7 +85,12 @@ def record_execution(fields, row, history, executor):
         count = int(item.substeps[0])
         fields["q_applied"][row, cursor:cursor + count] = item.applied[0, :count].numpy()
         fields["actuator_ctrl"][row, cursor:cursor + count] = item.ctrl[0, :count].numpy()
+        fields["actuator_torque"][row, cursor:cursor + count] = item.torque[0, :count].numpy()
         fields["physical_contact"][row] |= item.contact[0].numpy().astype(bool)
+        fields["physical_clearance_m"][row, arm_tick] = float(item.minimum_gap[0])
+        fields["physical_penetration_m"][row, arm_tick] = float(item.depth[0])
+        fields["physical_interval_mask"][row, arm_tick] = bool(count)
+        fields["physical_event"][row, arm_tick] = int(item.event[0])
         cursor += count
     fields["applied_substeps"][row] = cursor
     if cursor:
@@ -100,6 +117,8 @@ def blank(data):
                        "raw_manus_local": (2, 5, 4, 3), "q_nominal": (54,), "qd_nominal": (54,),
                        "nominal_proposal": (5, 54), "q_measured": (54,), "qd_measured": (54,),
                        "q_issued": (5, 54), "q_applied": (10, 54), "actuator_ctrl": (10, 54),
+                       "actuator_torque": (10, 54),
+                       "physical_clearance_m": (5,), "physical_penetration_m": (5,),
                        "raw_wuji": (5, 2, 20), "raw_marvin": (5, 2, 7)}.items():
         fields[key] = np.zeros((n, *shape), "<f4")
     for key, shape in {"raw_tracker": (), "registered": (), "mapped": (), "raw_manus_local": (2,),
@@ -108,6 +127,8 @@ def blank(data):
         fields[key + "_mask"] = np.zeros((n, *shape), bool)
     fields["applied_substeps"] = np.zeros(n, dtype="u1")
     fields["physical_contact"] = np.zeros((n, 13), dtype=bool)
+    fields["physical_interval_mask"] = np.zeros((n, 5), dtype=bool)
+    fields["physical_event"] = np.zeros((n, 5), dtype="<u2")
     fields["nominal_status"] = np.zeros((n, 5, 4), dtype="<u2")
     return fields
 
@@ -127,7 +148,8 @@ def record_target(fields, i, mapped):
 
 def mark_error(errors, fields, row, scoring):
     a, t = fields["actual"], fields["target"]
-    if not fields["q_measured_mask"][row] or not t["wrist_xyz_mask"][row].all() or not scoring:
+    if (fields["applied_substeps"][row] != 10 or not fields["q_measured_mask"][row]
+            or not t["wrist_xyz_mask"][row].all() or not scoring):
         return
     errors["wrist_mm"].append(1000 * np.linalg.norm(a["wrist_xyz"][row] - t["wrist_xyz"][row], axis=-1))
     delta = (Rotation.from_quat(t["wrist_xyzw"][row]).inv() * Rotation.from_quat(a["wrist_xyzw"][row]))
@@ -164,14 +186,31 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
     nominal = OfflineTeleopNominal(robot, kernel, hand, frames)
     executor = Lockstep(robot, nominal)
     mapped_start = mapper.map(start_human)
-    start = executor.preposition(start_human.registered_wrist, mapped_start["simulation_scoring_tcp"],
-                                 *hand_input(anchor_data, anchor_meta, anchor_sources, anchor_tick))
+    with (args.out / "start-events.jsonl").open("x", encoding="utf-8") as stream:
+        def observe_preposition(stage, tick, result, state):
+            post, velocity = state
+            physical = result.interval
+            row = {"stage": stage, "tick": tick, "sim_time_s": executor.physics.data[0].time,
+                   "proof": result.proof, "proof_metrics": result.request_metrics,
+                   "hold": result.used_hold, "hold_proof": result.hold_proof, "fault": result.fault,
+                   "proposal": result.proposal.q_requested.tolist(),
+                   "issued": result.issued.tolist() if result.issued is not None else None,
+                   "measured": post.tolist() if np.isfinite(post).all() else None,
+                   "velocity": velocity.tolist() if np.isfinite(velocity).all() else None,
+                   "physical": None if physical is None else {"substeps": int(physical.substeps[0]),
+                       "event": int(physical.event[0]), "gap_m": float(physical.minimum_gap[0]),
+                       "penetration_m": float(physical.depth[0])}}
+            stream.write(json.dumps(row, allow_nan=False, separators=(",", ":")) + "\n")
+        start = executor.preposition(start_human.registered_wrist, mapped_start["simulation_scoring_tcp"],
+                                     *hand_input(anchor_data, anchor_meta, anchor_sources, anchor_tick),
+                                     observe=observe_preposition)
     write_json(args.out / "start.json", {"scope": SCOPE, "locked_transform": frames[0].tolist(), **start})
     print(args.root, start["status"], start["stages"][-1], flush=True)
     full, historical, causes, proofs, nominal_codes = (Counter() for _ in range(5))
     errors = {key: [] for key in ("wrist_mm", "wrist_deg", "ten_tip_mm", "issued_measured_joint_deg")}
     index = []
     last_tick = None
+    locked_generation = generation(anchor_data, anchor_meta, anchor_tick)
     previous_q = None
     consecutive = 0
     active_previous = False
@@ -208,9 +247,14 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
                     reason = executor.fault
                 else:
                     registered = sample.registered_wrist if valid_input(data, i) else None
+                    if registered is not None and generation(data, meta, i) != locked_generation:
+                        executor.fault = "UNBRIDGED_HMB_GENERATION"
+                        registered = None
                     if registered is not None:
                         nominal.refresh(registered, *hand_input(data, meta, sources, i), tick_ns=tick)
                     for _ in range(ARM_SUBSTEPS):
+                        if executor.fault:
+                            break
                         result = executor.advance(registered)
                         history.append(result)
                         proofs[result.proof] += 1
@@ -239,7 +283,7 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
                 mark_error(errors, fields, i, target["robot_morphology_target"] is not None)
                 causes[reason] += 1
                 log.write(json.dumps({"partition": part["key"], "tick": i, "time_ns": tick, "status": reason,
-                    "safety": [dict(proof=item.proof, hold=item.used_hold, fault=item.fault,
+                    "safety": [dict(proof=item.proof, hold=item.used_hold, hold_proof=item.hold_proof, fault=item.fault,
                                     metrics=item.request_metrics) for item in history]},
                     allow_nan=False, separators=(",", ":")) + "\n")
             index.append(publish_partition(args.out / f"part-{part_i:03}", part["key"], fields))
@@ -250,20 +294,24 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
         raise ValueError("Offline execution changed the original HMB denominators")
     digest = lambda name: file_sha(args.out / name)
     ready = (start["status"] == "START_REACHED" and historical["full_physical_ticks"] == window["plan_ticks"]
-             and not any(fields["contact_ticks"] for fields in [historical])
-             and historical["legal_active_nominal_ticks"] > 0 and not executor.fault)
+             and not historical["contact_ticks"] and not executor.fault
+             and historical["legal_active_nominal_ticks"] >= .85 * window["hmb_joint_valid_ticks"]
+             and historical["diagnostic_five_frame_ticks"] >= .70 * window["hmb_five_frame_candidate_ticks"])
     return {"schema": "s05.rmb.offline_diagnostic.v1", "scope": SCOPE, "formal_coverage_credit": False,
             "root": args.root, "full": dict(full), "window": window, "historical": dict(historical),
             "statuses": dict(causes), "proofs": dict(proofs), "nominal_status_codes": dict(nominal_codes),
             "start_status": start["status"], "recorded_physical_seconds": historical["physical_substeps"] * .002,
             "root_technical_gate": "DIAGNOSTIC_PASS" if ready else "BLOCKED", "physical_fault": executor.fault,
             "proof_budget": PROOF,
+            "statistic_clock": "post-20ms interval feedback vs independent target available at interval start",
             "statistics": {name: {"ticks": len(data), "p50_p95_p99": np.percentile(data, [50, 95, 99], axis=0).tolist()}
                            for name, data in errors.items() if data},
             "robot_model_servo": signature(robot, executor.profile), "input_cohort_sha256": file_sha(args.cohort),
+            "implementation": implementation(),
             "input_plan_sha256": file_sha(args.plan), "anchor_sha256": file_sha(args.plan.parent / selection["anchor_path"]),
             "asset_sha256": {name: file_sha(getattr(args, name)) for name in ("bridge", "wuji", "frames", "config")},
             "start_sha256": digest("start.json"), "diagnostic_events_sha256": digest("diagnostic-events.jsonl"),
+            "start_events_sha256": digest("start-events.jsonl"),
             "partitions": index, "wall_seconds": monotonic() - begin, "process_cpu_seconds": process_time() - cpu_begin}
 
 
@@ -283,7 +331,10 @@ def main():
     if args.root != ROOT_FIVE:
         previous = json.loads(args.root_five_receipt.read_bytes()) if args.root_five_receipt else {}
         if (previous.get("root") != ROOT_FIVE or previous.get("root_technical_gate") != "DIAGNOSTIC_PASS"
-                or previous.get("input_plan_sha256") != ROOT_FIVE_PLAN_SHA):
+                or previous.get("input_plan_sha256") != ROOT_FIVE_PLAN_SHA
+                or previous.get("implementation") != implementation()
+                or previous.get("asset_sha256") != {name: file_sha(getattr(args, name))
+                                                      for name in ("bridge", "wuji", "frames", "config")}):
             raise ValueError("Six-root diagnostic requires the root-five physical technical check")
     roots, reader, cohort_sha = train_reader(args.cohort, DOCS, None)
     if cohort_sha != plan["cohort_sha256"]:
@@ -296,6 +347,8 @@ def main():
     anchor = json.loads(anchor_path.read_bytes())
     identity = json.loads(args.model_receipt.read_bytes())["model_identity"]["signed"]
     robot = verified_robot(args.model, SIGNED_SHA, identity)
+    if args.root != ROOT_FIVE and previous.get("robot_model_servo") != signature(robot, ServoProfile()):
+        raise ValueError("Six-root diagnostic requires the same signed model and Servo")
     args.out.mkdir(exist_ok=False)
     with TeleopNative(args.bridge, args.config, args.phase1) as kernel:
         hand = Wuji(args.wuji)

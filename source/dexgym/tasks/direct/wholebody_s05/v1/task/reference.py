@@ -24,18 +24,24 @@ class RmbReference:
         if len(set(self.generations.values())) != len(self.generations):
             raise ValueError("RMB generation namespace collision")
 
-    def _tensor(self, values):
-        return torch.as_tensor(np.stack(values, axis=0), device=self.device)
-
     def current(self, locations):
+        return self.pack_current(self.partitions, self.generations, self.device, locations)
+
+    @staticmethod
+    def pack_current(partitions, generations, device, locations):
+        """Pack current rows only. Production admission remains in the constructor."""
         if not locations:
             raise ValueError("Expected a nonempty batch of explicit partition/tick locations")
-        frames = [(key, self.partitions[key].arrays, int(i)) for key, i in locations]
+        frames = [(key, partitions[key].arrays, int(i)) for key, i in locations]
         for _, arrays, i in frames:
             if not 0 <= i < len(arrays["tick_ns"]):
                 raise IndexError("RMB tick is outside its partition")
+
+        def tensor(values):
+            return torch.as_tensor(np.stack(values, axis=0), device=device)
+
         def field(name):
-            return self._tensor([array[name][i] for _, array, i in frames])
+            return tensor([array[name][i] for _, array, i in frames])
 
         def mapped(name):
             return field(f"mapped_{name}")
@@ -58,8 +64,8 @@ class RmbReference:
         nominal_valid = torch.stack((field("nominal_joint_valid").all(-1) & field("domain_nominal_legal"),
                                      field("nominal_velocity_valid").all(-1)), dim=-1)
         allowed = field("domain_mapped_valid") & field("inputs_safety_permission")
-        generation = self._tensor([
-            np.int64((self.generations[key] << 23) + int(array["audit_generation"][i]))
+        generation = tensor([
+            np.int64((generations[key] << 23) + int(array["audit_generation"][i]))
             for key, array, i in frames
         ])
         return TargetFrame(nominal=field("nominal_q_nominal"), nominal_velocity=field("nominal_qd_nominal"),

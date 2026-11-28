@@ -1,0 +1,46 @@
+{
+  "scope": "NATIVE_NOMINAL_INTERFACE_ONLY",
+  "status": "PASS",
+  "formal_coverage_credit": false,
+  "actual_mujoco_execution": false,
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+  "input": "Signed Train MANUS keypoints at HMB cutoff 800000000 ns for both real Wuji retarget sessions and synthetic fixed native-FK Home goals for the arm seam. Injected feedback offsets are negative controls.",
+  "adapter_sha256": "0ee5fcf3b9ac8038ec75daf6d53d85937ff086110c76f6ee8b129d82062d86af",
+  "synthetic_test_source_sha256": "a94727b064016df19d577b4436963a5df46cfbf9ee634eb2fc2f3cee4db995c9",
+  "teleop_revision": "6d0b0b5b2601618f1b0052d93ef2403eea9b064a",
+  "model_sha256": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d",
+  "bridge_sha256": "510b1f10620ac69aa277d85e3399921a9050521aee10b934b62502dbd09ee5d4",
+  "marvin_config_sha256": "ce20b1a80974c3ed58cdac4973152625096c8ad93a779e5fd4108c26ce19bd52",
+  "wuji_library_sha256": "1bdc160c6c27a9b1bfa727dfb7c33c8b01fbb5acbefc8cfdfa17b2fd84c75282",
+  "marvin_vendor_sha256": "f2aec6ebc1f41302fe0126284076211c044d6c7e1c2276dc919767254e0c597f",
+  "commands": {
+    "python": "/home/ubuntu/dexgym_worktrees/s0-5/.venv/bin/python",
+    "native": "python -B real-native-probe.py",
+    "synthetic": "python -B tests/s0_5/v1_rmb/test_offline_nominal.py",
+    "native_library": "/dev/shm/s05-resume-490770e/teleop-native-02/obj/libs05_teleop.so"
+  },
+  "actual_outputs": {
+    "declared_arm_control_dt_s": 0.004,
+    "home_target_native_arm_state": ["ACTIVE", "ACTIVE"],
+    "maximum_same_pose_arm_command_difference_rad": 1.955827004795907e-7,
+    "nonzero_real_wuji_raw_coordinates_per_side": [20, 20],
+    "soft_tracking_error_offset_rad": 0.2,
+    "soft_control_arm_state": ["NATIVE_ARM_HOLD", "ACTIVE"],
+    "hard_tracking_error_offset_rad": 0.5,
+    "hard_control_arm_state": ["NATIVE_PAIR_FAILED", "NATIVE_PAIR_FAILED"],
+    "hard_control_requested_command_equals_previous": true,
+    "synthetic_tests_passed": 3
+  },
+  "archive": {
+    "ubuntu_directory": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/DCR-010-OFFLINE-NOMINAL-PREFLIGHT-01",
+    "probe_source_sha256": "87e14771711a87e70c3ed579451b2a3a94ddf34317bba3c4f8b7d4ff6bedd093",
+    "native_log_sha256": "5037db17c1022107d7f66867e67e7401d1dd62d7040dbeafcb71813636b302e2",
+    "synthetic_log_sha256": "27c4a39d34ece4cbc66cc59cb0870c7abe4cc0a5f009205bdd0ea06a93f8b3ac"
+  },
+  "limitations": [
+    "Causal HMB sampling supplies available MANUS observations and does not reconstruct every asynchronous ROS MANUS arrival.",
+    "The native arm profile remains the DCR-008 pinned normal 8 degree profile. The prior root-five DCR-009 5 degree left J6 preposition overlay is a distinct profile.",
+    "This verifies native math and session API behavior. It makes no claim of START completion, ROS parity, continuous path admission, physical execution, real-world qualification or formal training data admission."
+  ]
+}
