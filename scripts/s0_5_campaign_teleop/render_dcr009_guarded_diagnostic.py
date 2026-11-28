@@ -72,7 +72,7 @@ def checked_inputs(attempt, plan_path, cohort_path, model_path):
     return result, receipt, trace, anchor_path, anchor, digest(model_path)
 
 
-def trace_data(path, model_sha, anchor, yaw_alignment=False):
+def trace_data(path, model_sha, anchor, yaw_alignment=False, authorized_history=False):
     groups = defaultdict(dict)
     times, models, latched, outcomes, preposition_clocks = [], [], [], [], []
     stages, statuses, measurements, history_input = {}, [], [], []
@@ -140,8 +140,8 @@ def trace_data(path, model_sha, anchor, yaw_alignment=False):
         expected = np.asarray(anchor["registered_wrist_start_h"], dtype=float)
         rotation_matches = np.array_equal(locked[:3, :3], VIRTUAL_R)
         if yaw_alignment:
-            if history_input or anchor["root"] != ROOT_FIVE or measured_home is None:
-                raise ValueError("Yaw rendering requires the root-five START-only scope and measured Home")
+            if (history_input and not authorized_history) or anchor["root"] != ROOT_FIVE or measured_home is None:
+                raise ValueError("Yaw rendering requires the authorized root-five scope and measured Home")
             original = np.eye(4)[None]
             original[0, :3, :3] = VIRTUAL_R
             home = np.asarray(measured_home)
@@ -524,7 +524,10 @@ def main():
     yaw_alignment = result.get("align_start_yaw_to_home") is True
     if yaw_alignment != (input_receipt.get("align_start_yaw_to_home") is True):
         raise ValueError("The result and input receipt disagree on the yaw alignment")
-    trace = trace_data(path, model_sha, anchor, yaw_alignment)
+    authorized_history = result.get("replay_root_five_history") is True
+    if authorized_history != (input_receipt.get("replay_root_five_history") is True):
+        raise ValueError("The result and signed input receipt disagree on authorized root-five history")
+    trace = trace_data(path, model_sha, anchor, yaw_alignment, authorized_history)
     center = result.get("center_offset_mm")
     if center != input_receipt.get("center_offset_mm"):
         raise ValueError("Video center offset does not match the native input receipt")
@@ -559,6 +562,7 @@ def main():
                    "center_offset_mm": center, "preposition_from_seconds": args.preposition_from_seconds,
                    "start_only_profile": profile,
                    "align_start_yaw_to_home": yaw_alignment,
+                   "replay_root_five_history": authorized_history,
                    "feedback": "Same-header four native MuJoCo groups; FK only; monotonic receipt cutoff and 40 ms freshness",
                    "timing": "Historical samples chosen at preceding signed HMB cutoff with recorded ROS epoch. Preposition uses actual observer monotonic receipt time.",
                    "fps": args.fps, "frame_size": FRAME_SIZE})
