@@ -18,6 +18,7 @@ from dexgym.tasks.direct.wholebody_s05.p02.intent import semantic_order
 from dexgym.tasks.direct.wholebody_s05.p02.model import RobotModel
 from hmb_cohort import IDENTITIES
 from pair_nominal_hmb import signed_feedback_names
+from replay_dcr009_guarded_diagnostic import ROOT_FIVE, align_pair_yaw
 from summarize_nominal_replay import ACTIVE, FEEDBACK, HISTORICAL, stamp
 
 
@@ -71,12 +72,13 @@ def checked_inputs(attempt, plan_path, cohort_path, model_path):
     return result, receipt, trace, anchor_path, anchor, digest(model_path)
 
 
-def trace_data(path, model_sha, anchor):
+def trace_data(path, model_sha, anchor, yaw_alignment=False):
     groups = defaultdict(dict)
     times, models, latched, outcomes, preposition_clocks = [], [], [], [], []
     stages, statuses, measurements, history_input = {}, [], [], []
     previous = -1
     phase_active = False
+    measured_home = None
     opener = gzip.open if path.suffix == ".gz" else open
     with opener(path, "rb") as stream:
         for line in stream:
@@ -93,6 +95,8 @@ def trace_data(path, model_sha, anchor):
                 times.append(row)
             elif kind == "start_anchor":
                 latched.append(row)
+            elif kind == "home_feedback":
+                measured_home = row["anatomical_palm_world"]
             elif kind == "start_handoff":
                 outcomes.append(row)
             elif kind == "start_measurement":
@@ -134,9 +138,22 @@ def trace_data(path, model_sha, anchor):
         observed = latched[0]
         locked = np.asarray(observed["shared_transform"], dtype=float)
         expected = np.asarray(anchor["registered_wrist_start_h"], dtype=float)
+        rotation_matches = np.array_equal(locked[:3, :3], VIRTUAL_R)
+        if yaw_alignment:
+            if history_input or anchor["root"] != ROOT_FIVE or measured_home is None:
+                raise ValueError("Yaw rendering requires the root-five START-only scope and measured Home")
+            original = np.eye(4)[None]
+            original[0, :3, :3] = VIRTUAL_R
+            home = np.asarray(measured_home)
+            original[0, :3, 3] = home[:, :3, 3].mean(axis=0) - VIRTUAL_R @ expected[:, :3, 3].mean(axis=0)
+            aligned, _, yaw = align_pair_yaw(original, home, original[0] @ expected)
+            if (not np.allclose(locked, aligned[0], atol=1e-10, rtol=0)
+                    or abs(yaw["yaw_deg"] - observed["yaw_alignment"]["yaw_deg"]) > 1e-9):
+                raise ValueError("Yaw overlay does not match the START target derived from the measured Home")
+            rotation_matches = True
         if (observed["source_cutoff_ns"] != anchor["source_cutoff_ns"] or observed["inputs"] != anchor["inputs"]
                 or locked.shape != (4, 4) or not np.isfinite(locked).all()
-                or not np.array_equal(locked[:3, :3], VIRTUAL_R)
+                or not rotation_matches
                 or not np.array_equal(locked[3], [0, 0, 0, 1])
                 or not np.allclose(locked @ expected, observed["start_world_registered_wrist"], atol=1e-5, rtol=0)):
             raise ValueError("Native locked diagnostic target differs from the sealed registered wrist")
@@ -504,7 +521,10 @@ def main():
     matches = [root for root in cohort["selected_roots"] if root["root"] == result["root"] and root["split"] == "Train"]
     if len(matches) != 1 or input_receipt["root"] != matches[0]:
         raise ValueError("Input receipt and original signed HMB root metadata differ")
-    trace = trace_data(path, model_sha, anchor)
+    yaw_alignment = result.get("align_start_yaw_to_home") is True
+    if yaw_alignment != (input_receipt.get("align_start_yaw_to_home") is True):
+        raise ValueError("The result and input receipt disagree on the yaw alignment")
+    trace = trace_data(path, model_sha, anchor, yaw_alignment)
     center = result.get("center_offset_mm")
     if center != input_receipt.get("center_offset_mm"):
         raise ValueError("Video center offset does not match the native input receipt")
@@ -538,6 +558,7 @@ def main():
                    "original_input_mode": input_mode,
                    "center_offset_mm": center, "preposition_from_seconds": args.preposition_from_seconds,
                    "start_only_profile": profile,
+                   "align_start_yaw_to_home": yaw_alignment,
                    "feedback": "Same-header four native MuJoCo groups; FK only; monotonic receipt cutoff and 40 ms freshness",
                    "timing": "Historical samples chosen at preceding signed HMB cutoff with recorded ROS epoch. Preposition uses actual observer monotonic receipt time.",
                    "fps": args.fps, "frame_size": FRAME_SIZE})
