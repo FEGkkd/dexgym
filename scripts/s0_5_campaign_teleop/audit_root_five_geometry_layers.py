@@ -13,7 +13,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 
 from dexgym.tasks.direct.wholebody_s05.p02.intent import hand_basis
-from dexgym.tasks.direct.wholebody_s05.p02.model import RobotModel
+from dexgym.tasks.direct.wholebody_s05.p02.model import RobotModel, asset_files
 from dexgym.tasks.direct.wholebody_s05.v1.rmb.home_anchored_intent import SignedHumanPartition, SimulationIntent
 from dexgym.tasks.direct.wholebody_s05.v1.rmb.teleop_candidate import HAND_FILTER_ALPHA
 from home_anchored_start_anchor import role_identity, train_reader
@@ -108,8 +108,10 @@ def main():
     assert digest(starts) == r["start_sha256"]
     lock = np.asarray(json.loads(starts.read_bytes())["locked_transform"])
     manifest = r["robot_model_servo"]["assets"]
-    expected_model = manifest.get("dual_arm_marvin.xml")
-    assert expected_model and digest(args.xml) == expected_model
+    assets = {Path(path).relative_to(args.xml.resolve().parent).as_posix(): value
+              for path, value in asset_files(args.xml).items()}
+    if assets != manifest or mujoco.__version__ != r["robot_model_servo"]["mujoco"]:
+        raise ValueError("Model dependency or MuJoCo runtime differs from the verified archive")
     robot = RobotModel(args.xml)
     assert list(robot.names) == r["robot_model_servo"]["joints"]
     initial = robot.geometry(robot.home)

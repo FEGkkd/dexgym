@@ -162,7 +162,7 @@ def audit(run, model, out):
                 q_filter = np.asarray(arr["q_applied"][tick, 2*sub+1], dtype=np.float64)
                 physical = (float(arr["physical_clearance_m"][tick, sub]),
                             float(arr["physical_penetration_m"][tick, sub]),
-                            bool(np.any(arr["physical_contact"][tick, sub])),
+                            bool(arr["physical_contact"][tick].any()),
                             int(arr["physical_event"][tick, sub]))
                 physical_intervals.add(physical)
                 n_phys += 1
@@ -201,7 +201,7 @@ def audit(run, model, out):
         "original_physics": {"intervals": n_phys, "substeps": 2*n_phys,
                              "minimum_sampled_gap_mm": min(p[0] for p in physical_intervals)*1000.,
                              "maximum_penetration_mm": max(p[1] for p in physical_intervals)*1000.,
-                             "any_contact": any(p[2] for p in physical_intervals),
+                             "any_contact_across_13_channels_per_hmb_tick": any(p[2] for p in physical_intervals),
                              "any_event": any(p[3] for p in physical_intervals)},
         "cases": sample_cases, "wall_seconds": perf_counter()-t0,
         "limitations": [
