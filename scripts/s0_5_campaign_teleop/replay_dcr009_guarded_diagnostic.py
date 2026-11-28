@@ -306,6 +306,8 @@ def diagnostic_class():
                 raise
 
         def send(self, event, epoch_delta_ns=None):
+            if epoch_delta_ns is None:
+                return super().send(event)
             header = super().send(event, epoch_delta_ns)
             if self.stage == HISTORICAL:
                 self.last_history_event = {"topic": event.topic, "record_index": event.record_index,
