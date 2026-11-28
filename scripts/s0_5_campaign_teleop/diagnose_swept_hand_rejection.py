@@ -51,7 +51,7 @@ def _snapshot(row):
     return states
 
 
-def replay_prefix(path, original, budget_ms, groups=HAND_GROUPS):
+def replay_prefix(path, original, budget_ms, groups=HAND_GROUPS, sequence_filter=None):
     selected, mismatches, counts = {}, [], Counter()
     budget_ns = budget_ms * 1_000_000
     with path.open(encoding="utf-8") as stream:
@@ -60,7 +60,8 @@ def replay_prefix(path, original, budget_ms, groups=HAND_GROUPS):
             sequence, group, name = row["sequence"], row["group"], row["reason"]
             counts[name] += 1
             states = _snapshot(row)
-            target = group in groups and name == "SWEEP_UNPROVEN" and group not in selected
+            target = (group in groups and name == "SWEEP_UNPROVEN" and group not in selected
+                      and (sequence_filter is None or sequence_filter == sequence))
             if states is not None:
                 if type(sequence) is not int or type(group) is not int or sequence <= 0 or group not in (0, 1, 2):
                     raise ValueError(f"Malformed finite row at line {lineno}")
@@ -196,6 +197,7 @@ def main():
         parser.add_argument(f"--{key}", type=Path, required=True)
     parser.add_argument("--ready", type=Path, help="Original sweep-ready.json beside the trace by default")
     parser.add_argument("--arms", action="store_true", help="Attribute the first whole-arm failure instead of both hands")
+    parser.add_argument("--sequence", type=int, help="Attribute only this exact logged SWEEP_UNPROVEN request")
     args = parser.parse_args()
     ready_path = args.ready or args.trace.with_name("sweep-ready.json")
     ready, models = _check_sources(ready_path, args.model_receipt)
@@ -205,7 +207,15 @@ def main():
     if ready["joint_names"] != list(code.names) or ready["actuator_names"] != list(code.actuators):
         raise ValueError("The reconstructed named 54-axis order differs from the original")
     groups = ARM_GROUP if args.arms else HAND_GROUPS
-    selected, mismatches, counts = replay_prefix(args.trace, code, ready["budget_ms"], groups)
+    if args.sequence is not None:
+        all_groups = {**ARM_GROUP, **HAND_GROUPS}
+        with args.trace.open(encoding="utf-8") as stream:
+            matches = [row for row in map(json.loads, stream) if row["sequence"] == args.sequence]
+        if len(matches) != 1 or matches[0]["reason"] != "SWEEP_UNPROVEN" or matches[0]["group"] not in all_groups:
+            raise ValueError("Exact request is missing or is not a sweep-proof rejection")
+        selected_group = matches[0]["group"]
+        groups = {selected_group: all_groups[selected_group]}
+    selected, mismatches, counts = replay_prefix(args.trace, code, ready["budget_ms"], groups, args.sequence)
     witnesses = []
     for group, (row, states, caches, same_budget, lineno) in sorted(selected.items()):
         analysis = {key: diagnose_model(robot, states, cache) for key, robot, cache in
@@ -215,7 +225,7 @@ def main():
                       and analysis[first_reject]["result"] == row["reason"] and not mismatches)
         witnesses.append({
             "sequence": row["sequence"], "trace_line": lineno,
-            ("group" if args.arms else "hand"): groups[group],
+            ("group" if group in ARM_GROUP else "hand"): groups[group],
             "recorded_reason": row["reason"], "same_budget_offline_replay_reason": same_budget,
             "recorded_proof_duration_ms": (row["proof_complete_ns"] - row["receipt_ns"]) / 1e6,
             "original_first_failing_model_reproduced": first_reject if reproduced else None,

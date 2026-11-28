@@ -6,13 +6,15 @@ from hashlib import sha256
 import json
 import os
 from pathlib import Path
+from stat import S_ISREG
+from tempfile import NamedTemporaryFile
 import time
 
 import numpy as np
 from scipy.spatial.transform import Rotation
 
 from replay_home_anchored_pilot import (
-    FRESH_NS, WRISTS, digest, map_file, object_at, palm_poses, pose_from_xyz_quat, proper, read_frames,
+    FRESH_NS, WRISTS, FeedbackDwell, StartMiss, digest, map_file, object_at, palm_poses, pose_from_xyz_quat, proper, read_frames,
     replay_class, validate_environment,
 )
 
@@ -29,6 +31,57 @@ ROOT_FIVE = "capture:b63bc72d2e8b2ee395e966f6"
 ROOT_FIVE_PLAN_SHA = "3c0268291bdb8916a9a520d3fa73a1340fffd7f9e8a7b7364a1ef9950f9a0004"
 # +X in W goes toward the named left base. -X is virtual operator right.
 CENTER_OFFSET_SEQUENCE_MM = (0, 10, 20, -10, -20)
+FINGER_STAGE_ENV = "S05_DCR009_FINGER_STAGE"
+FINGER_STAGES = (("right", "RFJ"), ("right", "THJ"), ("right", "FFJ"), ("right", "MFJ"), ("right", "LFJ"),
+                 ("left", "THJ"), ("left", "FFJ"), ("left", "MFJ"), ("left", "RFJ"), ("left", "LFJ"))
+FINAL_FINGER_STAGE = len(FINGER_STAGES) + 1
+WRISTS_ONLY_LIMIT_S = 10.0
+FINGER_STAGE_LIMIT_S = 3.5
+WRIST_FIRST_LIMIT_S = 30.0
+FINGER_COMMAND_TOLERANCE_RAD = .02
+
+
+def finger_stage_marker(socket, enabled):
+    raw = os.environ.get(FINGER_STAGE_ENV)
+    if not enabled:
+        if raw is not None:
+            raise ValueError("An unused DCR-009 finger-stage marker is installed")
+        return None
+    path = Path(raw or ".")
+    if not path.is_absolute() or path.parent.resolve() != socket.parent.resolve():
+        raise ValueError("Require the finger-stage marker in the owned guard socket directory")
+    metadata = path.lstat()
+    if (not S_ISREG(metadata.st_mode) or metadata.st_uid != os.geteuid() or metadata.st_mode & 0o077
+            or metadata.st_size != 4 or path.read_bytes() != b"0 0\n"):
+        raise ValueError("Require an owned, private and initially held finger-stage marker")
+    return path
+
+
+def publish_finger_stage(path, stage, ros_deadline_ns=0):
+    """Atomically publish a short lease, or a zero-deadline state that holds all fingers."""
+    temporary = None
+    try:
+        with NamedTemporaryFile(mode="wb", prefix=".finger-stage-", dir=path.parent, delete=False) as stream:
+            temporary = Path(stream.name)
+            stream.write(f"{stage} {ros_deadline_ns}\n".encode("ascii"))
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+
+
+def wrist_ready(value):
+    return (value is not None and value["arms_accepted"]
+            and all(distance <= .010 and angle <= 5. for distance, angle in value["wrist_error_m_deg"]))
+
+
+def digit_ready(stage, readbacks):
+    side, finger = FINGER_STAGES[stage - 1]
+    published = readbacks.get(side)
+    names = [f"{side[0]}_{finger}{index}" for index in range(4)]
+    return (published is not None and published["stage"] == stage
+            and all(published["issued_error_rad"][name] <= FINGER_COMMAND_TOLERANCE_RAD
+                    and published["measured_error_rad"][name] <= .10 for name in names))
 
 
 def check_scope(plan):
@@ -102,6 +155,11 @@ def load(args):
             raise ValueError("The original START audit must use the original unsegmented controller")
     if args.align_start_yaw_to_home and args.start_only_profile != "segmented":
         raise ValueError("Common yaw alignment is confined to the segmented root-five START-only run")
+    if args.wrist_first_fingers and not (args.align_start_yaw_to_home and args.start_only_profile == "segmented"
+                                        and args.center_offset_mm == 0 and args.root == ROOT_FIVE
+                                        and args.plan_sha256 == ROOT_FIVE_PLAN_SHA):
+        raise ValueError("Wrist-first staging requires the original-center, yaw-aligned root-five START-only profile")
+    args.finger_stage_marker = finger_stage_marker(args.guard_socket, args.wrist_first_fingers)
     if plan["cohort_sha256"] != COHORT_SHA or plan["shared_frames_sha256"] != digest(args.frames):
         raise ValueError("Plan does not bind the original cohort and exact runtime frames")
     selection = next(row for row in rows if row["root"] == args.root)
@@ -164,34 +222,38 @@ def diagnostic_class():
                         if fields.get("session") == self.session:
                             self.segmented_diag[side] = header, fields
 
-        def segmented_hand_errors(self, q):
+        def segmented_hand_readbacks(self, q):
             now = self.node.get_clock().now().nanoseconds
             generation = {fields.get("pilot_generation") for _, fields in self.pilot_diagnostics.values()}
-            errors, proof_ids = [], []
+            readbacks = {}
             for index, side in enumerate(("left", "right")):
                 observed = self.segmented_diag.get(side)
-                proof, error = None, None
-                if observed is not None and 0 <= now - observed[0] <= FRESH_NS:
-                    _, fields = observed
-                    try:
-                        header = int(fields["command_header_ns"])
-                        sequence = int(fields["command_sequence"])
-                        guard = int(fields["guard_sequence"])
-                        raw = np.asarray([float(value) for value in fields["raw_wuji_target_rad"].split(",")])
-                        issued = np.asarray([float(value) for value in fields["issued_target_rad"].split(",")])
-                        names = self.plant_names[14 + 20 * index:34 + 20 * index]
-                        actual = self.segmented_commands.get((side, header, sequence))
-                        if (actual is not None and set(actual) == set(names) and 0 <= now - header <= FRESH_NS
-                                and guard > 0 and generation == {fields["generation"]}
-                                and raw.shape == issued.shape == (20,) and np.isfinite(raw).all()
-                                and np.array_equal(issued, [actual[name] for name in names])):
-                            error = float(np.max(np.abs(raw - [q[name] for name in names])))
-                            proof = guard
-                    except (KeyError, ValueError):
-                        pass
-                errors.append(error)
-                proof_ids.append(proof)
-            return errors, proof_ids
+                if observed is None or not 0 <= now - observed[0] <= FRESH_NS:
+                    continue
+                diagnostic_header, fields = observed
+                try:
+                    header = int(fields["command_header_ns"])
+                    sequence = int(fields["command_sequence"])
+                    guard = int(fields["guard_sequence"])
+                    raw = np.asarray([float(value) for value in fields["raw_wuji_target_rad"].split(",")])
+                    issued = np.asarray([float(value) for value in fields["issued_target_rad"].split(",")])
+                    names = self.plant_names[14 + 20 * index:34 + 20 * index]
+                    actual = self.segmented_commands.get((side, header, sequence))
+                    finger_stage = int(fields.get("finger_stage", "-1"))
+                    if (actual is not None and set(actual) == set(names) and 0 <= now - header <= FRESH_NS
+                            and header <= diagnostic_header and guard > 0 and generation == {fields["generation"]}
+                            and raw.shape == issued.shape == (20,) and np.isfinite(raw).all()
+                            and np.array_equal(issued, [actual[name] for name in names])):
+                        readbacks[side] = {
+                            "stage": finger_stage, "proof": guard, "command_sequence": sequence, "command_header_ns": header,
+                            "raw_wuji_target_rad": dict(zip(names, raw.tolist())),
+                            "issued_target_rad": dict(zip(names, issued.tolist())),
+                            "issued_error_rad": dict(zip(names, np.abs(raw - issued).tolist())),
+                            "measured_error_rad": dict(zip(names, np.abs(raw - [q[name] for name in names]).tolist())),
+                        }
+                except (KeyError, ValueError):
+                    continue
+            return readbacks
 
         def additional_start_checks(self, measurement):
             if self.args.start_only_profile != "segmented":
@@ -201,14 +263,82 @@ def diagnostic_class():
         def replay(self, events, warmup):
             if self.args.start_only_profile is not None:
                 self.write("start_only_completed", profile=self.args.start_only_profile,
-                           original_history_started=False)
+                           original_history_started=False, wrist_first_fingers=self.args.wrist_first_fingers)
                 return
             return super().replay(events, warmup)
 
         def before_history(self, warmup):
             self.stage = "preposition_start"
             self.write("preposition_clock", center_offset_mm=self.args.center_offset_mm)
+            if self.args.wrist_first_fingers:
+                return self.wrist_then_fingers(warmup)
             return super().before_history(warmup)
+
+        def wrist_then_fingers(self, warmup):
+            marker = self.args.finger_stage_marker
+            begin = time.monotonic_ns()
+            overall_deadline = begin + int(WRIST_FIRST_LIMIT_S * 1e9)
+            stage_deadline = begin + int(WRISTS_ONLY_LIMIT_S * 1e9)
+            movement_stage = 0
+            dwell, last = FeedbackDwell(), None
+            self.write("finger_stage_begin", finger_stage=0, finger="WRISTS_ONLY")
+            try:
+                while time.monotonic_ns() < min(overall_deadline, stage_deadline):
+                    for event in warmup.values():
+                        self.send(event)
+                    self.wait(.020)
+                    self.require_no_hard_fault()
+                    current = self.measure()
+                    wall_now = time.monotonic_ns()
+                    remaining_ns = min(overall_deadline, stage_deadline) - wall_now
+                    within_wrists = remaining_ns > 0 and wrist_ready(current)
+                    ready = False
+                    if within_wrists:
+                        speed = current["measured_speed_rad_s"]
+                        stopped = speed is not None and speed <= .16
+                        hands = current["finger_stage_readbacks"]
+                        if movement_stage == 0:
+                            ready = wall_now - begin >= 1_500_000_000 and stopped
+                        elif movement_stage == FINAL_FINGER_STAGE:
+                            ready = (stopped and all(x is not None and x <= .10 for x in current["hand_error_to_issued_rad"])
+                                     and self.additional_start_checks(current)
+                                     and all(side in hands and hands[side]["stage"] == FINAL_FINGER_STAGE
+                                             and max(hands[side]["issued_error_rad"].values()) <= FINGER_COMMAND_TOLERANCE_RAD
+                                             for side in ("left", "right")))
+                        else:
+                            ready = digit_ready(movement_stage, hands)
+                    if current is not None:
+                        last = current
+                        self.write("start_measurement", elapsed_s=(wall_now - begin) / 1e9,
+                                   ready=bool(ready and movement_stage == FINAL_FINGER_STAGE), value=current,
+                                   finger_stage=movement_stage, finger_stage_ready=bool(ready), wrist_lease_eligible=bool(within_wrists))
+                    feedback_header = current["feedback_header_ns"] if current is not None else None
+                    if dwell.observe(feedback_header, ready):
+                        self.write("finger_stage_dwell", finger_stage=movement_stage, first_feedback_header_ns=dwell.first_ns,
+                                   last_feedback_header_ns=dwell.last_ns, evidence=last)
+                        if movement_stage == FINAL_FINGER_STAGE:
+                            self.start_ready = True
+                            break
+                        movement_stage += 1
+                        stage_deadline = wall_now + int(FINGER_STAGE_LIMIT_S * 1e9)
+                        dwell = FeedbackDwell()
+                        finger = FINGER_STAGES[movement_stage - 1] if movement_stage <= len(FINGER_STAGES) else "FINAL_HOLD"
+                        self.write("finger_stage_begin", finger_stage=movement_stage, finger=finger)
+                    deadline_ros_ns = 0
+                    if movement_stage and within_wrists:
+                        now_ros = self.node.get_clock().now().nanoseconds
+                        remaining_ns = min(overall_deadline, stage_deadline) - time.monotonic_ns()
+                        expires = min(feedback_header + FRESH_NS, now_ros + min(FRESH_NS, remaining_ns))
+                        if expires > now_ros:
+                            deadline_ros_ns = expires
+                    publish_finger_stage(marker, movement_stage if deadline_ros_ns else 0, deadline_ros_ns)
+            finally:
+                publish_finger_stage(marker, 0)
+            self.write("start_handoff", status="START_REACHED" if self.start_ready else "START_NOT_REACHED",
+                       measurement=last, elapsed_s=(time.monotonic_ns() - begin) / 1e9, continue_after_miss=False,
+                       wrist_first_fingers=True, terminal_finger_stage=movement_stage)
+            if not self.start_ready:
+                raise StartMiss("START_NOT_REACHED: wrist-first or digit dwell did not complete within the bounded phase")
 
         def measure(self):
             value = super().measure()
@@ -220,9 +350,12 @@ def diagnostic_class():
                 value["arms_accepted"] = value["arms_accepted"] and guarded
                 value["arm_guard_proof"] = next(iter(sequences)) if guarded else None
                 if self.args.start_only_profile == "segmented":
-                    errors, proofs = self.segmented_hand_errors(value["named_q_rad"])
-                    value["hand_error_to_unsegmented_wuji_rad"] = errors
-                    value["hand_segment_guard_proofs"] = proofs
+                    readbacks = self.segmented_hand_readbacks(value["named_q_rad"])
+                    value["hand_error_to_unsegmented_wuji_rad"] = [max(readbacks[side]["measured_error_rad"].values())
+                                                               if side in readbacks else None for side in ("left", "right")]
+                    value["hand_segment_guard_proofs"] = [readbacks.get(side, {}).get("proof") for side in ("left", "right")]
+                    if self.args.wrist_first_fingers:
+                        value["finger_stage_readbacks"] = readbacks
                 if self.args.center_offset_mm is not None:
                     geometry = self.robot.geometry()
                     native = (np.linalg.inv(self.frames[1:3]) @ palm_poses(geometry)
@@ -330,6 +463,7 @@ def main():
     parser.add_argument("--center-offset-mm", type=int, choices=CENTER_OFFSET_SEQUENCE_MM)
     parser.add_argument("--start-only-profile", choices=("original", "segmented"))
     parser.add_argument("--align-start-yaw-to-home", action="store_true")
+    parser.add_argument("--wrist-first-fingers", action="store_true")
     args = parser.parse_args()
     root, anchor, frames, raw, home = load(args)
     from dexgym.tasks.direct.wholebody_s05.p02.model import RobotModel
@@ -350,6 +484,8 @@ def main():
     receipt["start_only_profile"] = args.start_only_profile
     if args.align_start_yaw_to_home:
         receipt["align_start_yaw_to_home"] = True
+    if args.wrist_first_fingers:
+        receipt["wrist_first_fingers"] = True
     (args.output / "input.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     Runner, rclpy = diagnostic_class()
     rclpy.init()
@@ -358,7 +494,8 @@ def main():
         with (args.output / "trace.jsonl").open("x", encoding="utf-8", buffering=1) as trace:
             runner = Runner(node, trace, args, anchor, frames, raw, home, model, np.repeat(np.eye(4)[None], 2, axis=0))
             runner.home_guard = home_guard
-            runner.write("diagnostic_scope", scope=SCOPE, formal_coverage_credit=False, anatomical_mount_status="UNKNOWN")
+            runner.write("diagnostic_scope", scope=SCOPE, formal_coverage_credit=False, anatomical_mount_status="UNKNOWN",
+                         wrist_first_fingers=args.wrist_first_fingers)
             try:
                 runner.run(events)
             except (RuntimeError, ValueError) as error:
