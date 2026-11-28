@@ -1,0 +1,64 @@
+{
+  "status": "TECHNICAL_PASS",
+  "scope": "DIAGNOSTIC_ONLY_MUJOCO_SWEEP_V2",
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "formal_coverage_credit": false,
+  "reviewed_code_commit": "3e26e9b756c308690aeacab38022185fed49eaba",
+  "implementation_sha256": "35121d6540c3de06905cca4d22cdfb92b2af987e69c0c5e14d016455e0c781bb",
+  "strict_guard_sha256": "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909",
+  "native_header_sha256": "5995ef2830a216d3787bd86b3cc55b25726621e9da61ca5dd1b87c984654ce82",
+  "model_frame_receipt_sha256": "1d67a6dad1831574af10a1fdf6349638097af6457e9d8527c9bd77e150e876fe",
+  "observed_models": {
+    "live": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "signed": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d"
+  },
+  "budget_ms": 25,
+  "max_box_queries": 63,
+  "max_box_depth": 7,
+  "clearance_m": 0.0005,
+  "distance_rounding_margin_m": 0.000002,
+  "independent_review": {
+    "role": "Independent Reviewer",
+    "production_implementation_author": false,
+    "offline_only": true,
+    "proof_domain": "UNCHANGED_COMPONENTWISE_ISSUED_MEASURED_PROPOSED",
+    "analytic_review_checks": [
+      "Common-ancestor rigid motion cancels by exact model topology",
+      "Nearest rigidly attached collider offset plus geom_rbound bounds its orbit; other axes retain V1 lever bounds",
+      "Chord bound is monotone until pi and clamps at the circular diameter thereafter",
+      "Both children cover the original interval for every unresolved pair",
+      "Proven-box cache reuse requires exact containment and distance cache reuse retains the conservative displacement bound",
+      "Original pair catalogues, double model veto, positive geometric clearance, joint/coupling limits, ownership and native STOP authority remain in the path",
+      "Numerical anomalies, insufficient proof, exhausted search limits and deadlines do not permit a command"
+    ]
+  },
+  "actual_offline_controls": {
+    "interpreter": "/usr/bin/python3.12",
+    "mujoco_version": "3.13.0",
+    "test_path": "scripts/s0_5_campaign_teleop/test_dcr009_swept_guard_v2_independent.py",
+    "test_sha256": "7a865f3adde417eab9ad473a618d4e6b6ca9c84400087b411dc71bd46a2ceca7",
+    "raw_log_sha256": "f3d857d5c38a3b0775b9f582cb26b34ac9de2bf3c3ce53753051a9b4a23efb8f",
+    "python_passed": 9,
+    "native_cpp_passed": 8,
+    "exit_code": 0,
+    "controls": [
+      "Penetration in either child with legal endpoints and midpoint, including a warmed cache",
+      "Real dual-model arm path with legal endpoints and a penetrating midpoint",
+      "Positive 0.25 mm clearance deficit, preserved rounding at 0.501 mm and permit at 0.510 mm",
+      "Depth and query caps, monotonic expiry after warm cache and packet expiry",
+      "Shared rotating ancestor, unrelated axes and 128 skew-hinge displacement observations",
+      "Original wire sequence, changed wrong group, nonfinite state, invalid baseline, hard limit and a coupling-invalid corner with individually legal endpoints",
+      "Signed model veto of a request cleared by the live model",
+      "Native mixed timestamps, duplicate or invalid feedback, future/stale source time, clock reversal and stale monotonic observation",
+      "Fresh coherent feedback reaches the deliberately absent private proof transport"
+    ]
+  },
+  "limitations": [
+    "Permits one isolated root-five MuJoCo diagnostic on this exact reviewed source and model profile",
+    "Geometry proof pertains to the original componentwise state box; sampled servo feedback does not certify a tighter substep envelope",
+    "The prior 7020 bypass was examined as historical evidence and is prohibited in this V2 run",
+    "The shared yaw and mapping remain diagnostic, and wrist-palm physical extrinsic qualification remains UNKNOWN",
+    "No prediction of full replay completion or guarantee of deadline behavior under scheduler contention",
+    "No hardware operation, other mother sources, formal coverage, full RMB build or training execution"
+  ]
+}

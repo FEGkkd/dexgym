@@ -1,0 +1,22 @@
+test_group_sequences_hard_limits_coupling_and_expiry (__main__.DualModelControls.test_group_sequences_hard_limits_coupling_and_expiry) ... ok
+test_real_asset_interior_collision (__main__.DualModelControls.test_real_asset_interior_collision) ... ok
+test_signed_model_can_veto_an_otherwise_permitted_packet (__main__.DualModelControls.test_signed_model_can_veto_an_otherwise_permitted_packet) ... ok
+test_incomplete_search_fails_closed_at_depth_and_query_caps (__main__.GeometryControls.test_incomplete_search_fails_closed_at_depth_and_query_caps) ... ok
+test_margin_is_retained_on_both_sides (__main__.GeometryControls.test_margin_is_retained_on_both_sides) ... ok
+test_penetration_inside_interval_with_clear_endpoints_and_midpoint (__main__.GeometryControls.test_penetration_inside_interval_with_clear_endpoints_and_midpoint) ... ok
+test_positive_clearance_shortfall_is_rejected (__main__.GeometryControls.test_positive_clearance_shortfall_is_rejected) ... ok
+test_shared_hinge_cancels_and_expiry_remains_fail_closed (__main__.GeometryControls.test_shared_hinge_cancels_and_expiry_remains_fail_closed) ... ok
+test_tightened_skew_hinge_bounds_box_corner_displacement (__main__.GeometryControls.test_tightened_skew_hinge_bounds_box_corner_displacement) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.150s
+
+OK
+mixed-headers 100
+duplicate-group 100
+invalid-group 100
+future-feedback 100
+stale-source-clock 100
+fresh-complete-reaches-transport 103
+clock-reversal 100
+stale-steady-clock 100
