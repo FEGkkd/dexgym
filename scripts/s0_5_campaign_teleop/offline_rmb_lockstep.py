@@ -21,6 +21,7 @@ ACTIVE = (OfflineNominalStatus.ACTIVE, OfflineNominalStatus.LIMITED_ACTIVE)
 FINGER_ORDER = (8, 5, 6, 7, 9, 0, 1, 2, 3, 4)
 PROOF = {"max_queries": 8191, "max_depth": 18}
 PROOF_NS = 2_000_000_000
+START_FINGER_STEP_RAD = .015
 
 
 @dataclass(frozen=True)
@@ -67,7 +68,7 @@ class Lockstep:
         status = self.sweep.prove(low, high, monotonic_ns() + PROOF_NS)
         return status, self.sweep.last_metrics
 
-    def advance(self, target, *, hand_axes=None):
+    def advance(self, target, *, hand_axes=None, start_stage=False):
         if self.fault is not None:
             raise RuntimeError("No additional physical steps after an uncontained fault")
         measured, _ = self.state()
@@ -76,7 +77,12 @@ class Lockstep:
             self.fault = "NATIVE_PAIR_HARD_FAULT"
             return Substep(proposal, "NATIVE_PAIR_HARD_FAULT", {}, None, None, True, self.fault)
         # CpuServo receives float32. Certify the exact vector it will receive.
-        candidate = proposal.q_requested.astype(np.float32).astype(np.float64)
+        requested = proposal.q_requested.copy()
+        if start_stage:
+            previous = self.issued[14:]
+            requested[14:] = np.clip(requested[14:], previous - START_FINGER_STEP_RAD,
+                                     previous + START_FINGER_STEP_RAD)
+        candidate = requested.astype(np.float32).astype(np.float64)
         proof, evidence = self._proof(candidate, measured)
         hold = target is None or proof != Reason.PERMIT
         hold_status = None
@@ -108,7 +114,7 @@ class Lockstep:
             maximum = 500 if stage == 0 else 175
             for tick in range(maximum):
                 for _ in range(ARM_SUBSTEPS):
-                    report = self.advance(target, hand_axes=enabled)
+                    report = self.advance(target, hand_axes=enabled, start_stage=True)
                     observe(stage, tick, report, self.state())
                     if report.fault:
                         break

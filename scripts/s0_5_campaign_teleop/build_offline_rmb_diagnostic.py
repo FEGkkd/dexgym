@@ -32,11 +32,15 @@ from swept_live_guard import EXACT_MODEL_RECEIPT_SHA, verified_robot
 
 SCOPE = "DIAGNOSTIC_ONLY"
 DOCS = Path(__file__).resolve().parents[2] / "docs/s0-5"
+HMB_GRID_TOLERANCE_NS = 1_000
 
 
 def implementation():
-    modules = ("offline_rmb_lockstep", "swept_live_guard_v2",
-               SimulationIntent.__module__, OfflineTeleopNominal.__module__)
+    package = "dexgym.tasks.direct.wholebody_s05.v1."
+    modules = ("offline_rmb_lockstep", "swept_live_guard_v2", "swept_live_guard",
+               *(package + name for name in ("task.physics", "task.safety", "task.native_sweep",
+                 "rmb.teleop_native", "rmb.nominal", "rmb.mapping", "rmb.schema",
+                 "rmb.home_anchored_intent", "rmb.offline_nominal")))
     return {name: file_sha(Path(sys.modules[name].__file__)) for name in modules} | {"builder": file_sha(Path(__file__))}
 
 
@@ -113,6 +117,7 @@ def blank(data):
               "hmb_source_index": data["source_index"][:, :4, 0].copy(),
               "history_eligible": np.zeros(n, bool),
               "target": empty_geometry(n), "actual": empty_geometry(n)}
+    fields["control_cutoff_ns"] = np.zeros(n, "<i8")
     for key, shape in {"raw_tracker": (2, 4, 4), "registered": (2, 4, 4), "mapped": (2, 4, 4),
                        "raw_manus_local": (2, 5, 4, 3), "q_nominal": (54,), "qd_nominal": (54,),
                        "nominal_proposal": (5, 54), "q_measured": (54,), "qd_measured": (54,),
@@ -209,7 +214,6 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
     full, historical, causes, proofs, nominal_codes = (Counter() for _ in range(5))
     errors = {key: [] for key in ("wrist_mm", "wrist_deg", "ten_tip_mm", "issued_measured_joint_deg")}
     index = []
-    last_tick = None
     locked_generation = generation(anchor_data, anchor_meta, anchor_tick)
     previous_q = None
     consecutive = 0
@@ -237,9 +241,11 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
                 historical.update(plan_ticks=1, hmb_joint_valid_ticks=int(data["joint_valid"][i]),
                                   hmb_five_frame_candidate_ticks=int(fields["hmb_five_frame_candidate"][i]),
                                   independent_geometry_ticks=int(target["robot_morphology_target"] is not None))
-                if last_tick is not None and tick != last_tick + TICK_NS:
+                expected_tick = window["hmb_cutoff_start_ns"] + (historical["plan_ticks"] - 1) * TICK_NS
+                control_cutoff = expected_tick + HMB_GRID_TOLERANCE_NS
+                fields["control_cutoff_ns"][i] = control_cutoff
+                if not executor.fault and abs(tick - expected_tick) > HMB_GRID_TOLERANCE_NS:
                     executor.fault = "UNBRIDGED_HMB_TIME_GAP"
-                last_tick = tick
                 history = []
                 if start["status"] != "START_REACHED":
                     reason = "START_UNQUALIFIED"
@@ -251,7 +257,7 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
                         executor.fault = "UNBRIDGED_HMB_GENERATION"
                         registered = None
                     if registered is not None:
-                        nominal.refresh(registered, *hand_input(data, meta, sources, i), tick_ns=tick)
+                        nominal.refresh(registered, *hand_input(data, meta, sources, i), tick_ns=control_cutoff)
                     for _ in range(ARM_SUBSTEPS):
                         if executor.fault:
                             break
@@ -282,7 +288,8 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
                 historical["diagnostic_five_frame_ticks"] += int(fields["history_eligible"][i])
                 mark_error(errors, fields, i, target["robot_morphology_target"] is not None)
                 causes[reason] += 1
-                log.write(json.dumps({"partition": part["key"], "tick": i, "time_ns": tick, "status": reason,
+                log.write(json.dumps({"partition": part["key"], "tick": i, "time_ns": tick,
+                    "control_cutoff_ns": control_cutoff, "status": reason,
                     "safety": [dict(proof=item.proof, hold=item.used_hold, hold_proof=item.hold_proof, fault=item.fault,
                                     metrics=item.request_metrics) for item in history]},
                     allow_nan=False, separators=(",", ":")) + "\n")
@@ -303,6 +310,7 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
             "start_status": start["status"], "recorded_physical_seconds": historical["physical_substeps"] * .002,
             "root_technical_gate": "DIAGNOSTIC_PASS" if ready else "BLOCKED", "physical_fault": executor.fault,
             "proof_budget": PROOF,
+            "hmb_grid_tolerance_ns": HMB_GRID_TOLERANCE_NS,
             "statistic_clock": "post-20ms interval feedback vs independent target available at interval start",
             "statistics": {name: {"ticks": len(data), "p50_p95_p99": np.percentile(data, [50, 95, 99], axis=0).tolist()}
                            for name, data in errors.items() if data},
