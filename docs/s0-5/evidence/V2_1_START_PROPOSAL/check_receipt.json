@@ -1,0 +1,49 @@
+{
+  "schema": "s05.start_home_anchored.stage_one_check_receipt.v1",
+  "reviewed_remote_head": "cf07a88bc93d1aa9737b41fb83b9392921449142",
+  "scope": "READ_ONLY_REPOSITORY_VERIFICATION_AND_SYNTHETIC_DESIGN_TESTS",
+  "status": "PENDING_HUMAN_REVIEW",
+  "execution_authorized": false,
+  "actual_validation": {
+    "synthetic_unit_tests": {
+      "command": "py -3 -B -m unittest discover -s docs/s0-5/evidence/V2_1_START_PROPOSAL -p \"test_*.py\" -v",
+      "status": "PASS",
+      "passed_test_methods": 12
+    },
+    "read_only_check": {
+      "command": "py -3 -B docs/s0-5/evidence/V2_1_START_PROPOSAL/check_proposal.py --verify-artifacts",
+      "status": "PASS",
+      "exit_code": 0,
+      "frozen_design_documents": 39,
+      "frozen_verification_artifacts": 10,
+      "historical_receipts": 5,
+      "local_document_file_links": 91,
+      "proposal_artifacts": 10,
+      "stdout": [
+        "PASS Stage I scope, ancestral baseline and DCR ordering; 39 design hashes, 10 verification artifacts, 5 historical receipts, 91 local document links.",
+        "PASS original HMB split denominators, immutable 85%/70% gates, pending human review, and execution authorization false.",
+        "PASS 10 proposal artifact hashes."
+      ]
+    },
+    "independent_repeat": {
+      "status": "PASS",
+      "passed_test_methods": 12,
+      "artifact_verification_exit_code": 0,
+      "report": "docs/s0-5/reports/V2_1_home_anchored_independent_review.md"
+    }
+  },
+  "runtime_experiments": {
+    "physical_calibration": "NOT_RUN",
+    "native_teleop_or_mujoco": "NOT_RUN",
+    "six_train_root_pilot": "NOT_RUN",
+    "full_rmb_build": "NOT_RUN",
+    "supermimic_training": "NOT_RUN",
+    "real_robot": "NOT_RUN"
+  },
+  "stage_one_limitations": [
+    "Discovered physical rotation and historical wearable calibration have no independent qualification.",
+    "Difference between installed MuJoCo model and signed model needs reconciliation.",
+    "New tracking and five-frame numerator semantics have not been human approved."
+  ],
+  "packaging_correction": "Normalized CRLF in the new RMB proposal to LF after staged whitespace validation."
+}

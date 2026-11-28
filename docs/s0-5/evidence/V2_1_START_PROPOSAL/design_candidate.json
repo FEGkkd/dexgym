@@ -1,0 +1,89 @@
+{
+  "schema": "s05.start_home_anchored.stage_one_proposal.v1",
+  "repository": "FEGkkd/dexgym",
+  "branch": "s0-5",
+  "reviewed_remote_head": "cf07a88bc93d1aa9737b41fb83b9392921449142",
+  "user_baseline_hint": "324d771e29d436b206211f444a6d800338f871ce",
+  "active_design_commit": "490770e1df45832d0693380563152bd19eefa3f4",
+  "active_design_freeze_sha256": "cd5bff29a5b5f683fae328898aa9060b40fc4be00e193a22d9bf18cb2d10b60b",
+  "design_version": "2.1.0-proposal",
+  "dcr_id": "DCR-009",
+  "status": "PENDING_HUMAN_REVIEW",
+  "stage": "DCR_PENDING_HUMAN_REVIEW",
+  "execution_authorized": false,
+  "implementation_authorized": false,
+  "pilot_authorized": false,
+  "full_rmb_authorized": false,
+  "training_authorized": false,
+  "physical_actuation_authorized": false,
+  "calibration_execution_authorized": false,
+  "approval_ref": null,
+  "allowed_stage_one_actions": [
+    "READ_ONLY_SOURCE_AND_HISTORICAL_AUDIT",
+    "DESIGN_PROPOSAL_EDIT",
+    "INDEPENDENT_DESIGN_REVIEW",
+    "SYNTHETIC_DESIGN_CHECK",
+    "PUBLISH_PROPOSAL"
+  ],
+  "geometry": {
+    "target_version": "START_HOME_ANCHORED_V1",
+    "planned_target_role": "INDEPENDENT_SCORING_AND_REWARD_AFTER_APPROVAL_AND_REQUALIFICATION",
+    "rotation_source": "FIXED_PHYSICAL_CALIBRATION",
+    "physical_calibration_status": "MISSING_INDEPENDENT_QUALIFICATION",
+    "approved_rotation_ref": null,
+    "origin_alignment": "ONE_SHARED_MATCHED_ANATOMICAL_BILATERAL_HOME_MIDPOINT",
+    "scale": 1,
+    "per_recording_rotation": false,
+    "per_side_recenter": false,
+    "force_home_palm_direction": false,
+    "geometry_from_commands_or_feedback": false,
+    "robot_feedback_anchor_role": "MEASURED_HOME_MIDPOINT_ONLY",
+    "ineligible_observed_start": "START_UNQUALIFIED_WITHOUT_RECONSTRUCTION",
+    "anchor_policy": "QUALIFIED_EXPLICIT_OR_EARLIEST_COMPLETE_CAUSAL_STABLE_WINDOW_TERMINAL",
+    "partition_restarts_native_session": false,
+    "historical_labels": ["M0_TARGET", "M1_TARGET"],
+    "separate_state_layers": ["START_TARGET", "Q_NOMINAL", "Q_ISSUED", "Q_APPLIED", "Q_MEASURED"]
+  },
+  "cohort": {
+    "Train": {"roots": 24, "partitions": 228, "planned_ticks": 86338, "joint_valid_ticks": 85382, "original_history_candidates": 82559},
+    "Validation": {"roots": 8, "partitions": 80, "planned_ticks": 30275, "joint_valid_ticks": 29150, "original_history_candidates": 28237},
+    "total": {"roots": 32, "partitions": 308, "planned_ticks": 116613, "joint_valid_ticks": 114532, "original_history_candidates": 110796}
+  },
+  "coverage": {
+    "active_percent": 85,
+    "active_denominator": "ORIGINAL_HMB_JOINT_VALID_PER_SPLIT",
+    "history_percent": 70,
+    "history_denominator": "ORIGINAL_SIGNED_HMB_FIVE_FRAME_WINDOWS_PER_SPLIT",
+    "new_numerator_approved": false,
+    "active_exclusions": ["PUBLISH_ONLY", "START_ONLY", "PREPOSITION", "HOLD", "FALLBACK", "FAILED", "UNKNOWN", "UNREACHABLE", "MISSING_FEEDBACK"],
+    "count_additional_cross_partition_history": false
+  },
+  "future_pilot": {
+    "roots": 6,
+    "allowed_split": "Train",
+    "fit_on_validation": false,
+    "max_cold_starts_proposed": 8,
+    "launch_requires_future_stage_authority": true
+  },
+  "machine_check_scope": "READ_ONLY_PHASE_ONE_PROPOSAL_AND_SYNTHETIC_TRANSITION_FIXTURES",
+  "phase_sequence": [
+    "DESIGN_PROPOSAL",
+    "DCR_PENDING_HUMAN_REVIEW",
+    "DESIGN_APPROVED",
+    "IMPLEMENTATION",
+    "PILOT_VALIDATION",
+    "PILOT_APPROVED",
+    "FULL_RMB_BUILD_AUTHORIZED",
+    "FULL_RMB_BUILD",
+    "INDEPENDENT_AUDIT",
+    "READY_FOR_REVIEW"
+  ],
+  "proposal_documents": [
+    "docs/s0-5/dcr/DCR-009_home_anchored_human_intent.md",
+    "docs/s0-5/specs/V2_1_home_anchored_geometry_proposal.md",
+    "docs/s0-5/specs/V2_1_home_anchored_runtime_proposal.md",
+    "docs/s0-5/specs/V2_1_home_anchored_data_gate_proposal.md",
+    "docs/s0-5/reports/V2_1_home_anchored_design_audit.md",
+    "docs/s0-5/reports/V2_1_home_anchored_independent_review.md"
+  ]
+}
