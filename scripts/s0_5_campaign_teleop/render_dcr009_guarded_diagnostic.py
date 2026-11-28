@@ -232,6 +232,8 @@ def render_rows(trace, human, anchor, names, fps, max_seconds):
     base = trace["timebase"]
     ticks = sorted(human)
     outcome = trace["outcome"]
+    if not outcome and any(status == "FAULT_STOP" for _, status in trace["lifecycle"]):
+        outcome = {"status": "PROTECTIVE_STOP_NO_HOME_TO_START_HANDOFF"}
     if historical:
         zero = origin = base["origin_mono_ns"]
         last = min(trace["history_end"], anchor["historical_window"]["source_cutoff_stop_exclusive_ns"] - 1)

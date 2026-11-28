@@ -27,6 +27,7 @@ def evidence_summary(path):
     counts = {"historical_packets": 0, "historical_seals": 0, "preposition_packets": 0}
     reached = "NOT_OBSERVED"
     stop = False
+    position_held = False
     with path.open(encoding="utf-8") as stream:
         for line in stream:
             if not line.endswith("\n"):
@@ -38,6 +39,13 @@ def evidence_summary(path):
                 reached = row["status"]
             if row["kind"] == "pilot_stop":
                 stop = row["late_observed_command_count"] == 0
+            if row["kind"] == "pilot_lifecycle" and row.get("status") == "FAULT_STOP":
+                failure = row.get("failure", {})
+                position_held = (
+                    row["stage"] == "preposition_start" and failure.get("source") == "/tianji/robot_state"
+                    and failure.get("code") == "DRIVER_NOT_COMMANDABLE"
+                    and failure.get("reason") == "position held; home required before next enable"
+                )
             if row["kind"] == "input" and row["stage"] == "preposition_start":
                 counts["preposition_packets"] += 1
             if row["stage"] == "historical_human_inputs":
@@ -53,6 +61,9 @@ def evidence_summary(path):
         phase = "HISTORICAL_REPLAY_COMPLETE"
     elif stop and reached == "START_NOT_REACHED" and not counts["historical_packets"]:
         phase = "START_NOT_REACHED_NO_HISTORY"
+    elif (stop and position_held and reached == "NOT_OBSERVED" and counts["preposition_packets"]
+          and not counts["historical_packets"]):
+        phase = "NATIVE_PROTECTIVE_HOLD_NO_HISTORY"
     else:
         phase = "INCOMPLETE_TRACE"
     return {"observed_phase": phase, "start_status": reached, **counts, "formal_coverage_credit": False}
@@ -152,9 +163,35 @@ def attempt(args, index, selection, cancelled):
                     result.update(phase="INVALID_TRACE", trace_error=str(error))
             if result["phase"] == "COMPLETED":
                 result["phase"] = result.get("observed_phase", "INCOMPLETE_TRACE")
+            elif result.get("observed_phase") == "NATIVE_PROTECTIVE_HOLD_NO_HISTORY":
+                result["phase"] = result["observed_phase"]
             result["finished_unix_ns"] = time.time_ns()
             save(result_file, result)
     return result
+
+
+def closed(row):
+    return (
+        row["phase"] in {"HISTORICAL_REPLAY_COMPLETE", "START_NOT_REACHED_NO_HISTORY", "NATIVE_PROTECTIVE_HOLD_NO_HISTORY"}
+        and row["owned_groups_stopped"] and row.get("same_domain_empty_after") is True
+    )
+
+
+def completed_prefix(previous_run, plan_sha, roster):
+    receipt = json.loads((previous_run / "run_receipt.json").read_bytes())
+    if receipt["scope"] != SCOPE or receipt["plan_sha256"] != plan_sha:
+        raise ValueError("Earlier work does not belong to these locked six roots")
+    previous = receipt["attempts"]
+    if not 0 < len(previous) < len(roster):
+        raise ValueError("No incomplete original roster to continue")
+    for index, row in enumerate(previous, start=1):
+        trace = previous_run / f"attempt-{index:02d}" / "evidence" / "trace.jsonl"
+        if row["attempt"] != index or row["root"] != roster[index - 1]["root"] or row["trace_sha256"] != digest(trace):
+            raise ValueError("Earlier protected attempt does not match the original trace or root")
+        actual = evidence_summary(trace)
+        if not closed(dict(row, phase=actual["observed_phase"])):
+            raise ValueError("Previous session was not a verified independent closed diagnostic")
+    return len(previous)
 
 
 def main():
@@ -164,6 +201,7 @@ def main():
         parser.add_argument(f"--{key}", type=lambda path: Path(path).resolve(), required=True)
     for key in ("plan-sha256", "controller-sha256", "simulator-sha256"):
         parser.add_argument(f"--{key}", required=True)
+    parser.add_argument("--resume-from", type=lambda path: Path(path).resolve())
     parser.add_argument("--domain", type=int, choices=DOMAINS, required=True)
     args = parser.parse_args()
     if os.name != "posix" or not args.output.parent.is_dir():
@@ -179,27 +217,26 @@ def main():
     if (plan["cohort_sha256"] != COHORT_SHA or plan["shared_frames_sha256"] != digest(args.frames)
             or any(roots[row["root"]]["split"] != "Train" or not 0 < row["replay_planned_ticks"] <= 6000 for row in roster)):
         raise ValueError("Plan is outside the verified Train cohort or budget")
+    prior = completed_prefix(args.resume_from, args.plan_sha256, roster) if args.resume_from else 0
     args.output.mkdir(exist_ok=False)
     cancelled = Event()
     for stop in (signal.SIGINT, signal.SIGTERM):
         signal.signal(stop, lambda signum, frame: cancelled.set())
     ledger = {"run_id": RUN_ID, "scope": SCOPE, "formal_coverage_credit": False, "plan_sha256": args.plan_sha256,
               "preregistered_roots": [row["root"] for row in roster], "attempts": [], "status": "IN_PROGRESS"}
+    if prior:
+        ledger["prior_closed_attempt_count"] = prior
+        ledger["prior_run_receipt_sha256"] = digest(args.resume_from / "run_receipt.json")
     receipt = args.output / "run_receipt.json"
     save(receipt, ledger)
-    for index, root in enumerate(roster, start=1):
+    for index, root in enumerate(roster[prior:], start=prior + 1):
         verdict = attempt(args, index, root, cancelled)
         ledger["attempts"].append(verdict)
         save(receipt, ledger)
         print(index, root["root"], verdict["phase"], verdict.get("start_status"), flush=True)
-        if (verdict["phase"] not in {"HISTORICAL_REPLAY_COMPLETE", "START_NOT_REACHED_NO_HISTORY"}
-                or verdict.get("same_domain_empty_after") is not True
-                or not verdict["owned_groups_stopped"] or cancelled.is_set()):
+        if not closed(verdict) or cancelled.is_set():
             break
-    complete = len(ledger["attempts"]) == 6 and all(
-        row["phase"] in {"HISTORICAL_REPLAY_COMPLETE", "START_NOT_REACHED_NO_HISTORY"}
-        and row["owned_groups_stopped"] and row.get("same_domain_empty_after") is True for row in ledger["attempts"]
-    )
+    complete = len(ledger["attempts"]) + prior == 6 and all(closed(row) for row in ledger["attempts"])
     ledger["status"] = "ALL_SIX_DIAGNOSTICS_CLOSED" if complete else "STOPPED_WITH_INCOMPLETE_DIAGNOSTICS"
     save(receipt, ledger)
     return 0 if complete else 1
