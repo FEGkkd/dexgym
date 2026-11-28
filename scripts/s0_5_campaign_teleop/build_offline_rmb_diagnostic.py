@@ -34,6 +34,8 @@ from swept_live_guard import EXACT_MODEL_RECEIPT_SHA, verified_robot
 SCOPE = "DIAGNOSTIC_ONLY"
 DOCS = Path(__file__).resolve().parents[2] / "docs/s0-5"
 HMB_GRID_TOLERANCE_NS = 1_000
+RAW_HMB_FIELDS = ("pose", "sdk_common_pose", "pose_valid", "node_mask", "capture_bounds_ns", "arrival_bounds_ns",
+                  "age_ns", "clock_generation", "calibration_id", "topology_id", "safety_permission", "reason_code")
 
 
 def implementation():
@@ -118,9 +120,14 @@ def record_execution(fields, row, history, executor):
             continue
         item = result.interval
         count = int(item.substeps[0])
-        fields["q_applied"][row, cursor:cursor + count] = item.applied[0, :count].numpy()
-        fields["actuator_ctrl"][row, cursor:cursor + count] = item.ctrl[0, :count].numpy()
-        fields["actuator_torque"][row, cursor:cursor + count] = item.torque[0, :count].numpy()
+        for j, (key, sample) in enumerate((("q_applied", item.applied), ("actuator_ctrl", item.ctrl),
+                                           ("actuator_torque", item.torque))):
+            value = sample[0, :count].numpy()
+            if isinstance(result, GroupedSubstep):
+                valid = np.isfinite(value).all(axis=1)
+                fields["actuation_sample_mask"][row, cursor:cursor + count, j] = valid
+                value = np.where(valid[:, None], value, 0.)
+            fields[key][row, cursor:cursor + count] = value
         fields["physical_contact"][row] |= item.contact[0].numpy().astype(bool)
         fields["physical_clearance_m"][row, arm_tick] = float(item.minimum_gap[0])
         fields["physical_penetration_m"][row, arm_tick] = float(item.depth[0])
@@ -174,12 +181,12 @@ def blank(data, *, grouped=False):
             ("physical_qd", (10, 54), "<f8"), ("physical_state_mask", (10,), bool),
             ("substep_clearance_m", (10,), "<f4"), ("substep_penetration_m", (10,), "<f4"),
             ("substep_contact", (10, 13), bool), ("substep_event", (10,), "<u2"),
+            ("actuation_sample_mask", (10, 3), bool),
             ("filtered_wuji", (5, 2, 20), "<f4"), ("nominal_hand_limited", (5, 40), bool),
         ):
             fields[key] = np.zeros((n, *shape), dtype=dtype)
         fields["hmb_source_index_full"] = data["source_index"].copy()
-        for key in ("pose", "pose_valid", "node_mask", "capture_bounds_ns", "arrival_bounds_ns",
-                    "age_ns", "clock_generation", "calibration_id", "topology_id", "safety_permission"):
+        for key in RAW_HMB_FIELDS:
             fields["hmb_" + key] = data[key].copy()
     return fields
 
@@ -215,7 +222,18 @@ def mark_error(errors, fields, row, scoring):
 def publish_partition(output, partition, fields):
     for prefix in ("target", "actual"):
         add_arrays(fields, prefix, fields.pop(prefix))
-    return {"partition": partition, "arrays": write_partition(output, fields),
+    raw = {key: fields.pop(key) for key in ("hmb_source_index_full", *("hmb_" + f for f in RAW_HMB_FIELDS))
+           if key in fields}
+    arrays = write_partition(output, fields)
+    for key, values in raw.items():
+        if values.dtype.kind not in "biuf":
+            raise ValueError(f"Unexpected raw HMB dtype {values.dtype} for {key}")
+        path = output / (key + ".npy")
+        with path.open("xb") as stream:
+            np.save(stream, values, allow_pickle=False)
+        arrays[key] = {"sha256": file_sha(path), "shape": list(values.shape),
+                       "dtype": values.dtype.str, "raw_diagnostic_only": True}
+    return {"partition": partition, "arrays": arrays,
             "directory": output.name, "ticks": len(fields["tick_ns"])}
 
 

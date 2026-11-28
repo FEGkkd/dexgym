@@ -1,16 +1,22 @@
 """Deterministic controls for the offline simultaneous-commit boundary."""
 
+from dataclasses import replace
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import numpy as np
+import torch
 
+from build_offline_rmb_diagnostic import RAW_HMB_FIELDS, active, blank, publish_partition, record_execution
 from group_admission import (
-    GROUPS, GroupStatus, GroupedLockstep, RECOVERY_HAND_STEP_RAD,
-    RECOVERY_SUBCYCLES, admit_groups, verified_groups,
+    GROUPS, GroupStatus, GroupedLockstep, GroupedSubstep, RECOVERY_HAND_STEP_RAD,
+    RECOVERY_SUBCYCLES, admit_groups, combine_intervals, verified_groups,
 )
 from dexgym.tasks.direct.wholebody_s05.v1.rmb.offline_nominal import OfflineNominalStatus
+from dexgym.tasks.direct.wholebody_s05.v1.task.physics import Interval
 from dexgym.tasks.direct.wholebody_s05.v1.task.safety import Stop
 from swept_live_guard import Reason
 
@@ -29,6 +35,24 @@ def command():
 def decision(allowed):
     return (Reason.PERMIT, {}) if allowed else (
         Reason.SWEEP_UNPROVEN, {"termination": "MAX_SUBDIVISION_DEPTH"})
+
+
+def physical_sample(number, *, event=0):
+    target = torch.full((1, 1, 54), float(number))
+    return Interval(
+        torch.full((1, 108), float(number)), target[:, 0],
+        target, target * 2, target * 3, torch.zeros(1, 13),
+        torch.zeros(1), torch.tensor([.01 / number]),
+        torch.ones(1, dtype=torch.int32), torch.tensor([int(event)]),
+    )
+
+
+def builder_fields():
+    data = dict.fromkeys(RAW_HMB_FIELDS, np.zeros(1))
+    data.update(tick_ns=np.zeros(1), joint_valid=np.ones(1, bool), segment_id=np.zeros(1, int),
+                source_index=np.zeros((1, 4, 1), int))
+    with patch("build_offline_rmb_diagnostic.hmb_five_rows", return_value=np.ones(1, bool)):
+        return blank(data, grouped=True)
 
 
 def lockstep(proof, *, goal=None, hard_fault=False, feedback_valid=True, event=0, substeps=2):
@@ -200,6 +224,95 @@ class AdmissionTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             step.advance(object())
         step._physical_steps.assert_called_once()
+
+    def test_physical_calls_share_one_command_and_stop_at_first_event(self):
+        for event in (0, Stop.PHYSICAL_CONSTRAINT):
+            with self.subTest(event=event):
+                step = object.__new__(GroupedLockstep)
+                step.issued = command()
+                step.safety = object()
+                step.state = Mock(side_effect=[
+                    (np.full(54, 1.), np.full(54, -1.)), (np.full(54, 2.), np.full(54, -2.)),
+                ])
+                interval = Mock(side_effect=[physical_sample(1, event=event), physical_sample(2)])
+                step.physics = SimpleNamespace(interval=interval)
+                combined, positions, velocities, executed = step._physical_steps()
+                count = 1 if event else 2
+                self.assertEqual(len(executed), count)
+                self.assertEqual(int(combined.substeps[0]), count)
+                self.assertEqual(int(combined.event[0]), event)
+                self.assertEqual(interval.call_count, count)
+                self.assertEqual(step.state.call_count, count)
+                np.testing.assert_array_equal(combined.applied[0, :, 0].numpy(), np.arange(1, count + 1))
+                np.testing.assert_array_equal(np.asarray(positions)[:, 0], np.arange(1, count + 1))
+                np.testing.assert_array_equal(np.asarray(velocities)[:, 0], -np.arange(1, count + 1))
+                for call in interval.call_args_list:
+                    applied, allowed, safety = call.args
+                    self.assertEqual(call.kwargs, {"count": 1})
+                    self.assertEqual(applied.dtype, torch.float32)
+                    np.testing.assert_array_equal(applied.numpy(), step.issued[None])
+                    self.assertTrue(allowed.item())
+                    self.assertIs(safety, step.safety)
+
+    def test_builder_full_active_requires_every_group_and_all_physical_positions(self):
+        proposal = SimpleNamespace(q_requested=command(), status=np.full(4, OfflineNominalStatus.ACTIVE),
+                                   native_arms=(), raw_hand_q=np.zeros((2, 20)), raw_hand_valid=np.ones(2, bool),
+                                   filtered_hand_q=np.zeros((2, 20)), hand_limited=np.zeros(40, bool))
+        groups = tuple({"status": GroupStatus.ACTIVE} for _ in GROUPS)
+        history = []
+        for first in range(1, 11, 2):
+            numbers = (first, first + 1)
+            intervals = tuple(physical_sample(number) for number in numbers)
+            history.append(GroupedSubstep(proposal, "PERMIT", {}, command(), combine_intervals(intervals),
+                          False, None, groups=groups, physical_steps=intervals,
+                          physical_q=tuple(np.full(54, number) for number in numbers),
+                          physical_qd=tuple(np.full(54, -number) for number in numbers)))
+        geometry = SimpleNamespace(wrists=np.zeros((2, 3)), rotations=np.array([np.eye(3)] * 2),
+                                   local=np.zeros((2, 5, 4, 3)), landmarks=np.zeros((2, 5, 4, 3)))
+        executor = SimpleNamespace(state=lambda: (np.full(54, 10.), np.full(54, -10.)),
+                                   robot=SimpleNamespace(geometry=lambda q: geometry))
+        self.assertTrue(active(history))
+        positive = builder_fields()
+        record_execution(positive, 0, history, executor)
+        self.assertTrue(positive["q_nominal_mask"][0])
+        self.assertEqual(positive["applied_substeps"][0], 10)
+        self.assertTrue(positive["physical_state_mask"][0].all())
+        np.testing.assert_array_equal(positive["physical_q"][0, :, 0], np.arange(1, 11))
+        np.testing.assert_array_equal(positive["physical_qd"][0, :, 0], -np.arange(1, 11))
+        for name, changed in (
+                ("partial", replace(history[-1], groups=(*groups[:3], {"status": GroupStatus.GROUP_HOLD}))),
+                ("rejoin", replace(history[-1], groups=(*groups[:3], {"status": GroupStatus.REJOINING}))),
+                ("hold", replace(history[-1], used_hold=True))):
+            with self.subTest(name=name):
+                result = [*history[:-1], changed]
+                self.assertFalse(active(result))
+                fields = builder_fields()
+                record_execution(fields, 0, result, executor)
+                self.assertEqual(fields["applied_substeps"][0], 10)
+                self.assertFalse(fields["q_nominal_mask"][0])
+        self.assertFalse(active(history[:-1]))
+        fields = builder_fields()
+        record_execution(fields, 0, history[:-1], executor)
+        self.assertEqual(fields["applied_substeps"][0], 8)
+        self.assertFalse(fields["q_nominal_mask"][0])
+        final = history[-1]
+        short = replace(final, interval=final.physical_steps[0], physical_steps=final.physical_steps[:1],
+                        physical_q=final.physical_q[:1], physical_qd=final.physical_qd[:1])
+        fields = builder_fields()
+        record_execution(fields, 0, [*history[:-1], short], executor)
+        self.assertEqual(fields["applied_substeps"][0], 9)
+        self.assertFalse(fields["q_nominal_mask"][0])
+
+    def test_raw_missing_payload_survives_without_entering_finite_rmb_fields(self):
+        fields = builder_fields()
+        sentinel = np.asarray([0x7ff80000000000ca], dtype="<u8")
+        fields["hmb_pose"] = sentinel.view("<f8")
+        with TemporaryDirectory() as directory:
+            root = Path(directory) / "part"
+            result = publish_partition(root, "signed-source", fields)
+            self.assertTrue(result["arrays"]["hmb_pose"]["raw_diagnostic_only"])
+            self.assertNotIn("raw_diagnostic_only", result["arrays"]["q_measured"])
+            np.testing.assert_array_equal(np.load(root / "hmb_pose.npy", allow_pickle=False).view("<u8"), sentinel)
 
 
 if __name__ == "__main__":
