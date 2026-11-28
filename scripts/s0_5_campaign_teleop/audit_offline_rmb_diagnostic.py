@@ -44,6 +44,7 @@ def main():
     geometry_unknown = retained_history = bad_velocity_boundaries = 0
     smallest_observed_gap = None
     largest_sampled_penetration = 0.
+    safety_conservation = Counter()
     divisions = []
     for part in receipt["partitions"]:
         def data(name):
@@ -54,6 +55,7 @@ def main():
 
         statuses = data("nominal_status")
         applied = data("applied_substeps")
+        issued = data("q_issued_mask")
         legal = data("q_nominal_mask")
         target_tip, actual_tip = data("target_world_tip_xyz"), data("actual_world_tip_xyz")
         target_mask, actual_mask = data("target_world_tip_xyz_mask"), data("actual_world_tip_xyz_mask")
@@ -84,9 +86,21 @@ def main():
                     active_tip_errors.append(error)
             for axis, records in enumerate(statuses[i].T):
                 counts_by_group[axis].update(OfflineNominalStatus(int(code)).name for code in records if code)
-            for evidence in event["safety"]:
+            for subcycle, evidence in enumerate(event["safety"]):
                 proof, metrics = evidence["proof"], evidence["metrics"]
                 proof_causes[(proof, metrics.get("termination", proof))] += 1
+                if issued[i, subcycle]:
+                    approved = evidence["hold_proof"] if evidence["hold"] else proof
+                    if approved != "PERMIT" or proof == "NATIVE_PAIR_HARD_FAULT":
+                        raise ValueError(f"Issued command lacks protection evidence: {marker} subcycle {subcycle}")
+                    safety_conservation["proved_issued_subcycles"] += 1
+                    safety_conservation["proved_issued_hold_subcycles"] += int(evidence["hold"])
+                if intervals[i, subcycle] and not issued[i, subcycle]:
+                    raise ValueError(f"Physics without an issued command: {marker} subcycle {subcycle}")
+            if issued[i, len(event["safety"]):].any():
+                raise ValueError(f"Unrecorded proof for issued commands: {marker}")
+            if not int(intervals[i].sum()) <= int(applied[i]) <= 2 * int(intervals[i].sum()):
+                raise ValueError(f"Physical substep count disagrees with active intervals: {marker}")
             if intervals[i].any():
                 observed = float(gaps[i, intervals[i]].min())
                 smallest_observed_gap = observed if smallest_observed_gap is None else min(smallest_observed_gap, observed)
@@ -104,6 +118,7 @@ def main():
               "postinterval_max_ten_tip_mm": {"all_observed": {"n": len(tip_errors), "p50_p95_p99": percentiles(tip_errors)},
                                              "active_only": {"n": len(active_tip_errors), "p50_p95_p99": percentiles(active_tip_errors)}},
               "velocity_masks_crossing_partition_local_segment": bad_velocity_boundaries,
+              "safety_conservation": dict(safety_conservation),
               "proof_status": [{"decision": reason, "termination": termination, "count": count}
                                for (reason, termination), count in sorted(proof_causes.items())],
               "partitions": divisions})
