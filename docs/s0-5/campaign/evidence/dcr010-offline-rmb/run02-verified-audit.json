@@ -1,0 +1,183 @@
+{
+  "formal_coverage_credit": false,
+  "geometry_unknown_ticks": 3,
+  "native_group_order": [
+    "left arm",
+    "right arm",
+    "left hand",
+    "right hand"
+  ],
+  "native_status_per_4ms_subcycle": [
+    {
+      "ACTIVE": 10749,
+      "INPUT_MISSING": 50,
+      "LIMITED_ACTIVE": 13094,
+      "NATIVE_ARM_HOLD": 102,
+      "NATIVE_PAIR_HOLD": 25
+    },
+    {
+      "ACTIVE": 17105,
+      "INPUT_MISSING": 50,
+      "LIMITED_ACTIVE": 6814,
+      "NATIVE_ARM_HOLD": 26,
+      "NATIVE_PAIR_HOLD": 25
+    },
+    {
+      "ACTIVE": 1060,
+      "INPUT_MISSING": 50,
+      "LIMITED_ACTIVE": 22885,
+      "NATIVE_PAIR_HOLD": 25
+    },
+    {
+      "ACTIVE": 1034,
+      "INPUT_MISSING": 50,
+      "LIMITED_ACTIVE": 22911,
+      "NATIVE_PAIR_HOLD": 25
+    }
+  ],
+  "partitions": [
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "statuses": {
+        "ACTIVE": 146,
+        "NOMINAL_OR_PROOF_HOLD": 214
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00001",
+      "statuses": {
+        "INPUT_HOLD": 3,
+        "NOMINAL_OR_PROOF_HOLD": 397
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00002",
+      "statuses": {
+        "NOMINAL_OR_PROOF_HOLD": 400
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00003",
+      "statuses": {
+        "NOMINAL_OR_PROOF_HOLD": 400
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+      "statuses": {
+        "NOMINAL_OR_PROOF_HOLD": 400
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00005",
+      "statuses": {
+        "NOMINAL_OR_PROOF_HOLD": 400
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00006",
+      "statuses": {
+        "NOMINAL_OR_PROOF_HOLD": 400
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00007",
+      "statuses": {
+        "INPUT_HOLD": 1,
+        "NOMINAL_OR_PROOF_HOLD": 399
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00008",
+      "statuses": {
+        "INPUT_HOLD": 6,
+        "NOMINAL_OR_PROOF_HOLD": 394
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+      "statuses": {
+        "NOMINAL_OR_PROOF_HOLD": 400
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00010",
+      "statuses": {
+        "NOMINAL_OR_PROOF_HOLD": 400
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00011",
+      "statuses": {
+        "NOMINAL_OR_PROOF_HOLD": 400
+      }
+    },
+    {
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00012",
+      "statuses": {
+        "NOMINAL_OR_PROOF_HOLD": 44
+      }
+    }
+  ],
+  "postinterval_max_ten_tip_mm": {
+    "active_only": {
+      "n": 146,
+      "p50_p95_p99": [
+        54.739755630493164,
+        57.563918113708496,
+        76.59928932189942
+      ]
+    },
+    "all_observed": {
+      "n": 4801,
+      "p50_p95_p99": [
+        148.69827270507812,
+        234.0720672607422,
+        318.8257751464844
+      ]
+    }
+  },
+  "proof_status": [
+    {
+      "count": 1115,
+      "decision": "PERMIT",
+      "termination": "PERMIT"
+    },
+    {
+      "count": 22905,
+      "decision": "SWEEP_UNPROVEN",
+      "termination": "MAX_SUBDIVISION_DEPTH"
+    }
+  ],
+  "run_receipt_sha256": "d6d83d40b44d29447e1d4a1e357bc0424b123dbabfcc113eef8218d330c605df",
+  "safety_conservation": {
+    "proved_issued_hold_subcycles": 22955,
+    "proved_issued_subcycles": 24020
+  },
+  "scope": "DIAGNOSTIC_ONLY",
+  "signed_geometry": {
+    "maximum_sampled_penetration_m": 0.0,
+    "minimum_sampled_gap_m": 0.001170595409348607
+  },
+  "status_counts": {
+    "ACTIVE": 146,
+    "INPUT_HOLD": 10,
+    "NOMINAL_OR_PROOF_HOLD": 4648
+  },
+  "timing": {
+    "first_active": {
+      "elapsed_s": 0.0,
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "status": "ACTIVE",
+      "tick": 40
+    },
+    "first_hold": {
+      "elapsed_s": 2.86,
+      "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+      "status": "NOMINAL_OR_PROOF_HOLD",
+      "tick": 183
+    },
+    "first_short_physics": null
+  },
+  "velocity_masks_crossing_partition_local_segment": 0
+}

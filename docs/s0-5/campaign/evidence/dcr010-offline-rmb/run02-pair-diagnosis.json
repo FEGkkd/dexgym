@@ -1,0 +1,26 @@
+{
+  "pair_index": 2425,
+  "geometry": [
+    {
+      "geom": "r_finger1_tip_sensor_col",
+      "body": "r_thumb_tip_sensor_frame",
+      "geom_id": 138
+    },
+    {
+      "geom": "r_finger2_tip_sensor_col",
+      "body": "r_index_finger_tip_sensor_frame",
+      "geom_id": 151
+    }
+  ],
+  "first_row": {
+    "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+    "tick": 253,
+    "time_ns": 5060000000
+  },
+  "clearance_m_from_float32_endpoints": {
+    "previous_measured": 0.0029074433517683558,
+    "retained_issued": 0.00272619322237144,
+    "nominal_proposed": 0.0024613171959885207
+  },
+  "scope": "DIAGNOSTIC_ONLY"
+}

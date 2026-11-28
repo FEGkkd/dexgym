@@ -1,0 +1,307 @@
+{
+  "locked_transform": [
+    [
+      -0.07521309496857392,
+      0.0,
+      0.9971674835980404,
+      0.6351925377198786
+    ],
+    [
+      0.9971674835980404,
+      0.0,
+      0.07521309496857392,
+      0.023361900004084835
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      1.894468205487459
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "scope": "DIAGNOSTIC_ONLY",
+  "stages": [
+    {
+      "dwell_ticks": 5,
+      "elapsed_ticks": 56,
+      "fault": null,
+      "held": false,
+      "max_issued_finger_delta_rad": 0.0,
+      "max_measured_finger_delta_rad": 0.0,
+      "proof": "PERMIT",
+      "sim_time_s": 1.1200000000000008,
+      "stage": 0,
+      "status": [
+        "ACTIVE",
+        "ACTIVE",
+        "HELD_BY_START_STAGE",
+        "HELD_BY_START_STAGE"
+      ],
+      "wrist_deg": [
+        0.11963705814475882,
+        0.4773507724688721
+      ],
+      "wrist_mm": [
+        0.22618044361128056,
+        0.29535539685482914
+      ]
+    },
+    {
+      "dwell_ticks": 5,
+      "elapsed_ticks": 12,
+      "fault": null,
+      "held": false,
+      "max_issued_finger_delta_rad": 0.0,
+      "max_measured_finger_delta_rad": 0.029294292186206383,
+      "proof": "PERMIT",
+      "sim_time_s": 1.360000000000001,
+      "stage": 1,
+      "status": [
+        "ACTIVE",
+        "ACTIVE",
+        "HELD_BY_START_STAGE",
+        "ACTIVE"
+      ],
+      "wrist_deg": [
+        0.06059025032120715,
+        0.1534902082975719
+      ],
+      "wrist_mm": [
+        0.24733972343887115,
+        0.08203166464520532
+      ]
+    },
+    {
+      "dwell_ticks": 5,
+      "elapsed_ticks": 15,
+      "fault": null,
+      "held": false,
+      "max_issued_finger_delta_rad": 0.0,
+      "max_measured_finger_delta_rad": 0.022497044558266066,
+      "proof": "PERMIT",
+      "sim_time_s": 1.6600000000000013,
+      "stage": 2,
+      "status": [
+        "ACTIVE",
+        "ACTIVE",
+        "HELD_BY_START_STAGE",
+        "ACTIVE"
+      ],
+      "wrist_deg": [
+        0.029576942340688396,
+        0.0692181878325525
+      ],
+      "wrist_mm": [
+        0.26340555100908025,
+        0.16200637364133988
+      ]
+    },
+    {
+      "dwell_ticks": 5,
+      "elapsed_ticks": 16,
+      "fault": null,
+      "held": false,
+      "max_issued_finger_delta_rad": 0.0,
+      "max_measured_finger_delta_rad": 0.027965447762570705,
+      "proof": "PERMIT",
+      "sim_time_s": 1.9800000000000015,
+      "stage": 3,
+      "status": [
+        "ACTIVE",
+        "ACTIVE",
+        "HELD_BY_START_STAGE",
+        "ACTIVE"
+      ],
+      "wrist_deg": [
+        0.015282951916452334,
+        0.0349629693910718
+      ],
+      "wrist_mm": [
+        0.27447998370355714,
+        0.20184380724612996
+      ]
+    },
+    {
+      "dwell_ticks": 5,
+      "elapsed_ticks": 14,
+      "fault": null,
+      "held": false,
+      "max_issued_finger_delta_rad": 0.0,
+      "max_measured_finger_delta_rad": 0.030169357686729015,
+      "proof": "PERMIT",
+      "sim_time_s": 2.2599999999999727,
+      "stage": 4,
+      "status": [
+        "ACTIVE",
+        "ACTIVE",
+        "HELD_BY_START_STAGE",
+        "ACTIVE"
+      ],
+      "wrist_deg": [
+        0.00923359468503928,
+        0.02161997210883112
+      ],
+      "wrist_mm": [
+        0.2810964208819031,
+        0.21676804908016228
+      ]
+    },
+    {
+      "dwell_ticks": 5,
+      "elapsed_ticks": 16,
+      "fault": null,
+      "held": false,
+      "max_issued_finger_delta_rad": 0.0,
+      "max_measured_finger_delta_rad": 0.022903404866991273,
+      "proof": "PERMIT",
+      "sim_time_s": 2.5799999999999375,
+      "stage": 5,
+      "status": [
+        "ACTIVE",
+        "ACTIVE",
+        "HELD_BY_START_STAGE",
+        "ACTIVE"
+      ],
+      "wrist_deg": [
+        0.005634932433763573,
+        0.012836292280541742
+      ],
+      "wrist_mm": [
+        0.2863208420528689,
+        0.23079562070105406
+      ]
+    },
+    {
+      "dwell_ticks": 5,
+      "elapsed_ticks": 17,
+      "fault": null,
+      "held": false,
+      "max_issued_finger_delta_rad": 0.0,
+      "max_measured_finger_delta_rad": 0.02290360391789492,
+      "proof": "PERMIT",
+      "sim_time_s": 2.9199999999999,
+      "stage": 6,
+      "status": [
+        "ACTIVE",
+        "ACTIVE",
+        "ACTIVE",
+        "ACTIVE"
+      ],
+      "wrist_deg": [
+        0.003776237858517931,
+        0.006751332558040364
+      ],
+      "wrist_mm": [
+        0.2889754074674805,
+        0.24417818149369566
+      ]
+    },
+    {
+      "dwell_ticks": 5,
+      "elapsed_ticks": 11,
+      "fault": null,
+      "held": false,
+      "max_issued_finger_delta_rad": 0.0,
+      "max_measured_finger_delta_rad": 0.028871045169875043,
+      "proof": "PERMIT",
+      "sim_time_s": 3.139999999999876,
+      "stage": 7,
+      "status": [
+        "ACTIVE",
+        "ACTIVE",
+        "ACTIVE",
+        "ACTIVE"
+      ],
+      "wrist_deg": [
+        0.003964328375046326,
+        0.004700005770450032
+      ],
+      "wrist_mm": [
+        0.28163505251026033,
+        0.24823164153896699
+      ]
+    },
+    {
+      "dwell_ticks": 5,
+      "elapsed_ticks": 11,
+      "fault": null,
+      "held": false,
+      "max_issued_finger_delta_rad": 0.0,
+      "max_measured_finger_delta_rad": 0.02974688259623437,
+      "proof": "PERMIT",
+      "sim_time_s": 3.3599999999998515,
+      "stage": 8,
+      "status": [
+        "ACTIVE",
+        "ACTIVE",
+        "ACTIVE",
+        "ACTIVE"
+      ],
+      "wrist_deg": [
+        0.004576394405748352,
+        0.0034473854717423824
+      ],
+      "wrist_mm": [
+        0.27451855100336564,
+        0.2504246060697876
+      ]
+    },
+    {
+      "dwell_ticks": 5,
+      "elapsed_ticks": 9,
+      "fault": null,
+      "held": false,
+      "max_issued_finger_delta_rad": 0.0,
+      "max_measured_finger_delta_rad": 0.03026603690519053,
+      "proof": "PERMIT",
+      "sim_time_s": 3.5399999999998317,
+      "stage": 9,
+      "status": [
+        "ACTIVE",
+        "ACTIVE",
+        "ACTIVE",
+        "ACTIVE"
+      ],
+      "wrist_deg": [
+        0.003979928327779837,
+        0.0027789206785905404
+      ],
+      "wrist_mm": [
+        0.27752138809903143,
+        0.2514157070735704
+      ]
+    },
+    {
+      "dwell_ticks": 5,
+      "elapsed_ticks": 12,
+      "fault": null,
+      "held": false,
+      "max_issued_finger_delta_rad": 0.0,
+      "max_measured_finger_delta_rad": 0.023285923214604987,
+      "proof": "PERMIT",
+      "sim_time_s": 3.7799999999998053,
+      "stage": 10,
+      "status": [
+        "ACTIVE",
+        "ACTIVE",
+        "ACTIVE",
+        "ACTIVE"
+      ],
+      "wrist_deg": [
+        0.00330380651836594,
+        0.0021799850260048677
+      ],
+      "wrist_mm": [
+        0.280471259877105,
+        0.25209026701733933
+      ]
+    }
+  ],
+  "status": "START_REACHED"
+}

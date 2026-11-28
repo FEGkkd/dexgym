@@ -1,0 +1,82 @@
+{
+  "locked_transform": [
+    [
+      -0.07521309496857392,
+      0.0,
+      0.9971674835980404,
+      0.6351925377198786
+    ],
+    [
+      0.9971674835980404,
+      0.0,
+      0.07521309496857392,
+      0.023361900004084835
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      1.894468205487459
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "scope": "DIAGNOSTIC_ONLY",
+  "stages": [
+    {
+      "dwell_ticks": 5,
+      "elapsed_ticks": 56,
+      "fault": null,
+      "held": false,
+      "max_issued_finger_delta_rad": 0.0,
+      "max_measured_finger_delta_rad": 0.0,
+      "proof": "PERMIT",
+      "sim_time_s": 1.1200000000000008,
+      "stage": 0,
+      "status": [
+        "ACTIVE",
+        "ACTIVE",
+        "HELD_BY_START_STAGE",
+        "HELD_BY_START_STAGE"
+      ],
+      "wrist_deg": [
+        0.11963705814475882,
+        0.4773507724688721
+      ],
+      "wrist_mm": [
+        0.22618044361128056,
+        0.29535539685482914
+      ]
+    },
+    {
+      "dwell_ticks": 0,
+      "elapsed_ticks": 4,
+      "fault": "PHYSICS:64",
+      "held": false,
+      "max_issued_finger_delta_rad": 0.17862120270729065,
+      "max_measured_finger_delta_rad": 0.3421034006378555,
+      "proof": "PERMIT",
+      "sim_time_s": 1.1980000000000008,
+      "stage": 1,
+      "status": [
+        "ACTIVE",
+        "ACTIVE",
+        "HELD_BY_START_STAGE",
+        "LIMITED_ACTIVE"
+      ],
+      "wrist_deg": [
+        0.09433446765154063,
+        0.27679844864159475
+      ],
+      "wrist_mm": [
+        0.2343270975300765,
+        0.03820302540776928
+      ]
+    }
+  ],
+  "status": "START_UNQUALIFIED"
+}
