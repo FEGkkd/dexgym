@@ -1,0 +1,844 @@
+{
+  "alternate_calibration_sha256": "ab11733301dac592ce2aab910656b11428cf3ae27c25260d6abd7557d074c387",
+  "calibrated_recorded_up_expressed_in_world": {
+    "m1": [
+      -0.846755449602716,
+      -0.531982338586632,
+      0.0
+    ],
+    "shared": [
+      0.0,
+      0.0,
+      1.0
+    ]
+  },
+  "calibration_sha256": "a35f26c089e75f105c0bab78aa9442c7870698c442211bfe34ad033000912363",
+  "display_registration": "Original human uses the per-root shared START world placement for display; shared preserves the same calibrated landmarks by construction",
+  "historical_basis_sha256": "d720547d649929c5697f8094ef7e543356ff3ace766d890695ae2295fea7f590",
+  "human_scope": "Historical tracker-to-palm calibration, unverified for each individual recording",
+  "layer_index_sha256": "2bc6a63922e9f7790b4366690401c1d3934bd405b1a135cab1266c068fb1acb4",
+  "m1_mapping_sha256": "577195a8eb66699e11cf8bcf910383086672c384723d61fa90c13ed90652baa7",
+  "m1_palm_contract_sha256": "27671adc7f78d29ab282fabcf43d542f16e31e1481e51b2f7f3cd5c4121b5b2b",
+  "samples": [
+    {
+      "alternate_calibration_relative_errors": {
+        "m1": {
+          "cross_tip_distance_mae_mm": 81.718199616826,
+          "directed_palm_angle_delta_deg": -30.683425659420774,
+          "left_palm_relative_vector_error_mm": 356.80114322807225,
+          "relative_palm_so3_error_deg": 52.405699522352634,
+          "wrist_gap_delta_mm": 33.38433721980465
+        },
+        "mujoco": {
+          "cross_tip_distance_mae_mm": 19.62205703672012,
+          "directed_palm_angle_delta_deg": -6.5365149632716495,
+          "left_palm_relative_vector_error_mm": 61.20679397736165,
+          "relative_palm_so3_error_deg": 8.562394264009724,
+          "wrist_gap_delta_mm": 1.2544020865302627
+        },
+        "original_human": {
+          "cross_tip_distance_mae_mm": 3.0953515914979244,
+          "directed_palm_angle_delta_deg": 2.855775280797161,
+          "left_palm_relative_vector_error_mm": 14.134385838225864,
+          "relative_palm_so3_error_deg": 3.455236042217543,
+          "wrist_gap_delta_mm": 0.5902008616452576
+        },
+        "shared": {
+          "cross_tip_distance_mae_mm": 3.095351591497947,
+          "directed_palm_angle_delta_deg": 2.8557752807971326,
+          "left_palm_relative_vector_error_mm": 14.134385838226088,
+          "relative_palm_so3_error_deg": 3.4552360422176003,
+          "wrist_gap_delta_mm": 0.5902008616453145
+        }
+      },
+      "cutoff_ns": 19260000057,
+      "eligible_rows": 2102,
+      "execution": {
+        "filtered_to_step": {
+          "position_mm_by_side": [
+            0.0,
+            28.174488705141048
+          ],
+          "rotation_deg_by_side": [
+            0.0,
+            0.05654554157908697
+          ]
+        },
+        "issued_to_measured": {
+          "position_mm_by_side": [
+            1.0956818266143662,
+            10.12271114981754
+          ],
+          "rotation_deg_by_side": [
+            0.26035650127924115,
+            1.2723622265938304
+          ]
+        },
+        "native_reasons_by_side": [
+          [
+            "full_step",
+            "accept",
+            "",
+            "false"
+          ],
+          [
+            "full_step",
+            "accept",
+            "",
+            "true"
+          ]
+        ],
+        "native_reasons_fields": [
+          "solve_mode",
+          "recovery_action",
+          "primary_reason",
+          "rate_limited"
+        ],
+        "native_shared_to_filtered": {
+          "position_mm_by_side": [
+            0.23946825434332805,
+            2.5673622983229585
+          ],
+          "rotation_deg_by_side": [
+            0.0,
+            0.0
+          ]
+        },
+        "native_shared_to_issued": {
+          "position_mm_by_side": [
+            0.23942428434009122,
+            30.817306629644722
+          ],
+          "rotation_deg_by_side": [
+            0.00043234236452116976,
+            0.18954234358162667
+          ]
+        },
+        "step_to_issued": {
+          "position_mm_by_side": [
+            0.002227649583138623,
+            0.550873735190653
+          ],
+          "rotation_deg_by_side": [
+            0.00043234236452116976,
+            0.13299698237947752
+          ]
+        }
+      },
+      "measured_source_age_ms": 1.861918,
+      "p95_mm": 1042.3042202977558,
+      "panels": {
+        "m1": {
+          "directed_palm_angle_deg": 18.84721237054355,
+          "midpoint_xyz_m": [
+            -0.5580964489392204,
+            -0.14531517879000438,
+            1.1995470591346322
+          ],
+          "nearest_cross_tip_mm": 374.2685427124768,
+          "nearest_cross_tip_pair": [
+            "thumb",
+            "middle"
+          ],
+          "palm_normals_world": [
+            [
+              0.27639996501854897,
+              -0.2786802642831401,
+              -0.9197501669675434
+            ],
+            [
+              0.477791664085166,
+              -0.46757416722430645,
+              -0.7436998883119619
+            ]
+          ],
+          "wrist_gap_mm": 408.70653161418517
+        },
+        "mujoco": {
+          "directed_palm_angle_deg": 42.99412306669267,
+          "midpoint_xyz_m": [
+            0.08502198071401292,
+            -0.51714158096436,
+            0.9452881874898966
+          ],
+          "nearest_cross_tip_mm": 254.4765718888944,
+          "nearest_cross_tip_pair": [
+            "thumb",
+            "thumb"
+          ],
+          "palm_normals_world": [
+            [
+              -0.417356720499745,
+              -0.018054023056315677,
+              -0.9085633825469634
+            ],
+            [
+              0.31069425473665796,
+              -0.09355819600885326,
+              -0.9458942562639872
+            ]
+          ],
+          "wrist_gap_mm": 376.5765964809108
+        },
+        "original_human": {
+          "directed_palm_angle_deg": 52.38641331076148,
+          "midpoint_xyz_m": [
+            0.09339185281958831,
+            -0.5346459065459963,
+            0.9426947136443202
+          ],
+          "nearest_cross_tip_mm": 272.6142815786399,
+          "nearest_cross_tip_pair": [
+            "thumb",
+            "thumb"
+          ],
+          "palm_normals_world": [
+            [
+              -0.538681417106379,
+              -0.0553888151126941,
+              -0.8406868679982309
+            ],
+            [
+              0.33856990722956726,
+              -0.07100550912573526,
+              -0.9382582989733462
+            ]
+          ],
+          "wrist_gap_mm": 375.9123952560258
+        },
+        "shared": {
+          "directed_palm_angle_deg": 52.386413310761455,
+          "midpoint_xyz_m": [
+            0.09339185281958831,
+            -0.5346459065459963,
+            0.9426947136443202
+          ],
+          "nearest_cross_tip_mm": 272.6142815786397,
+          "nearest_cross_tip_pair": [
+            "thumb",
+            "thumb"
+          ],
+          "palm_normals_world": [
+            [
+              -0.5386814171063793,
+              -0.05538881511269529,
+              -0.8406868679982308
+            ],
+            [
+              0.3385699072295667,
+              -0.071005509125739,
+              -0.9382582989733462
+            ]
+          ],
+          "wrist_gap_mm": 375.91239525602583
+        }
+      },
+      "partition": "recording:339e9099faa56a79b627fda5/00002",
+      "relative_errors": {
+        "m1": {
+          "cross_tip_distance_mae_mm": 84.81355120832391,
+          "directed_palm_angle_delta_deg": -33.53920094021794,
+          "left_palm_relative_vector_error_mm": 344.9178118187998,
+          "relative_palm_so3_error_deg": 54.24911698230356,
+          "wrist_gap_delta_mm": 32.79413635815939
+        },
+        "mujoco": {
+          "cross_tip_distance_mae_mm": 16.526705445222195,
+          "directed_palm_angle_delta_deg": -9.39229024406881,
+          "left_palm_relative_vector_error_mm": 73.64842951764565,
+          "relative_palm_so3_error_deg": 10.303427125025198,
+          "wrist_gap_delta_mm": 0.6642012248850051
+        },
+        "original_human": {
+          "cross_tip_distance_mae_mm": 0.0,
+          "directed_palm_angle_delta_deg": 0.0,
+          "left_palm_relative_vector_error_mm": 0.0,
+          "relative_palm_so3_error_deg": 0.0,
+          "wrist_gap_delta_mm": 0.0
+        },
+        "shared": {
+          "cross_tip_distance_mae_mm": 1.2732925824820997e-13,
+          "directed_palm_angle_delta_deg": -2.842170943040401e-14,
+          "left_palm_relative_vector_error_mm": 7.706686837398279e-13,
+          "relative_palm_so3_error_deg": 2.4981436134535847e-13,
+          "wrist_gap_delta_mm": 5.684341886080802e-14
+        }
+      },
+      "root": "capture:b70297470e5e9fc8d030706e",
+      "split": "Train",
+      "stages": {
+        "first_global_placement_midpoint_difference_mm": 836.3700215269369,
+        "global_registration_rotation_difference_deg": 95.72617591398375,
+        "hard_pinch_active": [
+          [
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false
+          ]
+        ],
+        "m1_before_palm_offset_gap_mm": 413.99917006492615,
+        "raw_tracker_gap_mm": 413.99918494029373,
+        "shared_before_palm_offset_gap_mm": 413.999184940294
+      },
+      "task": "fruit",
+      "tick": 163
+    },
+    {
+      "alternate_calibration_relative_errors": {
+        "m1": {
+          "cross_tip_distance_mae_mm": 61.013459740395554,
+          "directed_palm_angle_delta_deg": 39.62090981634497,
+          "left_palm_relative_vector_error_mm": 555.5612960123746,
+          "relative_palm_so3_error_deg": 39.94791115095155,
+          "wrist_gap_delta_mm": 55.07777432411274
+        },
+        "mujoco": {
+          "cross_tip_distance_mae_mm": 221.1262067038321,
+          "directed_palm_angle_delta_deg": 111.56924493304801,
+          "left_palm_relative_vector_error_mm": 596.302922003763,
+          "relative_palm_so3_error_deg": 120.81059353061794,
+          "wrist_gap_delta_mm": 13.31721184827893
+        },
+        "original_human": {
+          "cross_tip_distance_mae_mm": 3.6432675393135376,
+          "directed_palm_angle_delta_deg": -0.9713591914671156,
+          "left_palm_relative_vector_error_mm": 25.180137877497305,
+          "relative_palm_so3_error_deg": 3.5925926231658383,
+          "wrist_gap_delta_mm": 0.5405849385659849
+        },
+        "shared": {
+          "cross_tip_distance_mae_mm": 3.643267539313206,
+          "directed_palm_angle_delta_deg": -0.9713591914671156,
+          "left_palm_relative_vector_error_mm": 25.180137877497764,
+          "relative_palm_so3_error_deg": 3.592592623166124,
+          "wrist_gap_delta_mm": 0.5405849385660986
+        }
+      },
+      "cutoff_ns": 20020000068,
+      "eligible_rows": 2277,
+      "execution": {
+        "filtered_to_step": {
+          "position_mm_by_side": [
+            37.95387897980218,
+            45.181955902090216
+          ],
+          "rotation_deg_by_side": [
+            69.1567314876979,
+            59.52022092097446
+          ]
+        },
+        "issued_to_measured": {
+          "position_mm_by_side": [
+            2.1948023609965834,
+            2.6341332881208737
+          ],
+          "rotation_deg_by_side": [
+            0.37753281357092033,
+            0.24326223768670835
+          ]
+        },
+        "native_reasons_by_side": [
+          [
+            "backoff",
+            "accept",
+            "",
+            "true"
+          ],
+          [
+            "full_step",
+            "accept",
+            "",
+            "true"
+          ]
+        ],
+        "native_reasons_fields": [
+          "solve_mode",
+          "recovery_action",
+          "primary_reason",
+          "rate_limited"
+        ],
+        "native_shared_to_filtered": {
+          "position_mm_by_side": [
+            7.474448917494817,
+            4.037819290696405
+          ],
+          "rotation_deg_by_side": [
+            0.0,
+            0.0
+          ]
+        },
+        "native_shared_to_issued": {
+          "position_mm_by_side": [
+            40.61697481886886,
+            47.12469213556416
+          ],
+          "rotation_deg_by_side": [
+            69.29951762640323,
+            59.61218391084978
+          ]
+        },
+        "step_to_issued": {
+          "position_mm_by_side": [
+            0.5970485250304758,
+            0.38937458038536843
+          ],
+          "rotation_deg_by_side": [
+            0.14302351744086622,
+            0.09262908404018397
+          ]
+        }
+      },
+      "measured_source_age_ms": 10.360648,
+      "p95_mm": 823.8314159131509,
+      "panels": {
+        "m1": {
+          "directed_palm_angle_deg": 42.547046536197804,
+          "midpoint_xyz_m": [
+            -0.4504272753746217,
+            -0.518799554826596,
+            1.0165109549453402
+          ],
+          "nearest_cross_tip_mm": 541.7819802641123,
+          "nearest_cross_tip_pair": [
+            "thumb",
+            "middle"
+          ],
+          "palm_normals_world": [
+            [
+              0.6716441869821873,
+              -0.21636226164108713,
+              -0.7085770655550392
+            ],
+            [
+              -0.002164414474901996,
+              -0.37249140977727546,
+              -0.9280331163014166
+            ]
+          ],
+          "wrist_gap_mm": 614.7192701109813
+        },
+        "mujoco": {
+          "directed_palm_angle_deg": 114.49538165290085,
+          "midpoint_xyz_m": [
+            0.02648249811749165,
+            -0.3471744333687723,
+            1.4585735556827955
+          ],
+          "nearest_cross_tip_mm": 369.3609339446998,
+          "nearest_cross_tip_pair": [
+            "index",
+            "thumb"
+          ],
+          "palm_normals_world": [
+            [
+              -0.8532069558470153,
+              -0.284230682785713,
+              -0.43732231758445245
+            ],
+            [
+              0.8088025112426075,
+              -0.0708971347237262,
+              -0.5837911391033764
+            ]
+          ],
+          "wrist_gap_mm": 572.9587076351474
+        },
+        "original_human": {
+          "directed_palm_angle_deg": 1.9547775283857223,
+          "midpoint_xyz_m": [
+            0.028428329833090016,
+            -0.3607950134991206,
+            1.4112848709852892
+          ],
+          "nearest_cross_tip_mm": 491.6542211225519,
+          "nearest_cross_tip_pair": [
+            "thumb",
+            "thumb"
+          ],
+          "palm_normals_world": [
+            [
+              0.03205732010869816,
+              -0.46054545935086555,
+              -0.8870570489538703
+            ],
+            [
+              0.024227145392253638,
+              -0.48986122575930857,
+              -0.8714637255352229
+            ]
+          ],
+          "wrist_gap_mm": 560.1820807254345
+        },
+        "shared": {
+          "directed_palm_angle_deg": 1.9547775283857223,
+          "midpoint_xyz_m": [
+            0.028428329833089974,
+            -0.3607950134991206,
+            1.4112848709852894
+          ],
+          "nearest_cross_tip_mm": 491.6542211225518,
+          "nearest_cross_tip_pair": [
+            "thumb",
+            "thumb"
+          ],
+          "palm_normals_world": [
+            [
+              0.03205732010869745,
+              -0.4605454593508632,
+              -0.8870570489538714
+            ],
+            [
+              0.02422714539225769,
+              -0.4898612257593084,
+              -0.8714637255352231
+            ]
+          ],
+          "wrist_gap_mm": 560.1820807254346
+        }
+      },
+      "partition": "recording:189e51a5df45ea33d051ffcf/00002",
+      "relative_errors": {
+        "m1": {
+          "cross_tip_distance_mae_mm": 59.04339141780854,
+          "directed_palm_angle_delta_deg": 40.592269007812085,
+          "left_palm_relative_vector_error_mm": 533.6115592973928,
+          "relative_palm_so3_error_deg": 41.867191494343665,
+          "wrist_gap_delta_mm": 54.53718938554675
+        },
+        "mujoco": {
+          "cross_tip_distance_mae_mm": 217.48293916451854,
+          "directed_palm_angle_delta_deg": 112.54060412451513,
+          "left_palm_relative_vector_error_mm": 574.8015868774189,
+          "relative_palm_so3_error_deg": 118.66790228773924,
+          "wrist_gap_delta_mm": 12.776626909712945
+        },
+        "original_human": {
+          "cross_tip_distance_mae_mm": 0.0,
+          "directed_palm_angle_delta_deg": 0.0,
+          "left_palm_relative_vector_error_mm": 0.0,
+          "relative_palm_so3_error_deg": 0.0,
+          "wrist_gap_delta_mm": 0.0
+        },
+        "shared": {
+          "cross_tip_distance_mae_mm": 3.410605131648481e-13,
+          "directed_palm_angle_delta_deg": 0.0,
+          "left_palm_relative_vector_error_mm": 7.262519311930476e-13,
+          "relative_palm_so3_error_deg": 3.0716334089311646e-13,
+          "wrist_gap_delta_mm": 1.1368683772161603e-13
+        }
+      },
+      "root": "capture:6fb07249fb5b858f8269a562",
+      "split": "Train",
+      "stages": {
+        "first_global_placement_midpoint_difference_mm": 637.785543846579,
+        "global_registration_rotation_difference_deg": 95.72617591398375,
+        "hard_pinch_active": [
+          [
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false
+          ]
+        ],
+        "m1_before_palm_offset_gap_mm": 617.2817945480347,
+        "raw_tracker_gap_mm": 617.2817705639682,
+        "shared_before_palm_offset_gap_mm": 617.2817705639686
+      },
+      "task": "arm_motion",
+      "tick": 201
+    },
+    {
+      "alternate_calibration_relative_errors": {
+        "m1": {
+          "cross_tip_distance_mae_mm": 26.91193785030922,
+          "directed_palm_angle_delta_deg": 40.11985203010415,
+          "left_palm_relative_vector_error_mm": 811.323685767531,
+          "relative_palm_so3_error_deg": 42.75942628395981,
+          "wrist_gap_delta_mm": 63.63450022543327
+        },
+        "mujoco": {
+          "cross_tip_distance_mae_mm": 78.39187230589673,
+          "directed_palm_angle_delta_deg": 6.426551210222839,
+          "left_palm_relative_vector_error_mm": 68.15285578128939,
+          "relative_palm_so3_error_deg": 8.862078427609674,
+          "wrist_gap_delta_mm": -23.793896797443495
+        },
+        "original_human": {
+          "cross_tip_distance_mae_mm": 3.944019676457092,
+          "directed_palm_angle_delta_deg": -0.3978402871929707,
+          "left_palm_relative_vector_error_mm": 35.82100808506473,
+          "relative_palm_so3_error_deg": 3.338857236991382,
+          "wrist_gap_delta_mm": 0.10306945113552501
+        },
+        "shared": {
+          "cross_tip_distance_mae_mm": 3.94401967645686,
+          "directed_palm_angle_delta_deg": -0.3978402871923574,
+          "left_palm_relative_vector_error_mm": 35.82100808506526,
+          "relative_palm_so3_error_deg": 3.3388572369916423,
+          "wrist_gap_delta_mm": 0.10306945113541133
+        }
+      },
+      "cutoff_ns": 77840000058,
+      "eligible_rows": 4165,
+      "execution": {
+        "filtered_to_step": {
+          "position_mm_by_side": [
+            6.139119288303688,
+            46.51745922541299
+          ],
+          "rotation_deg_by_side": [
+            0.0,
+            0.0
+          ]
+        },
+        "issued_to_measured": {
+          "position_mm_by_side": [
+            12.738758784765437,
+            19.893427449905744
+          ],
+          "rotation_deg_by_side": [
+            1.3506517993959861,
+            0.9945962285530808
+          ]
+        },
+        "native_reasons_by_side": [
+          [
+            "full_step",
+            "accept",
+            "",
+            "true"
+          ],
+          [
+            "full_step",
+            "accept",
+            "",
+            "false"
+          ]
+        ],
+        "native_reasons_fields": [
+          "solve_mode",
+          "recovery_action",
+          "primary_reason",
+          "rate_limited"
+        ],
+        "native_shared_to_filtered": {
+          "position_mm_by_side": [
+            3.468865175436511,
+            4.50020193189194
+          ],
+          "rotation_deg_by_side": [
+            0.0,
+            0.0
+          ]
+        },
+        "native_shared_to_issued": {
+          "position_mm_by_side": [
+            9.128263003967763,
+            48.56565659633
+          ],
+          "rotation_deg_by_side": [
+            0.11266562196880836,
+            0.16589986437346055
+          ]
+        },
+        "step_to_issued": {
+          "position_mm_by_side": [
+            0.45383024975711966,
+            1.8215782957230298
+          ],
+          "rotation_deg_by_side": [
+            0.11266562196880836,
+            0.16589986437346055
+          ]
+        }
+      },
+      "measured_source_age_ms": 3.547844,
+      "p95_mm": 813.8216337904354,
+      "panels": {
+        "m1": {
+          "directed_palm_angle_deg": 42.300359385766846,
+          "midpoint_xyz_m": [
+            -0.34670059161204847,
+            -0.5327887326545879,
+            0.9945379970429036
+          ],
+          "nearest_cross_tip_mm": 899.9946130115934,
+          "nearest_cross_tip_pair": [
+            "thumb",
+            "middle"
+          ],
+          "palm_normals_world": [
+            [
+              0.5886728464536016,
+              -0.3761099465042438,
+              -0.7155456575151508
+            ],
+            [
+              0.011594578727933715,
+              -0.048220882658246984,
+              -0.9987693989203821
+            ]
+          ],
+          "wrist_gap_mm": 893.8732142116434
+        },
+        "mujoco": {
+          "directed_palm_angle_deg": 8.607058565885536,
+          "midpoint_xyz_m": [
+            0.003916636515597621,
+            -0.42995674857543387,
+            1.2809154650530008
+          ],
+          "nearest_cross_tip_mm": 810.9573648242321,
+          "nearest_cross_tip_pair": [
+            "index",
+            "thumb"
+          ],
+          "palm_normals_world": [
+            [
+              0.16046119621896482,
+              -0.6854850919689047,
+              -0.7101847599015068
+            ],
+            [
+              0.011368549955533741,
+              -0.6861608666615653,
+              -0.7273609978093121
+            ]
+          ],
+          "wrist_gap_mm": 806.4448171887666
+        },
+        "original_human": {
+          "directed_palm_angle_deg": 1.7826670684697263,
+          "midpoint_xyz_m": [
+            -0.008389451417822824,
+            -0.4364576530549691,
+            1.3250669314059178
+          ],
+          "nearest_cross_tip_mm": 870.6934037344703,
+          "nearest_cross_tip_pair": [
+            "thumb",
+            "thumb"
+          ],
+          "palm_normals_world": [
+            [
+              0.01540855231037383,
+              -0.6956176735163264,
+              -0.7182469135383961
+            ],
+            [
+              0.045427800184262845,
+              -0.7007910799233266,
+              -0.7119186591671246
+            ]
+          ],
+          "wrist_gap_mm": 830.3417834373456
+        },
+        "shared": {
+          "directed_palm_angle_deg": 1.7826670684703396,
+          "midpoint_xyz_m": [
+            -0.008389451417822796,
+            -0.4364576530549691,
+            1.3250669314059178
+          ],
+          "nearest_cross_tip_mm": 870.6934037344704,
+          "nearest_cross_tip_pair": [
+            "thumb",
+            "thumb"
+          ],
+          "palm_normals_world": [
+            [
+              0.015408552310373497,
+              -0.6956176735163254,
+              -0.7182469135383969
+            ],
+            [
+              0.0454278001842669,
+              -0.7007910799233268,
+              -0.7119186591671239
+            ]
+          ],
+          "wrist_gap_mm": 830.3417834373455
+        }
+      },
+      "partition": "recording:51adcf9b11cd609ee6efaf88/00009",
+      "relative_errors": {
+        "m1": {
+          "cross_tip_distance_mae_mm": 27.442127362185843,
+          "directed_palm_angle_delta_deg": 40.51769231729712,
+          "left_palm_relative_vector_error_mm": 781.4075512816587,
+          "relative_palm_so3_error_deg": 45.351350196572675,
+          "wrist_gap_delta_mm": 63.531430774297746
+        },
+        "mujoco": {
+          "cross_tip_distance_mae_mm": 74.44785262943962,
+          "directed_palm_angle_delta_deg": 6.82439149741581,
+          "left_palm_relative_vector_error_mm": 100.52361586521417,
+          "relative_palm_so3_error_deg": 10.80267877369324,
+          "wrist_gap_delta_mm": -23.89696624857902
+        },
+        "original_human": {
+          "cross_tip_distance_mae_mm": 0.0,
+          "directed_palm_angle_delta_deg": 0.0,
+          "left_palm_relative_vector_error_mm": 0.0,
+          "relative_palm_so3_error_deg": 0.0,
+          "wrist_gap_delta_mm": 0.0
+        },
+        "shared": {
+          "cross_tip_distance_mae_mm": 2.319211489520967e-13,
+          "directed_palm_angle_delta_deg": 6.132871988029365e-13,
+          "left_palm_relative_vector_error_mm": 1.9421097065984936e-12,
+          "relative_palm_so3_error_deg": 3.20986465630489e-13,
+          "wrist_gap_delta_mm": -1.1368683772161603e-13
+        }
+      },
+      "root": "capture:2151546f1c0b35e04218a1bb",
+      "split": "Train",
+      "stages": {
+        "first_global_placement_midpoint_difference_mm": 476.1308573860722,
+        "global_registration_rotation_difference_deg": 95.72617591398375,
+        "hard_pinch_active": [
+          [
+            false,
+            false,
+            false,
+            false
+          ],
+          [
+            false,
+            false,
+            false,
+            false
+          ]
+        ],
+        "m1_before_palm_offset_gap_mm": 887.7748847007751,
+        "raw_tracker_gap_mm": 887.7748775688597,
+        "shared_before_palm_offset_gap_mm": 887.7748775688605
+      },
+      "task": "arm_hand",
+      "tick": 292
+    }
+  ],
+  "schema": "s05.teleop.start_mapping_witnesses.v1",
+  "sha256": {
+    "figures-corrected/2151546f1c0b_77840000058_mapping_witness.png": "270ff2cc9500cbf283a6ffabb7a002cdfff329da95d31da0f473c7c90b6c67da",
+    "figures-corrected/6fb07249fb5b_20020000068_mapping_witness.png": "976a7eb4baa4664ab8ada64950ea0a1b5cb2d063e4ad8da15c64db139b00202f",
+    "figures-corrected/b70297470e5e_19260000057_mapping_witness.png": "bb79aa4c74e5e1b413a3471e6381788617e85d11da098dcbe9c20b6b914a40e9",
+    "tools/plot_start_mapping_witnesses.py": "95c6e5cf9d77c1c1e91151b9a0489575ab54238961a5d2927eb6e77e0c0300df",
+    "tools/prepare_start_mapping_witnesses.py": "2735f5d2a02a54f8837234658c017de64ccdf7695e974a4c8b8f16f3a1b97c4c",
+    "witnesses.json": "4f8d7025ebb6b5465df2474513562e9544a9001bf0f9cb72306df62e1a84bb92"
+  },
+  "visual_wrist_definition": "Anatomical wrist or palm root, corresponding across four panels; ranked with the sealed TCP-site position error"
+}
