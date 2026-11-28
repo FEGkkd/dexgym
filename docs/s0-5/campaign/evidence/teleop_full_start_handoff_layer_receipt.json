@@ -1,0 +1,460 @@
+{
+  "archive": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/TELEOP-SHARED-RIGID-START-HANDOFF-FULL-01",
+  "asset_sha256": {
+    "cohort.json": "7d6c4702229aefd0d564f76dfae5a2a7b62a0340b9c4cae43fea512cc2d531c2",
+    "full_launch.sha256": "c55cbbfe2deb3871f617da194d5bb7f9bd511f08a5530d05bf175cfa7626be66",
+    "home_reference.json": "65517e1786fe2799184e7e61905671d820159854d7a9e52b6c1aa3897f18f3a6",
+    "launch_identity.sha256": "279379e26a2eae6ea437accd10851cd1a675eaf8403854df35f07fc082fac609",
+    "layer_index.json": "2bc6a63922e9f7790b4366690401c1d3934bd405b1a135cab1266c068fb1acb4",
+    "layers-verified/scoring_status.json": "abc2298297656b41d66f0237f63d25f616ada45bcd6ae2b94caa920c2f9b3662",
+    "native/cohort_run.json": "ab118c7868bed32e983fae13171c19e8153afa4f604d951e6dfd1a6d4ef02ba5",
+    "scoring_dependencies.sha256": "c7048b03974020af4d4bcf38e053c68a35acaeb6c095b62e3f064e8bb84fa2cb"
+  },
+  "attempts": 32,
+  "counts": {
+    "hmb_joint_valid": 114532,
+    "hmb_joint_valid_and_safety_permission": 114532,
+    "joint_availability": {
+      "issued": {
+        "all54_hmb_valid": 99778,
+        "all54_planned": 100728
+      },
+      "measured": {
+        "all54_hmb_valid": 95018,
+        "all54_planned": 95912
+      }
+    },
+    "layers": {
+      "issued_fk": {
+        "hmb_valid_with_both_wrists": 99960,
+        "planned_with_both_wrists": 100915
+      },
+      "m1": {
+        "hmb_valid_with_both_wrists": 114332,
+        "planned_with_both_wrists": 114332
+      },
+      "measured_fk": {
+        "hmb_valid_with_both_wrists": 99854,
+        "planned_with_both_wrists": 100807
+      },
+      "native_filtered": {
+        "hmb_valid_with_both_wrists": 99833,
+        "planned_with_both_wrists": 100756
+      },
+      "native_ik_requested": {
+        "hmb_valid_with_both_wrists": 99833,
+        "planned_with_both_wrists": 100756
+      },
+      "native_rate_limited": {
+        "hmb_valid_with_both_wrists": 99833,
+        "planned_with_both_wrists": 100756
+      },
+      "native_shared_raw": {
+        "hmb_valid_with_both_wrists": 99833,
+        "planned_with_both_wrists": 100783
+      },
+      "shared_hmb_raw": {
+        "hmb_valid_with_both_wrists": 114532,
+        "planned_with_both_wrists": 114532
+      }
+    },
+    "planned": 116613
+  },
+  "history_messages": 1115529,
+  "hmb_shared_common_support": {
+    "largest_position_link_on_the_worst_wrist": {
+      "issued_fk__measured_fk": 0,
+      "m1__shared_hmb_raw": 4976,
+      "shared_hmb_raw__issued_fk": 7,
+      "tied_unassigned": 0
+    },
+    "links": {
+      "issued_fk__measured_fk": {
+        "n": 99657,
+        "orientation_deg": {
+          "p50": 1.582429066532453,
+          "p95": 4.030270795421472,
+          "p99": 4.410543553231729
+        },
+        "position_mm": {
+          "p50": 3.7893385021840507,
+          "p95": 18.6624100041782,
+          "p99": 20.752803084454317
+        }
+      },
+      "m1__measured_fk": {
+        "n": 99657,
+        "orientation_deg": {
+          "p50": 55.13428955136791,
+          "p95": 88.3464986322411,
+          "p99": 103.96137146116523
+        },
+        "position_mm": {
+          "p50": 379.69460603038283,
+          "p95": 699.4030769898557,
+          "p99": 985.0840109853035
+        }
+      },
+      "m1__shared_hmb_raw": {
+        "n": 99657,
+        "orientation_deg": {
+          "p50": 55.93314535105881,
+          "p95": 87.34125103419312,
+          "p99": 102.14339893534351
+        },
+        "position_mm": {
+          "p50": 380.31882094437367,
+          "p95": 693.2387949030373,
+          "p99": 985.4402430549327
+        }
+      },
+      "shared_hmb_raw__issued_fk": {
+        "n": 99657,
+        "orientation_deg": {
+          "p50": 0.23327705329099413,
+          "p95": 44.16127485942393,
+          "p99": 71.05796652522102
+        },
+        "position_mm": {
+          "p50": 2.221719602356627,
+          "p95": 79.19762918622288,
+          "p99": 296.60313978387
+        }
+      }
+    },
+    "n": 99657,
+    "tail_rows": 4983,
+    "total_position_tail_cutoff_mm": 699.4030769898557
+  },
+  "home_reference_observed_roots": 32,
+  "initial_scoring_exit": 1,
+  "matched_issued_measured_joint_errors": {
+    "all_54": {
+      "n": 94907,
+      "p50_rad": 0.05217859000187075,
+      "p95_rad": 0.26448060199287365
+    },
+    "bilateral_arm_14": {
+      "n": 99839,
+      "p50_rad": 0.031064657339909596,
+      "p95_rad": 0.0625634066256989
+    },
+    "left_hand_20": {
+      "n": 99771,
+      "p50_rad": 0.005805859537430624,
+      "p95_rad": 0.21469697562454862
+    },
+    "right_hand_20": {
+      "n": 94930,
+      "p50_rad": 0.01683484919777023,
+      "p95_rad": 0.18756704504123703
+    }
+  },
+  "max_measured_home_error_rad": 0.004968711455735111,
+  "native_exit": 0,
+  "native_result_counts": {
+    "START_REACHED_REPLAY_COMPLETE": 32
+  },
+  "native_shared_common_support": {
+    "largest_position_link_on_the_worst_wrist": {
+      "issued_fk__measured_fk": 0,
+      "m1__native_shared_raw": 4972,
+      "native_shared_raw__issued_fk": 7,
+      "tied_unassigned": 0
+    },
+    "links": {
+      "issued_fk__measured_fk": {
+        "n": 99562,
+        "orientation_deg": {
+          "p50": 1.5822665941882086,
+          "p95": 4.0292772808137665,
+          "p99": 4.408965380984079
+        },
+        "position_mm": {
+          "p50": 3.787988213123187,
+          "p95": 18.6617257165895,
+          "p99": 20.751430902129925
+        }
+      },
+      "m1__measured_fk": {
+        "n": 99562,
+        "orientation_deg": {
+          "p50": 55.13396656045994,
+          "p95": 88.35002542608845,
+          "p99": 103.9613494834746
+        },
+        "position_mm": {
+          "p50": 379.7030597214637,
+          "p95": 699.4925242204221,
+          "p99": 985.1112282867491
+        }
+      },
+      "m1__native_shared_raw": {
+        "n": 99562,
+        "orientation_deg": {
+          "p50": 55.9306696325243,
+          "p95": 87.33075895387776,
+          "p99": 102.1397525083938
+        },
+        "position_mm": {
+          "p50": 380.3554007223145,
+          "p95": 693.2820815147658,
+          "p99": 985.4762213816183
+        }
+      },
+      "native_shared_raw__issued_fk": {
+        "n": 99562,
+        "orientation_deg": {
+          "p50": 0.2512874552164672,
+          "p95": 44.13935468151396,
+          "p99": 71.0200714721737
+        },
+        "position_mm": {
+          "p50": 2.100735253442619,
+          "p95": 79.10666494522644,
+          "p99": 296.53078225404107
+        }
+      }
+    },
+    "n": 99562,
+    "tail_rows": 4979,
+    "total_position_tail_cutoff_mm": 699.4925242204221
+  },
+  "other_native_failures": [],
+  "pair_specific_hmb_valid": {
+    "issued_fk__measured_fk": {
+      "frames": {
+        "n": 99839,
+        "orientation_deg": {
+          "p50": 1.5825961734117304,
+          "p95": 4.029377465523238,
+          "p99": 4.4097483725687745
+        },
+        "position_mm": {
+          "p50": 3.79306158651243,
+          "p95": 18.664522271564653,
+          "p99": 20.754664265128916
+        }
+      },
+      "median_of_root_p95_mm_deg": [
+        14.344152694881318,
+        3.566255814079617
+      ],
+      "root_support": 32
+    },
+    "m1__measured_fk": {
+      "frames": {
+        "n": 99672,
+        "orientation_deg": {
+          "p50": 55.134774303997006,
+          "p95": 88.34912952920853,
+          "p99": 103.96130552809338
+        },
+        "position_mm": {
+          "p50": 379.69484475800346,
+          "p95": 699.4138700808486,
+          "p99": 985.0815582354666
+        }
+      },
+      "median_of_root_p95_mm_deg": [
+        528.9917209514713,
+        77.86886416253088
+      ],
+      "root_support": 32
+    },
+    "m1__native_shared_raw": {
+      "frames": {
+        "n": 99651,
+        "orientation_deg": {
+          "p50": 55.92841115433742,
+          "p95": 87.33301134347509,
+          "p99": 102.13691068836243
+        },
+        "position_mm": {
+          "p50": 380.3600875358506,
+          "p95": 693.3254696779106,
+          "p99": 985.4478279153268
+        }
+      },
+      "median_of_root_p95_mm_deg": [
+        529.4906393623676,
+        77.41862729329591
+      ],
+      "root_support": 32
+    },
+    "m1__shared_hmb_raw": {
+      "frames": {
+        "n": 114332,
+        "orientation_deg": {
+          "p50": 55.735947886406024,
+          "p95": 87.32802843504955,
+          "p99": 101.88708819279385
+        },
+        "position_mm": {
+          "p50": 382.20908002949744,
+          "p95": 724.4656506415693,
+          "p99": 980.7351924160414
+        }
+      },
+      "median_of_root_p95_mm_deg": [
+        529.6922104461655,
+        78.42473255828294
+      ],
+      "root_support": 32
+    },
+    "native_filtered__native_rate_limited": {
+      "frames": {
+        "n": 99833,
+        "orientation_deg": {
+          "p50": 0.0851720303426233,
+          "p95": 44.18431864426009,
+          "p99": 70.95243194282793
+        },
+        "position_mm": {
+          "p50": 0.0005954094113215832,
+          "p95": 76.73506794303889,
+          "p99": 295.1079864302903
+        }
+      },
+      "median_of_root_p95_mm_deg": [
+        22.48792617963514,
+        16.080507731113887
+      ],
+      "root_support": 32
+    },
+    "native_ik_requested__issued_fk": {
+      "frames": {
+        "n": 99830,
+        "orientation_deg": {
+          "p50": 0.026549901938361653,
+          "p95": 0.4407886198912865,
+          "p99": 0.8314530417242495
+        },
+        "position_mm": {
+          "p50": 0.10102858687789654,
+          "p95": 1.3107673420981916,
+          "p99": 3.1072890389431977
+        }
+      },
+      "median_of_root_p95_mm_deg": [
+        1.0350582103695756,
+        0.3373255570388583
+      ],
+      "root_support": 32
+    },
+    "native_rate_limited__native_ik_requested": {
+      "frames": {
+        "n": 99833,
+        "orientation_deg": {
+          "p50": 1.7075472925031877e-06,
+          "p95": 0.22514776557228258,
+          "p99": 0.22774145084000602
+        },
+        "position_mm": {
+          "p50": 0.0,
+          "p95": 0.9385021485147982,
+          "p99": 0.9510616130856727
+        }
+      },
+      "median_of_root_p95_mm_deg": [
+        0.0,
+        2.9575586669421963e-06
+      ],
+      "root_support": 32
+    },
+    "native_shared_raw__issued_fk": {
+      "frames": {
+        "n": 99830,
+        "orientation_deg": {
+          "p50": 0.2511446726690808,
+          "p95": 44.182214048526376,
+          "p99": 71.00978357074155
+        },
+        "position_mm": {
+          "p50": 2.1009396343037836,
+          "p95": 79.07890346413781,
+          "p99": 296.3465490307242
+        }
+      },
+      "median_of_root_p95_mm_deg": [
+        24.398431235535895,
+        16.23521443072788
+      ],
+      "root_support": 32
+    },
+    "native_shared_raw__native_filtered": {
+      "frames": {
+        "n": 99833,
+        "orientation_deg": {
+          "p50": 1.7075472925031877e-06,
+          "p95": 2.4148365394514667e-06,
+          "p99": 2.9575586669421963e-06
+        },
+        "position_mm": {
+          "p50": 0.9879355921336282,
+          "p95": 5.75719426394375,
+          "p99": 8.609732083984088
+        }
+      },
+      "median_of_root_p95_mm_deg": [
+        4.044860767440767,
+        2.4148365394514667e-06
+      ],
+      "root_support": 32
+    },
+    "shared_hmb_raw__issued_fk": {
+      "frames": {
+        "n": 99960,
+        "orientation_deg": {
+          "p50": 0.23404182781704486,
+          "p95": 44.19880404445286,
+          "p99": 71.1050511908506
+        },
+        "position_mm": {
+          "p50": 2.2268479944413944,
+          "p95": 79.17527471448653,
+          "p99": 296.5535787628989
+        }
+      },
+      "median_of_root_p95_mm_deg": [
+        24.1831146462103,
+        16.202084549486493
+      ],
+      "root_support": 32
+    },
+    "shared_hmb_raw__native_shared_raw": {
+      "frames": {
+        "n": 99833,
+        "orientation_deg": {
+          "p50": 2.4148365394514667e-06,
+          "p95": 0.839416742330261,
+          "p99": 1.7235380890346181
+        },
+        "position_mm": {
+          "p50": 4.577566798522238e-13,
+          "p95": 2.130780170563612,
+          "p99": 4.08455163559688
+        }
+      },
+      "median_of_root_p95_mm_deg": [
+        1.7866659879138567,
+        0.4989203646002988
+      ],
+      "root_support": 32
+    }
+  },
+  "partitions": 308,
+  "preposition_elapsed_min_p50_max_s": [
+    1.7334515499824192,
+    1.7724547539983178,
+    3.3050352380087133
+  ],
+  "raw_parity_available_side_rows": 201566,
+  "raw_parity_within_tolerance_side_rows": 201566,
+  "roots_processed": 32,
+  "run": "TELEOP-SHARED-RIGID-START-HANDOFF-FULL-01",
+  "schema": "s05.teleop.full_start_handoff_review.v1",
+  "scoring_exit": 0,
+  "strict_start_misses": [],
+  "training_admission": false
+}

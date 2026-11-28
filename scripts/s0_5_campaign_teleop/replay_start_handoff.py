@@ -24,6 +24,8 @@ WRIST_M = 0.010
 WRIST_DEG = 5.0
 HAND_RAD = 0.10
 SETTLED_RAD_S = 0.16
+HOME_RAD = np.deg2rad(1.0)
+MEASUREMENT_JOIN_RAD = 0.01
 
 
 def array(fields, key):
@@ -59,7 +61,7 @@ def shared_targets(frames, diagnostic):
 
 
 class HandoffReplay(Replay):
-    def __init__(self, node, trace, anchor, frames, hold, diagnostic_after_miss):
+    def __init__(self, node, trace, anchor, frames, hold, diagnostic_after_miss, home_proof):
         super().__init__(node, trace)
         self.anchor, self.frames, self.hold = anchor, frames, hold
         self.diagnostic_after_miss = diagnostic_after_miss
@@ -68,6 +70,7 @@ class HandoffReplay(Replay):
         self.physical = None
         self.last_synthetic = {}
         self.home_q = None
+        self.home_proof = home_proof
 
     def observe_output(self, topic, value):
         if self.stage == "historical_human_inputs" or self.stage == "tail":
@@ -112,11 +115,25 @@ class HandoffReplay(Replay):
         return header
 
     def start_inputs(self, events):
-        if self.physical is None:
-            raise RuntimeError("Home lacks a complete 54-axis MuJoCo observation")
+        home_service_done = self.node.get_clock().now().nanoseconds
+        self.wait(0.15)
+        now = self.node.get_clock().now().nanoseconds
+        if (self.physical is None or not 0 <= now - self.physical[0] <= FRESH_NS
+                or self.physical[0] < home_service_done or self.physical[2] is None
+                or self.physical[2] > SETTLED_RAD_S):
+            raise RuntimeError("Home lacks fresh, settled 54-axis MuJoCo feedback after the service")
         self.home_q = self.physical[1].copy()
+        home_error = None
+        if self.home_proof is not None:
+            reference = self.home_proof["named_q_rad"]
+            if (self.loaded_model_sha256 != self.home_proof["model_sha256"] or self.home_q.keys() != reference.keys()
+                    or max(self.home_proof["palm_normal_angle_to_world_down_deg"]) > 5.0):
+                raise RuntimeError("Home reference and loaded simulator do not share the verified palms-down frame")
+            home_error = max(abs(q - reference[name]) for name, q in self.home_q.items())
+            if home_error > HOME_RAD:
+                raise RuntimeError(f"Fresh measured Home differs from the palms-down reference: {home_error:.6f} rad")
         self.write("home_feedback", named_q_rad=self.home_q, measured_header_ns=self.physical[0],
-                   max_measured_speed_rad_s=self.physical[2])
+                   max_measured_speed_rad_s=self.physical[2], max_error_to_home_proof_rad=home_error)
         witnessed = self.anchor["inputs"]
         selected = {event.topic: event for event in events
                     if event.record_index == witnessed[event.topic]["record_index"]}
@@ -142,6 +159,13 @@ class HandoffReplay(Replay):
         errors = [pose_error(target, pose(diag[side], "measured_fk"))
                   for side, target in zip(HANDS, goal, strict=True)]
         q = self.physical[1]
+        diagnostic_q = {side: array(diag[side], "q_meas_rad") for side in HANDS}
+        if any(angles.shape != (7,) or not np.isfinite(angles).all() for angles in diagnostic_q.values()):
+            return None
+        max_diagnostic_q_difference = max(
+            max(abs(angle - q[f"{side}_j{joint}"]) for joint, angle in enumerate(angles, 1))
+            for side, angles in diagnostic_q.items()
+        )
         hand_error = []
         for side in HANDS:
             header, command = self.hands.get(side, (0, None))
@@ -153,6 +177,7 @@ class HandoffReplay(Replay):
                      for topic, (key, label) in ACTIVE.items())
         return {"wrist_error_m_deg": errors, "hand_error_to_issued_rad": hand_error,
                 "measured_speed_rad_s": self.physical[2], "named_q_rad": q, "active_task": active,
+                "feedback_header_ns": self.physical[0], "max_diagnostic_q_difference_rad": max_diagnostic_q_difference,
                 "arms_accepted": all(x.get("arm_command_accepted") == "true" and x.get("ik_target_accepted") == "true"
                                      for x in diag.values()),
                 "control_reasons": {side: {key: fields.get(key) for key in
@@ -167,7 +192,7 @@ class HandoffReplay(Replay):
             self.write("start_handoff", status="IMMEDIATE_CONTROL", measurement=self.measure())
             return
         start = time.monotonic()
-        ready_since = None
+        ready_since = last_ready_stamp = None
         status, last = "START_NOT_REACHED", None
         while time.monotonic() - start < TIMEOUT_SEC:
             for event in warmup.values():
@@ -177,18 +202,23 @@ class HandoffReplay(Replay):
             current = self.measure()
             ready = (current is not None and elapsed >= RAMP_SEC and current["active_task"] and current["arms_accepted"]
                      and current["measured_speed_rad_s"] is not None and current["measured_speed_rad_s"] <= SETTLED_RAD_S
+                     and current["max_diagnostic_q_difference_rad"] <= MEASUREMENT_JOIN_RAD
                      and all(d <= WRIST_M and a <= WRIST_DEG for d, a in current["wrist_error_m_deg"])
                      and all(x is not None and x <= HAND_RAD for x in current["hand_error_to_issued_rad"]))
             if current is not None:
                 last = current
                 self.write("start_measurement", elapsed_s=elapsed, ready=ready, value=current)
             if not ready:
-                ready_since = None
-            elif ready_since is None:
-                ready_since = elapsed
-            elif elapsed - ready_since >= DWELL_SEC:
-                status = "START_REACHED"
-                break
+                ready_since = last_ready_stamp = None
+                continue
+            header = current["feedback_header_ns"]
+            if last_ready_stamp is None or header - last_ready_stamp > FRESH_NS:
+                ready_since = header
+            if last_ready_stamp is None or header > last_ready_stamp:
+                last_ready_stamp = header
+                if header - ready_since >= DWELL_SEC * NS:
+                    status = "START_REACHED"
+                    break
         self.write("start_handoff", status=status, measurement=last, elapsed_s=time.monotonic() - start,
                    continue_after_miss=self.diagnostic_after_miss and status != "START_REACHED")
         print(status, None if last is None else last["wrist_error_m_deg"], flush=True)
@@ -224,10 +254,16 @@ class HandoffReplay(Replay):
         self.stage = "historical_human_inputs"
         self.write("timebase", epoch_delta_ns=delta, origin_log_ns=self.origin_log_ns,
                    origin_mono_ns=self.origin_mono_ns, origin_schedule_ns=origin)
+        expected, sent = sha256(), sha256()
+        for event in historical:
+            expected.update(sha256(event.data).digest())
         for event in historical:
             self.wait((self.origin_mono_ns + event.schedule_ns - origin - time.monotonic_ns()) / NS)
             self.send(event, delta)
+            sent.update(sha256(event.data).digest())
             rclpy.spin_once(self.node, timeout_sec=0)
+        self.write("historical_input_seal", messages=len(historical), expected_cdr_sha256=expected.hexdigest(),
+                   published_cdr_sha256=sent.hexdigest())
 
 
 def main():
@@ -243,6 +279,8 @@ def main():
                                                   "FASTDDS_DEFAULT_PROFILES_FILE", "FASTRTPS_DEFAULT_PROFILES_FILE"))):
         parser.error("Expected the dedicated isolated shared-map simulation domains")
     path = Path(os.environ["S05_SHARED_RIGID_MAP"])
+    proof_path = os.environ.get("S05_START_HOME_PROOF")
+    home_proof = json.loads(Path(proof_path).read_bytes()) if proof_path is not None else None
     frames = np.repeat(np.eye(4)[None, :, :], 7, axis=0)
     frames[:, :3, :] = np.loadtxt(path).reshape(7, 3, 4)
     anchor = json.loads(args.anchor.read_bytes())
@@ -258,7 +296,7 @@ def main():
     with (args.output / "trace.jsonl").open("x", buffering=1) as trace:
         try:
             HandoffReplay(node, trace, anchor, frames, args.condition == "preposition",
-                          args.diagnostic_after_miss).run(events)
+                          args.diagnostic_after_miss, home_proof).run(events)
         finally:
             node.destroy_node()
             rclpy.shutdown()

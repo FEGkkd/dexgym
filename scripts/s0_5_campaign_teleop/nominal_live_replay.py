@@ -300,7 +300,8 @@ class Replay:
             raise RuntimeError("Unexpected arm controller backend")
         model = Path(simulator["model_path"].string_value)
         with model.open("rb") as stream:
-            self.write("model", path=str(model.resolve()), sha256=hashlib.file_digest(stream, "sha256").hexdigest())
+            self.loaded_model_sha256 = hashlib.file_digest(stream, "sha256").hexdigest()
+        self.write("model", path=str(model.resolve()), sha256=self.loaded_model_sha256)
         self.service("connect")
         self.service("home")
         warmup = self.start_inputs(events)
