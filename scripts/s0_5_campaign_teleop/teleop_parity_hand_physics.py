@@ -101,6 +101,7 @@ class NativeHandoff:
         self.received = [cutoff, cutoff]
         self.source = [None, None]
         self.fault = [False, False]
+        self.clipped = [False, False]
 
     def target(self, filtered, valid, source, received, now, measured):
         statuses = []
@@ -114,7 +115,8 @@ class NativeHandoff:
                 fraction = float(np.clip(elapsed - .5, 0., 1.))
                 blend = fraction * fraction * (3. - 2. * fraction)
                 command = np.clip(filtered[i], *self.ctrlrange[i].T)
-                self.command[i] = self.home[i] + blend * (command - self.home[i])
+                self.clipped[i] = not np.array_equal(command, filtered[i])
+                self.command[i] = (1. - blend) * self.home[i] + blend * command
             if now - self.received[i] > 100_000_000 and not self.fault[i]:
                 self.fault[i] = True
                 self.command[i] = measured.reshape(2, 20)[i]
@@ -194,6 +196,7 @@ class HandRollout:
             hold_proof, hold_detail = None, {}
         receipt = {"status": "HOLD" if hold else "ISSUED", "subcycle": subcycle,
                    "fixed_arm_joint_target": self.robot.home[:14].tolist(), "native_hand_status": statuses,
+                   "native_input_clamped": self.handoff.clipped.copy() if self.with_handoff else None,
                    "handoff_mask": usable.tolist(), "python_step_limited": limited.tolist(),
                    "command_source_index": row["a_source_index"] if self.mode == "A" else row["source_index"],
                    "physical_selection_ns": row["physical_selection_ns"],
@@ -235,7 +238,8 @@ class HandRollout:
                 break
         self.physics_stats["hold_intervals"] += int(hold)
         self.physics_stats["moved_intervals"] += int(not hold and not np.array_equal(previous, self.sim.issued))
-        self.physics_stats["native_clipped_intervals"] += int("NATIVE_DRIVER_CLAMPED" in statuses)
+        clipped = any(self.handoff.clipped) if self.with_handoff else "NATIVE_DRIVER_CLAMPED" in statuses
+        self.physics_stats["native_clipped_intervals"] += int(clipped)
         unproved = (Reason.SWEEP_UNPROVEN, Reason.TIME_BUDGET)
         exhausted = common in unproved or (self.mode == "D" and shadow in unproved)
         self.unproven_streak = self.unproven_streak + 1 if exhausted else 0
