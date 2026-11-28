@@ -53,6 +53,23 @@ def guard_trace_digests(directory, source):
     return set(find_digests(read(directory / "comparison.json")))
 
 
+def check_exception_counterfactual(raw_trace, guard_digests):
+    # The committed digest binds the earlier strict counterfactual copy. The
+    # original trace retains actual PERMIT at the single recorded exception.
+    strict_trace = raw_trace.parents[2] / "strict-exception-counterfactual.jsonl"
+    if v1.digest(strict_trace) not in guard_digests:
+        raise ValueError(f"Strict counterfactual differs from committed evidence: {strict_trace}")
+    with raw_trace.open(encoding="utf-8") as raw, strict_trace.open(encoding="utf-8") as strict:
+        for raw_line, strict_line in zip(raw, strict, strict=True):
+            actual, counterpart = json.loads(raw_line), json.loads(strict_line)
+            if actual["sequence"] == 7020:
+                if actual["reason"] != "PERMIT":
+                    raise ValueError("The documented exception must remain an actual PERMIT in the raw trace")
+                actual["reason"] = "SWEEP_UNPROVEN"
+            if actual != counterpart:
+                raise ValueError(f"Raw trace differs from the qualified comparison at {actual['sequence']}")
+
+
 def run_receipts(docs, runs_dir):
     """Bind original run identity, immutable ready receipts and real observer traces."""
     for source in SOURCES:
@@ -68,7 +85,9 @@ def run_receipts(docs, runs_dir):
             trace = Path(command[command.index("--trace") + 1]).resolve(strict=True)
             trace.relative_to(runs_dir)
             ready = Path(command[command.index("--ready") + 1]).resolve(strict=True)
-            if v1.digest(trace) not in guard_digests:
+            if source == "one-unproven":
+                check_exception_counterfactual(trace, guard_digests)
+            elif v1.digest(trace) not in guard_digests:
                 raise ValueError(f"Guard request trace digest absent from committed evidence: {trace}")
             if ready.parent != trace.parent or v1.digest(ready) != run["guard_ready_sha256"]:
                 raise ValueError(f"Guard readiness differs from committed attempt: {trace.parent}")
