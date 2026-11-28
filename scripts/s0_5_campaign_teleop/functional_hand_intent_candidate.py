@@ -249,13 +249,13 @@ def certify(robot, guard, candidate, *, splits=1):
 
 
 def read_archive(directory, baseline, source, geometry, window_plan):
-    source_rows = [row for row in jsonl(source) if row["in_start_window"]]
+    source_rows = list(jsonl(source))
     start = baseline["window"]["hmb_cutoff_start_ns"]
     stop = baseline["window"]["hmb_cutoff_stop_exclusive_ns"]
     proxies = [proxy for proxy in window_plan["proxy_evidence"] if proxy["status"] == "PLANNED_PROXY_PROBE"]
     near_rows = {(row["partition"], row["tick"], row["time_ns"]): row["right_thumb_to_index_mm"]
                  for row in geometry["raw_near_pinch_rows"]}
-    rows, paired, recovered = [], 0, set()
+    rows, window_rows, paired, recovered = [], 0, 0, set()
     for part in baseline["partitions"]:
         fields = {}
         for name in FIELDS:
@@ -264,18 +264,19 @@ def read_archive(directory, baseline, source, geometry, window_plan):
                 raise ValueError(f"Frozen archive differs at {path}")
             fields[name] = np.load(path, allow_pickle=False)
         for index, cutoff in enumerate(fields["tick_ns"]):
-            if not start <= cutoff < stop:
-                continue
-            row_index = len(rows)
-            observed = source_rows[row_index]
+            observed = source_rows[len(rows)]
+            in_window = bool(start <= cutoff < stop)
+            row_index = window_rows if in_window else None
+            window_rows += in_window
             key = part["partition"], index, int(cutoff)
-            if key != (observed["partition"], observed["partition_tick"], observed["tick_ns"]):
+            if (key != (observed["partition"], observed["partition_tick"], observed["tick_ns"])
+                    or in_window != observed["in_start_window"]):
                 raise ValueError(f"Original archive and HMB ledger clocks differ at {key}")
             raw = fields["raw_manus_local"][index]
             raw_mask = fields["raw_manus_local_mask"][index]
             frozen = fields["target_local_landmark_xyz"][index]
             frozen_mask = fields["target_local_landmark_xyz_mask"][index].all(axis=(1, 2))
-            is_paired = bool(raw_mask.all() and frozen_mask.all() and fields["applied_substeps"][index] == 10)
+            is_paired = bool(in_window and raw_mask.all() and frozen_mask.all() and fields["applied_substeps"][index] == 10)
             paired += is_paired
             raw_gap = float(np.linalg.norm(raw[1, 1, -1] - raw[1, 0, -1])) if raw_mask[1] else None
             legacy = near_rows.get(key)
@@ -286,17 +287,18 @@ def read_archive(directory, baseline, source, geometry, window_plan):
                         abs(1000 * np.linalg.norm(frozen[1, 1, -1] - frozen[1, 0, -1]) - legacy["both"]) > 1e-4):
                     raise ValueError(f"Raw or frozen score point differs from archived geometry at {key}")
                 recovered.add(key)
-            supports = [p for p in proxies if p["within_proxy_first_row"] <= row_index <
+            supports = [p for p in proxies if in_window and p["within_proxy_first_row"] <= row_index <
                         p["within_proxy_stop_row_exclusive"]]
             observed_shape = from_input(observed) if supports else None
             for proxy in supports:
                 value = margin(proxy["gesture"], observed_shape, proxy["side"])
                 if value is None or value < 0:
                     raise ValueError(f"Preregistered signed source gesture differs at {key}")
-            rows.append({"key": key, "source_index": observed["source_index"], "raw": raw, "raw_mask": raw_mask,
+            rows.append({"key": key, "window_index": row_index, "source_index": observed["source_index"], "raw": raw, "raw_mask": raw_mask,
                          "frozen": frozen, "frozen_mask": frozen_mask, "paired": is_paired,
                          "near_pinch": legacy is not None, "proxy": supports, "source_proxy_shape": observed_shape})
-    if len(rows) != len(source_rows) or len(rows) != 4804 or paired != 4801 or len(recovered) != len(near_rows) or len(recovered) != 187:
+    if (len(rows) != len(source_rows) or len(rows) != 4844 or window_rows != 4804 or paired != 4801
+            or len(recovered) != len(near_rows) or len(recovered) != 187):
         raise ValueError("This run does not preserve the frozen ROOT05 domain")
     return rows
 
@@ -311,37 +313,50 @@ def endpoints(robot, geometry, goals, sides, proxies):
                                                                for p in proxies}}
 
 
-def ledger_row(fit, row, order, witnesses):
+def ledger_row(fit, row, witnesses):
     key = row["key"]
     sides = {1} if row["near_pinch"] else set()
     for proxy in row["proxy"]:
         sides.update(range(2) if proxy["side"] == "both" else [SIDES.index(proxy["side"])])
-    sides = sorted(sides)
-    qualified_sides = sides if row["paired"] else []
-    value = {"partition": key[0], "partition_tick": key[1], "tick_ns": key[2], "start_window_row": order,
+    goals, intent, intent_failures = {}, {}, {}
+    for side, valid in enumerate(row["raw_mask"]):
+        if not valid:
+            continue
+        try:
+            goal = HandIntent.from_raw(row["raw"][side], fit.basis[side])
+        except ValueError as error:
+            intent_failures[SIDES[side]] = str(error)
+            intent[SIDES[side]] = {"raw_manus_landmarks_m": row["raw"][side].tolist()}
+            continue
+        goals[side] = goal
+        intent[SIDES[side]] = goal.evidence()
+    qualified_sides = sorted(sides) if row["paired"] and sides.issubset(goals) else []
+    frozen = {"local_landmarks_m": [points.tolist() if side_valid else None
+                                    for points, side_valid in zip(row["frozen"], row["frozen_mask"], strict=True)]}
+    value = {"partition": key[0], "partition_tick": key[1], "tick_ns": key[2], "start_window_row": row["window_index"],
              "source_index": row["source_index"], "frozen_paired_mask": row["paired"],
              "raw_manus_mask": row["raw_mask"].tolist(), "frozen_target_mask": row["frozen_mask"].tolist(),
+             "human_functional_intent_mask": [side in goals for side in range(2)],
+             "human_functional_intent_unavailable_by_side": intent_failures,
+             "candidate_requested_mask": [side in sides for side in range(2)],
              "candidate_mask": [side in qualified_sides for side in range(2)],
              "legacy_raw_near_pinch_cohort": row["near_pinch"],
              "source_proxy_windows": [p["gesture"] for p in row["proxy"]], "source_proxy_shape": row["source_proxy_shape"],
-             "HUMAN_FUNCTIONAL_INTENT": None, "FROZEN_ROBOT_MORPHOLOGY": None,
+             "HUMAN_FUNCTIONAL_INTENT": intent, "FROZEN_ROBOT_MORPHOLOGY": frozen,
              "ROBOT_FUNCTIONAL_CANDIDATE": None, "KINEMATIC_WITNESS": None}
     if not qualified_sides:
         return value
     robot = fit.robot
-    goals = {side: HandIntent.from_raw(row["raw"][side], fit.basis[side]) for side in qualified_sides}
     q, search = fit.solve(goals, qualified_sides, robot.home)
     actual = robot.geometry(q)
-    value["HUMAN_FUNCTIONAL_INTENT"] = {SIDES[side]: goal.evidence() for side, goal in goals.items()}
     frozen_scores = {SIDES[side]: goals[side].errors(row["frozen"][side]) for side in qualified_sides}
     frozen_shapes = [frozen_scores[side]["shape"] if side in frozen_scores else None for side in SIDES]
-    value["FROZEN_ROBOT_MORPHOLOGY"] = {
-        "local_landmarks_m": row["frozen"].tolist(), "scores_by_side": frozen_scores,
-        "source_proxy_margins": {p["gesture"]: margin(p["gesture"], frozen_shapes, p["side"]) for p in row["proxy"]}}
+    frozen.update(scores_by_side=frozen_scores, source_proxy_margins={
+        p["gesture"]: margin(p["gesture"], frozen_shapes, p["side"]) for p in row["proxy"]})
     value["ROBOT_FUNCTIONAL_CANDIDATE"] = {**endpoints(robot, actual, goals, qualified_sides, row["proxy"]),
                                            "q_rad": q.tolist(), "search": search}
     value["KINEMATIC_WITNESS"] = {"status": "NOT_SELECTED_FOR_PROOF"}
-    if order not in witnesses:
+    if row["window_index"] not in witnesses:
         return value
     proof = certify(robot, fit.guard, q)
     attempts = [{"search": "INDEPENDENT_TASK_SPACE_FIT", "proof": proof}]
@@ -425,7 +440,7 @@ def main(args):
     guard = SweptEnvelopeV2(robot, max_queries=PROOF_QUERIES, max_depth=PROOF_DEPTH)
     fit = FunctionalFit(robot, guard)
     rows = read_archive(args.baseline, baseline, args.input_ticks, geometry, window_plan)
-    near = [i for i, row in enumerate(rows) if row["near_pinch"]]
+    near = [row["window_index"] for row in rows if row["near_pinch"]]
     witnesses = {near[i] for i in np.linspace(0, len(near) - 1, args.pinch_proof_samples, dtype=int)}
     proxy_centers = {p["gesture"]: (p["within_proxy_first_row"] + p["within_proxy_stop_row_exclusive"] - 1) // 2
                      for p in window_plan["proxy_evidence"] if p["status"] == "PLANNED_PROXY_PROBE"}
@@ -433,18 +448,24 @@ def main(args):
     args.out.mkdir()
     ledger = args.out / "rows.jsonl.gz"
     counters = defaultdict(Counter)
+    masks = Counter()
     samples = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(list))))
     with ledger.open("xb") as raw, gzip.GzipFile(fileobj=raw, filename="", mode="wb", mtime=0, compresslevel=3) as stream:
-        for order, row in enumerate(rows):
-            value = ledger_row(fit, row, order, witnesses)
+        for row in rows:
+            value = ledger_row(fit, row, witnesses)
             accumulate(value, counters, samples)
+            for name in ("raw_manus_mask", "human_functional_intent_mask", "frozen_target_mask", "candidate_mask"):
+                masks.update(f"{name}_{side}" for side, eligible in zip(SIDES, value[name], strict=True) if eligible)
             stream.write((json.dumps(value, separators=(",", ":"), allow_nan=False) + "\n").encode())
     identities["ledger"] = file_sha(ledger)
     write_json(args.out / "summary.json", {
         "scope": "OFFLINE_SIGNED_MODEL_KINEMATIC_DIAGNOSTIC_ONLY", "root": ROOT,
         "formal_coverage_credit": False, "hardware_authorization": False, "simulated_physics_steps": 0,
         "signed_joint_order": robot.names, "signed_home_q_rad": robot.home.tolist(), "paired_timeline_rows": 4801,
-        "frozen_timeline_rows": len(rows), "full": baseline["full"], "window": baseline["window"],
+        "mujoco_version": mujoco.__version__, "signed_collision_pairs": len(robot.collision_pairs),
+        "masks_by_side": masks,
+        "full_root_ledger_rows": len(rows), "frozen_timeline_rows": 4804,
+        "full": baseline["full"], "window": baseline["window"],
         "finger_order": CHAINS, "landmark_order": ["proximal", "PIP", "DIP", "score_tip"],
         "tip_pair_order": [[CHAINS[a], CHAINS[b]] for a, b in PAIRS],
         "intent_scope": "Signed MANUS source and proper rotation into model palm axes, at unit scale.",

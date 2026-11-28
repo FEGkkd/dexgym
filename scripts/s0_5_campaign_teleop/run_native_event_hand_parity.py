@@ -153,8 +153,7 @@ def b_updates(row):
 
 def available(row, leading_cutoff):
     # The endpoint of a control interval first becomes available for the next tick.
-    executed = [s for s in row if "q_measured" in s]
-    return executed if not executed or executed[-1]["feedback_available_ns"] <= leading_cutoff else []
+    return [s for s in row if "q_measured" in s and s["feedback_available_ns"] <= leading_cutoff]
 
 
 def run(args):
@@ -243,6 +242,7 @@ def run(args):
                         if key in first or key in recovered:
                             matches[key + (":equal" if first.get(key) == recovered.get(key) else ":different")] += 1
             sampled = {}
+            strict_sampled = {}
             nominal_samples = {}
             measured_fk = {}
             for mode, records in evidence.items():
@@ -250,6 +250,12 @@ def run(args):
                 sampled[mode] = ({key: eligible[-1][key] for key in
                                   ("q_issued", "q_applied", "q_measured", "qd_measured", "feedback_available_ns")}
                                  if len(eligible) == SUBSTEPS and not any(s["event"] for s in eligible) else None)
+                signed_eligible = available(prior[mode], int(t))
+                strict_sampled[mode] = ({key: signed_eligible[-1][key] for key in
+                    ("sources", "q_driver_command", "q_issued", "q_applied", "q_measured", "qd_measured",
+                     "feedback_available_ns")}
+                    if signed_eligible and not any(s["event"] for s in signed_eligible)
+                    and int(t) - signed_eligible[-1]["feedback_available_ns"] < DT_NS else None)
                 now = records[0]
                 nominal_samples[mode] = ({key: now[key] for key in ("sources", "q_driver_command")}
                                          if "q_driver_command" in now else None)
@@ -265,6 +271,7 @@ def run(args):
             payload = {"partition": row["partition"], "partition_tick": row["partition_tick"], "tick_ns": t,
                        "input_source_index": row["source_index"], "control_cutoff_ns": lead, "window": w,
                        "rmb_feedback_at_leading_cutoff": sampled, "rmb_native_target_at_leading_cutoff": nominal_samples,
+                       "rmb_feedback_at_exact_signed_tick": strict_sampled,
                        "fk_at_last_observed_substep": measured_fk, "experiments": evidence}
             ledger.write((json.dumps(payload, separators=(",", ":"), allow_nan=False) + "\n").encode())
         for mode, engine in streams.items():
@@ -276,6 +283,8 @@ def run(args):
     write_json(args.out / "fixed-arm-native-summary.json", {
         "scope": "DIAGNOSTIC_ONLY", "formal_coverage_credit": False, "root": ROOT, "full": reference["full"],
         "window": reference["window"], "windows": windows, "source_clock": "RECORDED_EVENT_REPLAY",
+        "physical_clock": "Signed START-anchored lockstep grid plus the previous reconstruction's 1 us cutoff margin",
+        "strict_RMB_sample": "Latest previous observed 500 Hz endpoint no later than exact signed HMB tick",
         "signed_joints": robot.names, "physics_hz": 500, "rmb_hz": 50, "driver_source": driver_evidence,
         "driver_controls": qa, "experiment_status": {m: dict(statuses[m]) for m in MODES},
         "physics": {m: {**totals[m], "sampled_minimum_gap_m": min(gaps[m], default=None),

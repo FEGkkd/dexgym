@@ -80,9 +80,11 @@ class DriverLibrary:
 class Driver:
     def __init__(self, api, q, ctrl, cutoff):
         self.lib = api.lib
-        self.handle = self.lib.s05_driver_create(np.ascontiguousarray(q, dtype=np.float64),
-                                                np.ascontiguousarray(ctrl, dtype=np.float64),
-                                                cutoff + CLOCK_OFFSET_NS, *api.timing)
+        seed = np.ascontiguousarray(q, dtype=np.float64)
+        ranges = np.ascontiguousarray(ctrl, dtype=np.float64)
+        if seed.shape != (54,) or ranges.shape != (54, 2) or not np.isfinite(seed).all() or not np.isfinite(ranges).all():
+            raise ValueError("Native driver initialization requires finite signed 54-axis arrays")
+        self.handle = self.lib.s05_driver_create(seed, ranges, cutoff + CLOCK_OFFSET_NS, *api.timing)
 
     def close(self):
         if self.handle:
@@ -99,8 +101,10 @@ class Driver:
     def snapshot(self, cutoff, measured):
         target = np.empty(54, dtype=np.float64)
         fault = np.empty(2, dtype=np.int32)
-        self.lib.s05_driver_snapshot(self.handle, cutoff + CLOCK_OFFSET_NS,
-                                     np.ascontiguousarray(measured, dtype=np.float64), target, fault)
+        state = np.ascontiguousarray(measured, dtype=np.float64)
+        if state.shape != (54,) or not np.isfinite(state).all():
+            raise ValueError("Native driver requires finite signed measured joint state")
+        self.lib.s05_driver_snapshot(self.handle, cutoff + CLOCK_OFFSET_NS, state, target, fault)
         return target, fault.astype(bool)
 
 
@@ -121,9 +125,11 @@ def controls(api):
         assert not driver.receive(0, 850_000_002, 850_000_001, 3, hand)
         measured = np.linspace(0, .2, 54)
         q, fault = driver.snapshot(850_000_001, measured)
-        assert fault.all() and np.array_equal(q[14:], measured[14:])
+        assert fault.all() and np.array_equal(q[14:34], measured[14:34])
+        # Right never received a message and had already latched at the first snapshot.
+        assert np.array_equal(q[34:], state[34:])
         return {"valid_hold": True, "smoothstep_and_clip": True, "independent_hands": True,
                 "duplicate_rejected": True, "stale_rejected": True, "future_rejected": True,
-                "timeout_latches_measured": True}
+                "timeout_latches_measured_once_per_side": True}
     finally:
         driver.close()
