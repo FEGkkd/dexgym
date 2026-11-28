@@ -316,9 +316,10 @@ def dot(draw, centre, radius, color, stroke=2):
 
 
 class DrawVideo:
-    def __init__(self, root, anchor, locked, center_offset_mm=None):
+    def __init__(self, root, anchor, locked, center_offset_mm=None, start_only_profile=None):
         self.root = root
         self.center_offset_mm = center_offset_mm
+        self.start_only_profile = start_only_profile
         h = np.asarray(anchor["registered_wrist_start_h"], dtype=float)
         self.source_center = VIRTUAL_R @ h[:, :3, 3].mean(axis=0)
         self.world_center = (locked @ h)[:, :3, 3].mean(axis=0) if locked is not None else None
@@ -389,7 +390,9 @@ class DrawVideo:
         root = self.root.split(":")[-1]
         self.text(draw, (18, 17), "DCR-009   Native MuJoCo guarded diagnostic", "title")
         offset = self.center_offset_mm
-        if offset is not None:
+        if self.start_only_profile == "segmented":
+            self.text(draw, (800, 23), "Segmented START / original center", "small_title", color=INK, anchor="ma")
+        elif offset is not None:
             label = "Original center" if not offset else f"{'Left' if offset > 0 else 'Right'} {abs(offset)} mm"
             self.text(draw, (800, 23), label, "small_title", color=INK, anchor="ma")
         if frame["source_is_frozen_anchor"]:
@@ -511,7 +514,10 @@ def main():
         hmb_end += round(args.max_seconds * 1e9)
     human = human_rows(cohort, args.docs, args.hmb_products, matches[0], anchor, hmb_end)
     robot = RobotModel(args.model)
-    painter = DrawVideo(result["root"], anchor, trace["locked"], center)
+    profile = result.get("start_only_profile")
+    if profile != input_receipt.get("start_only_profile"):
+        raise ValueError("Video START profile does not match the native input receipt")
+    painter = DrawVideo(result["root"], anchor, trace["locked"], center, profile)
     rows = render_rows(trace, human, anchor, signed_feedback_names(robot), args.fps, args.max_seconds,
                        args.preposition_from_seconds)
     args.out.mkdir(exist_ok=False, parents=True)
@@ -531,6 +537,7 @@ def main():
                    "anatomical_mount_status": "UNKNOWN", "locked_map_from_actual_native_start": trace["locked"] is not None,
                    "original_input_mode": input_mode,
                    "center_offset_mm": center, "preposition_from_seconds": args.preposition_from_seconds,
+                   "start_only_profile": profile,
                    "feedback": "Same-header four native MuJoCo groups; FK only; monotonic receipt cutoff and 40 ms freshness",
                    "timing": "Historical samples chosen at preceding signed HMB cutoff with recorded ROS epoch. Preposition uses actual observer monotonic receipt time.",
                    "fps": args.fps, "frame_size": FRAME_SIZE})
