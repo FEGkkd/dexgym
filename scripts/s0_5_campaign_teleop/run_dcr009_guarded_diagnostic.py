@@ -103,6 +103,8 @@ def attempt(args, index, selection, cancelled):
         result["start_only_profile"] = profile
     if args.align_start_yaw_to_home:
         result["align_start_yaw_to_home"] = True
+    if args.wrist_first_fingers:
+        result["wrist_first_fingers"] = True
     save(result_file, result)
     children = []
     deadline = time.monotonic() + 180
@@ -116,11 +118,17 @@ def attempt(args, index, selection, cancelled):
         env["S05_DCR009_GUARD_SOCKET"] = str(endpoint)
         env["S05_DCR009_GUARD_TIMEOUT_MS"] = "35"
         env.pop("S05_DCR009_SEGMENTED_START_STATE", None)
+        env.pop("S05_DCR009_FINGER_STAGE", None)
         if profile == "segmented":
             stage_marker = Path(private_socket_dir) / "stage"
             stage_marker.write_bytes(b"PREPOSITION\n")
             stage_marker.chmod(0o600)
             env["S05_DCR009_SEGMENTED_START_STATE"] = str(stage_marker)
+        if args.wrist_first_fingers:
+            finger_marker = Path(private_socket_dir) / "finger"
+            finger_marker.write_bytes(b"0 0\n")
+            finger_marker.chmod(0o600)
+            env["S05_DCR009_FINGER_STAGE"] = str(finger_marker)
         try:
             if not graph_empty(env, path / "preflight-ros.log") or cancelled.is_set():
                 raise RuntimeError("Could not prove an unused local-only ROS domain")
@@ -180,6 +188,8 @@ def attempt(args, index, selection, cancelled):
                     program.extend((f"--{key}", str(value)))
                 if args.align_start_yaw_to_home:
                     program.append("--align-start-yaw-to-home")
+                if args.wrist_first_fingers:
+                    program.append("--wrist-first-fingers")
                 replay = subprocess.Popen(program, env=env, stdout=replay_log, stderr=subprocess.STDOUT, start_new_session=True)
                 children.append(replay)
                 result.update(replay_pid=replay.pid, replay_command=program, phase="RUNNING")
@@ -260,6 +270,7 @@ def main():
     mode.add_argument("--compare-root-five-centers", action="store_true")
     mode.add_argument("--root-five-start-only", choices=("original", "segmented"))
     parser.add_argument("--align-start-yaw-to-home", action="store_true")
+    parser.add_argument("--wrist-first-fingers", action="store_true")
     parser.add_argument("--domain", type=int, choices=DOMAINS, required=True)
     args = parser.parse_args()
     if os.name != "posix" or not args.output.parent.is_dir():
@@ -271,11 +282,13 @@ def main():
         raise ValueError("Requested diagnostic inputs differ from pinned assets")
     if args.align_start_yaw_to_home and (
         args.root_five_start_only != "segmented" or args.resume_from
-        or args.controller_sha256 != YAW_BASELINE_CONTROLLER_SHA256
+        or args.wrist_first_fingers == (args.controller_sha256 == YAW_BASELINE_CONTROLLER_SHA256)
         or args.simulator_sha256 != YAW_BASELINE_DRIVER_SHA256
         or digest(SCRIPTS / "swept_live_guard.py") != YAW_BASELINE_GUARD_SHA256
     ):
         raise ValueError("Yaw diagnostic must reuse the previous segmented controller, driver and sweep guard")
+    if args.wrist_first_fingers and not args.align_start_yaw_to_home:
+        raise ValueError("Finger staging requires the single prior yaw-aligned diagnostic")
     plan = json.loads(args.plan.read_bytes())
     roster = check_scope(plan)
     roots = verified_roots(args.cohort, SCRIPTS.parents[1] / "docs/s0-5")
@@ -304,6 +317,8 @@ def main():
         ledger["profile"] = args.root_five_start_only
     if args.align_start_yaw_to_home:
         ledger["align_start_yaw_to_home"] = True
+    if args.wrist_first_fingers:
+        ledger["wrist_first_fingers"] = True
     if prior:
         ledger["prior_closed_attempt_count"] = prior
         ledger["prior_run_receipt_sha256"] = digest(args.resume_from[-1] / "run_receipt.json")
