@@ -24,6 +24,7 @@ from dexgym.tasks.direct.wholebody_s05.v1.rmb.teleop_candidate import ARM_SUBSTE
 from dexgym.tasks.direct.wholebody_s05.v1.rmb.teleop_native import TeleopNative
 from dexgym.tasks.direct.wholebody_s05.v1.task.physics import ServoProfile, signature
 from home_anchored_start_anchor import hmb_five_rows, role_identity, train_reader
+from group_admission import GROUPS as COMMAND_GROUPS, GroupedLockstep, GroupedSubstep, GroupStatus
 from offline_rmb_lockstep import ACTIVE, PROOF, Lockstep
 from replay_dcr009_guarded_diagnostic import ROOT_FIVE, ROOT_FIVE_PLAN_SHA, SIGNED_SHA, check_scope
 from replay_home_anchored_pilot import palm_poses, read_frames
@@ -37,7 +38,7 @@ HMB_GRID_TOLERANCE_NS = 1_000
 
 def implementation():
     package = "dexgym.tasks.direct.wholebody_s05.v1."
-    modules = ("offline_rmb_lockstep", "swept_live_guard_v2", "swept_live_guard",
+    modules = ("offline_rmb_lockstep", "group_admission", "swept_live_guard_v2", "swept_live_guard",
                *(package + name for name in ("task.physics", "task.safety", "task.native_sweep",
                  "rmb.teleop_native", "rmb.nominal", "rmb.mapping", "rmb.schema",
                  "rmb.home_anchored_intent", "rmb.offline_nominal")))
@@ -64,7 +65,10 @@ def generation(data, meta, i):
 
 def active(history):
     return (len(history) == ARM_SUBSTEPS and all(
-        not sub.used_hold and not sub.fault and (np.isin(sub.proposal.status, ACTIVE)).all()
+        not sub.used_hold and not sub.fault and sub.proof == "PERMIT"
+        and (np.isin(sub.proposal.status, ACTIVE)).all()
+        and (not isinstance(sub, GroupedSubstep)
+             or (len(sub.groups) == 4 and all(g["status"] == GroupStatus.ACTIVE for g in sub.groups)))
         for sub in history))
 
 
@@ -72,6 +76,33 @@ def record_execution(fields, row, history, executor):
     cursor = 0
     for arm_tick, result in enumerate(history):
         proposal = result.proposal
+        if isinstance(result, GroupedSubstep):
+            if result.inputs is not None:
+                fields["proof_inputs"][row, arm_tick] = result.inputs
+                fields["proof_inputs_mask"][row, arm_tick] = True
+            if result.combined is not None:
+                fields["combined_trial"][row, arm_tick] = result.combined
+                fields["combined_trial_mask"][row, arm_tick] = True
+            if result.groups and all("status" in group for group in result.groups):
+                fields["group_status"][row, arm_tick] = [group["status"] for group in result.groups]
+            elif result.fault:
+                fields["group_status"][row, arm_tick] = (GroupStatus.FEEDBACK_INVALID
+                    if result.fault == "FEEDBACK_INVALID" else GroupStatus.GROUP_HOLD)
+            for j, (position, velocity, sample) in enumerate(zip(
+                    result.physical_q, result.physical_qd, result.physical_steps)):
+                if np.isfinite(position).all() and np.isfinite(velocity).all():
+                    fields["physical_q"][row, cursor + j] = position
+                    fields["physical_qd"][row, cursor + j] = velocity
+                    fields["physical_state_mask"][row, cursor + j] = True
+                fields["substep_clearance_m"][row, cursor + j] = float(sample.minimum_gap[0])
+                fields["substep_penetration_m"][row, cursor + j] = float(sample.depth[0])
+                fields["substep_contact"][row, cursor + j] = sample.contact[0].numpy().astype(bool)
+                fields["substep_event"][row, cursor + j] = int(sample.event[0])
+            if proposal is not None:
+                fields["filtered_wuji"][row, arm_tick] = proposal.filtered_hand_q
+                fields["nominal_hand_limited"][row, arm_tick] = proposal.hand_limited
+        if proposal is None:
+            continue
         fields["nominal_proposal"][row, arm_tick] = proposal.q_requested
         fields["nominal_status"][row, arm_tick] = proposal.status
         fields["raw_wuji"][row, arm_tick] = proposal.raw_hand_q
@@ -110,7 +141,7 @@ def record_execution(fields, row, history, executor):
         fields["q_nominal_mask"][row] = True
 
 
-def blank(data):
+def blank(data, *, grouped=False):
     n = len(data["tick_ns"])
     fields = {"tick_ns": data["tick_ns"].copy(), "hmb_joint_valid": data["joint_valid"].copy(),
               "hmb_five_frame_candidate": hmb_five_rows(data), "hmb_segment": data["segment_id"].copy(),
@@ -135,6 +166,20 @@ def blank(data):
     fields["physical_interval_mask"] = np.zeros((n, 5), dtype=bool)
     fields["physical_event"] = np.zeros((n, 5), dtype="<u2")
     fields["nominal_status"] = np.zeros((n, 5, 4), dtype="<u2")
+    if grouped:
+        for key, shape, dtype in (
+            ("proof_inputs", (5, 4, 54), "<f8"), ("proof_inputs_mask", (5,), bool),
+            ("combined_trial", (5, 54), "<f8"), ("combined_trial_mask", (5,), bool),
+            ("group_status", (5, 4), "u1"), ("physical_q", (10, 54), "<f8"),
+            ("physical_qd", (10, 54), "<f8"), ("physical_state_mask", (10,), bool),
+            ("substep_clearance_m", (10,), "<f4"), ("substep_penetration_m", (10,), "<f4"),
+            ("substep_contact", (10, 13), bool), ("substep_event", (10,), "<u2"),
+            ("filtered_wuji", (5, 2, 20), "<f4"), ("nominal_hand_limited", (5, 40), bool),
+        ):
+            fields[key] = np.zeros((n, *shape), dtype=dtype)
+        for key in ("pose", "pose_valid", "node_mask", "source_index", "capture_bounds_ns", "arrival_bounds_ns",
+                    "age_ns", "clock_generation", "calibration_id", "topology_id", "safety_permission"):
+            fields["hmb_" + key] = data[key].copy()
     return fields
 
 
@@ -173,6 +218,14 @@ def publish_partition(output, partition, fields):
             "directory": output.name, "ticks": len(fields["tick_ns"])}
 
 
+def safety_row(item):
+    row = dict(proof=item.proof, hold=item.used_hold, hold_proof=item.hold_proof, fault=item.fault,
+               metrics=item.request_metrics)
+    if isinstance(item, GroupedSubstep):
+        row.update(groups=item.groups, hold_metrics=item.hold_metrics)
+    return row
+
+
 def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
     begin = monotonic()
     cpu_begin = process_time()
@@ -189,7 +242,7 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
     frames[0] = lock_registered_start(start_human.registered_wrist, palm_poses(initial), align_yaw=True)
     mapper = SimulationIntent(frames[0], initial, proxy_from_model_palm=frames[3:5])
     nominal = OfflineTeleopNominal(robot, kernel, hand, frames)
-    executor = Lockstep(robot, nominal)
+    executor = GroupedLockstep(robot, nominal) if args.group_admission else Lockstep(robot, nominal)
     mapped_start = mapper.map(start_human)
     with (args.out / "start-events.jsonl").open("x", encoding="utf-8") as stream:
         def observe_preposition(stage, tick, result, state):
@@ -228,7 +281,7 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
                     or len(data["tick_ns"]) != part["planned_ticks"]):
                 raise ValueError("Signed HMB source, clock or denominators disagree")
             human = SignedHumanPartition(data, meta, sources)
-            fields = blank(data)
+            fields = blank(data, grouped=args.group_admission)
             full.update(partitions=1, plan_ticks=len(data["tick_ns"]), hmb_joint_valid_ticks=int(data["joint_valid"].sum()),
                         hmb_five_frame_candidate_ticks=int(fields["hmb_five_frame_candidate"].sum()))
             previous_segment = None
@@ -269,12 +322,19 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
                         result = executor.advance(registered)
                         history.append(result)
                         proofs[result.proof] += 1
-                        nominal_codes.update(map(int, result.proposal.status))
+                        if result.proposal is not None:
+                            nominal_codes.update(map(int, result.proposal.status))
                         if result.fault:
                             break
                     record_execution(fields, i, history, executor)
                     reason = (executor.fault or ("INPUT_HOLD" if registered is None else
                               ("ACTIVE" if fields["q_nominal_mask"][i] else "NOMINAL_OR_PROOF_HOLD")))
+                    if args.group_admission and reason == "NOMINAL_OR_PROOF_HOLD":
+                        code = fields["group_status"][i]
+                        if (code == GroupStatus.ACTIVE).all(axis=0).any():
+                            reason = "PARTIAL_GROUP"
+                        elif (code == GroupStatus.REJOINING).any():
+                            reason = "REJOINING"
                 historical.update(processed_ticks=1, physical_ticks=int(bool(fields["applied_substeps"][i])),
                                   full_physical_ticks=int(fields["applied_substeps"][i] == 10),
                                   physical_substeps=int(fields["applied_substeps"][i]),
@@ -295,10 +355,14 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
                 causes[reason] += 1
                 log.write(json.dumps({"partition": part["key"], "tick": i, "time_ns": tick,
                     "control_cutoff_ns": control_cutoff, "status": reason,
-                    "safety": [dict(proof=item.proof, hold=item.used_hold, hold_proof=item.hold_proof, fault=item.fault,
-                                    metrics=item.request_metrics) for item in history]},
+                    "safety": [safety_row(item) for item in history]},
                     allow_nan=False, separators=(",", ":")) + "\n")
-            index.append(publish_partition(args.out / f"part-{part_i:03}", part["key"], fields))
+            output = publish_partition(args.out / f"part-{part_i:03}", part["key"], fields)
+            if args.group_admission:
+                provenance = args.out / output["directory"] / "hmb-source-identities.json"
+                write_json(provenance, {"metadata": meta, "sources": sources})
+                output["hmb_source_identities_sha256"] = file_sha(provenance)
+            index.append(output)
             print(part["key"], dict(historical), flush=True)
     if (dict(full) != selection["full_root_denominators"]
             or any(historical[key] != window[key] for key in
@@ -309,7 +373,10 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
              and not historical["contact_ticks"] and not executor.fault
              and historical["legal_active_nominal_ticks"] >= .85 * window["hmb_joint_valid_ticks"]
              and historical["diagnostic_five_frame_ticks"] >= .70 * window["hmb_five_frame_candidate_ticks"])
-    return {"schema": "s05.rmb.offline_diagnostic.v1", "scope": SCOPE, "formal_coverage_credit": False,
+    return {"schema": "s05.rmb.offline_diagnostic.v2" if args.group_admission else "s05.rmb.offline_diagnostic.v1",
+            "scope": SCOPE, "formal_coverage_credit": False, "group_admission": args.group_admission,
+            "group_joint_names": dict(zip(COMMAND_GROUPS, robot.groups, strict=True)),
+            "group_status_codes": {code.name: int(code) for code in GroupStatus},
             "root": args.root, "full": dict(full), "window": window, "historical": dict(historical),
             "statuses": dict(causes), "proofs": dict(proofs), "nominal_status_codes": dict(nominal_codes),
             "start_status": start["status"], "recorded_physical_seconds": historical["physical_substeps"] * .002,
@@ -334,6 +401,8 @@ def main():
         parser.add_argument("--" + key, required=True, type=Path)
     parser.add_argument("--root", default=ROOT_FIVE)
     parser.add_argument("--root-five-receipt", type=Path)
+    parser.add_argument("--independent-gate-receipt", type=Path)
+    parser.add_argument("--group-admission", action="store_true")
     args = parser.parse_args()
     if file_sha(args.plan) != ROOT_FIVE_PLAN_SHA or file_sha(args.model_receipt) != EXACT_MODEL_RECEIPT_SHA:
         raise ValueError("Require the exact preregistered Train plan and model identity receipt")
@@ -344,11 +413,18 @@ def main():
     if args.root != ROOT_FIVE:
         previous = json.loads(args.root_five_receipt.read_bytes()) if args.root_five_receipt else {}
         if (previous.get("root") != ROOT_FIVE or previous.get("root_technical_gate") != "DIAGNOSTIC_PASS"
+                or previous.get("group_admission", False) != args.group_admission
                 or previous.get("input_plan_sha256") != ROOT_FIVE_PLAN_SHA
                 or previous.get("implementation") != implementation()
                 or previous.get("asset_sha256") != {name: file_sha(getattr(args, name))
                                                       for name in ("bridge", "wuji", "frames", "config")}):
             raise ValueError("Six-root diagnostic requires the root-five physical technical check")
+        if args.group_admission:
+            independent = (json.loads(args.independent_gate_receipt.read_bytes())
+                           if args.independent_gate_receipt else {})
+            if (independent.get("status") != "TECHNICAL_PASS" or independent.get("root") != ROOT_FIVE
+                    or independent.get("root_receipt_sha256") != file_sha(args.root_five_receipt)):
+                raise ValueError("Grouped six-root diagnostic requires the independent root-five decision")
     roots, reader, cohort_sha = train_reader(args.cohort, DOCS, None)
     if cohort_sha != plan["cohort_sha256"]:
         raise ValueError("Original cohort identity differs")
