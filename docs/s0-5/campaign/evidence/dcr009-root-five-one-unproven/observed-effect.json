@@ -1,0 +1,115 @@
+{
+  "proof": 7020,
+  "native_command": 4894,
+  "native_header_ns": 1795863223814502000,
+  "previously_uncertain_models": {
+    "live": "SWEEP_UNPROVEN",
+    "signed": "SWEEP_UNPROVEN"
+  },
+  "override_playback_s": 2.671116713,
+  "watchdog_playback_s": 2.686935229,
+  "last_original_schedule_elapsed_s": 2.678843811,
+  "command_observed": true,
+  "arm_denials": [
+    {
+      "sequence": 7023,
+      "reason": "SWEEP_UNPROVEN",
+      "receipt_ns": 173750119384617,
+      "proof_complete_ns": 173750121664970
+    }
+  ],
+  "endpoint_gaps": {
+    "issued": {
+      "right_ring_little_distal_gap_mm": 6.173623343610369,
+      "whole_catalogue_min_gap_mm": 2.3344055460391857
+    },
+    "measured": {
+      "right_ring_little_distal_gap_mm": 5.721804824715783,
+      "whole_catalogue_min_gap_mm": 2.334519409380169
+    },
+    "proposed": {
+      "right_ring_little_distal_gap_mm": 6.17362334361023,
+      "whole_catalogue_min_gap_mm": 2.3344055460390676
+    }
+  },
+  "measured_samples_in_next_100ms": [
+    {
+      "header_ns": 1795863223816761101,
+      "ms_from_override_command": 2.259101,
+      "right_ring_little_distal_gap_mm": 5.721611295061487,
+      "whole_catalogue_min_gap_mm": 2.3345193500877492
+    },
+    {
+      "header_ns": 1795863223826771837,
+      "ms_from_override_command": 12.269837,
+      "right_ring_little_distal_gap_mm": 5.720353460445654,
+      "whole_catalogue_min_gap_mm": 2.3345186100066146
+    },
+    {
+      "header_ns": 1795863223831008470,
+      "ms_from_override_command": 16.50647,
+      "right_ring_little_distal_gap_mm": 5.7204342387612455,
+      "whole_catalogue_min_gap_mm": 2.334518781055653
+    },
+    {
+      "header_ns": 1795863223831116993,
+      "ms_from_override_command": 16.614993,
+      "right_ring_little_distal_gap_mm": 5.7204342387612455,
+      "whole_catalogue_min_gap_mm": 2.334518781055653
+    },
+    {
+      "header_ns": 1795863223831195039,
+      "ms_from_override_command": 16.693039,
+      "right_ring_little_distal_gap_mm": 5.7204342387612455,
+      "whole_catalogue_min_gap_mm": 2.334518781055653
+    },
+    {
+      "header_ns": 1795863223836759829,
+      "ms_from_override_command": 22.257829,
+      "right_ring_little_distal_gap_mm": 5.722010780952594,
+      "whole_catalogue_min_gap_mm": 2.3345200889456703
+    },
+    {
+      "header_ns": 1795863223846800524,
+      "ms_from_override_command": 32.298524,
+      "right_ring_little_distal_gap_mm": 5.724108069536054,
+      "whole_catalogue_min_gap_mm": 2.3345219239074333
+    },
+    {
+      "header_ns": 1795863223856783759,
+      "ms_from_override_command": 42.281759,
+      "right_ring_little_distal_gap_mm": 5.724870712444416,
+      "whole_catalogue_min_gap_mm": 2.3345225359027513
+    },
+    {
+      "header_ns": 1795863223866847867,
+      "ms_from_override_command": 52.345867,
+      "right_ring_little_distal_gap_mm": 5.724809772642943,
+      "whole_catalogue_min_gap_mm": 2.334522384716513
+    },
+    {
+      "header_ns": 1795863223876754690,
+      "ms_from_override_command": 62.25269,
+      "right_ring_little_distal_gap_mm": 5.724295896934177,
+      "whole_catalogue_min_gap_mm": 2.334521803471448
+    },
+    {
+      "header_ns": 1795863223886812446,
+      "ms_from_override_command": 72.310446,
+      "right_ring_little_distal_gap_mm": 5.72358701459036,
+      "whole_catalogue_min_gap_mm": 2.334521033783088
+    },
+    {
+      "header_ns": 1795863223896744038,
+      "ms_from_override_command": 82.242038,
+      "right_ring_little_distal_gap_mm": 5.7228560358849885,
+      "whole_catalogue_min_gap_mm": 2.3345202517552037
+    },
+    {
+      "header_ns": 1795863223906734098,
+      "ms_from_override_command": 92.232098,
+      "right_ring_little_distal_gap_mm": 5.722204401797751,
+      "whole_catalogue_min_gap_mm": 2.334519568130554
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "mode": "SIMULATION_ONLY_ALLOW_ONE_UNPROVEN_ARM_SWEEP",
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "max_exceptions": 1,
+  "stage": "HISTORY",
+  "wrapper_sha256": "679cee1e70e5c20fb166a0c194a2ab564651ad49db0ab0aa84cef91c4840a128",
+  "strict_guard_sha256": "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909",
+  "formal_coverage_credit": false
+}
