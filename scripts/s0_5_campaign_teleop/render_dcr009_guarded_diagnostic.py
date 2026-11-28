@@ -192,7 +192,8 @@ def wrists_from_xyzw(value):
     return result
 
 
-def human_rows(cohort, docs, products, root, anchor, end_hmb):
+def human_rows(cohort, docs, products, root, anchor, end_hmb, include_raw=False):
+    from dexgym.tasks.direct.wholebody_s05.data.synchronize import STREAMS
     from dexgym.tasks.direct.wholebody_s05.hmb_reader import HMBReader, SIMULATED
 
     evidence = docs / "evidence"
@@ -201,6 +202,7 @@ def human_rows(cohort, docs, products, root, anchor, end_hmb):
                        "Train", SIMULATED)
     start_hmb = anchor["hmb_cutoff_ns"]
     samples = {}
+    raw_indices = tuple(STREAMS.index(stream) for stream in ("tracker_left_raw", "tracker_right_raw"))
     started = False
     for part in root["hmb_partitions"]:
         if not started:
@@ -220,6 +222,12 @@ def human_rows(cohort, docs, products, root, anchor, end_hmb):
         for i in np.flatnonzero((ticks >= start_hmb) & (ticks <= end_hmb)):
             time = int(ticks[i])
             wrists, fingers = None, [None, None]
+            raw_wrists = None
+            if (include_raw and raw["pose_valid"][i, raw_indices].all()
+                    and raw["node_mask"][i, raw_indices, 0].all()):
+                frames = {sources[raw["source_index"][i, side, 0]]["recorded_frame"] for side in raw_indices}
+                if frames == {"openvr_world"}:
+                    raw_wrists = wrists_from_xyzw(raw["pose"][i, raw_indices, 0])
             if raw["joint_valid"][i] and raw["safety_permission"][i] and raw["pose_valid"][i, :4].all():
                 wrists = wrists_from_xyzw(raw["pose"][i, 2:4, 0])
                 for side in range(2):
@@ -230,9 +238,9 @@ def human_rows(cohort, docs, products, root, anchor, end_hmb):
                         fingers[side] = pose[chains, :3] - pose[origin, :3]
             if time in samples:
                 raise ValueError("Duplicate original HMB control cutoff")
-            samples[time] = wrists, fingers, part["key"], int(i)
+            samples[time] = wrists, fingers, part["key"], int(i), raw_wrists
     original = samples.get(start_hmb)
-    if (original is None or original[0] is None or original[2:] != (anchor["partition"], anchor["partition_tick"])
+    if (original is None or original[0] is None or original[2:4] != (anchor["partition"], anchor["partition_tick"])
             or not np.allclose(original[0], anchor["registered_wrist_start_h"], atol=1e-5, rtol=0)):
         raise ValueError("Cannot find exact signed registered wrist anchor")
     return samples
@@ -287,11 +295,12 @@ def render_rows(trace, human, anchor, names, fps, max_seconds, preposition_from_
             tick = hmb_start
             source = anchor["source_cutoff_ns"]
         measured = feedback_at(frames, arrivals, mono, ros, names)
-        wrists, fingers, partition, index = human[tick]
+        wrists, fingers, partition, index, raw_wrists = human[tick]
         locked = None if wrists is None or trace["locked"] is None else trace["locked"] @ wrists
         yield {"stage": stage, "elapsed_s": (output_ns - zero) / 1e9, "cutoff_mono_ns": mono,
                "source_cutoff_ns": source, "hmb_cutoff_ns": tick, "hmb_partition": partition, "hmb_tick": index,
                "source_is_frozen_anchor": not historical, "human_registered": wrists, "human_fingers": fingers,
+               "human_raw_trackers": raw_wrists,
                "world_target": locked, "measured": measured,
                "status": outcome.get("status", "NO_HANDOFF_RECEIPT"), "stage_start_mono_ns": zero}
 
@@ -333,10 +342,11 @@ def dot(draw, centre, radius, color, stroke=2):
 
 
 class DrawVideo:
-    def __init__(self, root, anchor, locked, center_offset_mm=None, start_only_profile=None):
+    def __init__(self, root, anchor, locked, center_offset_mm=None, start_only_profile=None, raw_human=False):
         self.root = root
         self.center_offset_mm = center_offset_mm
         self.start_only_profile = start_only_profile
+        self.raw_human = raw_human
         h = np.asarray(anchor["registered_wrist_start_h"], dtype=float)
         self.source_center = VIRTUAL_R @ h[:, :3, 3].mean(axis=0)
         self.world_center = (locked @ h)[:, :3, 3].mean(axis=0) if locked is not None else None
@@ -421,11 +431,12 @@ class DrawVideo:
         self.text(draw, (18, 53), f"{stage}     {frame['elapsed_s']:06.3f} s", "body")
         self.text(draw, (1420, 21), f"Train root  {root}", "small_title", anchor="ra")
         self.text(draw, (1420, 55), f"Original HMB cutoff {frame['hmb_cutoff_ns'] / 1e9:.6f} s", "small", MUTED, anchor="ra")
-        for x, title, caption in ((18, "Original human input", "Registered wrist markers; virtual viewing basis"),
+        human_caption = "Raw VIVE wrist axes and local MANUS skeletons" if self.raw_human else "Registered wrist markers; virtual viewing basis"
+        for x, title, caption in ((18, "Original human input", human_caption),
                                   (494, "Locked registered-wrist target", "One common rigid map, applied to each marker"),
                                   (970, "MuJoCo measured", "Actual 54-axis feedback; kinematic model landmarks")):
             self.panel(draw, x, title, caption)
-        raw = frame["human_registered"]
+        raw = frame["human_raw_trackers"] if self.raw_human else frame["human_registered"]
         if raw is not None:
             display = np.eye(4)
             display[:3, :3] = VIRTUAL_R
@@ -508,6 +519,8 @@ def main():
     parser.add_argument("--hmb-products", type=Path)
     parser.add_argument("--max-seconds", type=float, default=8)
     parser.add_argument("--preposition-from-seconds", type=float)
+    parser.add_argument("--full-history", action="store_true")
+    parser.add_argument("--raw-human", action="store_true")
     parser.add_argument("--fps", type=int, default=25)
     parser.add_argument("--ffmpeg", default="ffmpeg")
     args = parser.parse_args()
@@ -528,20 +541,26 @@ def main():
     if authorized_history != (input_receipt.get("replay_root_five_history") is True):
         raise ValueError("The result and signed input receipt disagree on authorized root-five history")
     trace = trace_data(path, model_sha, anchor, yaw_alignment, authorized_history)
+    if args.full_history and (not authorized_history or result["root"] != ROOT_FIVE
+                              or args.preposition_from_seconds is not None):
+        raise ValueError("Full video scope requires the authorized root-five history")
     center = result.get("center_offset_mm")
     if center != input_receipt.get("center_offset_mm"):
         raise ValueError("Video center offset does not match the native input receipt")
     hmb_end = anchor["hmb_cutoff_ns"]
     historical = trace["history_end"] is not None and args.preposition_from_seconds is None
+    seconds = args.max_seconds
     if historical:
-        hmb_end += round(args.max_seconds * 1e9)
-    human = human_rows(cohort, args.docs, args.hmb_products, matches[0], anchor, hmb_end)
+        if args.full_history:
+            seconds = (trace["history_end"] - anchor["source_cutoff_ns"]) / 1e9
+        hmb_end += round(seconds * 1e9)
+    human = human_rows(cohort, args.docs, args.hmb_products, matches[0], anchor, hmb_end, args.raw_human)
     robot = RobotModel(args.model)
     profile = result.get("start_only_profile")
     if profile != input_receipt.get("start_only_profile"):
         raise ValueError("Video START profile does not match the native input receipt")
-    painter = DrawVideo(result["root"], anchor, trace["locked"], center, profile)
-    rows = render_rows(trace, human, anchor, signed_feedback_names(robot), args.fps, args.max_seconds,
+    painter = DrawVideo(result["root"], anchor, trace["locked"], center, profile, args.raw_human)
+    rows = render_rows(trace, human, anchor, signed_feedback_names(robot), args.fps, seconds,
                        args.preposition_from_seconds)
     args.out.mkdir(exist_ok=False, parents=True)
     report = write_video(rows, args.out, painter, robot, args.fps, args.ffmpeg)
@@ -563,6 +582,7 @@ def main():
                    "start_only_profile": profile,
                    "align_start_yaw_to_home": yaw_alignment,
                    "replay_root_five_history": authorized_history,
+                   "left_human_panel": "VIVE_RAW_AND_MANUS_LOCAL" if args.raw_human else "REGISTERED_HUMAN_WRIST_AND_MANUS_LOCAL",
                    "feedback": "Same-header four native MuJoCo groups; FK only; monotonic receipt cutoff and 40 ms freshness",
                    "timing": "Historical samples chosen at preceding signed HMB cutoff with recorded ROS epoch. Preposition uses actual observer monotonic receipt time.",
                    "fps": args.fps, "frame_size": FRAME_SIZE})

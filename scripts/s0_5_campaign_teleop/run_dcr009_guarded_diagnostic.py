@@ -27,6 +27,26 @@ YAW_BASELINE_DRIVER_SHA256 = "b226d4cbf4bbe7897a93c212c2e494430cbfe62da2aa97661c
 YAW_BASELINE_GUARD_SHA256 = "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909"
 STAGED_START_CONTROLLER_SHA256 = "13ed4843a57fdf1b58ac7ac78202b0d2ef0f686b1b468e78a5aa73d38f9adcc9"
 HISTORY_CONTROLLER_SHA256 = "9a4a318b11984a1659284cb3c38e8f382ff3de8539f14f495f6ca335e8016376"
+SWEEP_V2_SCOPE = "DIAGNOSTIC_ONLY_MUJOCO_SWEEP_V2"
+
+
+def verify_sweep_v2_review(path):
+    report = json.loads(path.read_bytes())
+    required = {
+        "status": "TECHNICAL_PASS",
+        "scope": SWEEP_V2_SCOPE,
+        "root": ROOT_FIVE,
+        "formal_coverage_credit": False,
+        "implementation_sha256": digest(SCRIPTS / "swept_live_guard_v2.py"),
+        "strict_guard_sha256": YAW_BASELINE_GUARD_SHA256,
+        "observed_models": {"live": LIVE_SHA, "signed": SIGNED_SHA},
+        "budget_ms": 25,
+        "max_box_queries": 63,
+        "max_box_depth": 7,
+    }
+    if any(report.get(key) != expected for key, expected in required.items()):
+        raise ValueError("The independent V2 qualification does not bind the isolated runtime")
+    return report
 
 
 def evidence_summary(path, audited_stop=False):
@@ -126,6 +146,9 @@ def attempt(args, index, selection, cancelled):
         result["replay_root_five_history"] = True
     if args.allow_one_unproven_arm:
         result["simulation_guard_exception"] = "SIMULATION_ONLY_ALLOW_ONE_UNPROVEN_ARM_SWEEP"
+    if args.sweep_v2_review is not None:
+        result["sweep_guard_variant"] = SWEEP_V2_SCOPE
+        result["sweep_v2_review_sha256"] = digest(args.sweep_v2_review)
     save(result_file, result)
     children = []
     deadline = time.monotonic() + 180
@@ -170,6 +193,10 @@ def attempt(args, index, selection, cancelled):
                 guard_command[2] = str(SCRIPTS / "simulate_one_unproven_sweep.py")
                 guard_command.extend(("--stage", str(stage_marker), "--exception-log", str(path / "guard-exception.jsonl"),
                                       "--mode-receipt", str(path / "guard-mode.json"), "--root", selection["root"]))
+            if args.sweep_v2_review is not None:
+                guard_command[2] = str(SCRIPTS / "swept_live_guard_v2.py")
+                guard_command.extend(("--metrics", str(path / "sweep-v2-metrics.jsonl"),
+                                      "--v2-receipt", str(path / "sweep-v2-ready.json")))
             with (path / "guard.log").open("w", encoding="utf-8") as guard_log:
                 guard = subprocess.Popen(guard_command, env=env, stdout=guard_log, stderr=subprocess.STDOUT, start_new_session=True)
                 children.append(guard)
@@ -191,6 +218,15 @@ def attempt(args, index, selection, cancelled):
                     or configuration["guard_script_sha256"] != digest(SCRIPTS / "swept_live_guard.py")):
                 raise RuntimeError("Sweep guard readiness names an unexpected process, socket, or model")
             result["guard_ready_sha256"] = digest(ready)
+            if args.sweep_v2_review is not None:
+                verified = verify_sweep_v2_review(args.sweep_v2_review)
+                v2_ready = path / "sweep-v2-ready.json"
+                runtime = json.loads(v2_ready.read_bytes())
+                keys = ("scope", "implementation_sha256", "strict_guard_sha256", "budget_ms", "max_box_queries",
+                        "max_box_depth", "formal_coverage_credit")
+                if any(runtime.get(key) != verified[key] for key in keys):
+                    raise ValueError("V2 runtime differs from the independently qualified envelope profile")
+                result["sweep_v2_ready_sha256"] = digest(v2_ready)
             if args.allow_one_unproven_arm:
                 guard_mode = path / "guard-mode.json"
                 exception_mode = json.loads(guard_mode.read_bytes())
@@ -239,6 +275,9 @@ def attempt(args, index, selection, cancelled):
             result.update(phase="ABORTED", error=str(error))
         finally:
             result["owned_groups_stopped"] = all([stop_owned_group(p) for p in reversed(children)])
+            metrics = path / "sweep-v2-metrics.jsonl"
+            if args.sweep_v2_review is not None and metrics.is_file():
+                result["sweep_v2_metrics_sha256"] = digest(metrics)
             if args.allow_one_unproven_arm and (path / "guard-exception.jsonl").is_file():
                 exception_trace = path / "guard-exception.jsonl"
                 records = exception_trace.read_bytes().splitlines()
@@ -332,6 +371,7 @@ def main():
     parser.add_argument("--wrist-first-fingers", action="store_true")
     parser.add_argument("--replay-root-five-history", action="store_true")
     parser.add_argument("--allow-one-unproven-arm", action="store_true")
+    parser.add_argument("--sweep-v2-review", type=lambda item: Path(item).resolve())
     parser.add_argument("--domain", type=int, choices=DOMAINS, required=True)
     args = parser.parse_args()
     if os.name != "posix" or not args.output.parent.is_dir():
@@ -358,6 +398,11 @@ def main():
         not args.replay_root_five_history or args.domain != 213 or args.controller_sha256 != HISTORY_CONTROLLER_SHA256
     ):
         raise ValueError("The one-step exception requires the exact prior isolated root-five history controller")
+    if args.sweep_v2_review is not None:
+        if (not args.replay_root_five_history or args.allow_one_unproven_arm
+                or args.controller_sha256 != HISTORY_CONTROLLER_SHA256 or args.domain != 213):
+            raise ValueError("V2 applies only to the single isolated prior-controller root-five history")
+        verify_sweep_v2_review(args.sweep_v2_review)
     plan = json.loads(args.plan.read_bytes())
     roster = check_scope(plan)
     roots = verified_roots(args.cohort, SCRIPTS.parents[1] / "docs/s0-5")
@@ -393,6 +438,9 @@ def main():
         ledger["replay_root_five_history"] = True
     if args.allow_one_unproven_arm:
         ledger["experiment"] = "ROOT_FIVE_ONE_SWEEP_UNPROVEN_PASS"
+    if args.sweep_v2_review is not None:
+        ledger["experiment"] = "ROOT_FIVE_PROVEN_SWEEP_V2"
+        ledger["sweep_v2_review_sha256"] = digest(args.sweep_v2_review)
     if prior:
         ledger["prior_closed_attempt_count"] = prior
         ledger["prior_run_receipt_sha256"] = digest(args.resume_from[-1] / "run_receipt.json")
