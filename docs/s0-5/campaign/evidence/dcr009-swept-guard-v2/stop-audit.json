@@ -1,0 +1,31 @@
+{
+  "scope": "DIAGNOSTIC_ONLY",
+  "formal_coverage_credit": false,
+  "status": "STOP_BOUNDARY_PASS",
+  "causes": [],
+  "native_record_conflicts": [],
+  "native_barrier": {
+    "session": "s05-dcr009-d123ec88-15e4-41b4-8b03-6d83b478cf0a",
+    "generation": 2,
+    "line": 9401,
+    "mono_ns": 176172216834772,
+    "last": {
+      "arm": 4944,
+      "left": 1171,
+      "right": 1173
+    }
+  },
+  "accepted_stop_receipt_mono_ns": 176172221718883,
+  "observer_ack_mono_ns": 176172222235291,
+  "observer_boundary_mono_ns": 176172222238456,
+  "native_post_barrier_publications": [],
+  "observer_post_boundary": [],
+  "driver_application_qualified": false,
+  "source_sha256": {
+    "native_log": "f91cd5fcb454b980247eaadd8871ea152f2c27fa158943411b69faa7de748bd9",
+    "observer_trace": "e70c540aaebcef205e095c81809c4d6820d1d7fe232cc1996758802723811ec8",
+    "sweep_trace": "70261964f49c6cf9c8c0c14c92f8a16273e3771f96456deca66335f93b4d3a2b",
+    "attempt_receipt": "c8c9e59fa18d1ebe21c6903884ce00bc9e13c191cff97dceccacd677b85995a9"
+  },
+  "recorded_phase": "ABORTED"
+}

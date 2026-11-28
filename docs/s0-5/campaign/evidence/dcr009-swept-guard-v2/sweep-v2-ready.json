@@ -1,0 +1,10 @@
+{
+  "scope": "DIAGNOSTIC_ONLY_MUJOCO_SWEEP_V2",
+  "implementation_sha256": "35121d6540c3de06905cca4d22cdfb92b2af987e69c0c5e14d016455e0c781bb",
+  "strict_guard_sha256": "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909",
+  "max_box_depth": 7,
+  "max_box_queries": 63,
+  "budget_ms": 25,
+  "state_envelope": "UNCHANGED_COMPONENTWISE_ISSUED_MEASURED_PROPOSED",
+  "formal_coverage_credit": false
+}

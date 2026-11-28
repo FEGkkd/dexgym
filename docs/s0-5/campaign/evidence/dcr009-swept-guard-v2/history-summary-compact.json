@@ -1,0 +1,863 @@
+{
+  "scope": "DIAGNOSTIC_ONLY_ROOT_FIVE_HISTORY",
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "formal_coverage_credit": false,
+  "original_full_root_denominators": {
+    "hmb_five_frame_candidate_ticks": 4741,
+    "hmb_joint_valid_ticks": 4831,
+    "partitions": 13,
+    "plan_ticks": 4844
+  },
+  "frozen_window": {
+    "hmb_cutoff_start_ns": 800000000,
+    "hmb_cutoff_stop_exclusive_ns": 96868267152,
+    "hmb_five_frame_candidate_ticks": 4708,
+    "hmb_joint_valid_ticks": 4794,
+    "partitions": [
+      {
+        "first_tick": 40,
+        "hmb_five_frame_candidate_ticks": 360,
+        "hmb_joint_valid_ticks": 360,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+        "plan_ticks": 360
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 381,
+        "hmb_joint_valid_ticks": 397,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00001",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00002",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00003",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00004",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00005",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00006",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 391,
+        "hmb_joint_valid_ticks": 399,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00007",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 368,
+        "hmb_joint_valid_ticks": 394,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00008",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00009",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00010",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 396,
+        "hmb_joint_valid_ticks": 400,
+        "last_tick": 399,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00011",
+        "plan_ticks": 400
+      },
+      {
+        "first_tick": 0,
+        "hmb_five_frame_candidate_ticks": 40,
+        "hmb_joint_valid_ticks": 44,
+        "last_tick": 43,
+        "partition": "recording:8d51b482abc64ad7af84b3fe/00012",
+        "plan_ticks": 44
+      }
+    ],
+    "plan_ticks": 4804,
+    "source_cutoff_start_ns": 621699543607975,
+    "source_cutoff_stop_exclusive_ns": 621795611875127
+  },
+  "source_files_sha256": {
+    "native_trace": "e70c540aaebcef205e095c81809c4d6820d1d7fe232cc1996758802723811ec8",
+    "input_receipt": "dc59579652ef97aba2a416bcf94097e9533b0f966faa4c0209491f458c7d67a3",
+    "cohort": "7d6c4702229aefd0d564f76dfae5a2a7b62a0340b9c4cae43fea512cc2d531c2",
+    "plan": "3c0268291bdb8916a9a520d3fa73a1340fffd7f9e8a7b7364a1ef9950f9a0004",
+    "live_model": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "swept_trace": "70261964f49c6cf9c8c0c14c92f8a16273e3771f96456deca66335f93b4d3a2b"
+  },
+  "start_handoff": {
+    "kind": "start_handoff",
+    "stage": "preposition_start",
+    "mono_ns": 176168649834357,
+    "log_est_ns": null,
+    "status": "START_REACHED",
+    "measurement": {
+      "wrist_error_m_deg": [
+        [
+          0.000002368202243386557,
+          0.0005698308023358778
+        ],
+        [
+          0.0000016082978198672327,
+          0.00034278373546022114
+        ]
+      ],
+      "hand_error_to_issued_rad": [
+        0.00005855846676268428,
+        1.050201592356359E-13
+      ],
+      "measured_speed_rad_s": 0.0008184528130228366,
+      "named_q_rad": {
+        "left_j1": 1.6951551722430476,
+        "left_j2": -1.5432571836304365,
+        "left_j3": -1.6094553591014722,
+        "left_j4": -1.6860896775616898,
+        "left_j5": 1.1855274507513682,
+        "left_j6": -0.20026285002476418,
+        "left_j7": 0.05374891045468386,
+        "l_THJ0": -0.3466810670536768,
+        "l_THJ1": -0.2643175224689142,
+        "l_THJ2": 1.0492217955661576,
+        "l_THJ3": -0.006835800473480724,
+        "l_FFJ0": 0.5476991558850193,
+        "l_FFJ1": -0.28369569745942874,
+        "l_FFJ2": 0.03446800122282069,
+        "l_FFJ3": 0.12336105934608271,
+        "l_MFJ0": 0.49633361003441295,
+        "l_MFJ1": -0.11910726863814912,
+        "l_MFJ2": -0.000055989326834828673,
+        "l_MFJ3": 0.0039123371290195495,
+        "l_RFJ0": 0.37439498330381715,
+        "l_RFJ1": -0.05871876960391423,
+        "l_RFJ2": 0.18799149412866278,
+        "l_RFJ3": 0.10726726781806341,
+        "l_LFJ0": 0.10665452789989076,
+        "l_LFJ1": 0.007531939895674336,
+        "l_LFJ2": 0.52545289183273,
+        "l_LFJ3": 0.17915661742263816,
+        "right_j1": -1.573990874188195,
+        "right_j2": -1.6062011823897484,
+        "right_j3": 1.532036821849441,
+        "right_j4": -1.4906216227649882,
+        "right_j5": -1.2620487537288931,
+        "right_j6": 0.07798267596219911,
+        "right_j7": -0.4573368774286835,
+        "r_THJ0": 0.3721073269844319,
+        "r_THJ1": -0.5194194316863869,
+        "r_THJ2": 0.8870668411255098,
+        "r_THJ3": 0.03752593323588784,
+        "r_FFJ0": 0.925989747047418,
+        "r_FFJ1": -0.019099131226504303,
+        "r_FFJ2": 0.10096610337495564,
+        "r_FFJ3": 0.056699242442845924,
+        "r_MFJ0": 0.7607223987579146,
+        "r_MFJ1": 0.04784855991612446,
+        "r_MFJ2": 0.09090341627597047,
+        "r_MFJ3": 0.17296427488326904,
+        "r_RFJ0": 0.607883155345889,
+        "r_RFJ1": 0.0047741276212521595,
+        "r_RFJ2": 0.2819128632545385,
+        "r_RFJ3": 0.22836567461490498,
+        "r_LFJ0": 0.28237292170522693,
+        "r_LFJ1": -0.025380415841920145,
+        "r_LFJ2": 0.9116518497466969,
+        "r_LFJ3": 0.16498272120952484
+      },
+      "active_task": true,
+      "feedback_header_ns": 1795865642351470779,
+      "arms_accepted": true,
+      "arm_publish_status": [
+        "ACCEPTED",
+        "ACCEPTED"
+      ],
+      "shared_transform": [
+        [
+          -0.0752192084444463,
+          0.0,
+          0.9971670224596234,
+          0.6351897099240722
+        ],
+        [
+          0.9971670224596234,
+          0.0,
+          0.0752192084444463,
+          0.023365696584624895
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          1.8941930705055054
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "native_goal": [
+        [
+          [
+            -0.16372012573140218,
+            0.05769922193964607,
+            0.9848180137558676,
+            0.38945397936239257
+          ],
+          [
+            -0.34053140603976945,
+            0.9336210305671432,
+            -0.11131097332842999,
+            0.296804896161945
+          ],
+          [
+            -0.9258693654782357,
+            -0.3535853094661941,
+            -0.13320415533542565,
+            0.1820723137147064
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        [
+          [
+            0.06608540882620258,
+            -0.3570952054575296,
+            0.9317272846597972,
+            0.416762278092439
+          ],
+          [
+            0.32907081622070977,
+            0.8893273768420513,
+            0.3175046688020055,
+            -0.3003185213323409
+          ],
+          [
+            -0.941989976938242,
+            0.28562183221609627,
+            0.17628117400735266,
+            0.1668003769214602
+          ],
+          [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        ]
+      ],
+      "session_map_sha256": "156e168ab6a523e9469230c60689b3cc050b6d54bfea11d6a5e49e15de21ecb3",
+      "arm_guard_proof": "5869",
+      "hand_error_to_unsegmented_wuji_rad": [
+        0.00005855846676268428,
+        1.1920928094655281E-7
+      ],
+      "hand_segment_guard_proofs": [
+        5863,
+        5864
+      ],
+      "finger_stage_readbacks": {
+        "left": {
+          "stage": 11,
+          "proof": 5863,
+          "command_sequence": 801,
+          "command_header_ns": 1795865642337613196,
+          "raw_wuji_target_rad": {
+            "l_THJ0": -0.34668150544166565,
+            "l_THJ1": -0.26431751251220703,
+            "l_THJ2": 1.0492216348648071,
+            "l_THJ3": -0.006835836451500654,
+            "l_FFJ0": 0.5476972460746765,
+            "l_FFJ1": -0.28369569778442383,
+            "l_FFJ2": 0.03446752950549126,
+            "l_FFJ3": 0.12336094677448273,
+            "l_MFJ0": 0.4963313639163971,
+            "l_MFJ1": -0.11910726130008698,
+            "l_MFJ2": -0.000056565604609204456,
+            "l_MFJ3": 0.003912229090929031,
+            "l_RFJ0": 0.374393492937088,
+            "l_RFJ1": -0.058718763291835785,
+            "l_RFJ2": 0.1879911571741104,
+            "l_RFJ3": 0.10726721584796906,
+            "l_LFJ0": 0.10671308636665344,
+            "l_LFJ1": 0.0075319609604775906,
+            "l_LFJ2": 0.5254648923873901,
+            "l_LFJ3": 0.17915910482406616
+          },
+          "issued_target_rad": {
+            "l_THJ0": -0.34668150544166565,
+            "l_THJ1": -0.26431751251220703,
+            "l_THJ2": 1.0492216348648071,
+            "l_THJ3": -0.006835836451500654,
+            "l_FFJ0": 0.5476972460746765,
+            "l_FFJ1": -0.28369569778442383,
+            "l_FFJ2": 0.03446752950549126,
+            "l_FFJ3": 0.12336094677448273,
+            "l_MFJ0": 0.4963313639163971,
+            "l_MFJ1": -0.11910726130008698,
+            "l_MFJ2": -0.000056565604609204456,
+            "l_MFJ3": 0.003912229090929031,
+            "l_RFJ0": 0.374393492937088,
+            "l_RFJ1": -0.058718763291835785,
+            "l_RFJ2": 0.1879911571741104,
+            "l_RFJ3": 0.10726721584796906,
+            "l_LFJ0": 0.10671308636665344,
+            "l_LFJ1": 0.0075319609604775906,
+            "l_LFJ2": 0.5254648923873901,
+            "l_LFJ3": 0.17915910482406616
+          },
+          "issued_error_rad": {
+            "l_THJ0": 0.0,
+            "l_THJ1": 0.0,
+            "l_THJ2": 0.0,
+            "l_THJ3": 0.0,
+            "l_FFJ0": 0.0,
+            "l_FFJ1": 0.0,
+            "l_FFJ2": 0.0,
+            "l_FFJ3": 0.0,
+            "l_MFJ0": 0.0,
+            "l_MFJ1": 0.0,
+            "l_MFJ2": 0.0,
+            "l_MFJ3": 0.0,
+            "l_RFJ0": 0.0,
+            "l_RFJ1": 0.0,
+            "l_RFJ2": 0.0,
+            "l_RFJ3": 0.0,
+            "l_LFJ0": 0.0,
+            "l_LFJ1": 0.0,
+            "l_LFJ2": 0.0,
+            "l_LFJ3": 0.0
+          },
+          "measured_error_rad": {
+            "l_THJ0": 4.383879888547604E-7,
+            "l_THJ1": 9.956707180958091E-9,
+            "l_THJ2": 1.6070135044898848E-7,
+            "l_THJ3": 3.597801993045907E-8,
+            "l_FFJ0": 0.0000019098103427594992,
+            "l_FFJ1": 3.24995086398161E-10,
+            "l_FFJ2": 4.717173294338517E-7,
+            "l_FFJ3": 1.125715999861221E-7,
+            "l_MFJ0": 0.0000022461180158583893,
+            "l_MFJ1": 7.33806214403554E-9,
+            "l_MFJ2": 5.762777743757827E-7,
+            "l_MFJ3": 1.0803809051811858E-7,
+            "l_RFJ0": 0.0000014903667291399358,
+            "l_RFJ1": 6.312078443260205E-9,
+            "l_RFJ2": 3.3695455237126026E-7,
+            "l_RFJ3": 5.1970094352982166E-8,
+            "l_LFJ0": 0.00005855846676268428,
+            "l_LFJ1": 2.106480325413107E-8,
+            "l_LFJ2": 0.000012000554660107632,
+            "l_LFJ3": 0.0000024874014279974155
+          }
+        },
+        "right": {
+          "stage": 11,
+          "proof": 5864,
+          "command_sequence": 801,
+          "command_header_ns": 1795865642337981563,
+          "raw_wuji_target_rad": {
+            "r_THJ0": 0.3721073269844055,
+            "r_THJ1": -0.5194194316864014,
+            "r_THJ2": 0.8870668411254883,
+            "r_THJ3": 0.03752593323588371,
+            "r_FFJ0": 0.9259897470474243,
+            "r_FFJ1": -0.019099131226539612,
+            "r_FFJ2": 0.10096610337495804,
+            "r_FFJ3": 0.0566992424428463,
+            "r_MFJ0": 0.7607223987579346,
+            "r_MFJ1": 0.04784855991601944,
+            "r_MFJ2": 0.09090341627597809,
+            "r_MFJ3": 0.17296427488327026,
+            "r_RFJ0": 0.6078832149505615,
+            "r_RFJ1": 0.004774162080138922,
+            "r_RFJ2": 0.28191274404525757,
+            "r_RFJ3": 0.2283656895160675,
+            "r_LFJ0": 0.28237292170524597,
+            "r_LFJ1": -0.025380415841937065,
+            "r_LFJ2": 0.9116518497467041,
+            "r_LFJ3": 0.16498272120952606
+          },
+          "issued_target_rad": {
+            "r_THJ0": 0.3721073269844055,
+            "r_THJ1": -0.5194194316864014,
+            "r_THJ2": 0.8870668411254883,
+            "r_THJ3": 0.03752593323588371,
+            "r_FFJ0": 0.9259897470474243,
+            "r_FFJ1": -0.019099131226539612,
+            "r_FFJ2": 0.10096610337495804,
+            "r_FFJ3": 0.0566992424428463,
+            "r_MFJ0": 0.7607223987579346,
+            "r_MFJ1": 0.04784855991601944,
+            "r_MFJ2": 0.09090341627597809,
+            "r_MFJ3": 0.17296427488327026,
+            "r_RFJ0": 0.6078831553459167,
+            "r_RFJ1": 0.004774127621203661,
+            "r_RFJ2": 0.2819128632545471,
+            "r_RFJ3": 0.2283656746149063,
+            "r_LFJ0": 0.28237292170524597,
+            "r_LFJ1": -0.025380415841937065,
+            "r_LFJ2": 0.9116518497467041,
+            "r_LFJ3": 0.16498272120952606
+          },
+          "issued_error_rad": {
+            "r_THJ0": 0.0,
+            "r_THJ1": 0.0,
+            "r_THJ2": 0.0,
+            "r_THJ3": 0.0,
+            "r_FFJ0": 0.0,
+            "r_FFJ1": 0.0,
+            "r_FFJ2": 0.0,
+            "r_FFJ3": 0.0,
+            "r_MFJ0": 0.0,
+            "r_MFJ1": 0.0,
+            "r_MFJ2": 0.0,
+            "r_MFJ3": 0.0,
+            "r_RFJ0": 5.960464477539063E-8,
+            "r_RFJ1": 3.4458935260772705E-8,
+            "r_RFJ2": 1.1920928955078125E-7,
+            "r_RFJ3": 1.4901161193847656E-8,
+            "r_LFJ0": 0.0,
+            "r_LFJ1": 0.0,
+            "r_LFJ2": 0.0,
+            "r_LFJ3": 0.0
+          },
+          "measured_error_rad": {
+            "r_THJ0": 2.6367796834847468E-14,
+            "r_THJ1": 1.4432899320127035E-14,
+            "r_THJ2": 2.1538326677728037E-14,
+            "r_THJ3": 4.128641872824801E-15,
+            "r_FFJ0": 6.328271240363392E-15,
+            "r_FFJ1": 3.530856163003193E-14,
+            "r_FFJ2": 2.400857290751901E-15,
+            "r_FFJ3": 3.7470027081099033E-16,
+            "r_MFJ0": 1.9984014443252818E-14,
+            "r_MFJ1": 1.050201592356359E-13,
+            "r_MFJ2": 7.618905506490137E-15,
+            "r_MFJ3": 1.2212453270876722E-15,
+            "r_RFJ0": 5.960467253096624E-8,
+            "r_RFJ1": 3.4458886762241125E-8,
+            "r_RFJ2": 1.1920928094655281E-7,
+            "r_RFJ3": 1.4901162526115286E-8,
+            "r_LFJ0": 1.9040324872321435E-14,
+            "r_LFJ1": 1.6920492784677776E-14,
+            "r_LFJ2": 7.216449660063518E-15,
+            "r_LFJ3": 1.2212453270876722E-15
+          }
+        }
+      },
+      "wrist_original_error_m_deg": [
+        [
+          0.38076812901210094,
+          85.68608974112045
+        ],
+        [
+          0.353188409968545,
+          85.68646693525123
+        ]
+      ],
+      "registered_wrist_error_m_deg": [
+        [
+          0.06755099364445223,
+          119.03906848214976
+        ],
+        [
+          0.04658179233532956,
+          122.47350948834338
+        ]
+      ]
+    },
+    "elapsed_s": 17.274630625,
+    "continue_after_miss": false,
+    "wrist_first_fingers": true,
+    "terminal_finger_stage": 11
+  },
+  "historical_window_intent": {
+    "kind": "historical_window_intent",
+    "stage": "preposition_start",
+    "mono_ns": 176168655699002,
+    "log_est_ns": null,
+    "packets_by_topic": {
+      "/manus_glove_left": 11528,
+      "/manus_glove_right": 11528,
+      "/vive/tracker/left_wrist": 11528,
+      "/vive/tracker/right_wrist": 11528
+    },
+    "expected_packets": 46112,
+    "source_cutoff_start_ns": 621699543607975,
+    "source_cutoff_stop_exclusive_ns": 621795611875127,
+    "planned_hmb_ticks": 4804,
+    "shared_transform": [
+      [
+        -0.0752192084444463,
+        0.0,
+        0.9971670224596234,
+        0.6351897099240722
+      ],
+      [
+        0.9971670224596234,
+        0.0,
+        0.0752192084444463,
+        0.023365696584624895
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        1.8941930705055054
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "session": "s05-dcr009-d123ec88-15e4-41b4-8b03-6d83b478cf0a"
+  },
+  "recorded_timebase": {
+    "kind": "timebase",
+    "stage": "historical_human_inputs",
+    "mono_ns": 176168687379099,
+    "log_est_ns": 1794488008952357305,
+    "epoch_delta_ns": 1377633443527575,
+    "origin_log_ns": 1794488008952280235,
+    "origin_mono_ns": 176168687302029,
+    "origin_schedule_ns": 621699543607975
+  },
+  "input_counts_all_stages": {
+    "synthetic_start_warmup": 104,
+    "preposition_start": 3100,
+    "historical_human_inputs": 1692
+  },
+  "matched_historical_packets": {
+    "expected_packets": 46112,
+    "observed_publication_records": 1692,
+    "matched_source_prefix_packets": 1692,
+    "expected_by_topic": {
+      "/manus_glove_left": 11528,
+      "/manus_glove_right": 11528,
+      "/vive/tracker/left_wrist": 11528,
+      "/vive/tracker/right_wrist": 11528
+    },
+    "observed_by_topic": {
+      "/manus_glove_left": 423,
+      "/manus_glove_right": 423,
+      "/vive/tracker/left_wrist": 423,
+      "/vive/tracker/right_wrist": 423
+    },
+    "unobserved_original_suffix_packets": 44420,
+    "packet_identity_status": "PARTIAL_PREFIX",
+    "first_mismatch": null,
+    "verified_per_packet_original_cdr_hashes_in_prefix": 1692,
+    "expected_ordered_cdr_digest": "dd6bd04430bf74a372f851d0ca32fc612d4bffcb9304366a678a2e2cd66f858c",
+    "complete_replayer_cdr_seal_matches": false,
+    "publication_observer_lag_ms": {
+      "n": 1692,
+      "max": 41.141542,
+      "p50": 1.128552,
+      "p95": 3.1724244999999973,
+      "p99": 18.23749949999999
+    },
+    "early_publication_observations": 0,
+    "last_matched": {
+      "kind": "input",
+      "stage": "historical_human_inputs",
+      "mono_ns": 176172209877721,
+      "log_est_ns": 1794488012474855927,
+      "topic": "/vive/tracker/left_wrist",
+      "original_log_ns": 1794488012472688305,
+      "original_schedule_ns": 621703064016053,
+      "record_index": 1030,
+      "original_stamp_ns": 1794488012472478309,
+      "published_stamp_ns": 1795865645916005884,
+      "cdr_sha256": "50c44b1132c18baf2d6e5eaff66e4cd22e2e8f0acb917fbf9203becd2cf01749"
+    },
+    "first_unmatched_original": {
+      "topic": "/manus_glove_left",
+      "record_index": 1032,
+      "original_log_ns": 1794488012480793546,
+      "original_schedule_ns": 621703072121273,
+      "original_stamp_ns": 1794488012480688404,
+      "cdr_sha256": "f1d905646ea08845f1d8b6a34a2a264dade2128e8f98dca2e3a30cd8277b922c"
+    }
+  },
+  "observed_historical_command_messages": {
+    "/tianji/joint_command": 605,
+    "/left_hand/command": 370,
+    "/right_hand/command": 372
+  },
+  "feedback_complete_named_history_frames": 356,
+  "hmb_tick_status_counts": {
+    "NO_FRESH_CAUSAL_54_AXIS_FEEDBACK": 3,
+    "OBSERVED_TCP": 174,
+    "ORIGINAL_INPUT_PREFIX_NOT_REACHED": 4627
+  },
+  "wrist_tcp_error": {
+    "left": {
+      "position_mm": {
+        "n": 174,
+        "max": 11.604948385226631,
+        "p50": 0.2908985750589236,
+        "p95": 9.481268859660288,
+        "p99": 11.56012491172549
+      },
+      "orientation_deg": {
+        "n": 174,
+        "max": 6.623368775169819,
+        "p50": 0.1443121847845259,
+        "p95": 4.854293969334185,
+        "p99": 6.373838645905338
+      }
+    },
+    "right": {
+      "position_mm": {
+        "n": 174,
+        "max": 32.81002186363576,
+        "p50": 0.5119173026851995,
+        "p95": 24.295408395590822,
+        "p99": 32.553949169065966
+      },
+      "orientation_deg": {
+        "n": 174,
+        "max": 6.261078166247875,
+        "p50": 0.20423531491321265,
+        "p95": 5.620642901431491,
+        "p99": 6.134852728572571
+      }
+    }
+  },
+  "last_scored_hmb_tick": {
+    "partition": "recording:8d51b482abc64ad7af84b3fe/00000",
+    "partition_tick": 216,
+    "hmb_cutoff_ns": 4320000000,
+    "original_schedule_ns": 621703063607975,
+    "original_hmb_joint_valid": true,
+    "original_five_frame_candidate": true,
+    "replay_cutoff_mono_ns": 176172207302029,
+    "replay_cutoff_ros_ns": 1795865645915807810,
+    "feedback_arrival_mono_ns": 176172204236665,
+    "feedback_header_ros_ns": 1795865645911522982,
+    "wrists": [
+      {
+        "side": "left",
+        "xyz_error_mm": [
+          4.995927425083535,
+          -8.485724539012029,
+          -6.048132469785195
+        ],
+        "position_mm": 11.556241523988787,
+        "orientation_deg": 2.9729255820513067,
+        "target_world_xyz_m": [
+          0.2732524082520135,
+          -0.368630928563739,
+          0.9621354415012305
+        ],
+        "actual_world_xyz_m": [
+          0.27824833567709706,
+          -0.37711665310275105,
+          0.9560873090314453
+        ]
+      },
+      {
+        "side": "right",
+        "xyz_error_mm": [
+          -30.430330902652123,
+          -3.262611304054308,
+          -11.328285954893103
+        ],
+        "position_mm": 32.634027242160535,
+        "orientation_deg": 6.107577264833393,
+        "target_world_xyz_m": [
+          -0.17439258131565175,
+          -0.4037981396358935,
+          0.9936786022122125
+        ],
+        "actual_world_xyz_m": [
+          -0.20482291221830387,
+          -0.4070607509399478,
+          0.9823503162573194
+        ]
+      }
+    ],
+    "status": "OBSERVED_TCP"
+  },
+  "halt": {
+    "kind": "history_halt",
+    "stage": "historical_human_inputs",
+    "mono_ns": 176172215900177,
+    "log_est_ns": 1794488012480878383,
+    "error": "Pilot watchdog observed native hard fault: DRIVER_NOT_COMMANDABLE",
+    "failure": {
+      "source": "/tianji/robot_state",
+      "code": "DRIVER_NOT_COMMANDABLE",
+      "reason": "position held; home required before next enable",
+      "header_ns": 1795865645917634786
+    },
+    "last_source": {
+      "topic": "/vive/tracker/left_wrist",
+      "record_index": 1030,
+      "source_schedule_ns": 621703064016053
+    }
+  },
+  "historical_safety_observations": [
+    {
+      "mono_ns": 176172214042026,
+      "header_ns": 1795865645917634786,
+      "topic": "/tianji/robot_state",
+      "code": "DRIVER_NOT_COMMANDABLE",
+      "reason": "position held; home required before next enable"
+    },
+    {
+      "mono_ns": 176172214218861,
+      "header_ns": 1795865645917714933,
+      "topic": "/tianji/robot_state",
+      "code": "DRIVER_NOT_COMMANDABLE",
+      "reason": "position held; home required before next enable"
+    },
+    {
+      "mono_ns": 176172214393192,
+      "header_ns": 1795865645917778981,
+      "topic": "/tianji/robot_state",
+      "code": "DRIVER_NOT_COMMANDABLE",
+      "reason": "position held; home required before next enable"
+    },
+    {
+      "mono_ns": 176172214567757,
+      "header_ns": 1795865645921488270,
+      "topic": "/tianji/robot_state",
+      "code": "DRIVER_NOT_COMMANDABLE",
+      "reason": "position held; home required before next enable"
+    }
+  ],
+  "latest_arm_diagnostics": {
+    "left": {
+      "mono_ns": 176172215604881,
+      "ros_header_ns": 1795865645917596756,
+      "fields": {
+        "session": "s05-dcr009-d123ec88-15e4-41b4-8b03-6d83b478cf0a",
+        "mapping_policy": "home_anchored_pilot_v1",
+        "arm_command_accepted": "false",
+        "pilot_generation": "2",
+        "pilot_guard_sequence": "0",
+        "pilot_guarded_publish": "false",
+        "pilot_arm_status": "NO_PUBLISH",
+        "sequence": "4944",
+        "tracker_source_stamp_sec": "1795865645.899307",
+        "primary_reason": "",
+        "solve_mode": "rejected",
+        "rate_limited": "true",
+        "target_input_raw_available": "true",
+        "target_input_raw_xyz_m": "0.3686315450011588,0.28786415160951767,0.18325850259043452",
+        "target_input_raw_quat_xyzw": "0.076560705524413894,0.74080624188898125,-0.34972023422720899,0.56836636786494843"
+      }
+    },
+    "right": {
+      "mono_ns": 176172215604881,
+      "ros_header_ns": 1795865645917596756,
+      "fields": {
+        "session": "s05-dcr009-d123ec88-15e4-41b4-8b03-6d83b478cf0a",
+        "mapping_policy": "home_anchored_pilot_v1",
+        "arm_command_accepted": "false",
+        "pilot_generation": "2",
+        "pilot_guard_sequence": "0",
+        "pilot_guarded_publish": "false",
+        "pilot_arm_status": "NO_PUBLISH",
+        "sequence": "4944",
+        "tracker_source_stamp_sec": "1795865645.907677",
+        "primary_reason": "",
+        "solve_mode": "rejected",
+        "rate_limited": "false",
+        "target_input_raw_available": "true",
+        "target_input_raw_xyz_m": "0.40361264699265126,-0.25583214488759126,0.082800676119284336",
+        "target_input_raw_quat_xyzw": "-0.16123544427141956,0.72919922768352607,0.29695716334757594,0.59505299007139545"
+      }
+    }
+  },
+  "sweep": {
+    "status": "OBSERVED",
+    "by_group_reason": {
+      "0:PERMIT": 615,
+      "1:PERMIT": 370,
+      "2:PERMIT": 372,
+      "1:SWEEP_UNPROVEN": 5,
+      "2:SWEEP_UNPROVEN": 3,
+      "0:SWEEP_UNPROVEN": 1
+    },
+    "latest_denial_by_group": {
+      "1": {
+        "sequence": 7244,
+        "reason": "SWEEP_UNPROVEN",
+        "receipt_ns": 176172191275430,
+        "proof_complete_ns": 176172200875670
+      },
+      "2": {
+        "sequence": 7243,
+        "reason": "SWEEP_UNPROVEN",
+        "receipt_ns": 176172184929414,
+        "proof_complete_ns": 176172190993895
+      },
+      "0": {
+        "sequence": 7245,
+        "reason": "SWEEP_UNPROVEN",
+        "receipt_ns": 176172201598858,
+        "proof_complete_ns": 176172208273781
+      }
+    }
+  },
+  "target_basis": "Frozen yaw-aligned engineering map of signed HMB registered wrists through the historical palm mount and exact live-model palm-to-scoring-TCP link. Independent anatomical and physical accuracy are unqualified. No feedback interpolation or packet-time realignment.",
+  "full_packet_audit": {
+    "path": "full-packet-audit.jsonl",
+    "sha256": "a44d8ad1adfc4af27336c6f91433a6e8556478015def11f3545eb57f7d91e098"
+  }
+}

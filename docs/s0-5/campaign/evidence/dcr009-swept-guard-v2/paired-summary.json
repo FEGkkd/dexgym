@@ -1,0 +1,1441 @@
+{
+  "scope": "DIAGNOSTIC_ONLY_ROOT_FIVE_READ_ONLY_ARCHIVE",
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "real_time_profile": {
+    "budget_ms": 25,
+    "max_queries": 63,
+    "max_depth": 7
+  },
+  "offline_high_budget": {
+    "budget_ms": 2000,
+    "max_queries": 8191,
+    "max_depth": 18
+  },
+  "formal_coverage_credit": false,
+  "method": "Paired strict proof on original 54D snapshots; both issued baselines advance only on recorded native admissions.",
+  "runtime": {
+    "mujoco": "3.13.0",
+    "numpy": "1.26.4"
+  },
+  "models": {
+    "live": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "signed": "939b3651e2426e596eed482e70a68c2382720df1fd55b124aa5f0893b640e92d"
+  },
+  "harness_sha256": "4454a0a4cd8966a3060bd4037ca0950c9a67fa18c03d8fbb18aef429c64306c8",
+  "v1_sha256": "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909",
+  "v2_sha256": "35121d6540c3de06905cca4d22cdfb92b2af987e69c0c5e14d016455e0c781bb",
+  "aggregate_25ms": {
+    "v1": {
+      "denominator": 24433,
+      "counts": {
+        "PERMIT": 23026,
+        "SWEEP_UNPROVEN": 1407
+      },
+      "permit_fraction": 0.942413948348545,
+      "proof_latency_ms": {
+        "p50": 0.108911,
+        "p95": 1.6748725999999987,
+        "p99": 3.72143864,
+        "max": 9.356871
+      },
+      "fine_queries": {
+        "p50": 0.0,
+        "p95": 8.0,
+        "p99": 63.0,
+        "max": 126.0
+      },
+      "fine_queries_total": 57075,
+      "root_queries_total": 11946,
+      "subdivisions_total": 28098,
+      "subdivisions_per_request": {
+        "p50": 0.0,
+        "p95": 7.0,
+        "p99": 34.0,
+        "max": 64.0
+      },
+      "max_depth_per_request": {
+        "p50": 0.0,
+        "p95": 7.0,
+        "p99": 7.0,
+        "max": 7.0
+      },
+      "root_or_reported_sample_min_mm": 0.9217212535991854,
+      "model_proof_invocations": {
+        "live": 24433,
+        "signed": 23724
+      },
+      "model_cache_hits": {
+        "live": 18320,
+        "signed": 17891
+      },
+      "cache_hit_fraction": {
+        "live": 0.7498055907993287,
+        "signed": 0.7541308379699881
+      }
+    },
+    "v2": {
+      "denominator": 24433,
+      "counts": {
+        "PERMIT": 23843,
+        "SWEEP_UNPROVEN": 590
+      },
+      "permit_fraction": 0.9758523308639954,
+      "proof_latency_ms": {
+        "p50": 0.128533,
+        "p95": 2.491977599999999,
+        "p99": 3.3109565200000004,
+        "max": 7.917966
+      },
+      "fine_queries": {
+        "p50": 0.0,
+        "p95": 16.0,
+        "p99": 63.0,
+        "max": 63.0
+      },
+      "fine_queries_total": 78794,
+      "root_queries_total": 11691,
+      "subdivisions_total": 24230,
+      "subdivisions_per_request": {
+        "p50": 0.0,
+        "p95": 2.0,
+        "p99": 33.0,
+        "max": 33.0
+      },
+      "max_depth_per_request": {
+        "p50": 0.0,
+        "p95": 1.0,
+        "p99": 7.0,
+        "max": 7.0
+      },
+      "root_or_reported_sample_min_mm": 0.7401765090710598,
+      "model_proof_invocations": {
+        "live": 24433,
+        "signed": 23843
+      },
+      "model_cache_hits": {
+        "live": 18504,
+        "signed": 18081
+      },
+      "cache_hit_fraction": {
+        "live": 0.7573363893095404,
+        "signed": 0.7583357798934698
+      }
+    }
+  },
+  "aggregate_transitions": {
+    "PERMIT->PERMIT": 23026,
+    "SWEEP_UNPROVEN->SWEEP_UNPROVEN": 590,
+    "SWEEP_UNPROVEN->PERMIT": 817
+  },
+  "classified_collision_returns": {},
+  "unexpected_unsafe_permit_count": 0,
+  "attempts": [
+    {
+      "source": "centers",
+      "attempt": 1,
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "guard_trace_path": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/HOME-ANCHORED-DIAGNOSTIC-DCR009-ROOT05-CENTERS-01/run/attempt-01/sweep-trace.jsonl",
+      "guard_trace_sha256": "ee13918eb29677073999f57f86f8b5218087831c4cdd3150e991e14b0f89b565",
+      "ready_sha256": "66507bea3ff6c2b2b1c900ebf18a1151caa8fd5788d772f300bc6ff8a877920d",
+      "committed_run_receipt_sha256": "d7635577f7937bcacc0457aaa99d77b109694de2e59221b997d49882458c61e0",
+      "raw_counts": {
+        "PERMIT": 279,
+        "SWEEP_UNPROVEN": 118
+      },
+      "records_without_original_q_snapshot": {},
+      "paired_25ms": {
+        "v1": {
+          "denominator": 397,
+          "counts": {
+            "PERMIT": 279,
+            "SWEEP_UNPROVEN": 118
+          },
+          "permit_fraction": 0.7027707808564232,
+          "proof_latency_ms": {
+            "p50": 1.47653,
+            "p95": 3.7682195999999997,
+            "p99": 4.237972960000001,
+            "max": 7.051428
+          },
+          "fine_queries": {
+            "p50": 2.0,
+            "p95": 8.0,
+            "p99": 14.0,
+            "max": 14.0
+          },
+          "fine_queries_total": 1726,
+          "root_queries_total": 658,
+          "subdivisions_total": 950,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9221016115978711,
+          "model_proof_invocations": {
+            "live": 397,
+            "signed": 279
+          },
+          "model_cache_hits": {
+            "live": 9,
+            "signed": 9
+          },
+          "cache_hit_fraction": {
+            "live": 0.022670025188916875,
+            "signed": 0.03225806451612903
+          }
+        },
+        "v2": {
+          "denominator": 397,
+          "counts": {
+            "PERMIT": 279,
+            "SWEEP_UNPROVEN": 118
+          },
+          "permit_fraction": 0.7027707808564232,
+          "proof_latency_ms": {
+            "p50": 2.503708,
+            "p95": 3.3832372,
+            "p99": 5.388672360000001,
+            "max": 7.146079
+          },
+          "fine_queries": {
+            "p50": 20.0,
+            "p95": 63.0,
+            "p99": 63.0,
+            "max": 63.0
+          },
+          "fine_queries_total": 9236,
+          "root_queries_total": 644,
+          "subdivisions_total": 3276,
+          "subdivisions_per_request": {
+            "p50": 2.0,
+            "p95": 33.0,
+            "p99": 33.0,
+            "max": 33.0
+          },
+          "max_depth_per_request": {
+            "p50": 1.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9221016115978711,
+          "model_proof_invocations": {
+            "live": 397,
+            "signed": 279
+          },
+          "model_cache_hits": {
+            "live": 16,
+            "signed": 16
+          },
+          "cache_hit_fraction": {
+            "live": 0.04030226700251889,
+            "signed": 0.05734767025089606
+          }
+        }
+      },
+      "paired_transitions": {
+        "PERMIT->PERMIT": 279,
+        "SWEEP_UNPROVEN->SWEEP_UNPROVEN": 118
+      },
+      "reconstructed_v1_differences": [],
+      "prohibited_v2_permits": [],
+      "classified_collision_returns": {}
+    },
+    {
+      "source": "centers",
+      "attempt": 2,
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "guard_trace_path": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/HOME-ANCHORED-DIAGNOSTIC-DCR009-ROOT05-CENTERS-01/run/attempt-02/sweep-trace.jsonl",
+      "guard_trace_sha256": "ef29593c3f43659e6527410a104c3ddc3731a430b6d65f5a7121cad0dfa7ae6d",
+      "ready_sha256": "79c7072253b175585bbf0bb5cc75866520ba2351eb8fc8448c22082f421c5419",
+      "committed_run_receipt_sha256": "d7635577f7937bcacc0457aaa99d77b109694de2e59221b997d49882458c61e0",
+      "raw_counts": {
+        "PERMIT": 250,
+        "SWEEP_UNPROVEN": 118
+      },
+      "records_without_original_q_snapshot": {},
+      "paired_25ms": {
+        "v1": {
+          "denominator": 368,
+          "counts": {
+            "PERMIT": 250,
+            "SWEEP_UNPROVEN": 118
+          },
+          "permit_fraction": 0.6793478260869565,
+          "proof_latency_ms": {
+            "p50": 1.5181689999999999,
+            "p95": 3.775064199999999,
+            "p99": 4.137535009999993,
+            "max": 4.963596
+          },
+          "fine_queries": {
+            "p50": 2.0,
+            "p95": 10.0,
+            "p99": 14.0,
+            "max": 14.0
+          },
+          "fine_queries_total": 1710,
+          "root_queries_total": 616,
+          "subdivisions_total": 963,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9221016115979093,
+          "model_proof_invocations": {
+            "live": 368,
+            "signed": 250
+          },
+          "model_cache_hits": {
+            "live": 1,
+            "signed": 1
+          },
+          "cache_hit_fraction": {
+            "live": 0.002717391304347826,
+            "signed": 0.004
+          }
+        },
+        "v2": {
+          "denominator": 368,
+          "counts": {
+            "PERMIT": 250,
+            "SWEEP_UNPROVEN": 118
+          },
+          "permit_fraction": 0.6793478260869565,
+          "proof_latency_ms": {
+            "p50": 2.5432449999999998,
+            "p95": 3.40408745,
+            "p99": 3.687634,
+            "max": 5.504366
+          },
+          "fine_queries": {
+            "p50": 20.0,
+            "p95": 63.0,
+            "p99": 63.0,
+            "max": 63.0
+          },
+          "fine_queries_total": 9060,
+          "root_queries_total": 614,
+          "subdivisions_total": 3244,
+          "subdivisions_per_request": {
+            "p50": 2.0,
+            "p95": 33.0,
+            "p99": 33.0,
+            "max": 33.0
+          },
+          "max_depth_per_request": {
+            "p50": 1.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9221016115979093,
+          "model_proof_invocations": {
+            "live": 368,
+            "signed": 250
+          },
+          "model_cache_hits": {
+            "live": 2,
+            "signed": 2
+          },
+          "cache_hit_fraction": {
+            "live": 0.005434782608695652,
+            "signed": 0.008
+          }
+        }
+      },
+      "paired_transitions": {
+        "PERMIT->PERMIT": 250,
+        "SWEEP_UNPROVEN->SWEEP_UNPROVEN": 118
+      },
+      "reconstructed_v1_differences": [],
+      "prohibited_v2_permits": [],
+      "classified_collision_returns": {}
+    },
+    {
+      "source": "centers",
+      "attempt": 3,
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "guard_trace_path": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/HOME-ANCHORED-DIAGNOSTIC-DCR009-ROOT05-CENTERS-01/run/attempt-03/sweep-trace.jsonl",
+      "guard_trace_sha256": "272f178f4f5e61cf1ca429c6ea97f5f713df5e643e1bf839674a9d4f5d603722",
+      "ready_sha256": "29f5b3ed190edc8b413521d63144a20775cb093487ce4125b4637a15acc7fb8a",
+      "committed_run_receipt_sha256": "d7635577f7937bcacc0457aaa99d77b109694de2e59221b997d49882458c61e0",
+      "raw_counts": {
+        "PERMIT": 266,
+        "SWEEP_UNPROVEN": 120
+      },
+      "records_without_original_q_snapshot": {},
+      "paired_25ms": {
+        "v1": {
+          "denominator": 386,
+          "counts": {
+            "PERMIT": 266,
+            "SWEEP_UNPROVEN": 120
+          },
+          "permit_fraction": 0.689119170984456,
+          "proof_latency_ms": {
+            "p50": 1.5246460000000002,
+            "p95": 3.79820575,
+            "p99": 3.9914590499999987,
+            "max": 4.664918
+          },
+          "fine_queries": {
+            "p50": 2.0,
+            "p95": 10.0,
+            "p99": 14.0,
+            "max": 14.0
+          },
+          "fine_queries_total": 1824,
+          "root_queries_total": 650,
+          "subdivisions_total": 1009,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9221016115979527,
+          "model_proof_invocations": {
+            "live": 386,
+            "signed": 266
+          },
+          "model_cache_hits": {
+            "live": 1,
+            "signed": 1
+          },
+          "cache_hit_fraction": {
+            "live": 0.0025906735751295338,
+            "signed": 0.0037593984962406013
+          }
+        },
+        "v2": {
+          "denominator": 386,
+          "counts": {
+            "PERMIT": 266,
+            "SWEEP_UNPROVEN": 120
+          },
+          "permit_fraction": 0.689119170984456,
+          "proof_latency_ms": {
+            "p50": 2.5291315,
+            "p95": 3.45625875,
+            "p99": 3.7386348999999997,
+            "max": 5.672536
+          },
+          "fine_queries": {
+            "p50": 20.0,
+            "p95": 63.0,
+            "p99": 63.0,
+            "max": 63.0
+          },
+          "fine_queries_total": 9416,
+          "root_queries_total": 648,
+          "subdivisions_total": 3357,
+          "subdivisions_per_request": {
+            "p50": 2.0,
+            "p95": 33.0,
+            "p99": 33.0,
+            "max": 33.0
+          },
+          "max_depth_per_request": {
+            "p50": 1.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9221016115979527,
+          "model_proof_invocations": {
+            "live": 386,
+            "signed": 266
+          },
+          "model_cache_hits": {
+            "live": 2,
+            "signed": 2
+          },
+          "cache_hit_fraction": {
+            "live": 0.0051813471502590676,
+            "signed": 0.007518796992481203
+          }
+        }
+      },
+      "paired_transitions": {
+        "PERMIT->PERMIT": 266,
+        "SWEEP_UNPROVEN->SWEEP_UNPROVEN": 120
+      },
+      "reconstructed_v1_differences": [],
+      "prohibited_v2_permits": [],
+      "classified_collision_returns": {}
+    },
+    {
+      "source": "centers",
+      "attempt": 4,
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "guard_trace_path": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/HOME-ANCHORED-DIAGNOSTIC-DCR009-ROOT05-CENTERS-01/run/attempt-04/sweep-trace.jsonl",
+      "guard_trace_sha256": "3d51068985c4d265e4347164c8244ecc8c0d5f9f997be86011d3f613359d268b",
+      "ready_sha256": "56285d605eb3af0c40c31d0b54093f6429be966438029b1970eb640201f158f5",
+      "committed_run_receipt_sha256": "d7635577f7937bcacc0457aaa99d77b109694de2e59221b997d49882458c61e0",
+      "raw_counts": {
+        "PERMIT": 262,
+        "SWEEP_UNPROVEN": 118
+      },
+      "records_without_original_q_snapshot": {},
+      "paired_25ms": {
+        "v1": {
+          "denominator": 380,
+          "counts": {
+            "PERMIT": 262,
+            "SWEEP_UNPROVEN": 118
+          },
+          "permit_fraction": 0.6894736842105263,
+          "proof_latency_ms": {
+            "p50": 1.492814,
+            "p95": 3.76353005,
+            "p99": 4.065205219999998,
+            "max": 7.543087
+          },
+          "fine_queries": {
+            "p50": 2.0,
+            "p95": 8.0,
+            "p99": 10.0,
+            "max": 10.0
+          },
+          "fine_queries_total": 1592,
+          "root_queries_total": 640,
+          "subdivisions_total": 891,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9221016115979284,
+          "model_proof_invocations": {
+            "live": 380,
+            "signed": 262
+          },
+          "model_cache_hits": {
+            "live": 1,
+            "signed": 1
+          },
+          "cache_hit_fraction": {
+            "live": 0.002631578947368421,
+            "signed": 0.003816793893129771
+          }
+        },
+        "v2": {
+          "denominator": 380,
+          "counts": {
+            "PERMIT": 262,
+            "SWEEP_UNPROVEN": 118
+          },
+          "permit_fraction": 0.6894736842105263,
+          "proof_latency_ms": {
+            "p50": 2.5451499999999996,
+            "p95": 3.3988242,
+            "p99": 4.462386069999996,
+            "max": 5.569987
+          },
+          "fine_queries": {
+            "p50": 20.0,
+            "p95": 63.0,
+            "p99": 63.0,
+            "max": 63.0
+          },
+          "fine_queries_total": 9056,
+          "root_queries_total": 640,
+          "subdivisions_total": 3244,
+          "subdivisions_per_request": {
+            "p50": 2.0,
+            "p95": 33.0,
+            "p99": 33.0,
+            "max": 33.0
+          },
+          "max_depth_per_request": {
+            "p50": 1.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9221016115979284,
+          "model_proof_invocations": {
+            "live": 380,
+            "signed": 262
+          },
+          "model_cache_hits": {
+            "live": 1,
+            "signed": 1
+          },
+          "cache_hit_fraction": {
+            "live": 0.002631578947368421,
+            "signed": 0.003816793893129771
+          }
+        }
+      },
+      "paired_transitions": {
+        "PERMIT->PERMIT": 262,
+        "SWEEP_UNPROVEN->SWEEP_UNPROVEN": 118
+      },
+      "reconstructed_v1_differences": [],
+      "prohibited_v2_permits": [],
+      "classified_collision_returns": {}
+    },
+    {
+      "source": "centers",
+      "attempt": 5,
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "guard_trace_path": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/HOME-ANCHORED-DIAGNOSTIC-DCR009-ROOT05-CENTERS-01/run/attempt-05/sweep-trace.jsonl",
+      "guard_trace_sha256": "4ff139fdefa700286ee0ec3321d53db0476893c29cc85b3d06d5fdce59997afe",
+      "ready_sha256": "e63d37cd7b18d5397fd3419f28297fcf82706aa2bd36f427975786c9bfb5d440",
+      "committed_run_receipt_sha256": "d7635577f7937bcacc0457aaa99d77b109694de2e59221b997d49882458c61e0",
+      "raw_counts": {
+        "PERMIT": 244,
+        "SWEEP_UNPROVEN": 116
+      },
+      "records_without_original_q_snapshot": {},
+      "paired_25ms": {
+        "v1": {
+          "denominator": 360,
+          "counts": {
+            "PERMIT": 244,
+            "SWEEP_UNPROVEN": 116
+          },
+          "permit_fraction": 0.6777777777777778,
+          "proof_latency_ms": {
+            "p50": 1.5410455,
+            "p95": 4.11974525,
+            "p99": 6.361159100000009,
+            "max": 7.621104
+          },
+          "fine_queries": {
+            "p50": 2.0,
+            "p95": 8.0,
+            "p99": 8.0,
+            "max": 8.0
+          },
+          "fine_queries_total": 1478,
+          "root_queries_total": 603,
+          "subdivisions_total": 845,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9221016115979925,
+          "model_proof_invocations": {
+            "live": 360,
+            "signed": 244
+          },
+          "model_cache_hits": {
+            "live": 0,
+            "signed": 1
+          },
+          "cache_hit_fraction": {
+            "live": 0.0,
+            "signed": 0.004098360655737705
+          }
+        },
+        "v2": {
+          "denominator": 360,
+          "counts": {
+            "PERMIT": 244,
+            "SWEEP_UNPROVEN": 116
+          },
+          "permit_fraction": 0.6777777777777778,
+          "proof_latency_ms": {
+            "p50": 2.5623365,
+            "p95": 3.9853603,
+            "p99": 6.31482567000005,
+            "max": 7.917966
+          },
+          "fine_queries": {
+            "p50": 17.0,
+            "p95": 63.0,
+            "p99": 63.0,
+            "max": 63.0
+          },
+          "fine_queries_total": 8638,
+          "root_queries_total": 597,
+          "subdivisions_total": 3145,
+          "subdivisions_per_request": {
+            "p50": 2.0,
+            "p95": 33.0,
+            "p99": 33.0,
+            "max": 33.0
+          },
+          "max_depth_per_request": {
+            "p50": 1.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9221016115979925,
+          "model_proof_invocations": {
+            "live": 360,
+            "signed": 244
+          },
+          "model_cache_hits": {
+            "live": 3,
+            "signed": 4
+          },
+          "cache_hit_fraction": {
+            "live": 0.008333333333333333,
+            "signed": 0.01639344262295082
+          }
+        }
+      },
+      "paired_transitions": {
+        "PERMIT->PERMIT": 244,
+        "SWEEP_UNPROVEN->SWEEP_UNPROVEN": 116
+      },
+      "reconstructed_v1_differences": [],
+      "prohibited_v2_permits": [],
+      "classified_collision_returns": {}
+    },
+    {
+      "source": "segmented",
+      "attempt": 1,
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "guard_trace_path": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/HOME-ANCHORED-DIAGNOSTIC-DCR009-ROOT05-SEGMENTED-START-01/run/attempt-01/sweep-trace.jsonl",
+      "guard_trace_sha256": "3ede1245c46eeaf336b0c879086584d7efcc404e01efacd400b40cc58e859186",
+      "ready_sha256": "55add28f5d562b3675507812868813e32d223de8733973e17c0016aad6dfd097",
+      "committed_run_receipt_sha256": "e972174c0e3f45b8de26bd10833269515ad228323febfc0b82d2292f8b180e5d",
+      "raw_counts": {
+        "PERMIT": 741,
+        "SWEEP_UNPROVEN": 257
+      },
+      "records_without_original_q_snapshot": {},
+      "paired_25ms": {
+        "v1": {
+          "denominator": 998,
+          "counts": {
+            "PERMIT": 741,
+            "SWEEP_UNPROVEN": 257
+          },
+          "permit_fraction": 0.7424849699398798,
+          "proof_latency_ms": {
+            "p50": 1.151669,
+            "p95": 1.4381936,
+            "p99": 1.5860629,
+            "max": 2.831495
+          },
+          "fine_queries": {
+            "p50": 2.0,
+            "p95": 9.0,
+            "p99": 9.0,
+            "max": 9.0
+          },
+          "fine_queries_total": 3765,
+          "root_queries_total": 1976,
+          "subdivisions_total": 1799,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.922101611598003,
+          "model_proof_invocations": {
+            "live": 998,
+            "signed": 998
+          },
+          "model_cache_hits": {
+            "live": 10,
+            "signed": 10
+          },
+          "cache_hit_fraction": {
+            "live": 0.01002004008016032,
+            "signed": 0.01002004008016032
+          }
+        },
+        "v2": {
+          "denominator": 998,
+          "counts": {
+            "PERMIT": 998
+          },
+          "permit_fraction": 1.0,
+          "proof_latency_ms": {
+            "p50": 1.6307334999999998,
+            "p95": 2.0065058000000002,
+            "p99": 2.2929133999999993,
+            "max": 3.899392
+          },
+          "fine_queries": {
+            "p50": 10.0,
+            "p95": 14.0,
+            "p99": 16.0,
+            "max": 16.0
+          },
+          "fine_queries_total": 10006,
+          "root_queries_total": 1976,
+          "subdivisions_total": 1966,
+          "subdivisions_per_request": {
+            "p50": 2.0,
+            "p95": 2.0,
+            "p99": 2.0,
+            "max": 2.0
+          },
+          "max_depth_per_request": {
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0,
+            "max": 1.0
+          },
+          "root_or_reported_sample_min_mm": 0.7429286016962289,
+          "model_proof_invocations": {
+            "live": 998,
+            "signed": 998
+          },
+          "model_cache_hits": {
+            "live": 10,
+            "signed": 10
+          },
+          "cache_hit_fraction": {
+            "live": 0.01002004008016032,
+            "signed": 0.01002004008016032
+          }
+        }
+      },
+      "paired_transitions": {
+        "PERMIT->PERMIT": 741,
+        "SWEEP_UNPROVEN->PERMIT": 257
+      },
+      "reconstructed_v1_differences": [],
+      "prohibited_v2_permits": [],
+      "classified_collision_returns": {}
+    },
+    {
+      "source": "j6-margin",
+      "attempt": 1,
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "guard_trace_path": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/HOME-ANCHORED-DIAGNOSTIC-DCR009-ROOT05-SEGMENTED-J6-5DEG-01/run/attempt-01/sweep-trace.jsonl",
+      "guard_trace_sha256": "80b5c471f788623b0c3b804d6163d96eae55496959e6e1a58256513da4ea637b",
+      "ready_sha256": "12f09ac1f8d56ce7c0c880e545b6b0c741b521533acf758157d4a1d8c8e83e7b",
+      "committed_run_receipt_sha256": "b01236c303c56e8a147c0c7b37180091edb9747c6b2ab3987a1efb92b4796b78",
+      "raw_counts": {
+        "PERMIT": 784,
+        "SWEEP_UNPROVEN": 275
+      },
+      "records_without_original_q_snapshot": {},
+      "paired_25ms": {
+        "v1": {
+          "denominator": 1059,
+          "counts": {
+            "PERMIT": 784,
+            "SWEEP_UNPROVEN": 275
+          },
+          "permit_fraction": 0.7403210576015109,
+          "proof_latency_ms": {
+            "p50": 1.234507,
+            "p95": 1.9386399999999977,
+            "p99": 2.541169800000001,
+            "max": 3.341459
+          },
+          "fine_queries": {
+            "p50": 2.0,
+            "p95": 9.0,
+            "p99": 9.0,
+            "max": 9.0
+          },
+          "fine_queries_total": 4013,
+          "root_queries_total": 2098,
+          "subdivisions_total": 1925,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9221016115980064,
+          "model_proof_invocations": {
+            "live": 1059,
+            "signed": 1059
+          },
+          "model_cache_hits": {
+            "live": 10,
+            "signed": 10
+          },
+          "cache_hit_fraction": {
+            "live": 0.009442870632672332,
+            "signed": 0.009442870632672332
+          }
+        },
+        "v2": {
+          "denominator": 1059,
+          "counts": {
+            "PERMIT": 1059
+          },
+          "permit_fraction": 1.0,
+          "proof_latency_ms": {
+            "p50": 1.743,
+            "p95": 2.742733199999998,
+            "p99": 3.5990424600000037,
+            "max": 5.132886
+          },
+          "fine_queries": {
+            "p50": 10.0,
+            "p95": 16.0,
+            "p99": 16.0,
+            "max": 20.0
+          },
+          "fine_queries_total": 10790,
+          "root_queries_total": 2098,
+          "subdivisions_total": 2088,
+          "subdivisions_per_request": {
+            "p50": 2.0,
+            "p95": 2.0,
+            "p99": 2.0,
+            "max": 2.0
+          },
+          "max_depth_per_request": {
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0,
+            "max": 1.0
+          },
+          "root_or_reported_sample_min_mm": 0.7434731211247565,
+          "model_proof_invocations": {
+            "live": 1059,
+            "signed": 1059
+          },
+          "model_cache_hits": {
+            "live": 10,
+            "signed": 10
+          },
+          "cache_hit_fraction": {
+            "live": 0.009442870632672332,
+            "signed": 0.009442870632672332
+          }
+        }
+      },
+      "paired_transitions": {
+        "PERMIT->PERMIT": 784,
+        "SWEEP_UNPROVEN->PERMIT": 275
+      },
+      "reconstructed_v1_differences": [],
+      "prohibited_v2_permits": [],
+      "classified_collision_returns": {}
+    },
+    {
+      "source": "yaw",
+      "attempt": 1,
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "guard_trace_path": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/HOME-ANCHORED-DIAGNOSTIC-DCR009-ROOT05-SEG-J6-5DEG-PAIR-YAW-01/run/attempt-01/sweep-trace.jsonl",
+      "guard_trace_sha256": "785a0b684bc6aab1cacde7fe18f7141dcb5f90cd72d97308b7a237ca699fa29a",
+      "ready_sha256": "28d8084778f1f2471ca2ef293fd5eabc0544e62003a017b40949794414807c30",
+      "committed_run_receipt_sha256": "77e2558039d838dd6c94418baa9e1abb858c72d21a532979bf7fc62fdc161f2b",
+      "raw_counts": {
+        "PERMIT": 480,
+        "SWEEP_UNPROVEN": 163
+      },
+      "records_without_original_q_snapshot": {},
+      "paired_25ms": {
+        "v1": {
+          "denominator": 643,
+          "counts": {
+            "PERMIT": 480,
+            "SWEEP_UNPROVEN": 163
+          },
+          "permit_fraction": 0.7465007776049767,
+          "proof_latency_ms": {
+            "p50": 1.062479,
+            "p95": 1.3772566999999998,
+            "p99": 2.1288766400000005,
+            "max": 3.572417
+          },
+          "fine_queries": {
+            "p50": 2.0,
+            "p95": 9.0,
+            "p99": 9.0,
+            "max": 63.0
+          },
+          "fine_queries_total": 2342,
+          "root_queries_total": 1115,
+          "subdivisions_total": 1218,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 33.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 7.0,
+            "p99": 7.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9221016115979318,
+          "model_proof_invocations": {
+            "live": 643,
+            "signed": 643
+          },
+          "model_cache_hits": {
+            "live": 103,
+            "signed": 68
+          },
+          "cache_hit_fraction": {
+            "live": 0.16018662519440124,
+            "signed": 0.1057542768273717
+          }
+        },
+        "v2": {
+          "denominator": 643,
+          "counts": {
+            "PERMIT": 643
+          },
+          "permit_fraction": 1.0,
+          "proof_latency_ms": {
+            "p50": 1.348428,
+            "p95": 1.7889753999999998,
+            "p99": 2.8175448600000004,
+            "max": 3.394593
+          },
+          "fine_queries": {
+            "p50": 8.0,
+            "p95": 14.0,
+            "p99": 16.0,
+            "max": 20.0
+          },
+          "fine_queries_total": 3924,
+          "root_queries_total": 1115,
+          "subdivisions_total": 1036,
+          "subdivisions_per_request": {
+            "p50": 2.0,
+            "p95": 2.0,
+            "p99": 2.0,
+            "max": 2.0
+          },
+          "max_depth_per_request": {
+            "p50": 1.0,
+            "p95": 1.0,
+            "p99": 1.0,
+            "max": 1.0
+          },
+          "root_or_reported_sample_min_mm": 0.7401765090710598,
+          "model_proof_invocations": {
+            "live": 643,
+            "signed": 643
+          },
+          "model_cache_hits": {
+            "live": 103,
+            "signed": 68
+          },
+          "cache_hit_fraction": {
+            "live": 0.16018662519440124,
+            "signed": 0.1057542768273717
+          }
+        }
+      },
+      "paired_transitions": {
+        "PERMIT->PERMIT": 480,
+        "SWEEP_UNPROVEN->PERMIT": 163
+      },
+      "reconstructed_v1_differences": [],
+      "prohibited_v2_permits": [],
+      "classified_collision_returns": {}
+    },
+    {
+      "source": "wrist-first",
+      "attempt": 1,
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "guard_trace_path": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/HOME-ANCHORED-DIAGNOSTIC-DCR009-ROOT05-YAW-WRIST-FIRST-FINGERS-01/run/attempt-01/sweep-trace.jsonl",
+      "guard_trace_sha256": "4c3211aca6e9cffe514691b63ed82ff24e6b89d02ab2134c8e0c2423c05bd767",
+      "ready_sha256": "328c2a25941e25e206d9ee9497357550f701462b5a1d6465f4d6c387427f8322",
+      "committed_run_receipt_sha256": "6b8a12b54c0f2ea3ff7b88629818fcbbf3ba452e6575df0a62b6a90e8ba74842",
+      "raw_counts": {
+        "PERMIT": 5834
+      },
+      "records_without_original_q_snapshot": {},
+      "paired_25ms": {
+        "v1": {
+          "denominator": 5834,
+          "counts": {
+            "PERMIT": 5834
+          },
+          "permit_fraction": 1.0,
+          "proof_latency_ms": {
+            "p50": 0.1064505,
+            "p95": 0.9623948999999993,
+            "p99": 1.13199406,
+            "max": 2.325993
+          },
+          "fine_queries": {
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 2.0,
+            "max": 3.0
+          },
+          "fine_queries_total": 492,
+          "root_queries_total": 962,
+          "subdivisions_total": 2,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "max": 1.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "max": 1.0
+          },
+          "root_or_reported_sample_min_mm": 0.921758872277887,
+          "model_proof_invocations": {
+            "live": 5834,
+            "signed": 5834
+          },
+          "model_cache_hits": {
+            "live": 5418,
+            "signed": 5288
+          },
+          "cache_hit_fraction": {
+            "live": 0.9286938635584505,
+            "signed": 0.9064106959204662
+          }
+        },
+        "v2": {
+          "denominator": 5834,
+          "counts": {
+            "PERMIT": 5834
+          },
+          "permit_fraction": 1.0,
+          "proof_latency_ms": {
+            "p50": 0.058835,
+            "p95": 0.9410939999999997,
+            "p99": 1.4635894600000003,
+            "max": 3.023924
+          },
+          "fine_queries": {
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 4.0,
+            "max": 12.0
+          },
+          "fine_queries_total": 978,
+          "root_queries_total": 851,
+          "subdivisions_total": 377,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 2.0,
+            "max": 2.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 1.0,
+            "max": 1.0
+          },
+          "root_or_reported_sample_min_mm": 0.921758872277887,
+          "model_proof_invocations": {
+            "live": 5834,
+            "signed": 5834
+          },
+          "model_cache_hits": {
+            "live": 5473,
+            "signed": 5344
+          },
+          "cache_hit_fraction": {
+            "live": 0.9381213575591361,
+            "signed": 0.9160095989029825
+          }
+        }
+      },
+      "paired_transitions": {
+        "PERMIT->PERMIT": 5834
+      },
+      "reconstructed_v1_differences": [],
+      "prohibited_v2_permits": [],
+      "classified_collision_returns": {}
+    },
+    {
+      "source": "history",
+      "attempt": 1,
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "guard_trace_path": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/HOME-ANCHORED-DIAGNOSTIC-DCR009-ROOT05-YAW-STAGED-HISTORY-01/run/attempt-01/sweep-trace.jsonl",
+      "guard_trace_sha256": "c7accfca453960fac3b30688af5da958345b75ff4f1bf5b01753bb88672addff",
+      "ready_sha256": "77d9d4d3208b3c3b7e24f7abc5f2257b95a5f0264e948268613232e3b6ee5f73",
+      "committed_run_receipt_sha256": "34705f4f9a07166cce6fc524df30346a3d659abb3d3777ef119943d18ecda92e",
+      "raw_counts": {
+        "PERMIT": 6930,
+        "SWEEP_UNPROVEN": 55
+      },
+      "records_without_original_q_snapshot": {},
+      "paired_25ms": {
+        "v1": {
+          "denominator": 6985,
+          "counts": {
+            "PERMIT": 6930,
+            "SWEEP_UNPROVEN": 55
+          },
+          "permit_fraction": 0.9921259842519685,
+          "proof_latency_ms": {
+            "p50": 0.108017,
+            "p95": 1.0397131999999996,
+            "p99": 3.662335799999998,
+            "max": 9.356871
+          },
+          "fine_queries": {
+            "p50": 0.0,
+            "p95": 2.0,
+            "p99": 126.0,
+            "max": 126.0
+          },
+          "fine_queries_total": 18323,
+          "root_queries_total": 1299,
+          "subdivisions_total": 8863,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 62.0,
+            "max": 64.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 5.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9217212535991854,
+          "model_proof_invocations": {
+            "live": 6985,
+            "signed": 6932
+          },
+          "model_cache_hits": {
+            "live": 6376,
+            "signed": 6242
+          },
+          "cache_hit_fraction": {
+            "live": 0.9128131710808877,
+            "signed": 0.900461627236007
+          }
+        },
+        "v2": {
+          "denominator": 6985,
+          "counts": {
+            "PERMIT": 6985
+          },
+          "permit_fraction": 1.0,
+          "proof_latency_ms": {
+            "p50": 0.126651,
+            "p95": 1.270118399999992,
+            "p99": 1.8308728799999987,
+            "max": 5.835718
+          },
+          "fine_queries": {
+            "p50": 0.0,
+            "p95": 3.599999999998545,
+            "p99": 8.0,
+            "max": 48.0
+          },
+          "fine_queries_total": 3614,
+          "root_queries_total": 1233,
+          "subdivisions_total": 1163,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 1.7999999999992724,
+            "p99": 2.0,
+            "max": 15.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 1.0,
+            "p99": 1.0,
+            "max": 3.0
+          },
+          "root_or_reported_sample_min_mm": 0.9217212535991854,
+          "model_proof_invocations": {
+            "live": 6985,
+            "signed": 6985
+          },
+          "model_cache_hits": {
+            "live": 6434,
+            "signed": 6303
+          },
+          "cache_hit_fraction": {
+            "live": 0.9211166785969935,
+            "signed": 0.9023622047244094
+          }
+        }
+      },
+      "paired_transitions": {
+        "PERMIT->PERMIT": 6930,
+        "SWEEP_UNPROVEN->PERMIT": 55
+      },
+      "reconstructed_v1_differences": [],
+      "prohibited_v2_permits": [],
+      "classified_collision_returns": {}
+    },
+    {
+      "source": "one-unproven",
+      "attempt": 1,
+      "root": "capture:b63bc72d2e8b2ee395e966f6",
+      "guard_trace_path": "/home/ubuntu/dexgym_data/s0-5/campaign/S05-V1-20261127-490770e/runs/HOME-ANCHORED-DIAGNOSTIC-DCR009-ROOT05-ONE-UNPROVEN-ARM-01/run/attempt-01/sweep-trace.jsonl",
+      "guard_trace_sha256": "ad8f159b55c288e12d3ae3d1fb1a8d3610f9161afddcfc63434b07a6681aa45b",
+      "ready_sha256": "0780abcee8edb4a2ead2832b24d59995ce6748ee38a19ded6dac49f651d958d3",
+      "committed_run_receipt_sha256": "2c562df8ddc33037e9ae7003b75a48ea16e8ea5ee4a39362f8f06e07076cbca4",
+      "raw_counts": {
+        "PERMIT": 6957,
+        "SWEEP_UNPROVEN": 66
+      },
+      "records_without_original_q_snapshot": {},
+      "paired_25ms": {
+        "v1": {
+          "denominator": 7023,
+          "counts": {
+            "PERMIT": 6956,
+            "SWEEP_UNPROVEN": 67
+          },
+          "permit_fraction": 0.9904599174142105,
+          "proof_latency_ms": {
+            "p50": 0.107053,
+            "p95": 1.043558,
+            "p99": 3.6982520799999987,
+            "max": 8.834042
+          },
+          "fine_queries": {
+            "p50": 0.0,
+            "p95": 2.0,
+            "p99": 126.0,
+            "max": 126.0
+          },
+          "fine_queries_total": 19810,
+          "root_queries_total": 1329,
+          "subdivisions_total": 9633,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 62.0,
+            "max": 64.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 0.0,
+            "p99": 5.0,
+            "max": 7.0
+          },
+          "root_or_reported_sample_min_mm": 0.9217307071716623,
+          "model_proof_invocations": {
+            "live": 7023,
+            "signed": 6957
+          },
+          "model_cache_hits": {
+            "live": 6391,
+            "signed": 6260
+          },
+          "cache_hit_fraction": {
+            "live": 0.9100099672504628,
+            "signed": 0.8998131378467731
+          }
+        },
+        "v2": {
+          "denominator": 7023,
+          "counts": {
+            "PERMIT": 7023
+          },
+          "permit_fraction": 1.0,
+          "proof_latency_ms": {
+            "p50": 0.125628,
+            "p95": 1.2817128999999998,
+            "p99": 1.8810647999999996,
+            "max": 6.022073
+          },
+          "fine_queries": {
+            "p50": 0.0,
+            "p95": 4.0,
+            "p99": 8.0,
+            "max": 48.0
+          },
+          "fine_queries_total": 4076,
+          "root_queries_total": 1275,
+          "subdivisions_total": 1334,
+          "subdivisions_per_request": {
+            "p50": 0.0,
+            "p95": 2.0,
+            "p99": 2.0,
+            "max": 15.0
+          },
+          "max_depth_per_request": {
+            "p50": 0.0,
+            "p95": 1.0,
+            "p99": 1.0,
+            "max": 3.0
+          },
+          "root_or_reported_sample_min_mm": 0.9158207372869296,
+          "model_proof_invocations": {
+            "live": 7023,
+            "signed": 7023
+          },
+          "model_cache_hits": {
+            "live": 6450,
+            "signed": 6321
+          },
+          "cache_hit_fraction": {
+            "live": 0.9184109354976506,
+            "signed": 0.9000427167876975
+          }
+        }
+      },
+      "paired_transitions": {
+        "PERMIT->PERMIT": 6956,
+        "SWEEP_UNPROVEN->PERMIT": 67
+      },
+      "reconstructed_v1_differences": [
+        {
+          "sequence": 7020,
+          "recorded": "PERMIT",
+          "reconstructed": "SWEEP_UNPROVEN",
+          "documented_exception": true
+        }
+      ],
+      "prohibited_v2_permits": [],
+      "classified_collision_returns": {}
+    }
+  ]
+}
