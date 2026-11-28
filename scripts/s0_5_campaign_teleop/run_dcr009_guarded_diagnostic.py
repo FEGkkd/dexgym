@@ -25,14 +25,17 @@ SCRIPTS = Path(__file__).resolve().parent
 YAW_BASELINE_CONTROLLER_SHA256 = "9f95f3f6fb38f2db225f9f69fa57a24492daada252570f813ca7ac243655b9ba"
 YAW_BASELINE_DRIVER_SHA256 = "b226d4cbf4bbe7897a93c212c2e494430cbfe62da2aa97661c51e1fdd27fce59"
 YAW_BASELINE_GUARD_SHA256 = "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909"
+STAGED_START_CONTROLLER_SHA256 = "13ed4843a57fdf1b58ac7ac78202b0d2ef0f686b1b468e78a5aa73d38f9adcc9"
 
 
-def evidence_summary(path):
+def evidence_summary(path, audited_stop=False):
     counts = {"historical_packets": 0, "historical_seals": 0, "preposition_packets": 0}
     reached = "NOT_OBSERVED"
     stop = False
     protective_stop = None
     start_only_done = False
+    history_intent = None
+    history_fault = None
     with path.open(encoding="utf-8") as stream:
         for line in stream:
             if not line.endswith("\n"):
@@ -43,7 +46,12 @@ def evidence_summary(path):
                     raise ValueError("Repeated START outcome")
                 reached = row["status"]
             if row["kind"] == "pilot_stop":
-                stop = row["late_observed_command_count"] == 0
+                stop = (audited_stop if row.get("native_barrier_audit_required") is True
+                        else row["late_observed_command_count"] == 0)
+            if row["kind"] == "historical_window_intent":
+                if history_intent is not None:
+                    raise ValueError("Repeated historical window intent")
+                history_intent = row["expected_packets"]
             if row["kind"] == "start_only_completed":
                 if (start_only_done or reached != "START_REACHED"
                         or row.get("original_history_started") is not False
@@ -52,6 +60,8 @@ def evidence_summary(path):
                 start_only_done = True
             if row["kind"] == "pilot_lifecycle" and row.get("status") == "FAULT_STOP":
                 failure = row.get("failure", {})
+                if row["stage"] == "historical_human_inputs":
+                    history_fault = failure
                 if row["stage"] != "preposition_start":
                     continue
                 if (
@@ -73,10 +83,13 @@ def evidence_summary(path):
                 counts["historical_packets"] += row["kind"] == "input"
                 if row["kind"] == "historical_input_seal":
                     if (row["messages"] != counts["historical_packets"]
+                            or (history_intent is not None and row["messages"] != history_intent)
                             or row["expected_cdr_sha256"] != row["published_cdr_sha256"]):
                         raise ValueError("Historical stream does not match its source seal")
                     counts["historical_seals"] += 1
-    if stop and reached == "START_REACHED" and counts["historical_packets"] and counts["historical_seals"] == 1:
+    if stop and reached == "START_REACHED" and history_intent is not None and history_fault:
+        phase = "HISTORICAL_REPLAY_GUARDED_STOP"
+    elif stop and reached == "START_REACHED" and counts["historical_packets"] and counts["historical_seals"] == 1:
         phase = "HISTORICAL_REPLAY_COMPLETE"
     elif stop and reached == "START_REACHED" and start_only_done and not counts["historical_packets"]:
         phase = "START_REACHED_NO_HISTORY_BY_SCOPE"
@@ -87,7 +100,10 @@ def evidence_summary(path):
         phase = protective_stop
     else:
         phase = "INCOMPLETE_TRACE"
-    return {"observed_phase": phase, "start_status": reached, **counts, "formal_coverage_credit": False}
+    result = {"observed_phase": phase, "start_status": reached, **counts, "formal_coverage_credit": False}
+    if history_intent is not None:
+        result.update(historical_expected_packets=history_intent, historical_fault=history_fault)
+    return result
 
 
 def attempt(args, index, selection, cancelled):
@@ -105,6 +121,8 @@ def attempt(args, index, selection, cancelled):
         result["align_start_yaw_to_home"] = True
     if args.wrist_first_fingers:
         result["wrist_first_fingers"] = True
+    if args.replay_root_five_history:
+        result["replay_root_five_history"] = True
     save(result_file, result)
     children = []
     deadline = time.monotonic() + 180
@@ -119,6 +137,9 @@ def attempt(args, index, selection, cancelled):
         env["S05_DCR009_GUARD_TIMEOUT_MS"] = "35"
         env.pop("S05_DCR009_SEGMENTED_START_STATE", None)
         env.pop("S05_DCR009_FINGER_STAGE", None)
+        env.pop("S05_DCR009_HISTORY_AUDIT", None)
+        if args.replay_root_five_history:
+            env["S05_DCR009_HISTORY_AUDIT"] = "1"
         if profile == "segmented":
             stage_marker = Path(private_socket_dir) / "stage"
             stage_marker.write_bytes(b"PREPOSITION\n")
@@ -190,6 +211,8 @@ def attempt(args, index, selection, cancelled):
                     program.append("--align-start-yaw-to-home")
                 if args.wrist_first_fingers:
                     program.append("--wrist-first-fingers")
+                if args.replay_root_five_history:
+                    program.append("--replay-root-five-history")
                 replay = subprocess.Popen(program, env=env, stdout=replay_log, stderr=subprocess.STDOUT, start_new_session=True)
                 children.append(replay)
                 result.update(replay_pid=replay.pid, replay_command=program, phase="RUNNING")
@@ -208,13 +231,27 @@ def attempt(args, index, selection, cancelled):
             if trace.is_file():
                 result["trace_sha256"] = digest(trace)
                 try:
-                    result.update(evidence_summary(trace))
+                    audited_stop = False
+                    if args.replay_root_five_history:
+                        from dcr009_stop_audit import PASS, audit_attempt
+
+                        save(result_file, result)
+                        save(path / "stop-audit-input-receipt.json", result)
+                        audit = audit_attempt(path)
+                        audit_receipt = path / "stop-audit.json"
+                        save(audit_receipt, audit)
+                        audited_stop = audit["status"] == PASS
+                        result.update(stop_audit_status=audit["status"], stop_audit_sha256=digest(audit_receipt))
+                    result.update(evidence_summary(trace, audited_stop=audited_stop))
+                    if args.replay_root_five_history and not audited_stop:
+                        result["phase"] = "STOP_AUDIT_FAILED"
                 except (OSError, ValueError, KeyError) as error:
                     result.update(phase="INVALID_TRACE", trace_error=str(error))
             if result["phase"] == "COMPLETED":
                 result["phase"] = result.get("observed_phase", "INCOMPLETE_TRACE")
             elif result.get("observed_phase") in {
-                "NATIVE_PROTECTIVE_HOLD_NO_HISTORY", "NATIVE_JOINT_LIMIT_REJECTION_NO_HISTORY"
+                "NATIVE_PROTECTIVE_HOLD_NO_HISTORY", "NATIVE_JOINT_LIMIT_REJECTION_NO_HISTORY",
+                "HISTORICAL_REPLAY_GUARDED_STOP",
             }:
                 result["phase"] = result["observed_phase"]
             result["finished_unix_ns"] = time.time_ns()
@@ -224,7 +261,8 @@ def attempt(args, index, selection, cancelled):
 
 def closed(row):
     return (
-        row["phase"] in {"HISTORICAL_REPLAY_COMPLETE", "START_REACHED_NO_HISTORY_BY_SCOPE", "START_NOT_REACHED_NO_HISTORY",
+        row["phase"] in {"HISTORICAL_REPLAY_COMPLETE", "HISTORICAL_REPLAY_GUARDED_STOP",
+                         "START_REACHED_NO_HISTORY_BY_SCOPE", "START_NOT_REACHED_NO_HISTORY",
                          "NATIVE_PROTECTIVE_HOLD_NO_HISTORY", "NATIVE_JOINT_LIMIT_REJECTION_NO_HISTORY"}
         and row["owned_groups_stopped"] and row.get("same_domain_empty_after") is True
     )
@@ -271,6 +309,7 @@ def main():
     mode.add_argument("--root-five-start-only", choices=("original", "segmented"))
     parser.add_argument("--align-start-yaw-to-home", action="store_true")
     parser.add_argument("--wrist-first-fingers", action="store_true")
+    parser.add_argument("--replay-root-five-history", action="store_true")
     parser.add_argument("--domain", type=int, choices=DOMAINS, required=True)
     args = parser.parse_args()
     if os.name != "posix" or not args.output.parent.is_dir():
@@ -289,6 +328,10 @@ def main():
         raise ValueError("Yaw diagnostic must reuse the previous segmented controller, driver and sweep guard")
     if args.wrist_first_fingers and not args.align_start_yaw_to_home:
         raise ValueError("Finger staging requires the single prior yaw-aligned diagnostic")
+    if args.replay_root_five_history and (
+        not args.wrist_first_fingers or args.resume_from or args.controller_sha256 == STAGED_START_CONTROLLER_SHA256
+    ):
+        raise ValueError("A single wrist-first root-five history requires the dedicated STOP-audited native controller")
     plan = json.loads(args.plan.read_bytes())
     roster = check_scope(plan)
     roots = verified_roots(args.cohort, SCRIPTS.parents[1] / "docs/s0-5")
@@ -319,6 +362,9 @@ def main():
         ledger["align_start_yaw_to_home"] = True
     if args.wrist_first_fingers:
         ledger["wrist_first_fingers"] = True
+    if args.replay_root_five_history:
+        ledger["experiment"] = "ROOT_FIVE_WRIST_FIRST_GUARDED_HISTORY"
+        ledger["replay_root_five_history"] = True
     if prior:
         ledger["prior_closed_attempt_count"] = prior
         ledger["prior_run_receipt_sha256"] = digest(args.resume_from[-1] / "run_receipt.json")
@@ -333,7 +379,9 @@ def main():
             break
     complete = len(ledger["attempts"]) + prior == len(roster) and all(closed(row) for row in ledger["attempts"])
     if complete:
-        if args.root_five_start_only:
+        if args.replay_root_five_history:
+            ledger["status"] = "ONE_ROOT_HISTORY_ATTEMPT_CLOSED"
+        elif args.root_five_start_only:
             ledger["status"] = "ONE_ROOT_START_ONLY_CLOSED"
         else:
             ledger["status"] = "ALL_FIVE_CENTER_OFFSETS_CLOSED" if args.compare_root_five_centers else "ALL_SIX_DIAGNOSTICS_CLOSED"

@@ -267,10 +267,11 @@ class Replay:
                         else original + epoch_delta_ns)
             msg.header.stamp.sec, msg.header.stamp.nanosec = divmod(adjusted, NS)
         self.publishers[event.topic].publish(msg)
+        packet_identity = {"cdr_sha256": hashlib.sha256(event.data).hexdigest()} if epoch_delta_ns is not None else {}
         self.write("input", topic=event.topic, original_log_ns=event.log_ns,
                    original_schedule_ns=event.schedule_ns, record_index=event.record_index,
                    original_stamp_ns=original,
-                   published_stamp_ns=msg.header.stamp.sec * NS + msg.header.stamp.nanosec)
+                   published_stamp_ns=msg.header.stamp.sec * NS + msg.header.stamp.nanosec, **packet_identity)
         return msg.header.stamp.sec * NS + msg.header.stamp.nanosec
 
     def observe_output(self, topic, value):

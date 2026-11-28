@@ -18,6 +18,28 @@ from replay_home_anchored_pilot import (
 
 
 class PilotRuntimeTest(unittest.TestCase):
+    def test_guarded_history_stop_requires_native_boundary_audit(self):
+        from run_dcr009_guarded_diagnostic import evidence_summary
+
+        stage = "historical_human_inputs"
+        data = [
+            {"kind": "start_handoff", "stage": "preposition_start", "status": "START_REACHED"},
+            {"kind": "historical_window_intent", "stage": "preposition_start", "expected_packets": 12},
+            {"kind": "input", "stage": stage},
+            {"kind": "pilot_lifecycle", "stage": stage, "status": "FAULT_STOP",
+             "failure": {"code": "COMMAND_STEP"}},
+            {"kind": "pilot_stop", "stage": "tail", "late_observed_command_count": 1,
+             "native_barrier_audit_required": True},
+        ]
+        with TemporaryDirectory() as folder:
+            trace = Path(folder) / "trace.jsonl"
+            trace.write_text("".join(json.dumps(row) + "\n" for row in data), encoding="utf-8")
+            self.assertEqual(evidence_summary(trace)["observed_phase"], "INCOMPLETE_TRACE")
+            report = evidence_summary(trace, audited_stop=True)
+            self.assertEqual(report["observed_phase"], "HISTORICAL_REPLAY_GUARDED_STOP")
+            self.assertEqual(report["historical_packets"], 1)
+            self.assertEqual(report["historical_expected_packets"], 12)
+
     def test_common_yaw_preserves_relative_pose_height_and_nonworld_frames(self):
         frames = np.repeat(np.eye(4)[None], 7, axis=0)
         frames[0, :3, :3] = VIRTUAL_R

@@ -554,6 +554,15 @@ def replay_class():
                 raise RuntimeError("Historical input denied outside the successful strict START and same ACTIVE/TASK session")
             return super().send(event, epoch_delta_ns)
 
+        def finish_stop(self):
+            self.stage = "tail"
+            self.service("stop")
+            self.stop_accept_mono_ns = time.monotonic_ns()
+            self.wait(.20)
+            self.write("pilot_stop", late_observed_command_count=self.late_command_count, session=self.session)
+            if self.late_command_count:
+                raise RuntimeError("Observed a command after native STOP acknowledgement")
+
         def run(self, events):
             self.write("pilot_lifecycle", status="SIM_PREFLIGHT", session=self.session)
             self.verify_and_subscribe()
@@ -590,13 +599,7 @@ def replay_class():
                 self.write("pilot_lifecycle", status="START_NOT_REACHED", session=self.session)
             finally:
                 if attempted_connection:
-                    self.stage = "tail"
-                    self.service("stop")
-                    self.stop_accept_mono_ns = time.monotonic_ns()
-                    self.wait(.20)
-                    self.write("pilot_stop", late_observed_command_count=self.late_command_count, session=self.session)
-                    if self.late_command_count:
-                        raise RuntimeError("Observed a command after native STOP acknowledgement")
+                    self.finish_stop()
 
     return PilotReplay, rclpy
 

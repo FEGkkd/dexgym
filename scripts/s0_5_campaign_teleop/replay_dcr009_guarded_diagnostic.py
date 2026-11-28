@@ -2,6 +2,7 @@
 """One zero-residual, guarded diagnostic replay. This entry point confers no Pilot qualification."""
 
 import argparse
+from collections import Counter
 from hashlib import sha256
 import json
 import os
@@ -14,7 +15,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 
 from replay_home_anchored_pilot import (
-    FRESH_NS, WRISTS, FeedbackDwell, StartMiss, digest, map_file, object_at, palm_poses, pose_from_xyz_quat, proper, read_frames,
+    FRESH_NS, HISTORICAL, WRISTS, FeedbackDwell, StartMiss, digest, map_file, object_at, palm_poses, pose_from_xyz_quat, proper, read_frames,
     replay_class, validate_environment,
 )
 
@@ -57,17 +58,21 @@ def finger_stage_marker(socket, enabled):
     return path
 
 
-def publish_finger_stage(path, stage, ros_deadline_ns=0):
-    """Atomically publish a short lease, or a zero-deadline state that holds all fingers."""
+def replace_marker(path, content):
     temporary = None
     try:
         with NamedTemporaryFile(mode="wb", prefix=".finger-stage-", dir=path.parent, delete=False) as stream:
             temporary = Path(stream.name)
-            stream.write(f"{stage} {ros_deadline_ns}\n".encode("ascii"))
+            stream.write(content)
         os.replace(temporary, path)
     finally:
         if temporary is not None:
             temporary.unlink(missing_ok=True)
+
+
+def publish_finger_stage(path, stage, ros_deadline_ns=0):
+    """Atomically publish a short lease, or a zero-deadline state that holds all fingers."""
+    replace_marker(path, f"{stage} {ros_deadline_ns}\n".encode("ascii"))
 
 
 def wrist_ready(value):
@@ -160,6 +165,10 @@ def load(args):
                                         and args.plan_sha256 == ROOT_FIVE_PLAN_SHA):
         raise ValueError("Wrist-first staging requires the original-center, yaw-aligned root-five START-only profile")
     args.finger_stage_marker = finger_stage_marker(args.guard_socket, args.wrist_first_fingers)
+    if args.replay_root_five_history != (os.environ.get("S05_DCR009_HISTORY_AUDIT") == "1") or (
+        args.replay_root_five_history and not args.wrist_first_fingers
+    ):
+        raise ValueError("Historical replay requires the owned wrist-first STOP audit profile")
     if plan["cohort_sha256"] != COHORT_SHA or plan["shared_frames_sha256"] != digest(args.frames):
         raise ValueError("Plan does not bind the original cohort and exact runtime frames")
     selection = next(row for row in rows if row["root"] == args.root)
@@ -193,9 +202,13 @@ def diagnostic_class():
             super().__init__(*args, **kwargs)
             self.segmented_diag = {}
             self.segmented_commands = {}
+            self.last_history_event = None
 
         def observe_output(self, topic, value):
+            already_stopped = self.hard_fault
             super().observe_output(topic, value)
+            if self.args.replay_root_five_history and already_stopped is not None:
+                self.hard_fault = already_stopped
             if self.args.start_only_profile != "segmented":
                 return
             header = stamp(value.get("header", {}).get("stamp"))
@@ -261,11 +274,54 @@ def diagnostic_class():
             return all(error is not None and error <= .10 for error in measurement["hand_error_to_unsegmented_wuji_rad"])
 
         def replay(self, events, warmup):
+            if self.args.replay_root_five_history:
+                return self.replay_root_five_history(events, warmup)
             if self.args.start_only_profile is not None:
                 self.write("start_only_completed", profile=self.args.start_only_profile,
                            original_history_started=False, wrist_first_fingers=self.args.wrist_first_fingers)
                 return
             return super().replay(events, warmup)
+
+        def replay_root_five_history(self, events, warmup):
+            if not self.start_ready or not self.active_task():
+                raise RuntimeError("Root-five history requires the verified complete START and same ACTIVE session")
+            start = self.anchor["source_cutoff_ns"]
+            end = self.anchor["historical_window"]["source_cutoff_stop_exclusive_ns"]
+            selected = [event for event in events if start <= event.schedule_ns < end]
+            counts = Counter(event.topic for event in selected)
+            if not 0 < end - start <= 120_000_000_000 or set(counts) != set(HUMAN):
+                raise ValueError("History is outside the single frozen root-five timeline")
+            marker = Path(os.environ["S05_DCR009_SEGMENTED_START_STATE"])
+            self.write("historical_window_intent", packets_by_topic=dict(counts), expected_packets=len(selected),
+                       source_cutoff_start_ns=start, source_cutoff_stop_exclusive_ns=end,
+                       planned_hmb_ticks=self.anchor["historical_window"]["plan_ticks"],
+                       shared_transform=self.shared.tolist(), session=self.session)
+            replace_marker(marker, b"HISTORY\n")
+            try:
+                super().replay(selected, warmup)
+                self.wait((self.origin_mono_ns + end - start - time.monotonic_ns()) / 1e9)
+                self.require_no_hard_fault()
+            except (ValueError, RuntimeError) as error:
+                self.write("history_halt", error=str(error), failure=self.hard_fault, last_source=self.last_history_event)
+                raise
+
+        def send(self, event, epoch_delta_ns=None):
+            header = super().send(event, epoch_delta_ns)
+            if self.stage == HISTORICAL:
+                self.last_history_event = {"topic": event.topic, "record_index": event.record_index,
+                                           "source_schedule_ns": event.schedule_ns}
+            return header
+
+        def finish_stop(self):
+            if not self.args.replay_root_five_history:
+                return super().finish_stop()
+            self.stage = "tail"
+            self.service("stop")
+            self.stop_accept_mono_ns = time.monotonic_ns()
+            self.write("stop_observation_boundary", ack_mono_ns=self.stop_accept_mono_ns, session=self.session)
+            self.wait(.20)
+            self.write("pilot_stop", late_observed_command_count=self.late_command_count, session=self.session,
+                       native_barrier_audit_required=True)
 
         def before_history(self, warmup):
             self.stage = "preposition_start"
@@ -464,6 +520,7 @@ def main():
     parser.add_argument("--start-only-profile", choices=("original", "segmented"))
     parser.add_argument("--align-start-yaw-to-home", action="store_true")
     parser.add_argument("--wrist-first-fingers", action="store_true")
+    parser.add_argument("--replay-root-five-history", action="store_true")
     args = parser.parse_args()
     root, anchor, frames, raw, home = load(args)
     from dexgym.tasks.direct.wholebody_s05.p02.model import RobotModel
@@ -486,6 +543,8 @@ def main():
         receipt["align_start_yaw_to_home"] = True
     if args.wrist_first_fingers:
         receipt["wrist_first_fingers"] = True
+    if args.replay_root_five_history:
+        receipt["replay_root_five_history"] = True
     (args.output / "input.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     Runner, rclpy = diagnostic_class()
     rclpy.init()
