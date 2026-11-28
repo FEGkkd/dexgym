@@ -63,6 +63,7 @@ def lockstep(proof, *, goal=None, hard_fault=False, feedback_valid=True, event=0
     step.branch = np.array([.1, .2])
     step.indices = AXES
     step.recovery = np.full(4, RECOVERY_SUBCYCLES, dtype=np.int16)
+    step.hold_engine = None
     step.physics = SimpleNamespace(filtered=np.zeros((1, 54)))
     measured = np.zeros(54)
     if not feedback_valid:
@@ -80,6 +81,24 @@ def lockstep(proof, *, goal=None, hard_fault=False, feedback_valid=True, event=0
 
 
 class AdmissionTests(unittest.TestCase):
+    def test_only_unchanged_hold_uses_deeper_proof_after_depth_exhaustion(self):
+        step = lockstep(lambda q: decision(False))
+        step.hold_engine = object()
+        step._proof = Mock(return_value=(Reason.PERMIT, {"termination": "PERMIT", "max_depth": 19}))
+        with self.assertRaises(ValueError):
+            step._checked_hold(command(), np.zeros(54))
+        step._proof.assert_not_called()
+        step._checked_proof.return_value = None
+        step._checked_proof.side_effect = None
+        step._checked_proof.return_value = (Reason.COLLISION, {"termination": "PENETRATION"})
+        self.assertIs(step._checked_hold(step.issued, np.zeros(54))[0], Reason.COLLISION)
+        step._proof.assert_not_called()
+        step._checked_proof.return_value = decision(False)
+        status, trace = step._checked_hold(step.issued, np.zeros(54))
+        self.assertIs(status, Reason.PERMIT)
+        self.assertEqual(trace["max_depth"], 19)
+        self.assertEqual(trace["original_hold_metrics"]["termination"], "MAX_SUBDIVISION_DEPTH")
+        self.assertIs(step._proof.call_args.kwargs["engine"], step.hold_engine)
     def test_named_groups_must_preserve_nominal_order_and_transmissions(self):
         names = tuple(f"q{i}" for i in range(54))
         groups = tuple(tuple(names[i] for i in axes) for axes in AXES)

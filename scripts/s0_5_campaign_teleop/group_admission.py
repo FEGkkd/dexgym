@@ -11,14 +11,16 @@ from dexgym.tasks.direct.wholebody_s05.v1.rmb.offline_nominal import OfflineNomi
 from dexgym.tasks.direct.wholebody_s05.v1.rmb.teleop_candidate import ARM_SUBSTEPS, RECOVERY_TICKS
 from dexgym.tasks.direct.wholebody_s05.v1.task.physics import Interval
 from dexgym.tasks.direct.wholebody_s05.v1.task.safety import Stop
-from offline_rmb_lockstep import ACTIVE, Lockstep, Substep
+from offline_rmb_lockstep import ACTIVE, PROOF, Lockstep, Substep
 from swept_live_guard import Reason
+from swept_live_guard_v2 import SweptEnvelopeV2
 
 
 GROUPS = ("LEFT_ARM", "RIGHT_ARM", "LEFT_HAND", "RIGHT_HAND")
 RECOVERY_SUBCYCLES = RECOVERY_TICKS * ARM_SUBSTEPS
 RECOVERY_HAND_STEP_RAD = .015
 FRACTIONS = (.5, .25)
+HOLD_MAX_DEPTH = 24
 
 
 class GroupStatus(IntEnum):
@@ -50,7 +52,7 @@ class Admission:
     issued: np.ndarray | None
 
 
-def admit_groups(previous, requested, groups, eligible, recovering, prove):
+def admit_groups(previous, requested, groups, eligible, recovering, prove, *, prove_hold=None):
     """Prove each trial and the final simultaneous command against one fixed snapshot."""
     combined = previous.copy()
     outcomes = []
@@ -83,7 +85,7 @@ def admit_groups(previous, requested, groups, eligible, recovering, prove):
     final = prove(combined)
     if final[0] == Reason.PERMIT:
         return Admission(combined, tuple(outcomes), final, None, combined)
-    hold = prove(previous)
+    hold = (prove if prove_hold is None else prove_hold)(previous)
     return Admission(combined, tuple(outcomes), final, hold,
                      previous.copy() if hold[0] == Reason.PERMIT else None)
 
@@ -112,10 +114,12 @@ def combine_intervals(items):
 class GroupedLockstep(Lockstep):
     """Keep signed START intact and opt into grouped admission for history only."""
 
-    def __init__(self, robot, nominal):
+    def __init__(self, robot, nominal, *, hold_escalation=False):
         super().__init__(robot, nominal)
         self.indices = verified_groups(robot)
         self.recovery = np.full(4, RECOVERY_SUBCYCLES, dtype=np.int16)
+        self.hold_engine = (SweptEnvelopeV2(robot, max_queries=PROOF["max_queries"], max_depth=HOLD_MAX_DEPTH)
+                            if hold_escalation else None)
 
     def _checked_proof(self, desired, measured):
         if not np.isfinite(desired).all():
@@ -133,6 +137,19 @@ class GroupedLockstep(Lockstep):
         else:
             decision, detail = self._proof(desired, measured)
         return decision, {**detail, "elapsed_ns": monotonic_ns() - start}
+
+    def _checked_hold(self, desired, measured):
+        if not np.array_equal(desired, self.issued):
+            raise ValueError("Extra proof budget is reserved for the unchanged issued command")
+        decision, metrics = self._checked_proof(desired, measured)
+        if (self.hold_engine is None or decision != Reason.SWEEP_UNPROVEN
+                or metrics.get("termination") != "MAX_SUBDIVISION_DEPTH"):
+            return decision, metrics
+        start = monotonic_ns()
+        deeper, details = self._proof(desired, measured, engine=self.hold_engine)
+        return deeper, {**details, "elapsed_ns": monotonic_ns() - start,
+                        "original_hold_proof": decision.name, "original_hold_metrics": metrics,
+                        "escalation_max_depth": HOLD_MAX_DEPTH}
 
     def _physical_steps(self):
         samples, samples_v, results = [], [], []
@@ -166,7 +183,8 @@ class GroupedLockstep(Lockstep):
         eligible = np.isin(proposal.status, (*ACTIVE, OfflineNominalStatus.NATIVE_ARM_FALLBACK))
         admission = admit_groups(self.issued, requested, self.indices, eligible,
                                  self.recovery < RECOVERY_SUBCYCLES,
-                                 lambda desired: self._checked_proof(desired, measured))
+                                 lambda desired: self._checked_proof(desired, measured),
+                                 prove_hold=lambda desired: self._checked_hold(desired, measured))
         final_reason, final_metrics = admission.final
         hold_reason, hold_metrics = admission.hold or (None, None)
         groups = admission.outcomes

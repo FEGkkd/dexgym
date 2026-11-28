@@ -55,7 +55,7 @@ class Lockstep:
         data = self.physics.data[0]
         return data.qpos[self.robot.q_indices].copy(), data.qvel[self.robot.v_indices].copy()
 
-    def _proof(self, target, measured):
+    def _proof(self, target, measured, *, engine=None):
         states = np.stack((self.issued, self.physics.filtered[0], measured, target))
         if not np.isfinite(states).all():
             return Reason.NONFINITE, {}
@@ -65,8 +65,9 @@ class Lockstep:
                 or np.any(np.maximum(self.robot.coupling * low, self.robot.coupling * high).sum(axis=1)
                           > COUPLING_LIMIT + 1e-9)):
             return Reason.LIMIT_OR_COUPLING, {}
-        status = self.sweep.prove(low, high, monotonic_ns() + PROOF_NS)
-        return status, self.sweep.last_metrics
+        proof = self.sweep if engine is None else engine
+        status = proof.prove(low, high, monotonic_ns() + PROOF_NS)
+        return status, proof.last_metrics
 
     def advance(self, target, *, hand_axes=None, start_stage=False):
         if self.fault is not None:

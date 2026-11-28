@@ -24,7 +24,7 @@ from dexgym.tasks.direct.wholebody_s05.v1.rmb.teleop_candidate import ARM_SUBSTE
 from dexgym.tasks.direct.wholebody_s05.v1.rmb.teleop_native import TeleopNative
 from dexgym.tasks.direct.wholebody_s05.v1.task.physics import ServoProfile, signature
 from home_anchored_start_anchor import hmb_five_rows, role_identity, train_reader
-from group_admission import GROUPS as COMMAND_GROUPS, GroupedLockstep, GroupedSubstep, GroupStatus
+from group_admission import GROUPS as COMMAND_GROUPS, HOLD_MAX_DEPTH, GroupedLockstep, GroupedSubstep, GroupStatus
 from offline_rmb_lockstep import ACTIVE, PROOF, Lockstep
 from replay_dcr009_guarded_diagnostic import ROOT_FIVE, ROOT_FIVE_PLAN_SHA, SIGNED_SHA, check_scope
 from replay_home_anchored_pilot import palm_poses, read_frames
@@ -261,7 +261,8 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
     frames[0] = lock_registered_start(start_human.registered_wrist, palm_poses(initial), align_yaw=True)
     mapper = SimulationIntent(frames[0], initial, proxy_from_model_palm=frames[3:5])
     nominal = OfflineTeleopNominal(robot, kernel, hand, frames)
-    executor = GroupedLockstep(robot, nominal) if args.group_admission else Lockstep(robot, nominal)
+    executor = (GroupedLockstep(robot, nominal, hold_escalation=args.hold_proof_escalation)
+                if args.group_admission else Lockstep(robot, nominal))
     mapped_start = mapper.map(start_human)
     with (args.out / "start-events.jsonl").open("x", encoding="utf-8") as stream:
         def observe_preposition(stage, tick, result, state):
@@ -394,6 +395,7 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
              and historical["diagnostic_five_frame_ticks"] >= .70 * window["hmb_five_frame_candidate_ticks"])
     return {"schema": "s05.rmb.offline_diagnostic.v2" if args.group_admission else "s05.rmb.offline_diagnostic.v1",
             "scope": SCOPE, "formal_coverage_credit": False, "group_admission": args.group_admission,
+            "unchanged_hold_proof_max_depth": HOLD_MAX_DEPTH if args.hold_proof_escalation else None,
             "proof_semantics": ("combined candidate before fallback; nominal_proposal remains pre-admission"
                                 if args.group_admission else "original whole-vector candidate before fallback"),
             "historical_target_layers": {
@@ -429,7 +431,10 @@ def main():
     parser.add_argument("--root-five-receipt", type=Path)
     parser.add_argument("--independent-gate-receipt", type=Path)
     parser.add_argument("--group-admission", action="store_true")
+    parser.add_argument("--hold-proof-escalation", action="store_true")
     args = parser.parse_args()
+    if args.hold_proof_escalation and not args.group_admission:
+        parser.error("The HOLD-only additional proof budget requires grouped admission")
     if file_sha(args.plan) != ROOT_FIVE_PLAN_SHA or file_sha(args.model_receipt) != EXACT_MODEL_RECEIPT_SHA:
         raise ValueError("Require the exact preregistered Train plan and model identity receipt")
     plan = json.loads(args.plan.read_bytes())
@@ -440,6 +445,7 @@ def main():
         previous = json.loads(args.root_five_receipt.read_bytes()) if args.root_five_receipt else {}
         if (previous.get("root") != ROOT_FIVE or previous.get("root_technical_gate") != "DIAGNOSTIC_PASS"
                 or previous.get("group_admission", False) != args.group_admission
+                or previous.get("unchanged_hold_proof_max_depth") != (HOLD_MAX_DEPTH if args.hold_proof_escalation else None)
                 or previous.get("input_plan_sha256") != ROOT_FIVE_PLAN_SHA
                 or previous.get("implementation") != implementation()
                 or previous.get("asset_sha256") != {name: file_sha(getattr(args, name))

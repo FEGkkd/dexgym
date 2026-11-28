@@ -136,6 +136,16 @@ def audit(args):
             for sub, event in enumerate(row["safety"]):
                 good_substeps = (a["physical_state_mask"][i, 2*sub:2*sub+2].all()
                                  and not a["substep_event"][i, 2*sub:2*sub+2].any() and not event["fault"])
+                hold_detail = event.get("hold_metrics") or {}
+                if "original_hold_proof" in hold_detail:
+                    if (event["proof"] == "PERMIT" or not event["hold"]
+                            or hold_detail["original_hold_proof"] != "SWEEP_UNPROVEN"
+                            or hold_detail["original_hold_metrics"].get("termination") != "MAX_SUBDIVISION_DEPTH"
+                            or hold_detail["escalation_max_depth"] != receipt.get("unchanged_hold_proof_max_depth")
+                            or (event["hold_proof"] == "PERMIT") != bool(a["q_issued_mask"][i, sub])):
+                        raise ValueError("Extra proof budget escaped a depth-limited unchanged HOLD")
+                    counters["unchanged_hold_depth_escalations"] += 1
+                    counters["unchanged_hold_depth_escalations_proved"] += int(event["hold_proof"] == "PERMIT")
                 active &= bool(good_substeps and event["proof"] == "PERMIT" and len(event["groups"]) == 4)
                 for g, group in enumerate(event["groups"]):
                     status = group.get("label", "NO_COMMIT")
