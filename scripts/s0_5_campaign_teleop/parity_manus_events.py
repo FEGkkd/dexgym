@@ -288,7 +288,7 @@ def run(args):
     selection = {"full_root": selection_statistics(selected)}
     if window is not None:
         selection["start_window"] = selection_statistics([row for row in selected if row["in_start_window"]])
-        for scope, reference in (("full_root", previous_receipt["full_root_hmb"]), ("start_window", prior)):
+        for scope, reference in (("full_root", previous_receipt["full"]), ("start_window", prior)):
             for key, expected in (("planned_ticks", "plan_ticks"), ("joint_valid_ticks", "hmb_joint_valid_ticks"),
                                   ("five_frame_ticks", "hmb_five_frame_candidate_ticks")):
                 if selection[scope][key] != reference[expected]:
