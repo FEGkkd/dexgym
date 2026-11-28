@@ -196,11 +196,11 @@ class OfflineTeleopNominal:
         statuses = []
         for side, row in enumerate(native):
             group = GROUPS[side]
-            q = _array(row.joint_command, (7,))
             fallback = row.analytic_braking or row.analytic_exact_stop_used
             if not row.accepted or (not row.ik_target_accepted and not fallback):
                 statuses.append(OfflineNominalStatus.NATIVE_ARM_HOLD)
                 continue
+            q = _array(row.joint_command, (7,))
             change = np.max(np.abs(q - previous[group]))
             if change > ARM_COMMAND_STEP_RAD + 1e-9 or not np.isfinite(row.arm_angle_command_rad):
                 raise ValueError("Native arm proposal violates the 4 ms shape or rate contract")

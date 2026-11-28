@@ -231,6 +231,7 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
             fields = blank(data)
             full.update(partitions=1, plan_ticks=len(data["tick_ns"]), hmb_joint_valid_ticks=int(data["joint_valid"].sum()),
                         hmb_five_frame_candidate_ticks=int(fields["hmb_five_frame_candidate"].sum()))
+            previous_segment = None
             for i, raw_tick in enumerate(data["tick_ns"]):
                 tick = int(raw_tick)
                 sample = human[i]
@@ -238,6 +239,10 @@ def build(args, plan, root, reader, robot, kernel, hand, frames, anchor):
                 record_target(fields, i, target)
                 if not window["hmb_cutoff_start_ns"] <= tick < window["hmb_cutoff_stop_exclusive_ns"]:
                     continue
+                segment = int(data["segment_id"][i])
+                if previous_segment is not None and segment != previous_segment:
+                    active_previous, consecutive = False, 0
+                previous_segment = segment
                 historical.update(plan_ticks=1, hmb_joint_valid_ticks=int(data["joint_valid"][i]),
                                   hmb_five_frame_candidate_ticks=int(fields["hmb_five_frame_candidate"][i]),
                                   independent_geometry_ticks=int(target["robot_morphology_target"] is not None))
