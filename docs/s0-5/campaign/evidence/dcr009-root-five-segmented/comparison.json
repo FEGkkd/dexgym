@@ -1,0 +1,761 @@
+{
+  "schema": "s05.teleop.dcr009_root_five_segmented_start.v1",
+  "scope": "DIAGNOSTIC_ONLY",
+  "root": "capture:b63bc72d2e8b2ee395e966f6",
+  "center_offset_mm": 0,
+  "formal_coverage_credit": false,
+  "stage_credit": false,
+  "physical_qualification": false,
+  "residual_enabled": false,
+  "original_goal_equality": {
+    "same_original_input_records": true,
+    "source_cutoff_ns": 621699543607975,
+    "within_tolerance": true,
+    "runtime_native_goal": {
+      "exact_numeric_match": true,
+      "within_bound_target_tolerance": true,
+      "per_wrist": {
+        "left": {
+          "position_mm": 0.0,
+          "so3_deg": 0.0
+        },
+        "right": {
+          "position_mm": 0.0,
+          "so3_deg": 0.0
+        }
+      }
+    },
+    "start_world_registered_wrist": {
+      "exact_numeric_match": true,
+      "within_bound_target_tolerance": true,
+      "per_wrist": {
+        "left": {
+          "position_mm": 0.0,
+          "so3_deg": 0.0
+        },
+        "right": {
+          "position_mm": 0.0,
+          "so3_deg": 0.0
+        }
+      }
+    },
+    "position_tolerance_mm": 0.1,
+    "so3_tolerance_deg": 0.057295779513082325
+  },
+  "same_two_model_guard_configuration": true,
+  "publication_home_and_cleanup_evidence_complete": true,
+  "equal_time_support": {
+    "bin_ms": 20.0,
+    "common_terminal_cutoff_ms": 1300.0,
+    "common_bin_end_ms": [
+      220.0,
+      240.0,
+      260.0,
+      300.0,
+      320.0,
+      340.0,
+      360.0,
+      380.0,
+      400.0,
+      420.0,
+      440.0,
+      500.0,
+      520.0,
+      540.0,
+      580.0,
+      600.0,
+      620.0,
+      640.0,
+      700.0,
+      720.0,
+      740.0,
+      760.0,
+      780.0,
+      820.0,
+      840.0,
+      860.0,
+      880.0,
+      900.0,
+      920.0,
+      960.0,
+      980.0,
+      1000.0,
+      1020.0,
+      1060.0,
+      1080.0,
+      1100.0,
+      1120.0,
+      1140.0,
+      1160.0,
+      1200.0,
+      1220.0,
+      1240.0,
+      1260.0,
+      1300.0
+    ],
+    "eligible_bins": 44,
+    "rule": "Last distinct observed sample within each shared right-closed bin before either terminal event; no cross-bin fill"
+  },
+  "comparison_status": "DIAGNOSTIC_PAIRED",
+  "paired_p95_deltas": {
+    "engineering_tcp": {
+      "segmented_minus_original_worst_wrist_p95_mm": 17.400631521727405,
+      "segmented_minus_original_worst_wrist_p95_deg": 6.826527585943168
+    },
+    "registered_wrist_marker": {
+      "segmented_minus_original_worst_wrist_p95_mm": 33.90156256020964,
+      "segmented_minus_original_worst_wrist_p95_deg": 2.6399691677374904
+    },
+    "unshifted_engineering_tcp": {
+      "segmented_minus_original_worst_wrist_p95_mm": 17.400631521727405,
+      "segmented_minus_original_worst_wrist_p95_deg": 6.826527585943168
+    }
+  },
+  "original": {
+    "attempt": 1,
+    "center_offset_mm": 0,
+    "phase": "NATIVE_JOINT_LIMIT_REJECTION_NO_HISTORY",
+    "process_exit": 1,
+    "start_status": "NOT_OBSERVED",
+    "preposition_origin": "preposition_clock",
+    "preposition_duration_s": 1.302996703,
+    "stop_ack_with_no_late_observed_command": true,
+    "domain_empty_after": true,
+    "owned_groups_stopped": true,
+    "internal_home_proofs": [
+      [
+        "PERMIT",
+        "PERMIT"
+      ]
+    ],
+    "recorded_history_inputs": 0,
+    "preposition_input_packets": 236,
+    "fault_stops": [
+      {
+        "elapsed_s": 1.302996703,
+        "stage": "preposition_start",
+        "source": "/tianji/safety",
+        "code": "JOINT_LIMIT",
+        "reason": "both arms held: joint command violates uniform joint limit margin",
+        "header_ns": 1795846140164600877
+      }
+    ],
+    "other_abort_reports": [
+      {
+        "stage": "tail",
+        "error": "Pilot watchdog observed native hard fault: JOINT_LIMIT"
+      }
+    ],
+    "unsafe_safety_topic_messages_by_code": {
+      "JOINT_LIMIT": 22
+    },
+    "native_joint_limit_watchdog_events": 1,
+    "all_supported_measurements_descriptive_only": {
+      "engineering_tcp": {
+        "samples": 49,
+        "left_position_mm": {
+          "mean": 298.17946574245514,
+          "p95": 367.2796736096379,
+          "min": 237.91237027207546
+        },
+        "right_position_mm": {
+          "mean": 219.4094428248749,
+          "p95": 303.9969511519225,
+          "min": 168.58575448660366
+        },
+        "left_so3_deg": {
+          "mean": 55.298433525901046,
+          "p95": 71.79733102330394,
+          "min": 41.11594966636879
+        },
+        "right_so3_deg": {
+          "mean": 42.84853893237512,
+          "p95": 69.61545846145735,
+          "min": 17.88123565318754
+        },
+        "worst_wrist_position_p95_mm": 367.2796736096379,
+        "worst_wrist_so3_p95_deg": 71.79733102330394,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "registered_wrist_marker": {
+        "samples": 49,
+        "left_position_mm": {
+          "mean": 253.74879011034048,
+          "p95": 321.8213522777604,
+          "min": 194.70795684972794
+        },
+        "right_position_mm": {
+          "mean": 259.7329562170436,
+          "p95": 348.3717988909162,
+          "min": 203.8507610094606
+        },
+        "left_so3_deg": {
+          "mean": 152.54479993330426,
+          "p95": 163.4431161100952,
+          "min": 143.35652559169338
+        },
+        "right_so3_deg": {
+          "mean": 95.99548396224493,
+          "p95": 108.40156354531199,
+          "min": 81.92890589466467
+        },
+        "worst_wrist_position_p95_mm": 348.3717988909162,
+        "worst_wrist_so3_p95_deg": 163.4431161100952,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "unshifted_engineering_tcp": {
+        "samples": 49,
+        "left_position_mm": {
+          "mean": 298.17946574245514,
+          "p95": 367.2796736096379,
+          "min": 237.91237027207546
+        },
+        "right_position_mm": {
+          "mean": 219.4094428248749,
+          "p95": 303.9969511519225,
+          "min": 168.58575448660366
+        },
+        "left_so3_deg": {
+          "mean": 55.298433525901046,
+          "p95": 71.79733102330394,
+          "min": 41.11594966636879
+        },
+        "right_so3_deg": {
+          "mean": 42.84853893237512,
+          "p95": 69.61545846145735,
+          "min": 17.88123565318754
+        },
+        "worst_wrist_position_p95_mm": 367.2796736096379,
+        "worst_wrist_so3_p95_deg": 71.79733102330394,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      }
+    },
+    "common_support_metrics": {
+      "engineering_tcp": {
+        "samples": 44,
+        "left_position_mm": {
+          "mean": 298.23808897005847,
+          "p95": 368.4172283704929,
+          "min": 237.91237027207546
+        },
+        "right_position_mm": {
+          "mean": 219.78228758649269,
+          "p95": 305.70155704247753,
+          "min": 168.58575448660366
+        },
+        "left_so3_deg": {
+          "mean": 55.30118958130343,
+          "p95": 72.06836704423152,
+          "min": 41.11594966636879
+        },
+        "right_so3_deg": {
+          "mean": 42.911141455148886,
+          "p95": 70.08339818141597,
+          "min": 17.88123565318754
+        },
+        "worst_wrist_position_p95_mm": 368.4172283704929,
+        "worst_wrist_so3_p95_deg": 72.06836704423152,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "registered_wrist_marker": {
+        "samples": 44,
+        "left_position_mm": {
+          "mean": 253.80698074274238,
+          "p95": 322.947511294044,
+          "min": 194.70795684972794
+        },
+        "right_position_mm": {
+          "mean": 260.0863042287748,
+          "p95": 350.0983857177573,
+          "min": 203.8507610094606
+        },
+        "left_so3_deg": {
+          "mean": 152.54432488091476,
+          "p95": 163.6238532998321,
+          "min": 143.35652559169338
+        },
+        "right_so3_deg": {
+          "mean": 95.99565475622398,
+          "p95": 108.56960557916561,
+          "min": 81.92890589466467
+        },
+        "worst_wrist_position_p95_mm": 350.0983857177573,
+        "worst_wrist_so3_p95_deg": 163.6238532998321,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "unshifted_engineering_tcp": {
+        "samples": 44,
+        "left_position_mm": {
+          "mean": 298.23808897005847,
+          "p95": 368.4172283704929,
+          "min": 237.91237027207546
+        },
+        "right_position_mm": {
+          "mean": 219.78228758649269,
+          "p95": 305.70155704247753,
+          "min": 168.58575448660366
+        },
+        "left_so3_deg": {
+          "mean": 55.30118958130343,
+          "p95": 72.06836704423152,
+          "min": 41.11594966636879
+        },
+        "right_so3_deg": {
+          "mean": 42.911141455148886,
+          "p95": 70.08339818141597,
+          "min": 17.88123565318754
+        },
+        "worst_wrist_position_p95_mm": 368.4172283704929,
+        "worst_wrist_so3_p95_deg": 72.06836704423152,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      }
+    },
+    "groups": {
+      "arm": {
+        "guard_service_reasons": {
+          "PERMIT": 279
+        },
+        "native_rejection_codes": {},
+        "native_publications_with_permit": 279,
+        "observed_ros_messages": 279,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 279,
+        "guard_permits": 279,
+        "permit_rate_over_valid_guard_requests": 1.0
+      },
+      "left": {
+        "guard_service_reasons": {
+          "SWEEP_UNPROVEN": 59
+        },
+        "native_rejection_codes": {
+          "7": 59
+        },
+        "native_publications_with_permit": 0,
+        "observed_ros_messages": 0,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 59,
+        "guard_permits": 0,
+        "permit_rate_over_valid_guard_requests": 0.0
+      },
+      "right": {
+        "guard_service_reasons": {
+          "SWEEP_UNPROVEN": 59
+        },
+        "native_rejection_codes": {
+          "7": 59
+        },
+        "native_publications_with_permit": 0,
+        "observed_ros_messages": 0,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 59,
+        "guard_permits": 0,
+        "permit_rate_over_valid_guard_requests": 0.0
+      }
+    },
+    "unattributed_guard_reasons": {},
+    "publication_mismatches": {},
+    "input_identity": {
+      "result_sha256": "e0d2fbe85aa3d55cd1d0dd8f3affd3fae7e627136424d624c3f747a77b5a3d04",
+      "native_trace_sha256": "6eaae4ff11202a636e5a06999eaa4ff2f763f57708f6aedc55cc731f4602711a",
+      "guard_trace_sha256": "ee13918eb29677073999f57f86f8b5218087831c4cdd3150e991e14b0f89b565",
+      "sim_log_sha256": "3a4de258010bfe803269c57bbd00b5846a84a05012982e650f01c5f4e709a9ce",
+      "input_receipt_sha256": "9146b4f80dffe17ca74d91f134c3c2f3f7faf3bda53157abf85c20dc15ef4aa3"
+    },
+    "profile": "original",
+    "measured_start_reached": false,
+    "endpoint": {
+      "elapsed_s": 1.281648181,
+      "observed_mono_ns": 156666897812789,
+      "terminal_gap_ms": 21.348522,
+      "feedback_header_ns": 1795846140148198807,
+      "matches_start_handoff_receipt": false,
+      "ready_sample": false,
+      "measured_speed_rad_s": 0.8238839230910303,
+      "hand_error_to_issued_rad": {
+        "left": null,
+        "right": null
+      },
+      "hand_error_to_unsegmented_wuji_rad": {
+        "left": null,
+        "right": null
+      },
+      "hand_segment_guard_proofs": {
+        "left": null,
+        "right": null
+      },
+      "engineering_tcp": {
+        "left": {
+          "position_mm": 237.91237027207546,
+          "so3_deg": 41.11594966636879
+        },
+        "right": {
+          "position_mm": 168.58575448660366,
+          "so3_deg": 17.88123565318754
+        }
+      },
+      "registered_wrist_marker": {
+        "left": {
+          "position_mm": 194.70795684972794,
+          "so3_deg": 143.35652559169338
+        },
+        "right": {
+          "position_mm": 203.8507610094606,
+          "so3_deg": 110.26567384661485
+        }
+      },
+      "unshifted_engineering_tcp": {
+        "left": {
+          "position_mm": 237.91237027207546,
+          "so3_deg": 41.11594966636879
+        },
+        "right": {
+          "position_mm": 168.58575448660366,
+          "so3_deg": 17.88123565318754
+        }
+      },
+      "hand_endpoint_proof_joins_observed_command": {
+        "left": null,
+        "right": null
+      }
+    },
+    "last_preterminal_hand_error_to_unsegmented_wuji_rad": {
+      "left": null,
+      "right": null
+    },
+    "start_only_scope_completion": false,
+    "live_model_sha256": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "identical_two_model_guard_contract_source_sha256": "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909"
+  },
+  "segmented": {
+    "attempt": 1,
+    "center_offset_mm": 0,
+    "phase": "NATIVE_PROTECTIVE_HOLD_NO_HISTORY",
+    "process_exit": 1,
+    "start_status": "NOT_OBSERVED",
+    "preposition_origin": "preposition_clock",
+    "preposition_duration_s": 2.950400374,
+    "stop_ack_with_no_late_observed_command": true,
+    "domain_empty_after": true,
+    "owned_groups_stopped": true,
+    "internal_home_proofs": [
+      [
+        "PERMIT",
+        "PERMIT"
+      ]
+    ],
+    "recorded_history_inputs": 0,
+    "preposition_input_packets": 532,
+    "fault_stops": [
+      {
+        "elapsed_s": 2.950400374,
+        "stage": "preposition_start",
+        "source": "/tianji/robot_state",
+        "code": "DRIVER_NOT_COMMANDABLE",
+        "reason": "position held; home required before next enable",
+        "header_ns": 1795847619604694794
+      }
+    ],
+    "other_abort_reports": [
+      {
+        "stage": "tail",
+        "error": "Pilot watchdog observed native hard fault: DRIVER_NOT_COMMANDABLE"
+      }
+    ],
+    "unsafe_safety_topic_messages_by_code": {
+      "COMMAND_STEP": 1
+    },
+    "native_joint_limit_watchdog_events": 0,
+    "all_supported_measurements_descriptive_only": {
+      "engineering_tcp": {
+        "samples": 124,
+        "left_position_mm": {
+          "mean": 315.3356281341348,
+          "p95": 381.8894788985997,
+          "min": 243.46485982260705
+        },
+        "right_position_mm": {
+          "mean": 278.5838640456891,
+          "p95": 335.7307501625475,
+          "min": 219.5744601573711
+        },
+        "left_so3_deg": {
+          "mean": 55.75378369568371,
+          "p95": 74.7861933674968,
+          "min": 35.25213588167554
+        },
+        "right_so3_deg": {
+          "mean": 58.727640903452034,
+          "p95": 77.77640990103795,
+          "min": 37.874117429614984
+        },
+        "worst_wrist_position_p95_mm": 381.8894788985997,
+        "worst_wrist_so3_p95_deg": 77.77640990103795,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "registered_wrist_marker": {
+        "samples": 124,
+        "left_position_mm": {
+          "mean": 270.5640066405688,
+          "p95": 336.23431147502123,
+          "min": 200.04767680969897
+        },
+        "right_position_mm": {
+          "mean": 322.3493991319773,
+          "p95": 380.45680516924364,
+          "min": 261.40446942042826
+        },
+        "left_so3_deg": {
+          "mean": 152.8741803461528,
+          "p95": 165.512464147016,
+          "min": 139.54743267403924
+        },
+        "right_so3_deg": {
+          "mean": 87.67400321510316,
+          "p95": 96.67237223892673,
+          "min": 79.49299128173647
+        },
+        "worst_wrist_position_p95_mm": 380.45680516924364,
+        "worst_wrist_so3_p95_deg": 165.512464147016,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "unshifted_engineering_tcp": {
+        "samples": 124,
+        "left_position_mm": {
+          "mean": 315.3356281341348,
+          "p95": 381.8894788985997,
+          "min": 243.46485982260705
+        },
+        "right_position_mm": {
+          "mean": 278.5838640456891,
+          "p95": 335.7307501625475,
+          "min": 219.5744601573711
+        },
+        "left_so3_deg": {
+          "mean": 55.75378369568371,
+          "p95": 74.7861933674968,
+          "min": 35.25213588167554
+        },
+        "right_so3_deg": {
+          "mean": 58.727640903452034,
+          "p95": 77.77640990103795,
+          "min": 37.874117429614984
+        },
+        "worst_wrist_position_p95_mm": 381.8894788985997,
+        "worst_wrist_so3_p95_deg": 77.77640990103795,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      }
+    },
+    "common_support_metrics": {
+      "engineering_tcp": {
+        "samples": 44,
+        "left_position_mm": {
+          "mean": 359.0206013900099,
+          "p95": 385.8178598922203,
+          "min": 329.9417010996114
+        },
+        "right_position_mm": {
+          "mean": 315.60084045766973,
+          "p95": 339.24859350404853,
+          "min": 290.34479673047497
+        },
+        "left_so3_deg": {
+          "mean": 68.2742011642411,
+          "p95": 75.90106280407143,
+          "min": 59.986568937750185
+        },
+        "right_so3_deg": {
+          "mean": 71.2622320243947,
+          "p95": 78.89489463017469,
+          "min": 62.98884385416282
+        },
+        "worst_wrist_position_p95_mm": 385.8178598922203,
+        "worst_wrist_so3_p95_deg": 78.89489463017469,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "registered_wrist_marker": {
+        "samples": 44,
+        "left_position_mm": {
+          "mean": 313.61399757180527,
+          "p95": 340.12628691728594,
+          "min": 284.88466273457095
+        },
+        "right_position_mm": {
+          "mean": 360.1257163676537,
+          "p95": 383.99994827796695,
+          "min": 334.5573867955723
+        },
+        "left_so3_deg": {
+          "mean": 161.1446721488238,
+          "p95": 166.26382246756958,
+          "min": 155.61735917259065
+        },
+        "right_so3_deg": {
+          "mean": 82.26260139906651,
+          "p95": 84.87974304637578,
+          "min": 79.61385358043147
+        },
+        "worst_wrist_position_p95_mm": 383.99994827796695,
+        "worst_wrist_so3_p95_deg": 166.26382246756958,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      },
+      "unshifted_engineering_tcp": {
+        "samples": 44,
+        "left_position_mm": {
+          "mean": 359.0206013900099,
+          "p95": 385.8178598922203,
+          "min": 329.9417010996114
+        },
+        "right_position_mm": {
+          "mean": 315.60084045766973,
+          "p95": 339.24859350404853,
+          "min": 290.34479673047497
+        },
+        "left_so3_deg": {
+          "mean": 68.2742011642411,
+          "p95": 75.90106280407143,
+          "min": 59.986568937750185
+        },
+        "right_so3_deg": {
+          "mean": 71.2622320243947,
+          "p95": 78.89489463017469,
+          "min": 62.98884385416282
+        },
+        "worst_wrist_position_p95_mm": 385.8178598922203,
+        "worst_wrist_so3_p95_deg": 78.89489463017469,
+        "bilateral_geometric_start_scale_hits": 0,
+        "bilateral_geometric_near_misses": 0
+      }
+    },
+    "groups": {
+      "arm": {
+        "guard_service_reasons": {
+          "PERMIT": 731,
+          "SWEEP_UNPROVEN": 1
+        },
+        "native_rejection_codes": {
+          "7": 1
+        },
+        "native_publications_with_permit": 731,
+        "observed_ros_messages": 727,
+        "native_publications_not_observed": 4,
+        "valid_guard_requests": 732,
+        "guard_permits": 731,
+        "permit_rate_over_valid_guard_requests": 0.9986338797814208
+      },
+      "left": {
+        "guard_service_reasons": {
+          "PERMIT": 6,
+          "SWEEP_UNPROVEN": 127
+        },
+        "native_rejection_codes": {
+          "7": 127
+        },
+        "native_publications_with_permit": 6,
+        "observed_ros_messages": 6,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 133,
+        "guard_permits": 6,
+        "permit_rate_over_valid_guard_requests": 0.045112781954887216
+      },
+      "right": {
+        "guard_service_reasons": {
+          "PERMIT": 4,
+          "SWEEP_UNPROVEN": 129
+        },
+        "native_rejection_codes": {
+          "7": 129
+        },
+        "native_publications_with_permit": 4,
+        "observed_ros_messages": 4,
+        "native_publications_not_observed": 0,
+        "valid_guard_requests": 133,
+        "guard_permits": 4,
+        "permit_rate_over_valid_guard_requests": 0.03007518796992481
+      }
+    },
+    "unattributed_guard_reasons": {},
+    "publication_mismatches": {},
+    "input_identity": {
+      "result_sha256": "7926bf9a9621403038523f49dcdcfad27e3fba9224e68eb50e7657f6fd9edf60",
+      "native_trace_sha256": "c1de42da7d0a48a48261bf509decb86358bac7bcc8ed0496e17e9b8d7c3f91ba",
+      "guard_trace_sha256": "3ede1245c46eeaf336b0c879086584d7efcc404e01efacd400b40cc58e859186",
+      "sim_log_sha256": "d3ae25e9f13726b16cfe2ae5c7742edfdf5485eb5f02267cf359fe9f964b76be",
+      "input_receipt_sha256": "398da04a718072f789ea5e1270747da7ae6281d14bceb64b6798a8027af6b90b"
+    },
+    "profile": "segmented",
+    "measured_start_reached": false,
+    "endpoint": {
+      "elapsed_s": 2.92805594,
+      "observed_mono_ns": 158146334255874,
+      "terminal_gap_ms": 22.344434,
+      "feedback_header_ns": 1795847619581749707,
+      "matches_start_handoff_receipt": false,
+      "ready_sample": false,
+      "measured_speed_rad_s": 0.2947126862814018,
+      "hand_error_to_issued_rad": {
+        "left": null,
+        "right": null
+      },
+      "hand_error_to_unsegmented_wuji_rad": {
+        "left": null,
+        "right": null
+      },
+      "hand_segment_guard_proofs": {
+        "left": null,
+        "right": null
+      },
+      "engineering_tcp": {
+        "left": {
+          "position_mm": 243.46485982260705,
+          "so3_deg": 35.25213588167554
+        },
+        "right": {
+          "position_mm": 219.5744601573711,
+          "so3_deg": 37.874117429614984
+        }
+      },
+      "registered_wrist_marker": {
+        "left": {
+          "position_mm": 200.04767680969897,
+          "so3_deg": 139.54743267403924
+        },
+        "right": {
+          "position_mm": 261.40446942042826,
+          "so3_deg": 97.87861704592734
+        }
+      },
+      "unshifted_engineering_tcp": {
+        "left": {
+          "position_mm": 243.46485982260705,
+          "so3_deg": 35.25213588167554
+        },
+        "right": {
+          "position_mm": 219.5744601573711,
+          "so3_deg": 37.874117429614984
+        }
+      },
+      "hand_endpoint_proof_joins_observed_command": {
+        "left": null,
+        "right": null
+      }
+    },
+    "last_preterminal_hand_error_to_unsegmented_wuji_rad": {
+      "left": null,
+      "right": null
+    },
+    "start_only_scope_completion": false,
+    "live_model_sha256": "be69f387f5bc25c8011a992a88ac2c2449c2c0419e09318b740fcdcd1402871d",
+    "identical_two_model_guard_contract_source_sha256": "fd785b5cc88c567862c32854d717dab307bed6263130d7cb51ae0c5506760909"
+  }
+}
