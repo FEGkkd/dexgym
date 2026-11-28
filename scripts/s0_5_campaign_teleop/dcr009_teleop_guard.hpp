@@ -6,12 +6,14 @@
 
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <cerrno>
 #include <chrono>
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
 #include <cstring>
+#include <fstream>
 #include <iomanip>
 #include <limits>
 #include <map>
@@ -28,6 +30,29 @@
 
 namespace dcr009_diagnostic {
 
+enum class SegmentPhase { Disabled, Preposition, History, Invalid };
+
+inline SegmentPhase segmented_phase()
+{
+  constexpr auto variable = "S05_DCR009_SEGMENTED_START_STATE";
+  const char * path = std::getenv(variable);
+  if (!path) return SegmentPhase::Disabled;
+  struct stat metadata{};
+  if (path[0] != '/' || ::lstat(path, &metadata) != 0 || !S_ISREG(metadata.st_mode) ||
+      metadata.st_uid != ::geteuid() || (metadata.st_mode & 077u) || metadata.st_size > 16) {
+    return SegmentPhase::Invalid;
+  }
+  std::ifstream state(path);
+  std::string text, extra;
+  if (!std::getline(state, text) || std::getline(state, extra)) return SegmentPhase::Invalid;
+  static std::atomic_bool historical{false};
+  if (text == "HISTORY") {
+    historical.store(true);
+    return SegmentPhase::History;
+  }
+  return text == "PREPOSITION" && !historical.load() ? SegmentPhase::Preposition : SegmentPhase::Invalid;
+}
+
 class NominalGuard {
 public:
   using Clock = std::chrono::steady_clock;
@@ -39,11 +64,13 @@ public:
   static constexpr uint32_t kTransport = 103;
   static constexpr uint32_t kTimeoutOrExpired = 104;
   static constexpr uint32_t kPublishException = 105;
+  static constexpr uint32_t kSegmentUnavailable = 106;
 
   struct Proof {
     Vector candidate{};
     uint64_t seq{0};
     int64_t feedback_header{0};
+    uint32_t group{3};
     uint32_t reason{kNoProof};
     bool permitted{false};
   };
@@ -94,6 +121,10 @@ public:
     int64_t now_ros, const Names & names, const Positions & positions)
   {
     Proof result;
+    if (segmented_phase() == SegmentPhase::Invalid) {
+      result.reason = kSegmentUnavailable;
+      return result;
+    }
     if (group > 2u || session.rfind("s05-dcr009-", 0) != 0 || generation == 0 ||
         (initialized_ && (generation != generation_ || session != session_))) {
       result.reason = kRearm;
@@ -118,6 +149,7 @@ public:
       issued_ = measured.q;
     }
     result.seq = ++sequence_;
+    result.group = group;
     result.reason = send(group, result.seq, measured.q, result.candidate);
     result.permitted = result.reason == 0u;
     return result;
@@ -126,11 +158,40 @@ public:
   bool still_valid(const Proof & proof, int64_t now_ros, int64_t valid_until_ros) const
   {
     return proof.permitted && proof.seq == sequence_ && now_ros >= last_proposal_ros_ &&
-      now_ros < valid_until_ros && fresh(now_ros) && feedback_complete_->header == proof.feedback_header;
+      now_ros < valid_until_ros && fresh(now_ros) && feedback_complete_->header == proof.feedback_header &&
+      segmented_phase() != SegmentPhase::Invalid;
   }
 
   void commit(const Proof & proof) {
-    if (proof.permitted && proof.seq != 0 && proof.seq == sequence_) issued_ = proof.candidate;
+    if (proof.permitted && proof.seq != 0 && proof.seq == sequence_ && proof.group < 3u) {
+      issued_ = proof.candidate;
+      last_group_commit_[proof.group] = Clock::now();
+    }
+  }
+
+  template<typename Positions>
+  std::optional<double> segment_hand(uint32_t group, int64_t now_ros, Positions & positions) const {
+    const auto phase = segmented_phase();
+    if (phase == SegmentPhase::Disabled || phase == SegmentPhase::History) return 1.;
+    if (phase != SegmentPhase::Preposition || (group != 1u && group != 2u) ||
+        positions.size() != 20u || !fresh(now_ros)) {
+      return std::nullopt;
+    }
+    const auto & previous = initialized_ ? issued_ : feedback_complete_->q;
+    const std::size_t offset = group == 1u ? 14u : 34u;
+    const auto committed = last_group_commit_[group];
+    const double dt = committed ? std::min(.020, std::chrono::duration<double>(Clock::now() - *committed).count()) : .004;
+    double max_delta = 0.;
+    for (std::size_t j = 0; j < positions.size(); ++j) {
+      if (!std::isfinite(positions[j])) return std::nullopt;
+      max_delta = std::max(max_delta, std::abs(positions[j] - previous[offset + j]));
+    }
+    const double alpha = max_delta > 0. ? std::min(1., .60 * dt / max_delta) : 1.;
+    for (std::size_t j = 0; j < positions.size(); ++j) {
+      const double prior = previous[offset + j];
+      positions[j] = prior + alpha * (positions[j] - prior);
+    }
+    return alpha;
   }
 
 private:
@@ -281,6 +342,7 @@ private:
   std::string session_;
   int timeout_ms_{30};
   Vector issued_{};
+  std::array<std::optional<Clock::time_point>, 3> last_group_commit_{};
   std::map<int64_t, Sample> feedback_;
   std::optional<Measured> feedback_complete_;
   uint64_t sequence_{0}, generation_{0};
